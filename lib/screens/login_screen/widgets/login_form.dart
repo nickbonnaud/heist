@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:heist/blocs/authentication/authentication_bloc.dart';
-import 'package:heist/blocs/login/login_bloc.dart';
+import 'package:heist/screens/login_screen/bloc/login_bloc.dart';
 import 'package:vibrate/vibrate.dart';
 
 class LoginForm extends StatefulWidget {

@@ -63,13 +63,13 @@ class PermissionScreenBloc extends Bloc<PermissionScreenEvent, PermissionScreenS
     List<PermissionType> incomplete = [];
 
     current = !beaconEnabled && !Platform.isAndroid ? PermissionType.beacon : null;
-    current = !notificationEnabled ? PermissionType.notification : null;
-    current = !locationEnabled ? PermissionType.location : null;
-    current = !bluetoothEnabled ? PermissionType.bluetooth : null;
+    current = !notificationEnabled ? PermissionType.notification : current;
+    current = !locationEnabled ? PermissionType.location : current;
+    current = !bluetoothEnabled ? PermissionType.bluetooth : current;
 
     next = !beaconEnabled && !Platform.isAndroid ? PermissionType.beacon : null;
-    next = !notificationEnabled ? PermissionType.notification : null;
-    next = !locationEnabled ? PermissionType.location : null;
+    next = !notificationEnabled ? PermissionType.notification : next;
+    next = !locationEnabled ? PermissionType.location : next;
 
     if (!bluetoothEnabled) incomplete.add(PermissionType.bluetooth);
     if (!locationEnabled) incomplete.add(PermissionType.location);

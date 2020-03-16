@@ -26,7 +26,7 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Center(
-        child: PlatformText('Hellow Workl')
+        child: PlatformText('Something')
       ),
     );
   }

@@ -4,7 +4,8 @@ import 'package:heist/blocs/authentication/authentication_bloc.dart';
 import 'package:heist/repositories/customer_repository.dart';
 import 'package:heist/screens/home_screen.dart';
 
-import 'login_screen.dart';
+import 'login_screen/login_screen.dart';
+
 
 class SplashScreen extends StatelessWidget {
   final CustomerRepository _customerRepository;

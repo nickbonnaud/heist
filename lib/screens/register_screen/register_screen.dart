@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:heist/blocs/register/register_bloc.dart';
-import 'package:heist/forms/register_form.dart';
 import 'package:heist/repositories/customer_repository.dart';
 import 'package:heist/resources/constants.dart';
-import 'package:heist/screens/login_screen.dart';
+import 'package:heist/screens/login_screen/login_screen.dart';
+
+import 'bloc/register_bloc.dart';
+import 'widgets/register_form.dart';
 
 class RegisterScreen extends StatelessWidget {
   final CustomerRepository _customerRepository;

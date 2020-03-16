@@ -6,11 +6,13 @@ class OnBoardRepository {
   static const String ONBOARD_KEY = 'onboard';
 
   Future<void> setIsInitialLogin(bool isInitial) async {
+    print(isInitial);
     return await _onBoardProvider.write(PERMISSIONS_KEY, isInitial.toString().toLowerCase());
   }
 
   Future<bool> isInitialLogin() async {
     String isInitial = await _onBoardProvider.read(PERMISSIONS_KEY);
+    // setIsInitialLogin(true);
     if (isInitial.toString() == 'null') {
       setIsInitialLogin(true);
       return true;

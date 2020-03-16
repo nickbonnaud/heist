@@ -2,7 +2,7 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:heist/blocs/register/register_bloc.dart';
+import 'package:heist/screens/register_screen/bloc/register_bloc.dart';
 import 'package:vibrate/vibrate.dart';
 
 class RegisterForm extends StatefulWidget {

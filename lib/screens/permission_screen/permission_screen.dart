@@ -3,14 +3,14 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:heist/blocs/permissions/permissions_bloc.dart';
 import 'package:heist/screens/permission_screen/bloc/permission_screen_bloc.dart';
-import 'package:heist/screens/permission_screen/bluetooth_body.dart';
 
-import 'beacon_body.dart';
-import 'location_body.dart';
-import 'notification_body.dart';
-import 'success_body.dart';
+import 'widgets/beacon_body.dart';
+import 'widgets/bluetooth_body.dart';
+import 'widgets/location_body.dart';
+import 'widgets/notification_body.dart';
+import 'widgets/success_body.dart';
+
 
 class PermissionsScreen extends StatefulWidget {
   final bool _isBluetoothEnabled;
@@ -81,20 +81,13 @@ class _PermissionsScreenState extends State<PermissionsScreen> with SingleTicker
   
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider<PermissionScreenBloc>(
-          create: (context) => PermissionScreenBloc(
-            isBluetoothEnabled: widget._isBluetoothEnabled,
-            isLocationEnabled: widget._isLocationEnabled,
-            isBeaconEnabled: widget._isBeaconEnabled,
-            isNotificationEnabled: widget._isNotificationEnabled
-          )
-        ),
-        BlocProvider<PermissionsBloc>(
-          create: (context) => PermissionsBloc()..add(AppReady())
-        )
-      ],
+    return BlocProvider<PermissionScreenBloc>(
+      create: (context) => PermissionScreenBloc(
+        isBluetoothEnabled: widget._isBluetoothEnabled,
+        isLocationEnabled: widget._isLocationEnabled,
+        isBeaconEnabled: widget._isBeaconEnabled,
+        isNotificationEnabled: widget._isNotificationEnabled
+      ), 
       child: BlocListener<PermissionScreenBloc, PermissionScreenState>(
         listener: (context, state) {
           if (state.incomplete.length == 0) {
@@ -153,6 +146,13 @@ class _PermissionsScreenState extends State<PermissionsScreen> with SingleTicker
       default:
         screen = SuccessBody();
     }
-    return screen;
+    return Container(
+      alignment: Alignment.center,
+      color: Colors.white,
+      child: Padding(
+        padding: EdgeInsets.all(18.0),
+        child: SingleChildScrollView(child: screen),
+      ),
+    );
   }
 }

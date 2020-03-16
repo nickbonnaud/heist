@@ -6,12 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_beacon/flutter_beacon.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
-import 'package:heist/blocs/permissions/permissions_bloc.dart';
 import 'package:heist/repositories/on_board_repository.dart';
 import 'package:heist/resources/constants.dart';
+import 'package:heist/screens/permission_screen/bloc/permission_screen_bloc.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-import 'bloc/permission_screen_bloc.dart';
 
 class PermissionButtons extends StatefulWidget {
   final PermissionType _permission;
@@ -67,11 +66,14 @@ class _PermissionButtonsState extends State<PermissionButtons> {
       BluetoothState currentBleState = await flutterBeacon.bluetoothState;
       if (currentBleState == BluetoothState.stateUnknown) {
         flutterBeacon.bluetoothStateChanged().listen((BluetoothState state) {
-          _updateIfGranted(currentBleState == BluetoothState.stateOn, permission);
-          OnBoardRepository().setIsInitialLogin(false);
+          OnBoardRepository().setIsInitialLogin(false).then((_) {
+            _updateIfGranted(currentBleState == BluetoothState.stateOn, permission);
+          });
         });
       } else {
-        _updateIfGranted(currentBleState == BluetoothState.stateOn, permission);
+        OnBoardRepository().setIsInitialLogin(false).then((_) {
+          _updateIfGranted(currentBleState == BluetoothState.stateOn, permission);
+        });
       }
     } else if (permission == PermissionType.location) {
       final Map<PermissionGroup, PermissionStatus> status = await PermissionHandler().requestPermissions([PermissionGroup.locationWhenInUse]);
@@ -107,20 +109,20 @@ class _PermissionButtonsState extends State<PermissionButtons> {
     String body;
     switch (type) {
       case PermissionType.bluetooth:
-        title = 'Bluetooth Required!';
+        title = 'Please enable Bluetooth';
         body = '${Constants.appName} requires Bluetooth to work properly';
         break;
       case PermissionType.location:
-        title = 'Location Services Required!';
+        title = 'Please Enable Location Services';
         body = '${Constants.appName} must use location services to work properly.';
         break;
       case PermissionType.notification:
-        title = 'Notifications Required!';
+        title = 'Please enable Notifications';
         body = '${Constants.appName} must use notifications to work properly.';
         break;
       case PermissionType.beacon:
-        title = 'Beacon Type Always Required!';
-        body = '${Constants.appName} requires Location Always to work properly';
+        title = 'Please set to Always';
+        body = "${Constants.appName} requires Location to be set to 'Always' to work properly";
         break;
     }
     
