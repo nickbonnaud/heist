@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_beacon/flutter_beacon.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
-import 'package:heist/repositories/on_board_repository.dart';
+import 'package:heist/repositories/onboard_repository.dart';
 import 'package:heist/resources/constants.dart';
 import 'package:heist/screens/permission_screen/bloc/permission_screen_bloc.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -66,12 +66,12 @@ class _PermissionButtonsState extends State<PermissionButtons> {
       BluetoothState currentBleState = await flutterBeacon.bluetoothState;
       if (currentBleState == BluetoothState.stateUnknown) {
         flutterBeacon.bluetoothStateChanged().listen((BluetoothState state) {
-          OnBoardRepository().setIsInitialLogin(false).then((_) {
+          OnboardRepository().setIsInitialLogin(false).then((_) {
             _updateIfGranted(currentBleState == BluetoothState.stateOn, permission);
           });
         });
       } else {
-        OnBoardRepository().setIsInitialLogin(false).then((_) {
+        OnboardRepository().setIsInitialLogin(false).then((_) {
           _updateIfGranted(currentBleState == BluetoothState.stateOn, permission);
         });
       }

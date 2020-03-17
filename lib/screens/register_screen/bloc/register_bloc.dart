@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:heist/repositories/customer_repository.dart';
-import 'package:heist/repositories/on_board_repository.dart';
 import 'package:heist/resources/helpers/validators.dart';
 import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
