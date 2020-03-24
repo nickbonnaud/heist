@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_beacon/flutter_beacon.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
+import 'package:heist/blocs/geo_location/geo_location_bloc.dart';
 import 'package:heist/repositories/onboard_repository.dart';
 import 'package:heist/resources/constants.dart';
 import 'package:heist/screens/permission_screen/bloc/permission_screen_bloc.dart';
@@ -40,12 +41,12 @@ class _PermissionButtonsState extends State<PermissionButtons> {
           ios: (_) => CupertinoButton.filled(
             child: PlatformText('Enable'), 
             onPressed: () {
-              _requestPermission(widget._permission, widget._controller);
+              _requestPermission(widget._permission, widget._controller, context);
             } 
           ),
           android: (_) => RaisedButton(
             onPressed: () {
-              _requestPermission(widget._permission, widget._controller);
+              _requestPermission(widget._permission, widget._controller, context);
             },
             child: PlatformText('Enable', style: TextStyle(color: Colors.white),),
             color: Theme.of(context).primaryColor,
@@ -61,7 +62,7 @@ class _PermissionButtonsState extends State<PermissionButtons> {
     super.dispose();
   }
 
-  void _requestPermission(PermissionType permission, AnimationController controller) async {
+  void _requestPermission(PermissionType permission, AnimationController controller, BuildContext context) async {
     if (permission == PermissionType.bluetooth) {
       BluetoothState currentBleState = await flutterBeacon.bluetoothState;
       if (currentBleState == BluetoothState.stateUnknown) {
@@ -77,6 +78,9 @@ class _PermissionButtonsState extends State<PermissionButtons> {
       }
     } else if (permission == PermissionType.location) {
       final Map<PermissionGroup, PermissionStatus> status = await PermissionHandler().requestPermissions([PermissionGroup.locationWhenInUse]);
+      if (status[PermissionGroup.locationWhenInUse] == PermissionStatus.granted) {
+        BlocProvider.of<GeoLocationBloc>(context).add(GeoLocationReady());
+      }
       _updateIfGranted(status[PermissionGroup.locationWhenInUse] == PermissionStatus.granted, permission);
     } else if (permission == PermissionType.notification) {
       FutureOr<bool> status = await FirebaseMessaging().requestNotificationPermissions();

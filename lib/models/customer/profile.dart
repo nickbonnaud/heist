@@ -17,4 +17,7 @@ class Profile extends Equatable {
 
   @override
   List<Object> get props => [identifier, firstName, lastName, photos];
+
+  @override
+  String toString() => 'Profile { identifier: $identifier, firstName: $firstName, lastName: $lastName, photos: $photos }';
 }

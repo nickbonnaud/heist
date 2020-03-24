@@ -27,4 +27,7 @@ class Customer extends Equatable {
 
   @override
   List<Object> get props => [identifier, email, profile, status, error];
+
+  @override
+  String toString() => 'Customer { identifier: $identifier, email: $email, profile: $profile, status: $status, error: $error }';
 }

@@ -11,8 +11,20 @@ class GeolocatorProvider {
     }
   }
 
-  Future<bool> checkPermission() async {
-    GeolocationStatus status = await Geolocator().checkGeolocationPermissionStatus();
-    return status == GeolocationStatus.granted;
+  Future<GeolocationStatus> checkPermission() async {
+    return await Geolocator().checkGeolocationPermissionStatus();
+  }
+
+  Future<Position> fetchRecent() async {
+    try {
+      Position position;
+      position = await Geolocator().getLastKnownPosition();
+      if (position == null) {
+        position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.medium);
+      }
+      return position;
+    } catch (e) {
+      return null;
+    }
   }
 }

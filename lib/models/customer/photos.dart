@@ -14,4 +14,7 @@ class Photos extends Equatable {
 
   @override
   List<Object> get props => [name, smallUrl, largeUrl];
+
+  @override
+  String toString() => 'Photos { name: $name, smallUrl: $smallUrl, largeUrl: $largeUrl }';
 }

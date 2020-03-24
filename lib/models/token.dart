@@ -21,5 +21,6 @@ class Token extends Equatable {
   @override
   List<Object> get props => [value, expiry];
 
-  
+  @override
+  String toString() => 'Token { value: $value, expiry: $expiry }';
 }

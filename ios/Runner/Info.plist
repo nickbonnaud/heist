@@ -41,29 +41,25 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-    
-    <key>UIRequiredDeviceCapabilities</key>
-    <array>
-        <string>bluetooth-le</string>
-    </array>
-    
-    <key>NSLocationWhenInUseUsageDescription</key>
-    <string>Location Services are always required.</string>
-    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-    <string>Location Services are always required.</string>
-    <key>NSLocationAlwaysUsageDescription</key>
-    <string>Location Services are always required.</string>
-    
-    <key>PermissionGroupNotification</key>
-    <string>Notifications are required.</string>
-    
-    <key>NSCameraUsageDescription</key>
-    <string>Allow access to camera.</string>
-    
-    <key>NSPhotoLibraryUsageDescription</key>
-    <string>Allow access to photos.</string>
-    
-    <key>NSBluetoothAlwaysUsageDescription</key>
-    <string>Reason why app needs bluetooth</string>
+	<key>UIRequiredDeviceCapabilities</key>
+	<array>
+		<string>bluetooth-le</string>
+	</array>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Location Services are always required.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Location Services are always required.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Location Services are always required.</string>
+	<key>PermissionGroupNotification</key>
+	<string>Notifications are required.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Allow access to camera.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Allow access to photos.</string>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>Allow Access to Bluetooth</string>
+    <key>io.flutter.embedded_views_preview</key>
+    <true/>
 </dict>
 </plist>
