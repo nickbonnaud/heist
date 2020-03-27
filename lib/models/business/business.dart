@@ -13,19 +13,25 @@ class Business extends Equatable {
 
   Business({this.identifier, this.profile, this.photos, this.location, this.error});
 
-  Business.fromJson(Map<String, dynamic> json)
-    : identifier = json['identifier'],
-      profile = Profile.fromJson(json['profile']),
-      photos = Photos.fromJson(json['photos']),
-      location = Location.fromJson(json['location']),
-      error = '';
+  static Business fromJson(Map<String, dynamic> json) {
+    return Business(
+      identifier: json['identifier'],
+      profile: Profile.fromJson(json['profile']),
+      photos: Photos.fromJson(json['photos']),
+      location: Location.fromJson(json['location']),
+      error: ''
+    );
+  }
 
-  Business.withError(String error)
-    : identifier = null,
-      profile = null,
-      photos = null,
-      location = null,
-      error = error;
+  static Business withError(String error) {
+    return Business(
+      identifier: null,
+      profile: null,
+      photos: null,
+      location: null,
+      error: error
+    );
+  }
 
   @override
   List<Object> get props => [identifier, profile, photos, location, error];

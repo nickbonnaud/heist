@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:heist/screens/map_screen/bloc/map_screen_bloc.dart';
+import 'package:heist/blocs/nearby_businesses/nearby_businesses_bloc.dart';
 
 class FetchMarkersFail extends StatelessWidget {
   final double _latitude;
@@ -40,7 +40,7 @@ class FetchMarkersFail extends StatelessWidget {
           ),
           SizedBox(height: 15.0),
           PlatformButton(
-            onPressed: () => BlocProvider.of<MapScreenBloc>(context).add(SendLocation(lat: _latitude, lng: _longitude)),
+            onPressed: () => BlocProvider.of<NearbyBusinessesBloc>(context).add(FetchNearby(lat: _latitude, lng: _longitude)),
             child: PlatformText('Try Again'),
           )
         ],

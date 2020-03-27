@@ -34,7 +34,6 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
   Stream<AuthenticationState> _mapAppStartedToState() async* {
     yield Loading();
     try {
-      await _testSleep();
       final bool isSignedIn = await _customerRepository.isSignedIn();
       if (isSignedIn) {
         final Customer customer = await _customerRepository.getCustomer();
@@ -45,10 +44,6 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
     } catch (_) {
       yield Unauthenticated();
     }
-  }
-
-  Future<void> _testSleep() async {
-    return await Future.delayed(Duration(seconds: 5));
   }
 
   Stream<AuthenticationState> _mapLoggedInToState() async* {

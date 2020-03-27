@@ -5,10 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:heist/blocs/geo_location/geo_location_bloc.dart';
-import 'package:heist/models/business/business.dart';
-import 'package:heist/screens/business_screen/business_screen.dart';
-import 'package:heist/screens/map_screen/bloc/map_screen_bloc.dart';
-import 'package:heist/screens/map_screen/helpers/icon_creator.dart';
+import 'package:heist/blocs/nearby_businesses/nearby_businesses_bloc.dart';
+import 'package:heist/screens/business_screen/business_screen.dart'; 
 import 'package:heist/screens/map_screen/helpers/pre_marker.dart';
 
 import 'fetch_markers_fail.dart';
@@ -25,9 +23,9 @@ class GoogleMapScreen extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<MapScreenBloc, MapScreenState>(
+    return BlocBuilder<NearbyBusinessesBloc, NearbyBusinessesState>(
       builder: (context, state) {
-        if (state is MarkersLoading || state is MapScreenEmpty) {
+        if (state is NearbyUninitialized) {
           return Scaffold(
             body: GoogleMap(
               initialCameraPosition: CameraPosition(
@@ -47,7 +45,7 @@ class GoogleMapScreen extends StatelessWidget {
               onPressed: () => _changeLocation(context),
             ),
           );
-        } else if (state is MarkersLoaded) {
+        } else if (state is NearbyBusinessLoaded) {
           return Scaffold(
             body: GoogleMap(
               initialCameraPosition: CameraPosition(
@@ -67,7 +65,7 @@ class GoogleMapScreen extends StatelessWidget {
               onPressed: () => _changeLocation(context),
             ),
           );
-        } else if (state is NoMarkers) {
+        } else if (state is NoNearby) {
           return NoNearbyLocations();
         } else {
           return FetchMarkersFail(latitude: _latitude, longitude: _longitude);

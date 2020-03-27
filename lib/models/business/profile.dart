@@ -11,13 +11,16 @@ class Profile extends Equatable {
   
   Profile({this.name, this.website, this.phone, this.description, this.hours});
 
-  Profile.fromJson(Map<String, dynamic> json)
-    : name = json['name'],
-      website = json['website'],
-      phone = json['phone'],
-      description = json['description'],
-      hours = Hours.fromJson(json['hours']);
-
+  static Profile fromJson(Map<String, dynamic> json) {
+    return Profile(
+      name: json['name'],
+      website: json['website'],
+      phone: json['phone'],
+      description: json['description'],
+      hours: Hours.fromJson(json['hours'])
+    );
+  }
+  
   @override
   List<Object> get props => [name, website, description, hours];
 

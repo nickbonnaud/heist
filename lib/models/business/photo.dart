@@ -1,23 +1,23 @@
 import 'package:equatable/equatable.dart';
 
-class Photos extends Equatable {
+class Photo extends Equatable {
   final String name;
   final String smallUrl;
   final String largeUrl;
 
-  Photos({this.name, this.smallUrl, this.largeUrl});
+  Photo({this.name, this.smallUrl, this.largeUrl});
 
-  static Photos fromJson(Map<String, dynamic> json) {
-    return Photos(
+  static Photo fromJson(Map<String, dynamic> json) {
+    return Photo(
       name: json['name'],
       smallUrl: json['small_url'],
       largeUrl: json['large_url']
     );
   }
-  
+
   @override
   List<Object> get props => [name, smallUrl, largeUrl];
 
   @override
-  String toString() => 'Photos { name: $name, smallUrl: $smallUrl, largeUrl: $largeUrl }';
+  String toString() => 'Photo { name: $name, smallUrl: $smallUrl, largeUrl: $largeUrl }';
 }

@@ -7,6 +7,7 @@ import 'package:flutter_beacon/flutter_beacon.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:heist/blocs/geo_location/geo_location_bloc.dart';
+import 'package:heist/blocs/permissions/permissions_bloc.dart';
 import 'package:heist/repositories/onboard_repository.dart';
 import 'package:heist/resources/constants.dart';
 import 'package:heist/screens/permission_screen/bloc/permission_screen_bloc.dart';
@@ -41,12 +42,12 @@ class _PermissionButtonsState extends State<PermissionButtons> {
           ios: (_) => CupertinoButton.filled(
             child: PlatformText('Enable'), 
             onPressed: () {
-              _requestPermission(widget._permission, widget._controller, context);
+              _requestPermission(widget._permission, widget._controller);
             } 
           ),
           android: (_) => RaisedButton(
             onPressed: () {
-              _requestPermission(widget._permission, widget._controller, context);
+              _requestPermission(widget._permission, widget._controller);
             },
             child: PlatformText('Enable', style: TextStyle(color: Colors.white),),
             color: Theme.of(context).primaryColor,
@@ -62,7 +63,7 @@ class _PermissionButtonsState extends State<PermissionButtons> {
     super.dispose();
   }
 
-  void _requestPermission(PermissionType permission, AnimationController controller, BuildContext context) async {
+  void _requestPermission(PermissionType permission, AnimationController controller) async {
     if (permission == PermissionType.bluetooth) {
       BluetoothState currentBleState = await flutterBeacon.bluetoothState;
       if (currentBleState == BluetoothState.stateUnknown) {
@@ -96,6 +97,7 @@ class _PermissionButtonsState extends State<PermissionButtons> {
   }
 
   void _updateIfGranted(bool granted, PermissionType type) {
+    _updatePermissionsBloc(granted, type);
     if (granted) {
       widget._controller..addStatusListener((AnimationStatus status) {
         if (status == AnimationStatus.completed) {
@@ -105,6 +107,23 @@ class _PermissionButtonsState extends State<PermissionButtons> {
       widget._controller.forward();
     } else {
       _showPermissionDeniedAlert(type);
+    }
+  }
+
+  void _updatePermissionsBloc(bool granted, PermissionType type) {
+    switch (type) {
+      case PermissionType.bluetooth:
+        BlocProvider.of<PermissionsBloc>(context).add(BleStatusChanged(granted: granted));
+        break;
+      case PermissionType.location:
+        BlocProvider.of<PermissionsBloc>(context).add(LocationStatusChanged(granted: granted));
+        break;
+      case PermissionType.notification:
+        BlocProvider.of<PermissionsBloc>(context).add(NotificationStatusChanged(granted: granted));
+        break;
+      case PermissionType.beacon:
+        BlocProvider.of<PermissionsBloc>(context).add(BeaconStatusChanged(granted: granted));
+        break;
     }
   }
 

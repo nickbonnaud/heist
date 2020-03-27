@@ -76,7 +76,6 @@ class MockResponses {
             'name': "Acme Inc.",
             'website': "https://acmecarrboro.com/",
             'description': "A description of the Acme Inc. company. It's a really cool company that you should patronize.",
-            'google_place_id': "bcfhu3y2ru3",
             'phone': "9195244477",
             'hours': {
               'monday': 'Monday: 11:00 AM - 10:00 PM',
@@ -109,8 +108,16 @@ class MockResponses {
             },
             'beacon': {
               'identifier': 'bcdhbv31r3yv',
-              'major': 'vd2jksbvkjdsvd52d',
-              'minor': 'cdanjcbd5r5cvae432'
+              'region_identifier': 'dcansjcbds22ded',
+              'major': '0',
+              'minor': '0'
+            },
+            'region': {
+              'identifier': 'fcdjnasy3y8',
+              'city': 'Chapel Hill',
+              'state': 'NC',
+              'zip': '27514',
+              'neighborhood': 'bchsavc'
             }
           }
         },
@@ -120,7 +127,6 @@ class MockResponses {
             'name': "Sunrise Biscuits",
             'website': "http://sunrisebiscuits.com/",
             'description': "A description of the Sunrise Biscuits. It's a really cool company that you should patronize.",
-            'google_place_id': "vdwsvff343g42",
             'phone': "3743734848",
             'hours': {
               'monday': 'Monday: 8:00 AM - 10:00 PM',
@@ -153,8 +159,16 @@ class MockResponses {
             },
             'beacon': {
               'identifier': 'cdsnji2rty42',
-              'major': 'cdbshj237123f',
-              'minor': 'cdascdanjiagij3'
+              'region_identifier': 'cdjsb1y27qycd',
+              'major': '1',
+              'minor': '1'
+            },
+            'region': {
+              'identifier': 'fcdjnasy3y8',
+              'city': 'Chapel Hill',
+              'state': 'NC',
+              'zip': '27514',
+              'neighborhood': 'cnsajcbads'
             }
           }
         },
@@ -164,7 +178,6 @@ class MockResponses {
             'name': "City Kitchen",
             'website': "https://citykitchenchapelhill.com/",
             'description': "A description of the City Kitchen Bistro. It's a really cool company that you should patronize.",
-            'google_place_id': "ccncjii1j3r3r",
             'phone': "3750370153",
             'hours': {
               'monday': 'Monday: 11:00 AM - 10:00 PM',
@@ -197,8 +210,16 @@ class MockResponses {
             },
             'beacon': {
               'identifier': '39320ifjebufcd',
-              'major': 'polvnfbj444',
-              'minor': 'ncio3iu8rg3ui'
+              'region_identifier': 'cdabsjhvchvda2j2',
+              'major': '2',
+              'minor': '2'
+            },
+            'region': {
+              'identifier': 'fcdjnasy3y8',
+              'city': 'Chapel Hill',
+              'state': 'NC',
+              'zip': '27514',
+              'neighborhood': 'cbjsabc'
             }
           }
         }
