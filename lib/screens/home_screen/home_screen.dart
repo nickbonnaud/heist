@@ -1,11 +1,16 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:heist/blocs/permissions/permissions_bloc.dart';
+import 'package:heist/resources/helpers/text_styles.dart';
+import 'package:heist/screens/home_screen/bloc/side_menu_bloc.dart';
+import 'package:heist/screens/home_screen/widgets/side_drawer.dart';
 import 'package:heist/screens/map_screen/map_screen.dart';
 import 'package:heist/screens/permission_screen/permission_screen.dart';
 
 class HomeScreen extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     return BlocListener<PermissionsBloc, PermissionsState>(
@@ -16,7 +21,10 @@ class HomeScreen extends StatelessWidget {
       },
       child: Scaffold(
         backgroundColor: Colors.white,
-        body: MapScreen()
+        body: BlocProvider<SideMenuBloc>(
+          create: (BuildContext context) => SideMenuBloc(),
+          child: SideDrawer(homeScreen: MapScreen()),
+        ),
       ),
     );
   }

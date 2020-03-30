@@ -9,15 +9,18 @@ import 'package:heist/blocs/beacon/beacon_bloc.dart';
 import 'package:heist/blocs/geo_location/geo_location_bloc.dart';
 import 'package:heist/blocs/nearby_businesses/nearby_businesses_bloc.dart';
 import 'package:heist/blocs/permissions/permissions_bloc.dart';
+import 'package:heist/blocs/push_notification/push_notification_bloc.dart';
 import 'package:heist/repositories/active_location_repository.dart';
 import 'package:heist/repositories/beacon_repository.dart';
 import 'package:heist/repositories/customer_repository.dart';
 import 'package:heist/repositories/geolocator_repository.dart';
 import 'package:heist/repositories/location_repository.dart';
 import 'package:heist/repositories/onboard_repository.dart';
+import 'package:heist/repositories/push_notification_repository.dart';
 import 'package:heist/resources/constants.dart';
-import 'package:heist/screens/home_screen.dart';
 import 'package:heist/themes/default_theme.dart';
+
+import 'screens/home_screen/home_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,6 +30,7 @@ void main() {
   final GeolocatorRepository _geolocatorRepository = GeolocatorRepository();
   final LocationRepository _locationRepository = LocationRepository();
   final BeaconRepository _beaconRepository = BeaconRepository();
+  final PushNotificationRepository _pushNotificationRepository = PushNotificationRepository();
   
   SystemChrome.setSystemUIOverlayStyle(
     SystemUiOverlayStyle(
@@ -48,6 +52,9 @@ void main() {
         ),
         BlocProvider<BeaconBloc>(
           create: (BuildContext context) => BeaconBloc(beaconRepository: _beaconRepository, activeLocationBloc: BlocProvider.of<ActiveLocationBloc>(context))
+        ),
+        BlocProvider<PushNotificationBloc>(
+          create: (BuildContext context) => PushNotificationBloc(pushNotificationRepository: _pushNotificationRepository)
         ),
         BlocProvider<AuthenticationBloc>(
           create: (BuildContext context) => AuthenticationBloc(customerRepository: _customerRepository)
@@ -72,6 +79,7 @@ class App extends StatelessWidget {
           listener: (context, state) {
             if (state.onStartPermissionsValid) {
               BlocProvider.of<GeoLocationBloc>(context)..add(GeoLocationReady());
+              BlocProvider.of<PushNotificationBloc>(context)..add(StartPushNotificationMonitoring());
             }
           },
         ),
@@ -88,6 +96,13 @@ class App extends StatelessWidget {
               BlocProvider.of<BeaconBloc>(context)..add(StartBeaconMonitoring(businesses: state.businesses));
             }
           },
+        ),
+        BlocListener<PushNotificationBloc, PushNotificationState>(
+          listener: (context, state) {
+            if (state is PushNotificationCallBackActivated) {
+              // handle push notification callbacks
+            }
+          }
         )
       ],
       child: AppTheme()
@@ -121,6 +136,11 @@ class AppTheme extends StatelessWidget {
         builder: (context) {
           return PlatformApp(
             title: Constants.appName,
+            localizationsDelegates: [
+              DefaultWidgetsLocalizations.delegate,
+              DefaultCupertinoLocalizations.delegate,
+              DefaultMaterialLocalizations.delegate,
+            ],
             android: (_) {
               return new MaterialAppData(
                 theme: materialTheme,
@@ -129,7 +149,7 @@ class AppTheme extends StatelessWidget {
               );
             },
             ios: (_) => new CupertinoAppData(
-              theme: cupertinoTheme
+              theme: cupertinoTheme,
             ),
             home: HomeScreen(),
           );

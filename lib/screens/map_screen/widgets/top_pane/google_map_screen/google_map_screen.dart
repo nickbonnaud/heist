@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -61,7 +62,13 @@ class GoogleMapScreen extends StatelessWidget {
               myLocationButtonEnabled: false,
             ),
             floatingActionButton: FloatingActionButton(
-              child: Icon(Icons.my_location),
+              child: PlatformWidget(
+                android: (_) => Icon(Icons.my_location),
+                ios: (_) => Icon(IconData(0xF2E9,
+                  fontFamily: CupertinoIcons.iconFont,
+                  fontPackage: CupertinoIcons.iconFontPackage
+                )),
+              ),
               onPressed: () => _changeLocation(context),
             ),
           );

@@ -22,10 +22,33 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>Allow Access to Bluetooth</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Allow access to camera.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Location Services are always required.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Location Services are always required.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Location Services are always required.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Allow access to photos.</string>
+	<key>PermissionGroupNotification</key>
+	<string>Notifications are required.</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+		<string>remote-notification</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
+	<key>UIRequiredDeviceCapabilities</key>
+	<array>
+		<string>bluetooth-le</string>
+	</array>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
@@ -41,25 +64,9 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>UIRequiredDeviceCapabilities</key>
-	<array>
-		<string>bluetooth-le</string>
-	</array>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Location Services are always required.</string>
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Location Services are always required.</string>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Location Services are always required.</string>
-	<key>PermissionGroupNotification</key>
-	<string>Notifications are required.</string>
-	<key>NSCameraUsageDescription</key>
-	<string>Allow access to camera.</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Allow access to photos.</string>
-	<key>NSBluetoothAlwaysUsageDescription</key>
-	<string>Allow Access to Bluetooth</string>
-    <key>io.flutter.embedded_views_preview</key>
-    <true/>
+	<key>io.flutter.embedded_views_preview</key>
+	<true/>
+    <key>FirebaseAppDelegateProxyEnabled</key>
+    <false/>
 </dict>
 </plist>

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heist/blocs/authentication/authentication_bloc.dart';
 import 'package:heist/repositories/customer_repository.dart';
-import 'package:heist/screens/home_screen.dart';
 
+import 'home_screen/home_screen.dart';
 import 'login_screen/login_screen.dart';
 
 
