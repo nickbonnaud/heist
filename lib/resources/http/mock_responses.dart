@@ -11,9 +11,27 @@ class MockResponses {
       return _mockLogin(options);
     } else if (options.path.endsWith("geo-location")) {
       return _mockOnStart(options);
+    } else if (options.path.endsWith('profile')) {
+      return _mockStoreProfile(options);
+    } else if (options.path.endsWith('profile/fake_identifier')) {
+      return _mockStoreProfile(options);
+    } else if (options.path.endsWith('/me')) {
+      return _mockFetchCustomer();
+    } else if (options.path.endsWith('avatar/fake_identifier')) {
+      return _mockPostPhoto();
     }
   }
 
+  static Map<String, dynamic> _mockPostPhoto() {
+    return {
+      'data': {
+        'name': 'fake_avatar.png',
+        'small_url': 'https://moresmilesdentalclinic.com/wp-content/uploads/2017/09/bigstock-profile-of-male-geek-smiling-w-35555741-250x250-1.jpg',
+        'large_url': 'https://corporate-rebels.com/CDN/378-500x500.jpg'
+      }
+    };
+  }
+  
   static Map<String, dynamic> _mockRegister(RequestOptions options) {
     return {
       'data': {
@@ -31,6 +49,45 @@ class MockResponses {
       'errors': {
         'email': [null],
         'password': [null]
+      }
+    };
+  }
+
+  static Map<String, dynamic> _mockStoreProfile(RequestOptions options) {
+    return {
+      'data': {
+        'identifier': 'fake_identifier',
+        'first_name': 'fake_name',
+        'last_name': 'fake last',
+        'photos': {
+          'name': 'fake-profile.png',
+          'small_url': 'https://upload.wikimedia.org/wikipedia/commons/4/46/Gabrielpalatch-headshot-500x500.png',
+          'large_url': 'https://cdn2.pauldavis.info/wp-content/uploads/sites/878/2019/02/26174944/Nate-Headshot-250x250.jpg'
+        }
+      }
+    };
+  }
+
+  static Map<String, dynamic> _mockFetchCustomer() {
+    return {
+      'data': {
+        'identifier': 'fake_identifier',
+        'email': 'fake@gmail.com',
+        'token': 'not_a_real_token',
+        'profile': {
+          'identifier': 'fake_identifier',
+          'first_name': 'Nick',
+          'last_name': 'Bonnaud',
+          'photos': {
+            'name': 'fake-profile.png',
+            'small_url': 'https://upload.wikimedia.org/wikipedia/commons/4/46/Gabrielpalatch-headshot-500x500.png',
+            'large_url': 'https://cdn2.pauldavis.info/wp-content/uploads/sites/878/2019/02/26174944/Nate-Headshot-250x250.jpg'
+          }
+        },
+        'status': {
+          'name': 'Ready',
+          'code': '200'
+        }
       }
     };
   }

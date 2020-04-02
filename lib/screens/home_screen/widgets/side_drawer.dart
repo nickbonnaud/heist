@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
 import 'package:heist/screens/home_screen/bloc/side_menu_bloc.dart';
+import 'package:heist/screens/profile_screen/profile_screen.dart';
 
 class SideDrawer extends StatefulWidget {
   final Widget _homeScreen;
@@ -17,6 +18,7 @@ class SideDrawer extends StatefulWidget {
 }
 
 class _SideDrawerState extends State<SideDrawer> with TickerProviderStateMixin {
+  static const String HERO_KEY = 'MENU_KEY';
   
   double _minScale = 0.86;
   double _drawerWidth = 0.66;
@@ -146,9 +148,10 @@ class _SideDrawerState extends State<SideDrawer> with TickerProviderStateMixin {
                 )
               ],
             ),
-            floatingActionButton: Padding(
+            floatingActionButton: !state.menuOpened ? Padding(
               padding: EdgeInsets.only(top: 200),
               child: FloatingActionButton(
+                heroTag: HERO_KEY,
                 child: PlatformWidget(
                   android: (_) => Icon(Icons.menu),
                   ios: (_) => Icon(IconData(
@@ -159,7 +162,7 @@ class _SideDrawerState extends State<SideDrawer> with TickerProviderStateMixin {
                 ),
                 onPressed: () => _onMenuPressed(context, state),
               ),
-            ),
+            ) : null,
             floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
           ),
         );
@@ -231,6 +234,21 @@ class Drawer extends StatelessWidget {
                     )
                   ),
                   DrawerItem(
+                    onPressed: () => showPlatformModalSheet(
+                      context: context, 
+                      builder: (_) => ProfileScreen()
+                    ),
+                    text: 'Profile Settings',
+                    icon: PlatformWidget(
+                      android: (_) => Icon(Icons.person),
+                      ios: (_) => Icon(IconData(
+                        0xF3A0,
+                        fontFamily: CupertinoIcons.iconFont,
+                        fontPackage: CupertinoIcons.iconFontPackage
+                      )),
+                    )
+                  ),
+                  DrawerItem(
                     onPressed: () => print('pressed'),
                     text: 'Settings',
                     icon: Icon(context.platformIcons.settings)
@@ -241,7 +259,7 @@ class Drawer extends StatelessWidget {
                     icon: PlatformWidget(
                       android: (_) => Icon(Icons.live_help),
                       ios: (_) => Icon(IconData(
-                        0xF3F8,
+                        0xF445,
                         fontFamily: CupertinoIcons.iconFont,
                         fontPackage: CupertinoIcons.iconFontPackage
                       )),

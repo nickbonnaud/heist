@@ -8,7 +8,6 @@ import 'package:meta/meta.dart';
 class CustomerRepository {
   final CustomerProvider _customerProvider = CustomerProvider();
   final TokenRepository _tokenRepository = TokenRepository();
-  Customer customer;
   
   Future<Customer> register({@required String email, @required String password, @required String passwordConfirmation}) async {
     final ApiResponse registerResponse =  await _customerProvider.register(email: email, password: password, passwordConfirmation: passwordConfirmation);
@@ -45,12 +44,8 @@ class CustomerRepository {
   Future<bool> isSignedIn() async {
     return await _tokenRepository.hasValidToken();
   }
-
-  Future<Customer> getCustomer() async {
-    return customer == null ? _fetchCustomer() : customer;
-  }
   
-  Future<Customer> _fetchCustomer() async {
+  Future<Customer> fetchCustomer() async {
     final ApiResponse response = await _customerProvider.getCustomer();
     if (response.isOK) {
       return _handleSuccess(response);
@@ -58,9 +53,16 @@ class CustomerRepository {
     return Customer.withError(response.error);
   }
 
+  Future<Customer> updateCustomer(String email, String customerId) async {
+    final ApiResponse updateResponse = await _customerProvider.updateCustomer(email, customerId);
+    if (updateResponse.isOK) {
+      return Customer.fromJson(updateResponse.body);
+    }
+    return Customer.withError(updateResponse.error);
+  }
+
   Customer _handleSuccess(ApiResponse response) {
-    _tokenRepository.saveToken(Token.fromJson(response.body));
-    customer = Customer.fromJson(response.body);
-    return customer;
+    // _tokenRepository.saveToken(Token.fromJson(response.body));
+    return Customer.fromJson(response.body);
   }
 }

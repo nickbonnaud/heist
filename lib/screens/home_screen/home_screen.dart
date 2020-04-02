@@ -3,16 +3,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:heist/blocs/permissions/permissions_bloc.dart';
+import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
 import 'package:heist/screens/home_screen/bloc/side_menu_bloc.dart';
 import 'package:heist/screens/home_screen/widgets/side_drawer.dart';
 import 'package:heist/screens/map_screen/map_screen.dart';
 import 'package:heist/screens/permission_screen/permission_screen.dart';
+import 'package:heist/screens/profile_screen/profile_screen.dart';
 
 class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     return BlocListener<PermissionsBloc, PermissionsState>(
       listener: (context, state) {
         if (!state.bleEnabled || !state.locationEnabled || !state.notificationEnabled || !state.beaconEnabled) {

@@ -25,6 +25,37 @@ class Customer extends Equatable {
       status = null,
       error = error;
 
+  Customer update({
+    String identifier,
+    String email,
+    Profile profile,
+    Status status,
+  }) {
+    return _copyWith(
+      identifier: identifier,
+      email: email,
+      profile: profile,
+      status: status
+    );
+  }
+  
+  Customer _copyWith({
+    String identifier,
+    String email,
+    Profile profile,
+    Status status,
+
+  }) {
+    return Customer(
+      identifier: identifier ?? this.identifier,
+      email: email ?? this.email,
+      profile: profile ?? this.profile,
+      status: status ?? this.status,
+      error: ''
+    );
+
+  }
+
   @override
   List<Object> get props => [identifier, email, profile, status, error];
 

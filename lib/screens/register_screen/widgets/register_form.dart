@@ -40,8 +40,6 @@ class _RegisterFormState extends State<RegisterForm> {
       listener: (context, state) {
         if (state.isFailure) {
           _errorRegister(context);
-        } else if (state.isSuccess) {
-          _errorRegister(context);
         }
       },
       child: Form(

@@ -6,6 +6,7 @@ import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:heist/blocs/active_location/active_location_bloc.dart';
 import 'package:heist/blocs/authentication/authentication_bloc.dart';
 import 'package:heist/blocs/beacon/beacon_bloc.dart';
+import 'package:heist/blocs/customer/customer_bloc.dart';
 import 'package:heist/blocs/geo_location/geo_location_bloc.dart';
 import 'package:heist/blocs/nearby_businesses/nearby_businesses_bloc.dart';
 import 'package:heist/blocs/permissions/permissions_bloc.dart';
@@ -24,13 +25,13 @@ import 'screens/home_screen/home_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  final CustomerRepository _customerRepository = CustomerRepository();
   final ActiveLocationRepository _activeLocationRepository = ActiveLocationRepository();
   final OnboardRepository _onboardRepository = OnboardRepository();
   final GeolocatorRepository _geolocatorRepository = GeolocatorRepository();
   final LocationRepository _locationRepository = LocationRepository();
   final BeaconRepository _beaconRepository = BeaconRepository();
   final PushNotificationRepository _pushNotificationRepository = PushNotificationRepository();
+  final CustomerRepository _customerRepository = CustomerRepository();
   
   SystemChrome.setSystemUIOverlayStyle(
     SystemUiOverlayStyle(
@@ -43,6 +44,9 @@ void main() {
       providers: [
         BlocProvider<ActiveLocationBloc>(
           create: (BuildContext context) => ActiveLocationBloc(activeLocationRepository: _activeLocationRepository),
+        ),
+        BlocProvider<CustomerBloc>(
+          create: (BuildContext context) => CustomerBloc(),
         ),
         BlocProvider<GeoLocationBloc>(
           create: (BuildContext context) => GeoLocationBloc(geolocatorRepository: _geolocatorRepository)
@@ -57,12 +61,10 @@ void main() {
           create: (BuildContext context) => PushNotificationBloc(pushNotificationRepository: _pushNotificationRepository)
         ),
         BlocProvider<AuthenticationBloc>(
-          create: (BuildContext context) => AuthenticationBloc(customerRepository: _customerRepository)
-            ..add(AppStarted()),
+          create: (BuildContext context) => AuthenticationBloc(customerRepository: _customerRepository, customerBloc: BlocProvider.of<CustomerBloc>(context)),
         ),
         BlocProvider<PermissionsBloc>(
           create: (BuildContext context) => PermissionsBloc(onboardRepository: _onboardRepository)
-            ..add(CheckPermissions())
         ),
       ],
       child: App()
@@ -73,6 +75,8 @@ void main() {
 class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    BlocProvider.of<AuthenticationBloc>(context).add(AppStarted());
+    BlocProvider.of<PermissionsBloc>(context).add(CheckPermissions());
     return MultiBlocListener(
       listeners: [
         BlocListener<PermissionsBloc, PermissionsState>(

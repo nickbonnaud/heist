@@ -21,7 +21,7 @@ class Api {
     return await _dio.post('$baseUrl/$url', data: body);
   }
 
-  Future patch(String url, FormData body) async {
+  Future patch(String url, Map body) async {
     return await _dio.patch('$baseUrl/$url', data: body);
   }
 

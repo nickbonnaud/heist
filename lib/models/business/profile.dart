@@ -8,8 +8,9 @@ class Profile extends Equatable {
   final String phone;
   final String description;
   final Hours hours;
+  final String error;
   
-  Profile({this.name, this.website, this.phone, this.description, this.hours});
+  Profile({this.name, this.website, this.phone, this.description, this.hours, this.error});
 
   static Profile fromJson(Map<String, dynamic> json) {
     return Profile(
@@ -17,13 +18,25 @@ class Profile extends Equatable {
       website: json['website'],
       phone: json['phone'],
       description: json['description'],
-      hours: Hours.fromJson(json['hours'])
+      hours: Hours.fromJson(json['hours']),
+      error: ''
+    );
+  }
+
+  static Profile withError(String error) {
+    return Profile(
+      name: "",
+      website: "",
+      phone: "",
+      description: "",
+      hours: null,
+      error: error
     );
   }
   
   @override
-  List<Object> get props => [name, website, description, hours];
+  List<Object> get props => [name, website, description, hours, error];
 
   @override
-  String toString() => 'Profile { name: $name, website: $website, phone: $phone, description: $description, hours: $hours }';
+  String toString() => 'Profile { name: $name, website: $website, phone: $phone, description: $description, hours: $hours, error: $error }';
 }

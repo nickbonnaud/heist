@@ -63,8 +63,21 @@ class CustomerProvider {
     String url = 'me';
     try {
       Response response = await this._api.get(url);
-      return ApiResponse(body: jsonDecode(response.data)?.data?.customer, error: null, isOK: true);
-    }  on DioError catch(error) {
+      return ApiResponse(body: response.data, error: null, isOK: true);
+    } on DioError catch(error) {
+      return _formatError(error);
+    }
+  }
+
+  Future<ApiResponse> updateCustomer(String email, String customerId) async {
+    String url = 'me/$customerId';
+    Map body = {
+      'email': email
+    };
+    try {
+      Response response = await this._api.patch(url, body);
+      return ApiResponse(body: response.data, error: null, isOK: true);
+    } on DioError catch (error) {
       return _formatError(error);
     }
   }

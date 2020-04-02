@@ -14,6 +14,7 @@ import 'fetch_markers_fail.dart';
 import 'no_nearby_locations.dart';
 
 class GoogleMapScreen extends StatelessWidget {
+  static const HERO_KEY = 'MAP_KEY';
   final double _latitude;
   final double _longitude;
 
@@ -42,6 +43,7 @@ class GoogleMapScreen extends StatelessWidget {
               myLocationButtonEnabled: false,
             ),
             floatingActionButton: FloatingActionButton(
+              heroTag: HERO_KEY,
               child: Icon(Icons.my_location),
               onPressed: () => _changeLocation(context),
             ),
@@ -62,6 +64,7 @@ class GoogleMapScreen extends StatelessWidget {
               myLocationButtonEnabled: false,
             ),
             floatingActionButton: FloatingActionButton(
+              heroTag: HERO_KEY,
               child: PlatformWidget(
                 android: (_) => Icon(Icons.my_location),
                 ios: (_) => Icon(IconData(0xF2E9,

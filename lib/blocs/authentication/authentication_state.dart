@@ -9,17 +9,7 @@ abstract class AuthenticationState extends Equatable {
 
 class Uninitialized extends AuthenticationState {}
 
-class Authenticated extends AuthenticationState {
-  final Customer customer;
-
-  Authenticated({@required this.customer});
-
-  @override
-  List<Object> get props => [customer];
-
-  @override
-  String toString() => 'Authenticated { customer: $customer }';
-}
+class Authenticated extends AuthenticationState {}
 
 class Unauthenticated extends AuthenticationState {}
 
