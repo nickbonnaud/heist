@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
+import 'package:heist/screens/email_screen/email_screen.dart';
 import 'package:heist/screens/home_screen/bloc/side_menu_bloc.dart';
+import 'package:heist/screens/onboard_screen/onboard_screen.dart';
 import 'package:heist/screens/profile_screen/profile_screen.dart';
 
 class SideDrawer extends StatefulWidget {
@@ -222,7 +224,10 @@ class Drawer extends StatelessWidget {
                     icon: Icon(Icons.payment)
                   ),
                   DrawerItem(
-                    onPressed: () => print('pressed'), 
+                    onPressed: () => showPlatformModalSheet(
+                      context: context, 
+                      builder: (_) => OnboardScreen()
+                    ),
                     text: 'Tutorial', 
                     icon: PlatformWidget(
                       android: (_) => Icon(Icons.lightbulb_outline),
@@ -249,7 +254,10 @@ class Drawer extends StatelessWidget {
                     )
                   ),
                   DrawerItem(
-                    onPressed: () => print('pressed'),
+                    onPressed: () => showPlatformModalSheet(
+                      context: context, 
+                      builder: (_) => EmailScreen()
+                    ),
                     text: 'Settings',
                     icon: Icon(context.platformIcons.settings)
                   ),
