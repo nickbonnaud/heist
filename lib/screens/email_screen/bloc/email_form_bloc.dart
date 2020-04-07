@@ -43,6 +43,8 @@ class EmailFormBloc extends Bloc<EmailFormEvent, EmailFormState> {
       yield* _mapEmailChangedToState(event);
     } else if (event is Submitted) {
       yield* _mapSubmittedToState(event);
+    } else if (event is Reset) {
+      yield* _mapResetToState();
     }
   }
 
@@ -59,5 +61,9 @@ class EmailFormBloc extends Bloc<EmailFormEvent, EmailFormState> {
     } catch (_) {
       yield state.update(isSubmitting: false, isFailure: true);
     }
+  }
+
+  Stream<EmailFormState> _mapResetToState() async* {
+    yield state.update(isFailure: false, isSuccess: false);
   }
 }

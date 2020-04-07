@@ -2,6 +2,9 @@ part of 'email_form_bloc.dart';
 
 abstract class EmailFormEvent extends Equatable {
   const EmailFormEvent();
+
+  @override
+  List<Object> get props => [];
 }
 
 class EmailChanged extends EmailFormEvent {
@@ -28,3 +31,5 @@ class Submitted extends EmailFormEvent {
   @override
   String toString() => 'Submitted { email: $email, customer: $customer }';
 }
+
+class Reset extends EmailFormEvent {}

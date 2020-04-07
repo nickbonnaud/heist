@@ -23,14 +23,14 @@ class EditPhotoBloc extends Bloc<EditPhotoEvent, EditPhotoState> {
       _customerBloc = customerBloc;
   
   @override
-  EditPhotoState get initialState => EditPhotoInit();
+  EditPhotoState get initialState => PhotoUnchanged();
 
   @override
   Stream<EditPhotoState> mapEventToState(EditPhotoEvent event) async* {
     if (event is ChangePhoto) {
       yield* _mapChangePhotoToState(event);
-    } else if (event is EditPhotoBlocInit) {
-      yield PhotoUnchanged(customer: event.customer);
+    } else if (event is ResetPhotoForm) {
+      yield PhotoUnchanged();
     }
   }
 
@@ -43,7 +43,7 @@ class EditPhotoBloc extends Bloc<EditPhotoEvent, EditPhotoState> {
       yield SubmitSuccess(photo: event.photo);
       _customerBloc.add(UpdateCustomer(customer: customer));
     } catch (_) {
-      yield SubmitFailed(customer: event.customer);
+      yield SubmitFailed();
     }
   }
 }

@@ -7,19 +7,7 @@ abstract class EditPhotoState extends Equatable {
   List<Object> get props => [];
 }
 
-class EditPhotoInit extends EditPhotoState {}
-
-class PhotoUnchanged extends EditPhotoState {
-  final Customer customer;
-
-  PhotoUnchanged({@required this.customer});
-
-  @override
-  List<Object> get props => [customer];
-
-  @override
-  String toString() => 'PhotoUnchanged { customer: $customer }';
-}
+class PhotoUnchanged extends EditPhotoState {}
 
 class Submitting extends EditPhotoState {
   final File photo;
@@ -45,14 +33,4 @@ class SubmitSuccess extends EditPhotoState {
   String toString() => 'SubmitSuccess { photo: $photo }';
 }
 
-class SubmitFailed extends EditPhotoState {
-  final Customer customer;
-
-  SubmitFailed({@required this.customer});
-
-  @override
-  List<Object> get props => [customer];
-
-  @override
-  String toString() => 'SubmitFailed { customer: $customer }';
-}
+class SubmitFailed extends EditPhotoState {}

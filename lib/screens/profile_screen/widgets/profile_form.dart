@@ -54,9 +54,9 @@ class _ProfileFormState extends State<ProfileForm> {
     return BlocListener<ProfileFormBloc, ProfileFormState>(
       listener: (context, state) {
         if (state.isFailure) {
-          _showErrorSnackbar(context, 'Failed to save. Please try again.');
+          _showSnackbar(context, 'Failed to save. Please try again.', state);
         } else if (state.isSuccess) {
-          _showSuccessSnackbar(context, 'Profile Updated!');
+          _showSnackbar(context, 'Profile Updated!', state);
         }
       },
       child: Form(
@@ -72,9 +72,8 @@ class _ProfileFormState extends State<ProfileForm> {
               SizedBox(height: SizeConfig.getHeight(5)),
               Center(
                 child: BlocProvider<EditPhotoBloc>(
-                  create: (BuildContext context) => EditPhotoBloc(profileRepository: widget._profileRepository , customerBloc: BlocProvider.of<CustomerBloc>(context))
-                    ..add(EditPhotoBlocInit(customer: widget._customer)),
-                  child: EditPhoto(photoPicker: PhotoPickerRepository()),
+                  create: (BuildContext context) => EditPhotoBloc(profileRepository: widget._profileRepository , customerBloc: BlocProvider.of<CustomerBloc>(context)),
+                  child: EditPhoto(photoPicker: PhotoPickerRepository(), customer: widget._customer,),
                 )
               ),
               SizedBox(height: SizeConfig.getHeight(8)),
@@ -223,10 +222,10 @@ class _ProfileFormState extends State<ProfileForm> {
     Navigator.pop(context);
   }
 
-  void _showSuccessSnackbar(BuildContext context, String successMessage) async {
+  void _showSnackbar(BuildContext context, String message, ProfileFormState state) async {
     bool canVibrate = await Vibrate.canVibrate;
     if (canVibrate) {
-      Vibrate.feedback(FeedbackType.success);
+      Vibrate.feedback(state.isSuccess ? FeedbackType.success : FeedbackType.error);
     }
 
     Scaffold.of(context)
@@ -237,13 +236,13 @@ class _ProfileFormState extends State<ProfileForm> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Expanded(
-                child: BoldText(text: successMessage, size: SizeConfig.getWidth(6), color: Colors.white)
+                child: BoldText(text: message, size: SizeConfig.getWidth(6), color: Colors.white)
               ),
               PlatformWidget(
-                android: (_) => Icon(Icons.check_circle_outline),
+                android: (_) => Icon(state.isSuccess ? Icons.check_circle_outline : Icons.error),
                 ios: (_) => Icon(
                   IconData(
-                    0xF3FE,
+                    state.isSuccess ? 0xF3FE : 0xF35B,
                     fontFamily: CupertinoIcons.iconFont,
                     fontPackage: CupertinoIcons.iconFontPackage
                   ),
@@ -252,42 +251,14 @@ class _ProfileFormState extends State<ProfileForm> {
               )
             ],
           ),
-          backgroundColor: Colors.green,
+          backgroundColor: state.isSuccess ? Colors.green : Colors.red,
         )
-      ).closed.then((_) => Navigator.of(context).pop());
-  }
-
-  void _showErrorSnackbar(BuildContext context, String errorMessage) async {
-    bool canVibrate = await Vibrate.canVibrate;
-    if (canVibrate) {
-      Vibrate.feedback(FeedbackType.error);
-    }
-
-    Scaffold.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(
-        SnackBar(
-          content: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Expanded(
-                child: NormalText(text: errorMessage, size: SizeConfig.getWidth(6), color: Colors.white)
-              ),
-              PlatformWidget(
-                android: (_) => Icon(Icons.error),
-                ios: (_) => Icon(
-                  IconData(
-                    0xF35B,
-                    fontFamily: CupertinoIcons.iconFont,
-                    fontPackage: CupertinoIcons.iconFontPackage
-                  ),
-                  color: Colors.white,
-                ),
-              )
-            ],
-          ),
-          backgroundColor: Colors.red,
-        )
-      );
+      ).closed.then((_) => {
+        if (state.isSuccess) {
+          Navigator.of(context).pop()
+        } else {
+          BlocProvider.of<ProfileFormBloc>(context).add(Reset())
+        }
+      });
   }
 }

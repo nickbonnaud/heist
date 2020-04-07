@@ -13,19 +13,21 @@ import 'package:vibrate/vibrate.dart';
 
 class EditPhoto extends StatelessWidget {
   final PhotoPickerRepository _photoPicker;
+  final Customer _customer;
 
-  EditPhoto({@required PhotoPickerRepository photoPicker})
-    : assert(photoPicker != null),
-      _photoPicker = photoPicker;
+  EditPhoto({@required PhotoPickerRepository photoPicker, @required Customer customer})
+    : assert(photoPicker != null, customer != null),
+      _photoPicker = photoPicker,
+      _customer = customer;
 
   @override
   Widget build(BuildContext context) {
     return BlocListener<EditPhotoBloc, EditPhotoState>(
       listener: (context, state) {
-        if (state is SubmitFailed) {
-          _showErrorSnackbar(context);
-        } else if (state is SubmitSuccess) {
-          _showSuccessSnackbar(context);
+        if (state is SubmitSuccess) {
+          _showSnackbar(context, "Photo updated!", state);
+        } else if (state is SubmitFailed) {
+          _showSnackbar(context, "Failed to upload photo. Please try again.", state);
         }
       },
       child: BlocBuilder<EditPhotoBloc, EditPhotoState>(
@@ -68,38 +70,37 @@ class EditPhoto extends StatelessWidget {
   }
 
   Widget _createAvatar(EditPhotoState state) {
-    Customer customer = state is PhotoUnchanged ? state.customer : (state is SubmitFailed ? state.customer : null);
-    if (customer != null) {
-      return CircleAvatar(
-        backgroundImage: NetworkImage(customer.profile.photos.largeUrl),
-        radius: SizeConfig.getWidth(25),
-      );
-    } else if (state is Submitting || state is SubmitSuccess) {
+   if (state is Submitting || state is SubmitSuccess) {
       File photo = state is Submitting ? state.photo : state is SubmitSuccess ? state.photo : null;
       return CircleAvatar(
         backgroundImage: Image.file(photo).image,
         radius: SizeConfig.getWidth(25),
       );
-    } else {
+    } else if (_customer == null) {
       return CircleAvatar(
         child: Image.asset('assets/profile_customer.png'),
+        radius: SizeConfig.getWidth(25),
+      );
+    } else {
+      return CircleAvatar(
+        backgroundImage: NetworkImage(_customer.profile.photos.largeUrl),
         radius: SizeConfig.getWidth(25),
       );
     }
   }
 
   void _editPhoto(BuildContext context, EditPhotoState state) async {
-    Customer customer = state is PhotoUnchanged ? state.customer : (state is SubmitFailed ? state.customer : null);
-    if (customer != null)  {
+    if (state is !Submitting) {
       File photo = await _photoPicker.pickPhoto();
-      BlocProvider.of<EditPhotoBloc>(context).add(ChangePhoto(customer: customer, photo: photo));
+      BlocProvider.of<EditPhotoBloc>(context).add(ChangePhoto(customer: _customer, photo: photo));
     }
   }
 
-  void _showSuccessSnackbar(BuildContext context) async {
+  void _showSnackbar(BuildContext context, String message, EditPhotoState state) async {
     bool canVibrate = await Vibrate.canVibrate;
+    bool isSuccess = state is SubmitSuccess;
     if (canVibrate) {
-      Vibrate.feedback(FeedbackType.success);
+      Vibrate.feedback(isSuccess ? FeedbackType.success : FeedbackType.error);
     }
 
     Scaffold.of(context)
@@ -110,13 +111,13 @@ class EditPhoto extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Expanded(
-                child: BoldText(text: "Photo updated!", size: SizeConfig.getWidth(6), color: Colors.white)
+                child: BoldText(text: message, size: SizeConfig.getWidth(6), color: Colors.white)
               ),
               PlatformWidget(
-                android: (_) => Icon(Icons.check_circle_outline),
+                android: (_) => Icon(isSuccess ? Icons.check_circle_outline : Icons.error),
                 ios: (_) => Icon(
                   IconData(
-                    0xF3FE,
+                    isSuccess ? 0xF3FE : 0xF35B,
                     fontFamily: CupertinoIcons.iconFont,
                     fontPackage: CupertinoIcons.iconFontPackage
                   ),
@@ -125,42 +126,14 @@ class EditPhoto extends StatelessWidget {
               )
             ],
           ),
-          backgroundColor: Colors.green,
+          backgroundColor: isSuccess ? Colors.green : Colors.red,
         )
-      ).closed.then((_) => Navigator.of(context).pop());
-  }
-  
-  void _showErrorSnackbar(BuildContext context) async {
-    bool canVibrate = await Vibrate.canVibrate;
-    if (canVibrate) {
-      Vibrate.feedback(FeedbackType.error);
-
-      Scaffold.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(
-        SnackBar(
-          content: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Expanded(
-                child: NormalText(text: "Failed to upload photo. Please try again.", size: SizeConfig.getWidth(6), color: Colors.white)
-              ),
-              PlatformWidget(
-                android: (_) => Icon(Icons.error),
-                ios: (_) => Icon(
-                  IconData(
-                    0xF35B,
-                    fontFamily: CupertinoIcons.iconFont,
-                    fontPackage: CupertinoIcons.iconFontPackage
-                  ),
-                  color: Colors.white,
-                ),
-              )
-            ],
-          ),
-          backgroundColor: Colors.red,
-        )
-      );
-    }
+      ).closed.then((_) => {
+        if (isSuccess) {
+          Navigator.of(context).pop()
+        } else {
+          BlocProvider.of<EditPhotoBloc>(context).add(ResetPhotoForm())
+        }
+      });
   }
 }

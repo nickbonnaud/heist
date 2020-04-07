@@ -8,6 +8,7 @@ import 'package:heist/models/customer/customer.dart';
 import 'package:heist/repositories/customer_repository.dart';
 import 'package:heist/resources/helpers/validators.dart';
 import 'package:meta/meta.dart';
+import 'package:rxdart/rxdart.dart';
 
 part 'password_form_event.dart';
 part 'password_form_state.dart';
@@ -24,6 +25,15 @@ class PasswordFormBloc extends Bloc<PasswordFormEvent, PasswordFormState> {
   @override
   PasswordFormState get initialState => PasswordFormState.initial();
 
+  @override
+  Stream<PasswordFormState> transformEvents(Stream<PasswordFormEvent> events, Stream<PasswordFormState> Function(PasswordFormEvent) next) {
+    final nonDebounceStream = events.where((event) => event is !OldPasswordChanged && event is !PasswordChanged && event is !PasswordConfirmationChanged);
+    final debounceStream = events.where((event) => event is OldPasswordChanged || event is PasswordChanged || event is PasswordConfirmationChanged)
+      .debounceTime(Duration(milliseconds: 300));
+      
+    return super.transformEvents(nonDebounceStream.mergeWith([debounceStream]), next);
+  }
+  
   @override
   Stream<PasswordFormState> mapEventToState(PasswordFormEvent event) async* {
     if (event is OldPasswordChanged) {

@@ -2,18 +2,9 @@ part of 'edit_photo_bloc.dart';
 
 abstract class EditPhotoEvent extends Equatable {
   const EditPhotoEvent();
-}
-
-class EditPhotoBlocInit extends EditPhotoEvent {
-  final Customer customer;
-
-  EditPhotoBlocInit({@required this.customer});
 
   @override
-  List<Object> get props => [customer];
-
-  @override
-  String toString() => 'ChangePhoto { customer: $customer }';
+  List<Object> get props => [];
 }
 
 class ChangePhoto extends EditPhotoEvent {
@@ -28,3 +19,5 @@ class ChangePhoto extends EditPhotoEvent {
   @override
   String toString() => 'ChangePhoto { customer: $customer, photo: $photo }';
 }
+
+class ResetPhotoForm extends EditPhotoEvent {}

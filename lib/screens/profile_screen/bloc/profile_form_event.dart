@@ -2,6 +2,9 @@ part of 'profile_form_bloc.dart';
 
 abstract class ProfileFormEvent extends Equatable {
   const ProfileFormEvent();
+
+  @override
+  List<Object> get props => [];
 }
 
 class FirstNameChanged extends ProfileFormEvent {
@@ -41,3 +44,5 @@ class Submitted extends ProfileFormEvent {
   @override
   String toString() => 'Submitted { firstName: $firstName, lastName: $lastName, customer: $customer }';
 }
+
+class Reset extends ProfileFormEvent {}

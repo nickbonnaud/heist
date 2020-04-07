@@ -45,6 +45,8 @@ class ProfileFormBloc extends Bloc<ProfileFormEvent, ProfileFormState> {
       yield* _mapLastNameChangedToState(event);
     } else if (event is Submitted) {
       yield* _mapSubmittedToState(event);
+    } else if (event is Reset) {
+      yield* _mapResetToState();
     }
   }
 
@@ -65,6 +67,10 @@ class ProfileFormBloc extends Bloc<ProfileFormEvent, ProfileFormState> {
     } catch (_) {
       yield state.update(isSubmitting: false, isFailure: true);
     }
+  }
+  
+  Stream<ProfileFormState> _mapResetToState() async* {
+    yield state.update(isSuccess: false, isFailure: false);
   }
 
   Future<Profile> _sendProfileData(String firstName, String lastName, Customer customer) {

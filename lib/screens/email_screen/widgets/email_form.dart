@@ -161,7 +161,13 @@ class _EmailFormState extends State<EmailForm> {
           ),
           backgroundColor: isSuccess ? Colors.green : Colors.red,
         )
-      ).closed.then((_) => isSuccess ? Navigator.of(context).pop() : null);
+      ).closed.then((_) => {
+        if (isSuccess) {
+          Navigator.of(context).pop()
+        } else {
+          BlocProvider.of<EmailFormBloc>(context).add(Reset())
+        }
+      });
   }
 
   void _cancelButtonPressed(BuildContext context) {
