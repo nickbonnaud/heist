@@ -59,6 +59,18 @@ class CustomerProvider {
     }
   }
 
+  Future<ApiResponse> checkPassword({@required String password}) async {
+    String url = "auth/password-check";
+    Map data = {"password": password};
+
+    try {
+      Response response = await this._api.post(url, data);
+      return ApiResponse(body: response.data, error: null, isOK: true);
+    } on DioError catch (error) {
+      return _formatError(error);
+    }
+  }
+
   Future<ApiResponse> getCustomer() async {
     String url = 'me';
     try {
@@ -69,11 +81,27 @@ class CustomerProvider {
     }
   }
 
-  Future<ApiResponse> updateCustomer(String email, String customerId) async {
+  Future<ApiResponse> updateEmail(String email, String customerId) async {
     String url = 'me/$customerId';
     Map body = {
       'email': email
     };
+    try {
+      Response response = await this._api.patch(url, body);
+      return ApiResponse(body: response.data, error: null, isOK: true);
+    } on DioError catch (error) {
+      return _formatError(error);
+    }
+  }
+
+  Future<ApiResponse> updatePassword(String oldPassword, String password, String passwordConfirmation, String customerId) async {
+    String url = 'me/$customerId';
+    Map body = {
+      'old_password': oldPassword,
+      'password': password,
+      'password_confirmation': passwordConfirmation
+    };
+
     try {
       Response response = await this._api.patch(url, body);
       return ApiResponse(body: response.data, error: null, isOK: true);

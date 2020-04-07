@@ -21,6 +21,8 @@ class MockResponses {
       return _mockUpdateCustomer();
     } else if (options.path.endsWith('avatar/fake_identifier')) {
       return _mockPostPhoto();
+    } else if (options.path.endsWith('password-check')) {
+      return _mockCheckValidPassword();
     }
   }
 
@@ -32,6 +34,14 @@ class MockResponses {
         'large_url': 'https://corporate-rebels.com/CDN/378-500x500.jpg'
       }
     };  
+  }
+
+  static Map<String, dynamic> _mockCheckValidPassword() {
+    return {
+      'data': {
+        'password_verified': true
+      }
+    };
   }
   
   static Map<String, dynamic> _mockRegister(RequestOptions options) {

@@ -6,6 +6,7 @@ import 'package:heist/resources/helpers/text_styles.dart';
 import 'package:heist/screens/email_screen/email_screen.dart';
 import 'package:heist/screens/home_screen/bloc/side_menu_bloc.dart';
 import 'package:heist/screens/onboard_screen/onboard_screen.dart';
+import 'package:heist/screens/password_screen/password_screen.dart';
 import 'package:heist/screens/profile_screen/profile_screen.dart';
 
 class SideDrawer extends StatefulWidget {
@@ -256,7 +257,7 @@ class Drawer extends StatelessWidget {
                   DrawerItem(
                     onPressed: () => showPlatformModalSheet(
                       context: context, 
-                      builder: (_) => EmailScreen()
+                      builder: (_) => PasswordScreen()
                     ),
                     text: 'Settings',
                     icon: Icon(context.platformIcons.settings)

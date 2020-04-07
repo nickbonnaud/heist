@@ -41,6 +41,14 @@ class CustomerRepository {
     return requestPasswordResponse.isOK;
   }
 
+  Future<bool> checkPassword({@required String password}) async {
+    final ApiResponse checkPasswordResponse = await _customerProvider.checkPassword(password: password);
+    if (checkPasswordResponse.isOK) {
+      return checkPasswordResponse.body['password_verified'].toString() == 'true';
+    }
+    return checkPasswordResponse.body;
+  }
+
   Future<bool> isSignedIn() async {
     return await _tokenRepository.hasValidToken();
   }
@@ -53,12 +61,20 @@ class CustomerRepository {
     return Customer.withError(response.error);
   }
 
-  Future<Customer> updateCustomer(String email, String customerId) async {
-    final ApiResponse updateResponse = await _customerProvider.updateCustomer(email, customerId);
+  Future<Customer> updateEmail(String email, String customerId) async {
+    final ApiResponse updateResponse = await _customerProvider.updateEmail(email, customerId);
     if (updateResponse.isOK) {
       return Customer.fromJson(updateResponse.body);
     }
     return Customer.withError(updateResponse.error);
+  }
+
+  Future<Customer> updatePassword(String oldPassword, String password, String passwordConfirmation, String customerId) async {
+    final ApiResponse response = await _customerProvider.updatePassword(oldPassword, password, passwordConfirmation, customerId);
+    if (response.isOK) {
+      return Customer.fromJson(response.body);
+    }
+    return Customer.withError(response.error);
   }
 
   Customer _handleSuccess(ApiResponse response) {

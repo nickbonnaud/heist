@@ -53,8 +53,7 @@ class EmailFormBloc extends Bloc<EmailFormEvent, EmailFormState> {
   Stream<EmailFormState> _mapSubmittedToState(Submitted event) async* {
     yield state.update(isSubmitting: true);
     try {
-      Customer customer = await _customerRepository.updateCustomer(event.email, event.customer.identifier);
-      print(customer.email);
+      Customer customer = await _customerRepository.updateEmail(event.email, event.customer.identifier);
       yield state.update(isSubmitting: false, isSuccess: true);
       _customerBloc.add(UpdateCustomer(customer: customer));
     } catch (_) {
