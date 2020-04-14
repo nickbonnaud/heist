@@ -5,7 +5,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:heist/models/business/business.dart';
 import 'package:heist/repositories/location_repository.dart';
-import 'package:heist/screens/map_screen/helpers/icon_creator.dart';
+import 'package:heist/resources/helpers/icon_creator.dart';
 import 'package:heist/screens/map_screen/helpers/pre_marker.dart';
 import 'package:meta/meta.dart';
 

@@ -17,6 +17,7 @@ class ApiInterceptors extends InterceptorsWrapper {
 
   @override
   Future onResponse(Response response) {
+    response.extra = response.data['links'] ?? null;
     response.data = response.data['data'] ?? response.data;
     return super.onResponse(response);
   }

@@ -23,6 +23,8 @@ class MockResponses {
       return _mockPostPhoto();
     } else if (options.path.endsWith('password-check')) {
       return _mockCheckValidPassword();
+    } else if (options.path.endsWith('?status=200&page=1')) {
+      return _mockFetchPaidTransactions();
     }
   }
 
@@ -154,13 +156,298 @@ class MockResponses {
     };
   }
 
+  static Map<String, dynamic> _mockFetchPaidTransactions() {
+    return {
+      "data": [
+        {
+          "transaction": {
+            "identifier": "3ff9ad40-79c9-11ea-8b92-a9b4a4c53696",
+            "employee_id": null,
+            "tax": "457",
+            "tip": "1636",
+            "net_sales": "6088",
+            "total": "8181",
+            "partial_payment": "0",
+            "locked": "1",
+            "bill_created_at": "2020-04-08 18:46:25",
+            "updated_at": "2020-04-08 18:46:25",
+            "status": "open",
+            "purchased_items": [
+              {
+                "name": "numquam",
+                "sub_name": 'fbjdss',
+                "price": "2000",
+                "quantity": "3",
+                "total": "6000"
+              },
+              {
+                "name": "vel",
+                "sub_name": null,
+                "price": "500",
+                "quantity": "2",
+                "total": "1000"
+              }
+            ]
+          },
+          "business": {
+            "identifier": "3ff30c10-79c9-11ea-a2da-ebb755a8f3fd",
+            "profile": {
+              "name": "Spencer PLC",
+              "website": "wisozk.com",
+              "description": "Dignissimos cum quidem neque magnam qui et dolor. Voluptatem error maiores quia repellat veritatis possimus. Molestias id rem hic ipsam.",
+              "google_place_id": null,
+              "phone": "7912752600",
+              "hours": {
+                "monday": "Monday: 11:00 AM – 10:00 PM",
+                "tuesday": "Tuesday: 11:00 AM – 10:00 PM",
+                "wednesday": "Wednesday: 11:00 AM – 10:00 PM",
+                "thursday": "Thursday: 11:00 AM – 10:00 PM",
+                "friday": "Friday: 11:00 AM – 10:30 PM",
+                "saturday": "Saturday: 11:00 AM – 10:30 PM",
+                "sunday": "Sunday: 10:30 AM – 9:00 PM",
+              }
+            },
+            'photos': {
+            'logo': {
+              'name': "logo_1.png",
+              'small_url': "https://d1yjjnpx0p53s8.cloudfront.net/styles/logo-thumbnail/s3/0019/1114/brand.gif?itok=DKwKOdLe",
+              'large_url': "https://d1yjjnpx0p53s8.cloudfront.net/styles/logo-thumbnail/s3/0019/1114/brand.gif?itok=DKwKOdLe"
+            },
+            'banner': {
+              'name': "banner_1.png",
+              'small_url': "https://www.gerardhuerta.com/wp-content/uploads/2016/08/ACDC-1000x650.jpg",
+              'large_url': "https://www.gerardhuerta.com/wp-content/uploads/2016/08/ACDC-1000x650.jpg"
+            },
+          },
+            "location": {
+              "geo": {
+                "identifier": "3ff884f0-79c9-11ea-9cdf-4d873094dff7",
+                "lat": "40.748440",
+                "lng":"-73.985664",
+                "radius": "50",
+              },
+              "beacon": {
+                "identifier": "3ff884f0-79c9-11ea-9cdf-4d873094dff7",
+                "region_identifier": "3ff871d0-79c9-11ea-8a10-a7f913a9d44b",
+                "major": "0",
+                "minor": "1"
+              },
+              "region": {
+                "identifier": "3ff871d0-79c9-11ea-8a10-a7f913a9d44b",
+                "city": "prosaccoshire",
+                "state": "ne",
+                "zip": "41232",
+                "neighborhood": null
+              }
+            }
+          },
+          "refund": []
+        },
+        {
+          "transaction": {
+            "identifier": "3ffcf790-79c9-11ea-9786-cda2137559e5",
+            "employee_id": null,
+            "tax": "54",
+            "tip": "77",
+            "net_sales": "715",
+            "total": "846",
+            "partial_payment": "0",
+            "locked": "1",
+            "bill_created_at": "2020-04-08 18:46:25",
+            "updated_at": "2020-04-08 18:46:25",
+            "status": "open",
+            "purchased_items": [
+              {
+                "name": "voluptatem",
+                "sub_name": "cnsjbjia",
+                "price": "1200",
+                "quantity": "5",
+                "total": "60000"
+              },
+              {
+                "name": "exercitationem",
+                "sub_name": 'fskdsf',
+                "price": "499",
+                "quantity": "2",
+                "total": "998"
+              },
+              {
+                "name": "coiahfioda",
+                "sub_name": 'fdsankfd',
+                "price": "999",
+                "quantity": "4",
+                "total": "4995"
+              },
+              {
+                "name": "bcjadsbji",
+                "sub_name": null,
+                "price": "1500",
+                "quantity": "1",
+                "total": "1500"
+              }
+            ]
+          },
+          "business": {
+            "identifier": "3ffb7e00-79c9-11ea-8327-0591af6899fa",
+            "profile": {
+              "name": "Breitenberg and Sons",
+              "website": "stroman.com",
+              "description": "Tempora non esse iusto libero libero dolores voluptas. Eligendi incidunt impedit ducimus beatae animi voluptatem eligendi rerum. Temporibus earum aut ut sunt dolor nobis. Officiis cumque quae suscipit consectetur et.",
+              "google_place_id": null,
+              "phone": "0075281221",
+              "hours": {
+                "monday": "Monday: 11:00 AM – 10:00 PM",
+                "tuesday": "Tuesday: 11:00 AM – 10:00 PM",
+                "wednesday": "Wednesday: 11:00 AM – 10:00 PM",
+                "thursday": "Thursday: 11:00 AM – 10:00 PM",
+                "friday": "Friday: 11:00 AM – 10:30 PM",
+                "saturday": "Saturday: 11:00 AM – 10:30 PM",
+                "sunday": "Sunday: 10:30 AM – 9:00 PM",
+              }
+            },
+            'photos': {
+            'logo': {
+              'name': "logo_2.png",
+              'small_url': "https://cdna.artstation.com/p/assets/images/images/021/760/294/micro_square/jip-scheepers-2018-04-25.jpg?1572865897",
+              'large_url': "https://cdna.artstation.com/p/assets/images/images/021/760/294/micro_square/jip-scheepers-2018-04-25.jpg?1572865897"
+            },
+            'banner': {
+              'name': "banner_2.png",
+              'small_url': "https://www.gerardhuerta.com/wp-content/uploads/2016/08/ACDC-1000x650.jpg",
+              'large_url': "https://www.gerardhuerta.com/wp-content/uploads/2016/08/ACDC-1000x650.jpg"
+            },
+          },
+            "location": {
+              "geo": {
+                "identifier": "3ffc9af0-79c9-11ea-8ba2-7bc9ac2c03dc",
+                "lat": "37.826977",
+                "lng": "-122.422958",
+                "radius": "50"
+              },
+              "beacon": {
+                "identifier": "3ffc9af0-79c9-11ea-8ba2-7bc9ac2c03dc",
+                "region_identifier": "3ffc8fb0-79c9-11ea-8a8d-e920600f039b",
+                "major": "2",
+                "minor": "3"
+              },
+              "region": {
+                "identifier": "3ffc8fb0-79c9-11ea-8a8d-e920600f039b",
+                "city": "east kirsten",
+                "state": "ca",
+                "zip": "72393",
+                "neighborhood": null
+              }
+            }
+          },
+          "refund": []
+        },
+        {
+          "transaction": {
+            "identifier": "3fff7d10-79c9-11ea-aeda-29f060c8d318",
+            "employee_id": null,
+            "tax": "101",
+            "tip": "0",
+            "net_sales": "1344",
+            "total": "1445",
+            "partial_payment": "0",
+            "locked": "1",
+            "bill_created_at": "2020-04-08 18:46:25",
+            "updated_at": "2020-04-08 18:46:25",
+            "status": "open",
+            "purchased_items": [
+              {
+                "name": "sequi",
+                "sub_name": 'acdsa',
+                "price": "1099",
+                "quantity": "10",
+                "total": "10990"
+              },
+              {
+                "name": "totam",
+                "sub_name": 'afdsafd',
+                "price": "99",
+                "quantity": "1",
+                "total": "99"
+              }
+            ]
+          },
+          "business": {
+            "identifier": "3ffdfd70-79c9-11ea-b016-91e22ba79bcd",
+            "profile": {
+              "name": "O'Connell Ltd",
+              "website": "dach.com",
+              "description": "Error repudiandae beatae ex facilis. In est quis ut et in voluptate incidunt. Nulla veniam in ut quasi nobis qui. Hic qui enim harum animi consequatur dolor.",
+              "google_place_id": null,
+              "phone": "1739470180",
+              "hours": {
+                "monday": "Monday: 11:00 AM – 10:00 PM",
+                "tuesday": "Tuesday: 11:00 AM – 10:00 PM",
+                "wednesday": "Wednesday: 11:00 AM – 10:00 PM",
+                "thursday": "Thursday: 11:00 AM – 10:00 PM",
+                "friday": "Friday: 11:00 AM – 10:30 PM",
+                "saturday": "Saturday: 11:00 AM – 10:30 PM",
+                "sunday": "Sunday: 10:30 AM – 9:00 PM"
+              }
+            },
+            'photos': {
+            'logo': {
+              'name': "logo_3.png",
+              'small_url': "https://www.tuesdaytactics.com/htmlemail/images/tt470-2.jpg",
+              'large_url': "https://www.tuesdaytactics.com/htmlemail/images/tt470-2.jpg"
+            },
+            'banner': {
+              'name': "banner_3.png",
+              'small_url': "https://www.gerardhuerta.com/wp-content/uploads/2016/08/ACDC-1000x650.jpg",
+              'large_url': "https://www.gerardhuerta.com/wp-content/uploads/2016/08/ACDC-1000x650.jpg"
+            },
+          },
+            "location": {
+              "geo": {
+                "identifier": "3fff26c0-79c9-11ea-9608-69d83ac82698",
+                "lat": "51.500729",
+                "lng": "-0.124625",
+                "radius": "50"
+              },
+              "beacon": {
+                "identifier": "3fff26c0-79c9-11ea-9608-69d83ac82698",
+                "region_identifier": "3fff1ca0-79c9-11ea-8448-55028a12fcdf",
+                "major": "2",
+                "minor": "3"
+              },
+              "region": {
+                "identifier": "3fff1ca0-79c9-11ea-8448-55028a12fcdf",
+                "city": "east juvenalton",
+                "state": "pa",
+                "zip": "68109",
+                "neighborhood": null
+              }
+            }
+          },
+          "refund": []
+        }
+      ],
+      "links": {
+        "first": "http://localhost/api/customer/transaction?page=1",
+        "last": "http://localhost/api/customer/transaction?page=1",
+        "prev": null,
+        "next": null
+      },
+      "meta": {
+        "current_page": 1,
+        "from": 1,
+        "last_page": 1,
+        "path": "http://localhost/api/customer/transaction",
+        "per_page": 15,
+        "to": 3,
+        "total": 3,
+      }
+    };
+  }
+  
   static Map<String, dynamic> _mockOnStart(RequestOptions options) {
     // return {
     //   'data': []
     // };
-    
-    
-    
     return {
       'data': [
         {

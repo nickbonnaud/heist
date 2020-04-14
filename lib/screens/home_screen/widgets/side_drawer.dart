@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
 import 'package:heist/screens/email_screen/email_screen.dart';
+import 'package:heist/screens/historic_transactions_screen/historic_transactions_screen.dart';
 import 'package:heist/screens/home_screen/bloc/side_menu_bloc.dart';
 import 'package:heist/screens/onboard_screen/onboard_screen.dart';
 import 'package:heist/screens/password_screen/password_screen.dart';
@@ -208,7 +209,10 @@ class Drawer extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   DrawerItem(
-                    onPressed: () => print('Pressed'),
+                    onPressed: () => showPlatformModalSheet(
+                      context: context,
+                      builder: (_) => HistoricTransactionsScreen()
+                    ),
                     text: 'Transactions',
                     icon: PlatformWidget(
                       android: (_) => Icon(Icons.receipt),
