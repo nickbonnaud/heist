@@ -10,6 +10,10 @@ class Validators {
     r'^[a-zA-Z]([\w -]*[a-zA-Z])?$'
   );
 
+  static final RegExp _tipRegExp = RegExp(
+    r'^([0-9]?\d|30)$'
+  );
+
   static isValidEmail(String email) => _emailRegExp.hasMatch(email);
 
   static isValidPassword(String password) => _passwordRegExp.hasMatch(password);
@@ -17,4 +21,6 @@ class Validators {
   static isPasswordConfirmationValid(String password, String passwordConfirmation) => password == passwordConfirmation;
 
   static isValidName(String name) => _nameRegExp.hasMatch(name);
+
+  static isValidTip(int tip) => _tipRegExp.hasMatch(tip.toString());
 }

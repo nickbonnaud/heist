@@ -11,6 +11,7 @@ import 'package:heist/repositories/profile_repository.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
 import 'package:heist/screens/profile_screen/bloc/profile_form_bloc.dart';
+import 'package:keyboard_actions/keyboard_actions.dart';
 import 'package:vibrate/vibrate.dart';
 
 import 'edit_photo/bloc/edit_photo_bloc.dart';
@@ -62,103 +63,110 @@ class _ProfileFormState extends State<ProfileForm> {
       child: Form(
         child: Padding(
           padding: EdgeInsets.only(left: 16.0, right: 16.0),
-          child: ListView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              SizedBox(height: SizeConfig.getHeight(5)),
+              Container(
+                height: SizeConfig.getHeight(50),
+                child: KeyboardActions(
+                  config: _buildKeyboard(context),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: <Widget>[
+                      BoldText(text: 'Edit Profile', size: SizeConfig.getWidth(9), color: Colors.black),
+                      Center(
+                        child: BlocProvider<EditPhotoBloc>(
+                          create: (BuildContext context) => EditPhotoBloc(profileRepository: widget._profileRepository , customerBloc: BlocProvider.of<CustomerBloc>(context)),
+                          child: EditPhoto(photoPicker: PhotoPickerRepository(), customer: widget._customer,),
+                        )
+                      ),
+                      BlocBuilder<ProfileFormBloc, ProfileFormState>(
+                        builder: (context, state) {
+                          return TextFormField(
+                            decoration: InputDecoration(
+                              labelText: 'First Name',
+                              labelStyle: GoogleFonts.roboto(
+                                fontWeight: FontWeight.w400,
+                                fontSize: SizeConfig.getWidth(6)
+                              )
+                            ),
+                            style: GoogleFonts.roboto(
+                              fontWeight: FontWeight.w700,
+                              fontSize: SizeConfig.getWidth(7)
+                            ),
+                            controller: _firstNameController,
+                            focusNode: _firstNameFocus,
+                            keyboardType: TextInputType.text,
+                            textInputAction: TextInputAction.done,
+                            autocorrect: false,
+                            autovalidate: true,
+                            validator: (_) => !state.isFirstNameValid ? 'Invalid first name' : null,
+                          );
+                        }
+                      ),
+                      BlocBuilder<ProfileFormBloc, ProfileFormState>(
+                        builder: (context, state) {
+                          return TextFormField(
+                            decoration: InputDecoration(
+                              labelText: 'Last Name',
+                              labelStyle: GoogleFonts.roboto(
+                                fontWeight: FontWeight.w400,
+                                fontSize: SizeConfig.getWidth(6)
+                              )
+                            ),
+                            style: GoogleFonts.roboto(
+                              fontWeight: FontWeight.w700,
+                              fontSize: SizeConfig.getWidth(7)
+                            ),
+                            controller: _lastNameController,
+                            focusNode: _lastNameFocus,
+                            keyboardType: TextInputType.text,
+                            textInputAction: TextInputAction.done,
+                            autocorrect: false,
+                            autovalidate: true,
+                            validator: (_) => !state.isLastNameValid ? 'Invalid last name' : null,
+                          );
+                        }
+                      )
+                    ],
+                  ),
+                ) ,
+              ),
               Padding(
-                padding: EdgeInsets.only(left: SizeConfig.getWidth(5)),
-                child: BoldText(text: 'Edit Profile', size: SizeConfig.getWidth(9), color: Colors.black),
-              ),
-              SizedBox(height: SizeConfig.getHeight(5)),
-              Center(
-                child: BlocProvider<EditPhotoBloc>(
-                  create: (BuildContext context) => EditPhotoBloc(profileRepository: widget._profileRepository , customerBloc: BlocProvider.of<CustomerBloc>(context)),
-                  child: EditPhoto(photoPicker: PhotoPickerRepository(), customer: widget._customer,),
-                )
-              ),
-              SizedBox(height: SizeConfig.getHeight(8)),
-              BlocBuilder<ProfileFormBloc, ProfileFormState>(
-                builder: (context, state) {
-                  return TextFormField(
-                    decoration: InputDecoration(
-                      labelText: 'First Name',
-                      labelStyle: GoogleFonts.roboto(
-                        fontWeight: FontWeight.w400,
-                        fontSize: SizeConfig.getWidth(6)
-                      )
+                padding: EdgeInsets.only(bottom: 16),
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: BlocBuilder<ProfileFormBloc, ProfileFormState>(
+                        builder: (context, state) {
+                          return OutlineButton(
+                            borderSide: BorderSide(
+                              color: Colors.black
+                            ),
+                            disabledBorderColor: Colors.grey.shade500,
+                            shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
+                            onPressed: state.isSubmitting ? null : () => _cancelButtonPressed(context),
+                            child: BoldText(text: 'Cancel', size: SizeConfig.getWidth(6), color: state.isSubmitting ? Colors.grey.shade500 : Colors.black),
+                          );
+                        }
+                      ),
                     ),
-                    style: GoogleFonts.roboto(
-                      fontWeight: FontWeight.w700,
-                      fontSize: SizeConfig.getWidth(7)
+                    SizedBox(width: 20.0),
+                    Expanded(
+                      child: BlocBuilder<ProfileFormBloc, ProfileFormState>(
+                        builder: (context, state) {
+                          return RaisedButton(
+                            color: Colors.green,
+                            disabledColor: Colors.green.shade100,
+                            shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
+                            onPressed: _isSaveButtonEnabled(state) ? () => _saveButtonPressed(state) : null,
+                            child: _createButtonText(state),
+                          );
+                        }
+                      ) 
                     ),
-                    controller: _firstNameController,
-                    focusNode: _firstNameFocus,
-                    keyboardType: TextInputType.text,
-                    textInputAction: TextInputAction.done,
-                    autocorrect: false,
-                    autovalidate: true,
-                    validator: (_) => !state.isFirstNameValid ? 'Invalid first name' : null,
-                  );
-                }
-              ),
-              SizedBox(height: SizeConfig.getHeight(4)),
-              BlocBuilder<ProfileFormBloc, ProfileFormState>(
-                builder: (context, state) {
-                  return TextFormField(
-                    decoration: InputDecoration(
-                      labelText: 'Last Name',
-                      labelStyle: GoogleFonts.roboto(
-                        fontWeight: FontWeight.w400,
-                        fontSize: SizeConfig.getWidth(6)
-                      )
-                    ),
-                    style: GoogleFonts.roboto(
-                      fontWeight: FontWeight.w700,
-                      fontSize: SizeConfig.getWidth(7)
-                    ),
-                    controller: _lastNameController,
-                    focusNode: _lastNameFocus,
-                    keyboardType: TextInputType.text,
-                    textInputAction: TextInputAction.done,
-                    autocorrect: false,
-                    autovalidate: true,
-                    validator: (_) => !state.isLastNameValid ? 'Invalid last name' : null,
-                  );
-                }
-              ),
-              SizedBox(height: SizeConfig.getHeight(10)),
-              Row(
-                children: <Widget>[
-                  Expanded(
-                    child: BlocBuilder<ProfileFormBloc, ProfileFormState>(
-                      builder: (context, state) {
-                        return OutlineButton(
-                          borderSide: BorderSide(
-                            color: Colors.black
-                          ),
-                          disabledBorderColor: Colors.grey.shade500,
-                          shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
-                          onPressed: state.isSubmitting ? null : () => _cancelButtonPressed(context),
-                          child: BoldText(text: 'Cancel', size: SizeConfig.getWidth(6), color: state.isSubmitting ? Colors.grey.shade500 : Colors.black),
-                        );
-                      }
-                    ),
-                  ),
-                  SizedBox(width: 20.0),
-                  Expanded(
-                    child: BlocBuilder<ProfileFormBloc, ProfileFormState>(
-                      builder: (context, state) {
-                        return RaisedButton(
-                          color: Colors.green,
-                          disabledColor: Colors.green.shade100,
-                          shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
-                          onPressed: _isSaveButtonEnabled(state) ? () => _saveButtonPressed(state) : null,
-                          child: _createButtonText(state),
-                        );
-                      }
-                    ) 
-                  ),
-                ],
+                  ],
+                ),
               ),
             ],
           )
@@ -260,5 +268,41 @@ class _ProfileFormState extends State<ProfileForm> {
           BlocProvider.of<ProfileFormBloc>(context).add(Reset())
         }
       });
+  }
+
+  KeyboardActionsConfig _buildKeyboard(BuildContext context) {
+    return KeyboardActionsConfig(
+      keyboardActionsPlatform: KeyboardActionsPlatform.ALL,
+      actions: [
+        KeyboardAction(
+          focusNode: _firstNameFocus,
+          toolbarButtons: [
+            (node) {
+              return GestureDetector(
+                onTap: () => node.unfocus(),
+                child: Padding(
+                  padding: EdgeInsets.only(right: 16.0),
+                  child: BoldText(text: 'Done', size: SizeConfig.getWidth(4), color: Theme.of(context).primaryColor),
+                ),
+              );
+            }
+          ]
+        ),
+        KeyboardAction(
+          focusNode: _lastNameFocus,
+          toolbarButtons: [
+            (node) {
+              return GestureDetector(
+                onTap: () => node.unfocus(),
+                child: Padding(
+                  padding: EdgeInsets.only(right: 16.0),
+                  child: BoldText(text: 'Done', size: SizeConfig.getWidth(4), color: Theme.of(context).primaryColor),
+                ),
+              );
+            }
+          ]
+        ),
+      ]
+    );
   }
 }

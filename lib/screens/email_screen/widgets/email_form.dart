@@ -9,6 +9,7 @@ import 'package:heist/models/customer/customer.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
 import 'package:heist/screens/email_screen/bloc/email_form_bloc.dart';
+import 'package:keyboard_actions/keyboard_actions.dart';
 import 'package:vibrate/vibrate.dart';
 
 class EmailForm extends StatefulWidget {
@@ -24,6 +25,7 @@ class EmailForm extends StatefulWidget {
 
 class _EmailFormState extends State<EmailForm> {
   TextEditingController _emailController;
+  final FocusNode _emailFocusNode = FocusNode();
 
   EmailFormBloc _emailFormBloc;
   
@@ -48,70 +50,80 @@ class _EmailFormState extends State<EmailForm> {
       child: Form(
         child: Padding(
           padding: EdgeInsets.only(left: 16.0, right: 16.0),
-          child: ListView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              SizedBox(height: SizeConfig.getHeight(5)),
-              Padding(
-                padding: EdgeInsets.only(left: SizeConfig.getWidth(5)),
-                child: BoldText(text: 'Edit Email', size: SizeConfig.getWidth(9), color: Colors.black),
-              ),
-              SizedBox(height: SizeConfig.getHeight(25)),
-              BlocBuilder<EmailFormBloc, EmailFormState>(
-                builder: (context, state) {
-                  return TextFormField(
-                    decoration: InputDecoration(
-                      labelText: 'Email',
-                      labelStyle: GoogleFonts.roboto(
-                        fontWeight: FontWeight.w400,
-                        fontSize: SizeConfig.getWidth(6)
+              Container(
+                height: SizeConfig.getHeight(50),
+                child: KeyboardActions(
+                  config: _buildKeyboard(context),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: <Widget>[
+                      BoldText(text: 'Edit Email', size: SizeConfig.getWidth(9), color: Colors.black),
+                      BlocBuilder<EmailFormBloc, EmailFormState>(
+                        builder: (context, state) {
+                          return TextFormField(
+                            decoration: InputDecoration(
+                              labelText: 'Email',
+                              labelStyle: GoogleFonts.roboto(
+                                fontWeight: FontWeight.w400,
+                                fontSize: SizeConfig.getWidth(6)
+                              )
+                            ),
+                            style: GoogleFonts.roboto(
+                              fontWeight: FontWeight.w700,
+                              fontSize: SizeConfig.getWidth(7)
+                            ),
+                            controller: _emailController,
+                            keyboardType: TextInputType.emailAddress,
+                            textInputAction: TextInputAction.done,
+                            autocorrect: false,
+                            autovalidate: true,
+                            focusNode: _emailFocusNode,
+                            validator: (_) => !state.isEmailValid ? 'Invalid email' : null,
+                          );
+                        }
                       )
-                    ),
-                    style: GoogleFonts.roboto(
-                      fontWeight: FontWeight.w700,
-                      fontSize: SizeConfig.getWidth(7)
-                    ),
-                    controller: _emailController,
-                    keyboardType: TextInputType.emailAddress,
-                    textInputAction: TextInputAction.done,
-                    autocorrect: false,
-                    autovalidate: true,
-                    validator: (_) => !state.isEmailValid ? 'Invalid email' : null,
-                  );
-                }
+                    ],
+                  ),
+                ),
               ),
-              SizedBox(height: SizeConfig.getHeight(34)),
-              Row(
-                children: <Widget>[
-                  Expanded(
-                    child: BlocBuilder<EmailFormBloc, EmailFormState>(
-                      builder: (context, state) {
-                        return OutlineButton(
-                          borderSide: BorderSide(
-                            color: Colors.black
-                          ),
-                          disabledBorderColor: Colors.grey.shade500,
-                          shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
-                          onPressed: state.isSubmitting ? null : () => _cancelButtonPressed(context),
-                          child: BoldText(text: 'Cancel', size: SizeConfig.getWidth(6), color: state.isSubmitting ? Colors.grey.shade500 : Colors.black),
-                        );
-                      }
+              Padding(
+                padding: EdgeInsets.only(bottom: 16),
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: BlocBuilder<EmailFormBloc, EmailFormState>(
+                        builder: (context, state) {
+                          return OutlineButton(
+                            borderSide: BorderSide(
+                              color: Colors.black
+                            ),
+                            disabledBorderColor: Colors.grey.shade500,
+                            shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
+                            onPressed: state.isSubmitting ? null : () => _cancelButtonPressed(context),
+                            child: BoldText(text: 'Cancel', size: SizeConfig.getWidth(6), color: state.isSubmitting ? Colors.grey.shade500 : Colors.black),
+                          );
+                        }
+                      ),
                     ),
-                  ),
-                  SizedBox(width: 20.0),
-                  Expanded(
-                    child: BlocBuilder<EmailFormBloc, EmailFormState>(
-                      builder: (context, state) {
-                        return RaisedButton(
-                          color: Colors.green,
-                          disabledColor: Colors.green.shade100,
-                          shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
-                          onPressed: _isSaveButtonEnabled(state) ? () => _saveButtonPressed(state) : null,
-                          child: _createButtonText(state),
-                        );
-                      }
-                    ) 
-                  ),
-                ],
+                    SizedBox(width: 20.0),
+                    Expanded(
+                      child: BlocBuilder<EmailFormBloc, EmailFormState>(
+                        builder: (context, state) {
+                          return RaisedButton(
+                            color: Colors.green,
+                            disabledColor: Colors.green.shade100,
+                            shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
+                            onPressed: _isSaveButtonEnabled(state) ? () => _saveButtonPressed(state) : null,
+                            child: _createButtonText(state),
+                          );
+                        }
+                      ) 
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
@@ -208,5 +220,27 @@ class _EmailFormState extends State<EmailForm> {
     } else {
       return BoldText(text: 'Save', size: SizeConfig.getWidth(6), color: Colors.white);
     }
+  }
+
+  KeyboardActionsConfig _buildKeyboard(BuildContext context) {
+    return KeyboardActionsConfig(
+      keyboardActionsPlatform: KeyboardActionsPlatform.ALL,
+      actions: [
+        KeyboardAction(
+          focusNode: _emailFocusNode,
+          toolbarButtons: [
+            (node) {
+              return GestureDetector(
+                onTap: () => node.unfocus(),
+                child: Padding(
+                  padding: EdgeInsets.only(right: 16.0),
+                  child: BoldText(text: 'Done', size: SizeConfig.getWidth(4), color: Theme.of(context).primaryColor),
+                ),
+              );
+            }
+          ]
+        ),
+      ]
+    );
   }
 }

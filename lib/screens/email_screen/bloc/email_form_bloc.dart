@@ -18,7 +18,7 @@ class EmailFormBloc extends Bloc<EmailFormEvent, EmailFormState> {
 
 
   EmailFormBloc({@required CustomerRepository customerRepository, @required CustomerBloc customerBloc})
-    : assert(customerRepository != null),
+    : assert(customerRepository != null && customerBloc != null),
       _customerRepository = customerRepository,
       _customerBloc = customerBloc;
   

@@ -1,20 +1,31 @@
 import 'package:equatable/equatable.dart';
-import 'package:heist/models/customer/profile.dart';
-import 'package:heist/models/customer/status.dart';
+
+import 'account.dart';
+import 'profile.dart';
+import 'status.dart';
 
 class Customer extends Equatable {
   final String identifier;
   final String email;
   final Profile profile;
+  final Account account;
   final Status status;
   final String error;
 
-  Customer({this.identifier, this.email, this.profile, this.status, this.error});
+  Customer({
+    this.identifier,
+    this.email,
+    this.profile,
+    this.account,
+    this.status,
+    this.error
+  });
 
   Customer.fromJson(Map<String, dynamic> json)
     : identifier = json['identifier'],
       email = json['email'],
       profile = json['profile'] != null ? Profile.fromJson(json['profile']) : null,
+      account = Account.fromJson(json['account']),
       status = Status.fromJson(json['status']),
       error = "";
 
@@ -22,6 +33,7 @@ class Customer extends Equatable {
     : identifier = null,
       email = null,
       profile = null,
+      account = null,
       status = null,
       error = error;
 
@@ -29,12 +41,14 @@ class Customer extends Equatable {
     String identifier,
     String email,
     Profile profile,
+    Account account,
     Status status,
   }) {
     return _copyWith(
       identifier: identifier,
       email: email,
       profile: profile,
+      account: account,
       status: status
     );
   }
@@ -43,6 +57,7 @@ class Customer extends Equatable {
     String identifier,
     String email,
     Profile profile,
+    Account account,
     Status status,
 
   }) {
@@ -50,6 +65,7 @@ class Customer extends Equatable {
       identifier: identifier ?? this.identifier,
       email: email ?? this.email,
       profile: profile ?? this.profile,
+      account: account ?? this.account,
       status: status ?? this.status,
       error: ''
     );
@@ -57,8 +73,8 @@ class Customer extends Equatable {
   }
 
   @override
-  List<Object> get props => [identifier, email, profile, status, error];
+  List<Object> get props => [identifier, email, profile, account, status, error];
 
   @override
-  String toString() => 'Customer { identifier: $identifier, email: $email, profile: $profile, status: $status, error: $error }';
+  String toString() => 'Customer { identifier: $identifier, email: $email, profile: $profile, account: $account, status: $status, error: $error }';
 }

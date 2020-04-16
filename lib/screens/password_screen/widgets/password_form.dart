@@ -8,6 +8,7 @@ import 'package:heist/models/customer/customer.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
 import 'package:heist/screens/password_screen/bloc/password_form_bloc.dart';
+import 'package:keyboard_actions/keyboard_actions.dart';
 import 'package:vibrate/vibrate.dart';
 
 class PasswordForm extends StatefulWidget {
@@ -25,6 +26,7 @@ class _PasswordFormState extends State<PasswordForm> {
   final TextEditingController _oldPasswordController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _passwordConfirmationController = TextEditingController();
+  final FocusNode _oldPasswordFocus = FocusNode();
   final FocusNode _passwordFocus = FocusNode();
   final FocusNode _passwordConfirmationFocus = FocusNode();
 
@@ -52,135 +54,136 @@ class _PasswordFormState extends State<PasswordForm> {
       child: Form(
         child: Padding(
           padding: EdgeInsets.only(left: 16.0, right: 16.0),
-          child: ListView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              SizedBox(height: SizeConfig.getHeight(5)),
-              Padding(
-                padding: EdgeInsets.only(left: SizeConfig.getWidth(5)),
-                child: BoldText(text: 'Change Password', size: SizeConfig.getWidth(9), color: Colors.black),
-              ),
-              SizedBox(height: SizeConfig.getHeight(12)),
-              BlocBuilder<PasswordFormBloc, PasswordFormState>(
-                builder: (context, state) {
-                  return TextFormField(
-                    decoration: InputDecoration(
-                      labelText: 'Current Password',
-                      labelStyle: GoogleFonts.roboto(
-                        fontWeight: FontWeight.w400,
-                        fontSize: SizeConfig.getWidth(6)
-                      )
-                    ),
-                    style: GoogleFonts.roboto(
-                      fontWeight: FontWeight.w700,
-                      fontSize: SizeConfig.getWidth(7)
-                    ),
-                    controller: _oldPasswordController,
-                    keyboardType: TextInputType.text,
-                    textInputAction: TextInputAction.send,
-                    autocorrect: false,
-                    autovalidate: true,
-                    validator: (_) => !state.isOldPasswordValid && _oldPasswordController.text.isNotEmpty ? 'Invalid password' : null,
-                    obscureText: true,
-                    onFieldSubmitted: (_) {
-                      _submit(state);
-                    },
-                    enabled: !state.isOldPasswordVerified,
-                  );
-                }
-              ),
-              SizedBox(height: SizeConfig.getHeight(4)),
-              BlocBuilder<PasswordFormBloc, PasswordFormState>(
-                builder: (context, state) {
-                  return TextFormField(
-                    decoration: InputDecoration(
-                      labelText: 'New Password',
-                      labelStyle: GoogleFonts.roboto(
-                        fontWeight: FontWeight.w400,
-                        fontSize: SizeConfig.getWidth(6)
-                      )
-                    ),
-                    style: GoogleFonts.roboto(
-                      fontWeight: FontWeight.w700,
-                      fontSize: SizeConfig.getWidth(7)
-                    ),
-                    controller: _passwordController,
-                    keyboardType: TextInputType.text,
-                    textInputAction: TextInputAction.next,
-                    autocorrect: false,
-                    autovalidate: true,
-                    validator: (_) => !state.isPasswordValid && _passwordController.text.isNotEmpty ? 'Invalid password' : null,
-                    obscureText: true,
-                    onFieldSubmitted: (_) {
-                      _passwordFocus.unfocus();
-                      FocusScope.of(context).requestFocus(_passwordConfirmationFocus);
-                    },
-                    enabled: state.isOldPasswordVerified,
-                  );
-                },
-              ),
-              SizedBox(height: SizeConfig.getHeight(4)),
-              BlocBuilder<PasswordFormBloc, PasswordFormState>(
-                builder: (context, state) {
-                  return TextFormField(
-                    decoration: InputDecoration(
-                      labelText: 'Password Confirmation',
-                      labelStyle: GoogleFonts.roboto(
-                        fontWeight: FontWeight.w400,
-                        fontSize: SizeConfig.getWidth(6)
-                      )
-                    ),
-                    style: GoogleFonts.roboto(
-                      fontWeight: FontWeight.w700,
-                      fontSize: SizeConfig.getWidth(7)
-                    ),
-                    controller: _passwordConfirmationController,
-                    keyboardType: TextInputType.text,
-                    textInputAction: TextInputAction.done,
-                    autocorrect: false,
-                    autovalidate: true,
-                    validator: (_) => !state.isPasswordConfirmationValid && _passwordConfirmationController.text.isNotEmpty ? 'Confirmation does not match' : null,
-                    obscureText: true,
-                    onFieldSubmitted: (_) {
-                      _passwordFocus.unfocus();
-                    },
-                    enabled: state.isOldPasswordVerified,
-                  );
-                },
-              ),
-              SizedBox(height: SizeConfig.getHeight(21
-              )),
-              Row(
-                children: <Widget>[
-                  Expanded(
-                    child: BlocBuilder<PasswordFormBloc, PasswordFormState>(
-                      builder: (context, state) {
-                        return OutlineButton(
-                          borderSide: BorderSide(
-                            color: Colors.black
+              Container(
+                height: SizeConfig.getHeight(50),
+                child: BlocBuilder<PasswordFormBloc, PasswordFormState>(
+                  builder: (context, state) {
+                    return KeyboardActions(
+                      config: _buildKeyboard(context, state),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: <Widget>[
+                          BoldText(text: 'Change Password', size: SizeConfig.getWidth(9), color: Colors.black),
+                          TextFormField(
+                            decoration: InputDecoration(
+                              labelText: 'Current Password',
+                              labelStyle: GoogleFonts.roboto(
+                                fontWeight: FontWeight.w400,
+                                fontSize: SizeConfig.getWidth(6)
+                              )
+                            ),
+                            style: GoogleFonts.roboto(
+                              fontWeight: FontWeight.w700,
+                              fontSize: SizeConfig.getWidth(7)
+                            ),
+                            controller: _oldPasswordController,
+                            keyboardType: TextInputType.text,
+                            textInputAction: TextInputAction.send,
+                            autocorrect: false,
+                            autovalidate: true,
+                            validator: (_) => !state.isOldPasswordValid && _oldPasswordController.text.isNotEmpty ? 'Invalid password' : null,
+                            obscureText: true,
+                            focusNode: _oldPasswordFocus,
+                            onFieldSubmitted: (_) {
+                              _submit(state);
+                            },
+                            enabled: !state.isOldPasswordVerified,
                           ),
-                          disabledBorderColor: Colors.grey.shade500,
-                          shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
-                          onPressed: state.isSubmitting ? null : () => _cancelButtonPressed(context),
-                          child: BoldText(text: 'Cancel', size: SizeConfig.getWidth(6), color: state.isSubmitting ? Colors.grey.shade500 : Colors.black),
-                        );
-                      },
+                          TextFormField(
+                            decoration: InputDecoration(
+                              labelText: 'New Password',
+                              labelStyle: GoogleFonts.roboto(
+                                fontWeight: FontWeight.w400,
+                                fontSize: SizeConfig.getWidth(6)
+                              )
+                            ),
+                            style: GoogleFonts.roboto(
+                              fontWeight: FontWeight.w700,
+                              fontSize: SizeConfig.getWidth(7)
+                            ),
+                            controller: _passwordController,
+                            keyboardType: TextInputType.text,
+                            textInputAction: TextInputAction.next,
+                            autocorrect: false,
+                            autovalidate: true,
+                            validator: (_) => !state.isPasswordValid && _passwordController.text.isNotEmpty ? 'Invalid password' : null,
+                            obscureText: true,
+                            focusNode: _passwordFocus,
+                            onFieldSubmitted: (_) {
+                              _passwordFocus.unfocus();
+                              FocusScope.of(context).requestFocus(_passwordConfirmationFocus);
+                            },
+                            enabled: state.isOldPasswordVerified,
+                          ),
+                          TextFormField(
+                            decoration: InputDecoration(
+                              labelText: 'Password Confirmation',
+                              labelStyle: GoogleFonts.roboto(
+                                fontWeight: FontWeight.w400,
+                                fontSize: SizeConfig.getWidth(6)
+                              )
+                            ),
+                            style: GoogleFonts.roboto(
+                              fontWeight: FontWeight.w700,
+                              fontSize: SizeConfig.getWidth(7)
+                            ),
+                            controller: _passwordConfirmationController,
+                            keyboardType: TextInputType.text,
+                            textInputAction: TextInputAction.done,
+                            autocorrect: false,
+                            autovalidate: true,
+                            validator: (_) => !state.isPasswordConfirmationValid && _passwordConfirmationController.text.isNotEmpty ? 'Confirmation does not match' : null,
+                            obscureText: true,
+                            focusNode: _passwordConfirmationFocus,
+                            onFieldSubmitted: (_) {
+                              _passwordFocus.unfocus();
+                            },
+                            enabled: state.isOldPasswordVerified,
+                          )
+                        ],
+                      ),
+                    );
+                  },
+                ) 
+              ),
+              Padding(
+                padding:  EdgeInsets.only(bottom: 16),
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: BlocBuilder<PasswordFormBloc, PasswordFormState>(
+                        builder: (context, state) {
+                          return OutlineButton(
+                            borderSide: BorderSide(
+                              color: Colors.black
+                            ),
+                            disabledBorderColor: Colors.grey.shade500,
+                            shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
+                            onPressed: state.isSubmitting ? null : () => _cancelButtonPressed(context),
+                            child: BoldText(text: 'Cancel', size: SizeConfig.getWidth(6), color: state.isSubmitting ? Colors.grey.shade500 : Colors.black),
+                          );
+                        },
+                      )
+                    ),
+                    SizedBox(width: 20.0),
+                    Expanded(
+                      child: BlocBuilder<PasswordFormBloc, PasswordFormState>(
+                        builder: (context, state) {
+                          return RaisedButton(
+                            color: Colors.green,
+                            disabledColor: Colors.green.shade100,
+                            shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
+                            onPressed: _canSubmit(state) ? () => _submit(state) : null,
+                            child: _createButtonText(state),
+                          );
+                        },
+                      )
                     )
-                  ),
-                  SizedBox(width: 20.0),
-                  Expanded(
-                    child: BlocBuilder<PasswordFormBloc, PasswordFormState>(
-                      builder: (context, state) {
-                        return RaisedButton(
-                          color: Colors.green,
-                          disabledColor: Colors.green.shade100,
-                          shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
-                          onPressed: _canSubmit(state) ? () => _submit(state) : null,
-                          child: _createButtonText(state),
-                        );
-                      },
-                    )
-                  )
-                ],
+                  ],
+                ),
               )
             ],
           ),
@@ -293,5 +296,60 @@ class _PasswordFormState extends State<PasswordForm> {
       String text = state.isOldPasswordVerified ? 'Save' : 'Verify';
       return BoldText(text: text, size: SizeConfig.getWidth(6), color: Colors.white);
     }
+  }
+
+  KeyboardActionsConfig _buildKeyboard(BuildContext context, PasswordFormState state) {
+    return KeyboardActionsConfig(
+      keyboardActionsPlatform: KeyboardActionsPlatform.ALL,
+      actions: [
+        if (!state.isOldPasswordVerified) 
+          KeyboardAction(
+            displayArrows: false,
+            focusNode: _oldPasswordFocus,
+            toolbarButtons: [
+              (node) {
+                return GestureDetector(
+                  onTap: () {
+                    node.unfocus();
+                    _submit(state);
+                  },
+                  child: Padding(
+                    padding: EdgeInsets.only(right: 16.0),
+                    child: BoldText(text: 'Submit', size: SizeConfig.getWidth(4), color: Theme.of(context).primaryColor),
+                  ),
+                );
+              }
+            ]
+          ),
+        KeyboardAction(
+          focusNode: _passwordFocus,
+          toolbarButtons: [
+            (node) {
+              return GestureDetector(
+                onTap: () => node.unfocus(),
+                child: Padding(
+                  padding: EdgeInsets.only(right: 16.0),
+                  child: BoldText(text: 'Done', size: SizeConfig.getWidth(4), color: Theme.of(context).primaryColor),
+                ),
+              );
+            }
+          ]
+        ),
+        KeyboardAction(
+          focusNode: _passwordConfirmationFocus,
+          toolbarButtons: [
+            (node) {
+              return GestureDetector(
+                onTap: () => node.unfocus(),
+                child: Padding(
+                  padding: EdgeInsets.only(right: 16.0),
+                  child: BoldText(text: 'Done', size: SizeConfig.getWidth(4), color: Theme.of(context).primaryColor),
+                ),
+              );
+            }
+          ]
+        ),
+      ]
+    );
   }
 }

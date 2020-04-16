@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
-import 'package:heist/models/customer/photos.dart';
+
+import 'photos.dart';
 
 class Profile extends Equatable {
   final String identifier;

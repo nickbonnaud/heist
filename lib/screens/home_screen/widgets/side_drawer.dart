@@ -9,6 +9,7 @@ import 'package:heist/screens/home_screen/bloc/side_menu_bloc.dart';
 import 'package:heist/screens/onboard_screen/onboard_screen.dart';
 import 'package:heist/screens/password_screen/password_screen.dart';
 import 'package:heist/screens/profile_screen/profile_screen.dart';
+import 'package:heist/screens/settings_screen/settings_screen.dart';
 
 class SideDrawer extends StatefulWidget {
   final Widget _homeScreen;
@@ -224,9 +225,15 @@ class Drawer extends StatelessWidget {
                     )
                   ),
                   DrawerItem(
-                    onPressed: () => print('pressed'),
-                    text: 'Payments',
-                    icon: Icon(Icons.payment)
+                    onPressed: () => Navigator.push(
+                      context,
+                      platformPageRoute(
+                        context: context,
+                        builder: (_) => SettingsScreen()
+                      )
+                    ),
+                    text: 'Settings',
+                    icon: Icon(context.platformIcons.settings)
                   ),
                   DrawerItem(
                     onPressed: () => showPlatformModalSheet(

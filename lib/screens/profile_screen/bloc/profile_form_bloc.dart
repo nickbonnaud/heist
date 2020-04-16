@@ -18,7 +18,7 @@ class ProfileFormBloc extends Bloc<ProfileFormEvent, ProfileFormState> {
   final CustomerBloc _customerBloc;
 
   ProfileFormBloc({@required ProfileRepository profileRepository, @required CustomerBloc customerBloc})
-    : assert(profileRepository != null, customerBloc != null),
+    : assert(profileRepository != null && customerBloc != null),
       _profileRepository = profileRepository,
       _customerBloc = customerBloc;
   
