@@ -28,7 +28,7 @@ class _HistoricTransactionsListState extends State<HistoricTransactionsList> {
   Widget build(BuildContext context) {
     return BlocBuilder<HistoricTransactionsBloc, HistoricTransactionsState>(
       builder: (context, state) {
-        if (state is Uninitialized) {
+        if (state is Uninitialized || state is Loading) {
           return Center(
             child: LoadingWidget(),
           );

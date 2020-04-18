@@ -150,7 +150,7 @@ class _PasswordFormState extends State<PasswordForm> {
                 ) 
               ),
               Padding(
-                padding:  EdgeInsets.only(bottom: 16),
+                padding: EdgeInsets.only(bottom: 16),
                 child: Row(
                   children: <Widget>[
                     Expanded(

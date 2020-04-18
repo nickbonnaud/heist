@@ -2,13 +2,15 @@ import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 
-import 'default_app_bar/bloc/default_app_bar_bloc.dart';
-
 class BottomModalAppBar extends StatefulWidget implements PreferredSizeWidget {
+  final Color _backgroundColor;
+
+  BottomModalAppBar({Color backgroundColor = Colors.white})
+    : _backgroundColor = backgroundColor;
+  
   @override
   Size get preferredSize => Size.fromHeight(kToolbarHeight);
 
@@ -32,7 +34,7 @@ class _BottomModalAppBarState extends State<BottomModalAppBar> with TickerProvid
   Widget build(BuildContext context) {
     return AppBar(
       elevation: 0,
-      backgroundColor: Colors.white,
+      backgroundColor: widget._backgroundColor,
       leading: AnimatedBuilder(
         animation: _showAnimationController, 
         builder: (context, child) => Transform.rotate(

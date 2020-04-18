@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:heist/models/date_range.dart';
 import 'package:heist/models/paginate_data_holder.dart';
-import 'package:heist/models/paginated_api_response.dart';
 import 'package:heist/models/transaction/transaction_resource.dart';
 import 'package:heist/repositories/transaction_repository.dart';
 import 'package:meta/meta.dart';
@@ -24,32 +24,86 @@ class HistoricTransactionsBloc extends Bloc<HistoricTransactionsEvent, HistoricT
   HistoricTransactionsState get initialState => Uninitialized();
 
   @override
-  Stream<HistoricTransactionsState> transformEvents(Stream<HistoricTransactionsEvent> events, Stream<HistoricTransactionsState> Function(HistoricTransactionsEvent) next) {
-    return super.transformEvents(
-      events.debounceTime(const Duration(milliseconds: 500)),
-      next
-    );
+  Stream<HistoricTransactionsState> mapEventToState(HistoricTransactionsEvent event) async* {
+    if (event is FetchHistoricTransactions) {
+      yield* _mapFetchHistoricTransactionsToState(event);
+    } else if (event is FetchTransactionsByDateRange) {
+      yield* _mapFetchTransactionsByDateRangeToState(event);
+    }
   }
-  
-  @override
-  Stream<HistoricTransactionsState> mapEventToState( HistoricTransactionsEvent event) async* {
-    final currentState = state;
-    if (event is FetchHistoricTransactions && !_hasReachedMax(currentState)) {
-      try {
-        if (currentState is Uninitialized) {
-          final PaginateDataHolder paginateData = await _transactionRepository.fetchPaid(1);
-          yield TransactionsLoaded(transactions: paginateData.data, nextPage: paginateData.nextPage, hasReachedEnd: paginateData.nextPage == null);
-          return;
-        }
 
-        if (currentState is TransactionsLoaded) {
-          final PaginateDataHolder paginateData = await _transactionRepository.fetchPaid(currentState.nextPage);
-          yield paginateData.nextPage == null 
-            ? currentState.copyWith(hasReachedEnd: true)
-            : TransactionsLoaded(transactions: currentState.transactions + paginateData.data, nextPage: paginateData.nextPage, hasReachedEnd: false);
+  Stream<HistoricTransactionsState> _mapFetchHistoricTransactionsToState(FetchHistoricTransactions event) async* {
+    if (state is !Loading) {
+      if (event.reset) {
+        try {
+          yield Loading();
+          final PaginateDataHolder paginateData = await _transactionRepository.fetchHistoric(1);
+          yield TransactionsLoaded(transactions: paginateData.data, nextPage: paginateData.nextPage, hasReachedEnd: paginateData.nextPage == null);
+        } catch (_) {
+          yield FetchFailure();
         }
-      } catch (_) {
-        yield FetchFailure();
+      } else {
+        final currentState = state;
+        if (!_hasReachedMax(currentState)) {
+          try {
+            yield Loading();
+            if (currentState is Uninitialized) {
+              final PaginateDataHolder paginateData = await _transactionRepository.fetchHistoric(1);
+              yield TransactionsLoaded(transactions: paginateData.data, nextPage: paginateData.nextPage, hasReachedEnd: paginateData.nextPage == null);
+              return;
+            }
+
+            if (currentState is TransactionsLoaded) {
+              final PaginateDataHolder paginateData = await _transactionRepository.fetchHistoric(currentState.nextPage);
+              yield paginateData.nextPage == null 
+                ? currentState.copyWith(hasReachedEnd: true)
+                : TransactionsLoaded(transactions: currentState.transactions + paginateData.data, nextPage: paginateData.nextPage, hasReachedEnd: false);
+            }
+          } catch (_) {
+            yield FetchFailure();
+          }
+        }
+      }
+    }
+  }
+
+  Stream<HistoricTransactionsState> _mapFetchTransactionsByDateRangeToState(FetchTransactionsByDateRange event) async* {
+    if (state is !Loading) {
+      if (event.reset) {
+        try {
+          yield Loading();
+          final PaginateDataHolder paginateData = await _transactionRepository.fetchDateRange(nextPage: 1, dateRange: event.dateRange);
+          yield TransactionsLoaded(transactions: paginateData.data, nextPage: paginateData.nextPage, hasReachedEnd: paginateData.nextPage == null);
+        } catch (_) {
+          yield FetchFailure();
+        }
+      } else {
+        final currentState = state;
+        print("1");
+        if (!_hasReachedMax(currentState)) {
+          print("2");
+          try {
+            yield Loading();
+            if (currentState is Uninitialized) {
+              print("3");
+              final PaginateDataHolder paginateData = await _transactionRepository.fetchDateRange(nextPage: 1, dateRange: event.dateRange);
+              yield TransactionsLoaded(transactions: paginateData.data, nextPage: paginateData.nextPage, hasReachedEnd: paginateData.nextPage == null);
+              return;
+            }
+
+            if (currentState is TransactionsLoaded) {
+              print("4");
+              final PaginateDataHolder paginateData = await _transactionRepository.fetchDateRange(nextPage: currentState.nextPage, dateRange: event.dateRange);
+              print("5");
+              yield paginateData.nextPage == null 
+                ? currentState.copyWith(hasReachedEnd: true)
+                : TransactionsLoaded(transactions: currentState.transactions + paginateData.data, nextPage: paginateData.nextPage, hasReachedEnd: false);
+            }
+          } catch (_) {
+            print("6");
+            yield FetchFailure();
+          }
+        }
       }
     }
   }

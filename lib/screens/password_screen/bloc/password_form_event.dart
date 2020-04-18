@@ -2,6 +2,7 @@ part of 'password_form_bloc.dart';
 
 abstract class PasswordFormEvent extends Equatable {
   const PasswordFormEvent();
+  
   @override
   List<Object> get props => [];
 }

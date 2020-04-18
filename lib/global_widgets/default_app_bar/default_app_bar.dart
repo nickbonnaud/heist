@@ -7,6 +7,13 @@ import 'package:heist/global_widgets/default_app_bar/bloc/default_app_bar_bloc.d
 import 'package:heist/resources/helpers/size_config.dart';
 
 class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
+  final Color _backgroundColor;
+  final Widget _trailingWidget;
+
+  DefaultAppBar({Color backgroundColor = Colors.white, Widget trailingWidget})
+    : _backgroundColor = backgroundColor,
+      _trailingWidget = trailingWidget;
+  
   @override
   Size get preferredSize => Size.fromHeight(kToolbarHeight);
 
@@ -14,8 +21,11 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       elevation: 0,
-      backgroundColor: Colors.white,
-      leading: AnimatedLeadingIcon()
+      backgroundColor: _backgroundColor,
+      leading: AnimatedLeadingIcon(),
+      actions: <Widget>[
+        _trailingWidget
+      ],
     );
   }
 }

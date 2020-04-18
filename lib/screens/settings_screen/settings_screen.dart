@@ -6,7 +6,6 @@ import 'package:heist/global_widgets/default_app_bar/default_app_bar.dart';
 import 'package:heist/screens/settings_screen/widgets/settings_list.dart';
 
 class SettingsScreen extends StatelessWidget {
-  
   @override
   Widget build(BuildContext context) {
     return BlocProvider<DefaultAppBarBloc>(
