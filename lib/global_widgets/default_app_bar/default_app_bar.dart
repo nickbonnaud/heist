@@ -24,7 +24,8 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
       backgroundColor: _backgroundColor,
       leading: AnimatedLeadingIcon(),
       actions: <Widget>[
-        _trailingWidget
+        if (_trailingWidget != null)
+          _trailingWidget
       ],
     );
   }

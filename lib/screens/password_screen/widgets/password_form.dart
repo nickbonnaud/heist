@@ -201,6 +201,14 @@ class _PasswordFormState extends State<PasswordForm> {
     _passwordConfirmationController.addListener(_onPasswordConfirmationChanged);
   }
 
+  @override
+  void dispose() {
+    _oldPasswordController.dispose();
+    _passwordController.dispose();
+    _passwordConfirmationController.dispose();
+    super.dispose();
+  }
+
   bool _canSubmit(PasswordFormState state) {
     if (state.isOldPasswordVerified) {
       return state.isPasswordValid && _passwordController.text.isNotEmpty && state.isPasswordConfirmationValid && _passwordConfirmationController.text.isNotEmpty && !state.isSubmitting;

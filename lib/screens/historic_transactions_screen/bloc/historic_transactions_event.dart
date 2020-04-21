@@ -31,3 +31,29 @@ class FetchTransactionsByDateRange extends HistoricTransactionsEvent {
   @override
   String toString() => 'FetchTransactionsByDateRange { dateRange: $dateRange, reset: $reset }';
 }
+
+class FetchTransactionsByBusiness extends HistoricTransactionsEvent {
+  final String identifier;
+  final bool reset;
+
+  const FetchTransactionsByBusiness({@required this.identifier, this.reset = false});
+
+  @override
+  List<Object> get props => [identifier, reset];
+
+  @override
+  String toString() => 'FetchTransactionsByBusiness { identifier: $identifier, reset: $reset }';
+}
+
+class FetchTransactionByIdentifier extends HistoricTransactionsEvent {
+  final String identifier;
+  final bool reset;
+
+  const FetchTransactionByIdentifier({@required this.identifier, @required this.reset});
+
+  @override
+  List<Object> get props => [identifier, reset];
+
+  @override
+  String toString() => 'FetchTransactionByIdentifier { identifier: $identifier, reset: $reset }';
+}

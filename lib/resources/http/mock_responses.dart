@@ -29,6 +29,12 @@ class MockResponses {
       return _mockUpdateAccount();
     } else if (options.path.contains("transaction?date[]=")) {
       return _mockFetchDateTransactions();
+    } else if (options.path.contains('business?name=')) {
+      return _mockFetchBusinessesByName();
+    } else if (options.path.contains('transaction?business=')) {
+      return _mockFetchTransactionsByBusiness();
+    } else if (options.path.contains('transaction?id=')) {
+      return _mockFetchTransactionsByIdentifier();
     }
   }
 
@@ -860,6 +866,378 @@ class MockResponses {
         "to": 3,
         "total": 3,
       }
+    };
+  }
+  
+  static Map<String, dynamic> _mockFetchTransactionsByBusiness() {
+    return {
+      'data': [
+        {
+          "transaction": {
+            "identifier": "3ff9ad40-79c9-11ea-8b92-a9b4a4c53696",
+            "employee_id": null,
+            "tax": "457",
+            "tip": "1636",
+            "net_sales": "6088",
+            "total": "8181",
+            "partial_payment": "0",
+            "locked": "1",
+            "bill_created_at": "2020-04-08 18:46:25",
+            "updated_at": "2020-04-08 18:46:25",
+            "status": "open",
+            "purchased_items": [
+              {
+                "name": "numquam",
+                "sub_name": 'fbjdss',
+                "price": "2000",
+                "quantity": "3",
+                "total": "6000"
+              },
+              {
+                "name": "vel",
+                "sub_name": null,
+                "price": "500",
+                "quantity": "2",
+                "total": "1000"
+              }
+            ]
+          },
+          "business": {
+            "identifier": "3ff30c10-79c9-11ea-a2da-ebb755a8f3fd",
+            "profile": {
+              "name": "Spencer PLC",
+              "website": "wisozk.com",
+              "description": "Dignissimos cum quidem neque magnam qui et dolor. Voluptatem error maiores quia repellat veritatis possimus. Molestias id rem hic ipsam.",
+              "google_place_id": null,
+              "phone": "7912752600",
+              "hours": {
+                "monday": "Monday: 11:00 AM – 10:00 PM",
+                "tuesday": "Tuesday: 11:00 AM – 10:00 PM",
+                "wednesday": "Wednesday: 11:00 AM – 10:00 PM",
+                "thursday": "Thursday: 11:00 AM – 10:00 PM",
+                "friday": "Friday: 11:00 AM – 10:30 PM",
+                "saturday": "Saturday: 11:00 AM – 10:30 PM",
+                "sunday": "Sunday: 10:30 AM – 9:00 PM",
+              }
+            },
+            'photos': {
+            'logo': {
+              'name': "logo_1.png",
+              'small_url': "https://d1yjjnpx0p53s8.cloudfront.net/styles/logo-thumbnail/s3/0019/1114/brand.gif?itok=DKwKOdLe",
+              'large_url': "https://d1yjjnpx0p53s8.cloudfront.net/styles/logo-thumbnail/s3/0019/1114/brand.gif?itok=DKwKOdLe"
+            },
+            'banner': {
+              'name': "banner_1.png",
+              'small_url': "https://www.gerardhuerta.com/wp-content/uploads/2016/08/ACDC-1000x650.jpg",
+              'large_url': "https://www.gerardhuerta.com/wp-content/uploads/2016/08/ACDC-1000x650.jpg"
+            },
+          },
+            "location": {
+              "geo": {
+                "identifier": "3ff884f0-79c9-11ea-9cdf-4d873094dff7",
+                "lat": "40.748440",
+                "lng":"-73.985664",
+                "radius": "50",
+              },
+              "beacon": {
+                "identifier": "3ff884f0-79c9-11ea-9cdf-4d873094dff7",
+                "region_identifier": "3ff871d0-79c9-11ea-8a10-a7f913a9d44b",
+                "major": "0",
+                "minor": "1"
+              },
+              "region": {
+                "identifier": "3ff871d0-79c9-11ea-8a10-a7f913a9d44b",
+                "city": "prosaccoshire",
+                "state": "ne",
+                "zip": "41232",
+                "neighborhood": null
+              }
+            }
+          },
+          "refund": []
+        },
+      ],
+      "links": {
+        "first": "http://localhost/api/customer/transaction?page=1",
+        "last": "http://localhost/api/customer/transaction?page=1",
+        "prev": null,
+        "next": null
+      },
+      "meta": {
+        "current_page": 1,
+        "from": 1,
+        "last_page": 1,
+        "path": "http://localhost/api/customer/transaction",
+        "per_page": 15,
+        "to": 1,
+        "total": 1,
+      }
+    };
+  }
+
+  static Map<String, dynamic> _mockFetchTransactionsByIdentifier() {
+    return {
+      'data': [
+        {
+          "transaction": {
+            "identifier": "3ff9ad40-79c9-11ea-8b92-a9b4a4c53696",
+            "employee_id": null,
+            "tax": "457",
+            "tip": "1636",
+            "net_sales": "6088",
+            "total": "8181",
+            "partial_payment": "0",
+            "locked": "1",
+            "bill_created_at": "2020-04-08 18:46:25",
+            "updated_at": "2020-04-08 18:46:25",
+            "status": "open",
+            "purchased_items": [
+              {
+                "name": "numquam",
+                "sub_name": 'fbjdss',
+                "price": "2000",
+                "quantity": "3",
+                "total": "6000"
+              },
+              {
+                "name": "vel",
+                "sub_name": null,
+                "price": "500",
+                "quantity": "2",
+                "total": "1000"
+              }
+            ]
+          },
+          "business": {
+            "identifier": "3ff30c10-79c9-11ea-a2da-ebb755a8f3fd",
+            "profile": {
+              "name": "Fake PLC",
+              "website": "wisozk.com",
+              "description": "Dignissimos cum quidem neque magnam qui et dolor. Voluptatem error maiores quia repellat veritatis possimus. Molestias id rem hic ipsam.",
+              "google_place_id": null,
+              "phone": "7912752600",
+              "hours": {
+                "monday": "Monday: 11:00 AM – 10:00 PM",
+                "tuesday": "Tuesday: 11:00 AM – 10:00 PM",
+                "wednesday": "Wednesday: 11:00 AM – 10:00 PM",
+                "thursday": "Thursday: 11:00 AM – 10:00 PM",
+                "friday": "Friday: 11:00 AM – 10:30 PM",
+                "saturday": "Saturday: 11:00 AM – 10:30 PM",
+                "sunday": "Sunday: 10:30 AM – 9:00 PM",
+              }
+            },
+            'photos': {
+            'logo': {
+              'name': "logo_1.png",
+              'small_url': "https://d1yjjnpx0p53s8.cloudfront.net/styles/logo-thumbnail/s3/0019/1114/brand.gif?itok=DKwKOdLe",
+              'large_url': "https://d1yjjnpx0p53s8.cloudfront.net/styles/logo-thumbnail/s3/0019/1114/brand.gif?itok=DKwKOdLe"
+            },
+            'banner': {
+              'name': "banner_1.png",
+              'small_url': "https://www.gerardhuerta.com/wp-content/uploads/2016/08/ACDC-1000x650.jpg",
+              'large_url': "https://www.gerardhuerta.com/wp-content/uploads/2016/08/ACDC-1000x650.jpg"
+            },
+          },
+            "location": {
+              "geo": {
+                "identifier": "3ff884f0-79c9-11ea-9cdf-4d873094dff7",
+                "lat": "40.748440",
+                "lng":"-73.985664",
+                "radius": "50",
+              },
+              "beacon": {
+                "identifier": "3ff884f0-79c9-11ea-9cdf-4d873094dff7",
+                "region_identifier": "3ff871d0-79c9-11ea-8a10-a7f913a9d44b",
+                "major": "0",
+                "minor": "1"
+              },
+              "region": {
+                "identifier": "3ff871d0-79c9-11ea-8a10-a7f913a9d44b",
+                "city": "prosaccoshire",
+                "state": "ne",
+                "zip": "41232",
+                "neighborhood": null
+              }
+            }
+          },
+          "refund": []
+        },
+      ],
+      "links": {
+        "first": "http://localhost/api/customer/transaction?page=1",
+        "last": "http://localhost/api/customer/transaction?page=1",
+        "prev": null,
+        "next": null
+      },
+      "meta": {
+        "current_page": 1,
+        "from": 1,
+        "last_page": 1,
+        "path": "http://localhost/api/customer/transaction",
+        "per_page": 15,
+        "to": 1,
+        "total": 1,
+      }
+    };
+  }
+  
+  static Map<String, dynamic> _mockFetchBusinessesByName() {
+    return {
+      'data': [
+        {
+          'identifier': "fake_id_1",
+          'profile': {
+            'name': "Acme Inc.",
+            'website': "https://acmecarrboro.com/",
+            'description': "A description of the Acme Inc. company. It's a really cool company that you should patronize.",
+            'phone': "9195244477",
+            'hours': {
+              'monday': 'Monday: 11:00 AM - 10:00 PM',
+              'tuesday': 'Tuesday: 11:00 AM - 10:00 PM',
+              'wednesday': 'Wednesday: 11:00 AM - 10:00 PM',
+              'thursday': 'Thursday: 11:00 AM - 10:00 PM',
+              'friday': 'Friday: 11:00 AM - 10:30 PM',
+              'saturday': 'Saturday: 11:00 AM - 10:30 PM',
+              'sunday': 'Sunday: 10:30 AM - 9:00 PM',
+            }
+          },
+          'photos': {
+            'logo': {
+              'name': "logo_1.png",
+              'small_url': "https://d1yjjnpx0p53s8.cloudfront.net/styles/logo-thumbnail/s3/0019/1114/brand.gif?itok=DKwKOdLe",
+              'large_url': "https://d1yjjnpx0p53s8.cloudfront.net/styles/logo-thumbnail/s3/0019/1114/brand.gif?itok=DKwKOdLe"
+            },
+            'banner': {
+              'name': "banner_1.png",
+              'small_url': "https://www.gerardhuerta.com/wp-content/uploads/2016/08/ACDC-1000x650.jpg",
+              'large_url': "https://www.gerardhuerta.com/wp-content/uploads/2016/08/ACDC-1000x650.jpg"
+            },
+          },
+          'location': {
+            'geo': {
+              'identifier': 'bcdhbv31r3yv',
+              'lat': '35.927115',
+              'lng': '-79.027379',
+              'radius': '50'
+            },
+            'beacon': {
+              'identifier': 'bcdhbv31r3yv',
+              'region_identifier': 'dcansjcbds22ded',
+              'major': '0',
+              'minor': '0'
+            },
+            'region': {
+              'identifier': 'fcdjnasy3y8',
+              'city': 'Chapel Hill',
+              'state': 'NC',
+              'zip': '27514',
+              'neighborhood': 'bchsavc'
+            }
+          }
+        },
+        {
+          'identifier': "fake_id_2",
+          'profile': {
+            'name': "Sunrise Biscuits",
+            'website': "http://sunrisebiscuits.com/",
+            'description': "A description of the Sunrise Biscuits. It's a really cool company that you should patronize.",
+            'phone': "3743734848",
+            'hours': {
+              'monday': 'Monday: 8:00 AM - 10:00 PM',
+              'tuesday': 'Tuesday: 8:00 AM - 10:00 PM',
+              'wednesday': 'Wednesday: 8:00 AM - 10:00 PM',
+              'thursday': 'Thursday: 8:00 AM - 10:00 PM',
+              'friday': 'Friday: 8:00 AM - 10:30 PM',
+              'saturday': 'Saturday: 8:00 AM - 10:30 PM',
+              'sunday': 'Sunday: 9:00 AM - 9:00 PM',
+            }
+          },
+          'photos': {
+            'logo': {
+              'name': "logo_2.png",
+              'small_url': "https://cdna.artstation.com/p/assets/images/images/021/760/294/micro_square/jip-scheepers-2018-04-25.jpg?1572865897",
+              'large_url': "https://cdna.artstation.com/p/assets/images/images/021/760/294/micro_square/jip-scheepers-2018-04-25.jpg?1572865897"
+            },
+            'banner': {
+              'name': "banner_2.png",
+              'small_url': "https://www.gerardhuerta.com/wp-content/uploads/2016/08/ACDC-1000x650.jpg",
+              'large_url': "https://www.gerardhuerta.com/wp-content/uploads/2016/08/ACDC-1000x650.jpg"
+            },
+          },
+          'location': {
+            'geo': {
+              'identifier': 'cdsnji2rty42',
+              'lat': '35.927393',
+              'lng': '-79.035551',
+              'radius': '60'
+            },
+            'beacon': {
+              'identifier': 'cdsnji2rty42',
+              'region_identifier': 'cdjsb1y27qycd',
+              'major': '1',
+              'minor': '1'
+            },
+            'region': {
+              'identifier': 'fcdjnasy3y8',
+              'city': 'Chapel Hill',
+              'state': 'NC',
+              'zip': '27514',
+              'neighborhood': 'cnsajcbads'
+            }
+          }
+        },
+        {
+          'identifier': "fake_id_3",
+          'profile': {
+            'name': "City Kitchen",
+            'website': "https://citykitchenchapelhill.com/",
+            'description': "A description of the City Kitchen Bistro. It's a really cool company that you should patronize.",
+            'phone': "3750370153",
+            'hours': {
+              'monday': 'Monday: 11:00 AM - 10:00 PM',
+              'tuesday': 'Tuesday: 11:00 AM - 10:00 PM',
+              'wednesday': 'Wednesday: 11:00 AM - 10:00 PM',
+              'thursday': 'Thursday: 11:00 AM - 10:00 PM',
+              'friday': 'Friday: 11:00 AM - 10:30 PM',
+              'saturday': 'Saturday: 11:00 AM - 10:30 PM',
+              'sunday': 'Sunday: 10:30 AM - 9:00 PM',
+            }
+          },
+          'photos': {
+            'logo': {
+              'name': "logo_3.png",
+              'small_url': "https://www.tuesdaytactics.com/htmlemail/images/tt470-2.jpg",
+              'large_url': "https://www.tuesdaytactics.com/htmlemail/images/tt470-2.jpg"
+            },
+            'banner': {
+              'name': "banner_3.png",
+              'small_url': "https://www.gerardhuerta.com/wp-content/uploads/2016/08/ACDC-1000x650.jpg",
+              'large_url': "https://www.gerardhuerta.com/wp-content/uploads/2016/08/ACDC-1000x650.jpg"
+            },
+          },
+          'location': {
+            'geo': {
+              'identifier': '39320ifjebufcd',
+              'lat': '35.914624',
+              'lng': '-79.052906',
+              'radius': '50'
+            },
+            'beacon': {
+              'identifier': '39320ifjebufcd',
+              'region_identifier': 'cdabsjhvchvda2j2',
+              'major': '2',
+              'minor': '2'
+            },
+            'region': {
+              'identifier': 'fcdjnasy3y8',
+              'city': 'Chapel Hill',
+              'state': 'NC',
+              'zip': '27514',
+              'neighborhood': 'cbjsabc'
+            }
+          }
+        }
+      ]
     };
   }
   

@@ -20,7 +20,7 @@ class BusinessScreen extends StatefulWidget {
 }
 
 class _BusinessScreenState extends State<BusinessScreen> with SingleTickerProviderStateMixin {
-  static const String DISMISSIBLE_KEY = "business_dimissible";
+  static const String DISMISSIBLE_KEY = "business_dismissible";
 
   @override
   Widget build(BuildContext context) {

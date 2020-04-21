@@ -27,6 +27,24 @@ class TransactionRepository {
     return PaginateDataHolder(data:[TransactionResource.withError(response.error)].toList(), nextPage: null);
   }
 
+  Future<PaginateDataHolder> fetchByBusiness({@required int nextPage, @required String identifier}) async {
+    final String query = 'business=$identifier';
+    final PaginatedApiResponse response = await _transactionProvider.fetch(query: '$query&page=$nextPage');
+    if (response.isOK) {
+      return _handleSuccess(response);
+    }
+    return PaginateDataHolder(data:[TransactionResource.withError(response.error)].toList(), nextPage: null);
+  }
+
+  Future<PaginateDataHolder> fetchByIdentifier({@required int nextPage, @required String identifier}) async {
+    final String query = 'id=$identifier';
+    final PaginatedApiResponse response = await _transactionProvider.fetch(query: '$query&page=$nextPage');
+    if (response.isOK) {
+      return _handleSuccess(response);
+    }
+    return PaginateDataHolder(data:[TransactionResource.withError(response.error)].toList(), nextPage: null);
+  }
+
   PaginateDataHolder _handleSuccess(PaginatedApiResponse response) {
     final rawData = response.body as List;
     List<TransactionResource> data = rawData.map((rawTransaction) {

@@ -9,6 +9,9 @@ import 'package:heist/global_widgets/ios_date_picker/bloc/ios_date_picker_bloc.d
 import 'package:heist/global_widgets/ios_date_picker/ios_date_picker.dart';
 import 'package:heist/global_widgets/material_date_picker/bloc/material_date_picker_bloc.dart';
 import 'package:heist/global_widgets/material_date_picker/material_date_picker.dart';
+import 'package:heist/global_widgets/search_business_name_modal.dart';
+import 'package:heist/global_widgets/search_transaction_id_modal.dart';
+import 'package:heist/models/business/business.dart';
 import 'package:heist/models/date_range.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
@@ -126,10 +129,44 @@ class HistoricTransactionsBody extends StatelessWidget {
       case Options.date:
         _searchByDate(context);
         break;
+      case Options.businessName:
+        _searchByName(context);
+        break;
+      case Options.transactionId:
+        _searchByTransactionId(context);
+        break;
+      case Options.all:
+        _fetchAllTransactions(context);
+        break;
       default:
     }
   }
 
+  void _fetchAllTransactions(context) async {
+    BlocProvider.of<HistoricTransactionsBloc>(context).add(FetchHistoricTransactions(reset: true));
+  }
+  
+  void _searchByTransactionId(BuildContext context) async {
+    String identifier = await showPlatformModalSheet(
+      context: context,
+      builder: (_) => SearchTransactionIdModal()
+    );
+    print(identifier);
+    if (identifier != null) {
+      BlocProvider.of<HistoricTransactionsBloc>(context).add(FetchTransactionByIdentifier(identifier: identifier, reset: true));
+    }
+  }
+
+  void _searchByName(BuildContext context) async {
+    Business business = await showPlatformModalSheet(
+      context: context,
+      builder: (_) => SearchBusinessNameModal()
+    );
+    if (business != null) {
+      BlocProvider.of<HistoricTransactionsBloc>(context).add(FetchTransactionsByBusiness(identifier: business.identifier, reset: true));
+    }
+  }
+  
   void _searchByDate(BuildContext context) async {
     DateRange range;
     if (Platform.isIOS) {
