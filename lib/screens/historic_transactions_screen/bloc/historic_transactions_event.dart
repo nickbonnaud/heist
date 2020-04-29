@@ -57,3 +57,5 @@ class FetchTransactionByIdentifier extends HistoricTransactionsEvent {
   @override
   String toString() => 'FetchTransactionByIdentifier { identifier: $identifier, reset: $reset }';
 }
+
+class FetchMoreTransactions extends HistoricTransactionsEvent {}

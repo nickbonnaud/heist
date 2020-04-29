@@ -3,11 +3,11 @@ import 'package:heist/models/paginated_api_response.dart';
 import 'package:heist/resources/http/api.dart';
 import 'package:meta/meta.dart';
 
-class TransactionProvider {
+class RefundProvider {
   final Api _api = Api();
 
   Future<PaginatedApiResponse> fetch({@required String query}) async {
-    String url = 'transaction?$query';
+    String url = 'refund?$query';
     try {
       Response response = await this._api.get(url);
       return PaginatedApiResponse(body: response.data, error: null, isOK: true, nextPageString: response.extra['next'].toString());

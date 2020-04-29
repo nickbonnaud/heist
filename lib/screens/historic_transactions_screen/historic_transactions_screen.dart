@@ -17,7 +17,10 @@ class HistoricTransactionsScreen extends StatelessWidget {
       child: BlocProvider<HistoricTransactionsBloc>(
         create: (BuildContext context) => HistoricTransactionsBloc(transactionRepository: _transactionRepository)
           ..add(FetchHistoricTransactions()),
-        child: HistoricTransactionsBody(),
+        child: Scaffold(
+          backgroundColor: Colors.grey.shade100,
+          body: HistoricTransactionsBody(),
+        ),
       ) 
     );
   }

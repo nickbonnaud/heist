@@ -99,6 +99,12 @@ class ReceiptScreen extends StatelessWidget {
                 )].toSet(),
               ),
             ),
+          ),
+          SizedBox(height: SizeConfig.getHeight(2)),
+          Divider(thickness: 2),
+          SizedBox(height: SizeConfig.getHeight(2)),
+          Center(
+            child: NormalText(text: "Transaction ID: ${_transactionResource.transaction.identifier}", size: SizeConfig.getWidth(4), color: Colors.black54),
           )
         ],
       ),

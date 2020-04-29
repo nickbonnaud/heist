@@ -6,8 +6,13 @@ import 'package:heist/global_widgets/bottom_modal_app_bar.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
-class SearchTransactionIdModal extends StatelessWidget {
-  final FocusNode _transactionIdNode = FocusNode();
+class SearchIdentifierModal extends StatelessWidget {
+  final FocusNode _identifierNode = FocusNode();
+  final String _hintText;
+
+  SearchIdentifierModal({@required String hintText})
+    : assert(hintText != null),
+      _hintText = hintText;
   
   @override
   Widget build(BuildContext context) {
@@ -21,7 +26,7 @@ class SearchTransactionIdModal extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             PlatformTextField(
-              focusNode: _transactionIdNode,
+              focusNode: _identifierNode,
               autocorrect: false,
               autofocus: true,
               keyboardType: TextInputType.text,
@@ -34,7 +39,7 @@ class SearchTransactionIdModal extends StatelessWidget {
               onSubmitted: (String identifier) => Navigator.of(context).pop(identifier),
               android: (_) => MaterialTextFieldData(
                 decoration: InputDecoration(
-                  hintText: "Transaction ID",
+                  hintText: _hintText,
                   hintStyle: GoogleFonts.roboto(
                     fontWeight: FontWeight.w700,
                     fontSize: SizeConfig.getWidth(6)
@@ -42,7 +47,7 @@ class SearchTransactionIdModal extends StatelessWidget {
                 ),
               ),
               ios: (_) => CupertinoTextFieldData(
-                placeholder: "Transaction ID",
+                placeholder: _hintText,
                 placeholderStyle: GoogleFonts.roboto(
                   fontWeight: FontWeight.w700,
                   fontSize: SizeConfig.getWidth(6),

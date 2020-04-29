@@ -10,6 +10,9 @@ class PaginatedApiResponse {
     @required this.body,
     @required this.error,
     @required this.isOK,
-    @required this.nextPage
-  });
+    @required String nextPageString
+  }) :
+    nextPage = nextPageString != 'null' 
+      ? int.parse(nextPageString.substring(nextPageString.indexOf("page=") + 5))
+      : null;
 }

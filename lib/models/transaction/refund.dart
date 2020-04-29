@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:intl/intl.dart';
 import 'package:meta/meta.dart';
 
 class Refund extends Equatable {
@@ -14,7 +15,7 @@ class Refund extends Equatable {
       identifier: json['identifier'],
       total: int.parse(json['total']),
       status: json['status'],
-      createdAt: json['created_at']
+      createdAt: DateFormat('E, MMM d').format(DateTime.parse(json['created_at']))
     );
   }
 

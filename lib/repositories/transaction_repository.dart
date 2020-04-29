@@ -8,7 +8,7 @@ import 'package:meta/meta.dart';
 class TransactionRepository {
   final TransactionProvider _transactionProvider = TransactionProvider();
 
-  Future<PaginateDataHolder> fetchHistoric(int nextPage) async {
+  Future<PaginateDataHolder> fetchHistoric({@required int nextPage}) async {
     final PaginatedApiResponse response = await _transactionProvider.fetch(query: 'status=200&page=$nextPage');
     if (response.isOK) {
       return _handleSuccess(response);

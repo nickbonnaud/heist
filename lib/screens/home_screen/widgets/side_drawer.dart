@@ -9,6 +9,7 @@ import 'package:heist/screens/home_screen/bloc/side_menu_bloc.dart';
 import 'package:heist/screens/onboard_screen/onboard_screen.dart';
 import 'package:heist/screens/password_screen/password_screen.dart';
 import 'package:heist/screens/profile_screen/profile_screen.dart';
+import 'package:heist/screens/refunds_screen/refunds_screen.dart';
 import 'package:heist/screens/settings_screen/settings_screen.dart';
 
 class SideDrawer extends StatefulWidget {
@@ -210,15 +211,36 @@ class Drawer extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   DrawerItem(
-                    onPressed: () => showPlatformModalSheet(
-                      context: context,
-                      builder: (_) => HistoricTransactionsScreen()
-                    ),
+                    onPressed: () => Navigator.push(
+                      context, 
+                      platformPageRoute(
+                        context: context, 
+                        builder: (_) => HistoricTransactionsScreen()
+                      )
+                    ), 
                     text: 'Transactions',
                     icon: PlatformWidget(
                       android: (_) => Icon(Icons.receipt),
                       ios: (_) => Icon(IconData(
                         0xF472,
+                        fontFamily: CupertinoIcons.iconFont,
+                        fontPackage: CupertinoIcons.iconFontPackage
+                      )),
+                    )
+                  ),
+                  DrawerItem(
+                    onPressed: () => Navigator.push(
+                      context, 
+                      platformPageRoute(
+                        context: context, 
+                        builder: (_) => RefundsScreen()
+                      )
+                    ), 
+                    text: 'Refunds',
+                    icon: PlatformWidget(
+                      android: (_) => Icon(Icons.undo),
+                      ios: (_) => Icon(IconData(
+                        0xF21E,
                         fontFamily: CupertinoIcons.iconFont,
                         fontPackage: CupertinoIcons.iconFontPackage
                       )),
@@ -249,29 +271,6 @@ class Drawer extends StatelessWidget {
                         fontPackage: CupertinoIcons.iconFontPackage
                       )),
                     )
-                  ),
-                  DrawerItem(
-                    onPressed: () => showPlatformModalSheet(
-                      context: context, 
-                      builder: (_) => ProfileScreen()
-                    ),
-                    text: 'Profile Settings',
-                    icon: PlatformWidget(
-                      android: (_) => Icon(Icons.person),
-                      ios: (_) => Icon(IconData(
-                        0xF3A0,
-                        fontFamily: CupertinoIcons.iconFont,
-                        fontPackage: CupertinoIcons.iconFontPackage
-                      )),
-                    )
-                  ),
-                  DrawerItem(
-                    onPressed: () => showPlatformModalSheet(
-                      context: context, 
-                      builder: (_) => PasswordScreen()
-                    ),
-                    text: 'Settings',
-                    icon: Icon(context.platformIcons.settings)
                   ),
                   DrawerItem(
                     onPressed: () => print('pressed'),

@@ -8,10 +8,12 @@ import 'package:heist/resources/helpers/size_config.dart';
 
 class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Color _backgroundColor;
+  final bool _isSliver;
   final Widget _trailingWidget;
 
-  DefaultAppBar({Color backgroundColor = Colors.white, Widget trailingWidget})
+  DefaultAppBar({Color backgroundColor = Colors.white, bool isSliver = false, Widget trailingWidget})
     : _backgroundColor = backgroundColor,
+      _isSliver = isSliver,
       _trailingWidget = trailingWidget;
   
   @override
@@ -19,6 +21,14 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (_isSliver) {
+      return _buildSliverAppBar();
+    }
+    return _buildDefaultAppBar();
+    
+  }
+
+  AppBar _buildDefaultAppBar() {
     return AppBar(
       elevation: 0,
       backgroundColor: _backgroundColor,
@@ -27,6 +37,21 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
         if (_trailingWidget != null)
           _trailingWidget
       ],
+    );
+  }
+
+  SliverAppBar _buildSliverAppBar() {
+    return SliverAppBar(
+      elevation: 0,
+      backgroundColor: _backgroundColor,
+      leading: AnimatedLeadingIcon(),
+      actions: <Widget>[
+        if (_trailingWidget != null)
+          _trailingWidget
+      ],
+      floating: true,
+      pinned: false,
+      snap: false,
     );
   }
 }

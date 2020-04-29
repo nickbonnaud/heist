@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
+import 'package:heist/models/transaction/refund_resource.dart';
 import 'package:heist/models/transaction/transaction_resource.dart';
 import 'package:heist/resources/helpers/currency.dart';
 import 'package:heist/resources/helpers/size_config.dart';
@@ -9,12 +10,12 @@ import 'package:heist/screens/receipt_screen/receipt_screen.dart';
 
 import 'default_app_bar/bloc/default_app_bar_bloc.dart';
 
-class TransactionWidget extends StatelessWidget {
-  final TransactionResource _transactionResource;
+class RefundWidget extends StatelessWidget {
+  final RefundResource _refundResource;
 
-  const TransactionWidget({Key key, @required TransactionResource transactionResource})
-    : assert(transactionResource != null),
-      _transactionResource = transactionResource,
+  const RefundWidget({Key key, @required RefundResource refundResource})
+    : assert(refundResource != null),
+      _refundResource = refundResource,
       super(key: key);
 
   @override
@@ -22,34 +23,40 @@ class TransactionWidget extends StatelessWidget {
     return Card(
       child: ListTile(
         leading: CircleAvatar(
-          backgroundImage: NetworkImage(_transactionResource.business.photos.logo.smallUrl),
+          backgroundImage: NetworkImage(_refundResource.business.photos.logo.smallUrl),
           radius: SizeConfig.getWidth(6),
         ),
         title: BoldText(
-          text: _transactionResource.business.profile.name, 
-          size: SizeConfig.getWidth(5), 
+          text: _refundResource.business.profile.name,
+          size: SizeConfig.getWidth(5),
           color: Colors.black
         ),
         subtitle: NormalText(
-          text: 'Total: ${Currency.create(cents: _transactionResource.transaction.total)}', 
-          size: SizeConfig.getWidth(5), 
+          text: 'Refund: ${Currency.create(cents: _refundResource.refund.total)}', 
+          size: SizeConfig.getWidth(5),
           color: Colors.black54
         ),
         trailing: NormalText(
-          text: _transactionResource.transaction.billUpdatedAt, 
-          size: SizeConfig.getWidth(5), 
+          text: _refundResource.refund.createdAt,
+          size: SizeConfig.getWidth(5),
           color: Colors.black54
         ),
         onTap: () => showFullTransaction(context),
-      )
+      ),
     );
   }
 
   void showFullTransaction(BuildContext context) {
+    TransactionResource transactionResource = TransactionResource(
+      transaction: _refundResource.transaction,
+      business: _refundResource.business,
+      refund: [_refundResource.refund].toList(), 
+      error: null
+    );
     BlocProvider.of<DefaultAppBarBloc>(context).add(Rotate());
     showPlatformModalSheet(
-      context: context, 
-      builder: (_) => ReceiptScreen(transactionResource: _transactionResource)
+      context: context,
+      builder: (_) => ReceiptScreen(transactionResource: transactionResource)
     ).then((_) {
       BlocProvider.of<DefaultAppBarBloc>(context).add(Reset());
     });

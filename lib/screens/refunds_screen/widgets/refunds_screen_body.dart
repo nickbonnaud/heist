@@ -2,35 +2,35 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heist/global_widgets/default_app_bar/default_app_bar.dart';
-import 'package:heist/global_widgets/transaction_widget.dart';
+import 'package:heist/global_widgets/refund_widget.dart';
 import 'package:heist/resources/helpers/bottom_loader.dart';
 import 'package:heist/resources/helpers/loading_widget.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
-import 'package:heist/screens/historic_transactions_screen/bloc/historic_transactions_bloc.dart';
+import 'package:heist/screens/refunds_screen/bloc/refunds_screen_bloc.dart';
 
 import 'filter_button.dart';
 
-class HistoricTransactionsBody extends StatefulWidget {
+class RefundsScreenBody extends StatefulWidget {
 
   @override
-  State<HistoricTransactionsBody> createState() => _HistoricTransactionsBodyState();
+  State<RefundsScreenBody> createState() => _RefundsScreenBodyState();
 }
 
-class _HistoricTransactionsBodyState extends State<HistoricTransactionsBody> {
+class _RefundsScreenBodyState extends State<RefundsScreenBody> {
   final ScrollController _scrollController = ScrollController();
   final double _scrollThreshold = 200.0;
-  HistoricTransactionsBloc _historicTransactionsBloc;
-  
+  RefundsScreenBloc _refundsScreenBloc;
+
   @override
   void initState() {
     super.initState();
     _scrollController.addListener(_onScroll);
-    _historicTransactionsBloc = BlocProvider.of<HistoricTransactionsBloc>(context);
+    _refundsScreenBloc = BlocProvider.of<RefundsScreenBloc>(context);
   }
-  
+
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<HistoricTransactionsBloc, HistoricTransactionsState>(
+    return BlocBuilder<RefundsScreenBloc, RefundsScreenState>(
       builder: (context, state) {
         if (state is Uninitialized || state is Loading) {
           return Center(
@@ -44,10 +44,10 @@ class _HistoricTransactionsBodyState extends State<HistoricTransactionsBody> {
           );
         }
 
-        if (state is TransactionsLoaded) {
-          if (state.transactions.isEmpty) {
+        if (state is RefundsLoaded) {
+          if (state.refunds.isEmpty) {
             return Center(
-              child: BoldText(text: 'No Transactions', size: 18.0, color: Colors.black),
+              child: BoldText(text: 'No Refunds', size: 18.0, color: Colors.black),
             );
           }
 
@@ -57,25 +57,26 @@ class _HistoricTransactionsBodyState extends State<HistoricTransactionsBody> {
               DefaultAppBar(
                 backgroundColor: Colors.grey.shade100,
                 isSliver: true,
-                trailingWidget: FilterButton(),
+                trailingWidget: FilterButton()
               ),
               SliverPadding(
                 padding: EdgeInsets.only(left: 8, right: 8),
                 sliver: SliverList(
                   delegate: SliverChildBuilderDelegate(
-                    (BuildContext context, int index) => index >= state.transactions.length 
-                      ? BottomLoader()
-                      : TransactionWidget(transactionResource: state.transactions[index]),
+                    (BuildContext context, int index) => index >= state.refunds.length
+                     ? BottomLoader()
+                     :  RefundWidget(refundResource: state.refunds[index]),
                     childCount: state.hasReachedEnd
-                      ? state.transactions.length
-                      : state.transactions.length + 1,
-                  )
+                      ? state.refunds.length
+                      : state.refunds.length +1,
+                    
+                  ),
                 ),
               )
             ],
           );
         }
-      },
+      }
     );
   }
 
@@ -90,7 +91,7 @@ class _HistoricTransactionsBodyState extends State<HistoricTransactionsBody> {
     final double currentScroll = _scrollController.position.pixels;
 
     if (maxScroll - currentScroll <= _scrollThreshold) {
-      _historicTransactionsBloc.add(FetchMoreTransactions());
+      _refundsScreenBloc.add(FetchMoreRefunds());
     }
   }
 }
