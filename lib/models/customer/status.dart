@@ -7,4 +7,7 @@ class Status {
   Status.fromJson(Map<String, dynamic> json)
     : name = json['name'],
       code = int.parse(json['code']);
+
+  @override
+  String toString() => 'Status { name: $name, code: $code }';
 }

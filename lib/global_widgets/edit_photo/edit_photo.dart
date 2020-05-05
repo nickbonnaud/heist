@@ -8,17 +8,20 @@ import 'package:heist/models/customer/customer.dart';
 import 'package:heist/repositories/photo_picker_repository.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
-import 'package:heist/screens/profile_screen/widgets/edit_photo/bloc/edit_photo_bloc.dart';
 import 'package:vibrate/vibrate.dart';
+
+import 'bloc/edit_photo_bloc.dart';
 
 class EditPhoto extends StatelessWidget {
   final PhotoPickerRepository _photoPicker;
   final Customer _customer;
+  final bool _autoDismiss;
 
-  EditPhoto({@required PhotoPickerRepository photoPicker, @required Customer customer})
-    : assert(photoPicker != null, customer != null),
+  EditPhoto({@required PhotoPickerRepository photoPicker, Customer customer, bool autoDismiss})
+    : assert(photoPicker != null),
       _photoPicker = photoPicker,
-      _customer = customer;
+      _customer = customer,
+      _autoDismiss = autoDismiss;
 
   @override
   Widget build(BuildContext context) {
@@ -76,14 +79,14 @@ class EditPhoto extends StatelessWidget {
         backgroundImage: Image.file(photo).image,
         radius: SizeConfig.getWidth(25),
       );
-    } else if (_customer == null) {
+    } else if (_customer?.profile?.photos == null) {
       return CircleAvatar(
         child: Image.asset('assets/profile_customer.png'),
         radius: SizeConfig.getWidth(25),
       );
     } else {
       return CircleAvatar(
-        backgroundImage: NetworkImage(_customer.profile.photos.largeUrl),
+        backgroundImage: NetworkImage(_customer.profile?.photos?.largeUrl),
         radius: SizeConfig.getWidth(25),
       );
     }
@@ -107,6 +110,7 @@ class EditPhoto extends StatelessWidget {
       ..hideCurrentSnackBar()
       ..showSnackBar(
         SnackBar(
+          duration: Duration(seconds: 1),
           content: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
@@ -130,7 +134,9 @@ class EditPhoto extends StatelessWidget {
         )
       ).closed.then((_) => {
         if (isSuccess) {
-          Navigator.of(context).pop()
+          if (_autoDismiss) {
+            Navigator.of(context).pop()
+          }
         } else {
           BlocProvider.of<EditPhotoBloc>(context).add(ResetPhotoForm())
         }

@@ -5,7 +5,7 @@ import 'package:meta/meta.dart';
 
 class AccountRepository {
   final AccountProvider _accountProvider = AccountProvider();
-
+  
   Future<Account> update({@required String accountIdentifier, @required int tipRate, @required int quickTipRate, String primary}) async {
     Map body = {};
     if (tipRate != null) {

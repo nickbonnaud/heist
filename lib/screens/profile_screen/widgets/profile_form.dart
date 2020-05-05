@@ -5,6 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:heist/blocs/customer/customer_bloc.dart';
+import 'package:heist/global_widgets/edit_photo/bloc/edit_photo_bloc.dart';
+import 'package:heist/global_widgets/edit_photo/edit_photo.dart';
 import 'package:heist/models/customer/customer.dart';
 import 'package:heist/repositories/photo_picker_repository.dart';
 import 'package:heist/repositories/profile_repository.dart';
@@ -14,8 +16,6 @@ import 'package:heist/screens/profile_screen/bloc/profile_form_bloc.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
 import 'package:vibrate/vibrate.dart';
 
-import 'edit_photo/bloc/edit_photo_bloc.dart';
-import 'edit_photo/edit_photo.dart';
 
 class ProfileForm extends StatefulWidget {
   final Customer _customer;

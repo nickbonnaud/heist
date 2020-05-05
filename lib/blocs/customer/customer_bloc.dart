@@ -23,4 +23,6 @@ class CustomerBloc extends Bloc<CustomerEvent, CustomerState> {
       yield SignedIn(customer: event.customer);
     }
   }
+
+  Customer get customer => state.customer;
 }

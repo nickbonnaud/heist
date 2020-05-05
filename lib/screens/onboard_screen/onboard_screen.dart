@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:heist/global_widgets/dots.dart';
 import 'package:heist/repositories/onboard_repository.dart';
 import 'package:heist/resources/constants.dart';
 import 'package:transformer_page_view/transformer_page_view.dart';
 
 import 'bloc/onboard_navigation_bloc.dart';
 import 'bloc/slide_changed.dart';
-import 'widgets/dots.dart';
 
 class OnboardScreen extends StatelessWidget {
 

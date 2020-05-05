@@ -5,7 +5,7 @@ import 'package:meta/meta.dart';
 
 class AccountProvider {
   final Api _api = Api();
-
+  
   Future<ApiResponse> update({@required Map body, @required String accountIdentifier}) async {
     String url = 'account/$accountIdentifier';
 

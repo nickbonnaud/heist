@@ -5,6 +5,8 @@ abstract class CustomerState extends Equatable {
 
   @override
   List<Object> get props => [];
+
+  Customer get customer => null;
 }
 
 class SignedOut extends CustomerState {}

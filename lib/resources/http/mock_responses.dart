@@ -97,11 +97,7 @@ class MockResponses {
         'identifier': 'fake_identifier',
         'first_name': 'fake_name',
         'last_name': 'fake last',
-        'photos': {
-          'name': 'fake-profile.png',
-          'small_url': 'https://upload.wikimedia.org/wikipedia/commons/4/46/Gabrielpalatch-headshot-500x500.png',
-          'large_url': 'https://cdn2.pauldavis.info/wp-content/uploads/sites/878/2019/02/26174944/Nate-Headshot-250x250.jpg'
-        }
+        'photos': null
       }
     };
   }
@@ -112,16 +108,7 @@ class MockResponses {
         'identifier': 'fake_identifier',
         'email': 'fake@gmail.com',
         'token': 'not_a_real_token',
-        'profile': {
-          'identifier': 'fake_identifier',
-          'first_name': 'Nick',
-          'last_name': 'Bonnaud',
-          'photos': {
-            'name': 'fake-profile.png',
-            'small_url': 'https://upload.wikimedia.org/wikipedia/commons/4/46/Gabrielpalatch-headshot-500x500.png',
-            'large_url': 'https://cdn2.pauldavis.info/wp-content/uploads/sites/878/2019/02/26174944/Nate-Headshot-250x250.jpg'
-          }
-        },
+        'profile': null,
         'account': {
           'identifier': 'fake_identifier',
           'tip_rate': '15',
@@ -129,11 +116,40 @@ class MockResponses {
           'primary': 'ach'
         },
         'status': {
-          'name': 'Ready',
-          'code': '200'
+          'name': 'Profile Account Incomplete',
+          'code': '100'
         }
       }
     };
+    
+    
+    // return {
+    //   'data': {
+    //     'identifier': 'fake_identifier',
+    //     'email': 'fake@gmail.com',
+    //     'token': 'not_a_real_token',
+    //     'profile': {
+    //       'identifier': 'fake_identifier',
+    //       'first_name': 'Nick',
+    //       'last_name': 'Bonnaud',
+    //       'photos': {
+    //         'name': 'fake-profile.png',
+    //         'small_url': 'https://upload.wikimedia.org/wikipedia/commons/4/46/Gabrielpalatch-headshot-500x500.png',
+    //         'large_url': 'https://cdn2.pauldavis.info/wp-content/uploads/sites/878/2019/02/26174944/Nate-Headshot-250x250.jpg'
+    //       }
+    //     },
+    //     'account': {
+    //       'identifier': 'fake_identifier',
+    //       'tip_rate': '15',
+    //       'quick_tip_rate': '5',
+    //       'primary': 'ach'
+    //     },
+    //     'status': {
+    //       'name': 'Ready',
+    //       'code': '200'
+    //     }
+    //   }
+    // };
   }
 
   static Map<String, dynamic> _mockUpdateCustomer() {

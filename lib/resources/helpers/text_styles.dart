@@ -15,12 +15,12 @@ class BoldText extends StatelessWidget {
       _color = color,
       _veryBold = false;
 
-  BoldText.veryBold({@required String text, @required double size, @required Color color, @required bool veryBold})
-    : assert(text != null && size != null && color != null && veryBold != null),
+  BoldText.veryBold({@required String text, @required double size, @required Color color})
+    : assert(text != null && size != null && color != null),
       _size = size,
       _text = text,
       _color = color,
-      _veryBold = veryBold;
+      _veryBold = true;
 
   @override
   Widget build(BuildContext context) {
