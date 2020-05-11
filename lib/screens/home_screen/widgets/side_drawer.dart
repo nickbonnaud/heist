@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
+import 'package:heist/models/business/business.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
 import 'package:heist/screens/historic_transactions_screen/historic_transactions_screen.dart';
 import 'package:heist/screens/home_screen/bloc/side_menu_bloc.dart';
@@ -9,6 +10,7 @@ import 'package:heist/screens/onboard_screen/onboard_screen.dart';
 import 'package:heist/screens/profile_setup_screen/profile_setup_screen.dart';
 import 'package:heist/screens/refunds_screen/refunds_screen.dart';
 import 'package:heist/screens/settings_screen/settings_screen.dart';
+import 'package:heist/screens/transaction_picker_screen/transaction_picker_screen.dart';
 
 class SideDrawer extends StatefulWidget {
   final Widget _homeScreen;
@@ -283,14 +285,11 @@ class Drawer extends StatelessWidget {
                     )
                   ),
                   DrawerItem(
-                    onPressed: () => Navigator.push(
-                      context, 
-                      platformPageRoute(
-                        context: context, 
-                        builder: (_) => ProfileSetupScreen()
-                      )
-                    ), 
-                    text: 'Profile Onboard',
+                    onPressed: () => showPlatformModalSheet(
+                      context: context, 
+                      builder: (_) => TransactionPickerScreen(business: Business(identifier: 'fsfvds'))
+                    ),
+                    text: 'Transaction Picker',
                     icon: PlatformWidget(
                       android: (_) => Icon(Icons.live_help),
                       ios: (_) => Icon(IconData(

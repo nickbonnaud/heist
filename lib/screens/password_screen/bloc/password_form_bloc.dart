@@ -26,12 +26,11 @@ class PasswordFormBloc extends Bloc<PasswordFormEvent, PasswordFormState> {
   PasswordFormState get initialState => PasswordFormState.initial();
 
   @override
-  Stream<PasswordFormState> transformEvents(Stream<PasswordFormEvent> events, Stream<PasswordFormState> Function(PasswordFormEvent) next) {
+  Stream<Transition<PasswordFormEvent, PasswordFormState>> transformEvents(Stream<PasswordFormEvent> events, transitionFn) {
     final nonDebounceStream = events.where((event) => event is !OldPasswordChanged && event is !PasswordChanged && event is !PasswordConfirmationChanged);
     final debounceStream = events.where((event) => event is OldPasswordChanged || event is PasswordChanged || event is PasswordConfirmationChanged)
       .debounceTime(Duration(milliseconds: 300));
-      
-    return super.transformEvents(nonDebounceStream.mergeWith([debounceStream]), next);
+    return super.transformEvents(nonDebounceStream.mergeWith([debounceStream]), transitionFn);
   }
   
   @override

@@ -26,15 +26,11 @@ class ProfileNameFormBloc extends Bloc<ProfileNameFormEvent, ProfileNameFormStat
   ProfileNameFormState get initialState => ProfileNameFormState.initial();
 
   @override
-  Stream<ProfileNameFormState> transformEvents(
-    Stream<ProfileNameFormEvent> events,
-    Stream<ProfileNameFormState> Function(ProfileNameFormEvent event) next
-  ) {
+  Stream<Transition<ProfileNameFormEvent, ProfileNameFormState>> transformEvents(Stream<ProfileNameFormEvent> events, transitionFn) {
     final nonDebounceStream = events.where((event) => event is !FirstNameChanged && event is !LastNameChanged);
     final debounceStream = events.where((event) => event is FirstNameChanged || event is LastNameChanged)
       .debounceTime(Duration(milliseconds: 300));
-    
-    return super.transformEvents(nonDebounceStream.mergeWith([debounceStream]), next);
+    return super.transformEvents(nonDebounceStream.mergeWith([debounceStream]), transitionFn);
   }
   
   @override

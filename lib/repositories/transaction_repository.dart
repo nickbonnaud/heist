@@ -1,7 +1,9 @@
+import 'package:heist/models/api_response.dart';
 import 'package:heist/models/date_range.dart';
 import 'package:heist/models/paginate_data_holder.dart';
 import 'package:heist/models/paginated_api_response.dart';
 import 'package:heist/models/transaction/transaction_resource.dart';
+import 'package:heist/models/unassigned_transaction/unassigned_transaction_resource.dart';
 import 'package:heist/providers/transaction_provider.dart';
 import 'package:meta/meta.dart';
 
@@ -43,6 +45,25 @@ class TransactionRepository {
       return _handleSuccess(response);
     }
     return PaginateDataHolder(data:[TransactionResource.withError(response.error)].toList(), nextPage: null);
+  }
+
+  Future<List<UnassignedTransactionResource>> fetchUnassigned({@required String buinessIdentifier}) async {
+    final ApiResponse response = await _transactionProvider.fetchUnassigned(buinessIdentifier: buinessIdentifier);
+    if (response.isOK) {
+      final rawData = response.body as List;
+      return rawData.map((rawUnassignedTransaction) {
+        return UnassignedTransactionResource.fromJson(rawUnassignedTransaction);
+      }).toList();
+    }
+    return [UnassignedTransactionResource.withError(response.error)].toList();
+  }
+
+  Future<TransactionResource> claimUnassigned({@required String transactionId}) async {
+    final ApiResponse response = await _transactionProvider.patchUnassigned(transactionId: transactionId);
+    if (response.isOK) {
+      return TransactionResource.fromJson(response.body);
+    }
+    return TransactionResource.withError(response.error);
   }
 
   PaginateDataHolder _handleSuccess(PaginatedApiResponse response) {

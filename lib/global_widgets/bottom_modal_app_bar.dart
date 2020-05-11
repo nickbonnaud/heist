@@ -7,9 +7,11 @@ import 'package:heist/resources/helpers/size_config.dart';
 
 class BottomModalAppBar extends StatefulWidget implements PreferredSizeWidget {
   final Color _backgroundColor;
+  final Widget _trailingWidget;
 
-  BottomModalAppBar({Color backgroundColor = Colors.white})
-    : _backgroundColor = backgroundColor;
+  BottomModalAppBar({Color backgroundColor = Colors.white, Widget trailingWidget})
+    : _backgroundColor = backgroundColor,
+      _trailingWidget = trailingWidget;
   
   @override
   Size get preferredSize => Size.fromHeight(kToolbarHeight);
@@ -35,6 +37,10 @@ class _BottomModalAppBarState extends State<BottomModalAppBar> with TickerProvid
     return AppBar(
       elevation: 0,
       backgroundColor: widget._backgroundColor,
+      actions: <Widget>[
+        if (widget._trailingWidget != null)
+          widget._trailingWidget
+      ],
       leading: AnimatedBuilder(
         animation: _showAnimationController, 
         builder: (context, child) => Transform.rotate(

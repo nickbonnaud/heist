@@ -18,12 +18,11 @@ class IosDatePickerBloc extends Bloc<IosDatePickerEvent, IosDatePickerState> {
   IosDatePickerState get initialState => IosDatePickerState.initial();
 
   @override
-  Stream<IosDatePickerState> transformEvents(Stream<IosDatePickerEvent> events, Stream<IosDatePickerState> Function(IosDatePickerEvent) next) {
+  Stream<Transition<IosDatePickerEvent, IosDatePickerState>> transformEvents(Stream<IosDatePickerEvent> events, transitionFn) {
     final nonDebounceStream = events.where((event) => event is !DateChanged);
     final debounceStream = events.where((event) => event is DateChanged)
       .debounceTime(Duration(milliseconds: 500));
-      
-    return super.transformEvents(nonDebounceStream.mergeWith([debounceStream]), next);
+    return super.transformEvents(nonDebounceStream.mergeWith([debounceStream]), transitionFn);
   }
   
   @override

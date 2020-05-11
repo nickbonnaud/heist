@@ -24,17 +24,13 @@ class TipFormBloc extends Bloc<TipFormEvent, TipFormState> {
   
   @override
   TipFormState get initialState => TipFormState.initial();
-
+  
   @override
-  Stream<TipFormState> transformEvents(
-    Stream<TipFormEvent> events,
-    Stream<TipFormState> Function(TipFormEvent event) next
-  ) {
+  Stream<Transition<TipFormEvent, TipFormState>> transformEvents(Stream<TipFormEvent> events, transitionFn) {
     final nonDebounceStream = events.where((event) => event is !TipRateChanged && event is !QuickTipRateChanged);
     final debounceStream = events.where((event) => event is TipRateChanged || event is QuickTipRateChanged)
       .debounceTime(Duration(milliseconds: 300));
-    
-    return super.transformEvents(nonDebounceStream.mergeWith([debounceStream]), next);
+    return super.transformEvents(nonDebounceStream.mergeWith([debounceStream]), transitionFn);
   }
   
   @override

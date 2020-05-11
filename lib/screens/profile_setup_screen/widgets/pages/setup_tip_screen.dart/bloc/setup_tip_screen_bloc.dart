@@ -26,15 +26,11 @@ class SetupTipScreenBloc extends Bloc<SetupTipScreenEvent, SetupTipScreenState> 
   SetupTipScreenState get initialState => SetupTipScreenState.initial();
 
   @override
-  Stream<SetupTipScreenState> transformEvents(
-    Stream<SetupTipScreenEvent> events,
-    Stream<SetupTipScreenState> Function(SetupTipScreenEvent event) next
-  ) {
+  Stream<Transition<SetupTipScreenEvent, SetupTipScreenState>> transformEvents(Stream<SetupTipScreenEvent> events, transitionFn) {
     final nonDebounceStream = events.where((event) => event is !TipRateChanged && event is !QuickTipRateChanged);
     final debounceStream = events.where((event) => event is TipRateChanged || event is QuickTipRateChanged)
       .debounceTime(Duration(milliseconds: 300));
-    
-    return super.transformEvents(nonDebounceStream.mergeWith([debounceStream]), next);
+    return super.transformEvents(nonDebounceStream.mergeWith([debounceStream]), transitionFn);
   }
   
   @override

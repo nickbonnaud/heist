@@ -26,15 +26,11 @@ class EmailFormBloc extends Bloc<EmailFormEvent, EmailFormState> {
   EmailFormState get initialState => EmailFormState.initial();
 
   @override
-  Stream<EmailFormState> transformEvents(
-    Stream<EmailFormEvent> events,
-    Stream<EmailFormState> Function(EmailFormEvent event) next
-  ) {
+  Stream<Transition<EmailFormEvent, EmailFormState>> transformEvents(Stream<EmailFormEvent> events, transitionFn) {
     final nonDebounceStream = events.where((event) => event is !EmailChanged);
     final debounceStream = events.where((event) => event is EmailChanged)
       .debounceTime(Duration(milliseconds: 300));
-    
-    return super.transformEvents(nonDebounceStream.mergeWith([debounceStream]), next);
+    return super.transformEvents(nonDebounceStream.mergeWith([debounceStream]), transitionFn);
   }
   
   @override

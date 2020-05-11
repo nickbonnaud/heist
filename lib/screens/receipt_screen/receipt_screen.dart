@@ -9,15 +9,17 @@ import 'package:heist/screens/receipt_screen/widgets/purchased_item_widget.dart'
 
 class ReceiptScreen extends StatelessWidget {
   final TransactionResource _transactionResource;
+  final bool _showAppBar;
 
-  const ReceiptScreen({@required TransactionResource transactionResource})
+  const ReceiptScreen({@required TransactionResource transactionResource, bool showAppBar = true})
     : assert(transactionResource != null),
-      _transactionResource = transactionResource;
+      _transactionResource = transactionResource,
+      _showAppBar = showAppBar;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: BottomModalAppBar(backgroundColor: Colors.white10),
+      appBar: _showAppBar ? BottomModalAppBar(backgroundColor: Colors.white10) : null,
       body: ListView(
         shrinkWrap: true,
         children: <Widget>[
@@ -66,8 +68,10 @@ class ReceiptScreen extends StatelessWidget {
                 _createFooterRow("Subtotal", _transactionResource.transaction.netSales),
                 SizedBox(height:SizeConfig.getHeight(1)),
                 _createFooterRow("Tax", _transactionResource.transaction.tax),
-                SizedBox(height:SizeConfig.getHeight(1)),
-                _createFooterRow("Tip", _transactionResource.transaction.tip),
+                if (_transactionResource.transaction.tip != 0)
+                  SizedBox(height:SizeConfig.getHeight(1)),
+                if (_transactionResource.transaction.tip != 0)
+                  _createFooterRow("Tip", _transactionResource.transaction.tip),
                 SizedBox(height:SizeConfig.getHeight(3)),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
