@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_beacon/flutter_beacon.dart';
-import 'package:heist/repositories/onboard_repository.dart';
+import 'package:heist/repositories/tutorial_repository.dart';
 import 'package:meta/meta.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -11,11 +11,11 @@ part 'permissions_event.dart';
 part 'permissions_state.dart';
 
 class PermissionsBloc extends Bloc<PermissionsEvent, PermissionsState> {
-  final OnboardRepository _onboardRepository;
+  final TutorialRepository _tutorialRepository;
 
-  PermissionsBloc({@required OnboardRepository onboardRepository})
-    : assert(onboardRepository != null),
-      _onboardRepository = onboardRepository;
+  PermissionsBloc({@required TutorialRepository tutorialRepository})
+    : assert(tutorialRepository != null),
+      _tutorialRepository = tutorialRepository;
   
   @override
   PermissionsState get initialState => PermissionsState.unknown();
@@ -63,7 +63,7 @@ class PermissionsBloc extends Bloc<PermissionsEvent, PermissionsState> {
   }
 
   void _checkPermissions() async {
-    bool isInitial =  await _onboardRepository.isInitialLogin();
+    bool isInitial =  await _tutorialRepository.isInitialLogin();
     if (isInitial != null && !isInitial) {
       List results = await Future.wait([
         flutterBeacon.bluetoothState,

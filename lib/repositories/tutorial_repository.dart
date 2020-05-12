@@ -1,16 +1,16 @@
 import 'package:heist/providers/storage_provider.dart';
 
-class OnboardRepository {
-  final StorageProvider _onboardProvider = StorageProvider();
+class TutorialRepository {
+  final StorageProvider _tutorialProvider = StorageProvider();
   static const String PERMISSIONS_KEY = 'permissions';
-  static const String TUTORIAL_KEY = 'onboard';
+  static const String TUTORIAL_KEY = 'tutorial';
 
   Future<void> setIsInitialLogin(bool isInitial) async {
-    return await _onboardProvider.write(PERMISSIONS_KEY, isInitial.toString().toLowerCase());
+    return await _tutorialProvider.write(PERMISSIONS_KEY, isInitial.toString().toLowerCase());
   }
 
   Future<bool> isInitialLogin() async {
-    String isInitial = await _onboardProvider.read(PERMISSIONS_KEY);
+    String isInitial = await _tutorialProvider.read(PERMISSIONS_KEY);
     // setIsInitialLogin(true);
     if (isInitial.toString() == 'null') {
       setIsInitialLogin(true);
@@ -21,11 +21,11 @@ class OnboardRepository {
   }
 
   Future<void> setShouldShowTutorial(bool shouldShow) async {
-    return await _onboardProvider.write(TUTORIAL_KEY, shouldShow.toString().toLowerCase());
+    return await _tutorialProvider.write(TUTORIAL_KEY, shouldShow.toString().toLowerCase());
   }
 
   Future<bool> showTutorial() async {
-    String showTutorial = await _onboardProvider.read(TUTORIAL_KEY);
+    String showTutorial = await _tutorialProvider.read(TUTORIAL_KEY);
     if (showTutorial.toString() == 'null') {
       setShouldShowTutorial(true);
       return true;

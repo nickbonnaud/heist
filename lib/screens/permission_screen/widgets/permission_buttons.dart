@@ -8,7 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:heist/blocs/geo_location/geo_location_bloc.dart';
 import 'package:heist/blocs/permissions/permissions_bloc.dart';
-import 'package:heist/repositories/onboard_repository.dart';
+import 'package:heist/repositories/tutorial_repository.dart';
 import 'package:heist/resources/constants.dart';
 import 'package:heist/screens/permission_screen/bloc/permission_screen_bloc.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -68,12 +68,12 @@ class _PermissionButtonsState extends State<PermissionButtons> {
       BluetoothState currentBleState = await flutterBeacon.bluetoothState;
       if (currentBleState == BluetoothState.stateUnknown) {
         flutterBeacon.bluetoothStateChanged().listen((BluetoothState state) {
-          OnboardRepository().setIsInitialLogin(false).then((_) {
+          TutorialRepository().setIsInitialLogin(false).then((_) {
             _updateIfGranted(currentBleState == BluetoothState.stateOn, permission);
           });
         });
       } else {
-        OnboardRepository().setIsInitialLogin(false).then((_) {
+        TutorialRepository().setIsInitialLogin(false).then((_) {
           _updateIfGranted(currentBleState == BluetoothState.stateOn, permission);
         });
       }

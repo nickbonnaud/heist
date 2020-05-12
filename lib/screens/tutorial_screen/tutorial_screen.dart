@@ -4,14 +4,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:heist/global_widgets/dots.dart';
-import 'package:heist/repositories/onboard_repository.dart';
+import 'package:heist/repositories/tutorial_repository.dart';
 import 'package:heist/resources/constants.dart';
 import 'package:transformer_page_view/transformer_page_view.dart';
 
-import 'bloc/onboard_navigation_bloc.dart';
 import 'bloc/slide_changed.dart';
+import 'bloc/tutorial_navigation_bloc.dart';
 
-class OnboardScreen extends StatelessWidget {
+class TutorialScreen extends StatelessWidget {
 
   final List<String> _images = [
     "assets/slide_1.png",
@@ -61,16 +61,16 @@ class OnboardScreen extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<OnBoardNavigationBloc>(
-      create: (context) => OnBoardNavigationBloc(),
-      child: BlocBuilder<OnBoardNavigationBloc, int>(
+    return BlocProvider<TutorialNavigationBloc>(
+      create: (context) => TutorialNavigationBloc(),
+      child: BlocBuilder<TutorialNavigationBloc, int>(
         builder: (context, index) {
           return PlatformScaffold(
             backgroundColor: Colors.white,
             body: TransformerPageView(
               pageSnapping: true,
               onPageChanged: (index) {
-                BlocProvider.of<OnBoardNavigationBloc>(context).add(SlideChanged(index: index));
+                BlocProvider.of<TutorialNavigationBloc>(context).add(SlideChanged(index: index));
               },
               loop: false,
               transformer: PageTransformerBuilder(
@@ -181,7 +181,7 @@ class OnboardScreen extends StatelessWidget {
   }
   
   void _closeModal({@required BuildContext context}) {
-    OnboardRepository().setShouldShowTutorial(false).then((_) {
+    TutorialRepository().setShouldShowTutorial(false).then((_) {
       Navigator.of(context).pop();
     });
   }

@@ -2,7 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'slide_changed.dart';
 
-class OnBoardNavigationBloc extends Bloc<SlideChanged, int> {
+class TutorialNavigationBloc extends Bloc<SlideChanged, int> {
 
   @override
   int get initialState => 0;

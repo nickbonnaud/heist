@@ -6,11 +6,10 @@ import 'package:heist/models/business/business.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
 import 'package:heist/screens/historic_transactions_screen/historic_transactions_screen.dart';
 import 'package:heist/screens/home_screen/bloc/side_menu_bloc.dart';
-import 'package:heist/screens/onboard_screen/onboard_screen.dart';
-import 'package:heist/screens/profile_setup_screen/profile_setup_screen.dart';
 import 'package:heist/screens/refunds_screen/refunds_screen.dart';
 import 'package:heist/screens/settings_screen/settings_screen.dart';
 import 'package:heist/screens/transaction_picker_screen/transaction_picker_screen.dart';
+import 'package:heist/screens/tutorial_screen/tutorial_screen.dart';
 
 class SideDrawer extends StatefulWidget {
   final Widget _homeScreen;
@@ -260,7 +259,7 @@ class Drawer extends StatelessWidget {
                   DrawerItem(
                     onPressed: () => showPlatformModalSheet(
                       context: context, 
-                      builder: (_) => OnboardScreen()
+                      builder: (_) => TutorialScreen()
                     ),
                     text: 'Tutorial', 
                     icon: PlatformWidget(
