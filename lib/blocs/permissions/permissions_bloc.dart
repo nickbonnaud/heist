@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_beacon/flutter_beacon.dart';
-import 'package:heist/repositories/tutorial_repository.dart';
+import 'package:heist/repositories/initial_login_repository.dart';
 import 'package:meta/meta.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -11,14 +11,21 @@ part 'permissions_event.dart';
 part 'permissions_state.dart';
 
 class PermissionsBloc extends Bloc<PermissionsEvent, PermissionsState> {
-  final TutorialRepository _tutorialRepository;
+  final InitialLoginRepository _initialLoginRepository;
 
-  PermissionsBloc({@required TutorialRepository tutorialRepository})
-    : assert(tutorialRepository != null),
-      _tutorialRepository = tutorialRepository;
+  PermissionsBloc({@required InitialLoginRepository initialLoginRepository})
+    : assert(initialLoginRepository != null),
+      _initialLoginRepository = initialLoginRepository;
   
   @override
   PermissionsState get initialState => PermissionsState.unknown();
+
+  bool get isBleEnabled => state.bleEnabled;
+  bool get isLocationEnabled => state.locationEnabled;
+  bool get isNotificationEnabled => state.notificationEnabled;
+  bool get isBeaconEnabled => state.beaconEnabled;
+
+  bool get allPermissionsValid => state.bleEnabled && state.locationEnabled && state.notificationEnabled && state.beaconEnabled;
 
   @override
   Stream<PermissionsState> mapEventToState(PermissionsEvent event) async* {
@@ -63,7 +70,7 @@ class PermissionsBloc extends Bloc<PermissionsEvent, PermissionsState> {
   }
 
   void _checkPermissions() async {
-    bool isInitial =  await _tutorialRepository.isInitialLogin();
+    bool isInitial =  await _initialLoginRepository.isInitialLogin();
     if (isInitial != null && !isInitial) {
       List results = await Future.wait([
         flutterBeacon.bluetoothState,

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:heist/blocs/permissions/permissions_bloc.dart';
 import 'package:heist/screens/permission_screen/bloc/permission_screen_bloc.dart';
 
 import 'widgets/beacon_body.dart';
@@ -13,38 +14,31 @@ import 'widgets/success_body.dart';
 
 
 class PermissionsScreen extends StatefulWidget {
-  final bool _isBluetoothEnabled;
-  final bool _isLocationEnabled;
-  final bool _isNotificationEnabled;
-  final bool _isBeaconEnabled;
-
-  const PermissionsScreen({
-    Key key,
-    @required isBluetoothEnabled,
-    @required isLocationEnabled,
-    @required isNotificationEnabled,
-    @required isBeaconEnabled,
-    }) :  _isBluetoothEnabled = isBluetoothEnabled,
-          _isLocationEnabled = isLocationEnabled,
-          _isNotificationEnabled = isNotificationEnabled,
-          _isBeaconEnabled = isBeaconEnabled,
-          super(key: key);
 
   @override
   State<PermissionsScreen> createState() => _PermissionsScreenState();
 }
 
 class _PermissionsScreenState extends State<PermissionsScreen> with SingleTickerProviderStateMixin {
+  bool _isBluetoothEnabled;
+  bool _isLocationEnabled;
+  bool _isNotificationEnabled;
+  bool _isBeaconEnabled;
+  
   AnimationController _controller;
   Animation<Offset> _offsetAnimationFirst;
   Animation<Offset> _offsetAnimationSecond;
 
   bool doAnimate = false;
-  
+
 
   @override
   void initState() {
     super.initState();
+    _isBluetoothEnabled = BlocProvider.of<PermissionsBloc>(context).isBleEnabled;
+    _isLocationEnabled = BlocProvider.of<PermissionsBloc>(context).isLocationEnabled;
+    _isNotificationEnabled = BlocProvider.of<PermissionsBloc>(context).isNotificationEnabled;
+    _isBeaconEnabled = BlocProvider.of<PermissionsBloc>(context).isBeaconEnabled;
 
     _controller = AnimationController(
       vsync: this,
@@ -83,10 +77,10 @@ class _PermissionsScreenState extends State<PermissionsScreen> with SingleTicker
   Widget build(BuildContext context) {
     return BlocProvider<PermissionScreenBloc>(
       create: (context) => PermissionScreenBloc(
-        isBluetoothEnabled: widget._isBluetoothEnabled,
-        isLocationEnabled: widget._isLocationEnabled,
-        isBeaconEnabled: widget._isBeaconEnabled,
-        isNotificationEnabled: widget._isNotificationEnabled
+        isBluetoothEnabled: _isBluetoothEnabled,
+        isLocationEnabled: _isLocationEnabled,
+        isBeaconEnabled: _isBeaconEnabled,
+        isNotificationEnabled: _isNotificationEnabled
       ), 
       child: BlocListener<PermissionScreenBloc, PermissionScreenState>(
         listener: (context, state) {

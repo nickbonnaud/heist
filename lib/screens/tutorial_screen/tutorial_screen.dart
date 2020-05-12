@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:heist/global_widgets/dots.dart';
-import 'package:heist/repositories/tutorial_repository.dart';
 import 'package:heist/resources/constants.dart';
 import 'package:transformer_page_view/transformer_page_view.dart';
 
@@ -181,8 +180,6 @@ class TutorialScreen extends StatelessWidget {
   }
   
   void _closeModal({@required BuildContext context}) {
-    TutorialRepository().setShouldShowTutorial(false).then((_) {
-      Navigator.of(context).pop();
-    });
+    Navigator.of(context).pop();
   }
 }

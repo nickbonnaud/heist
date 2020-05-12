@@ -2,12 +2,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
+import 'package:heist/blocs/customer/customer_bloc.dart';
 import 'package:heist/blocs/permissions/permissions_bloc.dart';
+import 'package:heist/models/customer/status.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
 import 'package:heist/screens/home_screen/bloc/side_menu_bloc.dart';
 import 'package:heist/screens/home_screen/widgets/side_drawer.dart';
 import 'package:heist/screens/map_screen/map_screen.dart';
+import 'package:heist/screens/onboard_screen/onboard_screen.dart';
 import 'package:heist/screens/permission_screen/permission_screen.dart';
 import 'package:heist/screens/profile_screen/profile_screen.dart';
 
@@ -16,45 +19,36 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    return BlocListener<PermissionsBloc, PermissionsState>(
-      listener: (context, state) {
-        if (!state.bleEnabled || !state.locationEnabled || !state.notificationEnabled || !state.beaconEnabled) {
-          _showPermissionsModal(context: context, bluetoothEnabled: state.bleEnabled, locationEnabled: state.locationEnabled, notificationEnabled: state.notificationEnabled, beaconEnabled: state.beaconEnabled);
-        }
-      },
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        body: BlocProvider<SideMenuBloc>(
-          create: (BuildContext context) => SideMenuBloc(),
-          child: SideDrawer(homeScreen: MapScreen()),
-        ),
+    // _showAutoModals(context: context);
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: BlocProvider<SideMenuBloc>(
+        create: (BuildContext context) => SideMenuBloc(),
+        child: SideDrawer(homeScreen: MapScreen()),
       ),
     );
   }
 
-  void _showPermissionsModal({
-    @required BuildContext context,
-    @required bool bluetoothEnabled,
-    @required bool locationEnabled,
-    @required bool notificationEnabled,
-    @required bool beaconEnabled
-  }) {
+  void _showAutoModals({@required BuildContext context}) {
+    Status status = BlocProvider.of<CustomerBloc>(context).customer.status;
+    if (status.code <= 103 ) {
+      _showOnboardModal(context: context);
+    } else if (!BlocProvider.of<PermissionsBloc>(context).allPermissionsValid) {
+      _showPermissionsModal(context: context);
+    }
+  }
+  
+  void _showOnboardModal({@required BuildContext context}) {
     showPlatformModalSheet(
       context: context,
-      builder: (_) => PlatformWidget(
-        android: (_) => PermissionsScreen(
-          isBluetoothEnabled: bluetoothEnabled,
-          isLocationEnabled: locationEnabled,
-          isNotificationEnabled: notificationEnabled,
-          isBeaconEnabled: beaconEnabled,
-        ),
-        ios: (_) => PermissionsScreen(
-          isBluetoothEnabled: bluetoothEnabled,
-          isLocationEnabled: locationEnabled,
-          isNotificationEnabled: notificationEnabled,
-          isBeaconEnabled: beaconEnabled,
-        )
-      )
+      builder: (_) => OnboardScreen()
+    );
+  }
+  
+  void _showPermissionsModal({@required BuildContext context}) {
+    showPlatformModalSheet(
+      context: context,
+      builder: (_) => PermissionsScreen()
     ); 
   }
 }

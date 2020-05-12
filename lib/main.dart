@@ -15,9 +15,9 @@ import 'package:heist/repositories/active_location_repository.dart';
 import 'package:heist/repositories/beacon_repository.dart';
 import 'package:heist/repositories/customer_repository.dart';
 import 'package:heist/repositories/geolocator_repository.dart';
+import 'package:heist/repositories/initial_login_repository.dart';
 import 'package:heist/repositories/location_repository.dart';
 import 'package:heist/repositories/push_notification_repository.dart';
-import 'package:heist/repositories/tutorial_repository.dart';
 import 'package:heist/resources/constants.dart';
 import 'package:heist/themes/default_theme.dart';
 
@@ -26,7 +26,7 @@ import 'screens/home_screen/home_screen.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   final ActiveLocationRepository _activeLocationRepository = ActiveLocationRepository();
-  final TutorialRepository _tutorialRepository = TutorialRepository();
+  final InitialLoginRepository _initialLoginRepository = InitialLoginRepository();
   final GeolocatorRepository _geolocatorRepository = GeolocatorRepository();
   final LocationRepository _locationRepository = LocationRepository();
   final BeaconRepository _beaconRepository = BeaconRepository();
@@ -64,7 +64,7 @@ void main() {
           create: (BuildContext context) => AuthenticationBloc(customerRepository: _customerRepository, customerBloc: BlocProvider.of<CustomerBloc>(context)),
         ),
         BlocProvider<PermissionsBloc>(
-          create: (BuildContext context) => PermissionsBloc(tutorialRepository: _tutorialRepository)
+          create: (BuildContext context) => PermissionsBloc(initialLoginRepository: _initialLoginRepository)
         ),
       ],
       child: App()

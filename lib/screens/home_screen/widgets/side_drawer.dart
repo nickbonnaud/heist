@@ -6,6 +6,7 @@ import 'package:heist/models/business/business.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
 import 'package:heist/screens/historic_transactions_screen/historic_transactions_screen.dart';
 import 'package:heist/screens/home_screen/bloc/side_menu_bloc.dart';
+import 'package:heist/screens/onboard_screen/onboard_screen.dart';
 import 'package:heist/screens/refunds_screen/refunds_screen.dart';
 import 'package:heist/screens/settings_screen/settings_screen.dart';
 import 'package:heist/screens/transaction_picker_screen/transaction_picker_screen.dart';
@@ -286,9 +287,9 @@ class Drawer extends StatelessWidget {
                   DrawerItem(
                     onPressed: () => showPlatformModalSheet(
                       context: context, 
-                      builder: (_) => TransactionPickerScreen(business: Business(identifier: 'fsfvds'))
+                      builder: (_) => OnboardScreen()
                     ),
-                    text: 'Transaction Picker',
+                    text: 'Onboard',
                     icon: PlatformWidget(
                       android: (_) => Icon(Icons.live_help),
                       ios: (_) => Icon(IconData(
