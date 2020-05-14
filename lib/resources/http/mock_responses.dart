@@ -53,6 +53,10 @@ class MockResponses {
       return _mockFetchUnassigned();
     } else if (options.path.contains("unassigned-transaction/")) {
       return _mockPatchUnassigned();
+    } else if (options.path.endsWith("location")) {
+      return _postActiveLocation(options);
+    } else if (options.path.contains('location/')) {
+      return _deleteActiveLocation();
     }
   }
 
@@ -70,6 +74,14 @@ class MockResponses {
     return {
       'data': {
         'password_verified': true
+      }
+    };
+  }
+
+  static Map<String, dynamic> _deleteActiveLocation() {
+    return {
+      'data': {
+        'deleted': true
       }
     };
   }
@@ -107,41 +119,12 @@ class MockResponses {
   }
 
   static Map<String, dynamic> _mockFetchCustomer() {
-    return {
-      'data': {
-        'identifier': 'fake_identifier',
-        'email': 'fake@gmail.com',
-        'token': 'not_a_real_token',
-        'profile': null,
-        'account': {
-          'identifier': 'fake_identifier',
-          'tip_rate': '15',
-          'quick_tip_rate': '5',
-          'primary': 'ach'
-        },
-        'status': {
-          'name': 'Profile Account Incomplete',
-          'code': '100'
-        }
-      }
-    };
-    
-    
     // return {
     //   'data': {
     //     'identifier': 'fake_identifier',
     //     'email': 'fake@gmail.com',
     //     'token': 'not_a_real_token',
-    //     'profile': {
-    //       'identifier': 'fake_identifier',
-    //       'first_name': 'Nick',
-    //       'last_name': 'Bonnaud',
-    //       'photos': {
-    //         'name': 'fake-profile.png',
-    //         'small_url': 'https://upload.wikimedia.org/wikipedia/commons/4/46/Gabrielpalatch-headshot-500x500.png',
-    //         'large_url': 'https://cdn2.pauldavis.info/wp-content/uploads/sites/878/2019/02/26174944/Nate-Headshot-250x250.jpg'
-    //       }
-    //     },
+    //     'profile': null,
     //     'account': {
     //       'identifier': 'fake_identifier',
     //       'tip_rate': '15',
@@ -149,11 +132,40 @@ class MockResponses {
     //       'primary': 'ach'
     //     },
     //     'status': {
-    //       'name': 'Ready',
-    //       'code': '200'
+    //       'name': 'Profile Account Incomplete',
+    //       'code': '100'
     //     }
     //   }
     // };
+    
+    
+    return {
+      'data': {
+        'identifier': 'fake_identifier',
+        'email': 'fake@gmail.com',
+        'token': 'not_a_real_token',
+        'profile': {
+          'identifier': 'fake_identifier',
+          'first_name': 'Nick',
+          'last_name': 'Bonnaud',
+          'photos': {
+            'name': 'fake-profile.png',
+            'small_url': 'https://upload.wikimedia.org/wikipedia/commons/4/46/Gabrielpalatch-headshot-500x500.png',
+            'large_url': 'https://cdn2.pauldavis.info/wp-content/uploads/sites/878/2019/02/26174944/Nate-Headshot-250x250.jpg'
+          }
+        },
+        'account': {
+          'identifier': 'fake_identifier',
+          'tip_rate': '15',
+          'quick_tip_rate': '5',
+          'primary': 'ach'
+        },
+        'status': {
+          'name': 'Ready',
+          'code': '200'
+        }
+      }
+    };
   }
 
   static Map<String, dynamic> _mockUpdateCustomer() {
@@ -225,6 +237,17 @@ class MockResponses {
         'tip_rate': '15',
         'quick_tip_rate': '7',
         'primary': 'ach'
+      }
+    };
+  }
+
+  static Map<String, dynamic> _postActiveLocation(RequestOptions options) {
+    return {
+      "data": {
+        "active_location_id": options.data['beacon_identifier'],
+        "beacon_identifier": options.data['beacon_identifier'],
+        "transaction_id": null,
+        "last_notification":  null
       }
     };
   }

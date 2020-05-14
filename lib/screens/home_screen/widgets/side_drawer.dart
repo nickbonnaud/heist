@@ -140,6 +140,8 @@ class _SideDrawerState extends State<SideDrawer> with TickerProviderStateMixin {
                                 child: ClipRRect(
                                   borderRadius: radiusAnimation.value,
                                   child: Container(
+                                    height: MediaQuery.of(context).size.height,
+                                    width: MediaQuery.of(context).size.width,
                                     color: Colors.white,
                                     child: widget._homeScreen,
                                   ),

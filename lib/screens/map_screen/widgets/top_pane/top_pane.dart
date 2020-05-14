@@ -11,12 +11,11 @@ class TopPane extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      flex: 2,
+    return Container(
       child: BlocBuilder<GeoLocationBloc, GeoLocationState>(
         builder: (context, state) {
           if (state is LocationLoaded) {
-            return GoogleMapScreen(latitude: state.latitude, longitude: state.longitude);
+            return Expanded(child: GoogleMapScreen(latitude: state.latitude, longitude: state.longitude)); 
           } else if (state is PermissionNotGranted) {
             return PermissionDenied();
           } else if (state is Loading) {

@@ -22,6 +22,13 @@ class NearbyBusinessesBloc extends Bloc<NearbyBusinessesEvent, NearbyBusinessesS
   @override
   NearbyBusinessesState get initialState => NearbyUninitialized();
 
+  List<Business> get businesses {
+    final currentState = state;
+    return currentState is NearbyBusinessLoaded 
+      ? currentState.businesses 
+      : [];
+  }
+  
   @override
   Stream<NearbyBusinessesState> mapEventToState(NearbyBusinessesEvent event) async* {
     if (event is FetchNearby) {

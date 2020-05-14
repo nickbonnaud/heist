@@ -22,41 +22,65 @@ class ActiveLocationBloc extends Bloc<ActiveLocationEvent, ActiveLocationState> 
   @override
   Stream<ActiveLocationState> mapEventToState(ActiveLocationEvent event) async* {
     if (event is NewActiveLocation) {
-      yield* _mapNewActiveLocationToState(event, state);
+      yield* _mapNewActiveLocationToState(event);
     } else if (event is RemoveActiveLocation) {
-      yield* _mapRemoveActiveLocationToState(event, state);
+      yield* _mapRemoveActiveLocationToState(event);
+    } else if (event is ResetActiveLocations) {
+      yield* _mapResetToState();
     }
   }
 
-  Stream<ActiveLocationState> _mapNewActiveLocationToState(NewActiveLocation event, ActiveLocationState state) async* {
-    try {
-      ActiveLocation activeLocation = await _activeLocationRepository.enterBusiness(beaconIdentifier: event.beaconIdentifier);
-      if (state is CurrentActiveLocations) {
-        List<ActiveLocation> activeLocations = state.activeLocations..add(activeLocation);
-        yield CurrentActiveLocations(activeLocations: activeLocations);
-      } else if (state is NoActiveLocations) {
-        yield CurrentActiveLocations(activeLocations: [activeLocation].toList());
+  Stream<ActiveLocationState> _mapNewActiveLocationToState(NewActiveLocation event) async* {
+    final currentState = state;
+    if (currentState is CurrentActiveLocations) {
+      if (currentState.activeLocations.indexWhere((activeLocation) => activeLocation.beaconIdentifier == event.beaconIdentifier) < 0) {
+        try {
+          ActiveLocation activeLocation = await _activeLocationRepository.enterBusiness(beaconIdentifier: event.beaconIdentifier);
+          yield currentState.update(activeLocations: currentState.activeLocations + [activeLocation].toList());
+        } catch (e) {
+          yield currentState.update(addActiveLocationFail: true);
+        }
       }
-    } catch (e) {
-      yield SendActiveLocationFail(activeLocations: state is CurrentActiveLocations ? state.activeLocations : [].toList());
+    } else if (currentState is NoActiveLocations) {
+      try {
+        ActiveLocation activeLocation = await _activeLocationRepository.enterBusiness(beaconIdentifier: event.beaconIdentifier);
+        yield CurrentActiveLocations(activeLocations: [activeLocation].toList());
+      } catch (e) {
+        yield currentState.update(addActiveLocationFail: true);
+      }
     }
   }
 
-  Stream<ActiveLocationState> _mapRemoveActiveLocationToState(RemoveActiveLocation event, ActiveLocationState state) async* {
+  Stream<ActiveLocationState> _mapRemoveActiveLocationToState(RemoveActiveLocation event) async* {
     if (state is CurrentActiveLocations) {
-      List<ActiveLocation> activeLocations = state.activeLocations;
-      ActiveLocation locationToRemove = activeLocations.firstWhere((ActiveLocation activeLocation) => activeLocation.beaconIdentifier == event.beaconIdentifier);
+      final currentState = state as CurrentActiveLocations;
       try {
+        ActiveLocation locationToRemove = currentState.activeLocations.firstWhere((ActiveLocation location) => location.beaconIdentifier == event.beaconIdentifier);
         bool didRemove = await _activeLocationRepository.exitBusiness(activeLocationId: locationToRemove.identifier);
         if (didRemove) {
-          activeLocations = activeLocations..remove(locationToRemove);
-          yield activeLocations.length == 0 ? NoActiveLocations() : CurrentActiveLocations(activeLocations: activeLocations);
+          final updatedActiveLocations = currentState
+            .activeLocations
+            .where((activeLocation) => activeLocation.beaconIdentifier != event.beaconIdentifier)
+            .toList();
+          
+          yield updatedActiveLocations.length == 0
+            ? NoActiveLocations()
+            : currentState.update(activeLocations: updatedActiveLocations);
         } else {
-          yield CurrentActiveLocations(activeLocations: activeLocations);
+          yield currentState.update(removeActiveLocationFail: true);
         }
       } catch (e) {
-        yield DeleteActiveLocationFail(activeLocations: state is CurrentActiveLocations ? state.activeLocations : [].toList());
+        yield currentState.update(removeActiveLocationFail: true);
       }
+    }
+  }
+
+  Stream<ActiveLocationState> _mapResetToState() async* {
+    final currentState = state;
+    if (currentState is CurrentActiveLocations) {
+      yield currentState.update(addActiveLocationFail: false, removeActiveLocationFail: false);
+    } else if (currentState is NoActiveLocations) {
+      yield currentState.update(addActiveLocationFail: false, removeActiveLocationFail: false);
     }
   }
 }

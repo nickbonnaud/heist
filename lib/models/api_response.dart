@@ -10,4 +10,7 @@ class ApiResponse {
     @required this.error,
     @required this.isOK,
   });
+
+  @override
+  String toString() => 'ApiResponse { body: $body, error: $error, isOK: $isOK }';
 }

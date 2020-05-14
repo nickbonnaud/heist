@@ -98,6 +98,11 @@ class App extends StatelessWidget {
           listener: (context , state) {
             if (state is NearbyBusinessLoaded) {
               BlocProvider.of<BeaconBloc>(context)..add(StartBeaconMonitoring(businesses: state.businesses));
+
+              // remove this. just for building active locations
+              state.businesses.forEach((business) {
+                BlocProvider.of<ActiveLocationBloc>(context).add(NewActiveLocation(beaconIdentifier: business.location.beacon.identifier));
+              });
             }
           },
         ),

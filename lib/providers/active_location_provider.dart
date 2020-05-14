@@ -22,7 +22,7 @@ class ActiveLocationProvider {
 
   Future<ApiResponse> exitBusiness({@required String activeLocationId}) async {
     String url = "location/$activeLocationId";
-    
+
     try {
       Response response = await this._api.delete(url);
       return ApiResponse(body: response.data, error: null, isOK: true);

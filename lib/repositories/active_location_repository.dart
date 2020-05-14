@@ -17,7 +17,7 @@ class ActiveLocationRepository {
   Future<bool> exitBusiness({@required String activeLocationId}) async {
     final ApiResponse response = await _activeLocationProvider.exitBusiness(activeLocationId: activeLocationId);
     if (response.isOK) {
-      return response.body['data']['deleted'].toString() == 'true';
+      return response.body['deleted'].toString() == 'true';
     }
     return false;
   }

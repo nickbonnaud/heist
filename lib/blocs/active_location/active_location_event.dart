@@ -30,3 +30,5 @@ class RemoveActiveLocation extends ActiveLocationEvent {
   @override
   String toString() => 'RemoveActiveLocation { beaconIdentifier: $beaconIdentifier }';
 }
+
+class ResetActiveLocations extends ActiveLocationEvent {}
