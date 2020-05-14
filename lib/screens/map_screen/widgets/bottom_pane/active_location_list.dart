@@ -9,6 +9,8 @@ import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
 import 'package:heist/screens/business_screen/business_screen.dart';
 
+import 'logo_button.dart';
+
 class ActiveLocationList extends StatelessWidget {
 
   @override
@@ -52,19 +54,7 @@ class ActiveLocationList extends StatelessWidget {
     Business business = _findBusiness(location: location, businesses: businesses);
     return Padding(
       padding: EdgeInsets.only(left: 16),
-      child: GestureDetector(
-        child: Material(
-          shape: CircleBorder(),
-          elevation: 5,
-          child: CircleAvatar(
-            backgroundImage: NetworkImage(business.photos.logo.smallUrl),
-            radius: SizeConfig.getWidth(8),
-          ),
-        ),
-        onTap: () {
-          BlocProvider.of<ActiveLocationBloc>(context).add(RemoveActiveLocation(beaconIdentifier: business.location.beacon.identifier));
-        }
-      ),
+      child: LogoButton(business: business)
     );
   }
 

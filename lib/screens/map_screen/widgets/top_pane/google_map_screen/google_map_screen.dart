@@ -104,10 +104,7 @@ class GoogleMapScreen extends StatelessWidget {
         consumeTapEvents: true,
         onTap: () => showPlatformModalSheet(
           context: context,
-          builder: (_) => PlatformWidget(
-            android: (_) => BusinessScreen(business: preMarker.business),
-            ios: (_) => BusinessScreen(business: preMarker.business),
-          )
+          builder: (_) => BusinessScreen(business: preMarker.business),
         )
       );
     }).toSet();
