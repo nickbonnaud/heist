@@ -9,7 +9,8 @@ import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
 import 'package:heist/screens/business_screen/business_screen.dart';
 
-import 'logo_button.dart';
+import 'show_business_button.dart';
+
 
 class ActiveLocationList extends StatelessWidget {
 
@@ -22,14 +23,22 @@ class ActiveLocationList extends StatelessWidget {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
+              Padding(
+                padding: EdgeInsets.only(left: SizeConfig.getWidth(15)),
+                child: Divider(thickness: 2),
+              ),
+              SizedBox(height: SizeConfig.getHeight(1)),
               Row(
                 children: <Widget>[
-                  Icon(
-                    context.platformIcons.location, 
-                    size: SizeConfig.getWidth(10)
+                  Padding(
+                    padding: EdgeInsets.only(left: 8, right: 8),
+                    child: Icon(
+                      Icons.pin_drop,
+                      size: SizeConfig.getWidth(10)
+                    ),
                   ),
                   SizedBox(width: SizeConfig.getWidth(1)),
-                  BoldText(text: "Where you're currently at:", size: SizeConfig.getWidth(5), color: Colors.grey),
+                  BoldText(text: "Your Active Locations:", size: SizeConfig.getWidth(5), color: Colors.grey),
                 ],
               ),
               SizedBox(height: SizeConfig.getHeight(1)),
@@ -38,23 +47,70 @@ class ActiveLocationList extends StatelessWidget {
                 scrollDirection: Axis.horizontal,
                 child: Row(
                   children: <Widget>[
-                    for (ActiveLocation activeLocation in state.activeLocations) _buildLocationIcon(context: context, location: activeLocation, businesses: _businesses)
+                    for (ActiveLocation activeLocation in state.activeLocations) _createActiveLocationIcon(location: activeLocation, businesses: _businesses)
                   ],
                 ),
-              )
+              ),
+              SizedBox(height: SizeConfig.getHeight(2)),
             ],
           );
         }
-        return Container(height: 0, width: 0,);
+        return BlocBuilder<NearbyBusinessesBloc, NearbyBusinessesState>(
+          builder: (context, state) {
+            if (state is NearbyBusinessLoaded) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.only(left: SizeConfig.getWidth(15)),
+                    child: Divider(thickness: 2),
+                  ),
+                  SizedBox(height: SizeConfig.getHeight(1)),
+                  Row(
+                    children: <Widget>[
+                      Padding(
+                        padding: EdgeInsets.only(left: 8, right: 8),
+                        child: Icon(
+                          Icons.location_city, 
+                          size: SizeConfig.getWidth(10)
+                        ),
+                      ),
+                      SizedBox(width: SizeConfig.getWidth(1)),
+                      Expanded(
+                        child: BoldText(text: "No Active Locations, checkout some nearby businesses:", size: SizeConfig.getWidth(5), color: Colors.grey),
+                      )
+                    ],
+                  ),
+                  SizedBox(height: SizeConfig.getHeight(1)),
+                  SingleChildScrollView(
+                    padding: EdgeInsets.only(bottom: 16),
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: <Widget>[
+                        for (Business business in state.businesses) _buildIcon(business: business)
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: SizeConfig.getHeight(2)),
+                ],
+              );
+            }
+            return Container();
+          }
+        );
       }
     );
   }
 
-  Widget _buildLocationIcon({@required BuildContext context, @required ActiveLocation location, @required List<Business> businesses}) {
+  Widget _createActiveLocationIcon({@required ActiveLocation location, @required List<Business> businesses}) {
     Business business = _findBusiness(location: location, businesses: businesses);
+    return _buildIcon(business: business);
+  }
+  
+  Widget _buildIcon({@required Business business}) {
     return Padding(
       padding: EdgeInsets.only(left: 16),
-      child: LogoButton(business: business)
+      child: ShowBusinessButton(business: business)
     );
   }
 

@@ -57,6 +57,14 @@ class MockResponses {
       return _postActiveLocation(options);
     } else if (options.path.contains('location/')) {
       return _deleteActiveLocation();
+    } else if (options.path.contains('transaction/')) {
+      return _mockAcceptTransaction();
+    } else if (options.path.endsWith('transaction-issue')) {
+      return _mockReportTransactionIssue(options);
+    } else if (options.path.contains('transaction-issue/') && options.method.toLowerCase() == 'patch') {
+      return _mockChangeTransactionIssue(options);
+    } else if (options.path.contains('transaction-issue/') && options.method.toLowerCase() == 'delete') {
+      return _mockDeleteIssue();
     }
   }
 
@@ -267,7 +275,10 @@ class MockResponses {
             "locked": "1",
             "bill_created_at": "2020-04-08 18:46:25",
             "updated_at": "2020-04-08 18:46:25",
-            "status": "open",
+            "status": {
+              "name": "open",
+              "code": "100"
+            },
             "purchased_items": [
               {
                 "name": "numquam",
@@ -337,7 +348,8 @@ class MockResponses {
               }
             }
           },
-          "refund": []
+          "refund": [],
+          'issue': null
         },
         {
           "transaction": {
@@ -351,7 +363,10 @@ class MockResponses {
             "locked": "1",
             "bill_created_at": "2020-04-08 18:46:25",
             "updated_at": "2020-04-08 18:46:25",
-            "status": "open",
+            "status": {
+              "name": "open",
+              "code": "100"
+            },
             "purchased_items": [
               {
                 "name": "voluptatem",
@@ -435,7 +450,8 @@ class MockResponses {
               }
             }
           },
-          "refund": []
+          "refund": [],
+          'issue': null
         },
         {
           "transaction": {
@@ -449,7 +465,10 @@ class MockResponses {
             "locked": "1",
             "bill_created_at": "2020-04-08 18:46:25",
             "updated_at": "2020-04-08 18:46:25",
-            "status": "open",
+            "status": {
+              "name": "open",
+              "code": "100"
+            },
             "purchased_items": [
               {
                 "name": "sequi",
@@ -519,7 +538,8 @@ class MockResponses {
               }
             }
           },
-          "refund": []
+          "refund": [],
+          'issue': null
         },
         {
           "transaction": {
@@ -533,7 +553,10 @@ class MockResponses {
             "locked": "1",
             "bill_created_at": "2020-04-08 18:46:25",
             "updated_at": "2020-04-08 18:46:25",
-            "status": "open",
+            "status": {
+              "name": "open",
+              "code": "100"
+            },
             "purchased_items": [
               {
                 "name": "numquam",
@@ -617,7 +640,8 @@ class MockResponses {
               }
             }
           },
-          "refund": []
+          "refund": [],
+          'issue': null
         },
       ],
       "links": {
@@ -653,7 +677,10 @@ class MockResponses {
             "locked": "1",
             "bill_created_at": "2020-04-08 18:46:25",
             "updated_at": "2020-04-08 18:46:25",
-            "status": "open",
+            "status": {
+              "name": "open",
+              "code": "100"
+            },
             "purchased_items": [
               {
                 "name": "numquam",
@@ -723,7 +750,8 @@ class MockResponses {
               }
             }
           },
-          "refund": []
+          "refund": [],
+          'issue': null
         },
         {
           "transaction": {
@@ -737,7 +765,10 @@ class MockResponses {
             "locked": "1",
             "bill_created_at": "2020-04-08 18:46:25",
             "updated_at": "2020-04-08 18:46:25",
-            "status": "open",
+            "status": {
+              "name": "open",
+              "code": "100"
+            },
             "purchased_items": [
               {
                 "name": "voluptatem",
@@ -821,7 +852,8 @@ class MockResponses {
               }
             }
           },
-          "refund": []
+          "refund": [],
+          'issue': null
         },
         {
           "transaction": {
@@ -835,7 +867,10 @@ class MockResponses {
             "locked": "1",
             "bill_created_at": "2020-04-08 18:46:25",
             "updated_at": "2020-04-08 18:46:25",
-            "status": "open",
+            "status": {
+              "name": "open",
+              "code": "100"
+            },
             "purchased_items": [
               {
                 "name": "sequi",
@@ -905,7 +940,8 @@ class MockResponses {
               }
             }
           },
-          "refund": []
+          "refund": [],
+          'issue': null
         },
         {
           "transaction": {
@@ -919,7 +955,10 @@ class MockResponses {
             "locked": "1",
             "bill_created_at": "2020-04-08 18:46:25",
             "updated_at": "2020-04-08 18:46:25",
-            "status": "open",
+            "status": {
+              "name": "open",
+              "code": "100"
+            },
             "purchased_items": [
               {
                 "name": "numquam",
@@ -989,7 +1028,8 @@ class MockResponses {
               }
             }
           },
-          "refund": []
+          "refund": [],
+          'issue': null
         },
         {
           "transaction": {
@@ -1003,7 +1043,10 @@ class MockResponses {
             "locked": "1",
             "bill_created_at": "2020-04-08 18:46:25",
             "updated_at": "2020-04-08 18:46:25",
-            "status": "open",
+            "status": {
+              "name": "open",
+              "code": "100"
+            },
             "purchased_items": [
               {
                 "name": "voluptatem",
@@ -1087,7 +1130,8 @@ class MockResponses {
               }
             }
           },
-          "refund": []
+          "refund": [],
+          'issue': null
         },
         {
           "transaction": {
@@ -1101,7 +1145,10 @@ class MockResponses {
             "locked": "1",
             "bill_created_at": "2020-04-08 18:46:25",
             "updated_at": "2020-04-08 18:46:25",
-            "status": "open",
+            "status": {
+              "name": "open",
+              "code": "100"
+            },
             "purchased_items": [
               {
                 "name": "sequi",
@@ -1171,7 +1218,8 @@ class MockResponses {
               }
             }
           },
-          "refund": []
+          "refund": [],
+          'issue': null
         },
         {
           "transaction": {
@@ -1185,7 +1233,10 @@ class MockResponses {
             "locked": "1",
             "bill_created_at": "2020-04-08 18:46:25",
             "updated_at": "2020-04-08 18:46:25",
-            "status": "open",
+            "status": {
+              "name": "open",
+              "code": "100"
+            },
             "purchased_items": [
               {
                 "name": "numquam",
@@ -1255,7 +1306,8 @@ class MockResponses {
               }
             }
           },
-          "refund": []
+          "refund": [],
+          'issue': null
         },
         {
           "transaction": {
@@ -1269,7 +1321,10 @@ class MockResponses {
             "locked": "1",
             "bill_created_at": "2020-04-08 18:46:25",
             "updated_at": "2020-04-08 18:46:25",
-            "status": "open",
+            "status": {
+              "name": "open",
+              "code": "100"
+            },
             "purchased_items": [
               {
                 "name": "voluptatem",
@@ -1353,7 +1408,8 @@ class MockResponses {
               }
             }
           },
-          "refund": []
+          "refund": [],
+          'issue': null
         },
         {
           "transaction": {
@@ -1367,7 +1423,10 @@ class MockResponses {
             "locked": "1",
             "bill_created_at": "2020-04-08 18:46:25",
             "updated_at": "2020-04-08 18:46:25",
-            "status": "open",
+            "status": {
+              "name": "open",
+              "code": "100"
+            },
             "purchased_items": [
               {
                 "name": "sequi",
@@ -1437,7 +1496,8 @@ class MockResponses {
               }
             }
           },
-          "refund": []
+          "refund": [],
+          'issue': null
         },
         {
           "transaction": {
@@ -1451,7 +1511,10 @@ class MockResponses {
             "locked": "1",
             "bill_created_at": "2020-04-08 18:46:25",
             "updated_at": "2020-04-08 18:46:25",
-            "status": "open",
+            "status": {
+              "name": "open",
+              "code": "100"
+            },
             "purchased_items": [
               {
                 "name": "numquam",
@@ -1521,7 +1584,8 @@ class MockResponses {
               }
             }
           },
-          "refund": []
+          "refund": [],
+          'issue': null
         },
         {
           "transaction": {
@@ -1535,7 +1599,10 @@ class MockResponses {
             "locked": "1",
             "bill_created_at": "2020-04-08 18:46:25",
             "updated_at": "2020-04-08 18:46:25",
-            "status": "open",
+            "status": {
+              "name": "open",
+              "code": "100"
+            },
             "purchased_items": [
               {
                 "name": "voluptatem",
@@ -1619,7 +1686,8 @@ class MockResponses {
               }
             }
           },
-          "refund": []
+          "refund": [],
+          'issue': null
         },
         {
           "transaction": {
@@ -1633,7 +1701,10 @@ class MockResponses {
             "locked": "1",
             "bill_created_at": "2020-04-08 18:46:25",
             "updated_at": "2020-04-08 18:46:25",
-            "status": "open",
+            "status": {
+              "name": "open",
+              "code": "100"
+            },
             "purchased_items": [
               {
                 "name": "sequi",
@@ -1703,7 +1774,8 @@ class MockResponses {
               }
             }
           },
-          "refund": []
+          "refund": [],
+          'issue': null
         }
       ],
       "links": {
@@ -1739,7 +1811,10 @@ class MockResponses {
             "locked": "1",
             "bill_created_at": "2020-04-08 18:46:25",
             "updated_at": "2020-04-08 18:46:25",
-            "status": "open",
+            "status": {
+              "name": "open",
+              "code": "100"
+            },
             "purchased_items": [
               {
                 "name": "numquam",
@@ -1809,7 +1884,8 @@ class MockResponses {
               }
             }
           },
-          "refund": []
+          "refund": [],
+          'issue': null
         },
         {
           "transaction": {
@@ -1823,7 +1899,10 @@ class MockResponses {
             "locked": "1",
             "bill_created_at": "2020-04-08 18:46:25",
             "updated_at": "2020-04-08 18:46:25",
-            "status": "open",
+            "status": {
+              "name": "open",
+              "code": "100"
+            },
             "purchased_items": [
               {
                 "name": "voluptatem",
@@ -1907,7 +1986,8 @@ class MockResponses {
               }
             }
           },
-          "refund": []
+          "refund": [],
+          'issue': null
         },
         {
           "transaction": {
@@ -1921,7 +2001,10 @@ class MockResponses {
             "locked": "1",
             "bill_created_at": "2020-04-08 18:46:25",
             "updated_at": "2020-04-08 18:46:25",
-            "status": "open",
+            "status": {
+              "name": "open",
+              "code": "100"
+            },
             "purchased_items": [
               {
                 "name": "sequi",
@@ -1991,7 +2074,8 @@ class MockResponses {
               }
             }
           },
-          "refund": []
+          "refund": [],
+          'issue': null
         },
         {
           "transaction": {
@@ -2005,7 +2089,10 @@ class MockResponses {
             "locked": "1",
             "bill_created_at": "2020-04-08 18:46:25",
             "updated_at": "2020-04-08 18:46:25",
-            "status": "open",
+            "status": {
+              "name": "open",
+              "code": "100"
+            },
             "purchased_items": [
               {
                 "name": "numquam",
@@ -2075,7 +2162,8 @@ class MockResponses {
               }
             }
           },
-          "refund": []
+          "refund": [],
+          'issue': null
         },
         {
           "transaction": {
@@ -2089,7 +2177,10 @@ class MockResponses {
             "locked": "1",
             "bill_created_at": "2020-04-08 18:46:25",
             "updated_at": "2020-04-08 18:46:25",
-            "status": "open",
+            "status": {
+              "name": "open",
+              "code": "100"
+            },
             "purchased_items": [
               {
                 "name": "voluptatem",
@@ -2173,7 +2264,8 @@ class MockResponses {
               }
             }
           },
-          "refund": []
+          "refund": [],
+          'issue': null
         },
         {
           "transaction": {
@@ -2187,7 +2279,10 @@ class MockResponses {
             "locked": "1",
             "bill_created_at": "2020-04-08 18:46:25",
             "updated_at": "2020-04-08 18:46:25",
-            "status": "open",
+            "status": {
+              "name": "open",
+              "code": "100"
+            },
             "purchased_items": [
               {
                 "name": "sequi",
@@ -2257,7 +2352,8 @@ class MockResponses {
               }
             }
           },
-          "refund": []
+          "refund": [],
+          'issue': null
         },
         {
           "transaction": {
@@ -2271,7 +2367,10 @@ class MockResponses {
             "locked": "1",
             "bill_created_at": "2020-04-08 18:46:25",
             "updated_at": "2020-04-08 18:46:25",
-            "status": "open",
+            "status": {
+              "name": "open",
+              "code": "100"
+            },
             "purchased_items": [
               {
                 "name": "numquam",
@@ -2341,7 +2440,8 @@ class MockResponses {
               }
             }
           },
-          "refund": []
+          "refund": [],
+          'issue': null
         },
         {
           "transaction": {
@@ -2355,7 +2455,10 @@ class MockResponses {
             "locked": "1",
             "bill_created_at": "2020-04-08 18:46:25",
             "updated_at": "2020-04-08 18:46:25",
-            "status": "open",
+            "status": {
+              "name": "open",
+              "code": "100"
+            },
             "purchased_items": [
               {
                 "name": "voluptatem",
@@ -2439,7 +2542,8 @@ class MockResponses {
               }
             }
           },
-          "refund": []
+          "refund": [],
+          'issue': null
         },
         {
           "transaction": {
@@ -2453,7 +2557,10 @@ class MockResponses {
             "locked": "1",
             "bill_created_at": "2020-04-08 18:46:25",
             "updated_at": "2020-04-08 18:46:25",
-            "status": "open",
+            "status": {
+              "name": "open",
+              "code": "100"
+            },
             "purchased_items": [
               {
                 "name": "sequi",
@@ -2523,7 +2630,8 @@ class MockResponses {
               }
             }
           },
-          "refund": []
+          "refund": [],
+          'issue': null
         },
         {
           "transaction": {
@@ -2537,7 +2645,10 @@ class MockResponses {
             "locked": "1",
             "bill_created_at": "2020-04-08 18:46:25",
             "updated_at": "2020-04-08 18:46:25",
-            "status": "open",
+            "status": {
+              "name": "open",
+              "code": "100"
+            },
             "purchased_items": [
               {
                 "name": "numquam",
@@ -2607,7 +2718,8 @@ class MockResponses {
               }
             }
           },
-          "refund": []
+          "refund": [],
+          'issue': null
         },
         {
           "transaction": {
@@ -2621,7 +2733,10 @@ class MockResponses {
             "locked": "1",
             "bill_created_at": "2020-04-08 18:46:25",
             "updated_at": "2020-04-08 18:46:25",
-            "status": "open",
+            "status": {
+              "name": "open",
+              "code": "100"
+            },
             "purchased_items": [
               {
                 "name": "voluptatem",
@@ -2705,7 +2820,8 @@ class MockResponses {
               }
             }
           },
-          "refund": []
+          "refund": [],
+          'issue': null
         },
         {
           "transaction": {
@@ -2719,7 +2835,10 @@ class MockResponses {
             "locked": "1",
             "bill_created_at": "2020-04-08 18:46:25",
             "updated_at": "2020-04-08 18:46:25",
-            "status": "open",
+            "status": {
+              "name": "open",
+              "code": "100"
+            },
             "purchased_items": [
               {
                 "name": "sequi",
@@ -2789,7 +2908,8 @@ class MockResponses {
               }
             }
           },
-          "refund": []
+          "refund": [],
+          'issue': null
         }
       ],
       "links": {
@@ -2810,6 +2930,486 @@ class MockResponses {
     };
   }
   
+  static Map<String, dynamic> _mockReportTransactionIssue(RequestOptions options) {
+    return {
+      "transaction": {
+        "identifier": "3ff9ad40-79c9-11ea-8b92-a9b4a4c53696",
+        "employee_id": null,
+        "tax": "457",
+        "tip": "1636",
+        "net_sales": "6088",
+        "total": "8181",
+        "partial_payment": "0",
+        "locked": "1",
+        "bill_created_at": "2020-04-08 18:46:25",
+        "updated_at": "2020-04-08 18:46:25",
+        "status": {
+          "name": "wrong bill assigned",
+          "code": "500"
+        },
+        "purchased_items": [
+          {
+            "name": "numquam",
+            "sub_name": 'fbjdss',
+            "price": "2000",
+            "quantity": "3",
+            "total": "6000"
+          },
+          {
+            "name": "vel",
+            "sub_name": null,
+            "price": "500",
+            "quantity": "2",
+            "total": "1000"
+          }
+        ]
+      },
+      "business": {
+        "identifier": "3ff30c10-79c9-11ea-a2da-ebb755a8f3fd",
+        "profile": {
+          "name": "Spencer PLC",
+          "website": "wisozk.com",
+          "description": "Dignissimos cum quidem neque magnam qui et dolor. Voluptatem error maiores quia repellat veritatis possimus. Molestias id rem hic ipsam.",
+          "google_place_id": null,
+          "phone": "7912752600",
+          "hours": {
+            "monday": "Monday: 11:00 AM – 10:00 PM",
+            "tuesday": "Tuesday: 11:00 AM – 10:00 PM",
+            "wednesday": "Wednesday: 11:00 AM – 10:00 PM",
+            "thursday": "Thursday: 11:00 AM – 10:00 PM",
+            "friday": "Friday: 11:00 AM – 10:30 PM",
+            "saturday": "Saturday: 11:00 AM – 10:30 PM",
+            "sunday": "Sunday: 10:30 AM – 9:00 PM",
+          }
+        },
+        'photos': {
+        'logo': {
+          'name': "logo_2.png",
+          'small_url': "https://cdna.artstation.com/p/assets/images/images/021/760/294/micro_square/jip-scheepers-2018-04-25.jpg?1572865897",
+          'large_url': "https://cdna.artstation.com/p/assets/images/images/021/760/294/micro_square/jip-scheepers-2018-04-25.jpg?1572865897"
+        },
+        'banner': {
+          'name': "banner_1.png",
+          'small_url': "https://www.gerardhuerta.com/wp-content/uploads/2016/08/ACDC-1000x650.jpg",
+          'large_url': "https://www.gerardhuerta.com/wp-content/uploads/2016/08/ACDC-1000x650.jpg"
+        },
+      },
+        "location": {
+          "geo": {
+            "identifier": "3ff884f0-79c9-11ea-9cdf-4d873094dff7",
+            "lat": "40.748440",
+            "lng":"-73.985664",
+            "radius": "50",
+          },
+          "beacon": {
+            "identifier": "3ff884f0-79c9-11ea-9cdf-4d873094dff7",
+            "region_identifier": "3ff871d0-79c9-11ea-8a10-a7f913a9d44b",
+            "major": "0",
+            "minor": "1"
+          },
+          "region": {
+            "identifier": "3ff871d0-79c9-11ea-8a10-a7f913a9d44b",
+            "city": "prosaccoshire",
+            "state": "ne",
+            "zip": "41232",
+            "neighborhood": null
+          }
+        }
+      },
+      "refund": [],
+      'issue': {
+        'identifier': 'fake_id',
+        'type': options.data['type'].toString(),
+        'issue': options.data['issue'],
+        'resolved': false,
+        'updated_at': '2020-05-26T22:04:56.000000Z'
+      }
+    };
+  }
+
+  static Map<String, dynamic> _mockChangeTransactionIssue(RequestOptions options) {
+    return {
+      "transaction": {
+        "identifier": "3ff9ad40-79c9-11ea-8b92-a9b4a4c53696",
+        "employee_id": null,
+        "tax": "457",
+        "tip": "1636",
+        "net_sales": "6088",
+        "total": "8181",
+        "partial_payment": "0",
+        "locked": "1",
+        "bill_created_at": "2020-04-08 18:46:25",
+        "updated_at": "2020-04-08 18:46:25",
+        "status": {
+          "name": "wrong bill assigned",
+          "code": "500"
+        },
+        "purchased_items": [
+          {
+            "name": "numquam",
+            "sub_name": 'fbjdss',
+            "price": "2000",
+            "quantity": "3",
+            "total": "6000"
+          },
+          {
+            "name": "vel",
+            "sub_name": null,
+            "price": "500",
+            "quantity": "2",
+            "total": "1000"
+          }
+        ]
+      },
+      "business": {
+        "identifier": "3ff30c10-79c9-11ea-a2da-ebb755a8f3fd",
+        "profile": {
+          "name": "Spencer PLC",
+          "website": "wisozk.com",
+          "description": "Dignissimos cum quidem neque magnam qui et dolor. Voluptatem error maiores quia repellat veritatis possimus. Molestias id rem hic ipsam.",
+          "google_place_id": null,
+          "phone": "7912752600",
+          "hours": {
+            "monday": "Monday: 11:00 AM – 10:00 PM",
+            "tuesday": "Tuesday: 11:00 AM – 10:00 PM",
+            "wednesday": "Wednesday: 11:00 AM – 10:00 PM",
+            "thursday": "Thursday: 11:00 AM – 10:00 PM",
+            "friday": "Friday: 11:00 AM – 10:30 PM",
+            "saturday": "Saturday: 11:00 AM – 10:30 PM",
+            "sunday": "Sunday: 10:30 AM – 9:00 PM",
+          }
+        },
+        'photos': {
+        'logo': {
+          'name': "logo_2.png",
+          'small_url': "https://cdna.artstation.com/p/assets/images/images/021/760/294/micro_square/jip-scheepers-2018-04-25.jpg?1572865897",
+          'large_url': "https://cdna.artstation.com/p/assets/images/images/021/760/294/micro_square/jip-scheepers-2018-04-25.jpg?1572865897"
+        },
+        'banner': {
+          'name': "banner_1.png",
+          'small_url': "https://www.gerardhuerta.com/wp-content/uploads/2016/08/ACDC-1000x650.jpg",
+          'large_url': "https://www.gerardhuerta.com/wp-content/uploads/2016/08/ACDC-1000x650.jpg"
+        },
+      },
+        "location": {
+          "geo": {
+            "identifier": "3ff884f0-79c9-11ea-9cdf-4d873094dff7",
+            "lat": "40.748440",
+            "lng":"-73.985664",
+            "radius": "50",
+          },
+          "beacon": {
+            "identifier": "3ff884f0-79c9-11ea-9cdf-4d873094dff7",
+            "region_identifier": "3ff871d0-79c9-11ea-8a10-a7f913a9d44b",
+            "major": "0",
+            "minor": "1"
+          },
+          "region": {
+            "identifier": "3ff871d0-79c9-11ea-8a10-a7f913a9d44b",
+            "city": "prosaccoshire",
+            "state": "ne",
+            "zip": "41232",
+            "neighborhood": null
+          }
+        }
+      },
+      "refund": [],
+      'issue': {
+        'identifier': 'fake_id',
+        'type': options.data['type'].toString(),
+        'issue': options.data['issue'],
+        'resolved': false,
+        'updated_at': '2020-05-26T22:04:56.000000Z'
+      }
+    };
+  }
+
+  static Map<String, dynamic> _mockDeleteIssue() {
+    return {
+      "transaction": {
+        "identifier": "3ff9ad40-79c9-11ea-8b92-a9b4a4c53696",
+        "employee_id": null,
+        "tax": "457",
+        "tip": "1636",
+        "net_sales": "6088",
+        "total": "8181",
+        "partial_payment": "0",
+        "locked": "1",
+        "bill_created_at": "2020-04-08 18:46:25",
+        "updated_at": "2020-04-08 18:46:25",
+        "status": {
+          "name": "open",
+          "code": "100"
+        },
+        "purchased_items": [
+          {
+            "name": "numquam",
+            "sub_name": 'fbjdss',
+            "price": "2000",
+            "quantity": "3",
+            "total": "6000"
+          },
+          {
+            "name": "vel",
+            "sub_name": null,
+            "price": "500",
+            "quantity": "2",
+            "total": "1000"
+          }
+        ]
+      },
+      "business": {
+        "identifier": "3ff30c10-79c9-11ea-a2da-ebb755a8f3fd",
+        "profile": {
+          "name": "Spencer PLC",
+          "website": "wisozk.com",
+          "description": "Dignissimos cum quidem neque magnam qui et dolor. Voluptatem error maiores quia repellat veritatis possimus. Molestias id rem hic ipsam.",
+          "google_place_id": null,
+          "phone": "7912752600",
+          "hours": {
+            "monday": "Monday: 11:00 AM – 10:00 PM",
+            "tuesday": "Tuesday: 11:00 AM – 10:00 PM",
+            "wednesday": "Wednesday: 11:00 AM – 10:00 PM",
+            "thursday": "Thursday: 11:00 AM – 10:00 PM",
+            "friday": "Friday: 11:00 AM – 10:30 PM",
+            "saturday": "Saturday: 11:00 AM – 10:30 PM",
+            "sunday": "Sunday: 10:30 AM – 9:00 PM",
+          }
+        },
+        'photos': {
+        'logo': {
+          'name': "logo_2.png",
+          'small_url': "https://cdna.artstation.com/p/assets/images/images/021/760/294/micro_square/jip-scheepers-2018-04-25.jpg?1572865897",
+          'large_url': "https://cdna.artstation.com/p/assets/images/images/021/760/294/micro_square/jip-scheepers-2018-04-25.jpg?1572865897"
+        },
+        'banner': {
+          'name': "banner_1.png",
+          'small_url': "https://www.gerardhuerta.com/wp-content/uploads/2016/08/ACDC-1000x650.jpg",
+          'large_url': "https://www.gerardhuerta.com/wp-content/uploads/2016/08/ACDC-1000x650.jpg"
+        },
+      },
+        "location": {
+          "geo": {
+            "identifier": "3ff884f0-79c9-11ea-9cdf-4d873094dff7",
+            "lat": "40.748440",
+            "lng":"-73.985664",
+            "radius": "50",
+          },
+          "beacon": {
+            "identifier": "3ff884f0-79c9-11ea-9cdf-4d873094dff7",
+            "region_identifier": "3ff871d0-79c9-11ea-8a10-a7f913a9d44b",
+            "major": "0",
+            "minor": "1"
+          },
+          "region": {
+            "identifier": "3ff871d0-79c9-11ea-8a10-a7f913a9d44b",
+            "city": "prosaccoshire",
+            "state": "ne",
+            "zip": "41232",
+            "neighborhood": null
+          }
+        }
+      },
+      "refund": [],
+      'issue': null
+    };
+  }
+  
+  static Map<String, dynamic> _mockAcceptTransaction() {
+    return {
+      "transaction": {
+        "identifier": "3ff9ad40-79c9-11ea-8b92-a9b4a4c53696",
+        "employee_id": null,
+        "tax": "457",
+        "tip": "1636",
+        "net_sales": "6088",
+        "total": "8181",
+        "partial_payment": "0",
+        "locked": "1",
+        "bill_created_at": "2020-04-08 18:46:25",
+        "updated_at": "2020-04-08 18:46:25",
+        "status": {
+          "name": "payment processing",
+          "code": "103"
+        },
+        "purchased_items": [
+          {
+            "name": "numquam",
+            "sub_name": 'fbjdss',
+            "price": "2000",
+            "quantity": "3",
+            "total": "6000"
+          },
+          {
+            "name": "vel",
+            "sub_name": null,
+            "price": "500",
+            "quantity": "2",
+            "total": "1000"
+          }
+        ]
+      },
+      "business": {
+        "identifier": "3ff30c10-79c9-11ea-a2da-ebb755a8f3fd",
+        "profile": {
+          "name": "Spencer PLC",
+          "website": "wisozk.com",
+          "description": "Dignissimos cum quidem neque magnam qui et dolor. Voluptatem error maiores quia repellat veritatis possimus. Molestias id rem hic ipsam.",
+          "google_place_id": null,
+          "phone": "7912752600",
+          "hours": {
+            "monday": "Monday: 11:00 AM – 10:00 PM",
+            "tuesday": "Tuesday: 11:00 AM – 10:00 PM",
+            "wednesday": "Wednesday: 11:00 AM – 10:00 PM",
+            "thursday": "Thursday: 11:00 AM – 10:00 PM",
+            "friday": "Friday: 11:00 AM – 10:30 PM",
+            "saturday": "Saturday: 11:00 AM – 10:30 PM",
+            "sunday": "Sunday: 10:30 AM – 9:00 PM",
+          }
+        },
+        'photos': {
+        'logo': {
+          'name': "logo_2.png",
+          'small_url': "https://cdna.artstation.com/p/assets/images/images/021/760/294/micro_square/jip-scheepers-2018-04-25.jpg?1572865897",
+          'large_url': "https://cdna.artstation.com/p/assets/images/images/021/760/294/micro_square/jip-scheepers-2018-04-25.jpg?1572865897"
+        },
+        'banner': {
+          'name': "banner_1.png",
+          'small_url': "https://www.gerardhuerta.com/wp-content/uploads/2016/08/ACDC-1000x650.jpg",
+          'large_url': "https://www.gerardhuerta.com/wp-content/uploads/2016/08/ACDC-1000x650.jpg"
+        },
+      },
+        "location": {
+          "geo": {
+            "identifier": "3ff884f0-79c9-11ea-9cdf-4d873094dff7",
+            "lat": "40.748440",
+            "lng":"-73.985664",
+            "radius": "50",
+          },
+          "beacon": {
+            "identifier": "3ff884f0-79c9-11ea-9cdf-4d873094dff7",
+            "region_identifier": "3ff871d0-79c9-11ea-8a10-a7f913a9d44b",
+            "major": "0",
+            "minor": "1"
+          },
+          "region": {
+            "identifier": "3ff871d0-79c9-11ea-8a10-a7f913a9d44b",
+            "city": "prosaccoshire",
+            "state": "ne",
+            "zip": "41232",
+            "neighborhood": null
+          }
+        }
+      },
+      "refund": [],
+      'issue': null
+    };
+  }
+  
+  static Map<String, dynamic> mockOpenTransaction() {
+    return {
+      "transaction": {
+        "identifier": "3ff9ad40-79c9-11ea-8b92-a9b4a4c53696",
+        "employee_id": null,
+        "tax": "457",
+        "tip": "1636",
+        "net_sales": "6088",
+        "total": "8181",
+        "partial_payment": "0",
+        "locked": "1",
+        "bill_created_at": "2020-05-26T22:04:56.000000Z",
+        "updated_at": "2020-05-26T22:04:56.000000Z",
+        "status": {
+          "name": "open",
+          "code": "100"
+        },
+        "purchased_items": [
+          {
+            "name": "numquam",
+            "sub_name": 'fbjdss',
+            "price": "2000",
+            "quantity": "3",
+            "total": "6000"
+          },
+          {
+            "name": "vel",
+            "sub_name": null,
+            "price": "500",
+            "quantity": "2",
+            "total": "1000"
+          }
+        ]
+      },
+      "business": {
+        "identifier": "3ff30c10-79c9-11ea-a2da-ebb755a8f3fd",
+        "profile": {
+          "name": "Spencer PLC",
+          "website": "wisozk.com",
+          "description": "Dignissimos cum quidem neque magnam qui et dolor. Voluptatem error maiores quia repellat veritatis possimus. Molestias id rem hic ipsam.",
+          "google_place_id": null,
+          "phone": "7912752600",
+          "hours": {
+            "monday": "Monday: 11:00 AM – 10:00 PM",
+            "tuesday": "Tuesday: 11:00 AM – 10:00 PM",
+            "wednesday": "Wednesday: 11:00 AM – 10:00 PM",
+            "thursday": "Thursday: 11:00 AM – 10:00 PM",
+            "friday": "Friday: 11:00 AM – 10:30 PM",
+            "saturday": "Saturday: 11:00 AM – 10:30 PM",
+            "sunday": "Sunday: 10:30 AM – 9:00 PM",
+          }
+        },
+        'photos': {
+        'logo': {
+          'name': "logo_2.png",
+          'small_url': "https://cdna.artstation.com/p/assets/images/images/021/760/294/micro_square/jip-scheepers-2018-04-25.jpg?1572865897",
+          'large_url': "https://cdna.artstation.com/p/assets/images/images/021/760/294/micro_square/jip-scheepers-2018-04-25.jpg?1572865897"
+        },
+        'banner': {
+          'name': "banner_1.png",
+          'small_url': "https://www.gerardhuerta.com/wp-content/uploads/2016/08/ACDC-1000x650.jpg",
+          'large_url': "https://www.gerardhuerta.com/wp-content/uploads/2016/08/ACDC-1000x650.jpg"
+        },
+      },
+        "location": {
+          "geo": {
+            "identifier": "3ff884f0-79c9-11ea-9cdf-4d873094dff7",
+            "lat": "40.748440",
+            "lng":"-73.985664",
+            "radius": "50",
+          },
+          "beacon": {
+            "identifier": "3ff884f0-79c9-11ea-9cdf-4d873094dff7",
+            "region_identifier": "3ff871d0-79c9-11ea-8a10-a7f913a9d44b",
+            "major": "0",
+            "minor": "1"
+          },
+          "region": {
+            "identifier": "3ff871d0-79c9-11ea-8a10-a7f913a9d44b",
+            "city": "prosaccoshire",
+            "state": "ne",
+            "zip": "41232",
+            "neighborhood": null
+          }
+        }
+      },
+      "refund": [
+        // {
+        //   "identifier": "125d10b0-895a-11ea-95db-b1ba0de9dfd1",
+        //   "total": "952",
+        //   "created_at": "2020-04-28 14:10:53",
+        //   "status": "refund paid",
+        // },
+        // {
+        //   "identifier": "125d10b0-895a-11ea-95db-b1ba0de9vcd1",
+        //   "total": "500",
+        //   "created_at": "2020-04-28 14:10:53",
+        //   "status": "refund paid",
+        // },
+      ],
+      'issue': null
+    };
+  }
+  
   static Map<String, dynamic> _mockFetchTransactionsByBusiness() {
     return {
       'data': [
@@ -2825,7 +3425,10 @@ class MockResponses {
             "locked": "1",
             "bill_created_at": "2020-04-08 18:46:25",
             "updated_at": "2020-04-08 18:46:25",
-            "status": "open",
+            "status": {
+              "name": "open",
+              "code": "100"
+            },
             "purchased_items": [
               {
                 "name": "numquam",
@@ -2895,7 +3498,8 @@ class MockResponses {
               }
             }
           },
-          "refund": []
+          "refund": [],
+          'issue': null
         },
       ],
       "links": {
@@ -2931,7 +3535,10 @@ class MockResponses {
             "locked": "1",
             "bill_created_at": "2020-04-08 18:46:25",
             "updated_at": "2020-04-08 18:46:25",
-            "status": "open",
+            "status": {
+              "name": "open",
+              "code": "100"
+            },
             "purchased_items": [
               {
                 "name": "numquam",
@@ -3001,7 +3608,8 @@ class MockResponses {
               }
             }
           },
-          "refund": []
+          "refund": [],
+          'issue': null
         },
       ],
       "links": {
@@ -3255,7 +3863,10 @@ class MockResponses {
             "locked": "1",
             "bill_created_at": "2020-04-28 14:10:53",
             "updated_at": "2020-04-28 14:10:53",
-            "status": "open",
+            "status": {
+              "name": "open",
+              "code": "100"
+            },
             "purchased_items": [
               {
                 "name": "sit",
@@ -3272,6 +3883,13 @@ class MockResponses {
                 "total": "2000"
               }
             ]
+          },
+          'issue': {
+            'identifier': 'fake_identifier',
+            'type': 'wrong_bill',
+            'issue': "My bill is not this",
+            'resolved': true,
+            'updated_at': '2020-05-21T22:27:59.000000Z'
           }
         },
         {
@@ -3344,7 +3962,10 @@ class MockResponses {
             "locked": "1",
             "bill_created_at": "2020-04-28 14:10:53",
             "updated_at": "2020-04-28 14:10:53",
-            "status": "open",
+            "status": {
+              "name": "open",
+              "code": "100"
+            },
             "purchased_items": [
               {
                 "name": "dolores",
@@ -3368,6 +3989,13 @@ class MockResponses {
                 "total": "4000"
               }
             ]
+          },
+          'issue': {
+            'identifier': 'fake_identifier',
+            'type': 'wrong_bill',
+            'issue': "My bill is not this",
+            'resolved': true,
+            'updated_at': '2020-05-21T22:27:59.000000Z'
           }
         },
         {
@@ -3440,7 +4068,10 @@ class MockResponses {
             "locked": "1",
             "bill_created_at": "2020-04-28 14:10:53",
             "updated_at": "2020-04-28 14:10:53",
-            "status": "open",
+            "status": {
+              "name": "open",
+              "code": "100"
+            },
             "purchased_items": [
               {
                 "name": "sit",
@@ -3471,6 +4102,13 @@ class MockResponses {
                 "total": "2000"
               }
             ]
+          },
+          'issue': {
+            'identifier': 'fake_identifier',
+            'type': 'wrong_bill',
+            'issue': "My bill is not this",
+            'resolved': true,
+            'updated_at': '2020-05-21T22:27:59.000000Z'
           }
         },
       ],
@@ -3565,7 +4203,10 @@ class MockResponses {
             "locked": "1",
             "bill_created_at": "2020-04-28 14:10:53",
             "updated_at": "2020-04-28 14:10:53",
-            "status": "open",
+            "status": {
+              "name": "open",
+              "code": "100"
+            },
             "purchased_items": [
               {
                 "name": "sit",
@@ -3582,6 +4223,13 @@ class MockResponses {
                 "total": "2000"
               }
             ]
+          },
+          'issue': {
+            'identifier': 'fake_identifier',
+            'type': 'wrong_bill',
+            'issue': "My bill is not this",
+            'resolved': true,
+            'updated_at': '2020-05-21T22:27:59.000000Z'
           }
         },
       ],
@@ -3617,7 +4265,10 @@ class MockResponses {
           "locked": "1",
           "bill_created_at": "2020-04-08 18:46:25",
           "updated_at": "2020-04-08 18:46:25",
-          "status": "open",
+          "status": {
+            "name": "open",
+            "code": "100"
+          },
           "purchased_items": [
             {
               "name": "numquam",
@@ -3687,7 +4338,8 @@ class MockResponses {
             }
           }
         },
-        "refund": []
+        "refund": [],
+        'issue': null
       }
     };
   }
@@ -3765,7 +4417,10 @@ class MockResponses {
             "locked": "1",
             "bill_created_at": "2020-04-28 14:10:53",
             "updated_at": "2020-04-28 14:10:53",
-            "status": "open",
+            "status": {
+              "name": "open",
+              "code": "100"
+            },
             "purchased_items": [
               {
                 "name": "sit",
@@ -3876,7 +4531,10 @@ class MockResponses {
             "locked": "1",
             "bill_created_at": "2020-04-28 14:10:53",
             "updated_at": "2020-04-28 14:10:53",
-            "status": "open",
+            "status": {
+              "name": "open",
+              "code": "100"
+            },
             "purchased_items": [
               {
                 "name": "sit",
@@ -3893,6 +4551,13 @@ class MockResponses {
                 "total": "2000"
               }
             ]
+          },
+          'issue': {
+            'identifier': 'fake_identifier',
+            'type': 'wrong_bill',
+            'issue': "My bill is not this",
+            'resolved': true,
+            'updated_at': '2020-05-21T22:27:59.000000Z'
           }
         },
         {
@@ -3965,7 +4630,10 @@ class MockResponses {
             "locked": "1",
             "bill_created_at": "2020-04-28 14:10:53",
             "updated_at": "2020-04-28 14:10:53",
-            "status": "open",
+            "status": {
+              "name": "open",
+              "code": "100"
+            },
             "purchased_items": [
               {
                 "name": "dolores",
@@ -3989,6 +4657,13 @@ class MockResponses {
                 "total": "4000"
               }
             ]
+          },
+          'issue': {
+            'identifier': 'fake_identifier',
+            'type': 'wrong_bill',
+            'issue': "My bill is not this",
+            'resolved': true,
+            'updated_at': '2020-05-21T22:27:59.000000Z'
           }
         },
         {
@@ -4061,7 +4736,10 @@ class MockResponses {
             "locked": "1",
             "bill_created_at": "2020-04-28 14:10:53",
             "updated_at": "2020-04-28 14:10:53",
-            "status": "open",
+            "status": {
+              "name": "open",
+              "code": "100"
+            },
             "purchased_items": [
               {
                 "name": "sit",
@@ -4092,6 +4770,13 @@ class MockResponses {
                 "total": "2000"
               }
             ]
+          },
+          'issue': {
+            'identifier': 'fake_identifier',
+            'type': 'wrong_bill',
+            'issue': "My bill is not this",
+            'resolved': true,
+            'updated_at': '2020-05-21T22:27:59.000000Z'
           }
         },
         {
@@ -4164,7 +4849,10 @@ class MockResponses {
             "locked": "1",
             "bill_created_at": "2020-04-28 14:10:53",
             "updated_at": "2020-04-28 14:10:53",
-            "status": "open",
+            "status": {
+              "name": "open",
+              "code": "100"
+            },
             "purchased_items": [
               {
                 "name": "sit",
@@ -4181,6 +4869,13 @@ class MockResponses {
                 "total": "2000"
               }
             ]
+          },
+          'issue': {
+            'identifier': 'fake_identifier',
+            'type': 'wrong_bill',
+            'issue': "My bill is not this",
+            'resolved': true,
+            'updated_at': '2020-05-21T22:27:59.000000Z'
           }
         },
         {
@@ -4253,7 +4948,10 @@ class MockResponses {
             "locked": "1",
             "bill_created_at": "2020-04-28 14:10:53",
             "updated_at": "2020-04-28 14:10:53",
-            "status": "open",
+            "status": {
+              "name": "open",
+              "code": "100"
+            },
             "purchased_items": [
               {
                 "name": "dolores",
@@ -4277,6 +4975,13 @@ class MockResponses {
                 "total": "4000"
               }
             ]
+          },
+          'issue': {
+            'identifier': 'fake_identifier',
+            'type': 'wrong_bill',
+            'issue': "My bill is not this",
+            'resolved': true,
+            'updated_at': '2020-05-21T22:27:59.000000Z'
           }
         },
         {
@@ -4349,7 +5054,10 @@ class MockResponses {
             "locked": "1",
             "bill_created_at": "2020-04-28 14:10:53",
             "updated_at": "2020-04-28 14:10:53",
-            "status": "open",
+            "status": {
+              "name": "open",
+              "code": "100"
+            },
             "purchased_items": [
               {
                 "name": "sit",
@@ -4380,6 +5088,13 @@ class MockResponses {
                 "total": "2000"
               }
             ]
+          },
+          'issue': {
+            'identifier': 'fake_identifier',
+            'type': 'wrong_bill',
+            'issue': "My bill is not this",
+            'resolved': true,
+            'updated_at': '2020-05-21T22:27:59.000000Z'
           }
         },
       ],
@@ -5093,7 +5808,10 @@ class MockResponses {
             "locked": "1",
             "bill_created_at": "2020-04-28 14:10:53",
             "updated_at": "2020-04-28 14:10:53",
-            "status": "open",
+            "status": {
+              "name": "open",
+              "code": "100"
+            },
             "purchased_items": [
               {
                 "name": "sit",
@@ -5110,6 +5828,13 @@ class MockResponses {
                 "total": "2000"
               }
             ]
+          },
+          'issue': {
+            'identifier': 'fake_identifier',
+            'type': 'wrong_bill',
+            'issue': "My bill is not this",
+            'resolved': true,
+            'updated_at': '2020-05-21T22:27:59.000000Z'
           }
         },
         {
@@ -5182,7 +5907,10 @@ class MockResponses {
             "locked": "1",
             "bill_created_at": "2020-04-28 14:10:53",
             "updated_at": "2020-04-28 14:10:53",
-            "status": "open",
+            "status": {
+              "name": "open",
+              "code": "100"
+            },
             "purchased_items": [
               {
                 "name": "dolores",
@@ -5206,6 +5934,13 @@ class MockResponses {
                 "total": "4000"
               }
             ]
+          },
+          'issue': {
+            'identifier': 'fake_identifier',
+            'type': 'wrong_bill',
+            'issue': "My bill is not this",
+            'resolved': true,
+            'updated_at': '2020-05-21T22:27:59.000000Z'
           }
         },
         {
@@ -5278,7 +6013,10 @@ class MockResponses {
             "locked": "1",
             "bill_created_at": "2020-04-28 14:10:53",
             "updated_at": "2020-04-28 14:10:53",
-            "status": "open",
+            "status": {
+              "name": "open",
+              "code": "100"
+            },
             "purchased_items": [
               {
                 "name": "sit",
@@ -5295,6 +6033,13 @@ class MockResponses {
                 "total": "2000"
               }
             ]
+          },
+          'issue': {
+            'identifier': 'fake_identifier',
+            'type': 'wrong_bill',
+            'issue': "My bill is not this",
+            'resolved': true,
+            'updated_at': '2020-05-21T22:27:59.000000Z'
           }
         },
         {
@@ -5367,7 +6112,10 @@ class MockResponses {
             "locked": "1",
             "bill_created_at": "2020-04-28 14:10:53",
             "updated_at": "2020-04-28 14:10:53",
-            "status": "open",
+            "status": {
+              "name": "open",
+              "code": "100"
+            },
             "purchased_items": [
               {
                 "name": "dolores",
@@ -5391,6 +6139,13 @@ class MockResponses {
                 "total": "4000"
               }
             ]
+          },
+          'issue': {
+            'identifier': 'fake_identifier',
+            'type': 'wrong_bill',
+            'issue': "My bill is not this",
+            'resolved': true,
+            'updated_at': '2020-05-21T22:27:59.000000Z'
           }
         },
         {
@@ -5463,7 +6218,10 @@ class MockResponses {
             "locked": "1",
             "bill_created_at": "2020-04-28 14:10:53",
             "updated_at": "2020-04-28 14:10:53",
-            "status": "open",
+            "status": {
+              "name": "open",
+              "code": "100"
+            },
             "purchased_items": [
               {
                 "name": "sit",
@@ -5480,6 +6238,13 @@ class MockResponses {
                 "total": "2000"
               }
             ]
+          },
+          'issue': {
+            'identifier': 'fake_identifier',
+            'type': 'wrong_bill',
+            'issue': "My bill is not this",
+            'resolved': true,
+            'updated_at': '2020-05-21T22:27:59.000000Z'
           }
         },
         {
@@ -5552,7 +6317,10 @@ class MockResponses {
             "locked": "1",
             "bill_created_at": "2020-04-28 14:10:53",
             "updated_at": "2020-04-28 14:10:53",
-            "status": "open",
+            "status": {
+              "name": "open",
+              "code": "100"
+            },
             "purchased_items": [
               {
                 "name": "dolores",
@@ -5576,6 +6344,13 @@ class MockResponses {
                 "total": "4000"
               }
             ]
+          },
+          'issue': {
+            'identifier': 'fake_identifier',
+            'type': 'wrong_bill',
+            'issue': "My bill is not this",
+            'resolved': true,
+            'updated_at': '2020-05-21T22:27:59.000000Z'
           }
         },
         {
@@ -5648,7 +6423,10 @@ class MockResponses {
             "locked": "1",
             "bill_created_at": "2020-04-28 14:10:53",
             "updated_at": "2020-04-28 14:10:53",
-            "status": "open",
+            "status": {
+              "name": "open",
+              "code": "100"
+            },
             "purchased_items": [
               {
                 "name": "sit",
@@ -5665,6 +6443,13 @@ class MockResponses {
                 "total": "2000"
               }
             ]
+          },
+          'issue': {
+            'identifier': 'fake_identifier',
+            'type': 'wrong_bill',
+            'issue': "My bill is not this",
+            'resolved': true,
+            'updated_at': '2020-05-21T22:27:59.000000Z'
           }
         },
         {
@@ -5737,7 +6522,10 @@ class MockResponses {
             "locked": "1",
             "bill_created_at": "2020-04-28 14:10:53",
             "updated_at": "2020-04-28 14:10:53",
-            "status": "open",
+            "status": {
+              "name": "open",
+              "code": "100"
+            },
             "purchased_items": [
               {
                 "name": "dolores",
@@ -5761,6 +6549,13 @@ class MockResponses {
                 "total": "4000"
               }
             ]
+          },
+          'issue': {
+            'identifier': 'fake_identifier',
+            'type': 'wrong_bill',
+            'issue': "My bill is not this",
+            'resolved': true,
+            'updated_at': '2020-05-21T22:27:59.000000Z'
           }
         },
         {
@@ -5833,7 +6628,10 @@ class MockResponses {
             "locked": "1",
             "bill_created_at": "2020-04-28 14:10:53",
             "updated_at": "2020-04-28 14:10:53",
-            "status": "open",
+            "status": {
+              "name": "open",
+              "code": "100"
+            },
             "purchased_items": [
               {
                 "name": "sit",
@@ -5850,6 +6648,13 @@ class MockResponses {
                 "total": "2000"
               }
             ]
+          },
+          'issue': {
+            'identifier': 'fake_identifier',
+            'type': 'wrong_bill',
+            'issue': "My bill is not this",
+            'resolved': true,
+            'updated_at': '2020-05-21T22:27:59.000000Z'
           }
         },
         {
@@ -5922,7 +6727,10 @@ class MockResponses {
             "locked": "1",
             "bill_created_at": "2020-04-28 14:10:53",
             "updated_at": "2020-04-28 14:10:53",
-            "status": "open",
+            "status": {
+              "name": "open",
+              "code": "100"
+            },
             "purchased_items": [
               {
                 "name": "dolores",
@@ -5946,6 +6754,13 @@ class MockResponses {
                 "total": "4000"
               }
             ]
+          },
+          'issue': {
+            'identifier': 'fake_identifier',
+            'type': 'wrong_bill',
+            'issue': "My bill is not this",
+            'resolved': true,
+            'updated_at': '2020-05-21T22:27:59.000000Z'
           }
         },
         {
@@ -6018,7 +6833,10 @@ class MockResponses {
             "locked": "1",
             "bill_created_at": "2020-04-28 14:10:53",
             "updated_at": "2020-04-28 14:10:53",
-            "status": "open",
+            "status": {
+              "name": "open",
+              "code": "100"
+            },
             "purchased_items": [
               {
                 "name": "sit",
@@ -6035,6 +6853,13 @@ class MockResponses {
                 "total": "2000"
               }
             ]
+          },
+          'issue': {
+            'identifier': 'fake_identifier',
+            'type': 'wrong_bill',
+            'issue': "My bill is not this",
+            'resolved': true,
+            'updated_at': '2020-05-21T22:27:59.000000Z'
           }
         },
         {
@@ -6107,7 +6932,10 @@ class MockResponses {
             "locked": "1",
             "bill_created_at": "2020-04-28 14:10:53",
             "updated_at": "2020-04-28 14:10:53",
-            "status": "open",
+            "status": {
+              "name": "open",
+              "code": "100"
+            },
             "purchased_items": [
               {
                 "name": "dolores",
@@ -6131,6 +6959,13 @@ class MockResponses {
                 "total": "4000"
               }
             ]
+          },
+          'issue': {
+            'identifier': 'fake_identifier',
+            'type': 'wrong_bill',
+            'issue': "My bill is not this",
+            'resolved': true,
+            'updated_at': '2020-05-21T22:27:59.000000Z'
           }
         },
         {
@@ -6203,7 +7038,10 @@ class MockResponses {
             "locked": "1",
             "bill_created_at": "2020-04-28 14:10:53",
             "updated_at": "2020-04-28 14:10:53",
-            "status": "open",
+            "status": {
+              "name": "open",
+              "code": "100"
+            },
             "purchased_items": [
               {
                 "name": "sit",
@@ -6220,6 +7058,13 @@ class MockResponses {
                 "total": "2000"
               }
             ]
+          },
+          'issue': {
+            'identifier': 'fake_identifier',
+            'type': 'wrong_bill',
+            'issue': "My bill is not this",
+            'resolved': true,
+            'updated_at': '2020-05-21T22:27:59.000000Z'
           }
         },
         {
@@ -6292,7 +7137,10 @@ class MockResponses {
             "locked": "1",
             "bill_created_at": "2020-04-28 14:10:53",
             "updated_at": "2020-04-28 14:10:53",
-            "status": "open",
+            "status": {
+              "name": "open",
+              "code": "100"
+            },
             "purchased_items": [
               {
                 "name": "dolores",
@@ -6316,6 +7164,13 @@ class MockResponses {
                 "total": "4000"
               }
             ]
+          },
+          'issue': {
+            'identifier': 'fake_identifier',
+            'type': 'wrong_bill',
+            'issue': "My bill is not this",
+            'resolved': true,
+            'updated_at': '2020-05-21T22:27:59.000000Z'
           }
         },
         {
@@ -6388,7 +7243,10 @@ class MockResponses {
             "locked": "1",
             "bill_created_at": "2020-04-28 14:10:53",
             "updated_at": "2020-04-28 14:10:53",
-            "status": "open",
+            "status": {
+              "name": "open",
+              "code": "100"
+            },
             "purchased_items": [
               {
                 "name": "sit",
@@ -6405,6 +7263,13 @@ class MockResponses {
                 "total": "2000"
               }
             ]
+          },
+          'issue': {
+            'identifier': 'fake_identifier',
+            'type': 'wrong_bill',
+            'issue': "My bill is not this",
+            'resolved': true,
+            'updated_at': '2020-05-21T22:27:59.000000Z'
           }
         },
         {
@@ -6477,7 +7342,10 @@ class MockResponses {
             "locked": "1",
             "bill_created_at": "2020-04-28 14:10:53",
             "updated_at": "2020-04-28 14:10:53",
-            "status": "open",
+            "status": {
+              "name": "open",
+              "code": "100"
+            },
             "purchased_items": [
               {
                 "name": "dolores",
@@ -6501,6 +7369,13 @@ class MockResponses {
                 "total": "4000"
               }
             ]
+          },
+          'issue': {
+            'identifier': 'fake_identifier',
+            'type': 'wrong_bill',
+            'issue': "My bill is not this",
+            'resolved': true,
+            'updated_at': '2020-05-21T22:27:59.000000Z'
           }
         }
       ],
@@ -6595,7 +7470,10 @@ class MockResponses {
             "locked": "1",
             "bill_created_at": "2020-04-28 14:10:53",
             "updated_at": "2020-04-28 14:10:53",
-            "status": "open",
+            "status": {
+              "name": "open",
+              "code": "100"
+            },
             "purchased_items": [
               {
                 "name": "sit",
@@ -6612,6 +7490,13 @@ class MockResponses {
                 "total": "2000"
               }
             ]
+          },
+          'issue': {
+            'identifier': 'fake_identifier',
+            'type': 'wrong_bill',
+            'issue': "My bill is not this",
+            'resolved': true,
+            'updated_at': '2020-05-21T22:27:59.000000Z'
           }
         },
         {
@@ -6684,7 +7569,10 @@ class MockResponses {
             "locked": "1",
             "bill_created_at": "2020-04-28 14:10:53",
             "updated_at": "2020-04-28 14:10:53",
-            "status": "open",
+            "status": {
+              "name": "open",
+              "code": "100"
+            },
             "purchased_items": [
               {
                 "name": "dolores",
@@ -6708,6 +7596,13 @@ class MockResponses {
                 "total": "4000"
               }
             ]
+          },
+          'issue': {
+            'identifier': 'fake_identifier',
+            'type': 'wrong_bill',
+            'issue': "My bill is not this",
+            'resolved': true,
+            'updated_at': '2020-05-21T22:27:59.000000Z'
           }
         },
         {
@@ -6780,7 +7675,10 @@ class MockResponses {
             "locked": "1",
             "bill_created_at": "2020-04-28 14:10:53",
             "updated_at": "2020-04-28 14:10:53",
-            "status": "open",
+            "status": {
+              "name": "open",
+              "code": "100"
+            },
             "purchased_items": [
               {
                 "name": "sit",
@@ -6797,6 +7695,13 @@ class MockResponses {
                 "total": "2000"
               }
             ]
+          }, 
+          'issue': {
+            'identifier': 'fake_identifier',
+            'type': 'wrong_bill',
+            'issue': "My bill is not this",
+            'resolved': true,
+            'updated_at': '2020-05-21T22:27:59.000000Z'
           }
         },
         {
@@ -6869,7 +7774,10 @@ class MockResponses {
             "locked": "1",
             "bill_created_at": "2020-04-28 14:10:53",
             "updated_at": "2020-04-28 14:10:53",
-            "status": "open",
+            "status": {
+              "name": "open",
+              "code": "100"
+            },
             "purchased_items": [
               {
                 "name": "dolores",
@@ -6893,6 +7801,13 @@ class MockResponses {
                 "total": "4000"
               }
             ]
+          },
+          'issue': {
+            'identifier': 'fake_identifier',
+            'type': 'wrong_bill',
+            'issue': "My bill is not this",
+            'resolved': true,
+            'updated_at': '2020-05-21T22:27:59.000000Z'
           }
         },
         {
@@ -6965,7 +7880,10 @@ class MockResponses {
             "locked": "1",
             "bill_created_at": "2020-04-28 14:10:53",
             "updated_at": "2020-04-28 14:10:53",
-            "status": "open",
+            "status": {
+              "name": "open",
+              "code": "100"
+            },
             "purchased_items": [
               {
                 "name": "sit",
@@ -6982,6 +7900,13 @@ class MockResponses {
                 "total": "2000"
               }
             ]
+          },
+          'issue': {
+            'identifier': 'fake_identifier',
+            'type': 'wrong_bill',
+            'issue': "My bill is not this",
+            'resolved': true,
+            'updated_at': '2020-05-21T22:27:59.000000Z'
           }
         },
         {
@@ -7054,7 +7979,10 @@ class MockResponses {
             "locked": "1",
             "bill_created_at": "2020-04-28 14:10:53",
             "updated_at": "2020-04-28 14:10:53",
-            "status": "open",
+            "status": {
+              "name": "open",
+              "code": "100"
+            },
             "purchased_items": [
               {
                 "name": "dolores",
@@ -7078,6 +8006,13 @@ class MockResponses {
                 "total": "4000"
               }
             ]
+          },
+          'issue': {
+            'identifier': 'fake_identifier',
+            'type': 'wrong_bill',
+            'issue': "My bill is not this",
+            'resolved': true,
+            'updated_at': '2020-05-21T22:27:59.000000Z'
           }
         },
         {
@@ -7150,7 +8085,10 @@ class MockResponses {
             "locked": "1",
             "bill_created_at": "2020-04-28 14:10:53",
             "updated_at": "2020-04-28 14:10:53",
-            "status": "open",
+            "status": {
+              "name": "open",
+              "code": "100"
+            },
             "purchased_items": [
               {
                 "name": "sit",
@@ -7167,6 +8105,13 @@ class MockResponses {
                 "total": "2000"
               }
             ]
+          },
+          'issue': {
+            'identifier': 'fake_identifier',
+            'type': 'wrong_bill',
+            'issue': "My bill is not this",
+            'resolved': true,
+            'updated_at': '2020-05-21T22:27:59.000000Z'
           }
         },
         {
@@ -7239,7 +8184,10 @@ class MockResponses {
             "locked": "1",
             "bill_created_at": "2020-04-28 14:10:53",
             "updated_at": "2020-04-28 14:10:53",
-            "status": "open",
+            "status": {
+              "name": "open",
+              "code": "100"
+            },
             "purchased_items": [
               {
                 "name": "dolores",
@@ -7263,6 +8211,13 @@ class MockResponses {
                 "total": "4000"
               }
             ]
+          },
+          'issue': {
+            'identifier': 'fake_identifier',
+            'type': 'wrong_bill',
+            'issue': "My bill is not this",
+            'resolved': true,
+            'updated_at': '2020-05-21T22:27:59.000000Z'
           }
         },
         {
@@ -7335,7 +8290,10 @@ class MockResponses {
             "locked": "1",
             "bill_created_at": "2020-04-28 14:10:53",
             "updated_at": "2020-04-28 14:10:53",
-            "status": "open",
+            "status": {
+              "name": "open",
+              "code": "100"
+            },
             "purchased_items": [
               {
                 "name": "sit",
@@ -7352,6 +8310,13 @@ class MockResponses {
                 "total": "2000"
               }
             ]
+          },
+          'issue': {
+            'identifier': 'fake_identifier',
+            'type': 'wrong_bill',
+            'issue': "My bill is not this",
+            'resolved': true,
+            'updated_at': '2020-05-21T22:27:59.000000Z'
           }
         },
         {
@@ -7424,7 +8389,10 @@ class MockResponses {
             "locked": "1",
             "bill_created_at": "2020-04-28 14:10:53",
             "updated_at": "2020-04-28 14:10:53",
-            "status": "open",
+            "status": {
+              "name": "open",
+              "code": "100"
+            },
             "purchased_items": [
               {
                 "name": "dolores",
@@ -7448,6 +8416,13 @@ class MockResponses {
                 "total": "4000"
               }
             ]
+          },
+          'issue': {
+            'identifier': 'fake_identifier',
+            'type': 'wrong_bill',
+            'issue': "My bill is not this",
+            'resolved': true,
+            'updated_at': '2020-05-21T22:27:59.000000Z'
           }
         },
         {
@@ -7520,7 +8495,10 @@ class MockResponses {
             "locked": "1",
             "bill_created_at": "2020-04-28 14:10:53",
             "updated_at": "2020-04-28 14:10:53",
-            "status": "open",
+            "status": {
+              "name": "open",
+              "code": "100"
+            },
             "purchased_items": [
               {
                 "name": "sit",
@@ -7537,6 +8515,13 @@ class MockResponses {
                 "total": "2000"
               }
             ]
+          },
+          'issue': {
+            'identifier': 'fake_identifier',
+            'type': 'wrong_bill',
+            'issue': "My bill is not this",
+            'resolved': true,
+            'updated_at': '2020-05-21T22:27:59.000000Z'
           }
         },
         {
@@ -7609,7 +8594,10 @@ class MockResponses {
             "locked": "1",
             "bill_created_at": "2020-04-28 14:10:53",
             "updated_at": "2020-04-28 14:10:53",
-            "status": "open",
+            "status": {
+              "name": "open",
+              "code": "100"
+            },
             "purchased_items": [
               {
                 "name": "dolores",
@@ -7633,6 +8621,13 @@ class MockResponses {
                 "total": "4000"
               }
             ]
+          },
+          'issue': {
+            'identifier': 'fake_identifier',
+            'type': 'wrong_bill',
+            'issue': "My bill is not this",
+            'resolved': true,
+            'updated_at': '2020-05-21T22:27:59.000000Z'
           }
         },
         {
@@ -7705,7 +8700,10 @@ class MockResponses {
             "locked": "1",
             "bill_created_at": "2020-04-28 14:10:53",
             "updated_at": "2020-04-28 14:10:53",
-            "status": "open",
+            "status": {
+              "name": "open",
+              "code": "100"
+            },
             "purchased_items": [
               {
                 "name": "sit",
@@ -7722,6 +8720,13 @@ class MockResponses {
                 "total": "2000"
               }
             ]
+          },
+          'issue': {
+            'identifier': 'fake_identifier',
+            'type': 'wrong_bill',
+            'issue': "My bill is not this",
+            'resolved': true,
+            'updated_at': '2020-05-21T22:27:59.000000Z'
           }
         },
         {
@@ -7794,7 +8799,10 @@ class MockResponses {
             "locked": "1",
             "bill_created_at": "2020-04-28 14:10:53",
             "updated_at": "2020-04-28 14:10:53",
-            "status": "open",
+            "status": {
+              "name": "open",
+              "code": "100"
+            },
             "purchased_items": [
               {
                 "name": "dolores",
@@ -7818,6 +8826,13 @@ class MockResponses {
                 "total": "4000"
               }
             ]
+          },
+          'issue': {
+            'identifier': 'fake_identifier',
+            'type': 'wrong_bill',
+            'issue': "My bill is not this",
+            'resolved': true,
+            'updated_at': '2020-05-21T22:27:59.000000Z'
           }
         },
         {
@@ -7890,7 +8905,10 @@ class MockResponses {
             "locked": "1",
             "bill_created_at": "2020-04-28 14:10:53",
             "updated_at": "2020-04-28 14:10:53",
-            "status": "open",
+            "status": {
+              "name": "open",
+              "code": "100"
+            },
             "purchased_items": [
               {
                 "name": "sit",
@@ -7907,6 +8925,13 @@ class MockResponses {
                 "total": "2000"
               }
             ]
+          },
+          'issue': {
+            'identifier': 'fake_identifier',
+            'type': 'wrong_bill',
+            'issue': "My bill is not this",
+            'resolved': true,
+            'updated_at': '2020-05-21T22:27:59.000000Z'
           }
         },
         {
@@ -7979,7 +9004,10 @@ class MockResponses {
             "locked": "1",
             "bill_created_at": "2020-04-28 14:10:53",
             "updated_at": "2020-04-28 14:10:53",
-            "status": "open",
+            "status": {
+              "name": "open",
+              "code": "100"
+            },
             "purchased_items": [
               {
                 "name": "dolores",
@@ -8003,6 +9031,13 @@ class MockResponses {
                 "total": "4000"
               }
             ]
+          },
+          'issue': {
+            'identifier': 'fake_identifier',
+            'type': 'wrong_bill',
+            'issue': "My bill is not this",
+            'resolved': true,
+            'updated_at': '2020-05-21T22:27:59.000000Z'
           }
         }
       ],

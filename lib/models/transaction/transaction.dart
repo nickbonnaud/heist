@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:meta/meta.dart';
 
 import 'purchased_item.dart';
+import 'status.dart';
 
 class Transaction extends Equatable {
   final String identifier;
@@ -12,7 +13,7 @@ class Transaction extends Equatable {
   final int total;
   final String billCreatedAt;
   final String billUpdatedAt;
-  final String status;
+  final Status status;
   final List<PurchasedItem> purchasedItems;
 
   Transaction({
@@ -36,7 +37,7 @@ class Transaction extends Equatable {
       total: int.parse(json['total']),
       billCreatedAt: DateFormat('E, MMM d').format(DateTime.parse(json['bill_created_at'])),
       billUpdatedAt: DateFormat('E, MMM d').format(DateTime.parse(json['updated_at'])),
-      status: json['status'],
+      status: Status.fromJson(json['status']),
       purchasedItems: (json['purchased_items'] as List).map((jsonPurchasedItem) {
         return PurchasedItem.fromJson(jsonPurchasedItem);
       }).toList()

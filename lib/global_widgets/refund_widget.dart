@@ -50,7 +50,8 @@ class RefundWidget extends StatelessWidget {
     TransactionResource transactionResource = TransactionResource(
       transaction: _refundResource.transaction,
       business: _refundResource.business,
-      refund: [_refundResource.refund].toList(), 
+      refunds: [_refundResource.refund].toList(),
+      issue: _refundResource.issue,
       error: null
     );
     BlocProvider.of<DefaultAppBarBloc>(context).add(Rotate());

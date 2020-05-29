@@ -158,7 +158,7 @@ class _ProfileFormState extends State<ProfileForm> {
                           return RaisedButton(
                             color: Colors.green,
                             disabledColor: Colors.green.shade100,
-                            shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
                             onPressed: _isSaveButtonEnabled(state) ? () => _saveButtonPressed(state) : null,
                             child: _createButtonText(state),
                           );

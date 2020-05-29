@@ -67,9 +67,9 @@ class _AnimatedLeadingIconState extends State<AnimatedLeadingIcon> with TickerPr
   
   @override
   void initState() {
+    super.initState();
     _rotateAnimationController = AnimationController(vsync: this, duration: Duration(milliseconds: 300));
     _rotateAnimation = Tween(begin: 0.0, end: - pi / 2).animate(_rotateAnimationController);
-    super.initState();
   }
   
   @override

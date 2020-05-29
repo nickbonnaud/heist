@@ -18,6 +18,8 @@ class OpenTransactionsBloc extends Bloc<OpenTransactionsEvent, OpenTransactionsS
       yield* _mapAddOpenTransactionToState(event);
     } else if (event is RemoveOpenTransaction) {
       yield* _mapRemoveOpenTransactionToState(event);
+    } else if (event is UpdateOpenTransaction) {
+      yield* _mapUpdateOpenTransactionToState(event);
     }
   }
 
@@ -42,6 +44,19 @@ class OpenTransactionsBloc extends Bloc<OpenTransactionsEvent, OpenTransactionsS
       yield updatedTransactions.length == 0
         ? NoOpenTransactions()
         : HasOpenTransactions(transactions: updatedTransactions);
+    }
+  }
+
+  Stream<OpenTransactionsState> _mapUpdateOpenTransactionToState(UpdateOpenTransaction event) async* {
+    final currentState = state;
+    if (currentState is HasOpenTransactions) {
+      final List<TransactionResource> updatedTransactions = currentState
+        .transactions
+        .where((transaction) => transaction.transaction.identifier != event.transaction.transaction.identifier)
+        .toList()
+        ..add(event.transaction);
+      
+      yield HasOpenTransactions(transactions: updatedTransactions);
     }
   }
 }

@@ -27,3 +27,15 @@ class RemoveOpenTransaction extends OpenTransactionsEvent {
   @override
   String toString() => 'RemoveOpenTransaction { transaction: $transaction }';
 }
+
+class UpdateOpenTransaction extends OpenTransactionsEvent {
+  final TransactionResource transaction;
+
+  const UpdateOpenTransaction({@required this.transaction});
+
+  @override
+  List<Object> get props => [transaction];
+
+   @override
+  String toString() => 'UpdateOpenTransaction { transaction: $transaction }';
+}

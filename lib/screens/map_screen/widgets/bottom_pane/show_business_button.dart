@@ -4,18 +4,18 @@ import 'package:heist/models/business/business.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/screens/business_screen/business_screen.dart';
 
-class LogoButton extends StatefulWidget {
+class ShowBusinessButton extends StatefulWidget {
   final Business _business;
 
-  LogoButton({@required Business business})
+  ShowBusinessButton({@required Business business})
     : assert(business != null),
       _business = business;
 
   @override
-  State<LogoButton> createState() => _LogoButtonState();
+  State<ShowBusinessButton> createState() => _ShowBusinessButtonState();
 }
 
-class _LogoButtonState extends State<LogoButton> {
+class _ShowBusinessButtonState extends State<ShowBusinessButton> {
   bool _buttonDown = false;
 
   @override

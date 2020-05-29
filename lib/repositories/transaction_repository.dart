@@ -66,6 +66,14 @@ class TransactionRepository {
     return TransactionResource.withError(response.error);
   }
 
+  Future<TransactionResource> approveTransaction({@required String transactionId}) async {
+    final ApiResponse response = await _transactionProvider.patchStatus(transactionId: transactionId, statusCode: 104);
+    if (response.isOK) {
+      return TransactionResource.fromJson(response.body);
+    }
+    return TransactionResource.withError(response.error);
+  }
+
   PaginateDataHolder _handleSuccess(PaginatedApiResponse response) {
     final rawData = response.body as List;
     List<TransactionResource> data = rawData.map((rawTransaction) {

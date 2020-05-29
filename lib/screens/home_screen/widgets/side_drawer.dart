@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:heist/models/business/business.dart';
+import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
 import 'package:heist/screens/historic_transactions_screen/historic_transactions_screen.dart';
 import 'package:heist/screens/home_screen/bloc/side_menu_bloc.dart';
@@ -122,32 +123,17 @@ class _SideDrawerState extends State<SideDrawer> with TickerProviderStateMixin {
                       absorbing: state.menuOpened && _disableContentTap,
                       child: Stack(
                         children: <Widget>[
-                          Column(
-                            children: <Widget>[
-                              Expanded(
-                                child: Container(
-                                  padding: EdgeInsets.symmetric(vertical: 32.0),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.all(Radius.circular(_shadowBorderRadius)),
-                                    child: Container(
-                                      color: Colors.white.withAlpha(128),
-                                    ),
-                                  ),
-                                )
+                          Padding(
+                            padding: EdgeInsets.only(left: animation.value * _shadowOffset),
+                            child: ClipRRect(
+                              borderRadius: radiusAnimation.value,
+                              child: Container(
+                                height: MediaQuery.of(context).size.height,
+                                width: MediaQuery.of(context).size.width,
+                                color: Colors.white,
+                                child: widget._homeScreen,
                               ),
-                              Padding(
-                                padding: EdgeInsets.only(left: animation.value * _shadowOffset),
-                                child: ClipRRect(
-                                  borderRadius: radiusAnimation.value,
-                                  child: Container(
-                                    height: MediaQuery.of(context).size.height,
-                                    width: MediaQuery.of(context).size.width,
-                                    color: Colors.white,
-                                    child: widget._homeScreen,
-                                  ),
-                                ),
-                              )
-                            ],
+                            ),
                           )
                         ],
                       ),
@@ -193,7 +179,8 @@ class Drawer extends StatelessWidget {
       ),
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: 64.0),
-        child: Column(
+        child: ListView(
+          physics: NeverScrollableScrollPhysics(),
           children: <Widget>[
             Container(
               child: Align(
@@ -208,102 +195,101 @@ class Drawer extends StatelessWidget {
                 ),
               ),
             ),
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  DrawerItem(
-                    onPressed: () => Navigator.push(
-                      context, 
-                      platformPageRoute(
-                        context: context, 
-                        builder: (_) => HistoricTransactionsScreen()
-                      )
-                    ), 
-                    text: 'Transactions',
-                    icon: PlatformWidget(
-                      android: (_) => Icon(Icons.receipt),
-                      ios: (_) => Icon(IconData(
-                        0xF472,
-                        fontFamily: CupertinoIcons.iconFont,
-                        fontPackage: CupertinoIcons.iconFontPackage
-                      )),
-                    )
-                  ),
-                  DrawerItem(
-                    onPressed: () => Navigator.push(
-                      context, 
-                      platformPageRoute(
-                        context: context, 
-                        builder: (_) => RefundsScreen()
-                      )
-                    ), 
-                    text: 'Refunds',
-                    icon: PlatformWidget(
-                      android: (_) => Icon(Icons.undo),
-                      ios: (_) => Icon(IconData(
-                        0xF21E,
-                        fontFamily: CupertinoIcons.iconFont,
-                        fontPackage: CupertinoIcons.iconFontPackage
-                      )),
-                    )
-                  ),
-                  DrawerItem(
-                    onPressed: () => Navigator.push(
-                      context,
-                      platformPageRoute(
-                        context: context,
-                        builder: (_) => SettingsScreen()
-                      )
-                    ),
-                    text: 'Settings',
-                    icon: Icon(context.platformIcons.settings)
-                  ),
-                  DrawerItem(
-                    onPressed: () => showPlatformModalSheet(
+            SizedBox(height: SizeConfig.getHeight(8)),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                DrawerItem(
+                  onPressed: () => Navigator.push(
+                    context, 
+                    platformPageRoute(
                       context: context, 
-                      builder: (_) => TutorialScreen()
-                    ),
-                    text: 'Tutorial', 
-                    icon: PlatformWidget(
-                      android: (_) => Icon(Icons.lightbulb_outline),
-                      ios: (_) => Icon(IconData(
-                        0xF451,
-                        fontFamily: CupertinoIcons.iconFont,
-                        fontPackage: CupertinoIcons.iconFontPackage
-                      )),
+                      builder: (_) => HistoricTransactionsScreen()
                     )
-                  ),
-                  DrawerItem(
-                    onPressed: () => print('pressed'),
-                    text: 'Help',
-                    icon: PlatformWidget(
-                      android: (_) => Icon(Icons.live_help),
-                      ios: (_) => Icon(IconData(
-                        0xF445,
-                        fontFamily: CupertinoIcons.iconFont,
-                        fontPackage: CupertinoIcons.iconFontPackage
-                      )),
-                    )
-                  ),
-                  DrawerItem(
-                    onPressed: () => showPlatformModalSheet(
-                      context: context, 
-                      builder: (_) => OnboardScreen()
-                    ),
-                    text: 'Onboard',
-                    icon: PlatformWidget(
-                      android: (_) => Icon(Icons.live_help),
-                      ios: (_) => Icon(IconData(
-                        0xF445,
-                        fontFamily: CupertinoIcons.iconFont,
-                        fontPackage: CupertinoIcons.iconFontPackage
-                      )),
-                    )
+                  ), 
+                  text: 'Transactions',
+                  icon: PlatformWidget(
+                    android: (_) => Icon(Icons.receipt),
+                    ios: (_) => Icon(IconData(
+                      0xF472,
+                      fontFamily: CupertinoIcons.iconFont,
+                      fontPackage: CupertinoIcons.iconFontPackage
+                    )),
                   )
-                ],
-              )
-            ),
+                ),
+                DrawerItem(
+                  onPressed: () => Navigator.push(
+                    context, 
+                    platformPageRoute(
+                      context: context, 
+                      builder: (_) => RefundsScreen()
+                    )
+                  ), 
+                  text: 'Refunds',
+                  icon: PlatformWidget(
+                    android: (_) => Icon(Icons.undo),
+                    ios: (_) => Icon(IconData(
+                      0xF21E,
+                      fontFamily: CupertinoIcons.iconFont,
+                      fontPackage: CupertinoIcons.iconFontPackage
+                    )),
+                  )
+                ),
+                DrawerItem(
+                  onPressed: () => Navigator.push(
+                    context,
+                    platformPageRoute(
+                      context: context,
+                      builder: (_) => SettingsScreen()
+                    )
+                  ),
+                  text: 'Settings',
+                  icon: Icon(context.platformIcons.settings)
+                ),
+                DrawerItem(
+                  onPressed: () => showPlatformModalSheet(
+                    context: context, 
+                    builder: (_) => TutorialScreen()
+                  ),
+                  text: 'Tutorial', 
+                  icon: PlatformWidget(
+                    android: (_) => Icon(Icons.lightbulb_outline),
+                    ios: (_) => Icon(IconData(
+                      0xF451,
+                      fontFamily: CupertinoIcons.iconFont,
+                      fontPackage: CupertinoIcons.iconFontPackage
+                    )),
+                  )
+                ),
+                DrawerItem(
+                  onPressed: () => print('pressed'),
+                  text: 'Help',
+                  icon: PlatformWidget(
+                    android: (_) => Icon(Icons.live_help),
+                    ios: (_) => Icon(IconData(
+                      0xF445,
+                      fontFamily: CupertinoIcons.iconFont,
+                      fontPackage: CupertinoIcons.iconFontPackage
+                    )),
+                  )
+                ),
+                DrawerItem(
+                  onPressed: () => showPlatformModalSheet(
+                    context: context, 
+                    builder: (_) => OnboardScreen()
+                  ),
+                  text: 'Onboard',
+                  icon: PlatformWidget(
+                    android: (_) => Icon(Icons.live_help),
+                    ios: (_) => Icon(IconData(
+                      0xF445,
+                      fontFamily: CupertinoIcons.iconFont,
+                      fontPackage: CupertinoIcons.iconFontPackage
+                    )),
+                  )
+                )
+              ],
+            )
           ],
         ),
       ),

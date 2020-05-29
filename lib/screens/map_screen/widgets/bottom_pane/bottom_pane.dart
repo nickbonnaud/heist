@@ -4,6 +4,7 @@ import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:heist/blocs/customer/customer_bloc.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
+import 'package:heist/screens/map_screen/widgets/bottom_pane/open_transactions_list.dart';
 
 import 'active_location_list.dart';
 import 'customer_welcome_message.dart';
@@ -12,7 +13,7 @@ class BottomPane extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         Container(
           decoration: BoxDecoration(
@@ -29,9 +30,9 @@ class BottomPane extends StatelessWidget {
         ),
         SizedBox(height: SizeConfig.getHeight(2)),
         CustomerWelcomeMessage(),
-        SizedBox(height: SizeConfig.getHeight(3)),
+        SizedBox(height: SizeConfig.getHeight(1)),
+        OpenTransactionsList(),
         ActiveLocationList(),
-        SizedBox(height: SizeConfig.getHeight(2)),
       ],
     );
   }

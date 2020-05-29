@@ -9,8 +9,11 @@ import 'package:heist/blocs/beacon/beacon_bloc.dart';
 import 'package:heist/blocs/customer/customer_bloc.dart';
 import 'package:heist/blocs/geo_location/geo_location_bloc.dart';
 import 'package:heist/blocs/nearby_businesses/nearby_businesses_bloc.dart';
+import 'package:heist/blocs/open_transactions/open_transactions_bloc.dart';
 import 'package:heist/blocs/permissions/permissions_bloc.dart';
 import 'package:heist/blocs/push_notification/push_notification_bloc.dart';
+import 'package:heist/models/paginate_data_holder.dart';
+import 'package:heist/models/transaction/transaction_resource.dart';
 import 'package:heist/repositories/active_location_repository.dart';
 import 'package:heist/repositories/beacon_repository.dart';
 import 'package:heist/repositories/customer_repository.dart';
@@ -18,7 +21,9 @@ import 'package:heist/repositories/geolocator_repository.dart';
 import 'package:heist/repositories/initial_login_repository.dart';
 import 'package:heist/repositories/location_repository.dart';
 import 'package:heist/repositories/push_notification_repository.dart';
+import 'package:heist/repositories/transaction_repository.dart';
 import 'package:heist/resources/constants.dart';
+import 'package:heist/resources/http/mock_responses.dart';
 import 'package:heist/themes/default_theme.dart';
 
 import 'screens/home_screen/home_screen.dart';
@@ -66,6 +71,9 @@ void main() {
         BlocProvider<PermissionsBloc>(
           create: (BuildContext context) => PermissionsBloc(initialLoginRepository: _initialLoginRepository)
         ),
+        BlocProvider<OpenTransactionsBloc>(
+          create: (BuildContext context) => OpenTransactionsBloc(),
+        )
       ],
       child: App()
     )
@@ -99,11 +107,15 @@ class App extends StatelessWidget {
             if (state is NearbyBusinessLoaded) {
               BlocProvider.of<BeaconBloc>(context)..add(StartBeaconMonitoring(businesses: state.businesses));
 
-              // remove this. just for building active locations
+            // remove this. just for building active locations
               state.businesses.forEach((business) {
                 BlocProvider.of<ActiveLocationBloc>(context).add(NewActiveLocation(beaconIdentifier: business.location.beacon.identifier));
               });
             }
+
+            // remove this as well
+            TransactionResource transaction = TransactionResource.fromJson(MockResponses.mockOpenTransaction());
+            BlocProvider.of<OpenTransactionsBloc>(context).add(AddOpenTransaction(transaction: transaction));
           },
         ),
         BlocListener<PushNotificationBloc, PushNotificationState>(

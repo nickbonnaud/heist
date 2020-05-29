@@ -8,9 +8,9 @@ class TransactionProvider {
   final Api _api = Api();
 
   Future<PaginatedApiResponse> fetch({@required String query}) async {
-    String url = 'transaction?$query';
+    final String url = 'transaction?$query';
     try {
-      Response response = await this._api.get(url);
+      Response response = await _api.get(url);
       return PaginatedApiResponse(body: response.data, error: null, isOK: true, nextPageString: response.extra['next'].toString());
     } on DioError catch (error) {
       return _formatErrorPaginated(error);
@@ -18,9 +18,9 @@ class TransactionProvider {
   }
 
   Future<ApiResponse> fetchUnassigned({@required String buinessIdentifier}) async {
-    String url = 'unassigned-transaction?business_id=$buinessIdentifier';
+    final String url = 'unassigned-transaction?business_id=$buinessIdentifier';
     try {
-      Response response = await this._api.get(url);
+      Response response = await _api.get(url);
       return ApiResponse(body: response.data, error: null, isOK: true);
     } on DioError catch (error) {
       return _formatError(error);
@@ -28,9 +28,23 @@ class TransactionProvider {
   }
 
   Future<ApiResponse> patchUnassigned({@required String transactionId}) async {
-    String url = 'unassigned-transaction/$transactionId';
+    final String url = 'unassigned-transaction/$transactionId';
     try {
-      Response response = await this._api.patch(url, {});
+      Response response = await _api.patch(url, {});
+      return ApiResponse(body: response.data, error: null, isOK: true);
+    } on DioError catch (error) {
+      return _formatError(error);
+    }
+  }
+
+  Future<ApiResponse> patchStatus({@required String transactionId, @required int statusCode}) async {
+    final String url = 'transaction/$transactionId';
+    final Map body = {
+      'status_code': statusCode
+    };
+    
+    try {
+      Response response = await _api.patch(url, body);
       return ApiResponse(body: response.data, error: null, isOK: true);
     } on DioError catch (error) {
       return _formatError(error);

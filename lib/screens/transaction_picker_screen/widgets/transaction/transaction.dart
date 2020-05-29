@@ -36,11 +36,6 @@ class _TransactionState extends State<Transaction> {
   final TransformerPageController _underlayController = TransformerPageController();
   
   @override
-  void initState() {
-    super.initState();
-  }
-  
-  @override
   Widget build(BuildContext context) {
     return BlocListener<TransactionPickerScreenBloc, TransactionPickerScreenState>(
       listener: (context, state) {
