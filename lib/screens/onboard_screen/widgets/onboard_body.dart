@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
+import 'package:heist/blocs/permissions/permissions_bloc.dart';
 import 'package:heist/resources/constants.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
@@ -9,11 +10,16 @@ import 'package:heist/screens/onboard_screen/bloc/onboard_bloc.dart';
 import 'package:heist/screens/permission_screen/permission_screen.dart';
 import 'package:heist/screens/profile_setup_screen/profile_setup_screen.dart';
 import 'package:heist/screens/tutorial_screen/tutorial_screen.dart';
-import 'package:vibrate/vibrate.dart';
 
 class OnboardBody extends StatelessWidget {
-  final int totalSteps = 3;
+  final bool _customerOnboarded;
+  final bool _permissionsReady;
 
+  OnboardBody({@required bool customerOnboarded, @required permissionsReady})
+    : assert(customerOnboarded != null && permissionsReady != null),
+      _customerOnboarded = customerOnboarded,
+      _permissionsReady = permissionsReady;
+  
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -33,26 +39,26 @@ class OnboardBody extends StatelessWidget {
                       title: BoldText(text: "Onboard", size: SizeConfig.getWidth(8), color: currentStep == 0 ? Colors.black : Colors.black26), 
                       content: BoldText(text: "Let's get Started! Don't worry it's only a few steps.", size: SizeConfig.getWidth(6), color: Colors.black54),
                       isActive: currentStep == 0,
-                      state: currentStep == 0 ? StepState.editing : currentStep > 0 ? StepState.complete : StepState.indexed
+                      state: _setCurrentStepState(currentStep: currentStep, stepIndex: 0)
                     ),
                     Step(
-                      title: BoldText(text: "Profile", size: SizeConfig.getWidth(8), color: currentStep == 1 ? Colors.black : Colors.black26), 
-                      content: BoldText(text: "First let's setup your Profile Account!", size: SizeConfig.getWidth(6), color: Colors.black54),
+                      title: BoldText(text: _customerOnboarded ? "Profile Completed" : "Profile", size: SizeConfig.getWidth(8), color: currentStep == 1 ? Colors.black : Colors.black26), 
+                      content: BoldText(text: _customerOnboarded ? "Go to next step." : "First let's setup your Profile Account!", size: SizeConfig.getWidth(6), color: Colors.black54),
                       isActive: currentStep == 1,
-                      state: currentStep == 0 ? StepState.editing : currentStep > 1 ? StepState.complete : StepState.indexed
+                      state: _setCurrentStepState(currentStep: currentStep, stepIndex: 1)
                     ),
                     Step(
                       title: BoldText(text: "Tutorial", size: SizeConfig.getWidth(8), color: currentStep == 2 ? Colors.black : Colors.black26), 
-                      content: BoldText(text: "Next let's learn how to use ${Constants.appName}!", size: SizeConfig.getWidth(6), color: Colors.black54),
+                      content: BoldText(text: "Learn how to use ${Constants.appName}!", size: SizeConfig.getWidth(6), color: Colors.black54),
                       isActive: currentStep == 2,
-                      state: currentStep == 0 ? StepState.editing : currentStep > 2 ? StepState.complete : StepState.indexed
+                      state: _setCurrentStepState(currentStep: currentStep, stepIndex: 2)
                     ),
                     Step(
-                      title: BoldText(text: "Permissions", size: SizeConfig.getWidth(8), color: currentStep == 3 ? Colors.black : Colors.black26), 
-                      content: BoldText(text: "Lastly let's configure your permissions!", size: SizeConfig.getWidth(6), color: Colors.black54),
+                      title: BoldText(text: _permissionsReady ? "Permissions Complete" : "Permissions", size: SizeConfig.getWidth(8), color: currentStep == 3 ? Colors.black : Colors.black26), 
+                      content: BoldText(text: _permissionsReady ? "Finish" : "Lastly let's configure your permissions!", size: SizeConfig.getWidth(6), color: Colors.black54),
                       isActive: currentStep == 3,
-                      state: currentStep == 0 ? StepState.editing : currentStep > 3 ? StepState.complete : StepState.indexed
-                    )
+                      state: _setCurrentStepState(currentStep: currentStep, stepIndex: 3)
+                    ),
                   ],
                   controlsBuilder: (
                     BuildContext context,
@@ -71,87 +77,67 @@ class OnboardBody extends StatelessWidget {
       )  
     );
   }
+  
+  StepState _setCurrentStepState({@required int currentStep, @required int stepIndex}) {
+    if (stepIndex == 1 && _customerOnboarded) {
+      return StepState.complete;
+    }
 
+    if (stepIndex == 3 && _permissionsReady) {
+      return StepState.complete;
+    }
+
+    if (currentStep > stepIndex) {
+      return StepState.complete;
+    } else if (currentStep == stepIndex) {
+      return StepState.editing;
+    } else return StepState.indexed;
+  }
+  
   void _showOnboardScreen(BuildContext context, int currentStep) {
     switch (currentStep) {
       case 0:
         BlocProvider.of<OnboardBloc>(context).add(OnboardEvent.next);
         break;
       case 1:
-        showModal(context, ProfileSetupScreen(), false);
+        _customerOnboarded
+          ? BlocProvider.of<OnboardBloc>(context).add(OnboardEvent.next)
+          : _showModal(context: context, screen: ProfileSetupScreen());
         break;
       case 2:
-        showModal(context, TutorialScreen(), false);
+        _showModal(context: context, screen: TutorialScreen());
         break;
       case 3:
-        showModal(context, PermissionsScreen(), true);
+        if (!_permissionsReady) _showModal(context: context, screen: PermissionsScreen(permissionsBloc: BlocProvider.of<PermissionsBloc>(context)), lastScreen: true);
         break;
     }
   }
 
   String _buttonText(int currentStep) {
+    String buttonText;
     switch (currentStep) {
       case 0:
-        return "Start";
+        buttonText = "Start";
         break;
       case 1:
-        return "Setup Account";
+        buttonText = _customerOnboarded ? "Next Step" : "Setup Account";
         break;
       case 2:
-        return "View Tutorial";
+        buttonText = "View Tutorial";
         break;
       case 3:
-        return "Set Permissions";
+        buttonText = _permissionsReady ? "Finish" : "Set Permissions";
         break;
     }
+    return buttonText;
   }
 
-  void showModal(BuildContext context, Widget screen, bool lastScreen) {
+  void _showModal({@required BuildContext context, @required Widget screen, bool lastScreen = false}) {
     showPlatformModalSheet(
       context: context, 
       builder: (_) => screen
-    ).then((value) {
-      if (!lastScreen) {
-        BlocProvider.of<OnboardBloc>(context).add(OnboardEvent.next); 
-      } else {
-        _showSnackbar(context);
-      }
+    ).then((_) {
+      if (!lastScreen) BlocProvider.of<OnboardBloc>(context).add(OnboardEvent.next);
     });
-  }
-
-  void _showSnackbar(BuildContext context) async {
-    bool canVibrate = await Vibrate.canVibrate;
-    if (canVibrate) {
-      Vibrate.feedback(FeedbackType.success);
-    }
-
-    Scaffold.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(
-        SnackBar(
-          content: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Expanded(
-                child: BoldText(text: "Account Setup Complete!", size: SizeConfig.getWidth(6), color: Colors.white)
-              ),
-              PlatformWidget(
-                android: (_) => Icon(Icons.check_circle_outline),
-                ios: (_) => Icon(
-                  IconData(
-                    0xF3FE,
-                    fontFamily: CupertinoIcons.iconFont,
-                    fontPackage: CupertinoIcons.iconFontPackage
-                  ),
-                  color: Colors.white,
-                ),
-              )
-            ],
-          ),
-          backgroundColor: Colors.green,
-        )
-      ).closed.then((_) => {
-        Navigator.of(context).pop()
-      });
   }
 }

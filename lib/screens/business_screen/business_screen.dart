@@ -1,9 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:heist/models/business/business.dart';
 import 'package:heist/models/business/hours.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
@@ -180,7 +178,6 @@ class _BusinessScreenState extends State<BusinessScreen> with SingleTickerProvid
   }
 
   void _navigateToWebsite() async {
-    print(widget._business.profile.website);
     if (await canLaunch(widget._business.profile.website)) {
       await launch(widget._business.profile.website);
     } else {

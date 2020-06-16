@@ -40,11 +40,11 @@ class ProfileSetupScreenBloc extends Bloc<ProfileSetupScreenEvent, ProfileSetupS
       case Section.photo:
         yield state.update(isPhotoComplete: true);
         break;
-      case Section.paymentAccount:
-        yield state.update(isPaymentAccountComplete: true);
-        break;
       case Section.tip:
         yield state.update(isTipComplete: true);
+        break;
+      case Section.paymentAccount:
+        yield state.update(isPaymentAccountComplete: true);
         break;
     }
   }
@@ -54,8 +54,8 @@ class ProfileSetupScreenBloc extends Bloc<ProfileSetupScreenEvent, ProfileSetupS
     bool isIntroComplete = false;
     bool isNameComplete = false;
     bool isPhotoComplete = false;
-    bool isPaymentAccountComplete = false;
     bool isTipSettingsComplete = false;
+    bool isPaymentAccountComplete = false;
 
     if (status == 101) {
       isIntroComplete = true;
@@ -68,13 +68,13 @@ class ProfileSetupScreenBloc extends Bloc<ProfileSetupScreenEvent, ProfileSetupS
       isIntroComplete = true;
       isNameComplete = true;
       isPhotoComplete = true;
-      isPaymentAccountComplete = true;
+      isTipSettingsComplete = true;
     } else if (status >= 120) {
       isIntroComplete = true;
       isNameComplete = true;
       isPhotoComplete = true;
-      isPaymentAccountComplete = true;
       isTipSettingsComplete = true;
+      isPaymentAccountComplete = true;
     }
     yield state.update(
       isIntroComplete: isIntroComplete,
@@ -83,5 +83,6 @@ class ProfileSetupScreenBloc extends Bloc<ProfileSetupScreenEvent, ProfileSetupS
       isPaymentAccountComplete: isPaymentAccountComplete,
       isTipComplete: isTipSettingsComplete
     );
+    
   }
 }

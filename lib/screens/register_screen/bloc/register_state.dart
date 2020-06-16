@@ -9,6 +9,8 @@ class RegisterState {
   final bool isSuccess;
   final bool isFailure;
 
+  final Customer customer;
+
   bool get isFormValid => isEmailValid && isPasswordValid && isPasswordConfirmationValid;
 
   RegisterState({
@@ -17,7 +19,8 @@ class RegisterState {
     @required this.isPasswordConfirmationValid,
     @required this.isSubmitting,
     @required this.isSuccess,
-    @required this.isFailure
+    @required this.isFailure,
+    @required this.customer
   });
 
   factory RegisterState.empty() {
@@ -27,7 +30,8 @@ class RegisterState {
       isPasswordConfirmationValid: true,
       isSubmitting: false,
       isSuccess: false,
-      isFailure: false
+      isFailure: false,
+      customer: null
     );
   }
 
@@ -38,7 +42,8 @@ class RegisterState {
       isPasswordConfirmationValid: true,
       isSubmitting: true,
       isSuccess: false,
-      isFailure: false
+      isFailure: false,
+      customer: null
     );
   }
 
@@ -49,18 +54,20 @@ class RegisterState {
       isPasswordConfirmationValid: true,
       isSubmitting: false,
       isSuccess: false,
-      isFailure: true
+      isFailure: true,
+      customer: null
     );
   }
 
-  factory RegisterState.success() {
+  factory RegisterState.success({@required Customer customer}) {
     return RegisterState(
       isEmailValid: true,
       isPasswordValid: true,
       isPasswordConfirmationValid: true,
       isSubmitting: false,
       isSuccess: true,
-      isFailure: false
+      isFailure: false,
+      customer: customer
     );
   }
 
@@ -94,7 +101,8 @@ class RegisterState {
       isPasswordConfirmationValid: isPasswordConfirmationValid ?? this.isPasswordConfirmationValid,
       isSubmitting: isSubmitting ?? this.isSubmitting,
       isSuccess: isSuccess ?? this.isSuccess,
-      isFailure: isFailure ?? this.isFailure
+      isFailure: isFailure ?? this.isFailure,
+      customer: null
     );
   }
 
@@ -106,7 +114,8 @@ class RegisterState {
       isPasswordConfirmationValid: $isPasswordConfirmationValid,
       isSubmitting: $isSubmitting,
       isSuccess: $isSuccess,
-      isFailure: $isFailure
+      isFailure: $isFailure,
+      customer: $customer
     }''';
   }
 }

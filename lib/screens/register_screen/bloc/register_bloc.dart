@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:heist/models/customer/customer.dart';
 import 'package:heist/repositories/customer_repository.dart';
 import 'package:heist/resources/helpers/validators.dart';
 import 'package:meta/meta.dart';
@@ -59,8 +60,8 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   Stream<RegisterState> _mapSubmittedToState(String email, String password, String passwordConfirmation) async* {
     yield RegisterState.loading();
     try {
-      await _customerRepository.register(email: email, password: password, passwordConfirmation: passwordConfirmation);
-      yield RegisterState.success();
+      Customer customer = await _customerRepository.register(email: email, password: password, passwordConfirmation: passwordConfirmation);
+      yield RegisterState.success(customer: customer);
     } catch (_) {
       yield RegisterState.failure();
     }

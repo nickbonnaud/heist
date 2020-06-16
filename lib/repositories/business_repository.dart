@@ -12,7 +12,16 @@ class BusinessRepository {
     if (response.isOK) {
       return _handleSuccess(response);
     }
-    return[ Business.withError((response.error))].toList();
+    return [ Business.withError((response.error))].toList();
+  }
+
+  Future<Business> fetchByIdentifier({@required String identifier}) async {
+    final String query = 'id=$identifier';
+    final ApiResponse response = await _businessProvider.fetch(query: query);
+    if (response.isOK) {
+      return Business.fromJson(response.body);
+    }
+    return Business.withError(response.error);
   }
 
   List<Business> _handleSuccess(ApiResponse response) {

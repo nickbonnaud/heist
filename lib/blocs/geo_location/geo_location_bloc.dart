@@ -37,16 +37,11 @@ class GeoLocationBloc extends Bloc<GeoLocationEvent, GeoLocationState> {
 
   Stream<GeoLocationState> _mapAppReadyToState() async* {
     yield Loading();
-    GeolocationStatus status = await _geolocatorRepository.checkPermission();
-    if (status == GeolocationStatus.granted) {
-      try {
-        Position position = await _geolocatorRepository.fetchMed();
-        yield LocationLoaded(latitude: position.latitude, longitude: position.longitude);
-      } catch (_) {
-        yield FetchFailure();
-      }
-    } else {
-      yield PermissionNotGranted();
+    try {
+      Position position = await _geolocatorRepository.fetchMed();
+      yield LocationLoaded(latitude: position.latitude, longitude: position.longitude);
+    } catch (_) {
+      yield FetchFailure();
     }
   }
 

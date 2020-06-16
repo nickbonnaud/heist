@@ -2,6 +2,7 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:heist/blocs/authentication/authentication_bloc.dart';
 import 'package:heist/screens/register_screen/bloc/register_bloc.dart';
 import 'package:vibrate/vibrate.dart';
 
@@ -40,6 +41,10 @@ class _RegisterFormState extends State<RegisterForm> {
       listener: (context, state) {
         if (state.isFailure) {
           _errorRegister(context);
+        } else if (state.isSuccess) {
+          BlocProvider.of<AuthenticationBloc>(context)
+            ..add(Registered(customer: state.customer));
+          Navigator.of(context).popUntil((route) => route.isFirst);
         }
       },
       child: Form(
@@ -59,6 +64,7 @@ class _RegisterFormState extends State<RegisterForm> {
                     },
                     validator: (_) => !state.isEmailValid && _emailController.text.isNotEmpty ? 'Invalid email' : null,
                     autovalidate: true,
+                    autocorrect: false,
                     decoration: InputDecoration(
                       enabledBorder: UnderlineInputBorder(
                         borderSide: BorderSide(color: Colors.white)
@@ -85,6 +91,7 @@ class _RegisterFormState extends State<RegisterForm> {
                     },
                     validator: (_) => !state.isPasswordValid && _passwordController.text.isNotEmpty ? 'Min 6 characters, at least 1 letter, 1 number.' : null,
                     autovalidate: true,
+                    autocorrect: false,
                     decoration: InputDecoration(
                       enabledBorder: UnderlineInputBorder(
                         borderSide: BorderSide(color: Colors.white)
@@ -109,10 +116,10 @@ class _RegisterFormState extends State<RegisterForm> {
                     textInputAction: TextInputAction.done,
                     onFieldSubmitted: (_) {
                       _passwordConfirmationFocus.unfocus();
-                      _submit(state);
                     },
                     validator: (_) => !state.isPasswordConfirmationValid && _passwordConfirmationController.text.isNotEmpty ? "Passwords are not matching" : null,
                     autovalidate: true,
+                    autocorrect: false,
                     decoration: InputDecoration(
                       enabledBorder: UnderlineInputBorder(
                         borderSide: BorderSide(color: Colors.white)

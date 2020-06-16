@@ -1,16 +1,65 @@
 part of 'authentication_bloc.dart';
 
-abstract class AuthenticationState extends Equatable {
-  const AuthenticationState();
+@immutable
+class AuthenticationState {
+  final bool authenticated;
+  final Customer customer;
+  final bool loading;
+
+  AuthenticationState({
+    @required this.authenticated, 
+    @required this.customer, 
+    @required this.loading
+  });
+
+  factory AuthenticationState.initial() {
+    return AuthenticationState(
+      authenticated: false,
+      customer: null,
+      loading: true
+    );
+  }
+
+  factory AuthenticationState.authenticated({@required Customer customer}) {
+    return AuthenticationState(
+      authenticated: true,
+      customer: customer,
+      loading: false
+    );
+  }
+
+  factory AuthenticationState.unAuthenticated() {
+    return AuthenticationState(
+      authenticated: false,
+      customer: null,
+      loading: false
+    );
+  }
+
+  AuthenticationState update({
+    bool authenticated,
+    Customer customer,
+    bool loading
+  }) {
+    return _copyWith(
+      authenticated: authenticated,
+      customer: customer,
+      loading: loading
+    );
+  }
+  
+  AuthenticationState _copyWith({
+    bool authenticated,
+    Customer customer,
+    bool loading
+  }) {
+    return AuthenticationState(
+      authenticated: authenticated ?? this.authenticated,
+      customer: customer ?? this.customer,
+      loading: loading ?? this.loading
+    );
+  }
 
   @override
-  List<Object> get props => [];
+  String toString() => 'AuthenticationState { authenticated: $authenticated, customer: $customer, loading: $loading }';
 }
-
-class Uninitialized extends AuthenticationState {}
-
-class Authenticated extends AuthenticationState {}
-
-class Unauthenticated extends AuthenticationState {}
-
-class Loading extends AuthenticationState {}

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:heist/blocs/customer/customer_bloc.dart';
+import 'package:heist/blocs/authentication/authentication_bloc.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
 import 'package:heist/screens/profile_setup_screen/bloc/profile_setup_screen_bloc.dart';
@@ -90,7 +90,7 @@ class _SetupTipBodyState extends State<SetupTipBody> {
   void _saveButtonPressed(BuildContext context, SetupTipScreenState state) {
     if (_isSaveButtonEnabled(state)) {
       _setupTipScreenBloc.add(Submitted(
-        customer: BlocProvider.of<CustomerBloc>(context).customer,
+        customer: BlocProvider.of<AuthenticationBloc>(context).customer,
         tipRate: int.parse(_tipRateController.text),
         quickTipRate: int.parse(_quickTipRateController.text)
       ));
@@ -131,7 +131,8 @@ class _SetupTipBodyState extends State<SetupTipBody> {
         )
       ).closed.then((_) => {
         if (state.isSuccess) {
-          Navigator.of(context).pop()
+          widget._controller.addStatusListener(_animationListener),
+          widget._controller.forward()
         } else {
           BlocProvider.of<SetupTipScreenBloc>(context).add(Reset())
         }
@@ -150,7 +151,7 @@ class _SetupTipBodyState extends State<SetupTipBody> {
               children: <Widget>[
                 SizedBox(height: SizeConfig.getHeight(15)),
                 BoldText.veryBold(
-                  text: 'Last, set your tip rates!', 
+                  text: 'Next, set your tip rates!', 
                   size: SizeConfig.getWidth(6), 
                   color: Colors.black
                 ),

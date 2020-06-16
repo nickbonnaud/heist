@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
-import 'package:heist/blocs/customer/customer_bloc.dart';
 import 'package:heist/resources/helpers/size_config.dart';
-import 'package:heist/resources/helpers/text_styles.dart';
 import 'package:heist/screens/map_screen/widgets/bottom_pane/open_transactions_list.dart';
 
 import 'active_location_list.dart';

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:heist/blocs/customer/customer_bloc.dart';
+import 'package:heist/blocs/authentication/authentication_bloc.dart';
 import 'package:heist/global_widgets/edit_photo/bloc/edit_photo_bloc.dart';
 import 'package:heist/global_widgets/edit_photo/edit_photo.dart';
 import 'package:heist/models/customer/customer.dart';
@@ -45,12 +45,12 @@ class _ProfilePhotoScreenState extends State<ProfilePhotoScreen> {
               BlocProvider<EditPhotoBloc>(
                 create: (BuildContext context) => EditPhotoBloc(
                   profileRepository: _profileRepository,
-                  customerBloc: BlocProvider.of<CustomerBloc>(context)
+                  authenticationBloc: BlocProvider.of<AuthenticationBloc>(context)
                 ),
                 child: EditPhoto(
                   photoPicker: PhotoPickerRepository(),
-                  customer: BlocProvider.of<CustomerBloc>(context).customer.profile != null
-                    ? BlocProvider.of<CustomerBloc>(context).customer : null,
+                  customer: BlocProvider.of<AuthenticationBloc>(context).customer.profile != null
+                    ? BlocProvider.of<AuthenticationBloc>(context).customer : null,
                   autoDismiss: false,
                 ),
               ),
@@ -77,16 +77,16 @@ class _ProfilePhotoScreenState extends State<ProfilePhotoScreen> {
           Row(
             children: <Widget>[
               Expanded(
-                child: BlocBuilder<CustomerBloc, CustomerState>(
+                child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
                   builder: (context, state) {
                     return RaisedButton(
                       color: Colors.green,
                       disabledColor: Colors.green.shade100,
                       shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
-                      onPressed: _isNextButtonEnabled(state is SignedIn ? state.customer : null) ? () => _nextButtonPressed(context) : null,
+                      onPressed: _isNextButtonEnabled(state.customer) ? () => _nextButtonPressed(context) : null,
                       child: BoldText(text: 'Next', size: SizeConfig.getWidth(6), color: Colors.white)
                     );
-                  },
+                  }
                 )
               )
             ],

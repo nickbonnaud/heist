@@ -5,6 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_beacon/flutter_beacon.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heist/blocs/active_location/active_location_bloc.dart';
+import 'package:heist/blocs/boot/boot_bloc.dart';
 import 'package:heist/models/business/business.dart';
 import 'package:heist/repositories/beacon_repository.dart';
 import 'package:meta/meta.dart';
@@ -15,12 +16,14 @@ part 'beacon_state.dart';
 class BeaconBloc extends Bloc<BeaconEvent, BeaconState> {
   final BeaconRepository _beaconRepository;
   final ActiveLocationBloc _activeLocationBloc;
+  final BootBloc _bootBloc;
   StreamSubscription<MonitoringResult> _beaconSubscription;
 
-  BeaconBloc({@required BeaconRepository beaconRepository, @required ActiveLocationBloc activeLocationBloc})
-    : assert(beaconRepository != null && activeLocationBloc != null),
+  BeaconBloc({@required BeaconRepository beaconRepository, @required ActiveLocationBloc activeLocationBloc, @required BootBloc bootBloc})
+    : assert(beaconRepository != null && activeLocationBloc != null && bootBloc != null),
       _beaconRepository = beaconRepository,
-      _activeLocationBloc = activeLocationBloc;
+      _activeLocationBloc = activeLocationBloc,
+      _bootBloc = bootBloc;
   
   @override
   BeaconState get initialState => BeaconUninitialized();
@@ -49,6 +52,7 @@ class BeaconBloc extends Bloc<BeaconEvent, BeaconState> {
       }
     });
     yield Monitoring();
+    _bootBloc.add(DataLoaded(type: DataType.beacons));
   }
 
   Stream<BeaconState> _mapBeaconCancelledToState() async* {

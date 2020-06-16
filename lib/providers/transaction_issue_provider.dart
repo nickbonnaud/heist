@@ -3,7 +3,6 @@ import 'package:heist/models/api_response.dart';
 import 'package:heist/models/transaction/issue.dart';
 import 'package:heist/resources/enums/issue_type.dart';
 import 'package:heist/resources/http/api.dart';
-import 'package:heist/screens/issue_screen/bloc/issue_form_bloc.dart';
 import 'package:meta/meta.dart';
 
 class TransactionIssueProvider {

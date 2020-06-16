@@ -10,10 +10,16 @@ import 'widgets/beacon_body.dart';
 import 'widgets/bluetooth_body.dart';
 import 'widgets/location_body.dart';
 import 'widgets/notification_body.dart';
+import 'widgets/permission_buttons/permission_buttons.dart';
 import 'widgets/success_body.dart';
 
 
 class PermissionsScreen extends StatefulWidget {
+  final PermissionsBloc _permissionsBloc;
+
+  PermissionsScreen({@required PermissionsBloc permissionsBloc})
+    : assert(permissionsBloc != null),
+      _permissionsBloc = permissionsBloc;
 
   @override
   State<PermissionsScreen> createState() => _PermissionsScreenState();
@@ -35,10 +41,10 @@ class _PermissionsScreenState extends State<PermissionsScreen> with SingleTicker
   @override
   void initState() {
     super.initState();
-    _isBluetoothEnabled = BlocProvider.of<PermissionsBloc>(context).isBleEnabled;
-    _isLocationEnabled = BlocProvider.of<PermissionsBloc>(context).isLocationEnabled;
-    _isNotificationEnabled = BlocProvider.of<PermissionsBloc>(context).isNotificationEnabled;
-    _isBeaconEnabled = BlocProvider.of<PermissionsBloc>(context).isBeaconEnabled;
+    _isBluetoothEnabled = widget._permissionsBloc.isBleEnabled;
+    _isLocationEnabled = widget._permissionsBloc.isLocationEnabled;
+    _isNotificationEnabled = widget._permissionsBloc.isNotificationEnabled;
+    _isBeaconEnabled = widget._permissionsBloc.isBeaconEnabled;
 
     _controller = AnimationController(
       vsync: this,
@@ -126,16 +132,16 @@ class _PermissionsScreenState extends State<PermissionsScreen> with SingleTicker
     Widget screen;
     switch (type) {
       case PermissionType.bluetooth:
-        screen = BluetoothBody(controller: controller);
+        screen = BluetoothBody(permissionButtons: PermissionButtons(permission: PermissionType.bluetooth, controller: _controller, permissionsBloc: widget._permissionsBloc));
         break;
       case PermissionType.location:
-        screen = LocationBody(controller: controller);
+        screen = LocationBody(permissionButtons: PermissionButtons(permission: PermissionType.location, controller: _controller, permissionsBloc: widget._permissionsBloc));
         break;
       case PermissionType.notification:
-        screen = NotificationBody(controller: controller);
+        screen = NotificationBody(permissionButtons: PermissionButtons(permission: PermissionType.notification, controller: _controller, permissionsBloc: widget._permissionsBloc));
         break;
       case PermissionType.beacon:
-        screen = BeaconBody(controller: controller);
+        screen = BeaconBody(permissionButtons: PermissionButtons(permission: PermissionType.beacon, controller: _controller, permissionsBloc: widget._permissionsBloc));
         break;
       default:
         screen = SuccessBody();

@@ -3,10 +3,8 @@ import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:heist/blocs/customer/customer_bloc.dart';
+import 'package:heist/blocs/authentication/authentication_bloc.dart';
 import 'package:heist/models/customer/customer.dart';
-import 'package:heist/models/customer/photos.dart';
-import 'package:heist/models/customer/profile.dart';
 import 'package:heist/repositories/profile_repository.dart';
 import 'package:meta/meta.dart';
 
@@ -15,12 +13,12 @@ part 'edit_photo_state.dart';
 
 class EditPhotoBloc extends Bloc<EditPhotoEvent, EditPhotoState> {
   final ProfileRepository _profileRepository;
-  final CustomerBloc _customerBloc;
+  final AuthenticationBloc _authenticationBloc;
 
-  EditPhotoBloc({@required ProfileRepository profileRepository, @required CustomerBloc customerBloc})
-    : assert(profileRepository != null, customerBloc != null),
+  EditPhotoBloc({@required ProfileRepository profileRepository, @required AuthenticationBloc authenticationBloc})
+    : assert(profileRepository != null, authenticationBloc != null),
       _profileRepository = profileRepository,
-      _customerBloc = customerBloc;
+      _authenticationBloc = authenticationBloc;
   
   @override
   EditPhotoState get initialState => PhotoUnchanged();
@@ -37,11 +35,9 @@ class EditPhotoBloc extends Bloc<EditPhotoEvent, EditPhotoState> {
   Stream<EditPhotoState> _mapChangePhotoToState(ChangePhoto event) async* {
     yield Submitting(photo: event.photo);
     try {
-      Photos photos = await _profileRepository.uploadPhoto(photo: event.photo, profileIdentifier: event.customer.profile.identifier);
-      Profile profile = event.customer.profile.update(photos: photos);
-      Customer customer = event.customer.update(profile: profile);
+      Customer customer = await _profileRepository.uploadPhoto(photo: event.photo, profileIdentifier: event.customer.profile.identifier);
       yield SubmitSuccess(photo: event.photo);
-      _customerBloc.add(UpdateCustomer(customer: customer));
+      _authenticationBloc.add(CustomerUpdated(customer: customer));
     } catch (_) {
       yield SubmitFailed();
     }

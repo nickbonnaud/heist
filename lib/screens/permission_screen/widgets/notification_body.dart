@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:heist/resources/constants.dart';
 import 'package:heist/screens/permission_screen/bloc/permission_screen_bloc.dart';
 
-import 'permission_buttons.dart';
+import 'permission_buttons/bloc/permission_buttons_bloc.dart';
+import 'permission_buttons/permission_buttons.dart';
+
 
 class NotificationBody extends StatelessWidget {
-  final AnimationController _controller;
+  final PermissionButtons _permissionButtons;
   
-  NotificationBody({@required controller})
-    : assert(controller != null),
-      _controller = controller;
+  NotificationBody({@required PermissionButtons permissionButtons})
+    : assert(permissionButtons != null),
+      _permissionButtons = permissionButtons;
 
   final String notificationText = 
   'Please allow ${Constants.appName} to send you notifications.\n\n'
@@ -51,7 +54,10 @@ class NotificationBody extends StatelessWidget {
           ),
         ),
         SizedBox(height: 35),
-        PermissionButtons(permission: PermissionType.notification, controller: _controller,)
+        BlocProvider<PermissionButtonsBloc>(
+          create: (_) => PermissionButtonsBloc(),
+          child: _permissionButtons
+        )
       ],
     );
   }

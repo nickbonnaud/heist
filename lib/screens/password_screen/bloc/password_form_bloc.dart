@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:heist/blocs/customer/customer_bloc.dart';
+import 'package:heist/blocs/authentication/authentication_bloc.dart';
 import 'package:heist/models/customer/customer.dart';
 import 'package:heist/repositories/customer_repository.dart';
 import 'package:heist/resources/helpers/validators.dart';
@@ -15,12 +15,12 @@ part 'password_form_state.dart';
 
 class PasswordFormBloc extends Bloc<PasswordFormEvent, PasswordFormState> {
   final CustomerRepository _customerRepository;
-  final CustomerBloc _customerBloc;
+  final AuthenticationBloc _authenticationBloc;
   
-  PasswordFormBloc({@required CustomerRepository customerRepository, @required CustomerBloc customerBloc})
+  PasswordFormBloc({@required CustomerRepository customerRepository, @required AuthenticationBloc authenticationBloc})
     : assert(customerRepository != null),
       _customerRepository = customerRepository,
-      _customerBloc = customerBloc;
+      _authenticationBloc = authenticationBloc;
   
   @override
   PasswordFormState get initialState => PasswordFormState.initial();
@@ -80,7 +80,7 @@ class PasswordFormBloc extends Bloc<PasswordFormEvent, PasswordFormState> {
     try {
       Customer customer = await _customerRepository.updatePassword(event.oldPassword, event.password, event.passwordConfirmation, event.customer.identifier);
       yield state.update(isSubmitting: false, isSuccess: true);
-      _customerBloc.add(UpdateCustomer(customer: customer));
+      _authenticationBloc.add(CustomerUpdated(customer: customer));
     } catch (_) {
       yield state.update(isSubmitting: false, isFailure: true);
     }

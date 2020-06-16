@@ -2,7 +2,12 @@ part of 'open_transactions_bloc.dart';
 
 abstract class OpenTransactionsEvent extends Equatable {
   const OpenTransactionsEvent();
+
+  @override
+  List<Object> get props => [];
 }
+
+class FetchOpenTransactions extends OpenTransactionsEvent {}
 
 class AddOpenTransaction extends OpenTransactionsEvent {
   final TransactionResource transaction;

@@ -2,8 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:heist/blocs/customer/customer_bloc.dart';
-import 'package:heist/models/customer/account.dart';
+import 'package:heist/blocs/authentication/authentication_bloc.dart';
 import 'package:heist/models/customer/customer.dart';
 import 'package:heist/repositories/account_repository.dart';
 import 'package:heist/resources/helpers/validators.dart';
@@ -15,12 +14,12 @@ part 'tip_form_state.dart';
 
 class TipFormBloc extends Bloc<TipFormEvent, TipFormState> {
   final AccountRepository _accountRepository;
-  final CustomerBloc _customerBloc;
+  final AuthenticationBloc _authenticationBloc;
 
-  TipFormBloc({@required AccountRepository accountRepository, @required CustomerBloc customerBloc})
-    : assert(accountRepository != null && customerBloc != null),
+  TipFormBloc({@required AccountRepository accountRepository, @required AuthenticationBloc authenticationBloc})
+    : assert(accountRepository != null && authenticationBloc != null),
       _accountRepository = accountRepository,
-      _customerBloc = customerBloc;
+      _authenticationBloc = authenticationBloc;
   
   @override
   TipFormState get initialState => TipFormState.initial();
@@ -57,8 +56,8 @@ class TipFormBloc extends Bloc<TipFormEvent, TipFormState> {
   Stream<TipFormState> _mapSubmittedToState(Submitted event) async* {
     yield state.update(isSubmitting: true);
     try {
-      Account account = await _accountRepository.update(accountIdentifier: event.customer.account.identifier, tipRate: event.tipRate, quickTipRate: event.quickTipRate);
-      _customerBloc.add(UpdateCustomer(customer: event.customer.update(account: account)));
+      Customer customer = await _accountRepository.update(accountIdentifier: event.customer.account.identifier, tipRate: event.tipRate, quickTipRate: event.quickTipRate);
+      _authenticationBloc.add(CustomerUpdated(customer: customer));
       yield state.update(isSubmitting: false, isSuccess: true);
     } catch (_) {
       yield state.update(isSubmitting: false, isFailure: true);

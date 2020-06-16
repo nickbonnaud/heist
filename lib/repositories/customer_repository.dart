@@ -1,6 +1,5 @@
 import 'package:heist/models/api_response.dart';
 import 'package:heist/models/customer/customer.dart';
-import 'package:heist/models/token.dart';
 import 'package:heist/providers/customer_provider.dart';
 import 'package:heist/repositories/token_repository.dart';
 import 'package:meta/meta.dart';

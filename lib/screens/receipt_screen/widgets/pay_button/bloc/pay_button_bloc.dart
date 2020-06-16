@@ -2,11 +2,8 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:heist/blocs/open_transactions/open_transactions_bloc.dart';
-import 'package:heist/models/transaction/status.dart';
 import 'package:heist/models/transaction/transaction_resource.dart';
 import 'package:heist/repositories/transaction_repository.dart';
-import 'package:heist/screens/historic_transactions_screen/bloc/historic_transactions_bloc.dart';
 import 'package:meta/meta.dart';
 
 part 'pay_button_event.dart';

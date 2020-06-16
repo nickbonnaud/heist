@@ -1,4 +1,4 @@
-
+ 
 
 import 'package:dio/dio.dart';
 
@@ -37,6 +37,8 @@ class MockResponses {
       return _mockFetchTransactionsByBusiness();
     } else if (options.path.contains('transaction?id=')) {
       return _mockFetchTransactionsByIdentifier();
+    } else if (options.path.endsWith('transaction?open=true')) {
+      return _mockFetchOpenTransaction();
     } else if (options.path.endsWith('refund?page=1')) {
       return _mockFetchAllRefunds();
     } else if (options.path.endsWith('refund?page=2')) {
@@ -71,11 +73,31 @@ class MockResponses {
   static Map<String, dynamic> _mockPostPhoto() {
     return {
       'data': {
-        'name': 'fake_avatar.png',
-        'small_url': 'https://moresmilesdentalclinic.com/wp-content/uploads/2017/09/bigstock-profile-of-male-geek-smiling-w-35555741-250x250-1.jpg',
-        'large_url': 'https://corporate-rebels.com/CDN/378-500x500.jpg'
+        'identifier': 'fake_identifier',
+        'email': 'fake@gmail.com',
+        'token': 'not_a_real_token',
+        'profile': {
+          'identifier': 'fake_identifier',
+          'first_name': 'Nick',
+          'last_name': 'Bonnaud',
+          'photos': {
+            'name': 'fake_avatar.png',
+            'small_url': 'https://moresmilesdentalclinic.com/wp-content/uploads/2017/09/bigstock-profile-of-male-geek-smiling-w-35555741-250x250-1.jpg',
+            'large_url': 'https://corporate-rebels.com/CDN/378-500x500.jpg'
+          }
+        },
+        'account': {
+          'identifier': 'fake_identifier',
+          'tip_rate': '15',
+          'quick_tip_rate': '5',
+          'primary': 'ach'
+        },
+        'status': {
+          'name': 'Ready',
+          'code': '102'
+        }
       }
-    };  
+    };
   }
 
   static Map<String, dynamic> _mockCheckValidPassword() {
@@ -99,9 +121,15 @@ class MockResponses {
       'data': {
         'customer': {
           'identifier': 'fake_identifier',
-          'email': 'options.data.email',
+          'email': 'nick@gmail.com',
           'token': "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3RcL2FwaVwvY3VzdG9tZXJcL21lIiwiaWF0IjoxNTgyMTM2NDk0LCJleHAiOjE1OTc5MDQ0OTUsIm5iZiI6MTU4MjEzNjQ5NSwianRpIjoiQVZYUnhNOVBsUnNuZDFqRSIsInN1YiI6MSwicHJ2IjoiZGE5YzU1NjBkZTE2MTUzYmE4MTgwYzU4OTNmZDc0OTRhZDU4YWY5ZSJ9._qGQeHTjiT90MT-zV3XOoA154XzOruP8HmwcnS4tNwk",
           'profile': null,
+          'account' : {
+            'identifier': 'fake_identifier',
+            'tip_rate': '15',
+            'quick_tip_rate': '5',
+            'primary': 'ach'
+          },
           'status': {
             'name': 'Profile Account Incomplete',
             'code': "100"
@@ -119,9 +147,24 @@ class MockResponses {
     return {
       'data': {
         'identifier': 'fake_identifier',
-        'first_name': 'fake_name',
-        'last_name': 'fake last',
-        'photos': null
+        'email': 'fake@gmail.com',
+        'token': 'not_a_real_token',
+        'profile': {
+          'identifier': 'fake_identifier',
+          'first_name': 'Nick',
+          'last_name': 'Bonnaud',
+          'photos': null
+        },
+        'account': {
+          'identifier': 'fake_identifier',
+          'tip_rate': '15',
+          'quick_tip_rate': '5',
+          'primary': 'ach'
+        },
+        'status': {
+          'name': 'Ready',
+          'code': '101'
+        }
       }
     };
   }
@@ -240,11 +283,30 @@ class MockResponses {
 
   static Map<String, dynamic> _mockUpdateAccount() {
     return {
-      "data": {
+      'data': {
         'identifier': 'fake_identifier',
-        'tip_rate': '15',
-        'quick_tip_rate': '7',
-        'primary': 'ach'
+        'email': 'fake@gmail.com',
+        'token': 'not_a_real_token',
+        'profile': {
+          'identifier': 'fake_identifier',
+          'first_name': 'Nick',
+          'last_name': 'Bonnaud',
+          'photos': {
+            'name': 'fake_avatar.png',
+            'small_url': 'https://moresmilesdentalclinic.com/wp-content/uploads/2017/09/bigstock-profile-of-male-geek-smiling-w-35555741-250x250-1.jpg',
+            'large_url': 'https://corporate-rebels.com/CDN/378-500x500.jpg'
+          }
+        },
+        'account': {
+          'identifier': 'fake_identifier',
+          'tip_rate': '15',
+          'quick_tip_rate': '7',
+          'primary': 'ach'
+        },
+        'status': {
+          'name': 'Ready',
+          'code': '103'
+        }
       }
     };
   }
@@ -272,7 +334,7 @@ class MockResponses {
             "net_sales": "6088",
             "total": "8181",
             "partial_payment": "0",
-            "locked": "1",
+            "locked": false,
             "bill_created_at": "2020-04-08 18:46:25",
             "updated_at": "2020-04-08 18:46:25",
             "status": {
@@ -360,7 +422,7 @@ class MockResponses {
             "net_sales": "715",
             "total": "846",
             "partial_payment": "0",
-            "locked": "1",
+            "locked": false,
             "bill_created_at": "2020-04-08 18:46:25",
             "updated_at": "2020-04-08 18:46:25",
             "status": {
@@ -462,7 +524,7 @@ class MockResponses {
             "net_sales": "1344",
             "total": "1445",
             "partial_payment": "0",
-            "locked": "1",
+            "locked": false,
             "bill_created_at": "2020-04-08 18:46:25",
             "updated_at": "2020-04-08 18:46:25",
             "status": {
@@ -550,7 +612,7 @@ class MockResponses {
             "net_sales": "9152",
             "total": "101223",
             "partial_payment": "0",
-            "locked": "1",
+            "locked": false,
             "bill_created_at": "2020-04-08 18:46:25",
             "updated_at": "2020-04-08 18:46:25",
             "status": {
@@ -674,12 +736,12 @@ class MockResponses {
             "net_sales": "6088",
             "total": "8181",
             "partial_payment": "0",
-            "locked": "1",
+            "locked": false,
             "bill_created_at": "2020-04-08 18:46:25",
             "updated_at": "2020-04-08 18:46:25",
             "status": {
-              "name": "open",
-              "code": "100"
+              "name": "paid",
+              "code": "200"
             },
             "purchased_items": [
               {
@@ -762,7 +824,7 @@ class MockResponses {
             "net_sales": "715",
             "total": "846",
             "partial_payment": "0",
-            "locked": "1",
+            "locked": false,
             "bill_created_at": "2020-04-08 18:46:25",
             "updated_at": "2020-04-08 18:46:25",
             "status": {
@@ -864,7 +926,7 @@ class MockResponses {
             "net_sales": "1344",
             "total": "1445",
             "partial_payment": "0",
-            "locked": "1",
+            "locked": false,
             "bill_created_at": "2020-04-08 18:46:25",
             "updated_at": "2020-04-08 18:46:25",
             "status": {
@@ -952,7 +1014,7 @@ class MockResponses {
             "net_sales": "6088",
             "total": "8181",
             "partial_payment": "0",
-            "locked": "1",
+            "locked": false,
             "bill_created_at": "2020-04-08 18:46:25",
             "updated_at": "2020-04-08 18:46:25",
             "status": {
@@ -1040,7 +1102,7 @@ class MockResponses {
             "net_sales": "715",
             "total": "846",
             "partial_payment": "0",
-            "locked": "1",
+            "locked": false,
             "bill_created_at": "2020-04-08 18:46:25",
             "updated_at": "2020-04-08 18:46:25",
             "status": {
@@ -1142,7 +1204,7 @@ class MockResponses {
             "net_sales": "1344",
             "total": "1445",
             "partial_payment": "0",
-            "locked": "1",
+            "locked": false,
             "bill_created_at": "2020-04-08 18:46:25",
             "updated_at": "2020-04-08 18:46:25",
             "status": {
@@ -1230,7 +1292,7 @@ class MockResponses {
             "net_sales": "6088",
             "total": "8181",
             "partial_payment": "0",
-            "locked": "1",
+            "locked": false,
             "bill_created_at": "2020-04-08 18:46:25",
             "updated_at": "2020-04-08 18:46:25",
             "status": {
@@ -1318,7 +1380,7 @@ class MockResponses {
             "net_sales": "715",
             "total": "846",
             "partial_payment": "0",
-            "locked": "1",
+            "locked": false,
             "bill_created_at": "2020-04-08 18:46:25",
             "updated_at": "2020-04-08 18:46:25",
             "status": {
@@ -1420,7 +1482,7 @@ class MockResponses {
             "net_sales": "1344",
             "total": "1445",
             "partial_payment": "0",
-            "locked": "1",
+            "locked": false,
             "bill_created_at": "2020-04-08 18:46:25",
             "updated_at": "2020-04-08 18:46:25",
             "status": {
@@ -1508,7 +1570,7 @@ class MockResponses {
             "net_sales": "6088",
             "total": "8181",
             "partial_payment": "0",
-            "locked": "1",
+            "locked": false,
             "bill_created_at": "2020-04-08 18:46:25",
             "updated_at": "2020-04-08 18:46:25",
             "status": {
@@ -1596,7 +1658,7 @@ class MockResponses {
             "net_sales": "715",
             "total": "846",
             "partial_payment": "0",
-            "locked": "1",
+            "locked": false,
             "bill_created_at": "2020-04-08 18:46:25",
             "updated_at": "2020-04-08 18:46:25",
             "status": {
@@ -1698,7 +1760,7 @@ class MockResponses {
             "net_sales": "1344",
             "total": "1445",
             "partial_payment": "0",
-            "locked": "1",
+            "locked": false,
             "bill_created_at": "2020-04-08 18:46:25",
             "updated_at": "2020-04-08 18:46:25",
             "status": {
@@ -1808,7 +1870,7 @@ class MockResponses {
             "net_sales": "6088",
             "total": "8181",
             "partial_payment": "0",
-            "locked": "1",
+            "locked": false,
             "bill_created_at": "2020-04-08 18:46:25",
             "updated_at": "2020-04-08 18:46:25",
             "status": {
@@ -1896,7 +1958,7 @@ class MockResponses {
             "net_sales": "715",
             "total": "846",
             "partial_payment": "0",
-            "locked": "1",
+            "locked": false,
             "bill_created_at": "2020-04-08 18:46:25",
             "updated_at": "2020-04-08 18:46:25",
             "status": {
@@ -1998,7 +2060,7 @@ class MockResponses {
             "net_sales": "1344",
             "total": "1445",
             "partial_payment": "0",
-            "locked": "1",
+            "locked": false,
             "bill_created_at": "2020-04-08 18:46:25",
             "updated_at": "2020-04-08 18:46:25",
             "status": {
@@ -2086,7 +2148,7 @@ class MockResponses {
             "net_sales": "6088",
             "total": "8181",
             "partial_payment": "0",
-            "locked": "1",
+            "locked": false,
             "bill_created_at": "2020-04-08 18:46:25",
             "updated_at": "2020-04-08 18:46:25",
             "status": {
@@ -2174,7 +2236,7 @@ class MockResponses {
             "net_sales": "715",
             "total": "846",
             "partial_payment": "0",
-            "locked": "1",
+            "locked": false,
             "bill_created_at": "2020-04-08 18:46:25",
             "updated_at": "2020-04-08 18:46:25",
             "status": {
@@ -2276,7 +2338,7 @@ class MockResponses {
             "net_sales": "1344",
             "total": "1445",
             "partial_payment": "0",
-            "locked": "1",
+            "locked": false,
             "bill_created_at": "2020-04-08 18:46:25",
             "updated_at": "2020-04-08 18:46:25",
             "status": {
@@ -2364,7 +2426,7 @@ class MockResponses {
             "net_sales": "6088",
             "total": "8181",
             "partial_payment": "0",
-            "locked": "1",
+            "locked": false,
             "bill_created_at": "2020-04-08 18:46:25",
             "updated_at": "2020-04-08 18:46:25",
             "status": {
@@ -2452,7 +2514,7 @@ class MockResponses {
             "net_sales": "715",
             "total": "846",
             "partial_payment": "0",
-            "locked": "1",
+            "locked": false,
             "bill_created_at": "2020-04-08 18:46:25",
             "updated_at": "2020-04-08 18:46:25",
             "status": {
@@ -2554,7 +2616,7 @@ class MockResponses {
             "net_sales": "1344",
             "total": "1445",
             "partial_payment": "0",
-            "locked": "1",
+            "locked": false,
             "bill_created_at": "2020-04-08 18:46:25",
             "updated_at": "2020-04-08 18:46:25",
             "status": {
@@ -2642,7 +2704,7 @@ class MockResponses {
             "net_sales": "6088",
             "total": "8181",
             "partial_payment": "0",
-            "locked": "1",
+            "locked": false,
             "bill_created_at": "2020-04-08 18:46:25",
             "updated_at": "2020-04-08 18:46:25",
             "status": {
@@ -2730,7 +2792,7 @@ class MockResponses {
             "net_sales": "715",
             "total": "846",
             "partial_payment": "0",
-            "locked": "1",
+            "locked": false,
             "bill_created_at": "2020-04-08 18:46:25",
             "updated_at": "2020-04-08 18:46:25",
             "status": {
@@ -2832,7 +2894,7 @@ class MockResponses {
             "net_sales": "1344",
             "total": "1445",
             "partial_payment": "0",
-            "locked": "1",
+            "locked": false,
             "bill_created_at": "2020-04-08 18:46:25",
             "updated_at": "2020-04-08 18:46:25",
             "status": {
@@ -2940,7 +3002,7 @@ class MockResponses {
         "net_sales": "6088",
         "total": "8181",
         "partial_payment": "0",
-        "locked": "1",
+        "locked": false,
         "bill_created_at": "2020-04-08 18:46:25",
         "updated_at": "2020-04-08 18:46:25",
         "status": {
@@ -3037,7 +3099,7 @@ class MockResponses {
         "net_sales": "6088",
         "total": "8181",
         "partial_payment": "0",
-        "locked": "1",
+        "locked": false,
         "bill_created_at": "2020-04-08 18:46:25",
         "updated_at": "2020-04-08 18:46:25",
         "status": {
@@ -3134,7 +3196,7 @@ class MockResponses {
         "net_sales": "6088",
         "total": "8181",
         "partial_payment": "0",
-        "locked": "1",
+        "locked": false,
         "bill_created_at": "2020-04-08 18:46:25",
         "updated_at": "2020-04-08 18:46:25",
         "status": {
@@ -3225,7 +3287,7 @@ class MockResponses {
         "net_sales": "6088",
         "total": "8181",
         "partial_payment": "0",
-        "locked": "1",
+        "locked": false,
         "bill_created_at": "2020-04-08 18:46:25",
         "updated_at": "2020-04-08 18:46:25",
         "status": {
@@ -3306,6 +3368,129 @@ class MockResponses {
     };
   }
   
+  static Map<String, dynamic> _mockFetchOpenTransaction() {
+    return {
+      'data': [
+        {
+          "transaction": {
+          "identifier": "3ff9ad40-79c9-11ea-8b92-a9b4a4c53696",
+          "employee_id": null,
+          "tax": "457",
+          "tip": "1636",
+          "net_sales": "6088",
+          "total": "8181",
+          "partial_payment": "0",
+          "locked": false,
+          "bill_created_at": "2020-05-26T22:04:56.000000Z",
+          "updated_at": "2020-05-26T22:04:56.000000Z",
+          "status": {
+            "name": "open",
+            "code": "100"
+          },
+          "purchased_items": [
+            {
+              "name": "numquam",
+              "sub_name": 'fbjdss',
+              "price": "2000",
+              "quantity": "3",
+              "total": "6000"
+            },
+            {
+              "name": "vel",
+              "sub_name": null,
+              "price": "500",
+              "quantity": "2",
+              "total": "1000"
+            }
+          ]
+        },
+        "business": {
+          "identifier": "3ff30c10-79c9-11ea-a2da-ebb755a8f3fd",
+          "profile": {
+            "name": "Spencer PLC",
+            "website": "wisozk.com",
+            "description": "Dignissimos cum quidem neque magnam qui et dolor. Voluptatem error maiores quia repellat veritatis possimus. Molestias id rem hic ipsam.",
+            "google_place_id": null,
+            "phone": "7912752600",
+            "hours": {
+              "monday": "Monday: 11:00 AM – 10:00 PM",
+              "tuesday": "Tuesday: 11:00 AM – 10:00 PM",
+              "wednesday": "Wednesday: 11:00 AM – 10:00 PM",
+              "thursday": "Thursday: 11:00 AM – 10:00 PM",
+              "friday": "Friday: 11:00 AM – 10:30 PM",
+              "saturday": "Saturday: 11:00 AM – 10:30 PM",
+              "sunday": "Sunday: 10:30 AM – 9:00 PM",
+            }
+          },
+          'photos': {
+          'logo': {
+            'name': "logo_2.png",
+            'small_url': "https://cdna.artstation.com/p/assets/images/images/021/760/294/micro_square/jip-scheepers-2018-04-25.jpg?1572865897",
+            'large_url': "https://cdna.artstation.com/p/assets/images/images/021/760/294/micro_square/jip-scheepers-2018-04-25.jpg?1572865897"
+          },
+          'banner': {
+            'name': "banner_1.png",
+            'small_url': "https://www.gerardhuerta.com/wp-content/uploads/2016/08/ACDC-1000x650.jpg",
+            'large_url': "https://www.gerardhuerta.com/wp-content/uploads/2016/08/ACDC-1000x650.jpg"
+          },
+        },
+          "location": {
+            "geo": {
+              "identifier": "3ff884f0-79c9-11ea-9cdf-4d873094dff7",
+              "lat": "40.748440",
+              "lng":"-73.985664",
+              "radius": "50",
+            },
+            "beacon": {
+              "identifier": "3ff884f0-79c9-11ea-9cdf-4d873094dff7",
+              "region_identifier": "3ff871d0-79c9-11ea-8a10-a7f913a9d44b",
+              "major": "0",
+              "minor": "1"
+            },
+            "region": {
+              "identifier": "3ff871d0-79c9-11ea-8a10-a7f913a9d44b",
+              "city": "prosaccoshire",
+              "state": "ne",
+              "zip": "41232",
+              "neighborhood": null
+            }
+          }
+        },
+        "refund": [
+          // {
+          //   "identifier": "125d10b0-895a-11ea-95db-b1ba0de9dfd1",
+          //   "total": "952",
+          //   "created_at": "2020-04-28 14:10:53",
+          //   "status": "refund paid",
+          // },
+          // {
+          //   "identifier": "125d10b0-895a-11ea-95db-b1ba0de9vcd1",
+          //   "total": "500",
+          //   "created_at": "2020-04-28 14:10:53",
+          //   "status": "refund paid",
+          // },
+        ],
+        'issue': null
+        },
+      ],
+      "links": {
+        "first": "http://localhost/api/customer/transaction?page=1",
+        "last": "http://localhost/api/customer/transaction?page=1",
+        "prev": null,
+        "next": null
+      },
+      "meta": {
+        "current_page": 1,
+        "from": 1,
+        "last_page": 1,
+        "path": "http://localhost/api/customer/transaction",
+        "per_page": 15,
+        "to": 1,
+        "total": 1,
+      }
+    };
+  }
+  
   static Map<String, dynamic> mockOpenTransaction() {
     return {
       "transaction": {
@@ -3316,7 +3501,7 @@ class MockResponses {
         "net_sales": "6088",
         "total": "8181",
         "partial_payment": "0",
-        "locked": "1",
+        "locked": false,
         "bill_created_at": "2020-05-26T22:04:56.000000Z",
         "updated_at": "2020-05-26T22:04:56.000000Z",
         "status": {
@@ -3422,7 +3607,7 @@ class MockResponses {
             "net_sales": "6088",
             "total": "8181",
             "partial_payment": "0",
-            "locked": "1",
+            "locked": false,
             "bill_created_at": "2020-04-08 18:46:25",
             "updated_at": "2020-04-08 18:46:25",
             "status": {
@@ -3532,7 +3717,7 @@ class MockResponses {
             "net_sales": "6088",
             "total": "8181",
             "partial_payment": "0",
-            "locked": "1",
+            "locked": false,
             "bill_created_at": "2020-04-08 18:46:25",
             "updated_at": "2020-04-08 18:46:25",
             "status": {
@@ -3860,7 +4045,7 @@ class MockResponses {
             "net_sales": "2635",
             "total": "3485",
             "partial_payment": "0",
-            "locked": "1",
+            "locked": false,
             "bill_created_at": "2020-04-28 14:10:53",
             "updated_at": "2020-04-28 14:10:53",
             "status": {
@@ -3959,7 +4144,7 @@ class MockResponses {
             "net_sales": "5242",
             "total": "5635",
             "partial_payment": "0",
-            "locked": "1",
+            "locked": false,
             "bill_created_at": "2020-04-28 14:10:53",
             "updated_at": "2020-04-28 14:10:53",
             "status": {
@@ -4065,7 +4250,7 @@ class MockResponses {
             "net_sales": "5035",
             "total": "7085",
             "partial_payment": "0",
-            "locked": "1",
+            "locked": false,
             "bill_created_at": "2020-04-28 14:10:53",
             "updated_at": "2020-04-28 14:10:53",
             "status": {
@@ -4200,7 +4385,7 @@ class MockResponses {
             "net_sales": "2635",
             "total": "3485",
             "partial_payment": "0",
-            "locked": "1",
+            "locked": false,
             "bill_created_at": "2020-04-28 14:10:53",
             "updated_at": "2020-04-28 14:10:53",
             "status": {
@@ -4262,7 +4447,7 @@ class MockResponses {
           "net_sales": "6088",
           "total": "8181",
           "partial_payment": "0",
-          "locked": "1",
+          "locked": false,
           "bill_created_at": "2020-04-08 18:46:25",
           "updated_at": "2020-04-08 18:46:25",
           "status": {
@@ -4414,7 +4599,7 @@ class MockResponses {
             "net_sales": "2635",
             "total": "3485",
             "partial_payment": "0",
-            "locked": "1",
+            "locked": false,
             "bill_created_at": "2020-04-28 14:10:53",
             "updated_at": "2020-04-28 14:10:53",
             "status": {
@@ -4528,7 +4713,7 @@ class MockResponses {
             "net_sales": "2635",
             "total": "3485",
             "partial_payment": "0",
-            "locked": "1",
+            "locked": false,
             "bill_created_at": "2020-04-28 14:10:53",
             "updated_at": "2020-04-28 14:10:53",
             "status": {
@@ -4627,7 +4812,7 @@ class MockResponses {
             "net_sales": "5242",
             "total": "5635",
             "partial_payment": "0",
-            "locked": "1",
+            "locked": false,
             "bill_created_at": "2020-04-28 14:10:53",
             "updated_at": "2020-04-28 14:10:53",
             "status": {
@@ -4733,7 +4918,7 @@ class MockResponses {
             "net_sales": "5035",
             "total": "7085",
             "partial_payment": "0",
-            "locked": "1",
+            "locked": false,
             "bill_created_at": "2020-04-28 14:10:53",
             "updated_at": "2020-04-28 14:10:53",
             "status": {
@@ -4846,7 +5031,7 @@ class MockResponses {
             "net_sales": "2635",
             "total": "3485",
             "partial_payment": "0",
-            "locked": "1",
+            "locked": false,
             "bill_created_at": "2020-04-28 14:10:53",
             "updated_at": "2020-04-28 14:10:53",
             "status": {
@@ -4945,7 +5130,7 @@ class MockResponses {
             "net_sales": "5242",
             "total": "5635",
             "partial_payment": "0",
-            "locked": "1",
+            "locked": false,
             "bill_created_at": "2020-04-28 14:10:53",
             "updated_at": "2020-04-28 14:10:53",
             "status": {
@@ -5051,7 +5236,7 @@ class MockResponses {
             "net_sales": "5035",
             "total": "7085",
             "partial_payment": "0",
-            "locked": "1",
+            "locked": false,
             "bill_created_at": "2020-04-28 14:10:53",
             "updated_at": "2020-04-28 14:10:53",
             "status": {
@@ -5805,7 +5990,7 @@ class MockResponses {
             "net_sales": "2635",
             "total": "3485",
             "partial_payment": "0",
-            "locked": "1",
+            "locked": false,
             "bill_created_at": "2020-04-28 14:10:53",
             "updated_at": "2020-04-28 14:10:53",
             "status": {
@@ -5904,7 +6089,7 @@ class MockResponses {
             "net_sales": "5242",
             "total": "5635",
             "partial_payment": "0",
-            "locked": "1",
+            "locked": false,
             "bill_created_at": "2020-04-28 14:10:53",
             "updated_at": "2020-04-28 14:10:53",
             "status": {
@@ -6010,7 +6195,7 @@ class MockResponses {
             "net_sales": "2635",
             "total": "3485",
             "partial_payment": "0",
-            "locked": "1",
+            "locked": false,
             "bill_created_at": "2020-04-28 14:10:53",
             "updated_at": "2020-04-28 14:10:53",
             "status": {
@@ -6109,7 +6294,7 @@ class MockResponses {
             "net_sales": "5242",
             "total": "5635",
             "partial_payment": "0",
-            "locked": "1",
+            "locked": false,
             "bill_created_at": "2020-04-28 14:10:53",
             "updated_at": "2020-04-28 14:10:53",
             "status": {
@@ -6215,7 +6400,7 @@ class MockResponses {
             "net_sales": "2635",
             "total": "3485",
             "partial_payment": "0",
-            "locked": "1",
+            "locked": false,
             "bill_created_at": "2020-04-28 14:10:53",
             "updated_at": "2020-04-28 14:10:53",
             "status": {
@@ -6314,7 +6499,7 @@ class MockResponses {
             "net_sales": "5242",
             "total": "5635",
             "partial_payment": "0",
-            "locked": "1",
+            "locked": false,
             "bill_created_at": "2020-04-28 14:10:53",
             "updated_at": "2020-04-28 14:10:53",
             "status": {
@@ -6420,7 +6605,7 @@ class MockResponses {
             "net_sales": "2635",
             "total": "3485",
             "partial_payment": "0",
-            "locked": "1",
+            "locked": false,
             "bill_created_at": "2020-04-28 14:10:53",
             "updated_at": "2020-04-28 14:10:53",
             "status": {
@@ -6519,7 +6704,7 @@ class MockResponses {
             "net_sales": "5242",
             "total": "5635",
             "partial_payment": "0",
-            "locked": "1",
+            "locked": false,
             "bill_created_at": "2020-04-28 14:10:53",
             "updated_at": "2020-04-28 14:10:53",
             "status": {
@@ -6625,7 +6810,7 @@ class MockResponses {
             "net_sales": "2635",
             "total": "3485",
             "partial_payment": "0",
-            "locked": "1",
+            "locked": false,
             "bill_created_at": "2020-04-28 14:10:53",
             "updated_at": "2020-04-28 14:10:53",
             "status": {
@@ -6724,7 +6909,7 @@ class MockResponses {
             "net_sales": "5242",
             "total": "5635",
             "partial_payment": "0",
-            "locked": "1",
+            "locked": false,
             "bill_created_at": "2020-04-28 14:10:53",
             "updated_at": "2020-04-28 14:10:53",
             "status": {
@@ -6830,7 +7015,7 @@ class MockResponses {
             "net_sales": "2635",
             "total": "3485",
             "partial_payment": "0",
-            "locked": "1",
+            "locked": false,
             "bill_created_at": "2020-04-28 14:10:53",
             "updated_at": "2020-04-28 14:10:53",
             "status": {
@@ -6929,7 +7114,7 @@ class MockResponses {
             "net_sales": "5242",
             "total": "5635",
             "partial_payment": "0",
-            "locked": "1",
+            "locked": false,
             "bill_created_at": "2020-04-28 14:10:53",
             "updated_at": "2020-04-28 14:10:53",
             "status": {
@@ -7035,7 +7220,7 @@ class MockResponses {
             "net_sales": "2635",
             "total": "3485",
             "partial_payment": "0",
-            "locked": "1",
+            "locked": false,
             "bill_created_at": "2020-04-28 14:10:53",
             "updated_at": "2020-04-28 14:10:53",
             "status": {
@@ -7134,7 +7319,7 @@ class MockResponses {
             "net_sales": "5242",
             "total": "5635",
             "partial_payment": "0",
-            "locked": "1",
+            "locked": false,
             "bill_created_at": "2020-04-28 14:10:53",
             "updated_at": "2020-04-28 14:10:53",
             "status": {
@@ -7240,7 +7425,7 @@ class MockResponses {
             "net_sales": "2635",
             "total": "3485",
             "partial_payment": "0",
-            "locked": "1",
+            "locked": false,
             "bill_created_at": "2020-04-28 14:10:53",
             "updated_at": "2020-04-28 14:10:53",
             "status": {
@@ -7339,7 +7524,7 @@ class MockResponses {
             "net_sales": "5242",
             "total": "5635",
             "partial_payment": "0",
-            "locked": "1",
+            "locked": false,
             "bill_created_at": "2020-04-28 14:10:53",
             "updated_at": "2020-04-28 14:10:53",
             "status": {
@@ -7467,7 +7652,7 @@ class MockResponses {
             "net_sales": "2635",
             "total": "3485",
             "partial_payment": "0",
-            "locked": "1",
+            "locked": false,
             "bill_created_at": "2020-04-28 14:10:53",
             "updated_at": "2020-04-28 14:10:53",
             "status": {
@@ -7566,7 +7751,7 @@ class MockResponses {
             "net_sales": "5242",
             "total": "5635",
             "partial_payment": "0",
-            "locked": "1",
+            "locked": false,
             "bill_created_at": "2020-04-28 14:10:53",
             "updated_at": "2020-04-28 14:10:53",
             "status": {
@@ -7672,7 +7857,7 @@ class MockResponses {
             "net_sales": "2635",
             "total": "3485",
             "partial_payment": "0",
-            "locked": "1",
+            "locked": false,
             "bill_created_at": "2020-04-28 14:10:53",
             "updated_at": "2020-04-28 14:10:53",
             "status": {
@@ -7771,7 +7956,7 @@ class MockResponses {
             "net_sales": "5242",
             "total": "5635",
             "partial_payment": "0",
-            "locked": "1",
+            "locked": false,
             "bill_created_at": "2020-04-28 14:10:53",
             "updated_at": "2020-04-28 14:10:53",
             "status": {
@@ -7877,7 +8062,7 @@ class MockResponses {
             "net_sales": "2635",
             "total": "3485",
             "partial_payment": "0",
-            "locked": "1",
+            "locked": false,
             "bill_created_at": "2020-04-28 14:10:53",
             "updated_at": "2020-04-28 14:10:53",
             "status": {
@@ -7976,7 +8161,7 @@ class MockResponses {
             "net_sales": "5242",
             "total": "5635",
             "partial_payment": "0",
-            "locked": "1",
+            "locked": false,
             "bill_created_at": "2020-04-28 14:10:53",
             "updated_at": "2020-04-28 14:10:53",
             "status": {
@@ -8082,7 +8267,7 @@ class MockResponses {
             "net_sales": "2635",
             "total": "3485",
             "partial_payment": "0",
-            "locked": "1",
+            "locked": false,
             "bill_created_at": "2020-04-28 14:10:53",
             "updated_at": "2020-04-28 14:10:53",
             "status": {
@@ -8181,7 +8366,7 @@ class MockResponses {
             "net_sales": "5242",
             "total": "5635",
             "partial_payment": "0",
-            "locked": "1",
+            "locked": false,
             "bill_created_at": "2020-04-28 14:10:53",
             "updated_at": "2020-04-28 14:10:53",
             "status": {
@@ -8287,7 +8472,7 @@ class MockResponses {
             "net_sales": "2635",
             "total": "3485",
             "partial_payment": "0",
-            "locked": "1",
+            "locked": false,
             "bill_created_at": "2020-04-28 14:10:53",
             "updated_at": "2020-04-28 14:10:53",
             "status": {
@@ -8386,7 +8571,7 @@ class MockResponses {
             "net_sales": "5242",
             "total": "5635",
             "partial_payment": "0",
-            "locked": "1",
+            "locked": false,
             "bill_created_at": "2020-04-28 14:10:53",
             "updated_at": "2020-04-28 14:10:53",
             "status": {
@@ -8492,7 +8677,7 @@ class MockResponses {
             "net_sales": "2635",
             "total": "3485",
             "partial_payment": "0",
-            "locked": "1",
+            "locked": false,
             "bill_created_at": "2020-04-28 14:10:53",
             "updated_at": "2020-04-28 14:10:53",
             "status": {
@@ -8591,7 +8776,7 @@ class MockResponses {
             "net_sales": "5242",
             "total": "5635",
             "partial_payment": "0",
-            "locked": "1",
+            "locked": false,
             "bill_created_at": "2020-04-28 14:10:53",
             "updated_at": "2020-04-28 14:10:53",
             "status": {
@@ -8697,7 +8882,7 @@ class MockResponses {
             "net_sales": "2635",
             "total": "3485",
             "partial_payment": "0",
-            "locked": "1",
+            "locked": false,
             "bill_created_at": "2020-04-28 14:10:53",
             "updated_at": "2020-04-28 14:10:53",
             "status": {
@@ -8796,7 +8981,7 @@ class MockResponses {
             "net_sales": "5242",
             "total": "5635",
             "partial_payment": "0",
-            "locked": "1",
+            "locked": false,
             "bill_created_at": "2020-04-28 14:10:53",
             "updated_at": "2020-04-28 14:10:53",
             "status": {
@@ -8902,7 +9087,7 @@ class MockResponses {
             "net_sales": "2635",
             "total": "3485",
             "partial_payment": "0",
-            "locked": "1",
+            "locked": false,
             "bill_created_at": "2020-04-28 14:10:53",
             "updated_at": "2020-04-28 14:10:53",
             "status": {
@@ -9001,7 +9186,7 @@ class MockResponses {
             "net_sales": "5242",
             "total": "5635",
             "partial_payment": "0",
-            "locked": "1",
+            "locked": false,
             "bill_created_at": "2020-04-28 14:10:53",
             "updated_at": "2020-04-28 14:10:53",
             "status": {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heist/screens/profile_setup_screen/bloc/profile_setup_screen_bloc.dart';
+import 'package:heist/screens/profile_setup_screen/widgets/pages/profile_finished_screen.dart';
 
 
 import 'pages/intro_screen.dart';
@@ -105,12 +106,12 @@ class _ProfileSetupScreenBodyState extends State<ProfileSetupScreenBody> with Si
       return ProfileNameScreen(controller: _controller);
     } else if (!state.isPhotoComplete) {
       return ProfilePhotoScreen(controller: _controller);
-    } else if (!state.isPaymentAccountComplete) {
-      return SetupPaymentAccountScreen(controller: _controller);
     } else if (!state.isTipComplete) {
       return SetupTipScreen(controller: _controller);
+    } else if (!state.isPaymentAccountComplete) {
+      return SetupPaymentAccountScreen(controller: _controller);
     } else {
-      return Container();
+      return ProfileFinishedScreen();
     }
   }
 
@@ -120,11 +121,11 @@ class _ProfileSetupScreenBodyState extends State<ProfileSetupScreenBody> with Si
     } else if (!state.isNameComplete) {
       return ProfilePhotoScreen(controller: _controller);
     } else if (!state.isPhotoComplete) {
-      return SetupPaymentAccountScreen(controller: _controller);
-    } else if (!state.isPaymentAccountComplete) {
       return  SetupTipScreen(controller: _controller);
+    } else if (!state.isTipComplete) {
+      return SetupPaymentAccountScreen(controller: _controller);
     } else {
-      return Container();
+      return ProfileFinishedScreen();
     }
   }
 }

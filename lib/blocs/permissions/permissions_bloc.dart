@@ -24,6 +24,7 @@ class PermissionsBloc extends Bloc<PermissionsEvent, PermissionsState> {
   bool get isLocationEnabled => state.locationEnabled;
   bool get isNotificationEnabled => state.notificationEnabled;
   bool get isBeaconEnabled => state.beaconEnabled;
+  bool get areChecksComplete => state.checksComplete;
 
   bool get allPermissionsValid => state.bleEnabled && state.locationEnabled && state.notificationEnabled && state.beaconEnabled;
 
@@ -39,8 +40,10 @@ class PermissionsBloc extends Bloc<PermissionsEvent, PermissionsState> {
       yield* _mapBeaconStatusChangedToState(event);
     } else if (event is UpdateAllPermissions) {
       yield* _mapUpdateAllPermissionsToState(event);
+    } else if (event is IsInitialLogin) {
+      yield* _mapIsInitialLoginToState();
     } else if (event is CheckPermissions) {
-      _checkPermissions();
+      yield* _checkPermissions();
     }
   }
 
@@ -65,25 +68,33 @@ class PermissionsBloc extends Bloc<PermissionsEvent, PermissionsState> {
       bleEnabled: event.bleGranted,
       locationEnabled: event.locationGranted,
       notificationEnabled: event.notificationGranted,
-      beaconEnabled: event.beaconGranted
+      beaconEnabled: event.beaconGranted,
+      checksComplete: event.checksComplete
     );
   }
 
-  void _checkPermissions() async {
+  Stream<PermissionsState> _mapIsInitialLoginToState() async* {
+    yield PermissionsState.isInitial();
+  }
+  
+  Stream<PermissionsState> _checkPermissions() async* {
     bool isInitial =  await _initialLoginRepository.isInitialLogin();
-    if (isInitial != null && !isInitial) {
+    if (!isInitial) {
       List results = await Future.wait([
         flutterBeacon.bluetoothState,
         PermissionHandler().checkPermissionStatus(PermissionGroup.location),
         PermissionHandler().checkPermissionStatus(PermissionGroup.notification),
         PermissionHandler().checkPermissionStatus(PermissionGroup.locationAlways),
       ]);
-      add(UpdateAllPermissions(
-        bleGranted: results[0] == BluetoothState.stateOn,
-        locationGranted: results[1] == PermissionStatus.granted,
-        notificationGranted: results[2] == PermissionStatus.granted,
-        beaconGranted: results[3] == PermissionStatus.granted
-      ));
+      yield state.update(
+        bleEnabled: results[0] == BluetoothState.stateOn,
+        locationEnabled: results[1] == PermissionStatus.granted,
+        notificationEnabled: results[2] == PermissionStatus.granted,
+        beaconEnabled: results[3] == PermissionStatus.granted,
+        checksComplete: true,
+      );
+    } else {
+      add(IsInitialLogin());
     }
   }
 }

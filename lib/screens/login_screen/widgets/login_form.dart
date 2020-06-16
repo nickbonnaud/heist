@@ -40,6 +40,7 @@ class _LoginFormState extends State<LoginForm> {
         } else if (state.isSuccess) {
           BlocProvider.of<AuthenticationBloc>(context)
             .add(LoggedIn());
+          Navigator.of(context).popUntil((route) => route.isFirst);
         }
       },
       child: Form(
@@ -59,6 +60,7 @@ class _LoginFormState extends State<LoginForm> {
                     },
                     validator: (_) => !state.isEmailValid && _emailController.text.isNotEmpty ? 'Invalid email' : null,
                     autovalidate: true,
+                    autocorrect: false,
                     decoration: InputDecoration(
                       enabledBorder: UnderlineInputBorder(
                         borderSide: BorderSide(color: Colors.white)
@@ -82,10 +84,10 @@ class _LoginFormState extends State<LoginForm> {
                     textInputAction: TextInputAction.done,
                     onFieldSubmitted: (_) {
                       _passwordFocus.unfocus();
-                      _submit(state);
                     },
                     validator: (_) => !state.isPasswordValid && _passwordController.text.isNotEmpty ? 'Invalid Password' : null,
                     autovalidate: true,
+                    autocorrect: false,
                     decoration: InputDecoration(
                       enabledBorder: UnderlineInputBorder(
                         borderSide: BorderSide(color: Colors.white),

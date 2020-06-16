@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:heist/blocs/customer/customer_bloc.dart';
+import 'package:heist/blocs/authentication/authentication_bloc.dart';
 import 'package:heist/models/customer/customer.dart';
 import 'package:heist/repositories/customer_repository.dart';
 import 'package:heist/resources/helpers/validators.dart';
@@ -14,13 +14,13 @@ part 'email_form_state.dart';
 
 class EmailFormBloc extends Bloc<EmailFormEvent, EmailFormState> {
   final CustomerRepository _customerRepository;
-  final CustomerBloc _customerBloc;
+  final AuthenticationBloc _authenticationBloc;
 
 
-  EmailFormBloc({@required CustomerRepository customerRepository, @required CustomerBloc customerBloc})
-    : assert(customerRepository != null && customerBloc != null),
+  EmailFormBloc({@required CustomerRepository customerRepository, @required AuthenticationBloc authenticationBloc})
+    : assert(customerRepository != null && authenticationBloc != null),
       _customerRepository = customerRepository,
-      _customerBloc = customerBloc;
+      _authenticationBloc = authenticationBloc;
   
   @override
   EmailFormState get initialState => EmailFormState.initial();
@@ -53,7 +53,7 @@ class EmailFormBloc extends Bloc<EmailFormEvent, EmailFormState> {
     try {
       Customer customer = await _customerRepository.updateEmail(event.email, event.customer.identifier);
       yield state.update(isSubmitting: false, isSuccess: true);
-      _customerBloc.add(UpdateCustomer(customer: customer));
+      _authenticationBloc.add(CustomerUpdated(customer: customer));
     } catch (_) {
       yield state.update(isSubmitting: false, isFailure: true);
     }

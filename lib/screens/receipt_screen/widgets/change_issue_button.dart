@@ -70,7 +70,7 @@ class ChangeIssueButton extends StatelessWidget {
             ),
           PopupMenuItem<Options>(
             child: _createTile(
-              title: "Cancel Error"
+              title: "Cancel Issue"
             ),
             value: Options.cancel,
           ),
@@ -101,7 +101,6 @@ class ChangeIssueButton extends StatelessWidget {
       builder: (_) => IssueScreen(type: type, transaction: _transaction)
     );
     if (transaction != null) {
-      print(transaction);
       BlocProvider.of<ReceiptScreenBloc>(context).add(TransactionChanged(transactionResource: transaction));
     }
   }

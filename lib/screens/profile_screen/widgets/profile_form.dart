@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:heist/blocs/customer/customer_bloc.dart';
+import 'package:heist/blocs/authentication/authentication_bloc.dart';
 import 'package:heist/global_widgets/edit_photo/bloc/edit_photo_bloc.dart';
 import 'package:heist/global_widgets/edit_photo/edit_photo.dart';
 import 'package:heist/models/customer/customer.dart';
@@ -76,7 +76,7 @@ class _ProfileFormState extends State<ProfileForm> {
                       BoldText(text: 'Edit Profile', size: SizeConfig.getWidth(9), color: Colors.black),
                       Center(
                         child: BlocProvider<EditPhotoBloc>(
-                          create: (BuildContext context) => EditPhotoBloc(profileRepository: widget._profileRepository , customerBloc: BlocProvider.of<CustomerBloc>(context)),
+                          create: (BuildContext context) => EditPhotoBloc(profileRepository: widget._profileRepository , authenticationBloc: BlocProvider.of<AuthenticationBloc>(context)),
                           child: EditPhoto(photoPicker: PhotoPickerRepository(), customer: widget._customer,),
                         )
                       ),

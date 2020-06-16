@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:heist/blocs/customer/customer_bloc.dart';
+import 'package:heist/blocs/authentication/authentication_bloc.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
 
@@ -10,9 +10,9 @@ class CustomerWelcomeMessage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(left: 16),
-      child: BlocBuilder<CustomerBloc, CustomerState>(
+      child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
         builder: (context, state) {
-          return state is SignedIn
+          return state.authenticated
             ? _createWelcomeMessage("Welcome ${state.customer.profile.firstName}!")
             : _createWelcomeMessage("Welcome Back!");
         }

@@ -74,6 +74,24 @@ class TransactionRepository {
     return TransactionResource.withError(response.error);
   }
 
+  Future<TransactionResource> keepBillOpen({@required String transactionId}) async {
+    final ApiResponse response = await _transactionProvider.patchStatus(transactionId: transactionId, statusCode: 100);
+    if (response.isOK) {
+      return TransactionResource.fromJson(response.body);
+    }
+    return TransactionResource.withError(response.error);
+  }
+
+  Future<List<TransactionResource>> fetchOpen() async {
+    final String query = 'open=true';
+    final PaginatedApiResponse response = await _transactionProvider.fetch(query: query);
+    if (response.isOK) {
+      PaginateDataHolder holder = _handleSuccess(response);
+      return holder.data;
+    }
+    return [TransactionResource.withError(response.error)].toList();
+  }
+
   PaginateDataHolder _handleSuccess(PaginatedApiResponse response) {
     final rawData = response.body as List;
     List<TransactionResource> data = rawData.map((rawTransaction) {

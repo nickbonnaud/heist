@@ -15,6 +15,8 @@ class ProfileSetupScreenState {
     @required this.isTipComplete
   });
 
+  bool get isComplete => this.isNameComplete && this.isPhotoComplete && this.isPaymentAccountComplete && this.isTipComplete;
+
   factory ProfileSetupScreenState.initial() {
     return ProfileSetupScreenState(
       isIntroComplete: false,
@@ -56,8 +58,6 @@ class ProfileSetupScreenState {
       isTipComplete: isTipComplete ?? this.isTipComplete
     );
   }
-
-  bool get isComplete => this.isNameComplete && this.isPhotoComplete && this.isPaymentAccountComplete && this.isTipComplete;
 
   @override
   String toString() {

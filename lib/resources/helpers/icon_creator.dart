@@ -33,7 +33,6 @@ class IconCreator {
   Future<BitmapDescriptor> _createMarker(Business business) async {
     final File markerImageFile = await DefaultCacheManager().getSingleFile(business.photos.logo.smallUrl);
     final Uint8List imageBytes = await markerImageFile.readAsBytes();
-
     Uint8List marker = await _formatIcon(imageBytes, _size);
     return BitmapDescriptor.fromBytes(marker);
   }

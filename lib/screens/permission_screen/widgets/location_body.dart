@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:heist/resources/constants.dart';
 import 'package:heist/screens/permission_screen/bloc/permission_screen_bloc.dart';
 
-import 'permission_buttons.dart';
+import 'permission_buttons/bloc/permission_buttons_bloc.dart';
+import 'permission_buttons/permission_buttons.dart';
 
 class LocationBody extends StatelessWidget {
-  final AnimationController _controller;
+  final PermissionButtons _permissionButtons;
   
-  LocationBody({@required controller})
-    : assert(controller != null),
-      _controller = controller;
+  LocationBody({@required PermissionButtons permissionButtons})
+    : assert(permissionButtons != null),
+      _permissionButtons = permissionButtons;
 
   final String locationTextIos = 
     "Please set Location Services to 'While in Use'.\n\n"
@@ -67,7 +69,10 @@ class LocationBody extends StatelessWidget {
           ),
         ),
         SizedBox(height: 35),
-        PermissionButtons(permission: PermissionType.location, controller: _controller,)
+        BlocProvider<PermissionButtonsBloc>(
+          create: (_) => PermissionButtonsBloc(),
+          child: _permissionButtons
+        )
       ],
     );
   }

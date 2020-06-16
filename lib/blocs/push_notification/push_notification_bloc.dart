@@ -8,12 +8,6 @@ import 'package:meta/meta.dart';
 part 'push_notification_event.dart';
 part 'push_notification_state.dart';
 
-enum CallBackType {
-  ON_MESSAGE,
-  ON_LAUNCH,
-  ON_RESUME,
-}
-
 class PushNotificationBloc extends Bloc<PushNotificationEvent, PushNotificationState> {
   final PushNotificationRepository _pushNotificationRepository;
 
@@ -27,32 +21,12 @@ class PushNotificationBloc extends Bloc<PushNotificationEvent, PushNotificationS
   @override
   Stream<PushNotificationState> mapEventToState(PushNotificationEvent event) async* {
     if (event is StartPushNotificationMonitoring) {
-      yield* _mapStartMonitoringToState();
-    } else if (event is OnMessageReceived) {
-      yield PushNotificationCallBackActivated(type: CallBackType.ON_MESSAGE, message: event.message);
-    } else if (event is OnLaunchReceived) {
-      yield PushNotificationCallBackActivated(type: CallBackType.ON_LAUNCH, message: event.message);
-    } else if (event is OnResumeReceived) {
-      yield PushNotificationCallBackActivated(type: CallBackType.ON_RESUME, message: event.message);
-    } else if (event is PushNotificationCallBackFinished) {
-      yield MonitoringPushNotifications();
+      yield* _mapStartMonitoringToState(event);
     }
   }
 
-  Stream<PushNotificationState> _mapStartMonitoringToState() async* {
-    _pushNotificationRepository.startMonitoring(_onMessage, _onLaunch, _onResume);
+  Stream<PushNotificationState> _mapStartMonitoringToState(StartPushNotificationMonitoring event) async* {
+    _pushNotificationRepository.startMonitoring(onMessageReceived: event.onMessageReceived, onMessageInteraction: event.onMessageInteraction);
     yield MonitoringPushNotifications();
-  }
-
-  Future<void> _onMessage(Map<String, dynamic> message) async {
-    add(OnMessageReceived(message: message));
-  }
-
-  Future<void> _onLaunch(Map<String, dynamic> message) async {
-    add(OnLaunchReceived(message: message));
-  }
-
-  Future<void> _onResume(Map<String, dynamic> message) async {
-    add(OnResumeReceived(message: message));
   }
 }

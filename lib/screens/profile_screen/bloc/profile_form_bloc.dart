@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:heist/blocs/customer/customer_bloc.dart';
+import 'package:heist/blocs/authentication/authentication_bloc.dart';
 import 'package:heist/models/customer/customer.dart';
 import 'package:heist/models/customer/profile.dart';
 import 'package:heist/repositories/profile_repository.dart';
@@ -15,12 +15,12 @@ part 'profile_form_state.dart';
 
 class ProfileFormBloc extends Bloc<ProfileFormEvent, ProfileFormState> {
   final ProfileRepository _profileRepository;
-  final CustomerBloc _customerBloc;
+  final AuthenticationBloc _authenticationBloc;
 
-  ProfileFormBloc({@required ProfileRepository profileRepository, @required CustomerBloc customerBloc})
-    : assert(profileRepository != null && customerBloc != null),
+  ProfileFormBloc({@required ProfileRepository profileRepository, @required AuthenticationBloc authenticationBloc})
+    : assert(profileRepository != null && authenticationBloc != null),
       _profileRepository = profileRepository,
-      _customerBloc = customerBloc;
+      _authenticationBloc = authenticationBloc;
   
   @override
   ProfileFormState get initialState => ProfileFormState.initial();
@@ -58,7 +58,7 @@ class ProfileFormBloc extends Bloc<ProfileFormEvent, ProfileFormState> {
     yield state.update(isSubmitting: true);
     try {
       Profile profile = await _sendProfileData(event.firstName, event.lastName, event.customer);
-      _updatCustomerBloc(event.customer, profile);
+      _updAtauthenticationBloc(event.customer, profile);
       yield state.update(isSubmitting: false, isSuccess: true);
     } catch (_) {
       yield state.update(isSubmitting: false, isFailure: true);
@@ -73,7 +73,7 @@ class ProfileFormBloc extends Bloc<ProfileFormEvent, ProfileFormState> {
     return _profileRepository.update(firstName: firstName, lastName: lastName, profileIdentifier: customer.profile.identifier);
   }
 
-  void _updatCustomerBloc(Customer customer, Profile profile) {
-    _customerBloc.add(UpdateCustomer(customer: customer.update(profile: profile)));
+  void _updAtauthenticationBloc(Customer customer, Profile profile) {
+    _authenticationBloc.add(CustomerUpdated(customer: customer.update(profile: profile)));
   }
 }

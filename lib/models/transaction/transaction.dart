@@ -14,6 +14,7 @@ class Transaction extends Equatable {
   final String billCreatedAt;
   final String billUpdatedAt;
   final Status status;
+  final bool locked;
   final List<PurchasedItem> purchasedItems;
 
   Transaction({
@@ -25,6 +26,7 @@ class Transaction extends Equatable {
     @required this.billCreatedAt,
     @required this.billUpdatedAt,
     @required this.status,
+    @required this.locked,
     @required this.purchasedItems
   });
 
@@ -38,6 +40,7 @@ class Transaction extends Equatable {
       billCreatedAt: DateFormat('E, MMM d').format(DateTime.parse(json['bill_created_at'])),
       billUpdatedAt: DateFormat('E, MMM d').format(DateTime.parse(json['updated_at'])),
       status: Status.fromJson(json['status']),
+      locked: json['locked'],
       purchasedItems: (json['purchased_items'] as List).map((jsonPurchasedItem) {
         return PurchasedItem.fromJson(jsonPurchasedItem);
       }).toList()
@@ -55,6 +58,7 @@ class Transaction extends Equatable {
     billCreatedAt,
     billUpdatedAt,
     status,
+    locked,
     purchasedItems
   ];
 
@@ -68,6 +72,7 @@ class Transaction extends Equatable {
     billCreatedAt: $billCreatedAt,
     billUpdatedAt: $billUpdatedAt,
     status: $status,
+    lockedL $locked,
     purchasedItems: $purchasedItems
   }''';
 }

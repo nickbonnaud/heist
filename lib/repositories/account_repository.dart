@@ -1,12 +1,12 @@
 import 'package:heist/models/api_response.dart';
-import 'package:heist/models/customer/account.dart';
+import 'package:heist/models/customer/customer.dart';
 import 'package:heist/providers/account_provider.dart';
 import 'package:meta/meta.dart';
 
 class AccountRepository {
   final AccountProvider _accountProvider = AccountProvider();
   
-  Future<Account> update({@required String accountIdentifier, @required int tipRate, @required int quickTipRate, String primary}) async {
+  Future<Customer> update({@required String accountIdentifier, @required int tipRate, @required int quickTipRate, String primary}) async {
     Map body = {};
     if (tipRate != null) {
       body.addAll({'tip_rate': tipRate});
@@ -20,8 +20,8 @@ class AccountRepository {
 
     final ApiResponse response = await _accountProvider.update(body: body, accountIdentifier: accountIdentifier);
     if (response.isOK) {
-      return Account.fromJson(response.body);
+      return Customer.fromJson(response.body);
     }
-    return Account.withError(response.error);
+    return Customer.withError(response.error);
   }
 }

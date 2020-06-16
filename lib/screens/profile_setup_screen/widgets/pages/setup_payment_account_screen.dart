@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:heist/blocs/customer/customer_bloc.dart';
+import 'package:heist/blocs/authentication/authentication_bloc.dart';
 import 'package:heist/models/customer/customer.dart';
 import 'package:heist/models/customer/status.dart';
 import 'package:heist/resources/constants.dart';
@@ -55,13 +55,13 @@ class _SetupPaymentAccountScreen extends State<SetupPaymentAccountScreen> {
           Row(
             children: <Widget>[
               Expanded(
-                child: BlocBuilder<CustomerBloc, CustomerState>(
+                child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
                   builder: (context, state) {
                     return RaisedButton(
                       color: Colors.green,
                       disabledColor: Colors.green.shade100,
                       shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
-                      onPressed: _isNextButtonEnabled(state is SignedIn ? state.customer : null) ? () => _nextButtonPressed(context) : null,
+                      onPressed: _isNextButtonEnabled(state) ? () => _nextButtonPressed(context) : null,
                       child: BoldText(text: 'Next', size: SizeConfig.getWidth(6), color: Colors.white)
                     );
                   },
@@ -81,14 +81,14 @@ class _SetupPaymentAccountScreen extends State<SetupPaymentAccountScreen> {
   }
 
   void _connectButtonPressed() {
-    Customer customer =  BlocProvider.of<CustomerBloc>(context).customer;
-    Status status = new Status(name: "pending", code: 120);
-    customer = customer.update(status: status);
-    BlocProvider.of<CustomerBloc>(context).add(UpdateCustomer(customer: customer));
+    Customer customer = BlocProvider.of<AuthenticationBloc>(context).customer;
+    Status status = Status(name: "pending", code: 120);
+    Customer updatedCustomer = customer.update(status: status);
+    BlocProvider.of<AuthenticationBloc>(context).add(CustomerUpdated(customer: updatedCustomer));
   }
 
-  bool _isNextButtonEnabled(Customer customer) {
-    return customer.status.code == 120 || customer.status.code == 200;
+  bool _isNextButtonEnabled(AuthenticationState state) {
+    return state.customer.status.code == 120 || state.customer.status.code == 200;
   }
 
   void _nextButtonPressed(BuildContext context) {

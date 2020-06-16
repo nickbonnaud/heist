@@ -13,19 +13,21 @@ class UpdateAllPermissions extends PermissionsEvent {
   final bool locationGranted;
   final bool notificationGranted;
   final bool beaconGranted;
+  final bool checksComplete;
 
   const UpdateAllPermissions({
     @required this.bleGranted,
     @required this.locationGranted,
     @required this.notificationGranted,
-    @required this.beaconGranted
+    @required this.beaconGranted,
+    @required this.checksComplete,
   });
 
   @override
-  List<Object> get props => [bleGranted, locationGranted, notificationGranted, beaconGranted];
+  List<Object> get props => [bleGranted, locationGranted, notificationGranted, beaconGranted, checksComplete];
 
   @override
-  String toString() => 'UpdateAllPermissions { bleGranted: $bleGranted, locationGranted: $locationGranted, notificationGranted: $notificationGranted, beaconGranted: $beaconGranted }';
+  String toString() => 'UpdateAllPermissions { bleGranted: $bleGranted, locationGranted: $locationGranted, notificationGranted: $notificationGranted, beaconGranted: $beaconGranted, checksComplete: $checksComplete }';
 }
 
 class BleStatusChanged extends PermissionsEvent {
@@ -75,3 +77,5 @@ class BeaconStatusChanged extends PermissionsEvent {
   @override
   String toString() => 'BeaconStatusChanged { granted: $granted }';
 }
+
+class IsInitialLogin extends PermissionsEvent {}

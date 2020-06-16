@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:heist/blocs/customer/customer_bloc.dart';
+import 'package:heist/blocs/authentication/authentication_bloc.dart';
 import 'package:heist/repositories/account_repository.dart';
 import 'package:heist/screens/profile_setup_screen/widgets/pages/setup_tip_screen.dart/bloc/setup_tip_screen_bloc.dart';
 
@@ -17,7 +17,7 @@ class SetupTipScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<SetupTipScreenBloc>(
-      create: (BuildContext context) => SetupTipScreenBloc(accountRepository: _accountRepository, customerBloc: BlocProvider.of<CustomerBloc>(context)),
+      create: (BuildContext context) => SetupTipScreenBloc(accountRepository: _accountRepository, authenticationBloc: BlocProvider.of<AuthenticationBloc>(context)),
       child: SetupTipBody(controller: _controller,),
     );
   }

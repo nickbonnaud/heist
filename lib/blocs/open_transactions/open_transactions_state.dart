@@ -5,18 +5,22 @@ abstract class OpenTransactionsState extends Equatable {
 
   @override
   List<Object> get props => [];
+  
+  List<TransactionResource> get openTransactions => null;
 }
 
-class NoOpenTransactions extends OpenTransactionsState {}
+class Uninitialized extends OpenTransactionsState {}
 
-class HasOpenTransactions extends OpenTransactionsState {
+class OpenTransactionsLoaded extends OpenTransactionsState {
   final List<TransactionResource> transactions;
 
-  const HasOpenTransactions({@required this.transactions});
-  
+  const OpenTransactionsLoaded({@required this.transactions});
+
   @override
   List<Object> get props => [transactions];
 
   @override
-  String toString() => 'HasOpenTransactions { transactions: $transactions }';
+  String toString() => 'OpenTransactionsLoaded { transactions: $transactions }';
 }
+
+class FailedToFetchOpenTransactions extends OpenTransactionsState {}

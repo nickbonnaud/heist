@@ -12,7 +12,8 @@ class OpenTransactionsList extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<OpenTransactionsBloc, OpenTransactionsState>(
       builder: (context, state) {
-        if (state is HasOpenTransactions) {
+        final currentState = state;
+        if (currentState is OpenTransactionsLoaded && currentState.transactions.length > 0) {
           return Column(
             children: <Widget>[
               Padding(
@@ -39,7 +40,7 @@ class OpenTransactionsList extends StatelessWidget {
                 scrollDirection: Axis.horizontal,
                 child: Row(
                   children: <Widget>[
-                    for (TransactionResource transaction in state.transactions) _buildIcon(transaction: transaction)
+                    for (TransactionResource transaction in currentState.transactions) _buildIcon(transaction: transaction)
                   ],
                 ),
               ),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:heist/blocs/customer/customer_bloc.dart';
+import 'package:heist/blocs/authentication/authentication_bloc.dart';
 import 'package:heist/global_widgets/bottom_modal_app_bar.dart';
 import 'package:heist/repositories/account_repository.dart';
 
@@ -16,14 +16,10 @@ class TipScreen extends StatelessWidget {
       resizeToAvoidBottomPadding: false,
       backgroundColor: Colors.white,
       appBar: BottomModalAppBar(),
-      body: BlocBuilder<CustomerBloc, CustomerState>(
-        builder: (context, state) {
-          return BlocProvider<TipFormBloc>(
-            create: (BuildContext context) => TipFormBloc(accountRepository: _accountRepository, customerBloc: BlocProvider.of<CustomerBloc>(context)),
-            child: TipForm(customer: state is SignedIn ? state.customer : null),
-          );
-        },
-      ),
+      body: BlocProvider<TipFormBloc>(
+        create: (BuildContext context) => TipFormBloc(accountRepository: _accountRepository, authenticationBloc: BlocProvider.of<AuthenticationBloc>(context)),
+        child: TipForm(customer: BlocProvider.of<AuthenticationBloc>(context).customer),
+      )
     );
   }
 }

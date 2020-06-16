@@ -56,6 +56,10 @@ class ReceiptScreenBody extends StatelessWidget {
                   ],
                 ),
               ),
+              if (_transactionResource.issue != null)
+                Center(
+                  child: BoldText(text: "Issue reported", size: SizeConfig.getWidth(5), color: Colors.red)
+                ),
               SizedBox(height: SizeConfig.getHeight(3)),
               ListView.separated(
                 physics: NeverScrollableScrollPhysics(),
