@@ -6,6 +6,7 @@ import 'package:heist/blocs/active_location/active_location_bloc.dart';
 import 'package:heist/blocs/authentication/authentication_bloc.dart';
 import 'package:heist/blocs/boot/boot_bloc.dart';
 import 'package:heist/blocs/geo_location/geo_location_bloc.dart';
+import 'package:heist/blocs/notification_boot/notification_boot_bloc.dart';
 import 'package:heist/blocs/permissions/permissions_bloc.dart';
 import 'package:heist/blocs/push_notification/push_notification_bloc.dart';
 import 'package:heist/repositories/active_location_repository.dart';
@@ -34,24 +35,27 @@ void main() {
     MultiBlocProvider(
       providers: [
         BlocProvider<AuthenticationBloc>(
-          create: (BuildContext context) => AuthenticationBloc(customerRepository: _customerRepository)
+          create: (_) => AuthenticationBloc(customerRepository: _customerRepository)
             ..add(AppStarted()),
         ),
         BlocProvider<BootBloc>(
           create: (_) => BootBloc()
         ),
         BlocProvider<PermissionsBloc>(
-          create: (BuildContext context) => PermissionsBloc(initialLoginRepository: _initialLoginRepository)
+          create: (_) => PermissionsBloc(initialLoginRepository: _initialLoginRepository)
             ..add(CheckPermissions())
         ),
         BlocProvider<GeoLocationBloc>(
           create: (_) => GeoLocationBloc(geolocatorRepository: _geolocatorRepository)
         ),
         BlocProvider<ActiveLocationBloc>(
-          create: (BuildContext context) => ActiveLocationBloc(activeLocationRepository: _activeLocationRepository),
+          create: (_) => ActiveLocationBloc(activeLocationRepository: _activeLocationRepository),
+        ),
+        BlocProvider<NotificationBootBloc>(
+          create: (_) => NotificationBootBloc(),
         ),
         BlocProvider<PushNotificationBloc>(
-          create: (BuildContext context) => PushNotificationBloc(pushNotificationRepository: _pushNotificationRepository),
+          create: (_) => PushNotificationBloc(pushNotificationRepository: _pushNotificationRepository),
         ),
       ],
       child: AppTheme()

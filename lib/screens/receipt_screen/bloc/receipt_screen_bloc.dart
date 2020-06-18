@@ -26,7 +26,7 @@ class ReceiptScreenBloc extends Bloc<ReceiptScreenEvent, ReceiptScreenState> {
   }
 
   bool _isButtonVisible({@required TransactionResource transactionResource}) {
-    List<int> visibleStatusCodes = [101, 1020, 1021, 1022, 500, 501, 502, 503];
+    List<int> visibleStatusCodes = [101, 1020, 1021, 1022, 105, 500, 501, 502, 503];
     return visibleStatusCodes.contains(transactionResource.transaction.status.code);
   }
 }

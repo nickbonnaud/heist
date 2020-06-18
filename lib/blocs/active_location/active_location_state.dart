@@ -5,6 +5,8 @@ abstract class ActiveLocationState extends Equatable {
 
   @override
   List<Object> get props => [];
+
+  List<ActiveLocation> get locations => [];
 }
 
 class NoActiveLocations extends ActiveLocationState {
@@ -56,6 +58,9 @@ class CurrentActiveLocations extends ActiveLocationState {
       removeActiveLocationFail: removeActiveLocationFail ?? this.removeActiveLocationFail
     );
   }
+
+  @override
+  List<ActiveLocation> get locations => activeLocations;
   
   @override
   List<Object> get props => [activeLocations, addActiveLocationFail, removeActiveLocationFail];

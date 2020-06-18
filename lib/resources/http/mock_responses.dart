@@ -192,7 +192,7 @@ class MockResponses {
     
     return {
       'data': {
-        'identifier': 'fake_identifier',
+        'identifier': 'fake_identifier_new',
         'email': 'fake@gmail.com',
         'token': 'not_a_real_token',
         'profile': {
@@ -3292,7 +3292,7 @@ class MockResponses {
         "updated_at": "2020-04-08 18:46:25",
         "status": {
           "name": "payment processing",
-          "code": "103"
+          "code": "105"
         },
         "purchased_items": [
           {
@@ -3373,7 +3373,7 @@ class MockResponses {
       'data': [
         {
           "transaction": {
-          "identifier": "3ff9ad40-79c9-11ea-8b92-a9b4a4c53696",
+          "identifier": "fake_open_transaction",
           "employee_id": null,
           "tax": "457",
           "tip": "1636",
@@ -3385,7 +3385,7 @@ class MockResponses {
           "updated_at": "2020-05-26T22:04:56.000000Z",
           "status": {
             "name": "open",
-            "code": "100"
+            "code": "105"
           },
           "purchased_items": [
             {

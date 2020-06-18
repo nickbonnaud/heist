@@ -6,7 +6,7 @@ abstract class OpenTransactionsState extends Equatable {
   @override
   List<Object> get props => [];
   
-  List<TransactionResource> get openTransactions => null;
+  List<TransactionResource> get openTransactions => [];
 }
 
 class Uninitialized extends OpenTransactionsState {}
@@ -18,6 +18,9 @@ class OpenTransactionsLoaded extends OpenTransactionsState {
 
   @override
   List<Object> get props => [transactions];
+
+  @override
+  List<TransactionResource> get openTransactions => transactions;
 
   @override
   String toString() => 'OpenTransactionsLoaded { transactions: $transactions }';

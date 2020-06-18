@@ -9,47 +9,46 @@ import 'package:heist/models/transaction/transaction_resource.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
 import 'package:heist/screens/receipt_screen/bloc/receipt_screen_bloc.dart';
-import 'package:heist/screens/receipt_screen/widgets/pay_button/bloc/pay_button_bloc.dart';
 import 'package:vibrate/vibrate.dart';
 
-class PayButton extends StatelessWidget {
+import 'bloc/keep_open_button_bloc.dart';
+
+class KeepOpenButton extends StatelessWidget {
   final TransactionResource _transactionResource;
 
-  PayButton({@required TransactionResource transactionResource})
+  KeepOpenButton({@required TransactionResource transactionResource})
     : assert(transactionResource != null),
       _transactionResource = transactionResource;
-  
+
   @override
   Widget build(BuildContext context) {
-    return BlocListener<PayButtonBloc, PayButtonState>(
+    return BlocListener<KeepOpenButtonBloc, KeepOpenButtonState>(
       listener: (context, state) {
         if (state.isSubmitFailure) {
-          _showSnackbar(context, "Failed to pay for transaction. Please try again.", state);
+          _showSnackbar(context, "Failed to send request. Please try again.", state);
         } else if (state.isSubmitSuccess) {
-          _showSnackbar(context, "Success! Payment pending.", state);
+          _showSnackbar(context, "Success! Bill will be kept open for 10 minutes. Please return to ${_transactionResource.business.profile.name} before then.", state);
         }
       },
-      child: BlocBuilder<PayButtonBloc, PayButtonState>(
+      child: BlocBuilder<KeepOpenButtonBloc, KeepOpenButtonState>(
         builder: (context, state) {
           return RaisedButton(
-            color: Colors.green,
-            disabledColor: Colors.green.shade100,
+            color: Colors.deepOrange,
+            disabledColor: Colors.orange.shade100,
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
-            onPressed: state.isEnabled 
-              ? () => BlocProvider.of<PayButtonBloc>(context).add(Submitted(transactionId: _transactionResource.transaction.identifier))
-              : null,
+            onPressed: () => BlocProvider.of<KeepOpenButtonBloc>(context).add(Submitted(transactionId: _transactionResource.transaction.identifier)),
             child: _createButtonText(state),
           );
         }
-      )
+      ),
     );
   }
 
-  Widget _createButtonText(PayButtonState state) {
+  Widget _createButtonText(KeepOpenButtonState state) {
     if (state.isSubmitting) {
       return TyperAnimatedTextKit(
         speed: Duration(milliseconds: 250),
-        text: ['Paying...'],
+        text: ['Submitting...'],
         textStyle: GoogleFonts.roboto(
           textStyle: TextStyle(
             fontSize: SizeConfig.getWidth(6),
@@ -59,11 +58,12 @@ class PayButton extends StatelessWidget {
         ),
       );
     } else {
-      return BoldText(text: 'Pay', size: SizeConfig.getWidth(6), color: Colors.white);
+      return BoldText(text: 'Keep Open', size: SizeConfig.getWidth(6), color: Colors.white);
     }
   }
 
-  void _showSnackbar(BuildContext context, String message, PayButtonState state) async {
+
+  void _showSnackbar(BuildContext context, String message, KeepOpenButtonState state) async {
     bool canVibrate = await Vibrate.canVibrate;
     if (canVibrate) {
       Vibrate.feedback(state.isSubmitSuccess ? FeedbackType.success : FeedbackType.error);
@@ -99,7 +99,7 @@ class PayButton extends StatelessWidget {
           BlocProvider.of<ReceiptScreenBloc>(context).add(TransactionChanged(transactionResource: state.transactionResource)),
           BlocProvider.of<OpenTransactionsBloc>(context).add(RemoveOpenTransaction(transaction: state.transactionResource))
         } else {
-          BlocProvider.of<PayButtonBloc>(context).add(Reset())
+          BlocProvider.of<KeepOpenButtonBloc>(context).add(Reset())
         }
       });
   }

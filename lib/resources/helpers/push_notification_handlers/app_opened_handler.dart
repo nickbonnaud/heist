@@ -6,6 +6,7 @@ import 'package:heist/blocs/open_transactions/open_transactions_bloc.dart';
 import 'package:heist/models/business/business.dart';
 import 'package:heist/models/paginate_data_holder.dart';
 import 'package:heist/models/push_notification.dart';
+import 'package:heist/models/transaction/status.dart';
 import 'package:heist/models/transaction/transaction_resource.dart';
 import 'package:heist/repositories/business_repository.dart';
 import 'package:heist/repositories/transaction_repository.dart';
@@ -57,51 +58,28 @@ class AppOpenedHandler {
 
   void _handleExit({@required BuildContext context, @required PushNotification notification}) async {
     TransactionResource transactionResource = await _getTransaction(context: context, notification: notification);
-    List<PlatformDialogAction> actions = [];
-    
-    PlatformDialogAction viewAction = PlatformDialogAction(
-      child: PlatformText("View Bill"), 
-      onPressed: () => _showReceiptScreen(context: context, transactionResource: transactionResource)
-    );
-    actions.add(viewAction);
-
-    if (!transactionResource.transaction.locked) {
-      PlatformDialogAction keepBillOpenAction = PlatformDialogAction(
-        child: PlatformText("Keep Bill Open"),
-        onPressed: () => _keepBillOpen(context: context, transaction: transactionResource)
-      );
-      actions.add(keepBillOpenAction);
+    if (transactionResource.transaction.status.code != 105) {
+      TransactionResource transaction = transactionResource.update(transaction: transactionResource.transaction.update(status: Status(name: "keep open notification sent", code: 105)));
+      BlocProvider.of<OpenTransactionsBloc>(context).add(UpdateOpenTransaction(transaction: transaction));
+      _showReceiptScreen(context: context, transactionResource: transaction, showAppBar: true);
+    } else {
+      _showReceiptScreen(context: context, transactionResource: transactionResource, showAppBar: true);
     }
-    
-    PlatformDialogAction payAction = PlatformDialogAction(
-      child: PlatformText("Pay"), 
-      onPressed: () => _payBill(context: context, transaction: transactionResource)
-    );
-    actions.add(payAction);
-
-    showPlatformDialog(
-      context: context, 
-      builder: (_) => PlatformAlertDialog(
-        title: PlatformText(notification.title),
-        content: PlatformText(notification.body),
-        actions: actions,
-      )
-    );
   }
 
   void _handleRequestPayment({@required BuildContext context, @required PushNotification notification}) async {
     TransactionResource transactionResource = await _getTransaction(context: context, notification: notification);
-    _showReceiptScreen(context: context, transactionResource: transactionResource);
+    _showReceiptScreen(context: context, transactionResource: transactionResource, showAppBar: true);
   }
 
   void _handleAutoPaid({@required BuildContext context, @required PushNotification notification}) async {
     TransactionResource transactionResource = await _getTransaction(context: context, notification: notification);
-    _showReceiptScreen(context: context, transactionResource: transactionResource);
+    _showReceiptScreen(context: context, transactionResource: transactionResource, showAppBar: false);
   }
 
   void _handleAutoPaidWithError({@required BuildContext context, @required PushNotification notification}) async {
     TransactionResource transactionResource = await _getTransaction(context: context, notification: notification);
-    _showReceiptScreen(context: context, transactionResource: transactionResource);
+    _showReceiptScreen(context: context, transactionResource: transactionResource, showAppBar: true);
   }
 
 
@@ -117,10 +95,10 @@ class AppOpenedHandler {
     BlocProvider.of<OpenTransactionsBloc>(context).add(RemoveOpenTransaction(transaction: updatedTransaction));
   }
   
-  void _showReceiptScreen({@required BuildContext context, @required TransactionResource transactionResource}) {
+  void _showReceiptScreen({@required BuildContext context, @required TransactionResource transactionResource, @required bool showAppBar}) {
     showPlatformModalSheet(
       context: context, 
-      builder: (_) => ReceiptScreen(transactionResource: transactionResource)
+      builder: (_) => ReceiptScreen(transactionResource: transactionResource, showAppBar: showAppBar)
     );
   }
 

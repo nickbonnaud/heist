@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:heist/blocs/active_location/active_location_bloc.dart';
+import 'package:heist/blocs/open_transactions/open_transactions_bloc.dart';
 import 'package:heist/global_widgets/bottom_modal_app_bar.dart';
+import 'package:heist/models/customer/active_location.dart';
 import 'package:heist/models/transaction/transaction_resource.dart';
 import 'package:heist/repositories/transaction_repository.dart';
 import 'package:heist/resources/helpers/currency.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
 import 'package:heist/screens/receipt_screen/bloc/receipt_screen_bloc.dart';
+import 'package:heist/screens/receipt_screen/widgets/keep_open_button/bloc/keep_open_button_bloc.dart';
 import 'package:heist/screens/receipt_screen/widgets/report_issue_button.dart';
 
 import 'change_issue_button.dart';
+import 'keep_open_button/keep_open_button.dart';
 import 'pay_button/bloc/pay_button_bloc.dart';
 import 'pay_button/pay_button.dart';
 import 'purchased_item_widget.dart';
@@ -130,13 +135,39 @@ class ReceiptScreenBody extends StatelessWidget {
             ],
           ),
           bottomNavigationBar: state.isButtonVisible ? BlocProvider<PayButtonBloc>(
-            create: (BuildContext context) => PayButtonBloc(
+            create: (_) => PayButtonBloc(
               transactionRepository: _transactionRepository,
               transactionResource: _transactionResource
             ),
             child: Padding(
               padding: EdgeInsets.only(left: 16, right: 16, bottom: 16),
-            child: PayButton(transactionResource: _transactionResource),
+              child: BlocBuilder<ActiveLocationBloc, ActiveLocationState>(
+                builder: (context, state) {
+
+                  int index = state.locations.indexWhere((ActiveLocation activeLocation) {
+                    return activeLocation.transactionIdentifier == _transactionResource.transaction.identifier;
+                  });
+
+                  if (index < 0 && _transactionResource.transaction.status.code == 105) {
+                    return Row(children: <Widget>[
+                      Expanded(
+                        child: BlocProvider<KeepOpenButtonBloc>(
+                          create: (BuildContext context) => KeepOpenButtonBloc(
+                            transactionRepository: _transactionRepository
+                          ),
+                          child: KeepOpenButton(transactionResource: _transactionResource),
+                        )
+                      ),
+                      SizedBox(width: 20.0),
+                      Expanded(
+                        child: PayButton(transactionResource: _transactionResource)
+                      )
+                    ]);
+                  } else {
+                    return PayButton(transactionResource: _transactionResource);
+                  }
+                }
+              ) 
             ),
           ) : null
         );

@@ -4,6 +4,7 @@ import 'package:heist/blocs/beacon/beacon_bloc.dart';
 import 'package:heist/blocs/boot/boot_bloc.dart';
 import 'package:heist/blocs/geo_location/geo_location_bloc.dart';
 import 'package:heist/blocs/nearby_businesses/nearby_businesses_bloc.dart';
+import 'package:heist/blocs/notification_boot/notification_boot_bloc.dart';
 import 'package:heist/blocs/open_transactions/open_transactions_bloc.dart';
 import 'package:heist/blocs/permissions/permissions_bloc.dart';
 import 'package:heist/blocs/push_notification/push_notification_bloc.dart';
@@ -34,21 +35,7 @@ class App extends StatelessWidget {
             }
 
             if (state.notificationEnabled) {
-              BlocProvider.of<PushNotificationBloc>(context).add(StartPushNotificationMonitoring(
-                onMessageReceived: ((OSNotification notification) {
-                  ForegroundHandler handler = ForegroundHandler();
-                  handler.init(context: context, oSNotification: notification);
-                }),
-                onMessageInteraction: ((OSNotificationOpenedResult interaction) {
-                  if (interaction.action.actionId != null) {
-                    ActionButtonHandler handler = ActionButtonHandler();
-                    handler.init(context: context, interaction: interaction);
-                  } else {
-                    AppOpenedHandler handler = AppOpenedHandler();
-                    handler.init(context: context, interaction: interaction);
-                  }
-                })
-              ));
+              BlocProvider.of<NotificationBootBloc>(context).add(PermissionReady());
             }
           },
         ),
@@ -63,18 +50,42 @@ class App extends StatelessWidget {
           listener: (context , state) {
             if (state is NearbyBusinessLoaded) {
               BlocProvider.of<BeaconBloc>(context).add(StartBeaconMonitoring(businesses: state.businesses));
-
+              BlocProvider.of<NotificationBootBloc>(context).add(NearbyBusinessesReady());
               // TEST: Building active locations
               // state.businesses.forEach((business) {
               //   BlocProvider.of<ActiveLocationBloc>(context).add(NewActiveLocation(beaconIdentifier: business.location.beacon.identifier));
               // });
             }
-
-            // remove this as well
-            TransactionResource transaction = TransactionResource.fromJson(MockResponses.mockOpenTransaction());
-            BlocProvider.of<OpenTransactionsBloc>(context).add(AddOpenTransaction(transaction: transaction));
           },
         ),
+        BlocListener<OpenTransactionsBloc, OpenTransactionsState>(
+          listener: (context, state) {
+            if (state is OpenTransactionsLoaded) {
+              BlocProvider.of<NotificationBootBloc>(context).add(OpenTransactionsReady());
+            }
+          },
+        ),
+        BlocListener<NotificationBootBloc, NotificationBootState>(
+          listener: (context, state) {
+            if (state.isReady) {
+              BlocProvider.of<PushNotificationBloc>(context).add(StartPushNotificationMonitoring(
+                onMessageReceived: ((OSNotification notification) {
+                  ForegroundHandler handler = ForegroundHandler();
+                  handler.init(context: context, oSNotification: notification);
+                }),
+                onMessageInteraction: ((OSNotificationOpenedResult interaction) {
+                  if (interaction.action?.actionId != null) {
+                    ActionButtonHandler handler = ActionButtonHandler();
+                    handler.init(context: context, interaction: interaction);
+                  } else {
+                    AppOpenedHandler handler = AppOpenedHandler();
+                    handler.init(context: context, interaction: interaction);
+                  }
+                })
+              ));
+            }
+          },
+        )
       ],
       child: BlocBuilder<BootBloc, BootState>(
         builder: (context, state) {

@@ -43,6 +43,38 @@ class TransactionResource extends Equatable {
     );
   }
 
+  TransactionResource update({
+    Transaction transaction,
+    Business business,
+    List<Refund> refunds,
+    Issue issue,
+    String error
+  }) {
+    return _copyWith(
+      transaction: transaction,
+      business: business,
+      refunds: refunds,
+      issue: issue,
+      error: error
+    );
+  }
+  
+  TransactionResource _copyWith({
+    Transaction transaction,
+    Business business,
+    List<Refund> refunds,
+    Issue issue,
+    String error
+  }) {
+    return TransactionResource(
+      transaction: transaction ?? this.transaction,
+      business: business ?? this.business,
+      refunds: refunds ?? this.refunds,
+      issue: issue ?? this.issue,
+      error: error?? this.error
+    );
+  }
+
   @override
   List<Object> get props => [transaction, business, refunds, issue, error];
 

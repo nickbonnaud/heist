@@ -37,37 +37,37 @@ class ForegroundHandler {
 
 
   void _handleEnter({@required BuildContext context, @required PushNotification notification}) {
-    PlatformDialogAction action = PlatformDialogAction(
-      child: PlatformText("OK"), 
-      onPressed: () => Navigator.pop(context)
-    );
-    _showDialog(context: context, notification: notification, actions: [action]);
+    // PlatformDialogAction action = PlatformDialogAction(
+    //   child: PlatformText("OK"), 
+    //   onPressed: () => Navigator.pop(context)
+    // );
+    // _showDialog(context: context, notification: notification, actions: [action]);
   }
 
   void _handleExit({@required BuildContext context, @required PushNotification notification}) async {
-    TransactionResource transactionResource = await _getTransaction(context: context, notification: notification);
-    List<PlatformDialogAction> actions = [];
+    // TransactionResource transactionResource = await _getTransaction(context: context, notification: notification);
+    // List<PlatformDialogAction> actions = [];
     
-    PlatformDialogAction viewAction = PlatformDialogAction(
-      child: PlatformText("View Bill"), 
-      onPressed: () => _showReceiptScreen(context: context, transactionResource: transactionResource)
-    );
-    actions.add(viewAction);
+    // PlatformDialogAction viewAction = PlatformDialogAction(
+    //   child: PlatformText("View Bill"), 
+    //   onPressed: () => _showReceiptScreen(context: context, transactionResource: transactionResource)
+    // );
+    // actions.add(viewAction);
 
-    if (!transactionResource.transaction.locked) {
-      PlatformDialogAction keepBillOpenAction = PlatformDialogAction(
-        child: PlatformText("Keep Bill Open"),
-        onPressed: () => _keepBillOpen(context: context, transaction: transactionResource)
-      );
-      actions.add(keepBillOpenAction);
-    }
+    // if (!transactionResource.transaction.locked) {
+    //   PlatformDialogAction keepBillOpenAction = PlatformDialogAction(
+    //     child: PlatformText("Keep Bill Open"),
+    //     onPressed: () => _keepBillOpen(context: context, transaction: transactionResource)
+    //   );
+    //   actions.add(keepBillOpenAction);
+    // }
     
-    PlatformDialogAction payAction = PlatformDialogAction(
-      child: PlatformText("Pay"), 
-      onPressed: () => _payBill(context: context, transaction: transactionResource)
-    );
-    actions.add(payAction);
-     _showDialog(context: context, notification: notification, actions: actions);    
+    // PlatformDialogAction payAction = PlatformDialogAction(
+    //   child: PlatformText("Pay"), 
+    //   onPressed: () => _payBill(context: context, transaction: transactionResource)
+    // );
+    // actions.add(payAction);
+    //  _showDialog(context: context, notification: notification, actions: actions);    
   }
 
   void _handleRequestPayment({@required BuildContext context, @required PushNotification notification}) async {

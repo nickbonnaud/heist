@@ -48,6 +48,58 @@ class Transaction extends Equatable {
     return transaction;
   }
 
+  Transaction update({
+    String identifier,
+    int tax,
+    int tip,
+    int netSales,
+    int total,
+    String billCreatedAt,
+    String billUpdatedAt,
+    Status status,
+    bool locked,
+    List<PurchasedItem> purchasedItems
+  }) {
+    return _copyWith(
+      identifier: identifier,
+      tax: tax,
+      tip: tip,
+      netSales: netSales,
+      total: total,
+      billCreatedAt: billCreatedAt,
+      billUpdatedAt: billUpdatedAt,
+      status: status,
+      locked: locked,
+      purchasedItems: purchasedItems
+    );
+  }
+  
+  Transaction _copyWith({
+    String identifier,
+    int tax,
+    int tip,
+    int netSales,
+    int total,
+    String billCreatedAt,
+    String billUpdatedAt,
+    Status status,
+    bool locked,
+    List<PurchasedItem> purchasedItems
+  }) {
+    return Transaction(
+      identifier: identifier ?? this.identifier,
+      tax: tax ?? this.tax,
+      tip: tip ?? this.tip,
+      netSales: netSales ?? this.netSales,
+      total: total ?? this.total,
+      billCreatedAt: billCreatedAt ?? this.billCreatedAt,
+      billUpdatedAt: billUpdatedAt ?? this.billUpdatedAt,
+      status: status ?? this.status,
+      locked: locked ?? this.locked,
+      purchasedItems: purchasedItems ?? this.purchasedItems
+    );
+  }
+
   @override
   List<Object> get props => [
     identifier,
@@ -72,7 +124,7 @@ class Transaction extends Equatable {
     billCreatedAt: $billCreatedAt,
     billUpdatedAt: $billUpdatedAt,
     status: $status,
-    lockedL $locked,
+    locked: $locked,
     purchasedItems: $purchasedItems
   }''';
 }
