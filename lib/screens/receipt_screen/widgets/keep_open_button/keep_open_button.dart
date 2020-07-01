@@ -97,7 +97,7 @@ class KeepOpenButton extends StatelessWidget {
       ).closed.then((_) => {
         if (state.isSubmitSuccess) {
           BlocProvider.of<ReceiptScreenBloc>(context).add(TransactionChanged(transactionResource: state.transactionResource)),
-          BlocProvider.of<OpenTransactionsBloc>(context).add(RemoveOpenTransaction(transaction: state.transactionResource))
+          BlocProvider.of<OpenTransactionsBloc>(context).add(UpdateOpenTransaction(transaction: state.transactionResource))
         } else {
           BlocProvider.of<KeepOpenButtonBloc>(context).add(Reset())
         }

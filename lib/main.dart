@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heist/blocs/active_location/active_location_bloc.dart';
 import 'package:heist/blocs/authentication/authentication_bloc.dart';
+import 'package:heist/blocs/bloc/receipt_modal_sheet_bloc.dart';
 import 'package:heist/blocs/boot/boot_bloc.dart';
 import 'package:heist/blocs/geo_location/geo_location_bloc.dart';
 import 'package:heist/blocs/notification_boot/notification_boot_bloc.dart';
@@ -57,6 +58,9 @@ void main() {
         BlocProvider<PushNotificationBloc>(
           create: (_) => PushNotificationBloc(pushNotificationRepository: _pushNotificationRepository),
         ),
+        BlocProvider<ReceiptModalSheetBloc>(
+          create: (_) => ReceiptModalSheetBloc(),
+        )
       ],
       child: AppTheme()
     )

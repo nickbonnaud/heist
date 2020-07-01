@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
+import 'package:heist/blocs/bloc/receipt_modal_sheet_bloc.dart';
 import 'package:heist/blocs/nearby_businesses/nearby_businesses_bloc.dart';
 import 'package:heist/blocs/open_transactions/open_transactions_bloc.dart';
 import 'package:heist/models/business/business.dart';
@@ -10,7 +11,7 @@ import 'package:heist/models/transaction/status.dart';
 import 'package:heist/models/transaction/transaction_resource.dart';
 import 'package:heist/repositories/business_repository.dart';
 import 'package:heist/repositories/transaction_repository.dart';
-import 'package:heist/resources/enums/notification_typ.dart';
+import 'package:heist/resources/enums/notification_type.dart';
 import 'package:heist/screens/business_screen/business_screen.dart';
 import 'package:heist/screens/receipt_screen/receipt_screen.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
@@ -28,14 +29,14 @@ class AppOpenedHandler {
       case NotificationType.exit:
         _handleExit(context: context, notification: notification);
         break;
-      case NotificationType.request_payment:
-        _handleRequestPayment(context: context, notification: notification);
+      case NotificationType.bill_closed:
+        _handleBillClosed(context: context, notification: notification);
         break;
       case NotificationType.auto_paid:
         _handleAutoPaid(context: context, notification: notification);
         break;
-      case NotificationType.auto_paid_with_error:
-        _handleAutoPaidWithError(context: context, notification: notification);
+      case NotificationType.fix_bill:
+        _handleFixBill(context: context, notification: notification);
         break;
     }
   }
@@ -50,6 +51,7 @@ class AppOpenedHandler {
       business =  await _businessRepository.fetchByIdentifier(identifier: notification.businessIdentifier);
     }
 
+    if (BlocProvider.of<ReceiptModalSheetBloc>(context).isVisible) Navigator.of(context).pop();
     showPlatformModalSheet(
       context: context, 
       builder: (_) => BusinessScreen(business: business)
@@ -57,54 +59,46 @@ class AppOpenedHandler {
   }
 
   void _handleExit({@required BuildContext context, @required PushNotification notification}) async {
-    TransactionResource transactionResource = await _getTransaction(context: context, notification: notification);
-    if (transactionResource.transaction.status.code != 105) {
-      TransactionResource transaction = transactionResource.update(transaction: transactionResource.transaction.update(status: Status(name: "keep open notification sent", code: 105)));
-      BlocProvider.of<OpenTransactionsBloc>(context).add(UpdateOpenTransaction(transaction: transaction));
-      _showReceiptScreen(context: context, transactionResource: transaction, showAppBar: true);
-    } else {
-      _showReceiptScreen(context: context, transactionResource: transactionResource, showAppBar: true);
-    }
+    TransactionResource transactionResource = await _fetchTransaction(context: context, notification: notification);
+    transactionResource = _updateTransactionStatus(transactionResource: transactionResource, name: 'keep open notification sent', code: 105);
+    _showReceiptScreen(context: context, transactionResource: transactionResource, showAppBar: true);
   }
 
-  void _handleRequestPayment({@required BuildContext context, @required PushNotification notification}) async {
-    TransactionResource transactionResource = await _getTransaction(context: context, notification: notification);
+  void _handleBillClosed({@required BuildContext context, @required PushNotification notification}) async {
+    TransactionResource transactionResource = await _fetchTransaction(context: context, notification: notification);
+    transactionResource = _updateTransactionStatus(transactionResource: transactionResource, name: 'bill closed', code: 101);
     _showReceiptScreen(context: context, transactionResource: transactionResource, showAppBar: true);
   }
 
   void _handleAutoPaid({@required BuildContext context, @required PushNotification notification}) async {
-    TransactionResource transactionResource = await _getTransaction(context: context, notification: notification);
-    _showReceiptScreen(context: context, transactionResource: transactionResource, showAppBar: false);
-  }
-
-  void _handleAutoPaidWithError({@required BuildContext context, @required PushNotification notification}) async {
-    TransactionResource transactionResource = await _getTransaction(context: context, notification: notification);
+    TransactionResource transactionResource = await _fetchTransaction(context: context, notification: notification);
+    transactionResource = _updateTransactionStatus(transactionResource: transactionResource, name: 'payment processing', code: 103);
     _showReceiptScreen(context: context, transactionResource: transactionResource, showAppBar: true);
   }
 
+  void _handleFixBill({@required BuildContext context, @required PushNotification notification}) async {
+    TransactionResource transactionResource = await _fetchTransaction(context: context, notification: notification);
+    if (transactionResource.transaction.status.code < 500) {
+      transactionResource = await _fetchNewTransaction(context: context, notification: notification);
+    } else {
+      transactionResource = transactionResource.update(issue: transactionResource.issue.update(warningsSent: notification.warningsSent));
+    }
 
+    _showReceiptScreen(context: context, transactionResource: transactionResource, showAppBar: true);
+  }
 
-  
-  void _keepBillOpen({@required BuildContext context, @required TransactionResource transaction}) async {
-    TransactionResource updatedTransaction = await _transactionRepository.keepBillOpen(transactionId: transaction.transaction.identifier);
-    BlocProvider.of<OpenTransactionsBloc>(context).add(UpdateOpenTransaction(transaction: updatedTransaction));
-  }
-  
-  void _payBill({@required BuildContext context, @required TransactionResource transaction}) async {
-    TransactionResource updatedTransaction = await _transactionRepository.approveTransaction(transactionId: transaction.transaction.identifier);
-    BlocProvider.of<OpenTransactionsBloc>(context).add(RemoveOpenTransaction(transaction: updatedTransaction));
-  }
-  
   void _showReceiptScreen({@required BuildContext context, @required TransactionResource transactionResource, @required bool showAppBar}) {
+    if (BlocProvider.of<ReceiptModalSheetBloc>(context).isVisible) Navigator.of(context).pop();
     showPlatformModalSheet(
       context: context, 
-      builder: (_) => ReceiptScreen(transactionResource: transactionResource, showAppBar: showAppBar)
+      builder: (_) => ReceiptScreen(transactionResource: transactionResource, receiptModalSheetBloc: BlocProvider.of<ReceiptModalSheetBloc>(context), showAppBar: showAppBar)
     );
   }
 
-  Future<TransactionResource> _getTransaction({@required BuildContext context, @required PushNotification notification}) async {
-    TransactionResource transactionResource = await _fetchTransaction(context: context, notification: notification);
-    BlocProvider.of<OpenTransactionsBloc>(context).add(AddOpenTransaction(transaction: transactionResource));
+  TransactionResource _updateTransactionStatus({@required TransactionResource transactionResource, @required String name, @required int code}) {
+    if (transactionResource.transaction.status.code != code) {
+      return transactionResource.update(transaction: transactionResource.transaction.update(status: Status(name: name, code: code)));
+    }
     return transactionResource;
   }
   
@@ -115,9 +109,13 @@ class AppOpenedHandler {
     );
     
     if (transactionResource == null) {
-      PaginateDataHolder data = await _transactionRepository.fetchByIdentifier(nextPage: 1, identifier: notification.transactionIdentifier);
-      return data.data[0];
+      return _fetchNewTransaction(context: context, notification: notification);
     }
     return transactionResource;
+  }
+
+  Future<TransactionResource> _fetchNewTransaction({@required BuildContext context, @required PushNotification notification}) async {
+    PaginateDataHolder data = await _transactionRepository.fetchByIdentifier(nextPage: 1, identifier: notification.transactionIdentifier);
+    return data.data[0];
   }
 }

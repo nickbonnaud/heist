@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
+import 'package:heist/blocs/bloc/receipt_modal_sheet_bloc.dart';
 import 'package:heist/models/transaction/refund_resource.dart';
 import 'package:heist/models/transaction/transaction_resource.dart';
 import 'package:heist/resources/helpers/currency.dart';
@@ -57,7 +58,7 @@ class RefundWidget extends StatelessWidget {
     BlocProvider.of<DefaultAppBarBloc>(context).add(Rotate());
     showPlatformModalSheet(
       context: context,
-      builder: (_) => ReceiptScreen(transactionResource: transactionResource)
+      builder: (_) => ReceiptScreen(transactionResource: transactionResource, receiptModalSheetBloc: BlocProvider.of<ReceiptModalSheetBloc>(context))
     ).then((_) {
       BlocProvider.of<DefaultAppBarBloc>(context).add(Reset());
     });

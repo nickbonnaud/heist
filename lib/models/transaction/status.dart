@@ -1,8 +1,10 @@
+import 'package:meta/meta.dart';
+
 class Status {
   final String name;
   final int code;
 
-  Status({this.name, this.code});
+  Status({@required this.name, @required this.code});
   
   Status.fromJson(Map<String, dynamic> json)
     : name = json['name'],

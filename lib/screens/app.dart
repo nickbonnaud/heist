@@ -8,14 +8,11 @@ import 'package:heist/blocs/notification_boot/notification_boot_bloc.dart';
 import 'package:heist/blocs/open_transactions/open_transactions_bloc.dart';
 import 'package:heist/blocs/permissions/permissions_bloc.dart';
 import 'package:heist/blocs/push_notification/push_notification_bloc.dart';
-import 'package:heist/models/transaction/transaction_resource.dart';
 import 'package:heist/resources/helpers/push_notification_handlers/action_button_handler.dart';
 import 'package:heist/resources/helpers/push_notification_handlers/app_opened_handler.dart';
-import 'package:heist/resources/helpers/push_notification_handlers/foreground_handler.dart';
-import 'package:heist/resources/http/mock_responses.dart';
+import 'package:heist/resources/helpers/push_notification_handlers/message_received_handler.dart';
 import 'package:heist/screens/home_screen/home_screen.dart';
 import 'package:heist/screens/onboard_screen/onboard_screen.dart';
-import 'package:heist/screens/permission_screen/permission_screen.dart';
 import 'package:heist/screens/splash_screen.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 
@@ -70,7 +67,7 @@ class App extends StatelessWidget {
             if (state.isReady) {
               BlocProvider.of<PushNotificationBloc>(context).add(StartPushNotificationMonitoring(
                 onMessageReceived: ((OSNotification notification) {
-                  ForegroundHandler handler = ForegroundHandler();
+                  MessageReceivedHandler handler = MessageReceivedHandler();
                   handler.init(context: context, oSNotification: notification);
                 }),
                 onMessageInteraction: ((OSNotificationOpenedResult interaction) {

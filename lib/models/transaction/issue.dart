@@ -8,14 +8,16 @@ class Issue extends Equatable {
   final IssueType type;
   final String message;
   final bool resolved;
+  final int warningsSent;
   final String updatedAt;
   final String formattedUpdatedAt;
 
   Issue({
     @required this.identifier,
-    @required this.type, 
-    @required this.message, 
-    @required this.resolved, 
+    @required this.type,
+    @required this.message,
+    @required this.resolved,
+    @required this.warningsSent,
     @required this.updatedAt,
     @required this.formattedUpdatedAt
   });
@@ -25,7 +27,8 @@ class Issue extends Equatable {
       identifier: json['identifier'],
       type: typeToEnum(json['type']),
       message: json['issue'],
-      resolved: json['resolved'], 
+      resolved: json['resolved'],
+      warningsSent: int.parse(json['warnings_sent']),
       updatedAt: json['updated_at'],
       formattedUpdatedAt: _formatDate(json['updated_at'])
     );
@@ -55,8 +58,48 @@ class Issue extends Equatable {
     }
   }
 
+  Issue update({
+    String identifier,
+    IssueType type,
+    String message,
+    bool resolved,
+    int warningsSent,
+    String updatedAt,
+    String formattedUpdatedAt
+  }) {
+    return _copyWith(
+      identifier: identifier,
+      type: type,
+      message: message,
+      resolved: resolved,
+      warningsSent: warningsSent,
+      updatedAt: updatedAt,
+      formattedUpdatedAt: formattedUpdatedAt
+    );
+  }
+  
+  Issue _copyWith({
+    String identifier,
+    IssueType type,
+    String message,
+    bool resolved,
+    int warningsSent,
+    String updatedAt,
+    String formattedUpdatedAt
+  }) {
+    return Issue(
+      identifier: identifier ?? this.identifier,
+      type: type ?? this.type,
+      message: message ?? this.message,
+      resolved: resolved ?? this.resolved,
+      warningsSent: warningsSent ?? this.warningsSent,
+      updatedAt: updatedAt ?? this.updatedAt,
+      formattedUpdatedAt: formattedUpdatedAt ?? this.formattedUpdatedAt
+    );
+  }
+
   @override
-  List<Object> get props => [identifier, type, message, resolved, updatedAt, formattedUpdatedAt];
+  List<Object> get props => [identifier, type, message, resolved, warningsSent, updatedAt, formattedUpdatedAt];
 
   @override
   String toString() => '''Issue {
@@ -64,6 +107,7 @@ class Issue extends Equatable {
     type: $type,
     message: $message,
     resolved: $resolved,
+    warningsSent: $warningsSent,
     updatedAt: $updatedAt,
     formattedUpdatedAt: $formattedUpdatedAt
   }''';

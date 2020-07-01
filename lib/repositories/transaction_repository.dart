@@ -75,7 +75,7 @@ class TransactionRepository {
   }
 
   Future<TransactionResource> keepBillOpen({@required String transactionId}) async {
-    final ApiResponse response = await _transactionProvider.patchStatus(transactionId: transactionId, statusCode: 105);
+    final ApiResponse response = await _transactionProvider.patchStatus(transactionId: transactionId, statusCode: 106);
     if (response.isOK) {
       return TransactionResource.fromJson(response.body);
     }

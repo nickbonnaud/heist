@@ -15,6 +15,7 @@ class PushNotificationProvider {
       }
     );
 
+    OneSignal.shared.setLocationShared(false);
     OneSignal.shared.setInFocusDisplayType(OSNotificationDisplayType.notification);
     OneSignal.shared.setNotificationReceivedHandler(onMessageReceived);
     OneSignal.shared.setNotificationOpenedHandler(onMessageInteraction);

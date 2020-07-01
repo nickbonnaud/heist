@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:heist/blocs/bloc/receipt_modal_sheet_bloc.dart';
 import 'package:heist/resources/helpers/loading_widget.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
 import 'package:heist/screens/receipt_screen/receipt_screen.dart';
@@ -17,7 +18,7 @@ class TransactionPickerBody extends StatelessWidget {
       builder: (context, state) {
         if (state is TransactionsLoaded) {
           if (state.claimSuccess) {
-            return ReceiptScreen(transactionResource: state.transaction, showAppBar: false,);
+            return ReceiptScreen(transactionResource: state.transaction, receiptModalSheetBloc: BlocProvider.of<ReceiptModalSheetBloc>(context), showAppBar: false,);
           }
           return BlocProvider<TransactionBloc>(
             create: (BuildContext context) => TransactionBloc()

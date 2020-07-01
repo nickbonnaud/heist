@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:heist/blocs/active_location/active_location_bloc.dart';
-import 'package:heist/blocs/open_transactions/open_transactions_bloc.dart';
 import 'package:heist/global_widgets/bottom_modal_app_bar.dart';
 import 'package:heist/models/customer/active_location.dart';
 import 'package:heist/models/transaction/transaction_resource.dart';
@@ -14,6 +13,7 @@ import 'package:heist/screens/receipt_screen/bloc/receipt_screen_bloc.dart';
 import 'package:heist/screens/receipt_screen/widgets/keep_open_button/bloc/keep_open_button_bloc.dart';
 import 'package:heist/screens/receipt_screen/widgets/report_issue_button.dart';
 
+import 'call_button.dart';
 import 'change_issue_button.dart';
 import 'keep_open_button/keep_open_button.dart';
 import 'pay_button/bloc/pay_button_bloc.dart';
@@ -61,9 +61,15 @@ class ReceiptScreenBody extends StatelessWidget {
                   ],
                 ),
               ),
-              if (_transactionResource.issue != null)
+              if (_transactionResource.issue != null && !_transactionResource.issue.resolved)
                 Center(
-                  child: BoldText(text: "Issue reported", size: SizeConfig.getWidth(5), color: Colors.red)
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      BoldText(text: "Issue reported", size: SizeConfig.getWidth(6), color: Colors.red),
+                      _numberWarningsLeft(_transactionResource)
+                    ],
+                  )
                 ),
               SizedBox(height: SizeConfig.getHeight(3)),
               ListView.separated(
@@ -141,38 +147,66 @@ class ReceiptScreenBody extends StatelessWidget {
             ),
             child: Padding(
               padding: EdgeInsets.only(left: 16, right: 16, bottom: 16),
-              child: BlocBuilder<ActiveLocationBloc, ActiveLocationState>(
-                builder: (context, state) {
-
-                  int index = state.locations.indexWhere((ActiveLocation activeLocation) {
-                    return activeLocation.transactionIdentifier == _transactionResource.transaction.identifier;
-                  });
-
-                  if (index < 0 && _transactionResource.transaction.status.code == 105) {
-                    return Row(children: <Widget>[
-                      Expanded(
-                        child: BlocProvider<KeepOpenButtonBloc>(
-                          create: (BuildContext context) => KeepOpenButtonBloc(
-                            transactionRepository: _transactionRepository
-                          ),
-                          child: KeepOpenButton(transactionResource: _transactionResource),
-                        )
-                      ),
-                      SizedBox(width: 20.0),
-                      Expanded(
-                        child: PayButton(transactionResource: _transactionResource)
-                      )
-                    ]);
-                  } else {
-                    return PayButton(transactionResource: _transactionResource);
-                  }
-                }
-              ) 
+              child: _createFooterButtons(receiptState: state, transactionResource: _transactionResource) 
             ),
           ) : null
         );
       }
     ); 
+  }
+
+  Widget _numberWarningsLeft(TransactionResource transactionResource) {
+    if (transactionResource.issue.warningsSent == 3) {
+      return NormalText(text: "Response required to avoid autopay", size: SizeConfig.getWidth(5), color: Colors.red);
+    } else if (transactionResource.issue.warningsSent > 0) {
+      return NormalText(text: "${3 - transactionResource.issue.warningsSent} warnings left", size: SizeConfig.getWidth(5), color: Colors.red);
+    } else {
+      return Container();
+    }
+  }
+  
+  Widget _createFooterButtons({@required ReceiptScreenState receiptState, @required TransactionResource transactionResource}) {
+    int statusCode = receiptState.transactionResource.transaction.status.code;
+    if (statusCode == 105) {
+      return BlocBuilder<ActiveLocationBloc, ActiveLocationState>(
+        builder: (context, state) {
+          int index = state.locations.indexWhere((ActiveLocation activeLocation) {
+            return activeLocation.transactionIdentifier == transactionResource.transaction.identifier;
+          });
+
+          if (index < 0) {
+            return Row(children: <Widget>[
+              Expanded(
+                child: BlocProvider<KeepOpenButtonBloc>(
+                  create: (BuildContext context) => KeepOpenButtonBloc(
+                    transactionRepository: _transactionRepository
+                  ),
+                  child: KeepOpenButton(transactionResource: transactionResource),
+                )
+              ),
+              SizedBox(width: 20.0),
+              Expanded(
+                child: PayButton(transactionResource: transactionResource)
+              )
+            ]);
+          } else {
+            return PayButton(transactionResource: transactionResource);
+          }
+        }
+      );
+    } else if (statusCode >= 500) {
+      return Row(children: <Widget>[
+        Expanded(
+          child: CallButton(transactionResource: transactionResource)
+        ),
+        SizedBox(width: 20.0),
+        Expanded(
+          child: PayButton(transactionResource: transactionResource)
+        )
+      ]);
+    } else {
+      return PayButton(transactionResource: transactionResource);
+    }
   }
 
   int _setTotal({@required TransactionResource transactionResource}) {

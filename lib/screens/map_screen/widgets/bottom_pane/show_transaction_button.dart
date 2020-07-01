@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
+import 'package:heist/blocs/bloc/receipt_modal_sheet_bloc.dart';
 import 'package:heist/models/transaction/transaction_resource.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/screens/receipt_screen/receipt_screen.dart';
@@ -32,7 +34,7 @@ class _ShowTransactionButtonState extends State<ShowTransactionButton> with Sing
       setState(() {});
     });
     
-    if (widget._transaction.transaction.status.code == 1021  || widget._transaction.transaction.status.code == 1022) {
+    if ((widget._transaction.issue?.warningsSent ?? 0) != 0 && widget._transaction.transaction.status.code >= 500) {
       _controller.repeat(reverse: true);
     }
   }
@@ -53,7 +55,7 @@ class _ShowTransactionButtonState extends State<ShowTransactionButton> with Sing
               )
             ),
           ),
-          if (widget._transaction.transaction.status.code == 1021  || widget._transaction.transaction.status.code == 1022)
+          if ((widget._transaction.issue?.warningsSent ?? 0) != 0 && widget._transaction.transaction.status.code >= 500)
             Positioned(
               bottom: 2.0,
               left: 10.0,
@@ -69,7 +71,7 @@ class _ShowTransactionButtonState extends State<ShowTransactionButton> with Sing
       }),
       onTap: () => showPlatformModalSheet(
         context: context,
-        builder: (_) => ReceiptScreen(transactionResource: widget._transaction)
+        builder: (_) => ReceiptScreen(transactionResource: widget._transaction, receiptModalSheetBloc: BlocProvider.of<ReceiptModalSheetBloc>(context))
       ).then((value) => setState(() {
         _buttonDown = false;
       }))
@@ -88,7 +90,7 @@ class _ShowTransactionButtonState extends State<ShowTransactionButton> with Sing
         child: RawMaterialButton(
           onPressed: () => showPlatformModalSheet(
             context: context,
-            builder: (_) => ReceiptScreen(transactionResource: widget._transaction)
+            builder: (_) => ReceiptScreen(transactionResource: widget._transaction, receiptModalSheetBloc: BlocProvider.of<ReceiptModalSheetBloc>(context))
           ),
           child: Icon(
             Icons.priority_high,
@@ -96,8 +98,10 @@ class _ShowTransactionButtonState extends State<ShowTransactionButton> with Sing
           ),
           shape: CircleBorder(),
           elevation: _buttonDown ? 0 : 5,
-          fillColor: widget._transaction.transaction.status.code == 1021
+          fillColor: widget._transaction.issue.warningsSent == 1
             ? Colors.orange 
+            : widget._transaction.issue.warningsSent == 2 
+            ? Colors.deepOrange[400]
             : Colors.red,
         )
         

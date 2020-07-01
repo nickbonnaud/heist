@@ -80,7 +80,7 @@ class PayButtonBloc extends Bloc<PayButtonEvent, PayButtonState> {
   }
 
   bool _isButtonEnabled({@required TransactionResource transactionResource}) {
-    List<int> enabledStatusCode = [101, 1020, 1021, 1022, 105, 502, 503];
+    List<int> enabledStatusCode = [101, 1020, 1021, 1022, 105, 502];
     return enabledStatusCode.contains(transactionResource.transaction.status.code);
   }
 }

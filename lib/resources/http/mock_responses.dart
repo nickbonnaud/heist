@@ -3084,6 +3084,7 @@ class MockResponses {
         'type': options.data['type'].toString(),
         'issue': options.data['issue'],
         'resolved': false,
+        'warnings_sent': '2',
         'updated_at': '2020-05-26T22:04:56.000000Z'
       }
     };
@@ -3181,6 +3182,7 @@ class MockResponses {
         'type': options.data['type'].toString(),
         'issue': options.data['issue'],
         'resolved': false,
+        'warnings_sent': '2',
         'updated_at': '2020-05-26T22:04:56.000000Z'
       }
     };
@@ -3280,7 +3282,7 @@ class MockResponses {
   static Map<String, dynamic> _mockAcceptTransaction() {
     return {
       "transaction": {
-        "identifier": "3ff9ad40-79c9-11ea-8b92-a9b4a4c53696",
+        "identifier": "fake_open_transaction",
         "employee_id": null,
         "tax": "457",
         "tip": "1636",
@@ -3291,8 +3293,8 @@ class MockResponses {
         "bill_created_at": "2020-04-08 18:46:25",
         "updated_at": "2020-04-08 18:46:25",
         "status": {
-          "name": "payment processing",
-          "code": "105"
+          "name": "error",
+          "code": "501"
         },
         "purchased_items": [
           {
@@ -3364,7 +3366,14 @@ class MockResponses {
         }
       },
       "refund": [],
-      'issue': null
+      'issue': {
+        'identifier': 'fake_identifier',
+        'type': 'wrong_bill',
+        'issue': "My bill is not this",
+        'resolved': false,
+        'warnings_sent': '2',
+        'updated_at': '2020-05-21T22:27:59.000000Z'
+      }
     };
   }
   
@@ -3385,7 +3394,7 @@ class MockResponses {
           "updated_at": "2020-05-26T22:04:56.000000Z",
           "status": {
             "name": "open",
-            "code": "105"
+            "code": "100"
           },
           "purchased_items": [
             {
@@ -3721,8 +3730,8 @@ class MockResponses {
             "bill_created_at": "2020-04-08 18:46:25",
             "updated_at": "2020-04-08 18:46:25",
             "status": {
-              "name": "open",
-              "code": "100"
+              "name": "error",
+              "code": "501"
             },
             "purchased_items": [
               {
@@ -3794,7 +3803,14 @@ class MockResponses {
             }
           },
           "refund": [],
-          'issue': null
+          'issue': {
+            'identifier': 'fake_identifier',
+            'type': 'wrong_bill',
+            'issue': "My bill is not this",
+            'resolved': false,
+            'warnings_sent': '3',
+            'updated_at': '2020-05-21T22:27:59.000000Z'
+          }
         },
       ],
       "links": {
@@ -4074,6 +4090,7 @@ class MockResponses {
             'type': 'wrong_bill',
             'issue': "My bill is not this",
             'resolved': true,
+            'warnings_sent': '2',
             'updated_at': '2020-05-21T22:27:59.000000Z'
           }
         },
@@ -4180,6 +4197,7 @@ class MockResponses {
             'type': 'wrong_bill',
             'issue': "My bill is not this",
             'resolved': true,
+            'warnings_sent': '2',
             'updated_at': '2020-05-21T22:27:59.000000Z'
           }
         },
@@ -4293,6 +4311,7 @@ class MockResponses {
             'type': 'wrong_bill',
             'issue': "My bill is not this",
             'resolved': true,
+            'warnings_sent': '2',
             'updated_at': '2020-05-21T22:27:59.000000Z'
           }
         },
@@ -4414,6 +4433,7 @@ class MockResponses {
             'type': 'wrong_bill',
             'issue': "My bill is not this",
             'resolved': true,
+            'warnings_sent': '2',
             'updated_at': '2020-05-21T22:27:59.000000Z'
           }
         },
@@ -4742,6 +4762,7 @@ class MockResponses {
             'type': 'wrong_bill',
             'issue': "My bill is not this",
             'resolved': true,
+            'warnings_sent': '2',
             'updated_at': '2020-05-21T22:27:59.000000Z'
           }
         },
@@ -4848,6 +4869,7 @@ class MockResponses {
             'type': 'wrong_bill',
             'issue': "My bill is not this",
             'resolved': true,
+            'warnings_sent': '2',
             'updated_at': '2020-05-21T22:27:59.000000Z'
           }
         },
@@ -4961,6 +4983,7 @@ class MockResponses {
             'type': 'wrong_bill',
             'issue': "My bill is not this",
             'resolved': true,
+            'warnings_sent': '2',
             'updated_at': '2020-05-21T22:27:59.000000Z'
           }
         },
@@ -5060,6 +5083,7 @@ class MockResponses {
             'type': 'wrong_bill',
             'issue': "My bill is not this",
             'resolved': true,
+            'warnings_sent': '2',
             'updated_at': '2020-05-21T22:27:59.000000Z'
           }
         },
@@ -5166,6 +5190,7 @@ class MockResponses {
             'type': 'wrong_bill',
             'issue': "My bill is not this",
             'resolved': true,
+            'warnings_sent': '2',
             'updated_at': '2020-05-21T22:27:59.000000Z'
           }
         },
@@ -5279,6 +5304,7 @@ class MockResponses {
             'type': 'wrong_bill',
             'issue': "My bill is not this",
             'resolved': true,
+            'warnings_sent': '2',
             'updated_at': '2020-05-21T22:27:59.000000Z'
           }
         },
@@ -6019,6 +6045,7 @@ class MockResponses {
             'type': 'wrong_bill',
             'issue': "My bill is not this",
             'resolved': true,
+            'warnings_sent': '2',
             'updated_at': '2020-05-21T22:27:59.000000Z'
           }
         },
@@ -6125,6 +6152,7 @@ class MockResponses {
             'type': 'wrong_bill',
             'issue': "My bill is not this",
             'resolved': true,
+            'warnings_sent': '2',
             'updated_at': '2020-05-21T22:27:59.000000Z'
           }
         },
@@ -6224,6 +6252,7 @@ class MockResponses {
             'type': 'wrong_bill',
             'issue': "My bill is not this",
             'resolved': true,
+            'warnings_sent': '2',
             'updated_at': '2020-05-21T22:27:59.000000Z'
           }
         },
@@ -6330,6 +6359,7 @@ class MockResponses {
             'type': 'wrong_bill',
             'issue': "My bill is not this",
             'resolved': true,
+            'warnings_sent': '2',
             'updated_at': '2020-05-21T22:27:59.000000Z'
           }
         },
@@ -6429,6 +6459,7 @@ class MockResponses {
             'type': 'wrong_bill',
             'issue': "My bill is not this",
             'resolved': true,
+            'warnings_sent': '2',
             'updated_at': '2020-05-21T22:27:59.000000Z'
           }
         },
@@ -6535,6 +6566,7 @@ class MockResponses {
             'type': 'wrong_bill',
             'issue': "My bill is not this",
             'resolved': true,
+            'warnings_sent': '2',
             'updated_at': '2020-05-21T22:27:59.000000Z'
           }
         },
@@ -6634,6 +6666,7 @@ class MockResponses {
             'type': 'wrong_bill',
             'issue': "My bill is not this",
             'resolved': true,
+            'warnings_sent': '2',
             'updated_at': '2020-05-21T22:27:59.000000Z'
           }
         },
@@ -6740,6 +6773,7 @@ class MockResponses {
             'type': 'wrong_bill',
             'issue': "My bill is not this",
             'resolved': true,
+            'warnings_sent': '2',
             'updated_at': '2020-05-21T22:27:59.000000Z'
           }
         },
@@ -6839,6 +6873,7 @@ class MockResponses {
             'type': 'wrong_bill',
             'issue': "My bill is not this",
             'resolved': true,
+            'warnings_sent': '2',
             'updated_at': '2020-05-21T22:27:59.000000Z'
           }
         },
@@ -6945,6 +6980,7 @@ class MockResponses {
             'type': 'wrong_bill',
             'issue': "My bill is not this",
             'resolved': true,
+            'warnings_sent': '2',
             'updated_at': '2020-05-21T22:27:59.000000Z'
           }
         },
@@ -7044,6 +7080,7 @@ class MockResponses {
             'type': 'wrong_bill',
             'issue': "My bill is not this",
             'resolved': true,
+            'warnings_sent': '2',
             'updated_at': '2020-05-21T22:27:59.000000Z'
           }
         },
@@ -7150,6 +7187,7 @@ class MockResponses {
             'type': 'wrong_bill',
             'issue': "My bill is not this",
             'resolved': true,
+            'warnings_sent': '2',
             'updated_at': '2020-05-21T22:27:59.000000Z'
           }
         },
@@ -7249,6 +7287,7 @@ class MockResponses {
             'type': 'wrong_bill',
             'issue': "My bill is not this",
             'resolved': true,
+            'warnings_sent': '2',
             'updated_at': '2020-05-21T22:27:59.000000Z'
           }
         },
@@ -7355,6 +7394,7 @@ class MockResponses {
             'type': 'wrong_bill',
             'issue': "My bill is not this",
             'resolved': true,
+            'warnings_sent': '2',
             'updated_at': '2020-05-21T22:27:59.000000Z'
           }
         },
@@ -7454,6 +7494,7 @@ class MockResponses {
             'type': 'wrong_bill',
             'issue': "My bill is not this",
             'resolved': true,
+            'warnings_sent': '2',
             'updated_at': '2020-05-21T22:27:59.000000Z'
           }
         },
@@ -7560,6 +7601,7 @@ class MockResponses {
             'type': 'wrong_bill',
             'issue': "My bill is not this",
             'resolved': true,
+            'warnings_sent': '2',
             'updated_at': '2020-05-21T22:27:59.000000Z'
           }
         }
@@ -7681,6 +7723,7 @@ class MockResponses {
             'type': 'wrong_bill',
             'issue': "My bill is not this",
             'resolved': true,
+            'warnings_sent': '2',
             'updated_at': '2020-05-21T22:27:59.000000Z'
           }
         },
@@ -7787,6 +7830,7 @@ class MockResponses {
             'type': 'wrong_bill',
             'issue': "My bill is not this",
             'resolved': true,
+            'warnings_sent': '2',
             'updated_at': '2020-05-21T22:27:59.000000Z'
           }
         },
@@ -7886,6 +7930,7 @@ class MockResponses {
             'type': 'wrong_bill',
             'issue': "My bill is not this",
             'resolved': true,
+            'warnings_sent': '2',
             'updated_at': '2020-05-21T22:27:59.000000Z'
           }
         },
@@ -7992,6 +8037,7 @@ class MockResponses {
             'type': 'wrong_bill',
             'issue': "My bill is not this",
             'resolved': true,
+            'warnings_sent': '2',
             'updated_at': '2020-05-21T22:27:59.000000Z'
           }
         },
@@ -8091,6 +8137,7 @@ class MockResponses {
             'type': 'wrong_bill',
             'issue': "My bill is not this",
             'resolved': true,
+            'warnings_sent': '2',
             'updated_at': '2020-05-21T22:27:59.000000Z'
           }
         },
@@ -8197,6 +8244,7 @@ class MockResponses {
             'type': 'wrong_bill',
             'issue': "My bill is not this",
             'resolved': true,
+            'warnings_sent': '2',
             'updated_at': '2020-05-21T22:27:59.000000Z'
           }
         },
@@ -8296,6 +8344,7 @@ class MockResponses {
             'type': 'wrong_bill',
             'issue': "My bill is not this",
             'resolved': true,
+            'warnings_sent': '2',
             'updated_at': '2020-05-21T22:27:59.000000Z'
           }
         },
@@ -8402,6 +8451,7 @@ class MockResponses {
             'type': 'wrong_bill',
             'issue': "My bill is not this",
             'resolved': true,
+            'warnings_sent': '2',
             'updated_at': '2020-05-21T22:27:59.000000Z'
           }
         },
@@ -8501,6 +8551,7 @@ class MockResponses {
             'type': 'wrong_bill',
             'issue': "My bill is not this",
             'resolved': true,
+            'warnings_sent': '2',
             'updated_at': '2020-05-21T22:27:59.000000Z'
           }
         },
@@ -8607,6 +8658,7 @@ class MockResponses {
             'type': 'wrong_bill',
             'issue': "My bill is not this",
             'resolved': true,
+            'warnings_sent': '2',
             'updated_at': '2020-05-21T22:27:59.000000Z'
           }
         },
@@ -8706,6 +8758,7 @@ class MockResponses {
             'type': 'wrong_bill',
             'issue': "My bill is not this",
             'resolved': true,
+            'warnings_sent': '2',
             'updated_at': '2020-05-21T22:27:59.000000Z'
           }
         },
@@ -8812,6 +8865,7 @@ class MockResponses {
             'type': 'wrong_bill',
             'issue': "My bill is not this",
             'resolved': true,
+            'warnings_sent': '2',
             'updated_at': '2020-05-21T22:27:59.000000Z'
           }
         },
@@ -8911,6 +8965,7 @@ class MockResponses {
             'type': 'wrong_bill',
             'issue': "My bill is not this",
             'resolved': true,
+            'warnings_sent': '2',
             'updated_at': '2020-05-21T22:27:59.000000Z'
           }
         },
@@ -9017,6 +9072,7 @@ class MockResponses {
             'type': 'wrong_bill',
             'issue': "My bill is not this",
             'resolved': true,
+            'warnings_sent': '2',
             'updated_at': '2020-05-21T22:27:59.000000Z'
           }
         },
@@ -9116,6 +9172,7 @@ class MockResponses {
             'type': 'wrong_bill',
             'issue': "My bill is not this",
             'resolved': true,
+            'warnings_sent': '2',
             'updated_at': '2020-05-21T22:27:59.000000Z'
           }
         },
@@ -9222,6 +9279,7 @@ class MockResponses {
             'type': 'wrong_bill',
             'issue': "My bill is not this",
             'resolved': true,
+            'warnings_sent': '2',
             'updated_at': '2020-05-21T22:27:59.000000Z'
           }
         }
