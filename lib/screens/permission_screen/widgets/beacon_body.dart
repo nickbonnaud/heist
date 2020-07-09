@@ -42,8 +42,10 @@ class BeaconBody extends StatelessWidget {
             fontWeight: FontWeight.bold
           ),
         ),
-        PlatformButton(
-          child: PlatformText('How?'),
+        SizedBox(height: SizeConfig.getHeight(1)),
+        FlatButton(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
+          child: BoldText4(text: 'How?', context: context, color: Theme.of(context).colorScheme.secondary),
           onPressed: () => _showHowModal(context),
         ),
         SizedBox(height: SizeConfig.getHeight(8)),

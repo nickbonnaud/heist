@@ -34,124 +34,7 @@ class ReceiptScreenBody extends StatelessWidget {
       builder: (context, state) {
         TransactionResource _transactionResource = state.transactionResource;
         return Scaffold(
-          appBar: _showAppBar ? BottomModalAppBar(backgroundColor: Theme.of(context).colorScheme.topAppBarLight, trailingWidget: _trailingWidget(transactionResource: _transactionResource)) : null,
-          body: ListView(
-            shrinkWrap: true,
-            children: <Widget>[
-              Padding(
-                padding: EdgeInsets.only(left: 16, right: 16),
-                child: Row(
-                  children: <Widget>[
-                    CircleAvatar(
-                      backgroundImage: NetworkImage(_transactionResource.business.photos.logo.smallUrl),
-                      radius: SizeConfig.getWidth(7),
-                    ),
-                    SizedBox(width: SizeConfig.getWidth(2)),
-                    Expanded(
-                      child: BoldText2(
-                        text: _transactionResource.business.profile.name,
-                        context: context,
-                      ),
-                    ),
-                    Text2(
-                      text: _transactionResource.transaction.billUpdatedAt,
-                      context: context,
-                      color: Theme.of(context).colorScheme.textOnLightSubdued,
-                    )
-                  ],
-                ),
-              ),
-              if (_transactionResource.issue != null && !_transactionResource.issue.resolved)
-                Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      BoldText3(text: "Issue reported", context: context, color: Theme.of(context).colorScheme.info),
-                      _numberWarningsLeft(context: context, transactionResource: _transactionResource)
-                    ],
-                  )
-                ),
-              SizedBox(height: SizeConfig.getHeight(3)),
-              ListView.separated(
-                physics: NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                itemBuilder: (BuildContext context, int index) {
-                  return PurchasedItemWidget(purchasedItem: _transactionResource.transaction.purchasedItems[index]);
-                },
-                itemCount: _transactionResource.transaction.purchasedItems.length,
-                separatorBuilder: (BuildContext context, int index) => Divider(thickness: 1),
-              ),
-              Divider(thickness: 1),
-              Padding(
-                padding: EdgeInsets.only(left: 16, right: 16),
-                child: ListView(
-                  physics: NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  children: <Widget>[
-                    SizedBox(height:SizeConfig.getHeight(3)),
-                    _createFooterRow(context: context, title:"Subtotal", value:_transactionResource.transaction.netSales),
-                    SizedBox(height:SizeConfig.getHeight(1)),
-                    _createFooterRow(context: context, title: "Tax", value: _transactionResource.transaction.tax),
-                    if (_transactionResource.transaction.tip != 0)
-                      SizedBox(height:SizeConfig.getHeight(1)),
-                    if (_transactionResource.transaction.tip != 0)
-                      _createFooterRow(context: context, title: "Tip", value: _transactionResource.transaction.tip),
-                    if (_transactionResource.refunds.length > 0)
-                      SizedBox(height: SizeConfig.getHeight(1)),
-                    if (_transactionResource.refunds.length > 0)
-                      _createRefundRow(context: context, transactionResource: _transactionResource),
-                    SizedBox(height:SizeConfig.getHeight(3)),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        BoldText2(text: "Total", context: context),
-                        BoldText2(text: Currency.create(cents: _setTotal(transactionResource: _transactionResource)), context: context),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              Divider(thickness: 2),
-              Padding(
-                padding: EdgeInsets.only(
-                  left: 16, 
-                  top: SizeConfig.getHeight(1)
-                ),
-                child: Text2(
-                  text: "Purchase Location", 
-                  context: context, 
-                  color: Theme.of(context).colorScheme.textOnLightSubdued
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(left: 16, right: 16),
-                child: Container(
-                  height: SizeConfig.getWidth(50),
-                  child: GoogleMap(
-                    initialCameraPosition: CameraPosition(
-                      target: LatLng(_transactionResource.business.location.geo.lat, _transactionResource.business.location.geo.lng),
-                      zoom: 16.0
-                    ),
-                    myLocationButtonEnabled: false,
-                    markers: [Marker(
-                      markerId: MarkerId(_transactionResource.business.identifier),
-                      position: LatLng(_transactionResource.business.location.geo.lat, _transactionResource.business.location.geo.lng),
-                    )].toSet(),
-                  ),
-                ),
-              ),
-              SizedBox(height: SizeConfig.getHeight(2)),
-              Divider(thickness: 2),
-              SizedBox(height: SizeConfig.getHeight(2)),
-              Center(
-                child: Text3(
-                  text: "Transaction ID: ${_transactionResource.transaction.identifier}",
-                  context: context, 
-                  color: Theme.of(context).colorScheme.textOnLightSubdued
-                ),
-              )
-            ],
-          ),
+          body: _createScrollableContent(context: context, transactionResource: _transactionResource),
           bottomNavigationBar: state.isButtonVisible ? BlocProvider<PayButtonBloc>(
             create: (_) => PayButtonBloc(
               transactionRepository: _transactionRepository,
@@ -167,6 +50,153 @@ class ReceiptScreenBody extends StatelessWidget {
     ); 
   }
 
+  Widget _createScrollableContent({@required BuildContext context, @required TransactionResource transactionResource}) {
+    if (_showAppBar) {
+      return CustomScrollView(
+        shrinkWrap: true,
+        slivers: <Widget>[
+          BottomModalAppBar(
+            backgroundColor: Theme.of(context).colorScheme.topAppBarLight,
+            isSliver: true,
+            trailingWidget: _trailingWidget(transactionResource: transactionResource)
+          ),
+          SliverPadding(
+            padding: EdgeInsets.only(left: 16, right: 16),
+            sliver: SliverToBoxAdapter(
+              child: Column(
+                children: _buildBody(context: context, transactionResource: transactionResource)
+              ),
+            ),
+          )
+        ],
+      );
+    } else {
+      return ListView(
+        shrinkWrap: true,
+        children: _buildBody(context: context, transactionResource: transactionResource),
+      );
+    }
+  }
+  
+  List<Widget> _buildBody({@required BuildContext context, @required TransactionResource transactionResource}) {
+    return <Widget>[
+      Padding(
+        padding: EdgeInsets.only(left: 16, right: 16),
+        child: Row(
+          children: <Widget>[
+            CircleAvatar(
+              backgroundImage: NetworkImage(transactionResource.business.photos.logo.smallUrl),
+              radius: SizeConfig.getWidth(7),
+            ),
+            SizedBox(width: SizeConfig.getWidth(2)),
+            Expanded(
+              child: BoldText2(
+                text: transactionResource.business.profile.name,
+                context: context,
+              ),
+            ),
+            Text2(
+              text: transactionResource.transaction.billUpdatedAt,
+              context: context,
+              color: Theme.of(context).colorScheme.textOnLightSubdued,
+            )
+          ],
+        ),
+      ),
+      if (transactionResource.issue != null && !transactionResource.issue.resolved)
+        Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              BoldText3(text: "Issue reported", context: context, color: Theme.of(context).colorScheme.info),
+              _numberWarningsLeft(context: context, transactionResource: transactionResource)
+            ],
+          )
+        ),
+      SizedBox(height: SizeConfig.getHeight(3)),
+      ListView.separated(
+        physics: NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+        itemBuilder: (BuildContext context, int index) {
+          return PurchasedItemWidget(purchasedItem: transactionResource.transaction.purchasedItems[index]);
+        },
+        itemCount: transactionResource.transaction.purchasedItems.length,
+        separatorBuilder: (BuildContext context, int index) => Divider(thickness: 1),
+      ),
+      Divider(thickness: 1),
+      Padding(
+        padding: EdgeInsets.only(left: 16, right: 16),
+        child: ListView(
+          physics: NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
+          children: <Widget>[
+            SizedBox(height:SizeConfig.getHeight(3)),
+            _createFooterRow(context: context, title:"Subtotal", value:transactionResource.transaction.netSales),
+            SizedBox(height:SizeConfig.getHeight(1)),
+            _createFooterRow(context: context, title: "Tax", value: transactionResource.transaction.tax),
+            if (transactionResource.transaction.tip != 0)
+              SizedBox(height:SizeConfig.getHeight(1)),
+            if (transactionResource.transaction.tip != 0)
+              _createFooterRow(context: context, title: "Tip", value: transactionResource.transaction.tip),
+            if (transactionResource.refunds.length > 0)
+              SizedBox(height: SizeConfig.getHeight(1)),
+            if (transactionResource.refunds.length > 0)
+              _createRefundRow(context: context, transactionResource: transactionResource),
+            SizedBox(height:SizeConfig.getHeight(3)),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                BoldText2(text: "Total", context: context),
+                BoldText2(text: Currency.create(cents: _setTotal(transactionResource: transactionResource)), context: context),
+              ],
+            ),
+          ],
+        ),
+      ),
+      Divider(thickness: 2),
+      Padding(
+        padding: EdgeInsets.only(
+          left: 16, 
+          top: SizeConfig.getHeight(1)
+        ),
+        child: Text2(
+          text: "Purchase Location", 
+          context: context, 
+          color: Theme.of(context).colorScheme.textOnLightSubdued
+        ),
+      ),
+      SizedBox(height: SizeConfig.getHeight(1)),
+      Padding(
+        padding: EdgeInsets.only(left: 16, right: 16),
+        child: Container(
+          height: SizeConfig.getWidth(50),
+          child: GoogleMap(
+            initialCameraPosition: CameraPosition(
+              target: LatLng(transactionResource.business.location.geo.lat, transactionResource.business.location.geo.lng),
+              zoom: 16.0
+            ),
+            myLocationButtonEnabled: false,
+            markers: [Marker(
+              markerId: MarkerId(transactionResource.business.identifier),
+              position: LatLng(transactionResource.business.location.geo.lat, transactionResource.business.location.geo.lng),
+            )].toSet(),
+          ),
+        ),
+      ),
+      SizedBox(height: SizeConfig.getHeight(2)),
+      Divider(thickness: 2),
+      SizedBox(height: SizeConfig.getHeight(2)),
+      Center(
+        child: Text3(
+          text: "Transaction ID: ${transactionResource.transaction.identifier}",
+          context: context, 
+          color: Theme.of(context).colorScheme.textOnLightSubdued
+        ),
+      ),
+      SizedBox(height: SizeConfig.getHeight(2)),
+    ];
+  }
+  
   Widget _numberWarningsLeft({@required BuildContext context, @required TransactionResource transactionResource}) {
     if (transactionResource.issue.warningsSent == 3) {
       return Text2(text: "Response required to avoid autopay", context: context, color: Theme.of(context).colorScheme.danger);

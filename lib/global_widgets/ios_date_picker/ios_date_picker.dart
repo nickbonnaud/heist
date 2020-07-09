@@ -99,6 +99,7 @@ class IosDatePicker extends StatelessWidget {
                     BlocBuilder<IosDatePickerBloc, IosDatePickerState>(
                       builder: (context, state) {
                         return FlatButton(
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
                           child: BoldText4(
                             text: 'Submit', 
                             context: context, 

@@ -12,7 +12,6 @@ import 'package:heist/repositories/beacon_repository.dart';
 import 'package:heist/repositories/location_repository.dart';
 import 'package:heist/repositories/transaction_repository.dart';
 import 'package:heist/resources/constants.dart';
-import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/screens/boot.dart';
 
 import 'default_theme.dart';

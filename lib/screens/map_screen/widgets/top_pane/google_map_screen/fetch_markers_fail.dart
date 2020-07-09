@@ -32,7 +32,8 @@ class FetchMarkersFail extends StatelessWidget {
             height: 250,
           ),
           SizedBox(height: 15.0),
-          PlatformButton(
+          FlatButton(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
             onPressed: () => BlocProvider.of<NearbyBusinessesBloc>(context).add(FetchNearby(lat: _latitude, lng: _longitude)),
             child: PlatformText('Try Again'),
           )

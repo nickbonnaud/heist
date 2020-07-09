@@ -24,7 +24,8 @@ class FetchLocationFail extends StatelessWidget {
             height: 250,
           ),
           SizedBox(height: 15.0),
-          PlatformButton(
+          FlatButton(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
             onPressed: () => BlocProvider.of<GeoLocationBloc>(context).add(FetchLocation(accuracy: Accuracy.MEDIUM)),
             child: PlatformText('Try Again'),
           )

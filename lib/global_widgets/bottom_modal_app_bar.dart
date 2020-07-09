@@ -8,10 +8,12 @@ import 'package:heist/themes/global_colors.dart';
 
 class BottomModalAppBar extends StatefulWidget implements PreferredSizeWidget {
   final Color _backgroundColor;
+  final bool _isSliver;
   final Widget _trailingWidget;
 
-  BottomModalAppBar({Color backgroundColor, Widget trailingWidget})
+  BottomModalAppBar({Color backgroundColor, bool isSliver = false, Widget trailingWidget})
     : _backgroundColor = backgroundColor,
+      _isSliver = isSliver,
       _trailingWidget = trailingWidget;
   
   @override
@@ -35,34 +37,64 @@ class _BottomModalAppBarState extends State<BottomModalAppBar> with TickerProvid
   
   @override
   Widget build(BuildContext context) {
-    return AppBar(
+    if (widget._isSliver) {
+      return _buildSliverAppBar(context: context);
+    }
+    return _buildDefaultAppBar(context: context);
+  }
+
+  SliverAppBar _buildSliverAppBar({@required BuildContext context}) {
+    return SliverAppBar(
+      floating: true,
+      pinned: false,
+      snap: false,
       elevation: 0,
-      backgroundColor: widget._backgroundColor == null 
-        ? Theme.of(context).colorScheme.background
-        : widget._backgroundColor,
+      backgroundColor: _setBackgroundColor(context: context),
       actions: <Widget>[
         if (widget._trailingWidget != null)
           widget._trailingWidget
       ],
-      leading: AnimatedBuilder(
-        animation: _showAnimationController, 
-        builder: (context, child) => Transform.rotate(
-          angle: _showAnimation.value,
-          child: IconButton(
-            icon: PlatformWidget(
-              android: (_) => Icon(Icons.arrow_downward),
-              ios: (_) => Icon(IconData(
-                0xF35D,
-                fontFamily: CupertinoIcons.iconFont,
-                fontPackage: CupertinoIcons.iconFontPackage
-              )),
-            ),
-            onPressed: () => Navigator.of(context).pop(),
-            color: Theme.of(context).colorScheme.topAppBarIconLight,
-            iconSize: SizeConfig.getWidth(10),
+      leading: _builder(context: context),
+    );
+  }
+
+  AppBar _buildDefaultAppBar({@required BuildContext context}) {
+    return AppBar(
+      elevation: 0,
+      backgroundColor: _setBackgroundColor(context: context),
+      actions: <Widget>[
+        if (widget._trailingWidget != null)
+          widget._trailingWidget
+      ],
+      leading: _builder(context: context)
+    );
+  }
+
+  Color _setBackgroundColor({@required BuildContext context}) {
+    return widget._backgroundColor == null 
+        ? Theme.of(context).colorScheme.background
+        : widget._backgroundColor;
+  }
+
+  AnimatedBuilder _builder({@required BuildContext context}) {
+    return AnimatedBuilder(
+      animation: _showAnimationController, 
+      builder: (context, child) => Transform.rotate(
+        angle: _showAnimation.value,
+        child: IconButton(
+          icon: PlatformWidget(
+            android: (_) => Icon(Icons.arrow_downward),
+            ios: (_) => Icon(IconData(
+              0xF35D,
+              fontFamily: CupertinoIcons.iconFont,
+              fontPackage: CupertinoIcons.iconFontPackage
+            )),
           ),
-        )
-      ),
+          onPressed: () => Navigator.of(context).pop(),
+          color: Theme.of(context).colorScheme.topAppBarIconLight,
+          iconSize: SizeConfig.getWidth(10),
+        ),
+      )
     );
   }
 

@@ -33,7 +33,7 @@ class _ReceiptScreenState extends State<ReceiptScreen> {
   Widget build(BuildContext context) {
     return BlocProvider<ReceiptScreenBloc>(
       create: (BuildContext context) => ReceiptScreenBloc(transactionResource: widget._transactionResource),
-      child: ReceiptScreenBody(showAppBar: widget._showAppBar,),
+      child: ReceiptScreenBody(showAppBar: widget._showAppBar)
     );
   }
 

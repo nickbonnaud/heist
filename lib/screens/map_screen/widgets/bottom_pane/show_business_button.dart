@@ -3,6 +3,7 @@ import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:heist/models/business/business.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/screens/business_screen/business_screen.dart';
+import 'package:heist/screens/transaction_picker_screen/transaction_picker_screen.dart';
 
 class ShowBusinessButton extends StatefulWidget {
   final Business _business;
@@ -37,8 +38,12 @@ class _ShowBusinessButtonState extends State<ShowBusinessButton> {
       }),
       onTap: () => showPlatformModalSheet(
         context: context,
-        builder: (_) => BusinessScreen(business: widget._business),
+        builder: (_) => TransactionPickerScreen(business: widget._business),
       )
+      // onTap: () => showPlatformModalSheet(
+      //   context: context,
+      //   builder: (_) => BusinessScreen(business: widget._business),
+      // )
     );
   }
 }

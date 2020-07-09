@@ -61,19 +61,19 @@ class AppOpenedHandler {
   void _handleExit({@required BuildContext context, @required PushNotification notification}) async {
     TransactionResource transactionResource = await _fetchTransaction(context: context, notification: notification);
     transactionResource = _updateTransactionStatus(transactionResource: transactionResource, name: 'keep open notification sent', code: 105);
-    _showReceiptScreen(context: context, transactionResource: transactionResource, showAppBar: true);
+    _showReceiptScreen(context: context, transactionResource: transactionResource);
   }
 
   void _handleBillClosed({@required BuildContext context, @required PushNotification notification}) async {
     TransactionResource transactionResource = await _fetchTransaction(context: context, notification: notification);
     transactionResource = _updateTransactionStatus(transactionResource: transactionResource, name: 'bill closed', code: 101);
-    _showReceiptScreen(context: context, transactionResource: transactionResource, showAppBar: true);
+    _showReceiptScreen(context: context, transactionResource: transactionResource);
   }
 
   void _handleAutoPaid({@required BuildContext context, @required PushNotification notification}) async {
     TransactionResource transactionResource = await _fetchTransaction(context: context, notification: notification);
     transactionResource = _updateTransactionStatus(transactionResource: transactionResource, name: 'payment processing', code: 103);
-    _showReceiptScreen(context: context, transactionResource: transactionResource, showAppBar: true);
+    _showReceiptScreen(context: context, transactionResource: transactionResource);
   }
 
   void _handleFixBill({@required BuildContext context, @required PushNotification notification}) async {
@@ -84,14 +84,14 @@ class AppOpenedHandler {
       transactionResource = transactionResource.update(issue: transactionResource.issue.update(warningsSent: notification.warningsSent));
     }
 
-    _showReceiptScreen(context: context, transactionResource: transactionResource, showAppBar: true);
+    _showReceiptScreen(context: context, transactionResource: transactionResource);
   }
 
-  void _showReceiptScreen({@required BuildContext context, @required TransactionResource transactionResource, @required bool showAppBar}) {
+  void _showReceiptScreen({@required BuildContext context, @required TransactionResource transactionResource}) {
     if (BlocProvider.of<ReceiptModalSheetBloc>(context).isVisible) Navigator.of(context).pop();
     showPlatformModalSheet(
       context: context, 
-      builder: (_) => ReceiptScreen(transactionResource: transactionResource, receiptModalSheetBloc: BlocProvider.of<ReceiptModalSheetBloc>(context), showAppBar: showAppBar)
+      builder: (_) => ReceiptScreen(transactionResource: transactionResource, receiptModalSheetBloc: BlocProvider.of<ReceiptModalSheetBloc>(context))
     );
   }
 
