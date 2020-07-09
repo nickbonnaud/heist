@@ -9,6 +9,7 @@ import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
 import 'package:heist/screens/issue_screen/widgets/cancel_issue_form/bloc/cancel_issue_form_bloc.dart';
 import 'package:vibrate/vibrate.dart';
+import 'package:heist/themes/global_colors.dart';
 
 class CancelIssueForm extends StatelessWidget {
   final TransactionResource _transactionResource;
@@ -36,9 +37,9 @@ class CancelIssueForm extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
                 SizedBox(height: SizeConfig.getHeight(3)),
-                BoldText(text: "Cancel Issue?", size: SizeConfig.getWidth(9), color: Colors.black),
+                BoldTextCustom(text: "Cancel Issue?", context: context, size: SizeConfig.getWidth(9)),
                 SizedBox(height: SizeConfig.getHeight(15)),
-                BoldText(text: "${_transactionResource.issue.message} is no longer a problem?", size: SizeConfig.getWidth(7), color: Colors.black54)
+                BoldText2(text: "${_transactionResource.issue.message} is no longer a problem?", context: context, color: Theme.of(context).colorScheme.textOnLightSubdued)
               ],
             ),
             Row(
@@ -48,12 +49,15 @@ class CancelIssueForm extends StatelessWidget {
                     builder: (context, state) {
                       return OutlineButton(
                         borderSide: BorderSide(
-                          color: Colors.black
+                          color: Theme.of(context).colorScheme.buttonOutlineCancel
                         ),
-                        disabledBorderColor: Colors.grey.shade500,
+                        disabledBorderColor: Theme.of(context).colorScheme.buttonOutlineCancelDisabled,
                         shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
                         onPressed: state.isSubmitting ? null : () => _cancelButtonPressed(context),
-                        child: BoldText(text: 'Cancel', size: SizeConfig.getWidth(6), color: state.isSubmitting ? Colors.grey.shade500 : Colors.black),
+                        child: BoldText3(text: 'Cancel', context: context, color: state.isSubmitting
+                          ? Theme.of(context).colorScheme.buttonOutlineCancelDisabled
+                          : Theme.of(context).colorScheme.buttonOutlineCancel
+                        ),
                       );
                     }
                   )
@@ -63,11 +67,9 @@ class CancelIssueForm extends StatelessWidget {
                   child: BlocBuilder<CancelIssueFormBloc, CancelIssueFormState>(
                     builder: (context, state) {
                       return RaisedButton(
-                        color: Colors.green,
-                        disabledColor: Colors.green.shade100,
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
                         onPressed: !state.isSubmitting ? () => _submitButtonPressed(context, state) : null,
-                        child: _createButtonText(state),
+                        child: _createButtonText(context: context, state: state),
                       );
                     }
                   ) 
@@ -92,7 +94,7 @@ class CancelIssueForm extends StatelessWidget {
     Navigator.pop(context);
   }
 
-  Widget _createButtonText(CancelIssueFormState state) {
+  Widget _createButtonText({@required BuildContext context, @required CancelIssueFormState state}) {
     if (state.isSubmitting) {
       return TyperAnimatedTextKit(
         speed: Duration(milliseconds: 250),
@@ -102,11 +104,11 @@ class CancelIssueForm extends StatelessWidget {
             fontSize: SizeConfig.getWidth(6),
             fontWeight: FontWeight.w700
           ),
-          color: Colors.white
+          color: Theme.of(context).colorScheme.textOnDark
         ),
       );
     } else {
-      return BoldText(text: 'Cancel', size: SizeConfig.getWidth(6), color: Colors.white);
+      return BoldText3(text: 'Cancel', context: context, color: Theme.of(context).colorScheme.textOnDark);
     }
   }
 
@@ -124,7 +126,7 @@ class CancelIssueForm extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Expanded(
-                child: BoldText(text: message, size: SizeConfig.getWidth(6), color: Colors.white)
+                child: BoldText3(text: message, context: context, color: Theme.of(context).colorScheme.textOnDark)
               ),
               PlatformWidget(
                 android: (_) => Icon(state.isSuccess ? Icons.check_circle_outline : Icons.error),
@@ -134,12 +136,14 @@ class CancelIssueForm extends StatelessWidget {
                     fontFamily: CupertinoIcons.iconFont,
                     fontPackage: CupertinoIcons.iconFontPackage
                   ),
-                  color: Colors.white,
+                  color: Theme.of(context).colorScheme.textOnDark,
                 ),
               )
             ],
           ),
-          backgroundColor: state.isSuccess ? Colors.green : Colors.red,
+          backgroundColor: state.isSuccess
+          ? Theme.of(context).colorScheme.success
+          : Theme.of(context).colorScheme.error,
         )
       ).closed.then((_) => {
         if (state.isSuccess) {

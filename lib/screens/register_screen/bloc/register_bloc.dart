@@ -16,10 +16,8 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
 
   RegisterBloc({@required CustomerRepository customerRepository})
     : assert(customerRepository != null),
-      _customerRepository = customerRepository;
-
-  @override
-  RegisterState get initialState => RegisterState.empty();
+      _customerRepository = customerRepository,
+      super(RegisterState.empty());
 
   @override
   Stream<Transition<RegisterEvent, RegisterState>> transformEvents(Stream<RegisterEvent> events, transitionFn) {

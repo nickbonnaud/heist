@@ -17,8 +17,8 @@ enum Section {
 }
 
 class ProfileSetupScreenBloc extends Bloc<ProfileSetupScreenEvent, ProfileSetupScreenState> {
-  @override
-  ProfileSetupScreenState get initialState => ProfileSetupScreenState.initial();
+  
+  ProfileSetupScreenBloc() : super(ProfileSetupScreenState.initial());
 
   @override
   Stream<ProfileSetupScreenState> mapEventToState(ProfileSetupScreenEvent event) async* {

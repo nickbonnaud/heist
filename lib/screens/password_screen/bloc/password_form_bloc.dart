@@ -20,10 +20,8 @@ class PasswordFormBloc extends Bloc<PasswordFormEvent, PasswordFormState> {
   PasswordFormBloc({@required CustomerRepository customerRepository, @required AuthenticationBloc authenticationBloc})
     : assert(customerRepository != null),
       _customerRepository = customerRepository,
-      _authenticationBloc = authenticationBloc;
-  
-  @override
-  PasswordFormState get initialState => PasswordFormState.initial();
+      _authenticationBloc = authenticationBloc,
+      super(PasswordFormState.initial());
 
   @override
   Stream<Transition<PasswordFormEvent, PasswordFormState>> transformEvents(Stream<PasswordFormEvent> events, transitionFn) {

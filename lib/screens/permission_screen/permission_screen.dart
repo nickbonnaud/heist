@@ -1,4 +1,4 @@
-import 'dart:async';
+ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -96,7 +96,7 @@ class _PermissionsScreenState extends State<PermissionsScreen> with SingleTicker
         },
 
         child: Scaffold(
-          backgroundColor: Colors.white,
+          backgroundColor: Theme.of(context).colorScheme.background,
           body: _constructBody(_controller)
         )
       )
@@ -148,7 +148,7 @@ class _PermissionsScreenState extends State<PermissionsScreen> with SingleTicker
     }
     return Container(
       alignment: Alignment.center,
-      color: Colors.white,
+      color: Theme.of(context).colorScheme.background,
       child: Padding(
         padding: EdgeInsets.all(18.0),
         child: SingleChildScrollView(child: screen),

@@ -17,9 +17,13 @@ class ProfileNameScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<ProfileNameFormBloc>(
-      create: (BuildContext context) => ProfileNameFormBloc(profileRepository: _profileRepository, authenticationBloc: BlocProvider.of<AuthenticationBloc>(context)),
-      child: ProfileNameBody(controller: _controller),
+    return Container(
+      height: MediaQuery.of(context).size.height,
+      width: MediaQuery.of(context).size.width,
+      child: BlocProvider<ProfileNameFormBloc>(
+        create: (BuildContext context) => ProfileNameFormBloc(profileRepository: _profileRepository, authenticationBloc: BlocProvider.of<AuthenticationBloc>(context)),
+        child: ProfileNameBody(controller: _controller),
+      ),
     );
   }
 }

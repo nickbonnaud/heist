@@ -19,7 +19,8 @@ class SetupTipScreenBloc extends Bloc<SetupTipScreenEvent, SetupTipScreenState> 
   SetupTipScreenBloc({@required AccountRepository accountRepository, @required AuthenticationBloc authenticationBloc})
     : assert(accountRepository != null && authenticationBloc != null),
       _accountRepository = accountRepository,
-      _authenticationBloc = authenticationBloc;
+      _authenticationBloc = authenticationBloc,
+      super(SetupTipScreenState.initial());
   
   @override
   SetupTipScreenState get initialState => SetupTipScreenState.initial();

@@ -184,7 +184,7 @@ class MockResponses {
     //     },
     //     'status': {
     //       'name': 'Profile Account Incomplete',
-    //       'code': '100'
+    //       'code': '200'
     //     }
     //   }
     // };

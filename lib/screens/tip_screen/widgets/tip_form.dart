@@ -3,11 +3,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:heist/models/customer/customer.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
 import 'package:heist/screens/tip_screen/bloc/tip_form_bloc.dart';
+import 'package:heist/themes/global_colors.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
 import 'package:vibrate/vibrate.dart';
 
@@ -59,14 +59,16 @@ class _TipFormState extends State<TipForm> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Container(
-                height: SizeConfig.getHeight(50),
+              Expanded(
                 child: KeyboardActions(
                   config: _buildKeyboard(context),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: <Widget>[
-                      BoldText(text: 'Edit Account', size: SizeConfig.getWidth(9), color: Colors.black),
+                      VeryBoldText1(
+                        text: 'Edit Tip Rates', 
+                        context: context, 
+                      ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: <Widget>[
@@ -78,17 +80,17 @@ class _TipFormState extends State<TipForm> {
                                     labelText: 'Default Tip Rate',
                                     suffix: PlatformText(
                                       '%',
-                                      style: GoogleFonts.roboto(
+                                      style: TextStyle(
                                         fontWeight: FontWeight.w700,
                                         fontSize: SizeConfig.getWidth(7)
                                       ),
                                     ),
-                                    labelStyle: GoogleFonts.roboto(
+                                    labelStyle: TextStyle(
                                       fontWeight: FontWeight.w400,
                                       fontSize: SizeConfig.getWidth(5)
                                     )
                                   ),
-                                  style: GoogleFonts.roboto(
+                                  style: TextStyle(
                                     fontWeight: FontWeight.w700,
                                     fontSize: SizeConfig.getWidth(7)
                                   ),
@@ -113,17 +115,17 @@ class _TipFormState extends State<TipForm> {
                                     labelText: 'Quick Tip Rate',
                                     suffix: PlatformText(
                                       '%',
-                                      style: GoogleFonts.roboto(
+                                      style: TextStyle(
                                         fontWeight: FontWeight.w700,
                                         fontSize: SizeConfig.getWidth(7)
                                       ),
                                     ),
-                                    labelStyle: GoogleFonts.roboto(
+                                    labelStyle: TextStyle(
                                       fontWeight: FontWeight.w400,
                                       fontSize: SizeConfig.getWidth(5)
                                     )
                                   ),
-                                  style: GoogleFonts.roboto(
+                                  style: TextStyle(
                                     fontWeight: FontWeight.w700,
                                     fontSize: SizeConfig.getWidth(7)
                                   ),
@@ -140,7 +142,8 @@ class _TipFormState extends State<TipForm> {
                             )
                           ),
                         ],
-                      )
+                      ),
+                      SizedBox(height: SizeConfig.getHeight(1)),
                     ],
                   ),
                 ) ,
@@ -154,12 +157,18 @@ class _TipFormState extends State<TipForm> {
                         builder: (context, state) {
                           return OutlineButton(
                             borderSide: BorderSide(
-                              color: Colors.black
+                              color: Theme.of(context).colorScheme.buttonOutlineCancel
                             ),
-                            disabledBorderColor: Colors.grey.shade500,
+                            disabledBorderColor: Theme.of(context).colorScheme.buttonOutlineCancelDisabled,
                             shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
                             onPressed: state.isSubmitting ? null : () => _cancelButtonPressed(context),
-                            child: BoldText(text: 'Cancel', size: SizeConfig.getWidth(6), color: state.isSubmitting ? Colors.grey.shade500 : Colors.black),
+                            child: BoldText3(
+                              text: 'Cancel', 
+                              context: context, 
+                              color: state.isSubmitting 
+                                ? Theme.of(context).colorScheme.buttonOutlineCancelDisabled
+                                : Theme.of(context).colorScheme.buttonOutlineCancel
+                            ),
                           );
                         }
                       )
@@ -169,8 +178,6 @@ class _TipFormState extends State<TipForm> {
                       child: BlocBuilder<TipFormBloc, TipFormState>(
                         builder: (context, state) {
                           return RaisedButton(
-                            color: Colors.green,
-                            disabledColor: Colors.green.shade100,
                             shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
                             onPressed: _isSaveButtonEnabled(state) ? () => _saveButtonPressed(state) : null,
                             child: _createButtonText(state),
@@ -200,16 +207,14 @@ class _TipFormState extends State<TipForm> {
       return TyperAnimatedTextKit(
         speed: Duration(milliseconds: 250),
         text: ['Saving...'],
-        textStyle: GoogleFonts.roboto(
-          textStyle: TextStyle(
-            fontSize: SizeConfig.getWidth(6),
-            fontWeight: FontWeight.w700
-          ),
-          color: Colors.white
+        textStyle: TextStyle(
+          fontSize: SizeConfig.getWidth(6),
+          fontWeight: FontWeight.w700,
+          color: Theme.of(context).colorScheme.textOnDark,
         ),
       );
     } else {
-      return BoldText(text: 'Save', size: SizeConfig.getWidth(6), color: Colors.white);
+      return BoldText3(text: 'Save', context: context, color: Theme.of(context).colorScheme.textOnDark);
     }
   }
 
@@ -258,7 +263,7 @@ class _TipFormState extends State<TipForm> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Expanded(
-                child: BoldText(text: message, size: SizeConfig.getWidth(6), color: Colors.white)
+                child: BoldText3(text: message, context: context, color: Theme.of(context).colorScheme.textOnDark)
               ),
               PlatformWidget(
                 android: (_) => Icon(state.isSuccess ? Icons.check_circle_outline : Icons.error),
@@ -268,12 +273,14 @@ class _TipFormState extends State<TipForm> {
                     fontFamily: CupertinoIcons.iconFont,
                     fontPackage: CupertinoIcons.iconFontPackage
                   ),
-                  color: Colors.white,
+                  color: Theme.of(context).colorScheme.onError,
                 ),
               )
             ],
           ),
-          backgroundColor: state.isSuccess ? Colors.green : Colors.red,
+          backgroundColor: state.isSuccess
+            ? Theme.of(context).colorScheme.success
+            : Theme.of(context).colorScheme.error,
         )
       ).closed.then((_) => {
         if (state.isSuccess) {
@@ -296,7 +303,7 @@ class _TipFormState extends State<TipForm> {
                 onTap: () => node.unfocus(),
                 child: Padding(
                   padding: EdgeInsets.only(right: 16.0),
-                  child: BoldText(text: 'Done', size: SizeConfig.getWidth(4), color: Theme.of(context).primaryColor),
+                  child: BoldText5(text: 'Done', context: context, color: Theme.of(context).primaryColor),
                 ),
               );
             }
@@ -310,7 +317,7 @@ class _TipFormState extends State<TipForm> {
                 onTap: () => node.unfocus(),
                 child: Padding(
                   padding: EdgeInsets.only(right: 16.0),
-                  child: BoldText(text: 'Done', size: SizeConfig.getWidth(4), color: Theme.of(context).primaryColor),
+                  child: BoldText5(text: 'Done', context: context, color: Theme.of(context).primaryColor),
                 ),
               );
             }

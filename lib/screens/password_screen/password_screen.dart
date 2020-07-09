@@ -14,7 +14,7 @@ class PasswordScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomPadding: false,
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).colorScheme.background,
       appBar: BottomModalAppBar(),
       body: BlocProvider<PasswordFormBloc>(
         create: (BuildContext context) => PasswordFormBloc(customerRepository: _customerRepository, authenticationBloc: BlocProvider.of<AuthenticationBloc>(context)),

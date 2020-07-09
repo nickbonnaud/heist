@@ -11,6 +11,7 @@ import 'package:heist/resources/helpers/text_styles.dart';
 import 'package:heist/screens/issue_screen/bloc/issue_form_bloc.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
 import 'package:vibrate/vibrate.dart';
+import 'package:heist/themes/global_colors.dart';
 
 class IssueForm extends StatefulWidget {
   final IssueType _type;
@@ -65,7 +66,7 @@ class _IssueFormState extends State<IssueForm> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       SizedBox(height: SizeConfig.getHeight(3)),
-                      BoldText(text: _formatIssueType(), size: SizeConfig.getWidth(9), color: Colors.black),
+                      BoldTextCustom(text: _formatIssueType(), context: context, size: SizeConfig.getWidth(9)),
                       SizedBox(height: SizeConfig.getHeight(15)),
                       BlocBuilder<IssueFormBloc, IssueFormState>(
                         builder: (context, state) {
@@ -102,12 +103,15 @@ class _IssueFormState extends State<IssueForm> {
                             builder: (context, state) {
                               return OutlineButton(
                                 borderSide: BorderSide(
-                                  color: Colors.black
+                                  color: Theme.of(context).colorScheme.buttonOutlineCancel
                                 ),
-                                disabledBorderColor: Colors.grey.shade500,
+                                disabledBorderColor: Theme.of(context).colorScheme.buttonOutlineCancelDisabled,
                                 shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
                                 onPressed: state.isSubmitting ? null : () => _cancelButtonPressed(context),
-                                child: BoldText(text: 'Cancel', size: SizeConfig.getWidth(6), color: state.isSubmitting ? Colors.grey.shade500 : Colors.black),
+                                child: BoldText3(text: 'Cancel', context: context, color: state.isSubmitting 
+                                  ? Theme.of(context).colorScheme.buttonOutlineCancelDisabled
+                                  : Theme.of(context).colorScheme.buttonOutlineCancel
+                                ),
                               );
                             },
                           )
@@ -117,11 +121,9 @@ class _IssueFormState extends State<IssueForm> {
                           child: BlocBuilder<IssueFormBloc, IssueFormState>(
                             builder: (context, state) {
                               return RaisedButton(
-                                color: Colors.green,
-                                disabledColor: Colors.green.shade100,
                                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
                                 onPressed: _isSaveButtonEnabled(state) ? () => _saveButtonPressed(state) : null,
-                                child: _createButtonText(state),
+                                child: _createButtonText(context: context, state: state),
                               );
                             }
                           ) 
@@ -167,7 +169,7 @@ class _IssueFormState extends State<IssueForm> {
     }
   }
 
-  Widget _createButtonText(IssueFormState state) {
+  Widget _createButtonText({@required BuildContext context, @required IssueFormState state}) {
     if (state.isSubmitting) {
       return TyperAnimatedTextKit(
         speed: Duration(milliseconds: 250),
@@ -177,11 +179,11 @@ class _IssueFormState extends State<IssueForm> {
             fontSize: SizeConfig.getWidth(6),
             fontWeight: FontWeight.w700
           ),
-          color: Colors.white
+          color: Theme.of(context).colorScheme.textOnDark
         ),
       );
     } else {
-      return BoldText(text: 'Save', size: SizeConfig.getWidth(6), color: Colors.white);
+      return BoldText3(text: 'Save', context: context, color: Theme.of(context).colorScheme.textOnDark);
     }
   }
 
@@ -199,7 +201,7 @@ class _IssueFormState extends State<IssueForm> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Expanded(
-                child: BoldText(text: message, size: SizeConfig.getWidth(6), color: Colors.white)
+                child: BoldText3(text: message, context: context, color: Theme.of(context).colorScheme.textOnDark)
               ),
               PlatformWidget(
                 android: (_) => Icon(state.isSuccess ? Icons.check_circle_outline : Icons.error),
@@ -209,12 +211,14 @@ class _IssueFormState extends State<IssueForm> {
                     fontFamily: CupertinoIcons.iconFont,
                     fontPackage: CupertinoIcons.iconFontPackage
                   ),
-                  color: Colors.white,
+                  color: Theme.of(context).colorScheme.textOnDark,
                 ),
               )
             ],
           ),
-          backgroundColor: state.isSuccess ? Colors.green : Colors.red,
+          backgroundColor: state.isSuccess 
+            ? Theme.of(context).colorScheme.success
+            : Theme.of(context).colorScheme.error,
         )
       ).closed.then((_) => {
         if (state.isSuccess) {
@@ -248,7 +252,7 @@ class _IssueFormState extends State<IssueForm> {
                 onTap: () => node.unfocus(),
                 child: Padding(
                   padding: EdgeInsets.only(right: 16),
-                  child: BoldText(text: 'Done', size: SizeConfig.getWidth(4), color: Theme.of(context).primaryColor),
+                  child: BoldText5(text: 'Done', context: context, color: Theme.of(context).primaryColor),
                 ),
               );
             }

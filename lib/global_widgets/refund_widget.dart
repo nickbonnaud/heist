@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
-import 'package:heist/blocs/bloc/receipt_modal_sheet_bloc.dart';
+import 'package:heist/blocs/receipt_modal_sheet/receipt_modal_sheet_bloc.dart';
 import 'package:heist/models/transaction/refund_resource.dart';
 import 'package:heist/models/transaction/transaction_resource.dart';
 import 'package:heist/resources/helpers/currency.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
 import 'package:heist/screens/receipt_screen/receipt_screen.dart';
+import 'package:heist/themes/global_colors.dart';
 
 import 'default_app_bar/bloc/default_app_bar_bloc.dart';
 
@@ -27,20 +28,19 @@ class RefundWidget extends StatelessWidget {
           backgroundImage: NetworkImage(_refundResource.business.photos.logo.smallUrl),
           radius: SizeConfig.getWidth(6),
         ),
-        title: BoldText(
+        title: BoldText4(
           text: _refundResource.business.profile.name,
-          size: SizeConfig.getWidth(5),
-          color: Colors.black
+          context: context
         ),
-        subtitle: NormalText(
-          text: 'Refund: ${Currency.create(cents: _refundResource.refund.total)}', 
-          size: SizeConfig.getWidth(5),
-          color: Colors.black54
+        subtitle: Text2(
+          text: 'Refund: ${Currency.create(cents: _refundResource.refund.total)}',
+          context: context,
+          color: Theme.of(context).colorScheme.textOnLightSubdued
         ),
-        trailing: NormalText(
+        trailing: Text2(
           text: _refundResource.refund.createdAt,
-          size: SizeConfig.getWidth(5),
-          color: Colors.black54
+          context: context,
+          color: Theme.of(context).colorScheme.textOnLightSubdued
         ),
         onTap: () => showFullTransaction(context),
       ),

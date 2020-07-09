@@ -20,10 +20,8 @@ class NearbyBusinessesBloc extends Bloc<NearbyBusinessesEvent, NearbyBusinessesS
   NearbyBusinessesBloc({@required LocationRepository locationRepository, @required BootBloc bootBloc})
     : assert(locationRepository != null && bootBloc != null),
       _locationRepository = locationRepository,
-      _bootBloc = bootBloc;
-  
-  @override
-  NearbyBusinessesState get initialState => NearbyUninitialized();
+      _bootBloc = bootBloc,
+      super(NearbyUninitialized());
 
   List<Business> get businesses {
     final currentState = state;

@@ -15,10 +15,8 @@ class KeepOpenButtonBloc extends Bloc<KeepOpenButtonEvent, KeepOpenButtonState> 
 
   KeepOpenButtonBloc({@required TransactionRepository transactionRepository})
     : assert(transactionRepository != null),
-      _transactionRepository = transactionRepository;
-  
-  @override
-  KeepOpenButtonState get initialState => KeepOpenButtonState.initial();
+      _transactionRepository = transactionRepository,
+      super(KeepOpenButtonState.initial());
 
   @override
   Stream<KeepOpenButtonState> mapEventToState(KeepOpenButtonEvent event) async* {

@@ -9,6 +9,7 @@ import 'package:heist/screens/email_screen/email_screen.dart';
 import 'package:heist/screens/password_screen/password_screen.dart';
 import 'package:heist/screens/profile_screen/profile_screen.dart';
 import 'package:heist/screens/tip_screen/tip_screen.dart';
+import 'package:heist/themes/global_colors.dart';
 
 class SettingsList extends StatelessWidget {
   @override
@@ -16,59 +17,71 @@ class SettingsList extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: <Widget>[
-        BoldText(text: 'Settings', size: SizeConfig.getWidth(9), color: Colors.black),
+        BoldTextCustom(text: 'Settings', context: context, size: SizeConfig.getWidth(9)),
         SizedBox(height: SizeConfig.getHeight(5)),
         ListTile(
           leading: PlatformWidget(
-            android: (_) => Icon(Icons.person),
-            ios: (_) => Icon(IconData(
-              0xF41A,
-              fontFamily: CupertinoIcons.iconFont,
-              fontPackage: CupertinoIcons.iconFontPackage
-            )),
+            android: (_) => Icon(Icons.person, color: Theme.of(context).colorScheme.iconPrimary),
+            ios: (_) => Icon(
+              IconData(
+                0xF41A,
+                fontFamily: CupertinoIcons.iconFont,
+                fontPackage: CupertinoIcons.iconFontPackage,
+              ),
+              color: Theme.of(context).colorScheme.iconPrimary
+            ),
           ),
-          title: NormalText(text: 'Change Profile', size: SizeConfig.getWidth(5), color: Colors.black54),
+          title: Text2(text: 'Change Profile', context: context, color: Theme.of(context).colorScheme.textOnLightSubdued),
           onTap: () => _showModal(context: context, screen: ProfileScreen())
         ),
         ListTile(
           leading: PlatformWidget(
-            android: (_) => Icon(Icons.email),
-            ios: (_) => Icon(IconData(
-              0xF474,
-              fontFamily: CupertinoIcons.iconFont,
-              fontPackage: CupertinoIcons.iconFontPackage
-            )),
+            android: (_) => Icon(Icons.email, color: Theme.of(context).colorScheme.iconPrimary),
+            ios: (_) => Icon(
+              IconData(
+                0xF474,
+                fontFamily: CupertinoIcons.iconFont,
+                fontPackage: CupertinoIcons.iconFontPackage
+              ),
+              color: Theme.of(context).colorScheme.iconPrimary
+            ),
           ),
-          title: NormalText(text: 'Change Email', size: SizeConfig.getWidth(5), color: Colors.black54),
+          title: Text2(text: 'Change Email', context: context, color: Theme.of(context).colorScheme.textOnLightSubdued),
           onTap: () => _showModal(context: context, screen: EmailScreen())
         ),
         ListTile(
           leading: PlatformWidget(
-            android: (_) => Icon(Icons.lock),
-            ios: (_) => Icon(IconData(
-              0xF392,
-              fontFamily: CupertinoIcons.iconFont,
-              fontPackage: CupertinoIcons.iconFontPackage
-            )),
+            android: (_) => Icon(Icons.lock, color: Theme.of(context).colorScheme.iconPrimary),
+            ios: (_) => Icon(
+              IconData(
+                0xF392,
+                fontFamily: CupertinoIcons.iconFont,
+                fontPackage: CupertinoIcons.iconFontPackage
+              ),
+              color: Theme.of(context).colorScheme.iconPrimary
+            ),
           ),
-          title: NormalText(text: 'Change Password', size: SizeConfig.getWidth(5), color: Colors.black54),
+          title: Text2(text: 'Change Password', context: context, color: Theme.of(context).colorScheme.textOnLightSubdued),
           onTap: () => _showModal(context: context, screen: PasswordScreen())
         ),
         ListTile(
-          leading: Icon(Icons.payment),
-          title: NormalText(text: 'Change Payment Method', size: SizeConfig.getWidth(5), color: Colors.black54),
+          leading: Icon(Icons.payment, color: Theme.of(context).colorScheme.iconPrimary),
+          title: Text2(text: 'Change Payment Method', context: context, color: Theme.of(context).colorScheme.textOnLightSubdued),
           onTap: () => print('show payment screen'),
         ),
         ListTile(
           leading: PlatformWidget(
-            android: (_) => Icon(Icons.thumb_up),
-            ios: (_) => Icon(IconData(
-              0xF388,
-              fontFamily: CupertinoIcons.iconFont,
-              fontPackage: CupertinoIcons.iconFontPackage
-            )),
+            android: (_) => Icon(Icons.thumb_up, color: Theme.of(context).colorScheme.iconPrimary),
+            ios: (_) => Icon(
+              IconData(
+                0xF388,
+                fontFamily: CupertinoIcons.iconFont,
+                fontPackage: CupertinoIcons.iconFontPackage
+              ),
+              color: Theme.of(context).colorScheme.iconPrimary
+            ),
           ),
-          title: NormalText(text: 'Change Tip Settings', size: SizeConfig.getWidth(5), color: Colors.black54),
+          title: Text2(text: 'Change Tip Settings', context: context, color: Theme.of(context).colorScheme.textOnLightSubdued),
           onTap: () => _showModal(context: context, screen: TipScreen())
         ),
         SizedBox(height: SizeConfig.getHeight(15))

@@ -9,14 +9,14 @@ class ProfileFinishedScreen extends StatelessWidget {
     return Column(
       mainAxisAlignment:  MainAxisAlignment.center,
       children: <Widget>[
-        BoldText(text: "Finished!", size: SizeConfig.getWidth(8), color: Colors.black),
+        BoldText1(text: "Finished!", context: context),
         Image.asset(
           "assets/slide_3.png",
           fit: BoxFit.contain,
           height: 350,
         ),
         SizedBox(height: SizeConfig.getHeight(2)),
-        BoldText(text: "Profile Setup Complete!", size: SizeConfig.getWidth(6), color: Colors.black)
+        BoldText3(text: "Profile Setup Complete!", context: context)
       ],
     );
   }

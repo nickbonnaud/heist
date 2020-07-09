@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:heist/global_widgets/bottom_modal_app_bar.dart';
 import 'package:heist/global_widgets/material_date_picker/bloc/material_date_picker_bloc.dart';
 import 'package:heist/models/date_range.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
+import 'package:heist/themes/global_colors.dart';
 import 'package:intl/intl.dart';
 
 class MaterialDatePicker extends StatefulWidget {
@@ -26,6 +26,7 @@ class _MaterialDatePicker extends State<MaterialDatePicker> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomPadding: false,
       appBar: BottomModalAppBar(backgroundColor: Colors.grey.shade300.withOpacity(.90)),
       backgroundColor: Colors.grey.shade300.withOpacity(.90),
       body: Padding(
@@ -48,9 +49,9 @@ class _MaterialDatePicker extends State<MaterialDatePicker> {
                         ),
                         child: Text(
                           state.startDate != null ? _formatDate(state.startDate) : "Select Start Date",
-                          style: GoogleFonts.roboto(
+                          style: TextStyle(
                             fontWeight: FontWeight.w700,
-                            color: Colors.black,
+                            color: Theme.of(context).colorScheme.textOnLight,
                             fontSize: SizeConfig.getWidth(7),
                             decoration: state.active == Active.start ? TextDecoration.underline : null
                           ),
@@ -59,7 +60,7 @@ class _MaterialDatePicker extends State<MaterialDatePicker> {
                     },
                   ),
                   SizedBox(height: SizeConfig.getHeight(3)),
-                  BoldText(text: "To", size: SizeConfig.getWidth(7), color: Colors.black),
+                  BoldText2(text: "To", context: context),
                   SizedBox(height: SizeConfig.getHeight(3)),
                   BlocBuilder<MaterialDatePickerBloc, MaterialDatePickerState>(
                     builder: (context, state) {
@@ -71,9 +72,9 @@ class _MaterialDatePicker extends State<MaterialDatePicker> {
                         ),
                         child: Text(
                           _formatDate(state.endDate),
-                          style: GoogleFonts.roboto(
+                          style: TextStyle(
                             fontWeight: FontWeight.w700,
-                            color: Colors.black,
+                            color: Theme.of(context).colorScheme.textOnLight,
                             fontSize: SizeConfig.getWidth(7),
                             decoration: state.active == Active.end ? TextDecoration.underline : null
                           ),
@@ -92,12 +93,12 @@ class _MaterialDatePicker extends State<MaterialDatePicker> {
                   Expanded(
                     child: OutlineButton(
                       borderSide: BorderSide(
-                        color: Colors.black
+                        color: Theme.of(context).colorScheme.buttonOutlineCancel
                       ),
-                      disabledBorderColor: Colors.grey.shade500,
+                      disabledBorderColor: Theme.of(context).colorScheme.buttonOutlineCancelDisabled,
                       shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
                       onPressed: () => Navigator.of(context).pop(),
-                      child: BoldText(text: 'Cancel', size: SizeConfig.getWidth(6), color: Colors.black),
+                      child: BoldText3(text: 'Cancel', context: context),
                     )
                   ),
                   SizedBox(width: 20.0),
@@ -105,13 +106,11 @@ class _MaterialDatePicker extends State<MaterialDatePicker> {
                     child: BlocBuilder<MaterialDatePickerBloc, MaterialDatePickerState>(
                       builder: (context, state) {
                         return RaisedButton(
-                          color: Colors.green,
-                          disabledColor: Colors.green.shade100,
                           shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
                           onPressed: state.startDate != null && state.endDate != null && state.startDate.isBefore(state.endDate)
                             ? () => Navigator.of(context).pop(DateRange(startDate: state.startDate, endDate: state.endDate))
                             : null,
-                          child: BoldText(text: 'Submit', size: SizeConfig.getWidth(6), color: Colors.white)
+                          child: BoldText3(text: 'Submit', context: context, color: Theme.of(context).colorScheme.textOnDark)
                         );
                       }
                     )
@@ -137,6 +136,8 @@ class _MaterialDatePicker extends State<MaterialDatePicker> {
       initialDate: state == null || active == Active.end ? DateTime.now() : state.endDate,
       firstDate: DateTime(2015), 
       lastDate: state == null || active == Active.end ? DateTime.now() : state.endDate,
+      helpText: active == Active.start ? "Set Start date" : "Set end Date",
+      confirmText: "SET",
     );
     BlocProvider.of<MaterialDatePickerBloc>(context).add(DateChanged(date: date));
   }

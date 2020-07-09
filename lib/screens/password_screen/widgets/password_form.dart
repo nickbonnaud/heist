@@ -3,11 +3,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:heist/models/customer/customer.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
 import 'package:heist/screens/password_screen/bloc/password_form_bloc.dart';
+import 'package:heist/themes/global_colors.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
 import 'package:vibrate/vibrate.dart';
 
@@ -57,8 +57,7 @@ class _PasswordFormState extends State<PasswordForm> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Container(
-                height: SizeConfig.getHeight(50),
+              Expanded(
                 child: BlocBuilder<PasswordFormBloc, PasswordFormState>(
                   builder: (context, state) {
                     return KeyboardActions(
@@ -66,16 +65,16 @@ class _PasswordFormState extends State<PasswordForm> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: <Widget>[
-                          BoldText(text: 'Change Password', size: SizeConfig.getWidth(9), color: Colors.black),
+                          VeryBoldText1(text: 'Change Password', context: context),
                           TextFormField(
                             decoration: InputDecoration(
                               labelText: 'Current Password',
-                              labelStyle: GoogleFonts.roboto(
+                              labelStyle: TextStyle(
                                 fontWeight: FontWeight.w400,
                                 fontSize: SizeConfig.getWidth(6)
                               )
                             ),
-                            style: GoogleFonts.roboto(
+                            style: TextStyle(
                               fontWeight: FontWeight.w700,
                               fontSize: SizeConfig.getWidth(7)
                             ),
@@ -95,12 +94,12 @@ class _PasswordFormState extends State<PasswordForm> {
                           TextFormField(
                             decoration: InputDecoration(
                               labelText: 'New Password',
-                              labelStyle: GoogleFonts.roboto(
+                              labelStyle: TextStyle(
                                 fontWeight: FontWeight.w400,
                                 fontSize: SizeConfig.getWidth(6)
                               )
                             ),
-                            style: GoogleFonts.roboto(
+                            style: TextStyle(
                               fontWeight: FontWeight.w700,
                               fontSize: SizeConfig.getWidth(7)
                             ),
@@ -121,12 +120,12 @@ class _PasswordFormState extends State<PasswordForm> {
                           TextFormField(
                             decoration: InputDecoration(
                               labelText: 'Password Confirmation',
-                              labelStyle: GoogleFonts.roboto(
+                              labelStyle: TextStyle(
                                 fontWeight: FontWeight.w400,
                                 fontSize: SizeConfig.getWidth(6)
                               )
                             ),
-                            style: GoogleFonts.roboto(
+                            style: TextStyle(
                               fontWeight: FontWeight.w700,
                               fontSize: SizeConfig.getWidth(7)
                             ),
@@ -142,7 +141,8 @@ class _PasswordFormState extends State<PasswordForm> {
                               _passwordFocus.unfocus();
                             },
                             enabled: state.isOldPasswordVerified,
-                          )
+                          ),
+                          SizedBox(height: SizeConfig.getHeight(10)),
                         ],
                       ),
                     );
@@ -158,12 +158,15 @@ class _PasswordFormState extends State<PasswordForm> {
                         builder: (context, state) {
                           return OutlineButton(
                             borderSide: BorderSide(
-                              color: Colors.black
+                              color: Theme.of(context).colorScheme.buttonOutlineCancel
                             ),
-                            disabledBorderColor: Colors.grey.shade500,
+                            disabledBorderColor: Theme.of(context).colorScheme.buttonOutlineCancelDisabled,
                             shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
                             onPressed: state.isSubmitting ? null : () => _cancelButtonPressed(context),
-                            child: BoldText(text: 'Cancel', size: SizeConfig.getWidth(6), color: state.isSubmitting ? Colors.grey.shade500 : Colors.black),
+                            child: BoldText3(text: 'Cancel', context: context, color: state.isSubmitting 
+                              ? Theme.of(context).colorScheme.buttonOutlineCancelDisabled
+                              : Theme.of(context).colorScheme.buttonOutlineCancel
+                            ),
                           );
                         },
                       )
@@ -173,8 +176,6 @@ class _PasswordFormState extends State<PasswordForm> {
                       child: BlocBuilder<PasswordFormBloc, PasswordFormState>(
                         builder: (context, state) {
                           return RaisedButton(
-                            color: Colors.green,
-                            disabledColor: Colors.green.shade100,
                             shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
                             onPressed: _canSubmit(state) ? () => _submit(state) : null,
                             child: _createButtonText(state),
@@ -261,7 +262,7 @@ class _PasswordFormState extends State<PasswordForm> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Expanded(
-                child: BoldText(text: message, size: SizeConfig.getWidth(6), color: Colors.white)
+                child: BoldText3(text: message, context: context, color: Theme.of(context).colorScheme.textOnDark)
               ),
               PlatformWidget(
                 android: (_) => Icon(isSuccess ? Icons.check_circle_outline : Icons.error),
@@ -271,12 +272,14 @@ class _PasswordFormState extends State<PasswordForm> {
                     fontFamily: CupertinoIcons.iconFont,
                     fontPackage: CupertinoIcons.iconFontPackage
                   ),
-                  color: Colors.white,
+                  color: Theme.of(context).colorScheme.onError,
                 ),
               )
             ],
           ),
-          backgroundColor: isSuccess ? Colors.green : Colors.red,
+          backgroundColor: isSuccess 
+            ? Theme.of(context).colorScheme.success
+            : Theme.of(context).colorScheme.error,
         )
       ).closed.then((_) => {
         if (state.isSuccess) {
@@ -292,17 +295,15 @@ class _PasswordFormState extends State<PasswordForm> {
       return TyperAnimatedTextKit(
         speed: Duration(milliseconds: 250),
         text: state.isOldPasswordVerified ? ['Saving...'] : ['Verifying'],
-        textStyle: GoogleFonts.roboto(
-          textStyle: TextStyle(
-            fontSize: SizeConfig.getWidth(6),
-            fontWeight: FontWeight.w700
-          ),
-          color: Colors.white
+        textStyle: TextStyle(
+          fontWeight: FontWeight.bold,
+          color: Theme.of(context).colorScheme.textOnDark,
+          fontSize: SizeConfig.getWidth(6)
         ),
       );
     } else {
       String text = state.isOldPasswordVerified ? 'Save' : 'Verify';
-      return BoldText(text: text, size: SizeConfig.getWidth(6), color: Colors.white);
+      return BoldText3(text: text, context: context, color: Theme.of(context).colorScheme.textOnDark);
     }
   }
 
@@ -317,13 +318,10 @@ class _PasswordFormState extends State<PasswordForm> {
             toolbarButtons: [
               (node) {
                 return GestureDetector(
-                  onTap: () {
-                    node.unfocus();
-                    _submit(state);
-                  },
+                  onTap: () => node.unfocus(),
                   child: Padding(
                     padding: EdgeInsets.only(right: 16.0),
-                    child: BoldText(text: 'Submit', size: SizeConfig.getWidth(4), color: Theme.of(context).primaryColor),
+                    child: BoldText5(text: 'Done', context: context, color: Theme.of(context).colorScheme.primary),
                   ),
                 );
               }
@@ -337,7 +335,7 @@ class _PasswordFormState extends State<PasswordForm> {
                 onTap: () => node.unfocus(),
                 child: Padding(
                   padding: EdgeInsets.only(right: 16.0),
-                  child: BoldText(text: 'Done', size: SizeConfig.getWidth(4), color: Theme.of(context).primaryColor),
+                  child: BoldText5(text: 'Done', context: context, color: Theme.of(context).colorScheme.primary),
                 ),
               );
             }
@@ -351,7 +349,7 @@ class _PasswordFormState extends State<PasswordForm> {
                 onTap: () => node.unfocus(),
                 child: Padding(
                   padding: EdgeInsets.only(right: 16.0),
-                  child: BoldText(text: 'Done', size: SizeConfig.getWidth(4), color: Theme.of(context).primaryColor),
+                  child: BoldText5(text: 'Done', context: context, color: Theme.of(context).colorScheme.primary),
                 ),
               );
             }

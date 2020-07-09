@@ -7,6 +7,7 @@ import 'package:heist/resources/constants.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
 import 'package:heist/screens/profile_setup_screen/bloc/profile_setup_screen_bloc.dart';
+import 'package:heist/themes/global_colors.dart';
 
 class SetupPaymentAccountScreen extends StatefulWidget {
   final AnimationController _controller;
@@ -23,53 +24,52 @@ class _SetupPaymentAccountScreen extends State<SetupPaymentAccountScreen> {
   
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(left: 16.0, bottom: 16, right: 16.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: <Widget>[
-              SizedBox(height: SizeConfig.getHeight(15)),
-              BoldText.veryBold(
-                text: "Let's add your Payment Method!", 
-                size: SizeConfig.getWidth(6),
-                color: Colors.black
-              ),
-              SizedBox(height: SizeConfig.getHeight(10)),
-              RaisedButton(
-                color: Colors.blue,
-                shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
-                onPressed: () => _connectButtonPressed(),
-                child: BoldText(text: 'Connect', size: SizeConfig.getWidth(6), color: Colors.white)
-              ),
-              SizedBox(height: SizeConfig.getHeight(8)),
-              BoldText(
-                text: "${Constants.appName} uses a secure 3rd party service to create your payment account.", 
-                size: SizeConfig.getWidth(4), 
-                color: Colors.grey.shade600
-              ),
-            ],
-          ),
-          Row(
-            children: <Widget>[
-              Expanded(
-                child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
-                  builder: (context, state) {
-                    return RaisedButton(
-                      color: Colors.green,
-                      disabledColor: Colors.green.shade100,
-                      shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
-                      onPressed: _isNextButtonEnabled(state) ? () => _nextButtonPressed(context) : null,
-                      child: BoldText(text: 'Next', size: SizeConfig.getWidth(6), color: Colors.white)
-                    );
-                  },
-                )
+    return Container(
+      height: MediaQuery.of(context).size.height,
+      width: MediaQuery.of(context).size.width,
+      child: Padding(
+        padding: EdgeInsets.only(left: 16.0, bottom: 16, right: 16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  VeryBoldText4(
+                    text: "Let's add your Payment Method!", 
+                    context: context,
+                  ),
+                  RaisedButton(
+                    shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
+                    onPressed: () => _connectButtonPressed(),
+                    child: BoldText3(text: 'Connect', context: context, color: Theme.of(context).colorScheme.textOnDark)
+                  ),
+                  Text2(
+                    text: "${Constants.appName} uses a secure 3rd party service to create your payment account.", 
+                    context: context, 
+                    color: Theme.of(context).colorScheme.textOnLightSubdued
+                  ),
+                ],
               )
-            ],
-          )
-        ],
+            ),
+            Row(
+              children: <Widget>[
+                Expanded(
+                  child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+                    builder: (context, state) {
+                      return RaisedButton(
+                        shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
+                        onPressed: _isNextButtonEnabled(state) ? () => _nextButtonPressed(context) : null,
+                        child: BoldText3(text: 'Next', context: context, color: Theme.of(context).colorScheme.textOnDark)
+                      );
+                    },
+                  )
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

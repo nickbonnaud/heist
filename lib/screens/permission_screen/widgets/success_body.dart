@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:heist/resources/helpers/size_config.dart';
+import 'package:heist/resources/helpers/text_styles.dart';
+import 'package:heist/themes/global_colors.dart';
 
 class SuccessBody extends StatelessWidget {
   @override
@@ -14,31 +17,19 @@ class SuccessBody extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            PlatformText(
-              'Success!',
-              style: GoogleFonts.roboto(
-                textStyle: TextStyle(
-                  color: Colors.blueGrey,
-                  fontSize: 34,
-                  fontWeight: FontWeight.bold
-                )
-              ),
-            ),
-            SizedBox(height: 25.0),
+            VeryBoldText2(text: 'Success!', context: context),
+            SizedBox(height: SizeConfig.getHeight(6)),
             Image.asset(
               "assets/slide_4.png",
               fit: BoxFit.contain,
-              height: 350,
             ),
-            SizedBox(height: 25.0),
+            SizedBox(height: SizeConfig.getHeight(6)),
             PlatformText('All your device permissions are set!',
               textAlign: TextAlign.center,
-              style: GoogleFonts.roboto(
-                textStyle: TextStyle(
-                  color: Colors.blueGrey,
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold
-                )
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.textOnLightSubdued,
+                fontSize: SizeConfig.getWidth(5),
+                fontWeight: FontWeight.bold
               ),
             )
           ],

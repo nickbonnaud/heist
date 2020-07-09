@@ -5,6 +5,7 @@ import 'package:heist/models/transaction/transaction_resource.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
 import 'package:heist/screens/map_screen/widgets/bottom_pane/show_transaction_button.dart';
+import 'package:heist/themes/global_colors.dart';
 
 
 class OpenTransactionsList extends StatelessWidget {
@@ -31,7 +32,11 @@ class OpenTransactionsList extends StatelessWidget {
                     ),
                   ),
                   SizedBox(width: SizeConfig.getWidth(1)),
-                  BoldText(text: "Open Transactions:", size: SizeConfig.getWidth(5), color: Colors.grey),
+                  BoldText4(
+                    text: "Open Transactions:",
+                    context: context, 
+                    color: Theme.of(context).colorScheme.textOnLightSubdued
+                  ),
                 ],
               ),
               SizedBox(height: SizeConfig.getHeight(1)),

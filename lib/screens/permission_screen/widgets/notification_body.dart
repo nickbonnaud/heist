@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:heist/resources/constants.dart';
-import 'package:heist/screens/permission_screen/bloc/permission_screen_bloc.dart';
+import 'package:heist/resources/helpers/size_config.dart';
+import 'package:heist/resources/helpers/text_styles.dart';
+import 'package:heist/themes/global_colors.dart';
 
 import 'permission_buttons/bloc/permission_buttons_bloc.dart';
 import 'permission_buttons/permission_buttons.dart';
@@ -26,34 +27,22 @@ class NotificationBody extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
-        PlatformText(
-          'Notications',
-          style: GoogleFonts.roboto(
-            textStyle: TextStyle(
-              color: Colors.blueGrey,
-              fontSize: 34,
-              fontWeight: FontWeight.bold
-            )
-          ),
-        ),
-        SizedBox(height: 25.0),
+        VeryBoldText2(text: 'Notications', context: context),
+        SizedBox(height: SizeConfig.getHeight(6)),
         Image.asset(
           "assets/slide_2.png",
           fit: BoxFit.contain,
-          height: 350,
         ),
-        SizedBox(height: 25.0),
+        SizedBox(height: SizeConfig.getHeight(6)),
         PlatformText(notificationText,
           textAlign: TextAlign.center,
-          style: GoogleFonts.roboto(
-            textStyle: TextStyle(
-              color: Colors.blueGrey,
-              fontSize: 18,
-              fontWeight: FontWeight.bold
-            )
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.textOnLightSubdued,
+            fontSize: SizeConfig.getWidth(5),
+            fontWeight: FontWeight.bold
           ),
         ),
-        SizedBox(height: 35),
+        SizedBox(height: SizeConfig.getHeight(8)),
         BlocProvider<PermissionButtonsBloc>(
           create: (_) => PermissionButtonsBloc(),
           child: _permissionButtons

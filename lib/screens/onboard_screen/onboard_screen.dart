@@ -16,7 +16,7 @@ class OnboardScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomPadding: false,
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).colorScheme.background,
       body: BlocProvider<OnboardBloc>(
         create: (BuildContext context) => OnboardBloc(),
         child: OnboardBody(customerOnboarded: _customerOnboarded, permissionsReady: _permissionsReady),

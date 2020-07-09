@@ -13,10 +13,8 @@ class PushNotificationBloc extends Bloc<PushNotificationEvent, PushNotificationS
 
   PushNotificationBloc({@required PushNotificationRepository pushNotificationRepository})
     : assert(pushNotificationRepository != null),
-      _pushNotificationRepository = pushNotificationRepository;
-  
-  @override
-  PushNotificationState get initialState => PushNotificatinsUninitialized();
+      _pushNotificationRepository = pushNotificationRepository,
+      super(PushNotificatinsUninitialized());
 
   @override
   Stream<PushNotificationState> mapEventToState(PushNotificationEvent event) async* {

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:heist/blocs/nearby_businesses/nearby_businesses_bloc.dart';
+import 'package:heist/resources/helpers/text_styles.dart';
 
 class FetchMarkersFail extends StatelessWidget {
   final double _latitude;
@@ -21,16 +22,8 @@ class FetchMarkersFail extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          PlatformText(
-            'Failed to Load Markers',
-            style: GoogleFonts.roboto(
-              textStyle: TextStyle(
-                color: Colors.blueGrey,
-                fontSize: 24,
-                fontWeight: FontWeight.bold
-              )
-            ),
-            textAlign: TextAlign.center,
+          Center(
+            child: BoldText3(text: 'Failed to Load Markers', context: context),
           ),
           SizedBox(height: 15.0),
           Image.asset(

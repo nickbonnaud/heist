@@ -14,13 +14,13 @@ description: A new Flutter project.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.2.2 <3.0.0"
+  sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  flutter_bloc: ^4.0.0
-  equatable: ^1.1.1
+  flutter_bloc: ^5.0.0
+  equatable: ^1.2.0
   meta: ^1.1.8
   dio: ^3.0.8
   flutter_secure_storage: ^3.3.1+1

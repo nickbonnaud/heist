@@ -37,9 +37,9 @@ class _IntroScreenState extends State<IntroScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               SizedBox(height: SizeConfig.getHeight(15)),
-              BoldText.veryBold(
+              VeryBoldText3(
                 text: "Let's setup your Profile!",
-                size: SizeConfig.getWidth(6),
+                context: context,
                 color: Colors.black
               ),
               SizedBox(height: SizeConfig.getHeight(3)),
@@ -49,7 +49,7 @@ class _IntroScreenState extends State<IntroScreen> {
                 height: 350,
               ),
               SizedBox(height: SizeConfig.getHeight(3)),
-              BoldText(text: "Don't worry it's only a few steps...", size: SizeConfig.getWidth(5), color: Colors.black)
+              BoldText4(text: "Don't worry it's only a few steps...", context: context)
             ],
           ),
           Row(
@@ -61,7 +61,7 @@ class _IntroScreenState extends State<IntroScreen> {
                       color: Colors.green,
                       shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
                       onPressed: () => _nextButtonPressed(context, state),
-                      child: BoldText(text: 'Next', size: SizeConfig.getWidth(6), color: Colors.white)
+                      child: BoldText3(text: 'Next', context: context, color: Colors.white)
                     );
                   }
                 ) 

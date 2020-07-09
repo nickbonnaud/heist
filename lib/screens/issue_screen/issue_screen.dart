@@ -26,7 +26,7 @@ class IssueScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomPadding: false,
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).colorScheme.background,
       appBar: OverlayAppBar(),
       body: _type != IssueType.cancel
         ? BlocProvider<IssueFormBloc>(

@@ -19,10 +19,8 @@ class TipFormBloc extends Bloc<TipFormEvent, TipFormState> {
   TipFormBloc({@required AccountRepository accountRepository, @required AuthenticationBloc authenticationBloc})
     : assert(accountRepository != null && authenticationBloc != null),
       _accountRepository = accountRepository,
-      _authenticationBloc = authenticationBloc;
-  
-  @override
-  TipFormState get initialState => TipFormState.initial();
+      _authenticationBloc = authenticationBloc,
+      super(TipFormState.initial());
   
   @override
   Stream<Transition<TipFormEvent, TipFormState>> transformEvents(Stream<TipFormEvent> events, transitionFn) {

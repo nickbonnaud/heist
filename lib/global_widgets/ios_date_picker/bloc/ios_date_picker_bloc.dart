@@ -14,8 +14,8 @@ enum Active {
 }
 
 class IosDatePickerBloc extends Bloc<IosDatePickerEvent, IosDatePickerState> {
-  @override
-  IosDatePickerState get initialState => IosDatePickerState.initial();
+  
+  IosDatePickerBloc() : super(IosDatePickerState.initial());
 
   @override
   Stream<Transition<IosDatePickerEvent, IosDatePickerState>> transformEvents(Stream<IosDatePickerEvent> events, transitionFn) {

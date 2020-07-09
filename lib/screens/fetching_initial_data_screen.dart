@@ -20,10 +20,8 @@ class FetchingInitialDataScreen extends StatelessWidget {
         children: <Widget>[
           Image.asset(
             "assets/slide_3.png",
-            fit: BoxFit.contain,
-            height: 350,
-          ),
-          BoldText(text: "Loading Data", size: 18, color: Colors.black)
+            fit: BoxFit.contain),
+          BoldText4(text: "Loading Data", context: context)
         ],
       )
     );

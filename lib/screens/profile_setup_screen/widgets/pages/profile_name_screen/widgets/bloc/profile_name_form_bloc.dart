@@ -19,10 +19,8 @@ class ProfileNameFormBloc extends Bloc<ProfileNameFormEvent, ProfileNameFormStat
   ProfileNameFormBloc({@required ProfileRepository profileRepository, @required AuthenticationBloc authenticationBloc})
     : assert(profileRepository != null && authenticationBloc != null),
       _profileRepository = profileRepository,
-      _authenticationBloc = authenticationBloc;
-  
-  @override
-  ProfileNameFormState get initialState => ProfileNameFormState.initial();
+      _authenticationBloc = authenticationBloc,
+      super(ProfileNameFormState.initial());
 
   @override
   Stream<Transition<ProfileNameFormEvent, ProfileNameFormState>> transformEvents(Stream<ProfileNameFormEvent> events, transitionFn) {

@@ -17,10 +17,8 @@ class OpenTransactionsBloc extends Bloc<OpenTransactionsEvent, OpenTransactionsS
   OpenTransactionsBloc({@required TransactionRepository transactionRepository, @required BootBloc bootBloc})
     : assert(transactionRepository != null && bootBloc != null),
       _transactionRepository = transactionRepository,
-      _bootBloc = bootBloc;
-  
-  @override
-  OpenTransactionsState get initialState => Uninitialized();
+      _bootBloc = bootBloc,
+      super(Uninitialized());
 
   @override
   Stream<OpenTransactionsState> mapEventToState(OpenTransactionsEvent event) async* {

@@ -8,6 +8,7 @@ import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
 import 'package:heist/screens/issue_screen/issue_screen.dart';
 import 'package:heist/screens/receipt_screen/bloc/receipt_screen_bloc.dart';
+import 'package:heist/themes/global_colors.dart';
 
 enum Options {
   wrongBill,
@@ -32,7 +33,7 @@ class ReportIssueButton extends StatelessWidget {
           android: (_) => Icon(
             Icons.more_vert,
             size: SizeConfig.getWidth(10),
-            color: Colors.black,
+            color: Theme.of(context).colorScheme.topAppBarIconLight,
           ),
           ios: (_) => Icon(
             IconData(
@@ -41,24 +42,27 @@ class ReportIssueButton extends StatelessWidget {
               fontPackage: CupertinoIcons.iconFontPackage,
             ),
             size: SizeConfig.getWidth(10),
-            color: Colors.black,
+            color: Theme.of(context).colorScheme.topAppBarIconLight,
           ),
         ),
         itemBuilder: (BuildContext context) => <PopupMenuEntry<Options>>[
           PopupMenuItem<Options>(
             child: _createTile(
+              context: context,
               title: 'Wrong Bill'
             ),
             value: Options.wrongBill,
           ),
           PopupMenuItem<Options>(
             child: _createTile(
+              context: context,
               title: 'Error in Bill'
             ),
             value: Options.errorInBill,
           ),
           PopupMenuItem<Options>(
             child: _createTile(
+              context: context,
               title: 'Other'
             ),
             value: Options.otherError,
@@ -92,13 +96,13 @@ class ReportIssueButton extends StatelessWidget {
     }
   }
 
-  ListTile _createTile({@required String title}) {
+  ListTile _createTile({@required BuildContext context, @required String title}) {
     return ListTile(
-      title: _createTitle(title: title),
+      title: _createTitle(context: context, title: title),
     );
   }
 
-  Widget _createTitle({@required String title}) {
-    return BoldText(text: title, size: SizeConfig.getWidth(4), color: Colors.black);
+  Widget _createTitle({@required BuildContext context, @required String title}) {
+    return BoldText5(text: title, context: context);
   }
 }

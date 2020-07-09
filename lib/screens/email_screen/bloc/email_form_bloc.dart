@@ -20,10 +20,8 @@ class EmailFormBloc extends Bloc<EmailFormEvent, EmailFormState> {
   EmailFormBloc({@required CustomerRepository customerRepository, @required AuthenticationBloc authenticationBloc})
     : assert(customerRepository != null && authenticationBloc != null),
       _customerRepository = customerRepository,
-      _authenticationBloc = authenticationBloc;
-  
-  @override
-  EmailFormState get initialState => EmailFormState.initial();
+      _authenticationBloc = authenticationBloc,
+      super(EmailFormState.initial());
 
   @override
   Stream<Transition<EmailFormEvent, EmailFormState>> transformEvents(Stream<EmailFormEvent> events, transitionFn) {

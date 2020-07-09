@@ -6,6 +6,7 @@ import 'package:heist/models/business/business.dart';
 import 'package:heist/models/business/hours.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:heist/themes/global_colors.dart';
 
 class BusinessScreen extends StatefulWidget {
   final Business _business;
@@ -62,7 +63,7 @@ class _BusinessScreenState extends State<BusinessScreen> with SingleTickerProvid
                                 ),
                               ),
                               SizedBox(height: 20),
-                              BoldText(text: widget._business.profile.name, size: 24.0, color: Colors.black),
+                              BoldText2(text: widget._business.profile.name, context: context, color: Theme.of(context).colorScheme.primary),
                               SizedBox(height: 20),
                               Row(
                                 children: <Widget>[
@@ -76,7 +77,7 @@ class _BusinessScreenState extends State<BusinessScreen> with SingleTickerProvid
                                   SizedBox(width: 16.0),
                                   GestureDetector(
                                     onTap: () => _navigateToWebsite(),
-                                    child: BoldText(text: _formatWebsite(), size: 18.0, color: Colors.orange),
+                                    child: BoldText4(text: _formatWebsite(), context: context, color: Theme.of(context).colorScheme.clickable),
                                   )
                                 ],
                               ),
@@ -90,7 +91,7 @@ class _BusinessScreenState extends State<BusinessScreen> with SingleTickerProvid
                                   SizedBox(width: 16),
                                   GestureDetector(
                                     onTap: () => launch("tel://${widget._business.profile.phone}"),
-                                    child: BoldText(text: _formatPhone(), size: 18.0, color: Colors.orange),
+                                    child: BoldText4(text: _formatPhone(), context: context, color: Theme.of(context).colorScheme.clickable),
                                   )
                                 ],
                               ),
@@ -102,7 +103,7 @@ class _BusinessScreenState extends State<BusinessScreen> with SingleTickerProvid
                                     ios: (_) => Icon(CupertinoIcons.clock),
                                   ),
                                   SizedBox(width: 16),
-                                  BoldText(text: _formatOpenHour(), size: 18.0, color: Colors.orange)
+                                  BoldText4(text: _formatOpenHour(), context: context)
                                 ],
                               ),
                               SizedBox(height: 20),
@@ -111,9 +112,9 @@ class _BusinessScreenState extends State<BusinessScreen> with SingleTickerProvid
                                 color: Colors.grey.shade100,
                               ),
                               SizedBox(height: 20),
-                              BoldText(text: "About ${widget._business.profile.name}", size: 22.0, color: Colors.black),
+                              BoldText3(text: "About ${widget._business.profile.name}", context: context),
                               SizedBox(height: 10),
-                              NormalText(text: widget._business.profile.description, size: 16.0, color: Colors.black),
+                              Text2(text: widget._business.profile.description, context: context, color: Theme.of(context).colorScheme.textOnLightSubdued),
                             ],
                           ),
                         ),

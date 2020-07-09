@@ -15,6 +15,7 @@ import 'package:heist/models/date_range.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
 import 'package:heist/screens/refunds_screen/bloc/refunds_screen_bloc.dart';
+import 'package:heist/themes/global_colors.dart';
 
 enum Options {
   all,
@@ -35,7 +36,7 @@ class FilterButton extends StatelessWidget {
           android: (_) => Icon(
             Icons.filter_list,
             size: SizeConfig.getWidth(10),
-            color: Colors.black,
+            color: Theme.of(context).colorScheme.topAppBarIconLight,
           ),
           ios: (_) => Icon(
             IconData(
@@ -44,76 +45,121 @@ class FilterButton extends StatelessWidget {
               fontPackage: CupertinoIcons.iconFontPackage,
             ),
             size: SizeConfig.getWidth(10),
-            color: Colors.black,
+            color: Theme.of(context).colorScheme.topAppBarIconLight,
           ),
         ),
         itemBuilder: (BuildContext context) => <PopupMenuEntry<Options>>[
           PopupMenuItem<Options>(
             child: _createTile(
+              context: context,
               title: 'Show all', 
               icon: PlatformWidget(
-                android: (_) => Icon(Icons.receipt, size: SizeConfig.getWidth(7)),
-                ios: (_) => Icon(IconData(
-                  0xF472,
-                  fontFamily: CupertinoIcons.iconFont,
-                  fontPackage: CupertinoIcons.iconFontPackage
-                ), size: SizeConfig.getWidth(7)),
+                android: (_) => Icon(
+                  Icons.receipt, 
+                  size: SizeConfig.getWidth(7),
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
+                ios: (_) => Icon(
+                  IconData(
+                    0xF472,
+                    fontFamily: CupertinoIcons.iconFont,
+                    fontPackage: CupertinoIcons.iconFontPackage
+                  ),
+                  size: SizeConfig.getWidth(7),
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
               )
             ),
             value: Options.all,
           ),
           PopupMenuItem<Options>(
             child: _createTile(
+              context: context,
               title: 'Search by date',
               icon: PlatformWidget(
-                android: (_) => Icon(Icons.event, size: SizeConfig.getWidth(7)),
-                ios: (_) => Icon(IconData(
-                  0xF2D1,
-                  fontFamily: CupertinoIcons.iconFont,
-                  fontPackage: CupertinoIcons.iconFontPackage
-                ), size: SizeConfig.getWidth(7)),
+                android: (_) => Icon(
+                  Icons.event,
+                  size: SizeConfig.getWidth(7),
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
+                ios: (_) => Icon(
+                  IconData(
+                    0xF2D1,
+                    fontFamily: CupertinoIcons.iconFont,
+                    fontPackage: CupertinoIcons.iconFontPackage
+                  ),
+                  size: SizeConfig.getWidth(7),
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
               )
             ),
             value: Options.date,
           ),
           PopupMenuItem<Options>(
             child: _createTile(
+              context: context,
               title: 'Find by refund ID',
               icon: PlatformWidget(
-                android: (_) => Icon(Icons.search, size: SizeConfig.getWidth(7)),
-                ios: (_) => Icon(IconData(
-                  0xF2F5,
-                  fontFamily: CupertinoIcons.iconFont,
-                  fontPackage: CupertinoIcons.iconFontPackage,
-                ), size: SizeConfig.getWidth(7)),
+                android: (_) => Icon(
+                  Icons.search, 
+                  size: SizeConfig.getWidth(7),
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
+                ios: (_) => Icon(
+                  IconData(
+                    0xF2F5,
+                    fontFamily: CupertinoIcons.iconFont,
+                    fontPackage: CupertinoIcons.iconFontPackage,
+                  ),
+                  size: SizeConfig.getWidth(7),
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
               )
             ),
             value: Options.refundId,
           ),
           PopupMenuItem<Options>(
             child: _createTile(
+              context: context,
               title: 'Find by business name',
               icon: PlatformWidget(
-                android: (_) => Icon(Icons.business, size: SizeConfig.getWidth(7)),
-                ios: (_) => Icon(IconData(
-                  0xF3EE,
-                  fontFamily: CupertinoIcons.iconFont,
-                  fontPackage: CupertinoIcons.iconFontPackage
-                ), size: SizeConfig.getWidth(7)),
+                android: (_) => Icon(
+                  Icons.business, 
+                  size: SizeConfig.getWidth(7),
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
+                ios: (_) => Icon(
+                  IconData(
+                    0xF3EE,
+                    fontFamily: CupertinoIcons.iconFont,
+                    fontPackage: CupertinoIcons.iconFontPackage
+                  ), 
+                  size: SizeConfig.getWidth(7),
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
               )
             ),
             value: Options.business,
           ),
           PopupMenuItem<Options>(
             child: _createTile(
+              context: context,
               title: 'Find by transaction ID',
               icon: PlatformWidget(
-                android: (_) => Icon(Icons.assignment, size: SizeConfig.getWidth(7)),
-                ios: (_) => Icon(IconData(
-                  0xF391,
-                  fontFamily: CupertinoIcons.iconFont,
-                  fontPackage: CupertinoIcons.iconFontPackage
-                ), size: SizeConfig.getWidth(7)),
+                android: (_) => Icon(
+                  Icons.assignment,
+                  size: SizeConfig.getWidth(7),
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
+                ios: (_) => Icon(
+                  IconData(
+                    0xF391,
+                    fontFamily: CupertinoIcons.iconFont,
+                    fontPackage: CupertinoIcons.iconFontPackage
+                  ),
+                  size: SizeConfig.getWidth(7),
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
               )
             ),
             value: Options.transactionId,
@@ -201,14 +247,14 @@ class FilterButton extends StatelessWidget {
     }
   }
 
-  ListTile _createTile({@required String title, @required Widget icon}) {
+  ListTile _createTile({@required BuildContext context, @required String title, @required Widget icon}) {
     return ListTile(
       leading: icon,
-      title: _createTitle(title: title),
+      title: _createTitle(context: context, title: title),
     );
   }
 
-  Widget _createTitle({@required String title}) {
-    return BoldText(text: title, size: SizeConfig.getWidth(4), color: Colors.black);
+  Widget _createTitle({@required BuildContext context, @required String title}) {
+    return BoldText5(text: title, context: context);
   }
 }

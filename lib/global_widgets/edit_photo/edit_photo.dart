@@ -9,6 +9,7 @@ import 'package:heist/repositories/photo_picker_repository.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
 import 'package:vibrate/vibrate.dart';
+import 'package:heist/themes/global_colors.dart';
 
 import 'bloc/edit_photo_bloc.dart';
 
@@ -52,16 +53,16 @@ class EditPhoto extends StatelessWidget {
                         fontFamily: CupertinoIcons.iconFont,
                         fontPackage: CupertinoIcons.iconFontPackage
                       ),
-                      color: Colors.white,
+                      color: Theme.of(context).colorScheme.textOnDark,
                     ),
                     android: (_) => Icon(
                       Icons.edit,
-                      color: Colors.white
+                      color: Theme.of(context).colorScheme.textOnDark
                     ),
                   ),
                   shape: CircleBorder(),
                   elevation: 5.0,
-                  fillColor: Colors.green,
+                  fillColor: Theme.of(context).colorScheme.secondary,
                   padding: EdgeInsets.all(SizeConfig.getWidth(3)),
                 )
               )
@@ -78,16 +79,19 @@ class EditPhoto extends StatelessWidget {
       return CircleAvatar(
         backgroundImage: Image.file(photo).image,
         radius: SizeConfig.getWidth(25),
+        backgroundColor: Colors.transparent,
       );
     } else if (_customer?.profile?.photos == null) {
       return CircleAvatar(
         child: Image.asset('assets/profile_customer.png'),
         radius: SizeConfig.getWidth(25),
+        backgroundColor: Colors.transparent,
       );
     } else {
       return CircleAvatar(
         backgroundImage: NetworkImage(_customer.profile?.photos?.largeUrl),
         radius: SizeConfig.getWidth(25),
+        backgroundColor: Colors.transparent,
       );
     }
   }
@@ -115,7 +119,7 @@ class EditPhoto extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Expanded(
-                child: BoldText(text: message, size: SizeConfig.getWidth(6), color: Colors.white)
+                child: BoldText3(text: message, context: context, color: Theme.of(context).colorScheme.textOnDark)
               ),
               PlatformWidget(
                 android: (_) => Icon(isSuccess ? Icons.check_circle_outline : Icons.error),
@@ -125,12 +129,14 @@ class EditPhoto extends StatelessWidget {
                     fontFamily: CupertinoIcons.iconFont,
                     fontPackage: CupertinoIcons.iconFontPackage
                   ),
-                  color: Colors.white,
+                  color: Theme.of(context).colorScheme.onError,
                 ),
               )
             ],
           ),
-          backgroundColor: isSuccess ? Colors.green : Colors.red,
+          backgroundColor: isSuccess 
+            ? Theme.of(context).colorScheme.success
+            : Theme.of(context).colorScheme.error,
         )
       ).closed.then((_) => {
         if (isSuccess) {

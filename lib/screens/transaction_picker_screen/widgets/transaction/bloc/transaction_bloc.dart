@@ -9,8 +9,7 @@ part 'transaction_event.dart';
 
 class TransactionBloc extends Bloc<TransactionEvent, String> {
   
-  @override
-  String get initialState => '';
+  TransactionBloc() : super('');
 
   @override
   Stream<String> mapEventToState(TransactionEvent event) async* {

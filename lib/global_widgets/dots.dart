@@ -14,20 +14,20 @@ class Dots extends StatelessWidget {
     return Center(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: _generateDots(),
+        children: _generateDots(context: context),
       ),
     );
   }
 
-  List<Widget> _generateDots() {
+  List<Widget> _generateDots({@required BuildContext context}) {
     List<Widget> dots = [];
     for (int i = 0; i < _numberOfDots; i++) {
-      dots.add(i == _slideIndex ? _activeSlide(i) : _inactiveSlide(i));
+      dots.add(i == _slideIndex ? _activeSlide(index: i, context: context) : _inactiveSlide(index: i, context: context));
     }
     return dots;
   }
 
-  Widget _activeSlide(int index) {
+  Widget _activeSlide({@required int index, @required BuildContext context}) {
     return Container(
       child: Padding(
         padding: EdgeInsets.only(left: 8.0, right: 8.0),
@@ -35,7 +35,7 @@ class Dots extends StatelessWidget {
           width: 20.0,
           height: 20.0,
           decoration: BoxDecoration(
-            color: Colors.orangeAccent.withOpacity(0.3),
+            color: Theme.of(context).colorScheme.secondary.withOpacity(0.3),
             borderRadius: BorderRadius.circular(50.0)
           ),
         ),
@@ -43,7 +43,7 @@ class Dots extends StatelessWidget {
     );
   }
 
-  Widget _inactiveSlide(int index) {
+  Widget _inactiveSlide({@required int index, @required BuildContext context}) {
     return Container(
       child: Padding(
         padding: EdgeInsets.only(left: 5.0, right: 5.0),
@@ -51,7 +51,7 @@ class Dots extends StatelessWidget {
           width: 14.0,
           height: 14.0,
           decoration: BoxDecoration(
-            color: Colors.grey.withOpacity(0.7),
+            color: Theme.of(context).colorScheme.surface.withOpacity(0.7),
             borderRadius: BorderRadius.circular(50.0)
           ),
         ),

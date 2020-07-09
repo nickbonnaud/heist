@@ -13,10 +13,8 @@ class ReceiptScreenBloc extends Bloc<ReceiptScreenEvent, ReceiptScreenState> {
 
   ReceiptScreenBloc({@required TransactionResource transactionResource})
     : assert(transactionResource != null),
-      _transactionResource = transactionResource;
-  
-  @override
-  ReceiptScreenState get initialState => ReceiptScreenState.initial(transactionResource: _transactionResource, isButtonVisible: _isButtonVisible(transactionResource: _transactionResource));
+      _transactionResource = transactionResource,
+      super(ReceiptScreenState.initial(transactionResource: transactionResource, isButtonVisible: _isButtonVisible(transactionResource: transactionResource)));
 
   @override
   Stream<ReceiptScreenState> mapEventToState(ReceiptScreenEvent event) async* {
@@ -25,7 +23,7 @@ class ReceiptScreenBloc extends Bloc<ReceiptScreenEvent, ReceiptScreenState> {
     }
   }
 
-  bool _isButtonVisible({@required TransactionResource transactionResource}) {
+  static bool _isButtonVisible({@required TransactionResource transactionResource}) {
     List<int> visibleStatusCodes = [101, 1020, 1021, 1022, 105, 500, 501, 502, 503];
     return visibleStatusCodes.contains(transactionResource.transaction.status.code);
   }

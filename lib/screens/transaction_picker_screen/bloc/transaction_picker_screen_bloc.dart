@@ -15,10 +15,8 @@ class TransactionPickerScreenBloc extends Bloc<TransactionPickerScreenEvent, Tra
 
   TransactionPickerScreenBloc({@required TransactionRepository transactionRepository})
     : assert(transactionRepository != null),
-      _transactionRepository = transactionRepository;
-  
-  @override
-  TransactionPickerScreenState get initialState => Uninitialized();
+      _transactionRepository = transactionRepository,
+      super(Uninitialized());
 
   @override
   Stream<TransactionPickerScreenState> mapEventToState(TransactionPickerScreenEvent event) async* {

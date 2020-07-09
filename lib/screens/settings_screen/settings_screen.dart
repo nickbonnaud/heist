@@ -11,7 +11,7 @@ class SettingsScreen extends StatelessWidget {
     return BlocProvider<DefaultAppBarBloc>(
       create: (BuildContext context) => DefaultAppBarBloc(),
       child: Scaffold(
-        backgroundColor: Colors.white,
+        resizeToAvoidBottomPadding: false,
         appBar: DefaultAppBar(),
         body: Padding(
           padding: EdgeInsets.only(left: 16, right: 16),

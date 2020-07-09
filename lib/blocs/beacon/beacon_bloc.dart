@@ -23,10 +23,8 @@ class BeaconBloc extends Bloc<BeaconEvent, BeaconState> {
     : assert(beaconRepository != null && activeLocationBloc != null && bootBloc != null),
       _beaconRepository = beaconRepository,
       _activeLocationBloc = activeLocationBloc,
-      _bootBloc = bootBloc;
-  
-  @override
-  BeaconState get initialState => BeaconUninitialized();
+      _bootBloc = bootBloc,
+      super(BeaconUninitialized());
 
   @override
   Stream<BeaconState> mapEventToState(BeaconEvent event) async* {

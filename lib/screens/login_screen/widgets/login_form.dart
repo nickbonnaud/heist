@@ -1,12 +1,24 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:heist/blocs/authentication/authentication_bloc.dart';
+import 'package:heist/repositories/customer_repository.dart';
+import 'package:heist/resources/constants.dart';
+import 'package:heist/resources/helpers/size_config.dart';
+import 'package:heist/resources/helpers/text_styles.dart';
 import 'package:heist/screens/login_screen/bloc/login_bloc.dart';
+import 'package:heist/screens/register_screen/register_screen.dart';
+import 'package:heist/themes/global_colors.dart';
+import 'package:keyboard_actions/keyboard_actions.dart';
 import 'package:vibrate/vibrate.dart';
 
 class LoginForm extends StatefulWidget {
+  final CustomerRepository _customerRepository;
+
+  LoginForm({@required CustomerRepository customerRepository})
+    : assert(customerRepository != null),
+      _customerRepository = customerRepository;
 
   @override
   State<LoginForm> createState() => _LoginFormState();
@@ -32,7 +44,6 @@ class _LoginFormState extends State<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
-
     return BlocListener<LoginBloc, LoginState>(
       listener: (context, state) {
         if (state.isFailure) {
@@ -44,113 +55,161 @@ class _LoginFormState extends State<LoginForm> {
         }
       },
       child: Form(
-        child: Container(
-          margin: EdgeInsets.symmetric(vertical: 10,horizontal: 45),
-          child: BlocBuilder<LoginBloc, LoginState>(
-            builder: (context, state) {
-              return Column(
-                children: <Widget>[
-                  TextFormField(
-                    controller: _emailController,
-                    focusNode: _emailFocus,
-                    keyboardType: TextInputType.emailAddress,
-                    textInputAction: TextInputAction.next,
-                    onFieldSubmitted: (_) {
-                      _changeFocus(context, _emailFocus, _passwordFocus);
-                    },
-                    validator: (_) => !state.isEmailValid && _emailController.text.isNotEmpty ? 'Invalid email' : null,
-                    autovalidate: true,
-                    autocorrect: false,
-                    decoration: InputDecoration(
-                      enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.white)
-                      ),
-                      hintText: 'Email',
-                      hintStyle: TextStyle(
-                        color: Colors.white70,
-                        fontSize: 20
-                      ),
-                    ),
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20
-                    ),
+        child: Padding(
+          padding: EdgeInsets.only(left: 16.0, right: 16.0),
+          child: KeyboardActions(
+            config: _buildKeyboard(context: context),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Center(
+                  child: Image.asset('assets/logo.png', 
+                    height: 30,
+                    width: 30,
+                    alignment: Alignment.center
                   ),
-                  SizedBox(height: 16),
-                  TextFormField(
-                    controller: _passwordController,
-                    focusNode: _passwordFocus,
-                    keyboardType: TextInputType.text,
-                    textInputAction: TextInputAction.done,
-                    onFieldSubmitted: (_) {
-                      _passwordFocus.unfocus();
-                    },
-                    validator: (_) => !state.isPasswordValid && _passwordController.text.isNotEmpty ? 'Invalid Password' : null,
-                    autovalidate: true,
-                    autocorrect: false,
-                    decoration: InputDecoration(
-                      enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.white),
+                ),
+                SizedBox(height: SizeConfig.getHeight(1)),
+                BoldText1(
+                  text: Constants.appName, 
+                  context: context,  
+                  color: Theme.of(context).colorScheme.textOnDark
+                ),
+                SizedBox(height: SizeConfig.getHeight(5)),
+                TextCustom(
+                  text: 'Welcome Back!',
+                  context: context,
+                  size: SizeConfig.getWidth(7), 
+                  color: Theme.of(context).colorScheme.textOnDark
+                ),
+                SizedBox(height: SizeConfig.getHeight(1)),
+                Text2(
+                  text: 'Please login to use ${Constants.appName} Pay', 
+                  context: context,
+                  color: Theme.of(context).colorScheme.textOnDarkSubdued
+                ),
+                SizedBox(height: SizeConfig.getHeight(5)),
+                BlocBuilder<LoginBloc, LoginState>(
+                  builder: (context, state) {
+                    return TextFormField(
+                      controller: _emailController,
+                      focusNode: _emailFocus,
+                      keyboardType: TextInputType.emailAddress,
+                      textInputAction: TextInputAction.next,
+                      onFieldSubmitted: (_) {
+                        _changeFocus(context, _emailFocus, _passwordFocus);
+                      },
+                      validator: (_) => !state.isEmailValid && _emailController.text.isNotEmpty ? 'Invalid email' : null,
+                      autovalidate: true,
+                      autocorrect: false,
+                      decoration: InputDecoration(
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Theme.of(context).colorScheme.textOnDark)
+                        ),
+                        hintText: 'Email',
+                        hintStyle: TextStyle(
+                          color: Theme.of(context).colorScheme.textOnDarkSubdued,
+                          fontSize: SizeConfig.getWidth(6)
+                        ),
                       ),
-                      hintText: 'Password',
-                      hintStyle: TextStyle(
-                        color: Colors.white70,
-                        fontSize: 20
-                      )
-                    ),
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20
-                    ),
-                    obscureText: true,
-                  ),
-                  SizedBox(height: 30),
-                  GestureDetector(
-                    onTap: () => _submit(state),
-                    child: Container(
-                      alignment: Alignment.center,
-                      width: double.infinity,
-                      height: 50,
-                      padding: EdgeInsets.symmetric(vertical: 10,horizontal: 0),
-                      decoration: BoxDecoration(
-                        border: (_isLoginButtonEnabled(state) || state.isSubmitting)
-                          ? Border.all(color: Colors.white)
-                          : null,
-                        borderRadius: BorderRadius.circular(50),
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.textOnDark,
+                        fontSize: SizeConfig.getWidth(6)
                       ),
-                      child: state.isSubmitting
-                        ? TyperAnimatedTextKit(
-                            speed: Duration(milliseconds: 250),
-                            text: ['Logging in...'],
-                            textStyle: GoogleFonts.roboto(
+                    );
+                  }
+                ),
+                SizedBox(height: SizeConfig.getHeight(2)),
+                BlocBuilder<LoginBloc, LoginState>(
+                  builder: (context, state) {
+                    return TextFormField(
+                      controller: _passwordController,
+                      focusNode: _passwordFocus,
+                      keyboardType: TextInputType.text,
+                      textInputAction: TextInputAction.done,
+                      onFieldSubmitted: (_) {
+                        _passwordFocus.unfocus();
+                      },
+                      validator: (_) => !state.isPasswordValid && _passwordController.text.isNotEmpty ? 'Invalid Password' : null,
+                      autovalidate: true,
+                      autocorrect: false,
+                      decoration: InputDecoration(
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Theme.of(context).colorScheme.textOnDark),
+                        ),
+                        hintText: 'Password',
+                        hintStyle: TextStyle(
+                          color: Theme.of(context).colorScheme.textOnDarkSubdued,
+                          fontSize: SizeConfig.getWidth(6)
+                        )
+                      ),
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.textOnDark,
+                        fontSize: SizeConfig.getWidth(6)
+                      ),
+                      obscureText: true,
+                    );
+                  }
+                ),
+                SizedBox(height: SizeConfig.getHeight(5)),
+                BlocBuilder<LoginBloc, LoginState>(
+                  builder: (context, state) {
+                    return GestureDetector(
+                      onTap: () => _submit(state),
+                      child: Container(
+                        alignment: Alignment.center,
+                        width: double.infinity,
+                        height: SizeConfig.getHeight(6),
+                        padding: EdgeInsets.symmetric(vertical: 10,horizontal: 0),
+                        decoration: BoxDecoration(
+                          border: (_isLoginButtonEnabled(state) || state.isSubmitting)
+                            ? Border.all(color: Theme.of(context).colorScheme.textOnDark)
+                            : null,
+                          borderRadius: BorderRadius.circular(50),
+                        ),
+                        child: state.isSubmitting
+                          ? TyperAnimatedTextKit(
+                              speed: Duration(milliseconds: 250),
+                              text: ['Logging in...'],
                               textStyle: TextStyle(
-                                fontSize: 24,
-                                letterSpacing: 1
+                                color: Theme.of(context).colorScheme.textOnDark,
+                                fontSize: SizeConfig.getWidth(7)
                               ),
-                              color: Colors.white
+                              textAlign: TextAlign.start,
+                              alignment: AlignmentDirectional.topStart,
+                            )
+                          : (_isLoginButtonEnabled(state)
+                              ? Text1(text: 'Login', context: context, color: Theme.of(context).colorScheme.textOnDark)
+                              : null
                             ),
-                            textAlign: TextAlign.start,
-                            alignment: AlignmentDirectional.topStart,
-                          )
-                        : (_isLoginButtonEnabled(state)
-                            ? Text('Login',
-                                textAlign: TextAlign.center,
-                                style: GoogleFonts.roboto(
-                                  textStyle: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 24,
-                                    letterSpacing: 1
-                                  )
-                                ),
-                              )
-                            : null
-                          ),
-                    ),
+                      ),
+                    );
+                  }
+                ),
+                SizedBox(height: SizeConfig.getHeight(5)),
+                GestureDetector(
+                  onTap: () {
+                    return Navigator.push(
+                      context,
+                      platformPageRoute(
+                        context: context,
+                        builder: (_) => RegisterScreen(customerRepository: widget._customerRepository)
+                      )
+                    );
+                  },
+                  child: Text("Don't have an account?",
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.textOnDarkSubdued,
+                      fontSize: SizeConfig.getWidth(4),
+                      decoration: TextDecoration.underline,
+                      letterSpacing: 0.5
+                    )
                   ),
-                ],
-              );
-            }
-          ),
+                )
+              ],
+            )
+          )
         )
       )
     );
@@ -190,6 +249,43 @@ class _LoginFormState extends State<LoginForm> {
     _loginBloc.add(Submitted(email: _emailController.text, password: _passwordController.text));
   }
 
+  KeyboardActionsConfig _buildKeyboard({@required BuildContext context}) {
+    return KeyboardActionsConfig(
+      keyboardBarColor: Theme.of(context).colorScheme.keyboardHelpBarOnDark,
+      keyboardActionsPlatform: KeyboardActionsPlatform.ALL,
+      actions: [
+        KeyboardAction(
+          focusNode: _emailFocus,
+          toolbarButtons: [
+            (node) {
+              return GestureDetector(
+                onTap: () => node.unfocus(),
+                child: Padding(
+                  padding: EdgeInsets.only(right: 16.0),
+                  child: BoldText5(text: 'Done', context: context, color: Theme.of(context).colorScheme.primary),
+                ),
+              );
+            }
+          ]
+        ),
+        KeyboardAction(
+          focusNode: _passwordFocus,
+          toolbarButtons: [
+            (node) {
+              return GestureDetector(
+                onTap: () => node.unfocus(),
+                child: Padding(
+                  padding: EdgeInsets.only(right: 16.0),
+                  child: BoldText5(text: 'Done', context: context, color: Theme.of(context).colorScheme.primary),
+                ),
+              );
+            }
+          ]
+        ),
+      ]
+    );
+  }
+
   void _errorLogin(BuildContext context) async {
     bool canVibrate = await Vibrate.canVibrate;
     if (canVibrate) {
@@ -204,15 +300,15 @@ class _LoginFormState extends State<LoginForm> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Expanded(
-                child: Text(
-                  'Cannot login. Please check your email or password.',
-                  style: GoogleFonts.roboto(fontSize: 16),
-                )
+                child: Text3(
+                  text: 'Cannot login. Please check your email or password.',
+                  context: context,
+                  color: Theme.of(context).colorScheme.onError)
               ),
               Icon(Icons.error)
             ],
           ),
-          backgroundColor: Colors.red,
+          backgroundColor: Theme.of(context).colorScheme.error,
         )
       );
   }

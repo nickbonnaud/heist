@@ -8,8 +8,8 @@ part 'notification_boot_event.dart';
 part 'notification_boot_state.dart';
 
 class NotificationBootBloc extends Bloc<NotificationBootEvent, NotificationBootState> {
-  @override
-  NotificationBootState get initialState => NotificationBootState.initial();
+  
+  NotificationBootBloc() : super(NotificationBootState.initial());
 
   @override
   Stream<NotificationBootState> mapEventToState(NotificationBootEvent event) async* {

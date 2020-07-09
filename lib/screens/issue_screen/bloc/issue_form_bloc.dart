@@ -19,14 +19,11 @@ class IssueFormBloc extends Bloc<IssueFormEvent, IssueFormState> {
   final TransactionResource _transactionResource;
 
   IssueFormBloc({@required TransactionIssueRepository issueRepository, @required OpenTransactionsBloc openTransactionsBloc, @required TransactionResource transactionResource})
-    : assert(issueRepository != null && openTransactionsBloc != null),
+    : assert(issueRepository != null && openTransactionsBloc != null && transactionResource != null),
       _issueRepository = issueRepository,
       _openTransactionsBloc = openTransactionsBloc,
-      _transactionResource = transactionResource;
-      
-  
-  @override
-  IssueFormState get initialState => IssueFormState.initial(transactionResource: _transactionResource);
+      _transactionResource = transactionResource,
+      super(IssueFormState.initial(transactionResource: transactionResource));
 
   @override
   Stream<Transition<IssueFormEvent, IssueFormState>> transformEvents(Stream<IssueFormEvent> events, transitionFn) {

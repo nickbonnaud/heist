@@ -11,13 +11,11 @@ part 'active_location_state.dart';
 
 class ActiveLocationBloc extends Bloc<ActiveLocationEvent, ActiveLocationState> {
   final ActiveLocationRepository _activeLocationRepository;
-
+  
   ActiveLocationBloc({@required ActiveLocationRepository activeLocationRepository})
     : assert(activeLocationRepository != null),
-      _activeLocationRepository = activeLocationRepository;
-  
-  @override
-  ActiveLocationState get initialState => NoActiveLocations();
+      _activeLocationRepository = activeLocationRepository,
+      super(NoActiveLocations());
 
   @override
   Stream<ActiveLocationState> mapEventToState(ActiveLocationEvent event) async* {

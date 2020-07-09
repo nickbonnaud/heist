@@ -14,10 +14,8 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
 
   AuthenticationBloc({@required CustomerRepository customerRepository})
     : assert(customerRepository != null),
-      _customerRepository = customerRepository;
-  
-  @override
-  AuthenticationState get initialState => AuthenticationState.initial();
+      _customerRepository = customerRepository,
+      super(AuthenticationState.initial());
 
   Customer get customer => state.customer;
 

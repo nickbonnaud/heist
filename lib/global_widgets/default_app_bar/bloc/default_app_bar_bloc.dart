@@ -7,8 +7,8 @@ part 'default_app_bar_event.dart';
 part 'default_app_bar_state.dart';
 
 class DefaultAppBarBloc extends Bloc<DefaultAppBarEvent, DefaultAppBarState> {
-  @override
-  DefaultAppBarState get initialState => DefaultAppBarState.initial();
+  
+  DefaultAppBarBloc() : super(DefaultAppBarState.initial());
 
   @override
   Stream<DefaultAppBarState> mapEventToState(DefaultAppBarEvent event) async* {

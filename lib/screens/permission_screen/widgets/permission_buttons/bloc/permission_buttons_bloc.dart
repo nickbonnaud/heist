@@ -6,8 +6,8 @@ import 'package:bloc/bloc.dart';
 enum PermissionButtonsEvent { enable, disable }
 
 class PermissionButtonsBloc extends Bloc<PermissionButtonsEvent, bool> {
-  @override
-  bool get initialState => true;
+  
+  PermissionButtonsBloc() : super(true);
 
   @override
   Stream<bool> mapEventToState(PermissionButtonsEvent event) async* {

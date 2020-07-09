@@ -16,9 +16,13 @@ class SetupTipScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<SetupTipScreenBloc>(
-      create: (BuildContext context) => SetupTipScreenBloc(accountRepository: _accountRepository, authenticationBloc: BlocProvider.of<AuthenticationBloc>(context)),
-      child: SetupTipBody(controller: _controller,),
+    return Container(
+      height: MediaQuery.of(context).size.height,
+      width: MediaQuery.of(context).size.width,
+      child: BlocProvider<SetupTipScreenBloc>(
+        create: (BuildContext context) => SetupTipScreenBloc(accountRepository: _accountRepository, authenticationBloc: BlocProvider.of<AuthenticationBloc>(context)),
+        child: SetupTipBody(controller: _controller,),
+      ),
     );
   }
 }

@@ -4,8 +4,7 @@ import 'slide_changed.dart';
 
 class TutorialNavigationBloc extends Bloc<SlideChanged, int> {
 
-  @override
-  int get initialState => 0;
+  TutorialNavigationBloc() : super(0);
 
   @override
   Stream<int> mapEventToState(SlideChanged event) async* {

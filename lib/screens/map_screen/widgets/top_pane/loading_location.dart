@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:heist/resources/helpers/loading_widget.dart';
+import 'package:heist/resources/helpers/text_styles.dart';
 
 class LoadingLocation extends StatelessWidget {
   @override
@@ -12,16 +13,8 @@ class LoadingLocation extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          PlatformText(
-            'Fetching Current Location',
-            style: GoogleFonts.roboto(
-              textStyle: TextStyle(
-                color: Colors.blueGrey,
-                fontSize: 24,
-                fontWeight: FontWeight.bold
-              )
-            ),
-            textAlign: TextAlign.center,
+          Center(
+            child: BoldText3(text: 'Fetching Current Location', context: context),
           ),
           SizedBox(height: 15.0),
           LoadingWidget(),

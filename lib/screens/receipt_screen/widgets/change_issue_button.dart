@@ -8,6 +8,7 @@ import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
 import 'package:heist/screens/issue_screen/issue_screen.dart';
 import 'package:heist/screens/receipt_screen/bloc/receipt_screen_bloc.dart';
+import 'package:heist/themes/global_colors.dart';
 
 enum Options {
   cancel,
@@ -34,7 +35,7 @@ class ChangeIssueButton extends StatelessWidget {
           android: (_) => Icon(
             Icons.more_vert,
             size: SizeConfig.getWidth(10),
-            color: Colors.black,
+            color: Theme.of(context).colorScheme.textOnLight,
           ),
           ios: (_) => Icon(
             IconData(
@@ -43,13 +44,14 @@ class ChangeIssueButton extends StatelessWidget {
               fontPackage: CupertinoIcons.iconFontPackage,
             ),
             size: SizeConfig.getWidth(10),
-            color: Colors.black,
+            color: Theme.of(context).colorScheme.textOnLight,
           ),
         ),
         itemBuilder: (BuildContext context) => <PopupMenuEntry<Options>>[
           if (_transaction.transaction.status.code != 500)
             PopupMenuItem<Options>(
               child: _createTile(
+                context: context,
               title: "Change to Wrong Bill"
               ),
               value: Options.changeToWrongBill,
@@ -57,6 +59,7 @@ class ChangeIssueButton extends StatelessWidget {
           if (_transaction.transaction.status.code != 501)
             PopupMenuItem<Options>(
               child: _createTile(
+                context: context,
                 title: "Change to Error in Bill"
               ),
               value: Options.changeToErrorInBill,
@@ -64,12 +67,14 @@ class ChangeIssueButton extends StatelessWidget {
           if (_transaction.transaction.status.code != 503)
             PopupMenuItem<Options>(
               child: _createTile(
+                context: context,
                 title: "Change to Other"
               ),
               value: Options.changeToOther,
             ),
           PopupMenuItem<Options>(
             child: _createTile(
+              context: context,
               title: "Cancel Issue"
             ),
             value: Options.cancel,
@@ -105,13 +110,13 @@ class ChangeIssueButton extends StatelessWidget {
     }
   }
 
-  ListTile _createTile({@required String title}) {
+  ListTile _createTile({@required BuildContext context, @required String title}) {
     return ListTile(
-      title: _createTitle(title: title),
+      title: _createTitle(context: context, title: title),
     );
   }
 
-  Widget _createTitle({@required String title}) {
-    return BoldText(text: title, size: SizeConfig.getWidth(4), color: Colors.black);
+  Widget _createTitle({@required BuildContext context, @required String title}) {
+    return BoldText5(text: title, context: context, color: Theme.of(context).colorScheme.textOnLight);
   }
 }

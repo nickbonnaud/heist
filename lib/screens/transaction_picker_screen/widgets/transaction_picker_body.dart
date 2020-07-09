@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:heist/blocs/bloc/receipt_modal_sheet_bloc.dart';
+import 'package:heist/blocs/receipt_modal_sheet/receipt_modal_sheet_bloc.dart';
 import 'package:heist/resources/helpers/loading_widget.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
 import 'package:heist/screens/receipt_screen/receipt_screen.dart';
@@ -31,7 +31,7 @@ class TransactionPickerBody extends StatelessWidget {
           );
         } else {
           return Center(
-            child: BoldText(text: 'Failed to Fetch Posts', size: 18.0, color: Colors.black),
+            child: BoldText4(text: 'Failed to Fetch Posts', context: context),
           );
         }
       }

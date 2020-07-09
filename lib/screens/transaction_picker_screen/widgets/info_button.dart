@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:heist/resources/constants.dart';
 import 'package:heist/resources/helpers/size_config.dart';
+import 'package:heist/themes/global_colors.dart';
 
 class InfoButton extends StatelessWidget {
   @override
@@ -9,7 +10,7 @@ class InfoButton extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.only(right: 16),
       child: PlatformIconButton(
-        icon: Icon(context.platformIcons.info, size: SizeConfig.getWidth(6), color: Colors.black),
+        icon: Icon(context.platformIcons.info, size: SizeConfig.getWidth(6), color: Theme.of(context).colorScheme.textOnLight),
         onPressed: () => _showInfoDialog(context),
       ),
     );

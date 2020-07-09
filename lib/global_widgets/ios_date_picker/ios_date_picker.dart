@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:heist/global_widgets/bottom_modal_app_bar.dart';
 import 'package:heist/models/date_range.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
+import 'package:heist/themes/global_colors.dart';
 import 'package:intl/intl.dart';
 
 import 'bloc/ios_date_picker_bloc.dart';
@@ -29,9 +29,9 @@ class IosDatePicker extends StatelessWidget {
                   builder: (context, state) {
                     return Text(
                       state.startDate != null ? _formatDate(state.startDate) : "Select Start Date",
-                      style: GoogleFonts.roboto(
+                      style: TextStyle(
                         fontWeight: FontWeight.w700,
-                        color: Colors.black,
+                        color: Theme.of(context).colorScheme.textOnLight,
                         fontSize: SizeConfig.getWidth(7),
                         decoration: state.active == Active.start ? TextDecoration.underline : null
                       ),
@@ -40,7 +40,7 @@ class IosDatePicker extends StatelessWidget {
                 )
               ),
               SizedBox(height: SizeConfig.getHeight(3)),
-              BoldText(text: "To", size: SizeConfig.getWidth(7), color: Colors.black),
+              BoldText2(text: "To", context: context),
               SizedBox(height: SizeConfig.getHeight(3)),
               GestureDetector(
                 onTap: () => BlocProvider.of<IosDatePickerBloc>(context).add(ActiveSelectionChanged(active: Active.end)),
@@ -48,9 +48,9 @@ class IosDatePicker extends StatelessWidget {
                   builder: (context, state) {
                     return Text(
                       _formatDate(state.endDate),
-                      style: GoogleFonts.roboto(
+                      style: TextStyle(
                         fontWeight: FontWeight.w700,
-                        color: Colors.black,
+                        color: Theme.of(context).colorScheme.textOnLight,
                         fontSize: SizeConfig.getWidth(7),
                         decoration: state.active == Active.end ? TextDecoration.underline : null
                       ),
@@ -63,7 +63,7 @@ class IosDatePicker extends StatelessWidget {
           Column(
             children: <Widget>[
               Container(
-                color: Colors.white,
+                color: Theme.of(context).colorScheme.background,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
@@ -76,7 +76,8 @@ class IosDatePicker extends StatelessWidget {
                                 0xF3D0,
                                 fontFamily: CupertinoIcons.iconFont,
                                 fontPackage: CupertinoIcons.iconFontPackage
-                              )
+                              ),
+                              color: Theme.of(context).colorScheme.secondary,
                             ),
                             onPressed: () => BlocProvider.of<IosDatePickerBloc>(context).add(ActiveSelectionChanged(active: Active.end)),
                           );
@@ -87,7 +88,8 @@ class IosDatePicker extends StatelessWidget {
                                 0xF3D8,
                                 fontFamily: CupertinoIcons.iconFont,
                                 fontPackage: CupertinoIcons.iconFontPackage
-                              )
+                              ),
+                              color: Theme.of(context).colorScheme.secondary,
                             ),
                             onPressed: () => BlocProvider.of<IosDatePickerBloc>(context).add(ActiveSelectionChanged(active: Active.start)),
                           );
@@ -96,9 +98,14 @@ class IosDatePicker extends StatelessWidget {
                     ),
                     BlocBuilder<IosDatePickerBloc, IosDatePickerState>(
                       builder: (context, state) {
-                        return CupertinoButton(
-                          child: BoldText(text: 'Submit', size: SizeConfig.getWidth(5), color: state.startDate != null && state.endDate != null
-                          ? Colors.black : Colors.black12),
+                        return FlatButton(
+                          child: BoldText4(
+                            text: 'Submit', 
+                            context: context, 
+                            color: state.startDate != null && state.endDate != null
+                              ? Theme.of(context).colorScheme.primary 
+                              : Theme.of(context).colorScheme.primarySubdued
+                          ),
                           onPressed: () => state.startDate != null && state.endDate != null && state.startDate.isBefore(state.endDate)
                             ? Navigator.of(context).pop(DateRange(startDate: state.startDate, endDate: state.endDate)) : null
                         );
@@ -108,6 +115,7 @@ class IosDatePicker extends StatelessWidget {
                 ),
               ),
               Container(
+                color: Theme.of(context).colorScheme.background,
                 height: SizeConfig.getHeight(20),
                 child: BlocBuilder<IosDatePickerBloc, IosDatePickerState>(
                   builder: (context, state) {

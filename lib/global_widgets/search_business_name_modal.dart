@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:flutter_typeahead/cupertino_flutter_typeahead.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:heist/models/business/business.dart';
 import 'package:heist/repositories/business_repository.dart';
 import 'package:heist/resources/helpers/loading_widget.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
+import 'package:heist/themes/global_colors.dart';
 
 import 'bottom_modal_app_bar.dart';
 
@@ -19,8 +19,8 @@ class SearchBusinessNameModal extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomPadding: false,
-      appBar: BottomModalAppBar(backgroundColor: Colors.grey.shade100),
-      backgroundColor: Colors.grey.shade100,
+      appBar: BottomModalAppBar(backgroundColor: Theme.of(context).colorScheme.scrollBackgroundLight),
+      backgroundColor: Theme.of(context).colorScheme.scrollBackgroundLight,
       body: Padding(
         padding: EdgeInsets.only(left: 16, right: 16),
         child: Column(
@@ -32,21 +32,22 @@ class SearchBusinessNameModal extends StatelessWidget {
                   child: LoadingWidget(),
                 ),
                 suggestionsBoxDecoration: SuggestionsBoxDecoration(
-                  color: Colors.grey.shade100,
+                  color: Theme.of(context).colorScheme.scrollBackgroundLight,
                   elevation: 0
                 ),
                 debounceDuration: Duration(milliseconds: 500),
                 textFieldConfiguration: TextFieldConfiguration(
                   focusNode: _businessNameNode,
-                  style: GoogleFonts.roboto(
+                  style: TextStyle(
                     fontWeight: FontWeight.w700,
                     fontSize: SizeConfig.getWidth(7),
                   ),
                   decoration: InputDecoration(
                     hintText: "Business Name",
-                    hintStyle: GoogleFonts.roboto(
+                    hintStyle: TextStyle(
                       fontWeight: FontWeight.w700,
-                      fontSize: SizeConfig.getWidth(7)
+                      fontSize: SizeConfig.getWidth(7),
+                      color: Theme.of(context).colorScheme.textOnLightDisabled
                     ),
                   ),
                   autocorrect: false,
@@ -57,7 +58,7 @@ class SearchBusinessNameModal extends StatelessWidget {
                 ),
                 suggestionsCallback: _suggestionCallback, 
                 itemBuilder: (context, Business business) {
-                  return _buildSuggestion(business);
+                  return _buildSuggestion(context: context, business: business);
                 }, 
                 onSuggestionSelected: (Business business) {
                   Navigator.of(context).pop(business);
@@ -69,14 +70,15 @@ class SearchBusinessNameModal extends StatelessWidget {
                   child: LoadingWidget(),
                 ),
                 suggestionsBoxDecoration: CupertinoSuggestionsBoxDecoration(
-                  color: Colors.grey.shade100,
+                  color: Theme.of(context).colorScheme.scrollBackgroundLight,
                 ),
                 debounceDuration: Duration(milliseconds: 500),
                 textFieldConfiguration: CupertinoTextFieldConfiguration(
                   focusNode: _businessNameNode,
-                  style: GoogleFonts.roboto(
-                    fontWeight: FontWeight.w700,
-                    fontSize: SizeConfig.getWidth(7)
+                  style: TextStyle(
+                    fontWeight: FontWeight.w800,
+                    fontSize: SizeConfig.getWidth(7),
+                    color: Theme.of(context).colorScheme.textOnLightDisabled
                   ),
                   placeholder: "Business Name",
                   keyboardType: TextInputType.text,
@@ -87,7 +89,7 @@ class SearchBusinessNameModal extends StatelessWidget {
                 ),
                 suggestionsCallback: _suggestionCallback,
                 itemBuilder: (context, Business business) {
-                  return _buildSuggestion(business);
+                  return _buildSuggestion(context: context, business: business);
                 },
                 onSuggestionSelected: (Business business) {
                   Navigator.of(context).pop(business);
@@ -105,7 +107,7 @@ class SearchBusinessNameModal extends StatelessWidget {
     return await _businessRepository.fetchByName(name: pattern);
   }
 
-  Widget _buildSuggestion(Business business) {
+  Widget _buildSuggestion({@required BuildContext context, @required Business business}) {
     return Card(
       child: Padding(
         padding: EdgeInsets.all(8),
@@ -114,7 +116,7 @@ class SearchBusinessNameModal extends StatelessWidget {
             backgroundImage: NetworkImage(business.photos.logo.smallUrl),
             radius: SizeConfig.getWidth(8),
           ),
-          title: BoldText(text: business.profile.name, size: SizeConfig.getWidth(5), color: Colors.black),
+          title: BoldText4(text: business.profile.name, context: context),
         ),
       )
     );

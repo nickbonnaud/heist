@@ -21,10 +21,8 @@ class GeoLocationBloc extends Bloc<GeoLocationEvent, GeoLocationState> {
 
   GeoLocationBloc({@required GeolocatorRepository geolocatorRepository})
     : assert(geolocatorRepository != null),
-      _geolocatorRepository = geolocatorRepository;
-  
-  @override
-  GeoLocationState get initialState => Uninitialized();
+      _geolocatorRepository = geolocatorRepository,
+      super(Uninitialized());
 
   @override
   Stream<GeoLocationState> mapEventToState(GeoLocationEvent event) async* {

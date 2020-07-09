@@ -15,10 +15,8 @@ class PermissionsBloc extends Bloc<PermissionsEvent, PermissionsState> {
 
   PermissionsBloc({@required InitialLoginRepository initialLoginRepository})
     : assert(initialLoginRepository != null),
-      _initialLoginRepository = initialLoginRepository;
-  
-  @override
-  PermissionsState get initialState => PermissionsState.unknown();
+      _initialLoginRepository = initialLoginRepository,
+      super(PermissionsState.unknown());
 
   bool get isBleEnabled => state.bleEnabled;
   bool get isLocationEnabled => state.locationEnabled;

@@ -12,6 +12,7 @@ import 'package:heist/resources/helpers/text_styles.dart';
 import 'package:heist/screens/receipt_screen/bloc/receipt_screen_bloc.dart';
 import 'package:heist/screens/receipt_screen/widgets/keep_open_button/bloc/keep_open_button_bloc.dart';
 import 'package:heist/screens/receipt_screen/widgets/report_issue_button.dart';
+import 'package:heist/themes/global_colors.dart';
 
 import 'call_button.dart';
 import 'change_issue_button.dart';
@@ -33,7 +34,7 @@ class ReceiptScreenBody extends StatelessWidget {
       builder: (context, state) {
         TransactionResource _transactionResource = state.transactionResource;
         return Scaffold(
-          appBar: _showAppBar ? BottomModalAppBar(backgroundColor: Colors.white10, trailingWidget: _trailingWidget(transactionResource: _transactionResource)) : null,
+          appBar: _showAppBar ? BottomModalAppBar(backgroundColor: Theme.of(context).colorScheme.topAppBarLight, trailingWidget: _trailingWidget(transactionResource: _transactionResource)) : null,
           body: ListView(
             shrinkWrap: true,
             children: <Widget>[
@@ -47,16 +48,15 @@ class ReceiptScreenBody extends StatelessWidget {
                     ),
                     SizedBox(width: SizeConfig.getWidth(2)),
                     Expanded(
-                      child: BoldText(
+                      child: BoldText2(
                         text: _transactionResource.business.profile.name,
-                        size: SizeConfig.getWidth(7), 
-                        color: Colors.black
+                        context: context,
                       ),
                     ),
-                    NormalText(
+                    Text2(
                       text: _transactionResource.transaction.billUpdatedAt,
-                      size: SizeConfig.getWidth(5),
-                      color: Colors.black54,
+                      context: context,
+                      color: Theme.of(context).colorScheme.textOnLightSubdued,
                     )
                   ],
                 ),
@@ -66,8 +66,8 @@ class ReceiptScreenBody extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      BoldText(text: "Issue reported", size: SizeConfig.getWidth(6), color: Colors.red),
-                      _numberWarningsLeft(_transactionResource)
+                      BoldText3(text: "Issue reported", context: context, color: Theme.of(context).colorScheme.info),
+                      _numberWarningsLeft(context: context, transactionResource: _transactionResource)
                     ],
                   )
                 ),
@@ -89,31 +89,39 @@ class ReceiptScreenBody extends StatelessWidget {
                   shrinkWrap: true,
                   children: <Widget>[
                     SizedBox(height:SizeConfig.getHeight(3)),
-                    _createFooterRow("Subtotal", _transactionResource.transaction.netSales),
+                    _createFooterRow(context: context, title:"Subtotal", value:_transactionResource.transaction.netSales),
                     SizedBox(height:SizeConfig.getHeight(1)),
-                    _createFooterRow("Tax", _transactionResource.transaction.tax),
+                    _createFooterRow(context: context, title: "Tax", value: _transactionResource.transaction.tax),
                     if (_transactionResource.transaction.tip != 0)
                       SizedBox(height:SizeConfig.getHeight(1)),
                     if (_transactionResource.transaction.tip != 0)
-                      _createFooterRow("Tip", _transactionResource.transaction.tip),
+                      _createFooterRow(context: context, title: "Tip", value: _transactionResource.transaction.tip),
                     if (_transactionResource.refunds.length > 0)
                       SizedBox(height: SizeConfig.getHeight(1)),
                     if (_transactionResource.refunds.length > 0)
-                      _createRefundRow(transactionResource: _transactionResource),
+                      _createRefundRow(context: context, transactionResource: _transactionResource),
                     SizedBox(height:SizeConfig.getHeight(3)),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        BoldText(text: "Total", size: SizeConfig.getWidth(7), color: Colors.black),
-                        BoldText(text: Currency.create(cents: _setTotal(transactionResource: _transactionResource)), size: SizeConfig.getWidth(7), color: Colors.black),
+                        BoldText2(text: "Total", context: context),
+                        BoldText2(text: Currency.create(cents: _setTotal(transactionResource: _transactionResource)), context: context),
                       ],
                     ),
                   ],
                 ),
               ),
               Divider(thickness: 2),
-              Padding(padding: EdgeInsets.only(left: 16, top: SizeConfig.getHeight(3)),
-              child: BoldText(text: "Purchase Location", size: SizeConfig.getWidth(4), color: Colors.black54),
+              Padding(
+                padding: EdgeInsets.only(
+                  left: 16, 
+                  top: SizeConfig.getHeight(1)
+                ),
+                child: Text2(
+                  text: "Purchase Location", 
+                  context: context, 
+                  color: Theme.of(context).colorScheme.textOnLightSubdued
+                ),
               ),
               Padding(
                 padding: EdgeInsets.only(left: 16, right: 16),
@@ -136,7 +144,11 @@ class ReceiptScreenBody extends StatelessWidget {
               Divider(thickness: 2),
               SizedBox(height: SizeConfig.getHeight(2)),
               Center(
-                child: NormalText(text: "Transaction ID: ${_transactionResource.transaction.identifier}", size: SizeConfig.getWidth(4), color: Colors.black54),
+                child: Text3(
+                  text: "Transaction ID: ${_transactionResource.transaction.identifier}",
+                  context: context, 
+                  color: Theme.of(context).colorScheme.textOnLightSubdued
+                ),
               )
             ],
           ),
@@ -155,11 +167,11 @@ class ReceiptScreenBody extends StatelessWidget {
     ); 
   }
 
-  Widget _numberWarningsLeft(TransactionResource transactionResource) {
+  Widget _numberWarningsLeft({@required BuildContext context, @required TransactionResource transactionResource}) {
     if (transactionResource.issue.warningsSent == 3) {
-      return NormalText(text: "Response required to avoid autopay", size: SizeConfig.getWidth(5), color: Colors.red);
+      return Text2(text: "Response required to avoid autopay", context: context, color: Theme.of(context).colorScheme.danger);
     } else if (transactionResource.issue.warningsSent > 0) {
-      return NormalText(text: "${3 - transactionResource.issue.warningsSent} warnings left", size: SizeConfig.getWidth(5), color: Colors.red);
+      return Text2(text: "${3 - transactionResource.issue.warningsSent} warnings left", context: context, color: Theme.of(context).colorScheme.warning);
     } else {
       return Container();
     }
@@ -216,37 +228,35 @@ class ReceiptScreenBody extends StatelessWidget {
     return transactionResource.transaction.total;
   }
 
-  Widget _createRefundRow({@required TransactionResource transactionResource}) {
+  Widget _createRefundRow({@required BuildContext context, @required TransactionResource transactionResource}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
-        NormalText(
+        Text2(
           text: "Total Refund", 
-          size: SizeConfig.getWidth(5), 
-          color: Colors.red
+          context: context, 
+          color: Theme.of(context).colorScheme.info
         ),
-        NormalText(
+        Text2(
           text: "(${Currency.create(cents: transactionResource.refunds.fold(0, (total, refund) => total + refund.total))})", 
-          size: SizeConfig.getWidth(5), 
-          color: Colors.red
+          context: context, 
+          color: Theme.of(context).colorScheme.info
         ),
       ],
     );
   }
 
-  Widget _createFooterRow(String title, int value) {
+  Widget _createFooterRow({@required BuildContext context, @required String title, @required int value}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
-        NormalText(
+        Text2(
           text: title, 
-          size: SizeConfig.getWidth(5), 
-          color: Colors.black
+          context: context, 
         ),
-        NormalText(
+        Text2(
           text: Currency.create(cents: value), 
-          size: SizeConfig.getWidth(5), 
-          color: Colors.black
+          context: context,
         )
       ],
     );

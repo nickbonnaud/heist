@@ -16,10 +16,8 @@ class PayButtonBloc extends Bloc<PayButtonEvent, PayButtonState> {
   PayButtonBloc({@required TransactionRepository transactionRepository, @required TransactionResource transactionResource})
     : assert(transactionRepository != null && transactionResource != null),
       _transactionRepository = transactionRepository,
-      _transactionResource = transactionResource;
-  
-  @override
-  PayButtonState get initialState => PayButtonState.initial(transactionResource: _transactionResource, isEnabled: _isButtonEnabled(transactionResource: _transactionResource));
+      _transactionResource = transactionResource,
+      super(PayButtonState.initial(transactionResource: transactionResource, isEnabled: _isButtonEnabled(transactionResource: transactionResource)));
 
   @override
   Stream<PayButtonState> mapEventToState(PayButtonEvent event) async* {
@@ -79,7 +77,7 @@ class PayButtonBloc extends Bloc<PayButtonEvent, PayButtonState> {
     );
   }
 
-  bool _isButtonEnabled({@required TransactionResource transactionResource}) {
+  static bool _isButtonEnabled({@required TransactionResource transactionResource}) {
     List<int> enabledStatusCode = [101, 1020, 1021, 1022, 105, 502];
     return enabledStatusCode.contains(transactionResource.transaction.status.code);
   }

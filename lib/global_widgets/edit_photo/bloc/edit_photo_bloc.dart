@@ -18,10 +18,8 @@ class EditPhotoBloc extends Bloc<EditPhotoEvent, EditPhotoState> {
   EditPhotoBloc({@required ProfileRepository profileRepository, @required AuthenticationBloc authenticationBloc})
     : assert(profileRepository != null, authenticationBloc != null),
       _profileRepository = profileRepository,
-      _authenticationBloc = authenticationBloc;
-  
-  @override
-  EditPhotoState get initialState => PhotoUnchanged();
+      _authenticationBloc = authenticationBloc,
+      super(PhotoUnchanged());
 
   @override
   Stream<EditPhotoState> mapEventToState(EditPhotoEvent event) async* {

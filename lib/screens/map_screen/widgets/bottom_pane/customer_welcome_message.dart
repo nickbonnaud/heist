@@ -13,14 +13,14 @@ class CustomerWelcomeMessage extends StatelessWidget {
       child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
         builder: (context, state) {
           return state.authenticated
-            ? _createWelcomeMessage("Welcome ${state.customer.profile.firstName}!")
-            : _createWelcomeMessage("Welcome Back!");
+            ? _createWelcomeMessage(message: "Welcome ${state.customer.profile.firstName}!", context: context)
+            : _createWelcomeMessage(message: "Welcome Back!", context: context);
         }
       ),
     );
   }
 
-  Widget _createWelcomeMessage(String message) {
-    return BoldText.veryBold(text: message, size: SizeConfig.getWidth(5), color: Colors.black);
+  Widget _createWelcomeMessage({@required String message, @required BuildContext context}) {
+    return BoldText2(text: message, context: context, color: Theme.of(context).colorScheme.primaryVariant);
   }
 }

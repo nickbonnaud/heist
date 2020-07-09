@@ -4,12 +4,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:heist/resources/helpers/size_config.dart';
+import 'package:heist/themes/global_colors.dart';
 
 class BottomModalAppBar extends StatefulWidget implements PreferredSizeWidget {
   final Color _backgroundColor;
   final Widget _trailingWidget;
 
-  BottomModalAppBar({Color backgroundColor = Colors.white, Widget trailingWidget})
+  BottomModalAppBar({Color backgroundColor, Widget trailingWidget})
     : _backgroundColor = backgroundColor,
       _trailingWidget = trailingWidget;
   
@@ -36,7 +37,9 @@ class _BottomModalAppBarState extends State<BottomModalAppBar> with TickerProvid
   Widget build(BuildContext context) {
     return AppBar(
       elevation: 0,
-      backgroundColor: widget._backgroundColor,
+      backgroundColor: widget._backgroundColor == null 
+        ? Theme.of(context).colorScheme.background
+        : widget._backgroundColor,
       actions: <Widget>[
         if (widget._trailingWidget != null)
           widget._trailingWidget
@@ -55,7 +58,7 @@ class _BottomModalAppBarState extends State<BottomModalAppBar> with TickerProvid
               )),
             ),
             onPressed: () => Navigator.of(context).pop(),
-            color: Colors.black,
+            color: Theme.of(context).colorScheme.topAppBarIconLight,
             iconSize: SizeConfig.getWidth(10),
           ),
         )

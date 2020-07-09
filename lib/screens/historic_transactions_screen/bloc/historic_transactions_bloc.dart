@@ -18,10 +18,8 @@ class HistoricTransactionsBloc extends Bloc<HistoricTransactionsEvent, HistoricT
 
   HistoricTransactionsBloc({@required TransactionRepository transactionRepository})
     : assert(transactionRepository != null),
-      _transactionRepository = transactionRepository;
-  
-  @override
-  HistoricTransactionsState get initialState => Uninitialized();
+      _transactionRepository = transactionRepository,
+      super(Uninitialized());
 
   @override
   Stream<HistoricTransactionsState> mapEventToState(HistoricTransactionsEvent event) async* {

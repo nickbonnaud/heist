@@ -5,13 +5,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:heist/global_widgets/default_app_bar/bloc/default_app_bar_bloc.dart';
 import 'package:heist/resources/helpers/size_config.dart';
+import 'package:heist/themes/global_colors.dart';
 
 class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Color _backgroundColor;
   final bool _isSliver;
   final Widget _trailingWidget;
 
-  DefaultAppBar({Color backgroundColor = Colors.white, bool isSliver = false, Widget trailingWidget})
+  DefaultAppBar({Color backgroundColor, bool isSliver = false, Widget trailingWidget})
     : _backgroundColor = backgroundColor,
       _isSliver = isSliver,
       _trailingWidget = trailingWidget;
@@ -22,16 +23,16 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     if (_isSliver) {
-      return _buildSliverAppBar();
+      return _buildSliverAppBar(context: context);
     }
-    return _buildDefaultAppBar();
+    return _buildDefaultAppBar(context: context);
     
   }
 
-  AppBar _buildDefaultAppBar() {
+  AppBar _buildDefaultAppBar({@required BuildContext context}) {
     return AppBar(
       elevation: 0,
-      backgroundColor: _backgroundColor,
+      backgroundColor: _setBackgroundColor(context: context),
       leading: AnimatedLeadingIcon(),
       actions: <Widget>[
         if (_trailingWidget != null)
@@ -40,10 +41,10 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
     );
   }
 
-  SliverAppBar _buildSliverAppBar() {
+  SliverAppBar _buildSliverAppBar({@required BuildContext context}) {
     return SliverAppBar(
       elevation: 0,
-      backgroundColor: _backgroundColor,
+      backgroundColor: _setBackgroundColor(context: context) ,
       leading: AnimatedLeadingIcon(),
       actions: <Widget>[
         if (_trailingWidget != null)
@@ -53,6 +54,12 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
       pinned: false,
       snap: false,
     );
+  }
+
+  Color _setBackgroundColor({@required BuildContext context}) {
+    return _backgroundColor == null 
+      ? Theme.of(context).colorScheme.topAppBarLight
+      : _backgroundColor;
   }
 }
 
@@ -89,7 +96,7 @@ class _AnimatedLeadingIconState extends State<AnimatedLeadingIcon> with TickerPr
           child: IconButton(
             icon: Icon(context.platformIcons.back),
             onPressed: () => Navigator.of(context).pop(),
-            color: Colors.black,
+            color: Theme.of(context).colorScheme.topAppBarIconLight,
             iconSize: SizeConfig.getWidth(10),
           ),
         )

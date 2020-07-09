@@ -10,6 +10,7 @@ import 'package:heist/screens/onboard_screen/bloc/onboard_bloc.dart';
 import 'package:heist/screens/permission_screen/permission_screen.dart';
 import 'package:heist/screens/profile_setup_screen/profile_setup_screen.dart';
 import 'package:heist/screens/tutorial_screen/tutorial_screen.dart';
+import 'package:heist/themes/global_colors.dart';
 
 class OnboardBody extends StatelessWidget {
   final bool _customerOnboarded;
@@ -30,43 +31,85 @@ class OnboardBody extends StatelessWidget {
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                BoldText.veryBold(text: "Account Setup", size: SizeConfig.getWidth(9), color: Colors.black),
+                VeryBoldText1(text: "Account Setup", context: context),
                 SizedBox(height: SizeConfig.getHeight(5)),
                 Stepper(
                   currentStep: currentStep,
                   steps: [
                     Step(
-                      title: BoldText(text: "Onboard", size: SizeConfig.getWidth(8), color: currentStep == 0 ? Colors.black : Colors.black26), 
-                      content: BoldText(text: "Let's get Started! Don't worry it's only a few steps.", size: SizeConfig.getWidth(6), color: Colors.black54),
+                      title: BoldText1(
+                        text: "Onboard", 
+                        context: context, 
+                        color: currentStep == 0 
+                          ? Theme.of(context).colorScheme.textOnLight
+                          : Theme.of(context).colorScheme.textOnLightDisabled
+                      ), 
+                      content: BoldText3(
+                        text: "Let's get Started! Don't worry it's only a few steps.",
+                        context: context,
+                        color: Theme.of(context).colorScheme.textOnLightSubdued
+                      ),
                       isActive: currentStep == 0,
                       state: _setCurrentStepState(currentStep: currentStep, stepIndex: 0)
                     ),
                     Step(
-                      title: BoldText(text: _customerOnboarded ? "Profile Completed" : "Profile", size: SizeConfig.getWidth(8), color: currentStep == 1 ? Colors.black : Colors.black26), 
-                      content: BoldText(text: _customerOnboarded ? "Go to next step." : "First let's setup your Profile Account!", size: SizeConfig.getWidth(6), color: Colors.black54),
+                      title: BoldText1(
+                        text: "Profile", 
+                        context: context, 
+                        color: currentStep == 1
+                          ? Theme.of(context).colorScheme.textOnLight 
+                          : Theme.of(context).colorScheme.textOnLightDisabled
+                      ), 
+                      content: BoldText3(
+                        text: _customerOnboarded 
+                          ? "Go to next step." 
+                          : "First let's setup your Profile Account!",
+                        context: context, 
+                        color: Theme.of(context).colorScheme.textOnLightSubdued
+                      ),
                       isActive: currentStep == 1,
                       state: _setCurrentStepState(currentStep: currentStep, stepIndex: 1)
                     ),
                     Step(
-                      title: BoldText(text: "Tutorial", size: SizeConfig.getWidth(8), color: currentStep == 2 ? Colors.black : Colors.black26), 
-                      content: BoldText(text: "Learn how to use ${Constants.appName}!", size: SizeConfig.getWidth(6), color: Colors.black54),
+                      title: BoldText1(
+                        text: "Tutorial",
+                        context: context, 
+                        color: currentStep == 2 
+                          ? Theme.of(context).colorScheme.textOnLight 
+                          : Theme.of(context).colorScheme.textOnLightDisabled
+                      ), 
+                      content: BoldText3(
+                        text: "Learn how to use ${Constants.appName}!", 
+                        context: context, 
+                        color: Theme.of(context).colorScheme.textOnLightSubdued
+                      ),
                       isActive: currentStep == 2,
                       state: _setCurrentStepState(currentStep: currentStep, stepIndex: 2)
                     ),
                     Step(
-                      title: BoldText(text: _permissionsReady ? "Permissions Complete" : "Permissions", size: SizeConfig.getWidth(8), color: currentStep == 3 ? Colors.black : Colors.black26), 
-                      content: BoldText(text: _permissionsReady ? "Finish" : "Lastly let's configure your permissions!", size: SizeConfig.getWidth(6), color: Colors.black54),
+                      title: BoldText1(
+                        text: "Permissions", 
+                        context: context,
+                        color: currentStep == 3 
+                          ? Theme.of(context).colorScheme.textOnLight
+                          : Theme.of(context).colorScheme.textOnLightDisabled
+                      ), 
+                      content: BoldText3(
+                        text: _permissionsReady 
+                          ? "Finish"
+                          : "Lastly let's configure your permissions!", 
+                        context: context, 
+                        color: Theme.of(context).colorScheme.textOnLightSubdued
+                      ),
                       isActive: currentStep == 3,
                       state: _setCurrentStepState(currentStep: currentStep, stepIndex: 3)
                     ),
                   ],
-                  controlsBuilder: (
-                    BuildContext context,
-                    {VoidCallback onStepContinue, 
-                    VoidCallback onStepCancel}) {
-                      return PlatformButton(
-                        child: BoldText(text: _buttonText(currentStep), size: SizeConfig.getWidth(6), color: Colors.blue),
+                  controlsBuilder: (BuildContext context, {VoidCallback onStepContinue,VoidCallback onStepCancel}) {
+                      return FlatButton(
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
                         onPressed: () => _showOnboardScreen(context, currentStep),
+                        child: BoldText3(text: _buttonText(currentStep), context: context, color: Theme.of(context).colorScheme.secondary),
                       );
                     }
                 )

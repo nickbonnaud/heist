@@ -6,6 +6,7 @@ import 'package:heist/models/business/business.dart';
 import 'package:heist/models/customer/active_location.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
+import 'package:heist/themes/global_colors.dart';
 
 import 'show_business_button.dart';
 
@@ -36,7 +37,11 @@ class ActiveLocationList extends StatelessWidget {
                     ),
                   ),
                   SizedBox(width: SizeConfig.getWidth(1)),
-                  BoldText(text: "Your Active Locations:", size: SizeConfig.getWidth(5), color: Colors.grey),
+                  BoldText4(
+                    text: "Your Active Locations:",
+                    context: context, 
+                    color: Theme.of(context).colorScheme.textOnLightSubdued
+                  ),
                 ],
               ),
               SizedBox(height: SizeConfig.getHeight(1)),
@@ -75,7 +80,11 @@ class ActiveLocationList extends StatelessWidget {
                       ),
                       SizedBox(width: SizeConfig.getWidth(1)),
                       Expanded(
-                        child: BoldText(text: "No Active Locations, checkout some nearby businesses:", size: SizeConfig.getWidth(5), color: Colors.grey),
+                        child: BoldText4(
+                          text: "No Active Locations, checkout some nearby businesses:", 
+                          context: context, 
+                          color: Theme.of(context).colorScheme.textOnLightSubdued
+                        ),
                       )
                     ],
                   ),

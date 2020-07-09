@@ -10,6 +10,7 @@ import 'package:heist/screens/onboard_screen/onboard_screen.dart';
 import 'package:heist/screens/refunds_screen/refunds_screen.dart';
 import 'package:heist/screens/settings_screen/settings_screen.dart';
 import 'package:heist/screens/tutorial_screen/tutorial_screen.dart';
+import 'package:heist/themes/global_colors.dart';
 
 class SideDrawer extends StatefulWidget {
   final Widget _homeScreen;
@@ -70,9 +71,7 @@ class _SideDrawerState extends State<SideDrawer> with TickerProviderStateMixin {
 
     animation = Tween<double>(begin: 0.0, end: 1.0).animate(animationController)
       ..addListener(() {
-        setState(() {
-          // The state that has changed here is the animation object’s value.
-        });
+        setState(() {});
       });
 
     radiusAnimation = BorderRadiusTween(begin: BorderRadius.circular(0.0), end: BorderRadius.circular(_borderRadius))
@@ -127,7 +126,7 @@ class _SideDrawerState extends State<SideDrawer> with TickerProviderStateMixin {
                               child: Container(
                                 height: MediaQuery.of(context).size.height,
                                 width: MediaQuery.of(context).size.width,
-                                color: Colors.white,
+                                color: Theme.of(context).colorScheme.background,
                                 child: widget._homeScreen,
                               ),
                             ),
@@ -306,7 +305,7 @@ class DrawerItem extends StatelessWidget {
                   padding: EdgeInsets.only(left: 16.0, right: 8.0),
                   child: _icon,
                 ),
-                BoldText(text: _text, size: 18, color: Colors.white)
+                BoldText3(text: _text, context: context, color: Theme.of(context).colorScheme.textOnDark)
               ],
             ),
           ),

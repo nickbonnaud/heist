@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:heist/blocs/authentication/authentication_bloc.dart';
 import 'package:heist/global_widgets/edit_photo/bloc/edit_photo_bloc.dart';
 import 'package:heist/global_widgets/edit_photo/edit_photo.dart';
@@ -13,6 +12,7 @@ import 'package:heist/repositories/profile_repository.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
 import 'package:heist/screens/profile_screen/bloc/profile_form_bloc.dart';
+import 'package:heist/themes/global_colors.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
 import 'package:vibrate/vibrate.dart';
 
@@ -66,31 +66,32 @@ class _ProfileFormState extends State<ProfileForm> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Container(
-                height: SizeConfig.getHeight(50),
+              Expanded(
                 child: KeyboardActions(
                   config: _buildKeyboard(context),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: <Widget>[
-                      BoldText(text: 'Edit Profile', size: SizeConfig.getWidth(9), color: Colors.black),
+                      VeryBoldText1(text: 'Edit Profile', context: context),
+                      SizedBox(height: SizeConfig.getHeight(6)),
                       Center(
                         child: BlocProvider<EditPhotoBloc>(
                           create: (BuildContext context) => EditPhotoBloc(profileRepository: widget._profileRepository , authenticationBloc: BlocProvider.of<AuthenticationBloc>(context)),
                           child: EditPhoto(photoPicker: PhotoPickerRepository(), customer: widget._customer,),
                         )
                       ),
+                      SizedBox(height: SizeConfig.getHeight(6)),
                       BlocBuilder<ProfileFormBloc, ProfileFormState>(
                         builder: (context, state) {
                           return TextFormField(
                             decoration: InputDecoration(
                               labelText: 'First Name',
-                              labelStyle: GoogleFonts.roboto(
+                              labelStyle: TextStyle(
                                 fontWeight: FontWeight.w400,
                                 fontSize: SizeConfig.getWidth(6)
                               )
                             ),
-                            style: GoogleFonts.roboto(
+                            style: TextStyle(
                               fontWeight: FontWeight.w700,
                               fontSize: SizeConfig.getWidth(7)
                             ),
@@ -109,12 +110,12 @@ class _ProfileFormState extends State<ProfileForm> {
                           return TextFormField(
                             decoration: InputDecoration(
                               labelText: 'Last Name',
-                              labelStyle: GoogleFonts.roboto(
+                              labelStyle: TextStyle(
                                 fontWeight: FontWeight.w400,
                                 fontSize: SizeConfig.getWidth(6)
                               )
                             ),
-                            style: GoogleFonts.roboto(
+                            style: TextStyle(
                               fontWeight: FontWeight.w700,
                               fontSize: SizeConfig.getWidth(7)
                             ),
@@ -127,7 +128,8 @@ class _ProfileFormState extends State<ProfileForm> {
                             validator: (_) => !state.isLastNameValid ? 'Invalid last name' : null,
                           );
                         }
-                      )
+                      ),
+                      SizedBox(height: SizeConfig.getHeight(10)),
                     ],
                   ),
                 ) ,
@@ -141,12 +143,15 @@ class _ProfileFormState extends State<ProfileForm> {
                         builder: (context, state) {
                           return OutlineButton(
                             borderSide: BorderSide(
-                              color: Colors.black
+                              color: Theme.of(context).colorScheme.buttonOutlineCancel
                             ),
-                            disabledBorderColor: Colors.grey.shade500,
+                            disabledBorderColor: Theme.of(context).colorScheme.buttonOutlineCancelDisabled,
                             shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
                             onPressed: state.isSubmitting ? null : () => _cancelButtonPressed(context),
-                            child: BoldText(text: 'Cancel', size: SizeConfig.getWidth(6), color: state.isSubmitting ? Colors.grey.shade500 : Colors.black),
+                            child: BoldText3(text: 'Cancel', context: context, color: state.isSubmitting 
+                              ? Theme.of(context).colorScheme.buttonOutlineCancelDisabled
+                              : Theme.of(context).colorScheme.buttonOutlineCancel
+                            ),
                           );
                         }
                       ),
@@ -156,8 +161,6 @@ class _ProfileFormState extends State<ProfileForm> {
                       child: BlocBuilder<ProfileFormBloc, ProfileFormState>(
                         builder: (context, state) {
                           return RaisedButton(
-                            color: Colors.green,
-                            disabledColor: Colors.green.shade100,
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
                             onPressed: _isSaveButtonEnabled(state) ? () => _saveButtonPressed(state) : null,
                             child: _createButtonText(state),
@@ -187,16 +190,14 @@ class _ProfileFormState extends State<ProfileForm> {
       return TyperAnimatedTextKit(
         speed: Duration(milliseconds: 250),
         text: ['Saving...'],
-        textStyle: GoogleFonts.roboto(
-          textStyle: TextStyle(
-            fontSize: SizeConfig.getWidth(6),
-            fontWeight: FontWeight.w700
-          ),
-          color: Colors.white
+        textStyle: TextStyle(
+          fontWeight: FontWeight.bold,
+          color: Theme.of(context).colorScheme.textOnDark,
+          fontSize: SizeConfig.getWidth(6)
         ),
       );
     } else {
-      return BoldText(text: 'Save', size: SizeConfig.getWidth(6), color: Colors.white);
+      return BoldText3(text: 'Save', context: context, color: Theme.of(context).colorScheme.textOnDark);
     }
   }
   
@@ -244,7 +245,7 @@ class _ProfileFormState extends State<ProfileForm> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Expanded(
-                child: BoldText(text: message, size: SizeConfig.getWidth(6), color: Colors.white)
+                child: BoldText3(text: message, context: context, color: Theme.of(context).colorScheme.textOnDark)
               ),
               PlatformWidget(
                 android: (_) => Icon(state.isSuccess ? Icons.check_circle_outline : Icons.error),
@@ -254,12 +255,14 @@ class _ProfileFormState extends State<ProfileForm> {
                     fontFamily: CupertinoIcons.iconFont,
                     fontPackage: CupertinoIcons.iconFontPackage
                   ),
-                  color: Colors.white,
+                  color: Theme.of(context).colorScheme.onError,
                 ),
               )
             ],
           ),
-          backgroundColor: state.isSuccess ? Colors.green : Colors.red,
+          backgroundColor: state.isSuccess
+            ? Theme.of(context).colorScheme.success
+            : Theme.of(context).colorScheme.error,
         )
       ).closed.then((_) => {
         if (state.isSuccess) {
@@ -282,7 +285,7 @@ class _ProfileFormState extends State<ProfileForm> {
                 onTap: () => node.unfocus(),
                 child: Padding(
                   padding: EdgeInsets.only(right: 16.0),
-                  child: BoldText(text: 'Done', size: SizeConfig.getWidth(4), color: Theme.of(context).primaryColor),
+                  child: BoldText5(text: 'Done', context: context, color: Theme.of(context).primaryColor),
                 ),
               );
             }
@@ -296,7 +299,7 @@ class _ProfileFormState extends State<ProfileForm> {
                 onTap: () => node.unfocus(),
                 child: Padding(
                   padding: EdgeInsets.only(right: 16.0),
-                  child: BoldText(text: 'Done', size: SizeConfig.getWidth(4), color: Theme.of(context).primaryColor),
+                  child: BoldText5(text: 'Done', context: context, color: Theme.of(context).primaryColor),
                 ),
               );
             }

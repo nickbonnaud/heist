@@ -14,7 +14,7 @@ class ProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomPadding: false,
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).colorScheme.background,
       appBar: BottomModalAppBar(),
       body: BlocProvider<ProfileFormBloc>(
         create: (BuildContext context) => ProfileFormBloc(profileRepository: _profileRepository, authenticationBloc: BlocProvider.of<AuthenticationBloc>(context)),

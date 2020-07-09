@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:heist/blocs/active_location/active_location_bloc.dart';
 import 'package:heist/blocs/beacon/beacon_bloc.dart';
 import 'package:heist/blocs/boot/boot_bloc.dart';
@@ -11,6 +12,7 @@ import 'package:heist/repositories/beacon_repository.dart';
 import 'package:heist/repositories/location_repository.dart';
 import 'package:heist/repositories/transaction_repository.dart';
 import 'package:heist/resources/constants.dart';
+import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/screens/boot.dart';
 
 import 'default_theme.dart';
@@ -20,63 +22,82 @@ class AppTheme extends StatelessWidget {
   final LocationRepository _locationRepository = LocationRepository();
   final BeaconRepository _beaconRepository = BeaconRepository();
 
-  final materialTheme = new ThemeData(
-    primarySwatch: Colors.purple,
-  );
-
-  final materialDarkTheme = new ThemeData(
-    brightness: Brightness.dark,
-    primarySwatch: Colors.teal,
-  );
-
-  final cupertinoTheme = new CupertinoThemeData(
-    brightness: null,
-    primaryColor: CupertinoDynamicColor.withBrightness(
-      color: Colors.purple,
-      darkColor: Colors.cyan,
-    ),
-  );
-
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
         BlocProvider<NearbyBusinessesBloc>(
-          create: (_) => NearbyBusinessesBloc(locationRepository: _locationRepository, bootBloc: BlocProvider.of<BootBloc>(context))
+          create: (_) => NearbyBusinessesBloc(
+            locationRepository: _locationRepository,
+            bootBloc: BlocProvider.of<BootBloc>(context)
+          )
         ),
         BlocProvider<BeaconBloc>(
-          create: (BuildContext context) => BeaconBloc(beaconRepository: _beaconRepository, activeLocationBloc: BlocProvider.of<ActiveLocationBloc>(context), bootBloc: BlocProvider.of<BootBloc>(context))
+          create: (BuildContext context) => BeaconBloc(
+            beaconRepository: _beaconRepository,
+            activeLocationBloc:
+                BlocProvider.of<ActiveLocationBloc>(context),
+            bootBloc: BlocProvider.of<BootBloc>(context)
+          )
         ),
         BlocProvider<OpenTransactionsBloc>(
-          create: (_) => OpenTransactionsBloc(transactionRepository: _transactionRepository, bootBloc: BlocProvider.of<BootBloc>(context)),
+          create: (_) => OpenTransactionsBloc(
+            transactionRepository: _transactionRepository,
+            bootBloc: BlocProvider.of<BootBloc>(context)
+          ),
         )
-      ], 
+      ],
       child: Theme(
         data: defaultTheme,
-        child: PlatformProvider(
-          builder: (context) {
-            return PlatformApp(
-              title: Constants.appName,
-              localizationsDelegates: [
-                DefaultWidgetsLocalizations.delegate,
-                DefaultCupertinoLocalizations.delegate,
-                DefaultMaterialLocalizations.delegate,
-              ],
-              android: (_) {
-                return new MaterialAppData(
-                  theme: materialTheme,
-                  darkTheme: materialDarkTheme,
-                  themeMode: ThemeMode.system
-                );
-              },
-              ios: (_) => new CupertinoAppData(
-                theme: cupertinoTheme,
-              ),
-              home: Boot()
-            );
-          } 
-        )
+        child: PlatformProvider(builder: (context) {
+          return MaterialApp(
+            title: Constants.appName,
+            localizationsDelegates: [
+              DefaultWidgetsLocalizations.delegate,
+              DefaultCupertinoLocalizations.delegate,
+              DefaultMaterialLocalizations.delegate,
+            ],
+            theme: _createTheme(context: context),
+            home: Boot(),
+          );
+        })
       )
     );
+  }
+
+  ThemeData _createTheme({@required BuildContext context}) {
+    return ThemeData(
+      iconTheme: IconThemeData(
+        color: Colors.orange
+      ),
+      primarySwatch: Colors.green,
+      accentColor: Colors.orange,
+
+      colorScheme: ColorScheme(
+        primary: Colors.green, 
+        primaryVariant: Colors.green[800],
+        onPrimary: Colors.white,
+
+        secondary: Colors.orange, 
+        secondaryVariant: Colors.orange[800], 
+        onSecondary: Colors.black, 
+
+        surface: Colors.grey,
+        onSurface: Colors.green,
+        background: Colors.white,
+        onBackground: Colors.orange, 
+
+        error: Colors.red,  
+        onError: Colors.white, 
+        brightness: Brightness.light,
+      ),
+      textTheme: _getTextTheme(context: context),
+      buttonColor: Colors.orange,
+      disabledColor: Colors.orange.shade100,
+    );
+  }
+
+  TextTheme _getTextTheme({@required BuildContext context}) {
+    return GoogleFonts.racingSansOneTextTheme(Theme.of(context).textTheme);
   }
 }

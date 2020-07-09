@@ -5,7 +5,10 @@ import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:heist/global_widgets/dots.dart';
 import 'package:heist/resources/constants.dart';
+import 'package:heist/resources/helpers/size_config.dart';
+import 'package:heist/resources/helpers/text_styles.dart';
 import 'package:transformer_page_view/transformer_page_view.dart';
+import 'package:heist/themes/global_colors.dart';
 
 import 'bloc/slide_changed.dart';
 import 'bloc/tutorial_navigation_bloc.dart';
@@ -60,13 +63,13 @@ class TutorialScreen extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<TutorialNavigationBloc>(
-      create: (context) => TutorialNavigationBloc(),
-      child: BlocBuilder<TutorialNavigationBloc, int>(
-        builder: (context, index) {
-          return PlatformScaffold(
-            backgroundColor: Colors.white,
-            body: TransformerPageView(
+    return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.background,
+      body: BlocProvider<TutorialNavigationBloc>(
+        create: (context) => TutorialNavigationBloc(),
+        child: BlocBuilder<TutorialNavigationBloc, int>(
+          builder: (context, index) {
+            return TransformerPageView(
               pageSnapping: true,
               onPageChanged: (index) {
                 BlocProvider.of<TutorialNavigationBloc>(context).add(SlideChanged(index: index));
@@ -75,15 +78,12 @@ class TutorialScreen extends StatelessWidget {
               transformer: PageTransformerBuilder(
                 builder: (Widget child, TransformInfo info) {
                   return Material(
-                    color: Colors.white,
+                    color: Theme.of(context).colorScheme.background,
                     elevation: 8.0,
-                    textStyle: GoogleFonts.roboto(
-                      textStyle: TextStyle(color: Colors.white)
-                    ),
                     borderRadius: BorderRadius.circular(12.0),
                     child: Container(
                       alignment: Alignment.center,
-                      color: Colors.white,
+                      color: Theme.of(context).colorScheme.background,
                       child: Padding(
                         padding: EdgeInsets.all(18.0),
                         child: LayoutBuilder(
@@ -98,65 +98,51 @@ class TutorialScreen extends StatelessWidget {
                                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: <Widget>[
-                                    SizedBox(height: 35.0),
+                                    SizedBox(height: SizeConfig.getHeight(6)),
                                     ParallaxContainer(
-                                      child: PlatformText(
-                                        _headers[info.index],
-                                        style: GoogleFonts.roboto(
-                                          textStyle: TextStyle(
-                                            color: Colors.blueGrey,
-                                            fontSize: 34,
-                                            fontWeight: FontWeight.bold
-                                          )
-                                        ),
-                                      ),
+                                      child: BoldText2(text: _headers[info.index], context: context),
                                       position: info.position,
                                       opacityFactor: 0.8,
                                       translationFactor: 400.0,
                                     ),
-                                    SizedBox(height: 25.0),
+                                    SizedBox(height: SizeConfig.getHeight(4)),
                                     ParallaxContainer(
                                       child: Image.asset(
                                         _images[info.index],
                                         fit: BoxFit.contain,
-                                        height: 350,
                                       ),
                                       position: info.position,
                                       translationFactor: 400.0,
                                     ),
-                                    SizedBox(height: 25.0),
+                                    SizedBox(height: SizeConfig.getHeight(3)),
                                     ParallaxContainer(
                                       child: PlatformText(
                                         _body[info.index],
                                         textAlign: TextAlign.center,
-                                        style: GoogleFonts.roboto(
-                                          textStyle: TextStyle(
-                                            color: Colors.blueGrey,
-                                            fontSize: info.index + 1 != _images.length -1 ? 28 : 14,
-                                            fontWeight: FontWeight.bold
-                                          )
-                                        ),
+                                        style: TextStyle(
+                                          color: Theme.of(context).colorScheme.textOnLightSubdued,
+                                          fontSize: info.index + 1 != _images.length -1 
+                                            ? SizeConfig.getWidth(7)  
+                                            : SizeConfig.getWidth(4),
+                                          fontWeight: FontWeight.bold
+                                        )
                                       ),
                                       position: info.position,
                                       translationFactor: 300.0,
                                     ),
-                                    SizedBox(height: 35),
+                                    SizedBox(height: SizeConfig.getHeight(4)),
                                     ParallaxContainer(
                                       child: Dots(slideIndex: index, numberOfDots: _images.length),
                                       position: info.position,
                                       translationFactor: 500.0,
                                     ),
                                     if (info.index + 1 == _images.length)
-                                      SizedBox(height: 20),
+                                      SizedBox(height: SizeConfig.getHeight(3)),
                                       ParallaxContainer(
-                                        child: PlatformButton(
+                                        child: FlatButton(
+                                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
                                           onPressed: () => _closeModal(context: context),
-                                          child: PlatformText(
-                                            'Close',
-                                            style: GoogleFonts.roboto(
-                                              fontSize: 20
-                                            )
-                                          ),
+                                          child: Text2(text: 'Close', context: context, color: Theme.of(context).colorScheme.secondary),
                                         ),
                                         position: info.position
                                       ),
@@ -172,10 +158,10 @@ class TutorialScreen extends StatelessWidget {
                 } 
               ),
               itemCount: _images.length
-            ),
-          );
-        }
-      ),
+            );
+          }
+        ),
+      )
     );
   }
   

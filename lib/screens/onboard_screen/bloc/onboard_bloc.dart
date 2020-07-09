@@ -6,8 +6,8 @@ import 'package:bloc/bloc.dart';
 enum OnboardEvent {next, prev}
 
 class OnboardBloc extends Bloc<OnboardEvent, int> {
-  @override
-  int get initialState => 0;
+  
+  OnboardBloc() : super(0);
 
   @override
   Stream<int> mapEventToState(OnboardEvent event) async* {

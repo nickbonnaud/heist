@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
-import 'package:heist/blocs/bloc/receipt_modal_sheet_bloc.dart';
 import 'package:heist/blocs/open_transactions/open_transactions_bloc.dart';
+import 'package:heist/blocs/receipt_modal_sheet/receipt_modal_sheet_bloc.dart';
 import 'package:heist/models/paginate_data_holder.dart';
 import 'package:heist/models/push_notification.dart';
 import 'package:heist/models/transaction/status.dart';

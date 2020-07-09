@@ -5,7 +5,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:heist/global_widgets/dots.dart';
 import 'package:heist/models/transaction/purchased_item.dart';
 import 'package:heist/models/unassigned_transaction/unassigned_transaction_resource.dart';
@@ -16,6 +15,7 @@ import 'package:heist/screens/receipt_screen/widgets/purchased_item_widget.dart'
 import 'package:heist/screens/transaction_picker_screen/bloc/transaction_picker_screen_bloc.dart';
 import 'package:heist/screens/transaction_picker_screen/helpers/picker_transformer.dart';
 import 'package:heist/screens/transaction_picker_screen/widgets/transaction/bloc/transaction_bloc.dart';
+import 'package:heist/themes/global_colors.dart';
 import 'package:intl/intl.dart';
 import 'package:transformer_page_view/transformer_page_view.dart';
 import 'package:vibrate/vibrate.dart';
@@ -99,20 +99,20 @@ class _TransactionState extends State<Transaction> {
               purchasedItem: PurchasedItem(name: "Another Item", subName: null, price: 1000, quantity: 3, total: 3000)
             ),
             Divider(),
-            // unique item
+            // where unique item is overlayed
             ListTile(),
             //
             Divider(),
             SizedBox(height:SizeConfig.getHeight(3)),
-            _createFooterRow("Subtotal", 4199),
+            _createFooterRow(context: context, title: "Subtotal", value: 4199),
             SizedBox(height:SizeConfig.getHeight(1)),
-            _createFooterRow("Tax", 525),
+            _createFooterRow(context: context, title: "Tax", value: 525),
             SizedBox(height:SizeConfig.getHeight(3)),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                BoldText(text: "Total", size: SizeConfig.getWidth(7), color: Colors.black),
-                BoldText(text: Currency.create(cents: 4724), size: SizeConfig.getWidth(7), color: Colors.black),
+                BoldText2(text: "Total", context: context),
+                BoldText2(text: Currency.create(cents: 4724), context: context),
               ],
             )
           ],
@@ -154,19 +154,18 @@ class _TransactionState extends State<Transaction> {
                 ),
                 SizedBox(width: SizeConfig.getWidth(2)),
                 Expanded(
-                  child: BoldText(
+                  child: BoldText2(
                     text: widget._transactions[0].business.profile.name,
-                    size: SizeConfig.getWidth(7),
-                    color: Colors.black
+                    context: context,
                   )
                 ),
                 BlocBuilder<TransactionBloc, String>(
                   builder: (context, date) {
                     if (date.length != 0) {
-                      return NormalText(
+                      return Text3(
                         text: "Billed at: ${_formatTime(date)}",
-                        size: SizeConfig.getWidth(4), 
-                        color: Colors.black54,
+                        context: context, 
+                        color: Theme.of(context).colorScheme.textOnLightSubdued,
                       );
                     }
                     return Container();
@@ -186,12 +185,11 @@ class _TransactionState extends State<Transaction> {
               children: <Widget>[
                 Expanded(
                   child: RaisedButton(
-                    color: Colors.blue,
                     shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
                     onPressed: () => _claimButtonPressed(context, index),
                     child: BlocBuilder<TransactionPickerScreenBloc, TransactionPickerScreenState>(
                       builder: (context, state) {
-                        return _createButtonText(state);
+                        return _createButtonText(context: context, state:state);
                       }
                     ) 
                   )
@@ -204,26 +202,24 @@ class _TransactionState extends State<Transaction> {
     );
   }
 
-  Widget _createButtonText(TransactionPickerScreenState state) {
+  Widget _createButtonText({@required BuildContext context, @required TransactionPickerScreenState state}) {
     final currentState = state;
     if (currentState is TransactionsLoaded) {
       if (currentState.claiming) {
         return TyperAnimatedTextKit(
           speed: Duration(milliseconds: 250),
           text: ['Claiming...'],
-          textStyle: GoogleFonts.roboto(
-            textStyle: TextStyle(
-              fontSize: SizeConfig.getWidth(6),
-              fontWeight: FontWeight.w700
-            ),
-            color: Colors.white
+          textStyle: TextStyle(
+            fontSize: SizeConfig.getWidth(6),
+            fontWeight: FontWeight.w700,
+            color: Theme.of(context).colorScheme.textOnDark
           ),
         );
       } else {
-        return BoldText(text: 'Claim', size: SizeConfig.getWidth(6), color: Colors.white);
+        return BoldText3(text: 'Claim', context: context, color: Theme.of(context).colorScheme.textOnDark);
       }
     }
-    return BoldText(text: 'Claim', size: SizeConfig.getWidth(6), color: Colors.white);
+    return BoldText3(text: 'Claim', context: context, color: Theme.of(context).colorScheme.textOnDark);
   }
 
   void _claimButtonPressed(BuildContext context, int index) {
@@ -260,19 +256,19 @@ class _TransactionState extends State<Transaction> {
     );
   }
 
-  Widget _createFooterRow(String title, int value) {
+  Widget _createFooterRow({@required BuildContext context, @required String title, @required int value}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
-        NormalText(
+        Text2(
           text: title, 
-          size: SizeConfig.getWidth(5), 
-          color: Colors.black
+          context: context, 
+          color: Theme.of(context).colorScheme.textOnLight
         ),
-        NormalText(
+        Text2(
           text: Currency.create(cents: value), 
-          size: SizeConfig.getWidth(5), 
-          color: Colors.black
+          context: context, 
+          color: Theme.of(context).colorScheme.textOnLight
         )
       ],
     );
@@ -292,7 +288,7 @@ class _TransactionState extends State<Transaction> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Expanded(
-                child: BoldText(text: message, size: SizeConfig.getWidth(6), color: Colors.white)
+                child: BoldText3(text: message, context: context, color: Theme.of(context).colorScheme.textOnDark)
               ),
               PlatformWidget(
                 android: (_) => Icon(state.claimSuccess ? Icons.check_circle_outline : Icons.error),
@@ -302,12 +298,14 @@ class _TransactionState extends State<Transaction> {
                     fontFamily: CupertinoIcons.iconFont,
                     fontPackage: CupertinoIcons.iconFontPackage
                   ),
-                  color: Colors.white,
+                  color: Theme.of(context).colorScheme.textOnDark,
                 ),
               )
             ],
           ),
-          backgroundColor: state.claimSuccess ? Colors.green : Colors.red,
+          backgroundColor: state.claimSuccess 
+            ? Theme.of(context).colorScheme.iconPrimary
+            : Theme.of(context).colorScheme.error,
         )
       ).closed.then((_) => {
         if (state.claimFailure) {

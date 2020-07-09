@@ -19,7 +19,6 @@ class TransactionPickerScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: BottomModalAppBar(trailingWidget: InfoButton()),
       body: BlocProvider<TransactionPickerScreenBloc>(
         create: (BuildContext context) => TransactionPickerScreenBloc(transactionRepository: _transactionRepository)

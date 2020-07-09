@@ -8,8 +8,8 @@ part 'side_menu_event.dart';
 part 'side_menu_state.dart';
 
 class SideMenuBloc extends Bloc<SideMenuEvent, SideMenuState> {
-  @override
-  SideMenuState get initialState => SideMenuState.initial();
+  
+  SideMenuBloc() : super(SideMenuState.initial());
 
   @override
   Stream<SideMenuState> mapEventToState(SideMenuEvent event) async* {

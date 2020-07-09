@@ -17,10 +17,8 @@ class RefundsScreenBloc extends Bloc<RefundsScreenEvent, RefundsScreenState> {
 
   RefundsScreenBloc({@required RefundRepository refundRepository})
     : assert(refundRepository != null),
-      _refundRepository = refundRepository;
-  
-  @override
-  RefundsScreenState get initialState => Uninitialized();
+      _refundRepository = refundRepository,
+      super(Uninitialized());
 
   @override
   Stream<RefundsScreenState> mapEventToState(RefundsScreenEvent event) async* {

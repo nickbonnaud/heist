@@ -7,6 +7,7 @@ import 'package:heist/resources/helpers/bottom_loader.dart';
 import 'package:heist/resources/helpers/loading_widget.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
 import 'package:heist/screens/refunds_screen/bloc/refunds_screen_bloc.dart';
+import 'package:heist/themes/global_colors.dart';
 
 import 'filter_button.dart';
 
@@ -40,14 +41,14 @@ class _RefundsScreenBodyState extends State<RefundsScreenBody> {
 
         if (state is FetchFailure) {
           return Center(
-            child: BoldText(text: 'Failed to Fetch Posts', size: 18.0, color: Colors.black),
+            child: BoldText4(text: 'Failed to Fetch Posts', context: context),
           );
         }
 
         if (state is RefundsLoaded) {
           if (state.refunds.isEmpty) {
             return Center(
-              child: BoldText(text: 'No Refunds', size: 18.0, color: Colors.black),
+              child: BoldText4(text: 'No Refunds', context: context),
             );
           }
 
@@ -55,7 +56,7 @@ class _RefundsScreenBodyState extends State<RefundsScreenBody> {
             controller: _scrollController,
             slivers: <Widget>[
               DefaultAppBar(
-                backgroundColor: Colors.grey.shade100,
+                backgroundColor: Theme.of(context).colorScheme.scrollBackgroundLight,
                 isSliver: true,
                 trailingWidget: FilterButton()
               ),

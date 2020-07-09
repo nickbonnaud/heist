@@ -13,8 +13,8 @@ enum Active {
 }
 
 class MaterialDatePickerBloc extends Bloc<MaterialDatePickerEvent, MaterialDatePickerState> {
-  @override
-  MaterialDatePickerState get initialState => MaterialDatePickerState.initial();
+  
+  MaterialDatePickerBloc() : super(MaterialDatePickerState.initial());
 
   @override
   Stream<MaterialDatePickerState> mapEventToState(MaterialDatePickerEvent event) async* {

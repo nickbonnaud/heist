@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:heist/blocs/geo_location/geo_location_bloc.dart';
+import 'package:heist/resources/helpers/text_styles.dart';
 
 class FetchLocationFail extends StatelessWidget {
   @override
@@ -13,16 +14,8 @@ class FetchLocationFail extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          PlatformText(
-            'Failed to Fetch Current Location',
-            style: GoogleFonts.roboto(
-              textStyle: TextStyle(
-                color: Colors.blueGrey,
-                fontSize: 24,
-                fontWeight: FontWeight.bold
-              )
-            ),
-            textAlign: TextAlign.center,
+          Center(
+            child: BoldText3(text: 'Failed to Fetch Current Location', context: context),
           ),
           SizedBox(height: 15.0),
           Image.asset(

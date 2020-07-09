@@ -15,8 +15,8 @@ enum DataType {
 }
 
 class BootBloc extends Bloc<BootEvent, BootState> {
-  @override
-  BootState get initialState => BootState.initial();
+
+  BootBloc() : super(BootState.initial());
 
   bool get isDataLoaded => state.isDataLoaded;
 
