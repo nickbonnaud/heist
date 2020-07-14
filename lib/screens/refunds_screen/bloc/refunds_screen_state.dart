@@ -15,7 +15,7 @@ class RefundsLoaded extends RefundsScreenState {
   final List<RefundResource> refunds;
   final int nextPage;
   final bool hasReachedEnd;
-  final Options currentQuery;
+  final Option currentQuery;
   final dynamic queryParams;
 
   const RefundsLoaded({@required this.refunds, @required this.nextPage, @required this.hasReachedEnd, @required this.currentQuery, @required this.queryParams});
@@ -24,7 +24,7 @@ class RefundsLoaded extends RefundsScreenState {
     List<RefundResource> refunds,
     int nextPage,
     bool hasReachedEnd,
-    Options currentQuery,
+    Option currentQuery,
     dynamic queryParams
   }) {
     return RefundsLoaded(

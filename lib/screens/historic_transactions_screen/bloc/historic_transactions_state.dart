@@ -15,7 +15,7 @@ class TransactionsLoaded extends HistoricTransactionsState {
   final List<TransactionResource> transactions;
   final int nextPage;
   final bool hasReachedEnd;
-  final Options currentQuery;
+  final Option currentQuery;
   final dynamic queryParams;
 
   const TransactionsLoaded({@required this.transactions, @required this.nextPage, @required this.hasReachedEnd, @required this.currentQuery, @required this.queryParams});
@@ -24,7 +24,7 @@ class TransactionsLoaded extends HistoricTransactionsState {
     List<TransactionResource> transactions,
     int nextPage,
     bool hasReachedEnd,
-    Options currentQuery,
+    Option currentQuery,
     dynamic queryParams
   }) {
     return TransactionsLoaded(

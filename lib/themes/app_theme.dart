@@ -79,7 +79,7 @@ class AppTheme extends StatelessWidget {
 
         secondary: Colors.orange, 
         secondaryVariant: Colors.orange[800], 
-        onSecondary: Colors.black, 
+        onSecondary: Colors.white, 
 
         surface: Colors.grey,
         onSurface: Colors.green,

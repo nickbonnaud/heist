@@ -30,6 +30,7 @@ extension GlobalColors on ColorScheme {
 
   Color get iconPrimary => Colors.green;
   Color get iconSecondary => Colors.orange;
+  Color get iconButton => Colors.white;
 
   Color get primarySubdued => Colors.green[100];
   Color get secondarySubdued => Colors.orange[100];

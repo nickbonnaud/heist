@@ -38,12 +38,8 @@ class _ShowBusinessButtonState extends State<ShowBusinessButton> {
       }),
       onTap: () => showPlatformModalSheet(
         context: context,
-        builder: (_) => TransactionPickerScreen(business: widget._business),
+        builder: (_) => BusinessScreen(business: widget._business),
       )
-      // onTap: () => showPlatformModalSheet(
-      //   context: context,
-      //   builder: (_) => BusinessScreen(business: widget._business),
-      // )
     );
   }
 }

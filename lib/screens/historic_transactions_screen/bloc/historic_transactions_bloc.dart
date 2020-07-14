@@ -6,7 +6,7 @@ import 'package:heist/models/date_range.dart';
 import 'package:heist/models/paginate_data_holder.dart';
 import 'package:heist/models/transaction/transaction_resource.dart';
 import 'package:heist/repositories/transaction_repository.dart';
-import 'package:heist/screens/historic_transactions_screen/widgets/filter_button.dart';
+import 'package:heist/screens/historic_transactions_screen/widgets/filter_button/filter_button.dart';
 import 'package:meta/meta.dart';
 
 part 'historic_transactions_event.dart';
@@ -38,46 +38,46 @@ class HistoricTransactionsBloc extends Bloc<HistoricTransactionsEvent, HistoricT
 
   Stream<HistoricTransactionsState> _mapFetchHistoricTransactionsToState(FetchHistoricTransactions event) async* {
     if (event.reset) {
-      yield* _fetchUnitialized(fetchFunction: () => _transactionRepository.fetchHistoric(nextPage: 1), state: state, currentQuery: Options.all, queryParams: null);
+      yield* _fetchUnitialized(fetchFunction: () => _transactionRepository.fetchHistoric(nextPage: 1), state: state, currentQuery: Option.all, queryParams: null);
     } else {
       final currentState = state;
       if (currentState is Uninitialized) {
-        yield* _fetchUnitialized(fetchFunction: () => _transactionRepository.fetchHistoric(nextPage: 1), state: currentState, currentQuery: Options.all, queryParams: null);
+        yield* _fetchUnitialized(fetchFunction: () => _transactionRepository.fetchHistoric(nextPage: 1), state: currentState, currentQuery: Option.all, queryParams: null);
       } else if (currentState is TransactionsLoaded) {
-        yield* _fetchMore(fetchFunction: () => _transactionRepository.fetchHistoric(nextPage: currentState.nextPage), state: currentState, currentQuery: Options.all, queryParams: null);
+        yield* _fetchMore(fetchFunction: () => _transactionRepository.fetchHistoric(nextPage: currentState.nextPage), state: currentState, currentQuery: Option.all, queryParams: null);
       }
     }
   }
 
   Stream<HistoricTransactionsState> _mapFetchTransactionsByDateRangeToState(FetchTransactionsByDateRange event) async* {
     if (event.reset) {
-      yield* _fetchUnitialized(fetchFunction: () => _transactionRepository.fetchDateRange(nextPage: 1, dateRange: event.dateRange), state: state, currentQuery: Options.date, queryParams: event.dateRange);
+      yield* _fetchUnitialized(fetchFunction: () => _transactionRepository.fetchDateRange(nextPage: 1, dateRange: event.dateRange), state: state, currentQuery: Option.date, queryParams: event.dateRange);
     } else {
       final currentState = state;
       if (currentState is TransactionsLoaded) {
-        yield* _fetchMore(fetchFunction: () => _transactionRepository.fetchDateRange(nextPage: currentState.nextPage, dateRange: event.dateRange), state: currentState, currentQuery: Options.date, queryParams: event.dateRange);
+        yield* _fetchMore(fetchFunction: () => _transactionRepository.fetchDateRange(nextPage: currentState.nextPage, dateRange: event.dateRange), state: currentState, currentQuery: Option.date, queryParams: event.dateRange);
       } 
     }
   }
 
   Stream<HistoricTransactionsState> _mapFetchTransactionsByBusinessToState(FetchTransactionsByBusiness event) async* {
     if (event.reset) {
-      yield* _fetchUnitialized(fetchFunction: () => _transactionRepository.fetchByBusiness(nextPage: 1, identifier: event.identifier), state: state, currentQuery: Options.businessName, queryParams: event.identifier);
+      yield* _fetchUnitialized(fetchFunction: () => _transactionRepository.fetchByBusiness(nextPage: 1, identifier: event.identifier), state: state, currentQuery: Option.businessName, queryParams: event.identifier);
     } else {
       final currentState = state;
       if (currentState is TransactionsLoaded) {
-        yield* _fetchMore(fetchFunction: () => _transactionRepository.fetchByBusiness(nextPage: currentState.nextPage, identifier: event.identifier), state: currentState, currentQuery: Options.businessName, queryParams: event.identifier);
+        yield* _fetchMore(fetchFunction: () => _transactionRepository.fetchByBusiness(nextPage: currentState.nextPage, identifier: event.identifier), state: currentState, currentQuery: Option.businessName, queryParams: event.identifier);
       }
     }
   }
 
   Stream<HistoricTransactionsState> _mapFetchTransactionByIdentifierToState(FetchTransactionByIdentifier event) async* {
     if (event.reset) {
-      yield* _fetchUnitialized(fetchFunction: () => _transactionRepository.fetchByIdentifier(nextPage: 1, identifier: event.identifier), state: state, currentQuery: Options.transactionId, queryParams: event.identifier);
+      yield* _fetchUnitialized(fetchFunction: () => _transactionRepository.fetchByIdentifier(nextPage: 1, identifier: event.identifier), state: state, currentQuery: Option.transactionId, queryParams: event.identifier);
     } else {
       final currentState = state;
       if (currentState is TransactionsLoaded) {
-        yield* _fetchMore(fetchFunction: () => _transactionRepository.fetchByIdentifier(nextPage: currentState.nextPage, identifier: event.identifier), state: currentState, currentQuery: Options.transactionId, queryParams: event.identifier);
+        yield* _fetchMore(fetchFunction: () => _transactionRepository.fetchByIdentifier(nextPage: currentState.nextPage, identifier: event.identifier), state: currentState, currentQuery: Option.transactionId, queryParams: event.identifier);
       }
     }
   }
@@ -86,16 +86,16 @@ class HistoricTransactionsBloc extends Bloc<HistoricTransactionsEvent, HistoricT
     final currentState = state;
     if (currentState is TransactionsLoaded) {
       switch (currentState.currentQuery) {
-        case Options.all:
+        case Option.all:
           yield* _mapFetchHistoricTransactionsToState(FetchHistoricTransactions(reset: false));
           break;
-        case Options.date:
+        case Option.date:
           yield* _mapFetchTransactionsByDateRangeToState(FetchTransactionsByDateRange(dateRange: currentState.queryParams, reset: false));
           break;
-        case Options.businessName:
+        case Option.businessName:
           yield* _mapFetchTransactionsByBusinessToState(FetchTransactionsByBusiness(identifier: currentState.queryParams, reset: false));
           break;
-        case Options.transactionId:
+        case Option.transactionId:
           yield* _mapFetchTransactionByIdentifierToState(FetchTransactionByIdentifier(identifier: currentState.queryParams, reset: false));
           break;
         default:
@@ -103,7 +103,7 @@ class HistoricTransactionsBloc extends Bloc<HistoricTransactionsEvent, HistoricT
     }
   }
 
-  Stream<HistoricTransactionsState> _fetchUnitialized({@required Future<PaginateDataHolder>Function() fetchFunction, @required HistoricTransactionsState state, @required Options currentQuery, @required dynamic queryParams}) async* {
+  Stream<HistoricTransactionsState> _fetchUnitialized({@required Future<PaginateDataHolder>Function() fetchFunction, @required HistoricTransactionsState state, @required Option currentQuery, @required dynamic queryParams}) async* {
     try {
       yield Loading();
       final PaginateDataHolder paginateData = await fetchFunction();
@@ -119,7 +119,7 @@ class HistoricTransactionsBloc extends Bloc<HistoricTransactionsEvent, HistoricT
     }
   }
 
-  Stream<HistoricTransactionsState> _fetchMore({@required Future<PaginateDataHolder>Function() fetchFunction, @required TransactionsLoaded state, @required Options currentQuery, @required dynamic queryParams}) async* {
+  Stream<HistoricTransactionsState> _fetchMore({@required Future<PaginateDataHolder>Function() fetchFunction, @required TransactionsLoaded state, @required Option currentQuery, @required dynamic queryParams}) async* {
     final currentState = state;
     if (!_hasReachedMax(currentState)) {
       try {
