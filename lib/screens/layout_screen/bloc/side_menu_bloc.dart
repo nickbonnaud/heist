@@ -19,18 +19,24 @@ class SideMenuBloc extends Bloc<SideMenuEvent, SideMenuState> {
       yield* _mapMenuStatusChangedToState(event);
     } else if (event is DraggingMenu) {
       yield* _mapDraggingMenuToState(event);
+    } else if (event is ToggleButtonVisibility) {
+      yield* _mapToggleButtonVisibilityToState(event);
     }
   }
 
   Stream<SideMenuState> _mapMenuPressedToState() async* {
-    yield state.update(menuOpened: !state.menuOpened);
+    yield state.update(menuOpened: !state.menuOpened, buttonVisible: !state.buttonVisible);
   }
 
   Stream<SideMenuState> _mapMenuStatusChangedToState(MenuStatusChanged event) async* {
-    yield state.update(menuOpened: event.menuOpen);
+    yield state.update(menuOpened: event.menuOpen, buttonVisible: event.menuOpen);
   }
 
   Stream<SideMenuState> _mapDraggingMenuToState(DraggingMenu event) async* {
     yield state.update(isDraggingMenu: event.isDragging);
+  }
+
+  Stream<SideMenuState> _mapToggleButtonVisibilityToState(ToggleButtonVisibility event) async* {
+    yield state.update(buttonVisible: event.isVisible);
   }
 }

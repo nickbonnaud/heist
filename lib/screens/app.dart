@@ -11,7 +11,7 @@ import 'package:heist/blocs/push_notification/push_notification_bloc.dart';
 import 'package:heist/resources/helpers/push_notification_handlers/action_button_handler.dart';
 import 'package:heist/resources/helpers/push_notification_handlers/app_opened_handler.dart';
 import 'package:heist/resources/helpers/push_notification_handlers/message_received_handler.dart';
-import 'package:heist/screens/home_screen/home_screen.dart';
+import 'package:heist/screens/layout_screen/layout_screen.dart';
 import 'package:heist/screens/onboard_screen/onboard_screen.dart';
 import 'package:heist/screens/splash_screen.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
@@ -91,7 +91,7 @@ class App extends StatelessWidget {
             if (!state.customerOnboarded || !permissionsReady) {
               return OnboardScreen(customerOnboarded: state.customerOnboarded, permissionsReady: permissionsReady);
             } else if (state.isDataLoaded) {
-              return HomeScreen();
+              return LayoutScreen();
             } else {
               return SplashScreen(shouldAnimate: true);
             }

@@ -5,6 +5,8 @@ abstract class NearbyBusinessesState extends Equatable {
 
   @override
   List<Object> get props => [];
+
+  List<Business> get businesses => [];
 }
 
 class NearbyUninitialized extends NearbyBusinessesState {}

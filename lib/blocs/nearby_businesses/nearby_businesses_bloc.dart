@@ -23,12 +23,7 @@ class NearbyBusinessesBloc extends Bloc<NearbyBusinessesEvent, NearbyBusinessesS
       _bootBloc = bootBloc,
       super(NearbyUninitialized());
 
-  List<Business> get businesses {
-    final currentState = state;
-    return currentState is NearbyBusinessLoaded 
-      ? currentState.businesses 
-      : [];
-  }
+  List<Business> get businesses => state.businesses;
   
   @override
   Stream<NearbyBusinessesState> mapEventToState(NearbyBusinessesEvent event) async* {
@@ -53,7 +48,6 @@ class NearbyBusinessesBloc extends Bloc<NearbyBusinessesEvent, NearbyBusinessesS
       _bootBloc.add(DataLoaded(type: DataType.businesses));
     }
   }
-
 
   Future<List<PreMarker>> _createPreMarkers(List<Business> businesses) async {
     IconCreator iconCreator = IconCreator(size: Size(150, 150), businesses: businesses);

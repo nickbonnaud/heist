@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heist/blocs/boot/boot_bloc.dart';
 import 'package:heist/resources/helpers/animated_routes.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
-import 'package:heist/screens/home_screen/home_screen.dart';
+import 'package:heist/screens/layout_screen/layout_screen.dart';
 
 class FetchingInitialDataScreen extends StatelessWidget {
 
@@ -12,7 +12,7 @@ class FetchingInitialDataScreen extends StatelessWidget {
     return BlocListener<BootBloc, BootState>(
       listener: (context, state) {
         if (state.isDataLoaded) {
-          Navigator.of(context).pushReplacement(AnimatedRoutes.centralIn(HomeScreen()));
+          Navigator.of(context).pushReplacement(AnimatedRoutes.centralIn(LayoutScreen()));
         }
       },
       child: Column(

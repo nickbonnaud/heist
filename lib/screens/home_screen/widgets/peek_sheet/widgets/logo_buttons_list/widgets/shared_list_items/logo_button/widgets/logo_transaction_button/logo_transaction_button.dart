@@ -1,0 +1,134 @@
+import 'dart:ui';
+
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
+import 'package:heist/blocs/receipt_modal_sheet/receipt_modal_sheet_bloc.dart';
+import 'package:heist/models/transaction/transaction_resource.dart';
+import 'package:heist/screens/receipt_screen/receipt_screen.dart';
+import 'package:heist/themes/global_colors.dart';
+
+import 'bloc/logo_transaction_button_bloc.dart';
+
+class LogoTransactionButton extends StatefulWidget {
+  final TransactionResource _transactionResource;
+  final double _logoBorderRadius;
+  final Alignment _buttonAlignment;
+  final double _warningIconSize;
+
+  LogoTransactionButton({
+    @required TransactionResource transactionResource,
+    @required double logoBorderRadius,
+    @required Alignment buttonAlignment,
+    @required double warningIconSize
+  })
+    : assert(transactionResource != null && logoBorderRadius != null && buttonAlignment != null && warningIconSize != null),
+      _transactionResource = transactionResource,
+      _logoBorderRadius = logoBorderRadius,
+      _buttonAlignment = buttonAlignment,
+      _warningIconSize = warningIconSize;
+
+  @override
+  State<LogoTransactionButton> createState() => _LogoTransactionButtonState();
+}
+
+class _LogoTransactionButtonState extends State<LogoTransactionButton> with SingleTickerProviderStateMixin {
+  AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: Duration(seconds: 1),
+      lowerBound: 0.0,
+      upperBound: 0.3,
+    )..addListener(() {
+      setState(() {});
+    });
+    
+    if ((widget._transactionResource.issue?.warningsSent ?? 0) != 0 && widget._transactionResource.transaction.status.code >= 500) {
+      _controller.repeat(reverse: true);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTapDown: (_) => _toggleButtonPress,
+      onTapUp: (_) => _toggleButtonPress,
+      onTap: () => _showCurrentTransaction,
+      child: Stack(
+        children: <Widget>[
+          BlocBuilder<LogoTransactionButtonBloc, LogoTransactionButtonState>(
+            builder: (context, state) {
+              return Material(
+                shape: CircleBorder(),
+                elevation: state.pressed ? 0 : 5,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.horizontal(
+                    left: Radius.circular(widget._logoBorderRadius),
+                    right: Radius.circular(widget._logoBorderRadius),
+                  ),
+                  child: Image.network(
+                    widget._transactionResource.business.photos.logo.smallUrl,
+                    fit: BoxFit.cover,
+                    alignment: widget._buttonAlignment
+                  ),
+                )
+              );
+            }
+          ),
+          if ((widget._transactionResource.issue?.warningsSent ?? 0) != 0 && widget._transactionResource.transaction.status.code >= 500)
+            Positioned(
+              bottom: 2.0,
+              left: 10.0,
+              child: _createWarningIcon()
+            )
+        ],
+      ),
+    );
+  }
+
+  Widget _createWarningIcon() {
+    return Transform.scale(
+      scale: 1 - _controller.value,
+      child: BlocBuilder<LogoTransactionButtonBloc, LogoTransactionButtonState>(
+        builder: (context, state) {
+          return RawMaterialButton(
+            onPressed: () => _showCurrentTransaction,
+            child: Icon(
+              Icons.priority_high,
+              color: Theme.of(context).colorScheme.background,
+              size: widget._warningIconSize,
+            ),
+            shape: CircleBorder(),
+            elevation: state.pressed ? 0 : 5,
+            fillColor: widget._transactionResource.issue.warningsSent == 1
+              ? Theme.of(context).colorScheme.info
+              : widget._transactionResource.issue.warningsSent == 2 
+              ? Theme.of(context).colorScheme.warning
+              : Theme.of(context).colorScheme.danger,
+          );
+        }
+      )
+    );
+  }
+
+  void _toggleButtonPress() {
+    BlocProvider.of<LogoTransactionButtonBloc>(context).add(TogglePressed());
+  }
+
+  void _showCurrentTransaction() {
+    showPlatformModalSheet(
+      context: context,
+      builder: (_) => ReceiptScreen(transactionResource: widget._transactionResource, receiptModalSheetBloc: BlocProvider.of<ReceiptModalSheetBloc>(context))
+    ).then((_) => _toggleButtonPress);
+  }
+  
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+}

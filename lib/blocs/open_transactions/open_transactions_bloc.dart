@@ -20,6 +20,8 @@ class OpenTransactionsBloc extends Bloc<OpenTransactionsEvent, OpenTransactionsS
       _bootBloc = bootBloc,
       super(Uninitialized());
 
+  List<TransactionResource> get openTransactions => state.openTransactions;
+
   @override
   Stream<OpenTransactionsState> mapEventToState(OpenTransactionsEvent event) async* {
     if (event is FetchOpenTransactions) {
@@ -76,6 +78,4 @@ class OpenTransactionsBloc extends Bloc<OpenTransactionsEvent, OpenTransactionsS
       yield OpenTransactionsLoaded(transactions: updatedTransactions);
     }
   }
-
-  List<TransactionResource> get openTransactions => state.openTransactions;
 }

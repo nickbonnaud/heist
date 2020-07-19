@@ -34,3 +34,15 @@ class DraggingMenu extends SideMenuEvent {
 }
 
 class FinishAnimation extends SideMenuEvent {}
+
+class ToggleButtonVisibility extends SideMenuEvent {
+  final bool isVisible;
+
+  ToggleButtonVisibility({@required this.isVisible});
+
+  @override
+  List<Object> get props => [isVisible];
+
+  @override
+  String toString() => 'ToggleButtonVisibility { isVisible: $isVisible }';
+}

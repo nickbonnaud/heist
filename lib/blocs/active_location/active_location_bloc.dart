@@ -17,6 +17,8 @@ class ActiveLocationBloc extends Bloc<ActiveLocationEvent, ActiveLocationState> 
       _activeLocationRepository = activeLocationRepository,
       super(NoActiveLocations());
 
+  List<ActiveLocation> get locations => state.locations;
+
   @override
   Stream<ActiveLocationState> mapEventToState(ActiveLocationEvent event) async* {
     if (event is NewActiveLocation) {

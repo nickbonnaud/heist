@@ -58,7 +58,7 @@ class _BusinessScreenState extends State<BusinessScreen> with SingleTickerProvid
                               Center(
                                 child: Container(
                                   height: 4,
-                                  color: Colors.grey,
+                                  color: Theme.of(context).colorScheme.draggableBar,
                                   width: MediaQuery.of(context).size.width / 2,
                                 ),
                               ),

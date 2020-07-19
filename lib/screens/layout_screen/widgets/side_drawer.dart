@@ -5,8 +5,7 @@ import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
 import 'package:heist/screens/historic_transactions_screen/historic_transactions_screen.dart';
-import 'package:heist/screens/home_screen/bloc/side_menu_bloc.dart';
-import 'package:heist/screens/onboard_screen/onboard_screen.dart';
+import 'package:heist/screens/layout_screen/bloc/side_menu_bloc.dart';
 import 'package:heist/screens/refunds_screen/refunds_screen.dart';
 import 'package:heist/screens/settings_screen/settings_screen.dart';
 import 'package:heist/screens/tutorial_screen/tutorial_screen.dart';
@@ -138,7 +137,7 @@ class _SideDrawerState extends State<SideDrawer> with TickerProviderStateMixin {
                 )
               ],
             ),
-            floatingActionButton: !state.menuOpened ? Padding(
+            floatingActionButton: state.buttonVisible ? Padding(
               padding: EdgeInsets.only(top: 200),
               child: FloatingActionButton(
                 heroTag: HERO_KEY,

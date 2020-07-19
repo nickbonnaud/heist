@@ -34,4 +34,6 @@ extension GlobalColors on ColorScheme {
 
   Color get primarySubdued => Colors.green[100];
   Color get secondarySubdued => Colors.orange[100];
+
+  Color get draggableBar => Colors.grey;
 }
