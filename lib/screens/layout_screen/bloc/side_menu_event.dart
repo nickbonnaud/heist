@@ -7,7 +7,6 @@ abstract class SideMenuEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class MenuPressed extends SideMenuEvent {}
 
 class MenuStatusChanged extends SideMenuEvent {
   final bool menuOpen;

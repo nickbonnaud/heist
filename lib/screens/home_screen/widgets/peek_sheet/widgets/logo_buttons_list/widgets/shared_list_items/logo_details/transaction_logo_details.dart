@@ -108,6 +108,4 @@ class TransactionLogoDetails extends StatelessWidget {
       builder: (_) => ReceiptScreen(transactionResource: _transactionResource, receiptModalSheetBloc: BlocProvider.of<ReceiptModalSheetBloc>(context))
     );
   }
-
-  
 }

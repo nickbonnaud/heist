@@ -61,7 +61,6 @@ class NearbyBusinessesList extends StatelessWidget {
 
   Widget _buildDetails({@required Business business, @required NearbyBusinessLoaded state}) {
     int index = _numberOpenTransactions + state.businesses.indexOf(business);
-
     return BusinessLogoDetails(
       topMargin: _logoMarginTop(index: index), 
       leftMargin: _logoLeftMargin(index: index), 

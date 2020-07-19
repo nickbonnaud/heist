@@ -25,9 +25,9 @@ class LogoBusinessButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTapDown: (_) => _toggleButtonPress,
-      onTapUp: (_) => _toggleButtonPress,
-      onTap: () => _showBusinessSheet,
+      onTapDown: (_) => _toggleButtonPress(context: context),
+      onTapUp: (_) => _toggleButtonPress(context: context),
+      onTap: () => _showBusinessSheet(context: context),
       child: BlocBuilder<LogoBusinessButtonBloc, LogoBusinessButtonState>(
         builder: (context, state) {
           return Material(
@@ -58,7 +58,7 @@ class LogoBusinessButton extends StatelessWidget {
     showPlatformModalSheet(
       context: context, 
       builder: (_) => BusinessScreen(business: _business)
-    ).then((_) => _toggleButtonPress);
+    );
   }
 }
 

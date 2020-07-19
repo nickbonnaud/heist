@@ -13,9 +13,7 @@ class SideMenuBloc extends Bloc<SideMenuEvent, SideMenuState> {
 
   @override
   Stream<SideMenuState> mapEventToState(SideMenuEvent event) async* {
-    if (event is MenuPressed) {
-      yield* _mapMenuPressedToState();
-    } else if (event is MenuStatusChanged) {
+    if (event is MenuStatusChanged) {
       yield* _mapMenuStatusChangedToState(event);
     } else if (event is DraggingMenu) {
       yield* _mapDraggingMenuToState(event);
@@ -24,12 +22,8 @@ class SideMenuBloc extends Bloc<SideMenuEvent, SideMenuState> {
     }
   }
 
-  Stream<SideMenuState> _mapMenuPressedToState() async* {
-    yield state.update(menuOpened: !state.menuOpened, buttonVisible: !state.buttonVisible);
-  }
-
   Stream<SideMenuState> _mapMenuStatusChangedToState(MenuStatusChanged event) async* {
-    yield state.update(menuOpened: event.menuOpen, buttonVisible: event.menuOpen);
+    yield state.update(menuOpened: event.menuOpen, buttonVisible: !event.menuOpen);
   }
 
   Stream<SideMenuState> _mapDraggingMenuToState(DraggingMenu event) async* {

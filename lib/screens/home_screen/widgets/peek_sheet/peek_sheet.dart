@@ -57,10 +57,19 @@ class _PeekSheetState extends State<PeekSheet> with SingleTickerProviderStateMix
           right: 0,
           bottom: 0,
           child: Container(
+
             padding: EdgeInsets.symmetric(horizontal: 8),
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.background,
-              borderRadius: BorderRadius.vertical(top: Radius.circular(32))
+              borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.3), 
+                  spreadRadius: 4.0,
+                  blurRadius: 5,
+                  offset: Offset(0, -5)
+                )
+              ]
             ),
             child: BlocProvider<LogoButtonsListBloc>(
               create: (_) => LogoButtonsListBloc(

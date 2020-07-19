@@ -55,9 +55,9 @@ class _LogoTransactionButtonState extends State<LogoTransactionButton> with Sing
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTapDown: (_) => _toggleButtonPress,
-      onTapUp: (_) => _toggleButtonPress,
-      onTap: () => _showCurrentTransaction,
+      onTapDown: (_) => _toggleButtonPress(context: context),
+      onTapUp: (_) => _toggleButtonPress(context: context),
+      onTap: () => _showCurrentTransaction(context: context),
       child: Stack(
         children: <Widget>[
           BlocBuilder<LogoTransactionButtonBloc, LogoTransactionButtonState>(
@@ -96,7 +96,7 @@ class _LogoTransactionButtonState extends State<LogoTransactionButton> with Sing
       child: BlocBuilder<LogoTransactionButtonBloc, LogoTransactionButtonState>(
         builder: (context, state) {
           return RawMaterialButton(
-            onPressed: () => _showCurrentTransaction,
+            onPressed: () => _showCurrentTransaction(context: context),
             child: Icon(
               Icons.priority_high,
               color: Theme.of(context).colorScheme.background,
@@ -115,15 +115,15 @@ class _LogoTransactionButtonState extends State<LogoTransactionButton> with Sing
     );
   }
 
-  void _toggleButtonPress() {
+  void _toggleButtonPress({@required BuildContext context}) {
     BlocProvider.of<LogoTransactionButtonBloc>(context).add(TogglePressed());
   }
 
-  void _showCurrentTransaction() {
+  void _showCurrentTransaction({@required BuildContext context}) {
     showPlatformModalSheet(
       context: context,
       builder: (_) => ReceiptScreen(transactionResource: widget._transactionResource, receiptModalSheetBloc: BlocProvider.of<ReceiptModalSheetBloc>(context))
-    ).then((_) => _toggleButtonPress);
+    );
   }
   
   @override
