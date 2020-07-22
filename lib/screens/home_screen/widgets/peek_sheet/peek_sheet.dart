@@ -57,7 +57,6 @@ class _PeekSheetState extends State<PeekSheet> with SingleTickerProviderStateMix
           right: 0,
           bottom: 0,
           child: Container(
-
             padding: EdgeInsets.symmetric(horizontal: 8),
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.background,

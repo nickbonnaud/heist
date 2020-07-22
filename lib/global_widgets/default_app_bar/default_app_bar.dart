@@ -5,17 +5,20 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:heist/global_widgets/default_app_bar/bloc/default_app_bar_bloc.dart';
 import 'package:heist/resources/helpers/size_config.dart';
+import 'package:heist/resources/helpers/text_styles.dart';
 import 'package:heist/themes/global_colors.dart';
 
 class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Color _backgroundColor;
   final bool _isSliver;
   final Widget _trailingWidget;
+  final String _title;
 
-  DefaultAppBar({Color backgroundColor, bool isSliver = false, Widget trailingWidget})
+  DefaultAppBar({Color backgroundColor, bool isSliver = false, Widget trailingWidget, String title})
     : _backgroundColor = backgroundColor,
       _isSliver = isSliver,
-      _trailingWidget = trailingWidget;
+      _trailingWidget = trailingWidget,
+      _title = title;
   
   @override
   Size get preferredSize => Size.fromHeight(kToolbarHeight);
@@ -31,6 +34,7 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   AppBar _buildDefaultAppBar({@required BuildContext context}) {
     return AppBar(
+      title: _title != null ? BoldText3(text: _title, context: context) : null,
       elevation: 0,
       backgroundColor: _setBackgroundColor(context: context),
       leading: AnimatedLeadingIcon(),
@@ -43,6 +47,7 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   SliverAppBar _buildSliverAppBar({@required BuildContext context}) {
     return SliverAppBar(
+      title: _title != null ? BoldText2(text: _title, context: context) : null,
       elevation: 0,
       backgroundColor: _setBackgroundColor(context: context) ,
       leading: AnimatedLeadingIcon(),

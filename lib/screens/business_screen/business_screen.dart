@@ -4,16 +4,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:heist/models/business/business.dart';
 import 'package:heist/models/business/hours.dart';
+import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:heist/themes/global_colors.dart';
 
 class BusinessScreen extends StatefulWidget {
   final Business _business;
+  final bool _fromMapScreen;
 
-  BusinessScreen({@required Business business})
+  BusinessScreen({@required Business business, bool fromMapScreen = false})
     : assert(business != null),
-      _business = business;
+      _business = business,
+      _fromMapScreen = fromMapScreen;
 
   State<BusinessScreen> createState() => _BusinessScreenState();
 }
@@ -42,6 +45,28 @@ class _BusinessScreenState extends State<BusinessScreen> with SingleTickerProvid
               )
             ),
             Positioned(
+              top: 100,
+              right: 0,
+              left: 0,
+              child: Align(
+                alignment: Alignment.center,
+                child: Material(
+                  color: Colors.transparent,
+                  shape: CircleBorder(),
+                  elevation: 5,
+                  child: Hero(
+                    tag: widget._fromMapScreen
+                      ? widget._business.identifier + "-map"
+                      : widget._business.identifier, 
+                    child: CircleAvatar(
+                      backgroundImage: NetworkImage(widget._business.photos.logo.largeUrl),
+                      radius: SizeConfig.getWidth(25),
+                    )
+                  ),
+                ) 
+              )
+            ),
+            Positioned(
               top: 400,
                 child: Container(
                   width: MediaQuery.of(context).size.width,
@@ -63,7 +88,29 @@ class _BusinessScreenState extends State<BusinessScreen> with SingleTickerProvid
                                 ),
                               ),
                               SizedBox(height: 20),
-                              BoldText2(text: widget._business.profile.name, context: context, color: Theme.of(context).colorScheme.primary),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  BoldText2(text: widget._business.profile.name, context: context, color: Theme.of(context).colorScheme.primary),
+                                  GestureDetector(
+                                    onTap: () => Navigator.of(context).pop(),
+                                    child: PlatformWidget(
+                                      android: (_) => Icon(
+                                        Icons.arrow_downward,
+                                        size: SizeConfig.getWidth(7),
+                                      ),
+                                      ios: (_) => Icon(
+                                        IconData(
+                                          0xF35D,
+                                          fontFamily: CupertinoIcons.iconFont,
+                                          fontPackage: CupertinoIcons.iconFontPackage
+                                        ),
+                                        size: SizeConfig.getWidth(7),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
                               SizedBox(height: 20),
                               Row(
                                 children: <Widget>[

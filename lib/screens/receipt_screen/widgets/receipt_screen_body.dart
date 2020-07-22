@@ -84,9 +84,12 @@ class ReceiptScreenBody extends StatelessWidget {
         padding: EdgeInsets.only(left: 16, right: 16),
         child: Row(
           children: <Widget>[
-            CircleAvatar(
-              backgroundImage: NetworkImage(transactionResource.business.photos.logo.smallUrl),
-              radius: SizeConfig.getWidth(7),
+            Hero(
+              tag: transactionResource.transaction.identifier, 
+              child: CircleAvatar(
+                backgroundImage: NetworkImage(transactionResource.business.photos.logo.smallUrl),
+                radius: SizeConfig.getWidth(7),
+              )
             ),
             SizedBox(width: SizeConfig.getWidth(2)),
             Expanded(

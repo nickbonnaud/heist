@@ -7,7 +7,7 @@ import 'package:heist/blocs/boot/boot_bloc.dart';
 import 'package:heist/models/business/business.dart';
 import 'package:heist/repositories/location_repository.dart';
 import 'package:heist/resources/helpers/icon_creator.dart';
-import 'package:heist/screens/map_screen/helpers/pre_marker.dart';
+import 'package:heist/screens/home_screen/widgets/nearby_businesses_map/helpers/pre_marker.dart';
 import 'package:meta/meta.dart';
 
 part 'nearby_businesses_event.dart';

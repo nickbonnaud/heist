@@ -31,17 +31,21 @@ class LogoBusinessButton extends StatelessWidget {
       child: BlocBuilder<LogoBusinessButtonBloc, LogoBusinessButtonState>(
         builder: (context, state) {
           return Material(
+            color: Colors.transparent,
             shape: CircleBorder(),
             elevation: state.pressed ? 0 : 5,
-            child: ClipRRect(
-              borderRadius: BorderRadius.horizontal(
-                left: Radius.circular(_logoBorderRadius),
-                right: Radius.circular(_logoBorderRadius),
-              ),
-              child: Image.network(
-                _business.photos.logo.smallUrl,
-                fit: BoxFit.cover,
-                alignment: _buttonAlignment,
+            child: Hero(
+              tag: _business.identifier, 
+              child: ClipRRect(
+                borderRadius: BorderRadius.horizontal(
+                  left: Radius.circular(_logoBorderRadius),
+                  right: Radius.circular(_logoBorderRadius),
+                ),
+                child: Image.network(
+                  _business.photos.logo.smallUrl,
+                  fit: BoxFit.cover,
+                  alignment: _buttonAlignment,
+                )
               )
             ),
           );
@@ -55,10 +59,11 @@ class LogoBusinessButton extends StatelessWidget {
   }
 
   void _showBusinessSheet({@required BuildContext context}) {
-    showPlatformModalSheet(
-      context: context, 
-      builder: (_) => BusinessScreen(business: _business)
-    );
+    Navigator.of(context).push(PageRouteBuilder(
+      opaque: false,
+      fullscreenDialog: true,
+      pageBuilder: (BuildContext context, _, __) => BusinessScreen(business: _business)
+    ));
   }
 }
 

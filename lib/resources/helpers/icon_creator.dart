@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:heist/models/business/business.dart';
-import 'package:heist/screens/map_screen/helpers/pre_marker.dart';
+import 'package:heist/screens/home_screen/widgets/nearby_businesses_map/helpers/pre_marker.dart';
 
 class IconCreator {
   final Size _size;

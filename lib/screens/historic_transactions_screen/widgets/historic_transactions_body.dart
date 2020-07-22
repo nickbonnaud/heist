@@ -72,6 +72,7 @@ class _HistoricTransactionsBodyState extends State<HistoricTransactionsBody> {
         DefaultAppBar(
           backgroundColor: Theme.of(context).colorScheme.scrollBackgroundLight,
           isSliver: true,
+          title: "Transactions",
         ),
         SliverPadding(
           padding: EdgeInsets.only(left: 8, right: 8),

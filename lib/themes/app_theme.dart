@@ -69,6 +69,9 @@ class AppTheme extends StatelessWidget {
       iconTheme: IconThemeData(
         color: Colors.orange
       ),
+      appBarTheme: AppBarTheme(
+        textTheme: _getTextTheme(context: context)
+      ),
       primarySwatch: Colors.green,
       accentColor: Colors.orange,
 

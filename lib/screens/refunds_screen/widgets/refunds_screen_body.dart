@@ -68,7 +68,8 @@ class _RefundsScreenBodyState extends State<RefundsScreenBody> {
       slivers: <Widget>[
         DefaultAppBar(
           backgroundColor: Theme.of(context).colorScheme.scrollBackgroundLight,
-          isSliver: true
+          isSliver: true,
+          title: "Refunds",
         ),
         SliverPadding(
           padding: EdgeInsets.only(left: 8, right: 8),

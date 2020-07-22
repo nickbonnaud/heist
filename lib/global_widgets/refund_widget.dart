@@ -24,9 +24,12 @@ class RefundWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       child: ListTile(
-        leading: CircleAvatar(
-          backgroundImage: NetworkImage(_refundResource.business.photos.logo.smallUrl),
-          radius: SizeConfig.getWidth(6),
+        leading: Hero(
+          tag: _refundResource.transaction.identifier,
+          child: CircleAvatar(
+            backgroundImage: NetworkImage(_refundResource.business.photos.logo.smallUrl),
+            radius: SizeConfig.getWidth(6),
+          )
         ),
         title: BoldText4(
           text: _refundResource.business.profile.name,
@@ -56,10 +59,10 @@ class RefundWidget extends StatelessWidget {
       error: null
     );
     BlocProvider.of<DefaultAppBarBloc>(context).add(Rotate());
-    showPlatformModalSheet(
-      context: context,
-      builder: (_) => ReceiptScreen(transactionResource: transactionResource, receiptModalSheetBloc: BlocProvider.of<ReceiptModalSheetBloc>(context))
-    ).then((_) {
+    Navigator.of(context).push(MaterialPageRoute<void>(
+      fullscreenDialog: true,
+      builder: (context) => ReceiptScreen(transactionResource: transactionResource, receiptModalSheetBloc: BlocProvider.of<ReceiptModalSheetBloc>(context))
+    )).then((_) {
       BlocProvider.of<DefaultAppBarBloc>(context).add(Reset());
     });
   }

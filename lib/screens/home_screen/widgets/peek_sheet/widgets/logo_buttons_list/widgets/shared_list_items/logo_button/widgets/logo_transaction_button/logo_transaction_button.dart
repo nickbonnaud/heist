@@ -7,6 +7,7 @@ import 'package:heist/blocs/receipt_modal_sheet/receipt_modal_sheet_bloc.dart';
 import 'package:heist/models/transaction/transaction_resource.dart';
 import 'package:heist/screens/receipt_screen/receipt_screen.dart';
 import 'package:heist/themes/global_colors.dart';
+import 'package:flutter/scheduler.dart' show timeDilation;
 
 import 'bloc/logo_transaction_button_bloc.dart';
 
@@ -63,18 +64,22 @@ class _LogoTransactionButtonState extends State<LogoTransactionButton> with Sing
           BlocBuilder<LogoTransactionButtonBloc, LogoTransactionButtonState>(
             builder: (context, state) {
               return Material(
+                color: Colors.transparent,
                 shape: CircleBorder(),
                 elevation: state.pressed ? 0 : 5,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.horizontal(
-                    left: Radius.circular(widget._logoBorderRadius),
-                    right: Radius.circular(widget._logoBorderRadius),
-                  ),
-                  child: Image.network(
-                    widget._transactionResource.business.photos.logo.smallUrl,
-                    fit: BoxFit.cover,
-                    alignment: widget._buttonAlignment
-                  ),
+                child: Hero(
+                  tag: widget._transactionResource.transaction.identifier, 
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.horizontal(
+                      left: Radius.circular(widget._logoBorderRadius),
+                      right: Radius.circular(widget._logoBorderRadius),
+                    ),
+                    child: Image.network(
+                      widget._transactionResource.business.photos.logo.smallUrl,
+                      fit: BoxFit.cover,
+                      alignment: widget._buttonAlignment
+                    ),
+                  )
                 )
               );
             }
@@ -120,10 +125,10 @@ class _LogoTransactionButtonState extends State<LogoTransactionButton> with Sing
   }
 
   void _showCurrentTransaction({@required BuildContext context}) {
-    showPlatformModalSheet(
-      context: context,
-      builder: (_) => ReceiptScreen(transactionResource: widget._transactionResource, receiptModalSheetBloc: BlocProvider.of<ReceiptModalSheetBloc>(context))
-    );
+    Navigator.of(context).push(MaterialPageRoute<void>(
+      fullscreenDialog: true,
+      builder: (context) => ReceiptScreen(transactionResource: widget._transactionResource, receiptModalSheetBloc: BlocProvider.of<ReceiptModalSheetBloc>(context))
+    ));
   }
   
   @override
