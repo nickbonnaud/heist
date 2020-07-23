@@ -1,7 +1,7 @@
+import 'dart:math' as math;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
-import 'dart:math' as math;
 
 class DragButton extends StatelessWidget {
   final double _size;
