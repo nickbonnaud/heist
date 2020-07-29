@@ -24,8 +24,6 @@ class LogoButton extends StatelessWidget {
 
   final SharedSizes sharedSizes = SharedSizes();
   
-  Alignment get _logoButtonAlignment => Alignment(lerp(min: 1, max: 0), 0);
-  
   LogoButton({
     @required AnimationController controller,
     @required double topMargin,
@@ -59,7 +57,6 @@ class LogoButton extends StatelessWidget {
             child: LogoTransactionButton(
               transactionResource: _transactionResource,
               logoBorderRadius: _borderRadius,
-              buttonAlignment: _logoButtonAlignment,
               warningIconSize: _logoSize / 2,
             )
           ) 
@@ -68,7 +65,6 @@ class LogoButton extends StatelessWidget {
             child: LogoBusinessButton(
               business: _business,
               logoBorderRadius: _borderRadius,
-              buttonAlignment: _logoButtonAlignment,
             )
           )
     );

@@ -1,30 +1,29 @@
 import 'dart:ui';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heist/blocs/receipt_modal_sheet/receipt_modal_sheet_bloc.dart';
 import 'package:heist/models/transaction/transaction_resource.dart';
 import 'package:heist/screens/receipt_screen/receipt_screen.dart';
 import 'package:heist/themes/global_colors.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 import 'bloc/logo_transaction_button_bloc.dart';
 
 class LogoTransactionButton extends StatefulWidget {
   final TransactionResource _transactionResource;
   final double _logoBorderRadius;
-  final Alignment _buttonAlignment;
   final double _warningIconSize;
 
   LogoTransactionButton({
     @required TransactionResource transactionResource,
     @required double logoBorderRadius,
-    @required Alignment buttonAlignment,
     @required double warningIconSize
   })
-    : assert(transactionResource != null && logoBorderRadius != null && buttonAlignment != null && warningIconSize != null),
+    : assert(transactionResource != null && logoBorderRadius != null && warningIconSize != null),
       _transactionResource = transactionResource,
       _logoBorderRadius = logoBorderRadius,
-      _buttonAlignment = buttonAlignment,
       _warningIconSize = warningIconSize;
 
   @override
@@ -65,19 +64,16 @@ class _LogoTransactionButtonState extends State<LogoTransactionButton> with Sing
                 color: Colors.transparent,
                 shape: CircleBorder(),
                 elevation: state.pressed ? 0 : 5,
-                child: Hero(
-                  tag: widget._transactionResource.transaction.identifier, 
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.horizontal(
-                      left: Radius.circular(widget._logoBorderRadius),
-                      right: Radius.circular(widget._logoBorderRadius),
-                    ),
-                    child: Image.network(
-                      widget._transactionResource.business.photos.logo.smallUrl,
-                      fit: BoxFit.cover,
-                      alignment: widget._buttonAlignment
-                    ),
-                  )
+                child: CachedNetworkImage(
+                  imageUrl: widget._transactionResource.business.photos.logo.smallUrl,
+                  imageBuilder: (context, imageProvider) => Hero(
+                    tag: widget._transactionResource.transaction.identifier,
+                    child: CircleAvatar(
+                      backgroundImage: imageProvider,
+                      radius: widget._logoBorderRadius,
+                    )
+                  ),
+                  placeholder: (_,__) => Image.memory(kTransparentImage),
                 )
               );
             }

@@ -1,24 +1,23 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heist/models/business/business.dart';
 import 'package:heist/screens/business_screen/business_screen.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 import 'bloc/logo_business_button_bloc.dart';
 
 class LogoBusinessButton extends StatelessWidget {
   final Business _business;
   final double _logoBorderRadius;
-  final Alignment _buttonAlignment;
 
   LogoBusinessButton({
     @required Business business,
     @required double logoBorderRadius,
-    @required Alignment buttonAlignment
   })
-    : assert(business != null && logoBorderRadius != null && buttonAlignment != null),
+    : assert(business != null && logoBorderRadius != null),
       _business = business,
-      _logoBorderRadius = logoBorderRadius,
-      _buttonAlignment = buttonAlignment;
+      _logoBorderRadius = logoBorderRadius;
 
   
   @override
@@ -33,20 +32,17 @@ class LogoBusinessButton extends StatelessWidget {
             color: Colors.transparent,
             shape: CircleBorder(),
             elevation: state.pressed ? 0 : 5,
-            child: Hero(
-              tag: _business.identifier, 
-              child: ClipRRect(
-                borderRadius: BorderRadius.horizontal(
-                  left: Radius.circular(_logoBorderRadius),
-                  right: Radius.circular(_logoBorderRadius),
-                ),
-                child: Image.network(
-                  _business.photos.logo.smallUrl,
-                  fit: BoxFit.cover,
-                  alignment: _buttonAlignment,
+            child: CachedNetworkImage(
+              imageUrl: _business.photos.logo.smallUrl,
+              imageBuilder: (context, imageProvider) => Hero(
+                tag: _business.identifier, 
+                child: CircleAvatar(
+                  backgroundImage: imageProvider,
+                  radius: _logoBorderRadius,
                 )
-              )
-            ),
+              ),
+              placeholder: (_,__) => Image.memory(kTransparentImage),
+            )
           );
         }
       )

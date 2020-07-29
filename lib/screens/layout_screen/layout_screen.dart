@@ -8,8 +8,6 @@ import 'widgets/side_drawer.dart';
 
 class LayoutScreen extends StatelessWidget {
 
-  // new
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,18 +18,4 @@ class LayoutScreen extends StatelessWidget {
       )
     );
   }
-  
-  
-  // Old
-
-  // @override
-  // Widget build(BuildContext context) {
-  //   return Scaffold(
-  //     backgroundColor: Colors.white,
-  //     body: BlocProvider<SideMenuBloc>(
-  //       create: (BuildContext context) => SideMenuBloc(),
-  //       child: SideDrawer(homeScreen: MapScreen())
-  //     ),
-  //   );
-  // }
 }

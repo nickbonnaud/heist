@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
+import 'package:heist/global_widgets/cached_avatar.dart';
 import 'package:heist/global_widgets/dots.dart';
 import 'package:heist/models/transaction/purchased_item.dart';
 import 'package:heist/models/unassigned_transaction/unassigned_transaction_resource.dart';
@@ -148,9 +149,9 @@ class _TransactionState extends State<Transaction> {
           children: <Widget>[
             Row(
               children: <Widget>[
-                CircleAvatar(
-                  backgroundImage: NetworkImage(widget._transactions[0].business.photos.logo.smallUrl),
-                  radius: SizeConfig.getWidth(7),
+                CachedAvatar(
+                  url: widget._transactions[0].business.photos.logo.smallUrl,
+                  radius: 7
                 ),
                 SizedBox(width: SizeConfig.getWidth(2)),
                 Expanded(
