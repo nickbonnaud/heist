@@ -45,45 +45,6 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     );
   }
 
-  // Route _createRoute(Widget screen) {
-  //   return PageRouteBuilder(
-  //     pageBuilder: (context, animation, secondaryAnimation) => screen,
-  //     transitionsBuilder: (context, animation, secondaryAnimation, child) {
-  //       return new ScaleTransition(
-  //         scale: new Tween<double>(
-  //           begin: 0.0,
-  //           end: 1.0,
-  //         ).animate(
-  //             CurvedAnimation(
-  //               parent: animation,
-  //               curve: Interval(
-  //                 0.00,
-  //                 0.50,
-  //                 curve: Curves.linear,
-  //               ),
-  //             ),
-  //         ),
-  //         child: ScaleTransition(
-  //           scale: Tween<double>(
-  //             begin: 5.0,
-  //             end: 1.0,
-  //           ).animate(
-  //             CurvedAnimation(
-  //               parent: animation,
-  //               curve: Interval(
-  //                 0.50,
-  //                 1.00,
-  //                 curve: Curves.linear,
-  //               ),
-  //             ),
-  //           ),
-  //           child: child,
-  //         ),
-  //       );
-  //     },
-  //   );
-  // }
-
   Widget _buildAnimation() {
     switch('zoom-out') {
       case 'fade-in': {
@@ -116,6 +77,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
             SizedBox(height: 200, child: Image.asset('assets/flutter_icon.png'))));
       }
     }
+    return Container();
   }
   
   @override

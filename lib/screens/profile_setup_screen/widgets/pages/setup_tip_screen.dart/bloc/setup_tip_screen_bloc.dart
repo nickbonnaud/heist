@@ -21,9 +21,6 @@ class SetupTipScreenBloc extends Bloc<SetupTipScreenEvent, SetupTipScreenState> 
       _accountRepository = accountRepository,
       _authenticationBloc = authenticationBloc,
       super(SetupTipScreenState.initial());
-  
-  @override
-  SetupTipScreenState get initialState => SetupTipScreenState.initial();
 
   @override
   Stream<Transition<SetupTipScreenEvent, SetupTipScreenState>> transformEvents(Stream<SetupTipScreenEvent> events, transitionFn) {

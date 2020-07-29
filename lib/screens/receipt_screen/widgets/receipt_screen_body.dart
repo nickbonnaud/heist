@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:heist/blocs/active_location/active_location_bloc.dart';
 import 'package:heist/global_widgets/bottom_modal_app_bar.dart';
+import 'package:heist/global_widgets/cached_avatar_hero.dart';
 import 'package:heist/models/customer/active_location.dart';
 import 'package:heist/models/transaction/transaction_resource.dart';
 import 'package:heist/repositories/transaction_repository.dart';
@@ -84,12 +85,10 @@ class ReceiptScreenBody extends StatelessWidget {
         padding: EdgeInsets.only(left: 16, right: 16),
         child: Row(
           children: <Widget>[
-            Hero(
-              tag: transactionResource.transaction.identifier, 
-              child: CircleAvatar(
-                backgroundImage: NetworkImage(transactionResource.business.photos.logo.smallUrl),
-                radius: SizeConfig.getWidth(7),
-              )
+            CachedAvatarHero(
+              url: transactionResource.business.photos.logo.smallUrl,
+              radius: 7,
+              tag: transactionResource.transaction.identifier
             ),
             SizedBox(width: SizeConfig.getWidth(2)),
             Expanded(

@@ -4,14 +4,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
+import 'package:heist/global_widgets/cached_avatar.dart';
 import 'package:heist/models/customer/customer.dart';
 import 'package:heist/repositories/photo_picker_repository.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
-import 'package:vibrate/vibrate.dart';
 import 'package:heist/themes/global_colors.dart';
+import 'package:vibrate/vibrate.dart';
 
 import 'bloc/edit_photo_bloc.dart';
+import 'widgets/fade_in_file.dart';
 
 class EditPhoto extends StatelessWidget {
   final PhotoPickerRepository _photoPicker;
@@ -45,7 +47,9 @@ class EditPhoto extends StatelessWidget {
                 child: RawMaterialButton(
                   onPressed: () => _editPhoto(context, state),
                   child: state is Submitting 
-                    ? CircularProgressIndicator()
+                    ? CircularProgressIndicator(
+                      backgroundColor: Theme.of(context).colorScheme.primary,
+                    )
                     : PlatformWidget(
                     ios: (_) => Icon(
                       IconData(
@@ -76,11 +80,7 @@ class EditPhoto extends StatelessWidget {
   Widget _createAvatar(EditPhotoState state) {
    if (state is Submitting || state is SubmitSuccess) {
       File photo = state is Submitting ? state.photo : state is SubmitSuccess ? state.photo : null;
-      return CircleAvatar(
-        backgroundImage: Image.file(photo).image,
-        radius: SizeConfig.getWidth(25),
-        backgroundColor: Colors.transparent,
-      );
+      return FadeInFile(imageFile: photo);
     } else if (_customer?.profile?.photos == null) {
       return CircleAvatar(
         child: Image.asset('assets/profile_customer.png'),
@@ -88,10 +88,10 @@ class EditPhoto extends StatelessWidget {
         backgroundColor: Colors.transparent,
       );
     } else {
-      return CircleAvatar(
-        backgroundImage: NetworkImage(_customer.profile?.photos?.largeUrl),
-        radius: SizeConfig.getWidth(25),
-        backgroundColor: Colors.transparent,
+      return CachedAvatar(
+        url: _customer.profile?.photos?.largeUrl, 
+        radius: 25,
+        showLoading: true,
       );
     }
   }

@@ -11,7 +11,6 @@ import 'package:heist/blocs/push_notification/push_notification_bloc.dart';
 import 'package:heist/resources/helpers/push_notification_handlers/action_button_handler.dart';
 import 'package:heist/resources/helpers/push_notification_handlers/app_opened_handler.dart';
 import 'package:heist/resources/helpers/push_notification_handlers/message_received_handler.dart';
-import 'package:heist/screens/auth_screen/auth_screen.dart';
 import 'package:heist/screens/layout_screen/layout_screen.dart';
 import 'package:heist/screens/onboard_screen/onboard_screen.dart';
 import 'package:heist/screens/splash_screen.dart';
@@ -88,9 +87,6 @@ class App extends StatelessWidget {
       child: BlocBuilder<BootBloc, BootState>(
         builder: (context, state) {
           if (state.checksComplete) {
-            
-            return AuthScreen();
-
             bool permissionsReady = BlocProvider.of<PermissionsBloc>(context).allPermissionsValid;
             if (!state.customerOnboarded || !permissionsReady) {
               return OnboardScreen(customerOnboarded: state.customerOnboarded, permissionsReady: permissionsReady);

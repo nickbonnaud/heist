@@ -1,11 +1,14 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
+import 'package:heist/global_widgets/cached_avatar_hero.dart';
 import 'package:heist/models/business/business.dart';
 import 'package:heist/models/business/hours.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
+import 'package:transparent_image/transparent_image.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:heist/themes/global_colors.dart';
 
@@ -40,7 +43,10 @@ class _BusinessScreenState extends State<BusinessScreen> with SingleTickerProvid
                 borderRadius: BorderRadius.circular(20.0),
                 child: Container(
                   width: MediaQuery.of(context).size.width,
-                  child: Image.network(widget._business.photos.banner.smallUrl),
+                  child: CachedNetworkImage(
+                    imageUrl: widget._business.photos.banner.smallUrl,
+                    placeholder: (_,__) => Image.memory(kTransparentImage),
+                  ),
                 ),
               )
             ),
@@ -54,14 +60,12 @@ class _BusinessScreenState extends State<BusinessScreen> with SingleTickerProvid
                   color: Colors.transparent,
                   shape: CircleBorder(),
                   elevation: 5,
-                  child: Hero(
+                  child: CachedAvatarHero(
+                    url: widget._business.photos.logo.smallUrl, 
+                    radius: 25, 
                     tag: widget._fromMapScreen
                       ? widget._business.identifier + "-map"
                       : widget._business.identifier, 
-                    child: CircleAvatar(
-                      backgroundImage: NetworkImage(widget._business.photos.logo.largeUrl),
-                      radius: SizeConfig.getWidth(25),
-                    )
                   ),
                 ) 
               )

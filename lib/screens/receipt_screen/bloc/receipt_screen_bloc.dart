@@ -9,11 +9,9 @@ part 'receipt_screen_event.dart';
 part 'receipt_screen_state.dart';
 
 class ReceiptScreenBloc extends Bloc<ReceiptScreenEvent, ReceiptScreenState> {
-  final TransactionResource _transactionResource;
 
   ReceiptScreenBloc({@required TransactionResource transactionResource})
     : assert(transactionResource != null),
-      _transactionResource = transactionResource,
       super(ReceiptScreenState.initial(transactionResource: transactionResource, isButtonVisible: _isButtonVisible(transactionResource: transactionResource)));
 
   @override

@@ -2,13 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:heist/global_widgets/dots.dart';
 import 'package:heist/resources/constants.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
-import 'package:transformer_page_view/transformer_page_view.dart';
 import 'package:heist/themes/global_colors.dart';
+import 'package:transformer_page_view/transformer_page_view.dart';
 
 import 'bloc/slide_changed.dart';
 import 'bloc/tutorial_navigation_bloc.dart';

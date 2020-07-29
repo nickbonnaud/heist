@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:heist/resources/constants.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
 

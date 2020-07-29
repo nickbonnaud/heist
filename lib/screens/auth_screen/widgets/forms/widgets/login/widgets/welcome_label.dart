@@ -1,7 +1,4 @@
-import 'dart:math' as math;
-
 import 'package:flutter/material.dart';
-import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
 import 'package:heist/screens/auth_screen/auth_screen.dart';
 import 'package:heist/screens/auth_screen/widgets/page_offset_notifier.dart';
@@ -28,25 +25,6 @@ class WelcomeLabel extends StatelessWidget {
         context: context,
         color: Theme.of(context).colorScheme.textOnDark,
       )
-    );
-    
-    return Consumer<PageOffsetNotifier>(
-      builder: (context, notifier, child) {
-        return Opacity(
-          opacity: math.max(0, 1 - 4 * notifier.page),
-          child: child,
-        );
-      },
-      child: Padding(
-        padding: EdgeInsets.only(left: 24),
-        child: PlatformText(
-          "Welcome Back",
-          style: TextStyle(
-            fontSize: 18,
-            color: Theme.of(context).colorScheme.textOnDark
-          ),
-        ),
-      ),
     );
   }
 }

@@ -7,6 +7,7 @@ import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:heist/blocs/geo_location/geo_location_bloc.dart';
 import 'package:heist/blocs/nearby_businesses/nearby_businesses_bloc.dart';
+import 'package:heist/global_widgets/cached_avatar_hero.dart';
 import 'package:heist/models/business/business.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/screens/business_screen/business_screen.dart'; 
@@ -88,13 +89,10 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
                         return Positioned(
                           top: state.screenCoordinate.y.toDouble() - SizeConfig.getHeight(6),
                           left: state.screenCoordinate.x.toDouble() - SizeConfig.getWidth(7),
-                          child: Hero(
-                            tag: state.business.identifier + "-map", 
-                            child: CircleAvatar(
-                              backgroundColor: Colors.transparent,
-                              backgroundImage: NetworkImage(state.business.photos.logo.smallUrl),
-                              radius: SizeConfig.getWidth(7),
-                            )
+                          child: CachedAvatarHero(
+                            url: state.business.photos.logo.smallUrl, 
+                            radius: 7, 
+                            tag: state.business.identifier + "-map"
                           )
                         );
                       }

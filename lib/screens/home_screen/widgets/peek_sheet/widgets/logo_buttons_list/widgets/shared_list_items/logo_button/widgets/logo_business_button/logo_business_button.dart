@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:heist/models/business/business.dart';
 import 'package:heist/screens/business_screen/business_screen.dart';
 

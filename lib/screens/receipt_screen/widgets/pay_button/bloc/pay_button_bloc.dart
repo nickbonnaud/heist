@@ -11,12 +11,10 @@ part 'pay_button_state.dart';
 
 class PayButtonBloc extends Bloc<PayButtonEvent, PayButtonState> {
   final TransactionRepository _transactionRepository;
-  final TransactionResource _transactionResource;
   
   PayButtonBloc({@required TransactionRepository transactionRepository, @required TransactionResource transactionResource})
     : assert(transactionRepository != null && transactionResource != null),
       _transactionRepository = transactionRepository,
-      _transactionResource = transactionResource,
       super(PayButtonState.initial(transactionResource: transactionResource, isEnabled: _isButtonEnabled(transactionResource: transactionResource)));
 
   @override

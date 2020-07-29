@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:heist/blocs/receipt_modal_sheet/receipt_modal_sheet_bloc.dart';
+import 'package:heist/global_widgets/cached_avatar_hero.dart';
 import 'package:heist/models/transaction/refund_resource.dart';
 import 'package:heist/models/transaction/transaction_resource.dart';
 import 'package:heist/resources/helpers/currency.dart';
-import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
 import 'package:heist/screens/receipt_screen/receipt_screen.dart';
 import 'package:heist/themes/global_colors.dart';
@@ -24,12 +23,10 @@ class RefundWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       child: ListTile(
-        leading: Hero(
-          tag: _refundResource.transaction.identifier,
-          child: CircleAvatar(
-            backgroundImage: NetworkImage(_refundResource.business.photos.logo.smallUrl),
-            radius: SizeConfig.getWidth(6),
-          )
+        leading: CachedAvatarHero(
+          url: _refundResource.business.photos.logo.smallUrl, 
+          radius: 6, 
+          tag: _refundResource.transaction.identifier
         ),
         title: BoldText4(
           text: _refundResource.business.profile.name,

@@ -16,13 +16,11 @@ part 'issue_form_state.dart';
 class IssueFormBloc extends Bloc<IssueFormEvent, IssueFormState> {
   final TransactionIssueRepository _issueRepository;
   final OpenTransactionsBloc _openTransactionsBloc;
-  final TransactionResource _transactionResource;
 
   IssueFormBloc({@required TransactionIssueRepository issueRepository, @required OpenTransactionsBloc openTransactionsBloc, @required TransactionResource transactionResource})
     : assert(issueRepository != null && openTransactionsBloc != null && transactionResource != null),
       _issueRepository = issueRepository,
       _openTransactionsBloc = openTransactionsBloc,
-      _transactionResource = transactionResource,
       super(IssueFormState.initial(transactionResource: transactionResource));
 
   @override

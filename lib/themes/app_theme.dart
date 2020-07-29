@@ -14,8 +14,6 @@ import 'package:heist/repositories/transaction_repository.dart';
 import 'package:heist/resources/constants.dart';
 import 'package:heist/screens/boot.dart';
 
-import 'default_theme.dart';
-
 class AppTheme extends StatelessWidget {
   final TransactionRepository _transactionRepository = TransactionRepository();
   final LocationRepository _locationRepository = LocationRepository();
@@ -47,7 +45,7 @@ class AppTheme extends StatelessWidget {
         )
       ],
       child: Theme(
-        data: defaultTheme,
+        data: _createTheme(context: context),
         child: PlatformProvider(builder: (context) {
           return MaterialApp(
             title: Constants.appName,

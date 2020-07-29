@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:heist/screens/onboard_screen/bloc/onboard_bloc.dart';
-import 'package:heist/screens/onboard_screen/widgets/onboard_body.dart';
+
+import 'bloc/onboard_bloc.dart';
+import 'widgets/onboard_body.dart';
 
 class OnboardScreen extends StatelessWidget {
   final bool _customerOnboarded;

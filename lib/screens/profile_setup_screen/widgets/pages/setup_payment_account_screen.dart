@@ -4,7 +4,6 @@ import 'package:heist/blocs/authentication/authentication_bloc.dart';
 import 'package:heist/models/customer/customer.dart';
 import 'package:heist/models/customer/status.dart';
 import 'package:heist/resources/constants.dart';
-import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
 import 'package:heist/screens/profile_setup_screen/bloc/profile_setup_screen_bloc.dart';
 import 'package:heist/themes/global_colors.dart';

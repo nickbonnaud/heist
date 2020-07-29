@@ -1,13 +1,12 @@
 import 'dart:ui';
 
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'bloc/logo_buttons_list_bloc.dart';
 import 'widgets/active_locations_list.dart';
 import 'widgets/nearby_businesses_list.dart';
 import 'widgets/open_transactions_list.dart';
-import 'bloc/logo_buttons_list_bloc.dart';
 import 'widgets/shared_list_items/shared_sizes.dart';
 
 class LogoButtonsList extends StatelessWidget {

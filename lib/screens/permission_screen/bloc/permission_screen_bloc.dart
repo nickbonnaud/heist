@@ -20,10 +20,6 @@ const String NEXT_KEY = 'next';
 const String INCOMPLETE_KEY = 'incomplete';
 
 class PermissionScreenBloc extends Bloc<PermissionScreenEvent, PermissionScreenState> {
-  final bool _isBluetoothEnabled;
-  final bool _isLocationEnabled;
-  final bool _isNotificationEnabled;
-  final bool _isBeaconEnabled;
 
   PermissionScreenBloc({
     @required bool isBluetoothEnabled,
@@ -32,10 +28,6 @@ class PermissionScreenBloc extends Bloc<PermissionScreenEvent, PermissionScreenS
     @required bool isBeaconEnabled
   })
     : assert(isBluetoothEnabled != null && isLocationEnabled != null && isNotificationEnabled != null && isBeaconEnabled != null),
-      _isBluetoothEnabled = isBluetoothEnabled,
-      _isLocationEnabled = isLocationEnabled,
-      _isNotificationEnabled = isNotificationEnabled,
-      _isBeaconEnabled = isBeaconEnabled,
       super(_setInitialState(
         bluetoothEnabled: isBluetoothEnabled,
         locationEnabled: isLocationEnabled,

@@ -4,14 +4,13 @@ import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:heist/blocs/authentication/authentication_bloc.dart';
 import 'package:heist/blocs/boot/boot_bloc.dart';
 import 'package:heist/blocs/open_transactions/open_transactions_bloc.dart';
-import 'package:heist/repositories/customer_repository.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/screens/app.dart';
-import 'package:heist/screens/login_screen/login_screen.dart';
 import 'package:heist/screens/splash_screen.dart';
 
+import 'auth_screen/auth_screen.dart';
+
 class Boot extends StatelessWidget {
-  final CustomerRepository _customerRepository = CustomerRepository();
   
   @override
   Widget build(BuildContext context) {
@@ -21,7 +20,10 @@ class Boot extends StatelessWidget {
         if (!state.authenticated && !state.loading) {
           Future.delayed(
             Duration(milliseconds: 500),
-            () => showPlatformModalSheet(context: context, builder: (_) => LoginScreen(customerRepository: _customerRepository))
+            () => showPlatformModalSheet(
+              context: context, 
+              builder: (_) => AuthScreen()
+            )
           );
         }
 

@@ -148,7 +148,7 @@ class _LoginFormState extends State<LoginForm> {
                           child: Container(
                             alignment: Alignment.center,
                             width: double.infinity,
-                            height: SizeConfig.getHeight(6),
+                            height: SizeConfig.getHeight(7),
                             padding: EdgeInsets.symmetric(vertical: 10,horizontal: 0),
                             decoration: BoxDecoration(
                               border: (_isLoginButtonEnabled(state) || state.isSubmitting)

@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heist/models/business/business.dart';
 import 'package:heist/models/transaction/transaction_resource.dart';
-import 'package:heist/resources/helpers/size_config.dart';
 
 import '../shared_sizes.dart';
 import 'widgets/logo_business_button/bloc/logo_business_button_bloc.dart';

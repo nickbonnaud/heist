@@ -3,15 +3,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:heist/blocs/authentication/authentication_bloc.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
 import 'package:heist/screens/profile_setup_screen/bloc/profile_setup_screen_bloc.dart';
 import 'package:heist/screens/profile_setup_screen/widgets/pages/setup_tip_screen.dart/bloc/setup_tip_screen_bloc.dart';
+import 'package:heist/themes/global_colors.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
 import 'package:vibrate/vibrate.dart';
-import 'package:heist/themes/global_colors.dart';
 
 class SetupTipBody extends StatefulWidget {
   final AnimationController _controller;

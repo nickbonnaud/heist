@@ -67,6 +67,8 @@ class MockResponses {
       return _mockChangeTransactionIssue(options);
     } else if (options.path.contains('transaction-issue/') && options.method.toLowerCase() == 'delete') {
       return _mockDeleteIssue();
+    } else {
+      return null;
     }
   }
 
@@ -184,7 +186,7 @@ class MockResponses {
     //     },
     //     'status': {
     //       'name': 'Profile Account Incomplete',
-    //       'code': '200'
+    //       'code': '100'
     //     }
     //   }
     // };

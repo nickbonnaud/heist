@@ -13,13 +13,11 @@ part 'cancel_issue_form_state.dart';
 class CancelIssueFormBloc extends Bloc<CancelIssueFormEvent, CancelIssueFormState> {
   final TransactionIssueRepository _issueRepository;
   final OpenTransactionsBloc _openTransactionsBloc;
-  final TransactionResource _transactionResource;
 
   CancelIssueFormBloc({@required TransactionIssueRepository issueRepository, @required OpenTransactionsBloc openTransactionsBloc, @required TransactionResource transactionResource})
     : assert(issueRepository != null && openTransactionsBloc != null && transactionResource != null),
       _issueRepository = issueRepository,
       _openTransactionsBloc = openTransactionsBloc,
-      _transactionResource = transactionResource,
       super(CancelIssueFormState.initial(transactionResource: transactionResource));
 
   @override

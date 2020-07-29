@@ -12,7 +12,7 @@ import 'package:heist/screens/profile_setup_screen/profile_setup_screen.dart';
 import 'package:heist/screens/tutorial_screen/tutorial_screen.dart';
 import 'package:heist/themes/global_colors.dart';
 
-class OnboardBody extends StatelessWidget {
+class OnboardBody extends StatefulWidget {
   final bool _customerOnboarded;
   final bool _permissionsReady;
 
@@ -20,6 +20,78 @@ class OnboardBody extends StatelessWidget {
     : assert(customerOnboarded != null && permissionsReady != null),
       _customerOnboarded = customerOnboarded,
       _permissionsReady = permissionsReady;
+
+  @override
+  State<OnboardBody> createState() => _OnboardBodyState();
+}
+
+class _OnboardBodyState extends State<OnboardBody> with SingleTickerProviderStateMixin {
+  AnimationController _animationController;
+  Animation<Offset> _onboardTitleAnimation;
+  Animation<Offset> _profileTitleAnimation;
+  Animation<Offset> _tutorialTitleAnimation;
+  Animation<Offset> _permissionsTitleAnimation;
+  Animation<Offset> _onboardBodyAnimation;
+  Animation<Offset> _buttonAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      vsync: this,
+      duration: Duration(seconds: 3),
+    );
+
+    _onboardTitleAnimation = Tween<Offset>(
+      begin: Offset(0, 50), 
+      end: Offset.zero
+    ).animate(CurvedAnimation(
+      parent: _animationController, 
+      curve: Interval(0.0, 0.90, curve: ElasticOutCurve(0.8))
+    ));
+
+    _profileTitleAnimation = Tween<Offset>(
+      begin: Offset(0, 100),
+      end: Offset.zero
+    ).animate(CurvedAnimation(
+      parent: _animationController, 
+      curve: Interval(.2, 1.0, curve: ElasticOutCurve(0.8))
+    ));
+
+    _tutorialTitleAnimation = Tween<Offset>(
+      begin: Offset(0, 100),
+      end: Offset.zero
+    ).animate(CurvedAnimation(
+      parent: _animationController, 
+      curve: Interval(0.1, 0.99, curve: ElasticOutCurve(0.8))
+    ));
+
+    _permissionsTitleAnimation = Tween<Offset>(
+      begin: Offset(0, 100),
+      end: Offset.zero
+    ).animate(CurvedAnimation(
+      parent: _animationController, 
+      curve: Interval(0.0, 0.8, curve: ElasticOutCurve(0.8))
+    ));
+
+    _onboardBodyAnimation = Tween<Offset>(
+      begin: Offset(50, 0), 
+      end: Offset.zero
+    ).animate(CurvedAnimation(
+      parent: _animationController, 
+      curve: Curves.linear
+    ));
+
+    _buttonAnimation = Tween<Offset>(
+      begin: Offset(-50.0, 0.0), 
+      end: Offset.zero
+    ).animate(CurvedAnimation(
+      parent: _animationController, 
+      curve: Curves.decelerate
+    ));
+    
+    _animationController.forward();
+  }
   
   @override
   Widget build(BuildContext context) {
@@ -31,37 +103,37 @@ class OnboardBody extends StatelessWidget {
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                VeryBoldText1(text: "Account Setup", context: context),
+                AnimatedOpacity(
+                  opacity: _animationController.value, 
+                  duration: Duration(milliseconds: 300),
+                  child: VeryBoldText1(text: "Account Setup", context: context),
+                ),
                 SizedBox(height: SizeConfig.getHeight(5)),
                 Stepper(
                   currentStep: currentStep,
                   steps: [
                     Step(
-                      title: BoldText1(
-                        text: "Onboard", 
-                        context: context, 
-                        color: currentStep == 0 
-                          ? Theme.of(context).colorScheme.textOnLight
-                          : Theme.of(context).colorScheme.textOnLightDisabled
-                      ), 
-                      content: BoldText3(
-                        text: "Let's get Started! Don't worry it's only a few steps.",
-                        context: context,
-                        color: Theme.of(context).colorScheme.textOnLightSubdued
+                      title: _createTitle(title: "Onboard", currentStep: currentStep, animation: _onboardTitleAnimation), 
+                      content: AnimatedBuilder(
+                        animation: _animationController,
+                        builder: (BuildContext context, Widget child) {
+                          return SlideTransition(
+                            position: _onboardBodyAnimation,
+                            child: BoldText3(
+                              text: "Let's get Started! Don't worry it's only a few steps.",
+                              context: context,
+                              color: Theme.of(context).colorScheme.textOnLightSubdued
+                            )
+                          );
+                        }
                       ),
                       isActive: currentStep == 0,
                       state: _setCurrentStepState(currentStep: currentStep, stepIndex: 0)
                     ),
                     Step(
-                      title: BoldText1(
-                        text: "Profile", 
-                        context: context, 
-                        color: currentStep == 1
-                          ? Theme.of(context).colorScheme.textOnLight 
-                          : Theme.of(context).colorScheme.textOnLightDisabled
-                      ), 
+                      title: _createTitle(title: "Profile", currentStep: currentStep, animation: _profileTitleAnimation), 
                       content: BoldText3(
-                        text: _customerOnboarded 
+                        text: widget._customerOnboarded 
                           ? "Go to next step." 
                           : "First let's setup your Profile Account!",
                         context: context, 
@@ -71,13 +143,7 @@ class OnboardBody extends StatelessWidget {
                       state: _setCurrentStepState(currentStep: currentStep, stepIndex: 1)
                     ),
                     Step(
-                      title: BoldText1(
-                        text: "Tutorial",
-                        context: context, 
-                        color: currentStep == 2 
-                          ? Theme.of(context).colorScheme.textOnLight 
-                          : Theme.of(context).colorScheme.textOnLightDisabled
-                      ), 
+                      title: _createTitle(title: "Tutorial", currentStep: currentStep, animation: _tutorialTitleAnimation), 
                       content: BoldText3(
                         text: "Learn how to use ${Constants.appName}!", 
                         context: context, 
@@ -87,15 +153,9 @@ class OnboardBody extends StatelessWidget {
                       state: _setCurrentStepState(currentStep: currentStep, stepIndex: 2)
                     ),
                     Step(
-                      title: BoldText1(
-                        text: "Permissions", 
-                        context: context,
-                        color: currentStep == 3 
-                          ? Theme.of(context).colorScheme.textOnLight
-                          : Theme.of(context).colorScheme.textOnLightDisabled
-                      ), 
+                      title: _createTitle(title: "Permissions", currentStep: currentStep, animation: _permissionsTitleAnimation), 
                       content: BoldText3(
-                        text: _permissionsReady 
+                        text: widget._permissionsReady 
                           ? "Finish"
                           : "Lastly let's configure your permissions!", 
                         context: context, 
@@ -106,10 +166,18 @@ class OnboardBody extends StatelessWidget {
                     ),
                   ],
                   controlsBuilder: (BuildContext context, {VoidCallback onStepContinue,VoidCallback onStepCancel}) {
-                      return FlatButton(
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
-                        onPressed: () => _showOnboardScreen(context, currentStep),
-                        child: BoldText3(text: _buttonText(currentStep), context: context, color: Theme.of(context).colorScheme.secondary),
+                      return AnimatedBuilder(
+                        animation: _animationController, 
+                        builder: (BuildContext context, Widget child) {
+                          return SlideTransition(
+                            position: _buttonAnimation,
+                            child: FlatButton(
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
+                              onPressed: () => _showOnboardScreen(context, currentStep),
+                              child: BoldText3(text: _buttonText(currentStep), context: context, color: Theme.of(context).colorScheme.secondary),
+                            ),
+                          );
+                        }
                       );
                     }
                 )
@@ -120,13 +188,37 @@ class OnboardBody extends StatelessWidget {
       )  
     );
   }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  AnimatedBuilder _createTitle({@required String title, @required int currentStep, @required Animation animation}) {
+    return AnimatedBuilder(
+      animation: _animationController,
+      builder: (BuildContext context, Widget child) {
+        return SlideTransition(
+          position: animation,
+          child: BoldText1(
+            text: title, 
+            context: context, 
+            color: currentStep == 0 
+              ? Theme.of(context).colorScheme.textOnLight
+              : Theme.of(context).colorScheme.textOnLightDisabled
+          )
+        );
+      }
+    );
+  }
   
   StepState _setCurrentStepState({@required int currentStep, @required int stepIndex}) {
-    if (stepIndex == 1 && _customerOnboarded) {
+    if (stepIndex == 1 && widget._customerOnboarded) {
       return StepState.complete;
     }
 
-    if (stepIndex == 3 && _permissionsReady) {
+    if (stepIndex == 3 && widget._permissionsReady) {
       return StepState.complete;
     }
 
@@ -143,7 +235,7 @@ class OnboardBody extends StatelessWidget {
         BlocProvider.of<OnboardBloc>(context).add(OnboardEvent.next);
         break;
       case 1:
-        _customerOnboarded
+        widget._customerOnboarded
           ? BlocProvider.of<OnboardBloc>(context).add(OnboardEvent.next)
           : _showModal(context: context, screen: ProfileSetupScreen());
         break;
@@ -151,7 +243,7 @@ class OnboardBody extends StatelessWidget {
         _showModal(context: context, screen: TutorialScreen());
         break;
       case 3:
-        if (!_permissionsReady) _showModal(context: context, screen: PermissionsScreen(permissionsBloc: BlocProvider.of<PermissionsBloc>(context)), lastScreen: true);
+        if (!widget._permissionsReady) _showModal(context: context, screen: PermissionsScreen(permissionsBloc: BlocProvider.of<PermissionsBloc>(context)), lastScreen: true);
         break;
     }
   }
@@ -163,13 +255,13 @@ class OnboardBody extends StatelessWidget {
         buttonText = "Start";
         break;
       case 1:
-        buttonText = _customerOnboarded ? "Next Step" : "Setup Account";
+        buttonText = widget._customerOnboarded ? "Next Step" : "Setup Account";
         break;
       case 2:
         buttonText = "View Tutorial";
         break;
       case 3:
-        buttonText = _permissionsReady ? "Finish" : "Set Permissions";
+        buttonText = widget._permissionsReady ? "Finish" : "Set Permissions";
         break;
     }
     return buttonText;

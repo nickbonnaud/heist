@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:flutter_typeahead/cupertino_flutter_typeahead.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:heist/global_widgets/cached_avatar.dart';
 import 'package:heist/models/business/business.dart';
 import 'package:heist/repositories/business_repository.dart';
 import 'package:heist/resources/helpers/loading_widget.dart';
@@ -112,9 +113,9 @@ class SearchBusinessNameModal extends StatelessWidget {
       child: Padding(
         padding: EdgeInsets.all(8),
         child: ListTile(
-          leading: CircleAvatar(
-            backgroundImage: NetworkImage(business.photos.logo.smallUrl),
-            radius: SizeConfig.getWidth(8),
+          leading: CachedAvatar(
+            url: business.photos.logo.smallUrl, 
+            radius: 8
           ),
           title: BoldText4(text: business.profile.name, context: context),
         ),
