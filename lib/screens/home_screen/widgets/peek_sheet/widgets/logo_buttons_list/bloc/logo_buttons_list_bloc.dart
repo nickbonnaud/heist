@@ -12,34 +12,48 @@ part 'logo_buttons_list_event.dart';
 part 'logo_buttons_list_state.dart';
 
 class LogoButtonsListBloc extends Bloc<LogoButtonsListEvent, LogoButtonsListState> {
-  StreamSubscription _openTransactionsSubscription;
-  StreamSubscription _activeLocationSubscription;
-  StreamSubscription _nearbyBusinessesSubscription;
+  final OpenTransactionsBloc openTransactionsBloc;
+  final ActiveLocationBloc activeLocationBloc;
+  final NearbyBusinessesBloc nearbyBusinessesBloc;
+  StreamSubscription openTransactionsSubscription;
+  StreamSubscription activeLocationSubscription;
+  StreamSubscription nearbyBusinessesSubscription;
 
   
   LogoButtonsListBloc({
-    @required OpenTransactionsBloc openTransactionsBloc, 
-    @required ActiveLocationBloc activeLocationBloc, 
-    @required NearbyBusinessesBloc nearbByusinessesBloc,
+    @required this.openTransactionsBloc, 
+    @required this.activeLocationBloc, 
+    @required this.nearbyBusinessesBloc,
     @required int numberOpenTransactions,
     @required int numberActiveLocations,
     @required int numberNearbyLocations
-  })
-    : assert(openTransactionsBloc != null 
-        && activeLocationBloc != null 
-        && nearbByusinessesBloc != null
-        && numberOpenTransactions != null
-        && numberActiveLocations != null
-        && numberNearbyLocations != null
-      ),
-      _openTransactionsSubscription = openTransactionsBloc.listen(_updateNumberOpenTransactions),
-      _activeLocationSubscription = activeLocationBloc.listen(_updatenumberActiveLocations),
-      _nearbyBusinessesSubscription = nearbByusinessesBloc.listen(_updatenumberNearbyBusinesses),
-      super(LogoButtonsListState.initial(
-        numberOpenTransactions: numberOpenTransactions,
-        numberActiveLocations: numberActiveLocations,
-        numberNearbyLocations: numberNearbyLocations
-      ));
+  }) : super(LogoButtonsListState.initial(
+      numberOpenTransactions: numberOpenTransactions,
+      numberActiveLocations: numberActiveLocations,
+      numberNearbyLocations: numberNearbyLocations
+    )) {
+      openTransactionsSubscription = openTransactionsBloc.listen((OpenTransactionsState state) {
+        if (state is OpenTransactionsLoaded) {
+          add(NumberOpenTransactionsChanged(numberOpenTransactions: state.openTransactions.length));
+        }
+      });
+
+      activeLocationSubscription = activeLocationBloc.listen((ActiveLocationState state) {
+        if (state is CurrentActiveLocations) {
+          add(NumberActiveLocationsChanged(numberActiveLocations: state.activeLocations.length));
+        } else {
+          add(NumberActiveLocationsChanged(numberActiveLocations: 0));
+        }
+      });
+
+      nearbyBusinessesSubscription = nearbyBusinessesBloc.listen((NearbyBusinessesState state) {
+        if (state is NearbyBusinessLoaded) {
+          add(NumberNearbyBusinessesChanged(numberNearbyBusinesses: state.businesses.length));
+        } else {
+          add(NumberNearbyBusinessesChanged(numberNearbyBusinesses: 0));
+        }
+      });
+  }
 
   @override
   Stream<LogoButtonsListState> mapEventToState(LogoButtonsListEvent event) async* {
@@ -52,33 +66,11 @@ class LogoButtonsListBloc extends Bloc<LogoButtonsListEvent, LogoButtonsListStat
     }
   }
 
-  static void _updateNumberOpenTransactions(OpenTransactionsState state) {
-    if (state is OpenTransactionsLoaded) {
-      NumberOpenTransactionsChanged(numberOpenTransactions: state.openTransactions.length);
-    }
-  }
-
-  static void _updatenumberActiveLocations(ActiveLocationState state) {
-    if (state is CurrentActiveLocations) {
-      NumberActiveLocationsChanged(numberActiveLocations: state.activeLocations.length);
-    } else {
-      NumberActiveLocationsChanged(numberActiveLocations: 0);
-    }
-  }
-
-  static void _updatenumberNearbyBusinesses(NearbyBusinessesState state) {
-    if (state is NearbyBusinessLoaded) {
-      NumberNearbyBusinessesChanged(numberNearbyBusinesses: state.businesses.length);
-    } else {
-      NumberNearbyBusinessesChanged(numberNearbyBusinesses: 0);
-    }
-  }
-
   @override
   Future<void> close() {
-    _openTransactionsSubscription.cancel();
-    _activeLocationSubscription.cancel();
-    _nearbyBusinessesSubscription.cancel();
+    openTransactionsSubscription.cancel();
+    activeLocationSubscription.cancel();
+    nearbyBusinessesSubscription.cancel();
     return super.close();
   }
 }

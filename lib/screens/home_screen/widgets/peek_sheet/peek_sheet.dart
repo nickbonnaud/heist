@@ -74,7 +74,7 @@ class _PeekSheetState extends State<PeekSheet> with SingleTickerProviderStateMix
               create: (_) => LogoButtonsListBloc(
                 openTransactionsBloc: BlocProvider.of<OpenTransactionsBloc>(context),
                 activeLocationBloc: BlocProvider.of<ActiveLocationBloc>(context),
-                nearbByusinessesBloc: BlocProvider.of<NearbyBusinessesBloc>(context),
+                nearbyBusinessesBloc: BlocProvider.of<NearbyBusinessesBloc>(context),
                 numberOpenTransactions: BlocProvider.of<OpenTransactionsBloc>(context).openTransactions.length,
                 numberActiveLocations: BlocProvider.of<ActiveLocationBloc>(context).locations.length,
                 numberNearbyLocations: BlocProvider.of<NearbyBusinessesBloc>(context).businesses.length

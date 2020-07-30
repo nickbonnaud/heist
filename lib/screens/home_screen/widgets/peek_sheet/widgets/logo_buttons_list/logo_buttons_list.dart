@@ -24,6 +24,7 @@ class LogoButtonsList extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<LogoButtonsListBloc, LogoButtonsListState>(
       builder: (context, state) {
+        print(state);
         return SingleChildScrollView(
           scrollDirection: _controller.status == AnimationStatus.completed
             ? Axis.vertical

@@ -9,6 +9,8 @@ abstract class ActiveLocationState extends Equatable {
   List<ActiveLocation> get locations => [];
 }
 
+
+
 class NoActiveLocations extends ActiveLocationState {
   final bool addActiveLocationFail;
   final bool removeActiveLocationFail;

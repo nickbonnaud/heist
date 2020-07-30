@@ -49,8 +49,12 @@ class OpenTransactionsBloc extends Bloc<OpenTransactionsEvent, OpenTransactionsS
   Stream<OpenTransactionsState> _mapAddOpenTransactionToState(AddOpenTransaction event) async* {
     final currentState = state;
     if (currentState is OpenTransactionsLoaded) {
-      if (currentState.transactions.indexWhere((transaction) => transaction.transaction.identifier == event.transaction.transaction.identifier) < 0) {
-        yield OpenTransactionsLoaded(transactions: currentState.transactions + [event.transaction].toList());
+      if (!currentState.transactions.contains(event.transaction)) {
+        final updatedTransactions = currentState
+          .transactions
+          .toList()
+          ..add(event.transaction);
+        yield OpenTransactionsLoaded(transactions: updatedTransactions);
       }
     }
   }

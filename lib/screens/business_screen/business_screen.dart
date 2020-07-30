@@ -25,12 +25,16 @@ class BusinessScreen extends StatefulWidget {
 }
 
 class _BusinessScreenState extends State<BusinessScreen> with SingleTickerProviderStateMixin {
-  static const String DISMISSIBLE_KEY = "business_dismissible";
+  final key = GlobalKey<_BusinessScreenState>();
 
   @override
   Widget build(BuildContext context) {
     return Dismissible(
-      key: Key(DISMISSIBLE_KEY),
+      resizeDuration: null,
+      dismissThresholds: {
+        DismissDirection.down: 0.25
+      },
+      key: key,
       direction: DismissDirection.down,
       onDismissed: (_) => Navigator.of(context).pop(),
       child: Scaffold(
