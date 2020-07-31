@@ -15,9 +15,9 @@ class ActiveLocationBloc extends Bloc<ActiveLocationEvent, ActiveLocationState> 
   ActiveLocationBloc({@required ActiveLocationRepository activeLocationRepository})
     : assert(activeLocationRepository != null),
       _activeLocationRepository = activeLocationRepository,
-      super(NoActiveLocations());
+      super(ActiveLocationState.initial());
 
-  List<ActiveLocation> get locations => state.locations;
+  List<ActiveLocation> get locations => state.activeLocations;
 
   @override
   Stream<ActiveLocationState> mapEventToState(ActiveLocationEvent event) async* {
@@ -31,67 +31,68 @@ class ActiveLocationBloc extends Bloc<ActiveLocationEvent, ActiveLocationState> 
   }
 
   Stream<ActiveLocationState> _mapNewActiveLocationToState(NewActiveLocation event) async* {
-    final currentState = state;
-    if (currentState is CurrentActiveLocations) {
-      if (currentState.activeLocations.indexWhere((activeLocation) => activeLocation.beaconIdentifier == event.beaconIdentifier) < 0) {
-        try {
-          ActiveLocation activeLocation = await _activeLocationRepository.enterBusiness(beaconIdentifier: event.beaconIdentifier);
-          final updatedActiveLocations = currentState
-            .activeLocations
-            .toList()
-            ..add(activeLocation);
-          yield currentState.update(activeLocations: updatedActiveLocations);
-        } catch (e) {
-          yield currentState.update(addActiveLocationFail: true);
-        }
-      }
-    } else if (currentState is NoActiveLocations) {
+    if (state.activeLocations.indexWhere((activeLocation) => activeLocation.beaconIdentifier == event.beaconIdentifier) < 0) {
       try {
         ActiveLocation activeLocation = await _activeLocationRepository.enterBusiness(beaconIdentifier: event.beaconIdentifier);
-        final updatedActiveLocations = []
+        final updatedActiveLocations = state
+          .activeLocations
           .toList()
           ..add(activeLocation);
-        yield CurrentActiveLocations(activeLocations: updatedActiveLocations);
+        yield state.update(activeLocations: updatedActiveLocations);
       } catch (e) {
-        yield currentState.update(addActiveLocationFail: true);
+        yield state.update(locationFailedToAdd: true);
       }
     }
   }
 
   Stream<ActiveLocationState> _mapRemoveActiveLocationToState(RemoveActiveLocation event) async* {
-    final currentState = state;
-    if (currentState is CurrentActiveLocations) {
-      try {
-        final locationToRemove = currentState.activeLocations
-          .firstWhere((ActiveLocation location) => location.beaconIdentifier == event.beaconIdentifier, 
-          orElse: null);
-        if (locationToRemove != null) {
+    final locationToRemove = state.activeLocations
+      .firstWhere(
+        (ActiveLocation location) => location.beaconIdentifier == event.beaconIdentifier, 
+        orElse: null
+      );
+      if (locationToRemove != null) {
+        try {
           bool didRemove = await _activeLocationRepository.exitBusiness(activeLocationId: locationToRemove.identifier);
           if (didRemove) {
-            final updatedActiveLocations = currentState
+            final updatedActiveLocations = state
               .activeLocations
               .where((activeLocation) => activeLocation.beaconIdentifier != event.beaconIdentifier)
               .toList();
             
-            yield updatedActiveLocations.length == 0
-              ? NoActiveLocations()
-              : currentState.update(activeLocations: updatedActiveLocations);
-          } else {
-            yield currentState.update(removeActiveLocationFail: true);
-          }
-        }
-      } catch (e) {
-        yield currentState.update(removeActiveLocationFail: true);
+            yield state.update(activeLocations: updatedActiveLocations);
+          } else {}
+        } catch (e) {}
       }
-    }
+    
+    // final currentState = state;
+    // if (currentState is CurrentActiveLocations) {
+    //   try {
+    //     final locationToRemove = currentState.activeLocations
+    //       .firstWhere((ActiveLocation location) => location.beaconIdentifier == event.beaconIdentifier, 
+    //       orElse: null);
+    //     if (locationToRemove != null) {
+    //       bool didRemove = await _activeLocationRepository.exitBusiness(activeLocationId: locationToRemove.identifier);
+    //       if (didRemove) {
+    //         final updatedActiveLocations = currentState
+    //           .activeLocations
+    //           .where((activeLocation) => activeLocation.beaconIdentifier != event.beaconIdentifier)
+    //           .toList();
+            
+    //         yield updatedActiveLocations.length == 0
+    //           ? NoActiveLocations()
+    //           : currentState.update(activeLocations: updatedActiveLocations);
+    //       } else {
+    //         yield currentState.update(removeActiveLocationFail: true);
+    //       }
+    //     }
+    //   } catch (e) {
+    //     yield currentState.update(removeActiveLocationFail: true);
+    //   }
+    // }
   }
 
   Stream<ActiveLocationState> _mapResetToState() async* {
-    final currentState = state;
-    if (currentState is CurrentActiveLocations) {
-      yield currentState.update(addActiveLocationFail: false, removeActiveLocationFail: false);
-    } else if (currentState is NoActiveLocations) {
-      yield currentState.update(addActiveLocationFail: false, removeActiveLocationFail: false);
-    }
+    state.update(locationFailedToAdd: false);
   }
 }

@@ -11,19 +11,22 @@ import 'shared_sizes.dart';
 import '../../bloc/logo_buttons_list_bloc.dart';
 
 class LogoDivider extends StatelessWidget {
-  final int _index;
+  final int _numberPreviousWidgets;
   final AnimationController _controller;
   final double _topMargin;
+  final bool _isActiveLocationDivider;
 
   LogoDivider({
-    @required int index, 
+    @required int numberPreviousWidgets, 
     @required AnimationController controller,
     @required double topMargin,
+    @required bool isActiveLocationDivider
   })
-    : assert(index != null && controller != null && topMargin != null),
-      _index = index,
+    : assert(numberPreviousWidgets != null && controller != null && topMargin != null && isActiveLocationDivider != null),
+      _numberPreviousWidgets = numberPreviousWidgets,
       _controller = controller,
-      _topMargin = topMargin;
+      _topMargin = topMargin,
+      _isActiveLocationDivider = isActiveLocationDivider;
 
   final double _horizontalDividerSize = SizeConfig.getWidth(50);
   final SharedSizes sharedSizes = SharedSizes();
@@ -39,8 +42,8 @@ class LogoDivider extends StatelessWidget {
       width: _controller.status != AnimationStatus.completed 
         ? _dividerWidth
         : MediaQuery.of(context).size.width - 16,
-      top: _marginTop(index: _index),
-      left: _marginLeft(index: _index),
+      top: _marginTop(index: _numberPreviousWidgets),
+      left: _marginLeft(index: _numberPreviousWidgets),
       child: _controller.status != AnimationStatus.completed
         ? Transform.rotate(
             angle: math.pi / 2 * _controller.value + math.pi/2,
@@ -52,7 +55,7 @@ class LogoDivider extends StatelessWidget {
         : BlocBuilder<LogoButtonsListBloc, LogoButtonsListState>(
             builder: (contexy, state) {
               return PlatformText(
-                state.numberActiveLocations > 0
+                _isActiveLocationDivider
                   ? "Active Locations"
                   : "Nearby Businesses",
                 style: TextStyle(
@@ -66,7 +69,7 @@ class LogoDivider extends StatelessWidget {
           )
     );
   }
-
+  
   double _marginTop({@required int index}) {
     return lerp(
       min: sharedSizes.startMarginTop,
@@ -76,7 +79,7 @@ class LogoDivider extends StatelessWidget {
 
   double _marginLeft({@required int index}) {
     return lerp(
-      min: index * ((sharedSizes.horizontalSpacing + sharedSizes.startSize)),
+      min: (index) * ((sharedSizes.horizontalSpacing + sharedSizes.startSize)),
       max: 8
     );
   }

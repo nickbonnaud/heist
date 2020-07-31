@@ -18,7 +18,6 @@ class MessageReceivedHandler {
     if (notification.type != NotificationType.enter) {
       TransactionResource transactionResource = await _getTransaction(context: context, notification: notification);
       transactionResource = await _updateStatus(context: context, transactionResource: transactionResource, notification: notification);
-      
       if (notification.type == NotificationType.auto_paid) {
         BlocProvider.of<OpenTransactionsBloc>(context).add(RemoveOpenTransaction(transaction: transactionResource));
       } else {

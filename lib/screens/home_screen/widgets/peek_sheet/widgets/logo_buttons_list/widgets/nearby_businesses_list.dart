@@ -12,6 +12,7 @@ import 'shared_list_items/shared_sizes.dart';
 
 class NearbyBusinessesList extends StatelessWidget {
   final int _numberOpenTransactions;
+  final int _numberActiveLocations;
   final AnimationController _controller;
   final double _topMargin;
 
@@ -20,9 +21,15 @@ class NearbyBusinessesList extends StatelessWidget {
   double get _size => lerp(min: sharedSizes.startSize, max: sharedSizes.endSize);
   double get _borderRadius => lerp(min: sharedSizes.startSize, max: sharedSizes.endSize);
 
-  NearbyBusinessesList({@required int numberOpenTransactions, @required AnimationController controller, @required double topMargin})
-    : assert(numberOpenTransactions != null && controller != null && topMargin != null),
+  NearbyBusinessesList({
+    @required int numberOpenTransactions,
+    @required int numberActiveLocations,
+    @required AnimationController controller,
+    @required double topMargin
+  })
+    : assert(numberOpenTransactions != null && numberActiveLocations != null && controller != null && topMargin != null),
       _numberOpenTransactions = numberOpenTransactions,
+      _numberActiveLocations = numberActiveLocations,
       _controller = controller,
       _topMargin = topMargin;
 
@@ -35,9 +42,14 @@ class NearbyBusinessesList extends StatelessWidget {
           return Stack(
             children: <Widget>[
               if (_showDivider())
-                LogoDivider(index: _numberOpenTransactions, controller: _controller, topMargin: _topMargin),
-              for (Business business in currentState.businesses) _buildDetails(business: business, state: currentState),
-              for (Business business in currentState.businesses) _buildLogoButton(business: business, state: currentState),
+                LogoDivider(
+                  numberPreviousWidgets: _numberOpenTransactions + _numberActiveLocations + (_numberOpenTransactions > 0 && _numberActiveLocations > 0 ? 1 : 0), 
+                  controller: _controller, 
+                  topMargin: _topMargin, 
+                  isActiveLocationDivider: false
+                ),
+              for (Business business in currentState.businesses.take(_numberNearbyToShow())) _buildDetails(business: business, state: currentState),
+              for (Business business in currentState.businesses.take(_numberNearbyToShow())) _buildLogoButton(business: business, state: currentState),
             ],
           );
         }
@@ -45,9 +57,33 @@ class NearbyBusinessesList extends StatelessWidget {
       },
     );
   }
+  
+  
+  int _setIndex({@required NearbyBusinessLoaded state, @required Business business}) {
+    return _setPreviousIndex() + state.businesses.indexOf(business);
+  }
 
+  int _setPreviousIndex() {
+    return _numberOpenTransactions + _numberActiveLocations + _numberOfDividers();
+  }
+  
+  int _numberOfDividers() {
+    if (_numberOpenTransactions > 0 && _numberActiveLocations > 0) {
+      return 2;
+    } else if (_numberOpenTransactions > 0 || _numberActiveLocations > 0) {
+      return 1;
+    } else {
+      return 0;
+    }
+  }
+  
+  int _numberNearbyToShow() {
+    final int numberSlotsLeft = 6 - (_numberOpenTransactions + _numberActiveLocations);
+    return numberSlotsLeft <= 0 ? 3 : numberSlotsLeft;
+  }
+  
   Widget _buildLogoButton({@required Business business, @required NearbyBusinessLoaded state}) {
-    int index = _numberOpenTransactions + state.businesses.indexOf(business);
+    int index = _setIndex(state: state, business: business);
     return LogoButton(
       controller: _controller, 
       topMargin: _logoMarginTop(index: index),
@@ -60,7 +96,7 @@ class NearbyBusinessesList extends StatelessWidget {
   }
 
   Widget _buildDetails({@required Business business, @required NearbyBusinessLoaded state}) {
-    int index = _numberOpenTransactions + state.businesses.indexOf(business);
+    int index = _setIndex(state: state, business: business);
     return BusinessLogoDetails(
       topMargin: _logoMarginTop(index: index), 
       leftMargin: _logoLeftMargin(index: index), 
@@ -72,19 +108,19 @@ class NearbyBusinessesList extends StatelessWidget {
   }
 
   bool _showDivider() {
-    return _numberOpenTransactions > 0;
+    return _numberOpenTransactions > 0 || _numberActiveLocations > 0;
   }
 
   double _logoMarginTop({@required int index}) {
     return lerp(
       min: sharedSizes.startMarginTop,
-      max: sharedSizes.endMarginTop + ((index + (_showDivider() ? 1 : 0)) * (sharedSizes.verticalSpacing + sharedSizes.endSize))
+      max: sharedSizes.endMarginTop + (index * (sharedSizes.verticalSpacing + sharedSizes.endSize))
     ) + _topMargin;
   }
 
   double _logoLeftMargin({@required int index}) {
     return lerp(
-      min: index == 0 ? 8 : (index + (_showDivider() ? 1 : 0)) * ((sharedSizes.horizontalSpacing + sharedSizes.startSize)),
+      min: index == 0 ? 8 : index * ((sharedSizes.horizontalSpacing + sharedSizes.startSize)),
       max: 8
     );
   }

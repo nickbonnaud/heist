@@ -11,8 +11,6 @@ abstract class NearbyBusinessesState extends Equatable {
 
 class NearbyUninitialized extends NearbyBusinessesState {}
 
-class NoNearby extends NearbyBusinessesState {}
-
 class NearbyBusinessLoaded extends NearbyBusinessesState {
   final List<Business> businesses;
   final List<PreMarker> preMarkers;

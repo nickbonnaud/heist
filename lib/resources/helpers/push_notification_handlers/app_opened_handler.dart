@@ -48,7 +48,8 @@ class AppOpenedHandler {
     );
 
     if (business == null) {
-      business =  await _businessRepository.fetchByIdentifier(identifier: notification.businessIdentifier);
+      List<Business> businesses = await _businessRepository.fetchByIdentifier(identifier: notification.businessIdentifier);
+      business = businesses.first;
     }
 
     if (BlocProvider.of<ReceiptModalSheetBloc>(context).isVisible) Navigator.of(context).pop();

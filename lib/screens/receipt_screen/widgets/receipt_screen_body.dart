@@ -214,7 +214,7 @@ class ReceiptScreenBody extends StatelessWidget {
     if (statusCode == 105) {
       return BlocBuilder<ActiveLocationBloc, ActiveLocationState>(
         builder: (context, state) {
-          int index = state.locations.indexWhere((ActiveLocation activeLocation) {
+          int index = state.activeLocations.indexWhere((ActiveLocation activeLocation) {
             return activeLocation.transactionIdentifier == transactionResource.transaction.identifier;
           });
 

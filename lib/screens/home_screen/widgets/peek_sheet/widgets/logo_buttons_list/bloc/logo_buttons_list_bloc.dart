@@ -32,23 +32,21 @@ class LogoButtonsListBloc extends Bloc<LogoButtonsListEvent, LogoButtonsListStat
       numberActiveLocations: numberActiveLocations,
       numberNearbyLocations: numberNearbyLocations
     )) {
-      openTransactionsSubscription = openTransactionsBloc.listen((OpenTransactionsState state) {
-        if (state is OpenTransactionsLoaded) {
-          add(NumberOpenTransactionsChanged(numberOpenTransactions: state.openTransactions.length));
+      openTransactionsSubscription = openTransactionsBloc.listen((OpenTransactionsState openTransactionsState) {
+        if (openTransactionsState is OpenTransactionsLoaded) {
+          add(NumberOpenTransactionsChanged(numberOpenTransactions: openTransactionsState.openTransactions.length));
         }
       });
 
-      activeLocationSubscription = activeLocationBloc.listen((ActiveLocationState state) {
-        if (state is CurrentActiveLocations) {
-          add(NumberActiveLocationsChanged(numberActiveLocations: state.activeLocations.length));
-        } else {
-          add(NumberActiveLocationsChanged(numberActiveLocations: 0));
+      activeLocationSubscription = activeLocationBloc.listen((ActiveLocationState activeLocationState) {
+        if (numberActiveLocations != activeLocationState.activeLocations.length) {
+          add(NumberActiveLocationsChanged(numberActiveLocations: activeLocationState.activeLocations.length));
         }
       });
 
-      nearbyBusinessesSubscription = nearbyBusinessesBloc.listen((NearbyBusinessesState state) {
-        if (state is NearbyBusinessLoaded) {
-          add(NumberNearbyBusinessesChanged(numberNearbyBusinesses: state.businesses.length));
+      nearbyBusinessesSubscription = nearbyBusinessesBloc.listen((NearbyBusinessesState nearbyBusinessesState) {
+        if (nearbyBusinessesState is NearbyBusinessLoaded) {
+          add(NumberNearbyBusinessesChanged(numberNearbyBusinesses: nearbyBusinessesState.businesses.length));
         } else {
           add(NumberNearbyBusinessesChanged(numberNearbyBusinesses: 0));
         }

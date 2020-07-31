@@ -66,6 +66,11 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
               ),
             );
           } else if (state is NearbyBusinessLoaded) {
+            
+            if (state.businesses.length == 0) {
+              return NoNearbyLocations();
+            }
+             
             return Scaffold(
               body: Stack(
                 children: <Widget>[
@@ -113,8 +118,6 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
                 onPressed: () => _changeLocation(context),
               ),
             );
-          } else if (state is NoNearby) {
-            return NoNearbyLocations();
           } else {
             return FetchMarkersFail(latitude: widget._latitude, longitude: widget._longitude);
           }

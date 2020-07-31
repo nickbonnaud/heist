@@ -24,7 +24,6 @@ class LogoButtonsList extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<LogoButtonsListBloc, LogoButtonsListState>(
       builder: (context, state) {
-        print(state);
         return SingleChildScrollView(
           scrollDirection: _controller.status == AnimationStatus.completed
             ? Axis.vertical
@@ -36,11 +35,10 @@ class LogoButtonsList extends StatelessWidget {
               children: <Widget>[
                 if (state.numberOpenTransactions > 0)
                   OpenTransactionsList(controller: _controller, topMargin: _topMargin),
-                state.numberActiveLocations > 0
-                  ? ActiveLocationsList(controller: _controller, topMargin: _topMargin, numberOpenTransactions: state.numberOpenTransactions)
-                  : state.numberNearbyLocations  > 0
-                    ? NearbyBusinessesList(controller: _controller, topMargin: _topMargin, numberOpenTransactions: state.numberOpenTransactions)
-                    : Container()
+                if (state.numberActiveLocations > 0)
+                  ActiveLocationsList(controller: _controller, topMargin: _topMargin, numberOpenTransactions: state.numberOpenTransactions),
+                if (state.numberNearbyLocations  > 0)
+                  NearbyBusinessesList(controller: _controller, topMargin: _topMargin, numberOpenTransactions: state.numberOpenTransactions, numberActiveLocations: state.numberActiveLocations,)
               ],
             ),
           ),
@@ -50,15 +48,13 @@ class LogoButtonsList extends StatelessWidget {
   }
 
   double _getContainerHeight({@required LogoButtonsListState state}) {
-    int logosLength = state.numberOpenTransactions;
-    logosLength += state.numberActiveLocations > 0 ? state.numberActiveLocations : state.numberNearbyLocations;
-    return sharedSizes.endMarginTop + ((logosLength + (state.numberOpenTransactions > 0 ? 1 : 0)) * (sharedSizes.verticalSpacing + sharedSizes.endSize)) + (_topMargin * 2.5);
+    int logosLength = state.numberOpenTransactions + state.numberActiveLocations + state.numberNearbyLocations;
+    return sharedSizes.endMarginTop + ((logosLength + (state.numberOpenTransactions > 0 ? 1 : 0) + (state.numberActiveLocations > 0 ? 1 : 0)) * (sharedSizes.verticalSpacing + sharedSizes.endSize)) + (_topMargin * 2.5);
   }
 
   double _getContainerWidth({@required LogoButtonsListState state}) {
-    int logosLength = state.numberOpenTransactions;
-    logosLength += state.numberActiveLocations > 0 ? state.numberActiveLocations : state.numberNearbyLocations;
-    return (logosLength + (state.numberOpenTransactions > 0 ? 1 : 0)) * ((1.1 * sharedSizes.horizontalSpacing + sharedSizes.startSize));
+    int logosLength = state.numberOpenTransactions + state.numberActiveLocations + state.numberNearbyLocations;
+    return (logosLength + (state.numberOpenTransactions > 0 ? 1 : 0) + (state.numberActiveLocations > 0 ? 1 : 0)) * ((1.1 * sharedSizes.horizontalSpacing + sharedSizes.startSize));
   }
 
   double lerp({@required double min, @required double max}) {

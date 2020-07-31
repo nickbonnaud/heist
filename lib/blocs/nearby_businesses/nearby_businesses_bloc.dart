@@ -34,14 +34,18 @@ class NearbyBusinessesBloc extends Bloc<NearbyBusinessesEvent, NearbyBusinessesS
 
   Stream<NearbyBusinessesState> _mapFetchNearbyToState(FetchNearby event) async* {
     try {
-      bool isInitial = state is NearbyUninitialized;
-      final List<Business> businesses = await _locationRepository.sendLocation(lat: event.lat, lng: event.lng, startLocation: isInitial);
-      if (businesses.length == 0) {
-        yield NoNearby();
-      } else {
-        List<PreMarker> preMarkers = await _createPreMarkers(businesses);
-        yield NearbyBusinessLoaded(businesses: businesses, preMarkers: preMarkers);
-      }
+      final List<Business> businesses = await _locationRepository.sendLocation(
+        lat: event.lat,
+        lng: event.lng,
+        startLocation: state is NearbyUninitialized
+      );
+      
+      
+      List<PreMarker> preMarkers = businesses.length > 0
+        ? await _createPreMarkers(businesses)
+        : null;
+      
+      yield NearbyBusinessLoaded(businesses: businesses, preMarkers: preMarkers);
       _bootBloc.add(DataLoaded(type: DataType.businesses));
     } catch (e) {
       yield FailedToLoadNearby();

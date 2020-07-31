@@ -32,14 +32,18 @@ class ActiveLocationsList extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ActiveLocationBloc, ActiveLocationState>(
       builder: (context, state) {
-        final currentState = state;
-        if (currentState is CurrentActiveLocations) {
+        if (state.activeLocations.length > 0) {
           return Stack(
             children: <Widget>[
               if (_showDivider())
-                LogoDivider(index: _numberOpenTransactions, controller: _controller, topMargin: _topMargin),
-              for (ActiveLocation activeLocation in currentState.activeLocations) _buildDetails(context: context, activeLocation: activeLocation, state: currentState),
-              for (ActiveLocation activeLocation in currentState.activeLocations) _buildLogoButton(context: context, activeLocation: activeLocation, state: currentState),
+                LogoDivider(
+                  numberPreviousWidgets: _numberOpenTransactions,
+                  controller: _controller,
+                  topMargin: _topMargin, 
+                  isActiveLocationDivider: true
+                ),
+              for (ActiveLocation activeLocation in state.activeLocations) _buildDetails(context: context, activeLocation: activeLocation, state: state),
+              for (ActiveLocation activeLocation in state.activeLocations) _buildLogoButton(context: context, activeLocation: activeLocation, state: state),
             ],
           );
         }
@@ -48,9 +52,24 @@ class ActiveLocationsList extends StatelessWidget {
     );
   }
 
-  Widget _buildLogoButton({@required BuildContext context, @required ActiveLocation activeLocation, @required CurrentActiveLocations state}) {
-    int index = _numberOpenTransactions + state.activeLocations.indexOf(activeLocation);
+  int _setIndex({@required ActiveLocationState state, @required ActiveLocation activeLocation}) {
+    return _setPreviousIndex() + state.activeLocations.indexOf(activeLocation);
+  }
+
+  int _setPreviousIndex() {
+    return _numberOpenTransactions + _numberOfDividers();
+  }
+
+  int _numberOfDividers() {
+    return _numberOpenTransactions > 0
+      ? 1 : 0;
+  }
+  
+  Widget _buildLogoButton({@required BuildContext context, @required ActiveLocation activeLocation, @required ActiveLocationState state}) {
+    int index = _setIndex(state: state, activeLocation: activeLocation);
     Business business = _getBusiness(context: context, activeLocation: activeLocation, state: state);
+
+    if (business == null) return Container();
 
     return LogoButton(
       controller: _controller, 
@@ -63,9 +82,12 @@ class ActiveLocationsList extends StatelessWidget {
     );
   }
 
-  Widget _buildDetails({@required BuildContext context, @required ActiveLocation activeLocation, @required CurrentActiveLocations state}) {
-    int index = _numberOpenTransactions + state.activeLocations.indexOf(activeLocation);
+  Widget _buildDetails({@required BuildContext context, @required ActiveLocation activeLocation, @required ActiveLocationState state}) {
+    int index = _setIndex(state: state, activeLocation: activeLocation);
     Business business = _getBusiness(context: context, activeLocation: activeLocation, state: state);
+    
+    if (business == null) return Container();
+    
     return BusinessLogoDetails(
       topMargin: _logoMarginTop(index: index), 
       leftMargin: _logoLeftMargin(index: index), 
@@ -75,10 +97,12 @@ class ActiveLocationsList extends StatelessWidget {
       business: business
     );
   }
-
-  Business _getBusiness({@required BuildContext context, @required ActiveLocation activeLocation, @required CurrentActiveLocations state}) {
+  
+  Business _getBusiness({@required BuildContext context, @required ActiveLocation activeLocation, @required ActiveLocationState state}) {
     return BlocProvider.of<NearbyBusinessesBloc>(context).businesses
-      .firstWhere((Business business) => activeLocation.beaconIdentifier == business.location.beacon.identifier);
+      .firstWhere((Business business) => activeLocation.beaconIdentifier == business.location.beacon.identifier,
+      orElse: null
+    );
   }
 
   bool _showDivider() {
@@ -88,13 +112,13 @@ class ActiveLocationsList extends StatelessWidget {
   double _logoMarginTop({@required int index}) {
     return lerp(
       min: sharedSizes.startMarginTop,
-      max: sharedSizes.endMarginTop + ((index + (_showDivider() ? 1 : 0)) * (sharedSizes.verticalSpacing + sharedSizes.endSize))
+      max: sharedSizes.endMarginTop + (index * (sharedSizes.verticalSpacing + sharedSizes.endSize))
     ) + _topMargin;
   }
 
   double _logoLeftMargin({@required int index}) {
     return lerp(
-      min: index == 0 ? 8 : (index + (_showDivider() ? 1 : 0)) * ((sharedSizes.horizontalSpacing + sharedSizes.startSize)),
+      min: index == 0 ? 8 : index * ((sharedSizes.horizontalSpacing + sharedSizes.startSize)),
       max: 8
     );
   }
