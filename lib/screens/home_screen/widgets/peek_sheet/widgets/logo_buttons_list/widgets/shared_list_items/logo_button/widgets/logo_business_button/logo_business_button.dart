@@ -26,6 +26,7 @@ class LogoBusinessButton extends StatelessWidget {
       onTapDown: (_) => _toggleButtonPress(context: context),
       onTapUp: (_) => _toggleButtonPress(context: context),
       onTap: () => _showBusinessSheet(context: context),
+      onTapCancel: () => _toggleButtonPress(context: context),
       child: BlocBuilder<LogoBusinessButtonBloc, LogoBusinessButtonState>(
         builder: (context, state) {
           return Material(

@@ -75,7 +75,7 @@ class OpenTransactionsList extends StatelessWidget {
 
   double _logoLeftMargin({@required int index}) {
     return lerp(
-      min: index == 0 ? 8 : index * ((sharedSizes.horizontalSpacing + sharedSizes.startSize)),
+      min: index == 0 ? 3 : index * ((sharedSizes.horizontalSpacing + sharedSizes.startSize)),
       max: 8
     );
   }

@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -22,26 +24,24 @@ class SideDrawer extends StatefulWidget {
   State<SideDrawer> createState() => _SideDrawerState();
 }
 
-class _SideDrawerState extends State<SideDrawer> with TickerProviderStateMixin {
+class _SideDrawerState extends State<SideDrawer> with SingleTickerProviderStateMixin {
   static const String HERO_KEY = 'MENU_KEY';
+  static const double _minScale = 0.86;
+  static const double _drawerWidth = 0.66;
+  static const double _shadowOffset = 16.0;
+  static const double _borderRadius = 32.0;
   
-  double _minScale = 0.86;
-  double _drawerWidth = 0.66;
-  double _shadowOffset = 16.0;
-  double _borderRadius = 32.0;
-  bool _disableContentTap = true;
-  
-  Animation<double> animation, scaleAnimation;
-  Animation<BorderRadius> radiusAnimation;
-  AnimationController animationController;
+  Animation<double> _animation, _scaleAnimation;
+  Animation<BorderRadius> _radiusAnimation;
+  AnimationController _animationController;
 
   _open(BuildContext context) {
-    animationController.forward();
+    _animationController.forward();
     BlocProvider.of<SideMenuBloc>(context).add(MenuStatusChanged(menuOpen: true));
   }
 
   _close(BuildContext context) {
-    animationController.reverse();
+    _animationController.reverse();
     BlocProvider.of<SideMenuBloc>(context).add(MenuStatusChanged(menuOpen: false));
   }
 
@@ -49,113 +49,115 @@ class _SideDrawerState extends State<SideDrawer> with TickerProviderStateMixin {
     state.menuOpened ? _close(context) : _open(context);
   }
 
-  _finishDrawerAnimation(SideMenuState state) {
-    if (state.isDraggingMenu) {
-      var opened = false;
-      BlocProvider.of<SideMenuBloc>(context).add(DraggingMenu(isDragging: false));
-      if (animationController.value >= 0.4) {
-        animationController.forward();
-        opened = true;
-      } else {
-        animationController.reverse();
-      }
-      BlocProvider.of<SideMenuBloc>(context).add(MenuStatusChanged(menuOpen: opened));
-    }
-  }
-
   @override
   void initState() {
     super.initState();
-    animationController = AnimationController(duration: const Duration(milliseconds: 300), vsync: this);
+    _animationController = AnimationController(duration: const Duration(milliseconds: 300), vsync: this)
+      ..addStatusListener((status) {
+        BlocProvider.of<SideMenuBloc>(context).add(MenuStatusChanged(menuOpen: status == AnimationStatus.completed));
+      });
 
-    animation = Tween<double>(begin: 0.0, end: 1.0).animate(animationController)
+    _animation = Tween<double>(begin: 0.0, end: 1.0).animate(_animationController)
       ..addListener(() {
         setState(() {});
       });
 
-    radiusAnimation = BorderRadiusTween(begin: BorderRadius.circular(0.0), end: BorderRadius.circular(_borderRadius))
-        .animate(CurvedAnimation(parent: animationController, curve: Curves.ease));
+    _radiusAnimation = BorderRadiusTween(begin: BorderRadius.circular(0.0), end: BorderRadius.circular(_borderRadius))
+        .animate(CurvedAnimation(parent: _animationController, curve: Curves.ease));
 
-    scaleAnimation = Tween<double>(begin: 1.0, end: _minScale).animate(animationController);
+    _scaleAnimation = Tween<double>(begin: 1.0, end: _minScale).animate(_animationController);
   }
   
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SideMenuBloc, SideMenuState>(
       builder: (context, state) {
-        return Listener(
-          onPointerDown: (PointerDownEvent event) {
-            if (_disableContentTap) {
-              if (state.menuOpened && event.position.dx / MediaQuery.of(context).size.width >= _drawerWidth) {
-                _close(context);
-              } else {
-                BlocProvider.of<SideMenuBloc>(context).add(DraggingMenu(isDragging: (!state.menuOpened && event.position.dx <= 8.0)));
-              }
-            } else {
-              BlocProvider.of<SideMenuBloc>(context).add(DraggingMenu(isDragging: (state.menuOpened && event.position.dx / MediaQuery.of(context).size.width >= _drawerWidth) || (!state.menuOpened && event.position.dx <= 8.0)));
-            }
-          },
-          onPointerMove: (PointerMoveEvent event) {
-            if (state.isDraggingMenu) {
-              animationController.value = event.position.dx / MediaQuery.of(context).size.width;
-            }
-          },
-          onPointerUp: (PointerUpEvent event) {
-            _finishDrawerAnimation(state);
-          },
-          onPointerCancel: (PointerCancelEvent event) {
-            _finishDrawerAnimation(state);
-          },
-          child: Scaffold(
-            body: Stack(
-              children: <Widget>[
-                Drawer(),
-                Transform.scale(
-                  scale: scaleAnimation.value,
-                  child: Transform.translate(
-                    offset: Offset((MediaQuery.of(context).size.width * _drawerWidth) * animation.value, 0.0),
-                    child: AbsorbPointer(
-                      absorbing: state.menuOpened && _disableContentTap,
-                      child: Stack(
-                        children: <Widget>[
-                          Padding(
-                            padding: EdgeInsets.only(left: animation.value * _shadowOffset),
-                            child: ClipRRect(
-                              borderRadius: radiusAnimation.value,
-                              child: Container(
-                                height: MediaQuery.of(context).size.height,
-                                width: MediaQuery.of(context).size.width,
-                                color: Theme.of(context).colorScheme.background,
-                                child: widget._homeScreen,
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                )
-              ],
-            ),
-            floatingActionButton: state.buttonVisible ? Padding(
-              padding: EdgeInsets.only(top: 200),
-              child: FloatingActionButton(
-                heroTag: HERO_KEY,
-                child: PlatformWidget(
-                  android: (_) => Icon(Icons.menu),
-                  ios: (_) => Icon(IconData(
-                    0xF394,
-                    fontFamily: CupertinoIcons.iconFont,
-                    fontPackage: CupertinoIcons.iconFontPackage
-                  )),
-                ),
-                onPressed: () => _onMenuPressed(context, state),
-              ),
-            ) : null,
-            floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
+        return Scaffold(
+          body: GestureDetector(
+            onHorizontalDragUpdate: _handleDragUpdate,
+            onHorizontalDragEnd: _handleDragEnd,
+            child: _buildBody(state: state)
           ),
+          floatingActionButton: state.buttonVisible ? Padding(
+            padding: EdgeInsets.only(top: 200),
+            child: FloatingActionButton(
+              heroTag: HERO_KEY,
+              child: PlatformWidget(
+                android: (_) => Icon(Icons.menu),
+                ios: (_) => Icon(IconData(
+                  0xF394,
+                  fontFamily: CupertinoIcons.iconFont,
+                  fontPackage: CupertinoIcons.iconFontPackage
+                )),
+              ),
+              onPressed: () => _onMenuPressed(context, state),
+            ),
+          ) : null,
+          floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
         );
       }
+    );
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  void _handleDragUpdate(DragUpdateDetails details) {
+    _animationController.value += details.primaryDelta / MediaQuery.of(context).size.width;
+  }
+
+  void _handleDragEnd(DragEndDetails details) {
+    if (_animationController.isAnimating ||
+        _animationController.status == AnimationStatus.completed) return;
+    
+    final double flingVelocity =
+      details.velocity.pixelsPerSecond.dy / MediaQuery.of(context).size.width;
+    if (flingVelocity < 0.0)
+      _animationController.fling(velocity: math.max(2.0, -flingVelocity));
+    else if (flingVelocity > 0.0)
+      _animationController.fling(velocity: math.min(-2.0, -flingVelocity));
+    else
+      _animationController.fling(
+        velocity: _animationController.value < 0.5 ? -2.0 : 2.0);
+  }
+
+  Widget _buildBody({@required SideMenuState state}) {
+    return Stack(
+      children: <Widget>[
+        Drawer(),
+        Transform.scale(
+          scale: _scaleAnimation.value,
+          child: Transform.translate(
+            offset: Offset((MediaQuery.of(context).size.width * _drawerWidth) * _animation.value, 0.0),
+            child: AbsorbPointer(
+              absorbing: state.menuOpened,
+              child: Stack(
+                children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.only(left: _animation.value * _shadowOffset),
+                    child: Material(
+                      borderRadius: _radiusAnimation.value,
+                      elevation: _animationController.value * 10,
+                      child: ClipRRect(
+                        borderRadius: _radiusAnimation.value,
+                        child: Container(
+                          height: MediaQuery.of(context).size.height,
+                          width: MediaQuery.of(context).size.width,
+                          color: Theme.of(context).colorScheme.background,
+                          child: widget._homeScreen,
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+        )
+      ],
     );
   }
 }

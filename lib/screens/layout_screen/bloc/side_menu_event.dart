@@ -20,19 +20,6 @@ class MenuStatusChanged extends SideMenuEvent {
   String toString() => 'MenuStatusChanged { menuOpen: $menuOpen }';
 }
 
-class DraggingMenu extends SideMenuEvent {
-  final bool isDragging;
-
-  DraggingMenu({@required this.isDragging});
-
-  @override
-  List<Object> get props => [isDragging];
-
-  @override
-  String toString() => 'DraggingMenu { isDragging: $isDragging }';
-}
-
-class FinishAnimation extends SideMenuEvent {}
 
 class ToggleButtonVisibility extends SideMenuEvent {
   final bool isVisible;
