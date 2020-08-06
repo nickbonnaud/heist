@@ -63,6 +63,7 @@ class OpenTransactionsList extends StatelessWidget {
       borderRadius: _borderRadius, 
       transactionResource: transactionResource,
       controller: _controller,
+      index: index
     );
   }
 

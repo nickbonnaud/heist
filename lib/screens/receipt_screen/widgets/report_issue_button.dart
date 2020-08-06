@@ -33,7 +33,7 @@ class ReportIssueButton extends StatelessWidget {
           android: (_) => Icon(
             Icons.more_vert,
             size: SizeConfig.getWidth(10),
-            color: Theme.of(context).colorScheme.topAppBarIconLight,
+            color: Theme.of(context).colorScheme.topAppBarIcon,
           ),
           ios: (_) => Icon(
             IconData(
@@ -42,7 +42,7 @@ class ReportIssueButton extends StatelessWidget {
               fontPackage: CupertinoIcons.iconFontPackage,
             ),
             size: SizeConfig.getWidth(10),
-            color: Theme.of(context).colorScheme.topAppBarIconLight,
+            color: Theme.of(context).colorScheme.topAppBarIcon,
           ),
         ),
         itemBuilder: (BuildContext context) => <PopupMenuEntry<Options>>[

@@ -63,7 +63,7 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   Color _setBackgroundColor({@required BuildContext context}) {
     return _backgroundColor == null 
-      ? Theme.of(context).colorScheme.topAppBarLight
+      ? Theme.of(context).colorScheme.topAppBar
       : _backgroundColor;
   }
 }
@@ -101,7 +101,7 @@ class _AnimatedLeadingIconState extends State<AnimatedLeadingIcon> with TickerPr
           child: IconButton(
             icon: Icon(context.platformIcons.back),
             onPressed: () => Navigator.of(context).pop(),
-            color: Theme.of(context).colorScheme.topAppBarIconLight,
+            color: Theme.of(context).colorScheme.topAppBarIcon,
             iconSize: SizeConfig.getWidth(10),
           ),
         )

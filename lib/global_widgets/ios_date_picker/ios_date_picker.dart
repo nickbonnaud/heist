@@ -31,7 +31,7 @@ class IosDatePicker extends StatelessWidget {
                       state.startDate != null ? _formatDate(state.startDate) : "Select Start Date",
                       style: TextStyle(
                         fontWeight: FontWeight.w700,
-                        color: Theme.of(context).colorScheme.textOnLight,
+                        color: Theme.of(context).colorScheme.onPrimary,
                         fontSize: SizeConfig.getWidth(7),
                         decoration: state.active == Active.start ? TextDecoration.underline : null
                       ),
@@ -50,7 +50,7 @@ class IosDatePicker extends StatelessWidget {
                       _formatDate(state.endDate),
                       style: TextStyle(
                         fontWeight: FontWeight.w700,
-                        color: Theme.of(context).colorScheme.textOnLight,
+                        color: Theme.of(context).colorScheme.onPrimary,
                         fontSize: SizeConfig.getWidth(7),
                         decoration: state.active == Active.end ? TextDecoration.underline : null
                       ),
@@ -77,7 +77,7 @@ class IosDatePicker extends StatelessWidget {
                                 fontFamily: CupertinoIcons.iconFont,
                                 fontPackage: CupertinoIcons.iconFontPackage
                               ),
-                              color: Theme.of(context).colorScheme.secondary,
+                              color: Theme.of(context).colorScheme.callToAction,
                             ),
                             onPressed: () => BlocProvider.of<IosDatePickerBloc>(context).add(ActiveSelectionChanged(active: Active.end)),
                           );
@@ -89,7 +89,7 @@ class IosDatePicker extends StatelessWidget {
                                 fontFamily: CupertinoIcons.iconFont,
                                 fontPackage: CupertinoIcons.iconFontPackage
                               ),
-                              color: Theme.of(context).colorScheme.secondary,
+                              color: Theme.of(context).colorScheme.callToAction,
                             ),
                             onPressed: () => BlocProvider.of<IosDatePickerBloc>(context).add(ActiveSelectionChanged(active: Active.start)),
                           );
@@ -104,8 +104,8 @@ class IosDatePicker extends StatelessWidget {
                             text: 'Submit', 
                             context: context, 
                             color: state.startDate != null && state.endDate != null
-                              ? Theme.of(context).colorScheme.primary 
-                              : Theme.of(context).colorScheme.primarySubdued
+                              ? Theme.of(context).colorScheme.callToAction 
+                              : Theme.of(context).colorScheme.callToActionDisabled
                           ),
                           onPressed: () => state.startDate != null && state.endDate != null && state.startDate.isBefore(state.endDate)
                             ? Navigator.of(context).pop(DateRange(startDate: state.startDate, endDate: state.endDate)) : null

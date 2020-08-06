@@ -119,7 +119,7 @@ class TutorialScreen extends StatelessWidget {
                                         _body[info.index],
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
-                                          color: Theme.of(context).colorScheme.textOnLightSubdued,
+                                          color: Theme.of(context).colorScheme.onPrimarySubdued,
                                           fontSize: info.index + 1 != _images.length -1 
                                             ? SizeConfig.getWidth(7)  
                                             : SizeConfig.getWidth(4),
@@ -141,7 +141,7 @@ class TutorialScreen extends StatelessWidget {
                                         child: FlatButton(
                                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
                                           onPressed: () => _closeModal(context: context),
-                                          child: Text2(text: 'Close', context: context, color: Theme.of(context).colorScheme.secondary),
+                                          child: Text2(text: 'Close', context: context, color: Theme.of(context).colorScheme.callToAction),
                                         ),
                                         position: info.position
                                       ),

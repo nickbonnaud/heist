@@ -227,6 +227,7 @@ class _FilterButtonState extends State<FilterButton> with SingleTickerProviderSt
   }
 
   void _onSelection({@required Option option}) {
+    BlocProvider.of<FilterButtonBloc>(context).add(Toggle());
     switch (option) {
       case Option.all:
         _fetchAllRefunds();
@@ -290,7 +291,7 @@ class _FilterButtonState extends State<FilterButton> with SingleTickerProviderSt
       builder: (_) => SearchBusinessNameModal()
     );
     if (business != null) {
-       BlocProvider.of<RefundsScreenBloc>(context).add(FetchRefundByBusiness(identifier: business.identifier, reset: true));
+      BlocProvider.of<RefundsScreenBloc>(context).add(FetchRefundByBusiness(identifier: business.identifier, reset: true));
     }
   }
 

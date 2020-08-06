@@ -21,67 +21,63 @@ class SettingsList extends StatelessWidget {
         SizedBox(height: SizeConfig.getHeight(5)),
         ListTile(
           leading: PlatformWidget(
-            android: (_) => Icon(Icons.person, color: Theme.of(context).colorScheme.iconPrimary),
+            android: (_) => Icon(Icons.person),
             ios: (_) => Icon(
               IconData(
                 0xF41A,
                 fontFamily: CupertinoIcons.iconFont,
                 fontPackage: CupertinoIcons.iconFontPackage,
-              ),
-              color: Theme.of(context).colorScheme.iconPrimary
+              )
             ),
           ),
-          title: Text2(text: 'Change Profile', context: context, color: Theme.of(context).colorScheme.textOnLightSubdued),
+          title: Text2(text: 'Change Profile', context: context, color: Theme.of(context).colorScheme.onPrimarySubdued),
           onTap: () => _showModal(context: context, screen: ProfileScreen())
         ),
         ListTile(
           leading: PlatformWidget(
-            android: (_) => Icon(Icons.email, color: Theme.of(context).colorScheme.iconPrimary),
+            android: (_) => Icon(Icons.email),
             ios: (_) => Icon(
               IconData(
                 0xF474,
                 fontFamily: CupertinoIcons.iconFont,
                 fontPackage: CupertinoIcons.iconFontPackage
-              ),
-              color: Theme.of(context).colorScheme.iconPrimary
+              )
             ),
           ),
-          title: Text2(text: 'Change Email', context: context, color: Theme.of(context).colorScheme.textOnLightSubdued),
+          title: Text2(text: 'Change Email', context: context, color: Theme.of(context).colorScheme.onPrimarySubdued),
           onTap: () => _showModal(context: context, screen: EmailScreen())
         ),
         ListTile(
           leading: PlatformWidget(
-            android: (_) => Icon(Icons.lock, color: Theme.of(context).colorScheme.iconPrimary),
+            android: (_) => Icon(Icons.lock),
             ios: (_) => Icon(
               IconData(
                 0xF392,
                 fontFamily: CupertinoIcons.iconFont,
                 fontPackage: CupertinoIcons.iconFontPackage
-              ),
-              color: Theme.of(context).colorScheme.iconPrimary
+              )
             ),
           ),
-          title: Text2(text: 'Change Password', context: context, color: Theme.of(context).colorScheme.textOnLightSubdued),
+          title: Text2(text: 'Change Password', context: context, color: Theme.of(context).colorScheme.onPrimarySubdued),
           onTap: () => _showModal(context: context, screen: PasswordScreen())
         ),
         ListTile(
-          leading: Icon(Icons.payment, color: Theme.of(context).colorScheme.iconPrimary),
-          title: Text2(text: 'Change Payment Method', context: context, color: Theme.of(context).colorScheme.textOnLightSubdued),
+          leading: Icon(Icons.payment),
+          title: Text2(text: 'Change Payment Method', context: context, color: Theme.of(context).colorScheme.onPrimarySubdued),
           onTap: () => print('show payment screen'),
         ),
         ListTile(
           leading: PlatformWidget(
-            android: (_) => Icon(Icons.thumb_up, color: Theme.of(context).colorScheme.iconPrimary),
+            android: (_) => Icon(Icons.thumb_up),
             ios: (_) => Icon(
               IconData(
                 0xF388,
                 fontFamily: CupertinoIcons.iconFont,
                 fontPackage: CupertinoIcons.iconFontPackage
-              ),
-              color: Theme.of(context).colorScheme.iconPrimary
+              )
             ),
           ),
-          title: Text2(text: 'Change Tip Settings', context: context, color: Theme.of(context).colorScheme.textOnLightSubdued),
+          title: Text2(text: 'Change Tip Settings', context: context, color: Theme.of(context).colorScheme.onPrimarySubdued),
           onTap: () => _showModal(context: context, screen: TipScreen())
         ),
         SizedBox(height: SizeConfig.getHeight(15))

@@ -94,7 +94,8 @@ class ActiveLocationsList extends StatelessWidget {
       height: _size, 
       controller: _controller, 
       borderRadius: _borderRadius, 
-      business: business
+      business: business,
+      index: index,
     );
   }
   

@@ -103,14 +103,14 @@ class _IssueFormState extends State<IssueForm> {
                             builder: (context, state) {
                               return OutlineButton(
                                 borderSide: BorderSide(
-                                  color: Theme.of(context).colorScheme.buttonOutlineCancel
+                                  color: Theme.of(context).colorScheme.callToAction
                                 ),
-                                disabledBorderColor: Theme.of(context).colorScheme.buttonOutlineCancelDisabled,
+                                disabledBorderColor: Theme.of(context).colorScheme.callToActionDisabled,
                                 shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
                                 onPressed: state.isSubmitting ? null : () => _cancelButtonPressed(context),
                                 child: BoldText3(text: 'Cancel', context: context, color: state.isSubmitting 
-                                  ? Theme.of(context).colorScheme.buttonOutlineCancelDisabled
-                                  : Theme.of(context).colorScheme.buttonOutlineCancel
+                                  ? Theme.of(context).colorScheme.callToActionDisabled
+                                  : Theme.of(context).colorScheme.callToAction
                                 ),
                               );
                             },
@@ -179,11 +179,11 @@ class _IssueFormState extends State<IssueForm> {
             fontSize: SizeConfig.getWidth(6),
             fontWeight: FontWeight.w700
           ),
-          color: Theme.of(context).colorScheme.textOnDark
+          color: Theme.of(context).colorScheme.onSecondary
         ),
       );
     } else {
-      return BoldText3(text: 'Save', context: context, color: Theme.of(context).colorScheme.textOnDark);
+      return BoldText3(text: 'Save', context: context, color: Theme.of(context).colorScheme.onSecondary);
     }
   }
 
@@ -201,7 +201,7 @@ class _IssueFormState extends State<IssueForm> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Expanded(
-                child: BoldText3(text: message, context: context, color: Theme.of(context).colorScheme.textOnDark)
+                child: BoldText3(text: message, context: context, color: Theme.of(context).colorScheme.onSecondary)
               ),
               PlatformWidget(
                 android: (_) => Icon(state.isSuccess ? Icons.check_circle_outline : Icons.error),
@@ -211,7 +211,7 @@ class _IssueFormState extends State<IssueForm> {
                     fontFamily: CupertinoIcons.iconFont,
                     fontPackage: CupertinoIcons.iconFontPackage
                   ),
-                  color: Theme.of(context).colorScheme.textOnDark,
+                  color: Theme.of(context).colorScheme.onSecondary,
                 ),
               )
             ],

@@ -57,16 +57,16 @@ class EditPhoto extends StatelessWidget {
                         fontFamily: CupertinoIcons.iconFont,
                         fontPackage: CupertinoIcons.iconFontPackage
                       ),
-                      color: Theme.of(context).colorScheme.textOnDark,
+                      color: Theme.of(context).colorScheme.onCallToAction,
                     ),
                     android: (_) => Icon(
                       Icons.edit,
-                      color: Theme.of(context).colorScheme.textOnDark
+                      color: Theme.of(context).colorScheme.onSecondary
                     ),
                   ),
                   shape: CircleBorder(),
                   elevation: 5.0,
-                  fillColor: Theme.of(context).colorScheme.secondary,
+                  fillColor: Theme.of(context).colorScheme.callToAction,
                   padding: EdgeInsets.all(SizeConfig.getWidth(3)),
                 )
               )
@@ -119,7 +119,7 @@ class EditPhoto extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Expanded(
-                child: BoldText3(text: message, context: context, color: Theme.of(context).colorScheme.textOnDark)
+                child: BoldText3(text: message, context: context, color: Theme.of(context).colorScheme.onSecondary)
               ),
               PlatformWidget(
                 android: (_) => Icon(isSuccess ? Icons.check_circle_outline : Icons.error),

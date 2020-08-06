@@ -49,7 +49,7 @@ class LogoDivider extends StatelessWidget {
             angle: math.pi / 2 * _controller.value + math.pi/2,
             child: Divider(
               thickness: 2,
-              color: Theme.of(context).colorScheme.textOnLightDisabled,
+              color: Theme.of(context).colorScheme.onPrimaryDisabled,
             )
           )
         : BlocBuilder<LogoButtonsListBloc, LogoButtonsListState>(
@@ -59,7 +59,7 @@ class LogoDivider extends StatelessWidget {
                   ? "Active Locations"
                   : "Nearby Businesses",
                 style: TextStyle(
-                  color: Theme.of(context).colorScheme.textOnLightDisabled,
+                  color: Theme.of(context).colorScheme.onPrimaryDisabled,
                   fontWeight: FontWeight.w900,
                   fontSize: SizeConfig.getWidth(7),
                   decoration: TextDecoration.underline

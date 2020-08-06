@@ -3,8 +3,7 @@ import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:heist/resources/constants.dart';
 import 'package:heist/screens/auth_screen/auth_screen.dart';
 import 'package:heist/screens/auth_screen/widgets/page_offset_notifier.dart';
-import 'package:provider/provider.dart';
-import 'package:heist/themes/global_colors.dart'; 
+import 'package:provider/provider.dart'; 
 
 class AppName extends StatelessWidget {
 
@@ -36,7 +35,7 @@ class AppName extends StatelessWidget {
                     Constants.appName,
                     style: TextStyle(
                       fontWeight: FontWeight.bold, 
-                      color: Theme.of(context).colorScheme.textOnDark
+                      color: Theme.of(context).colorScheme.onSecondary
                     ),
                   ),
                 ),

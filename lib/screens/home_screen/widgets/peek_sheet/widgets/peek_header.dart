@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:heist/resources/helpers/size_config.dart';
-import 'package:heist/themes/global_colors.dart';
 
 import 'logo_buttons_list/bloc/logo_buttons_list_bloc.dart';
 
@@ -30,7 +29,7 @@ class PeekHeader extends StatelessWidget {
           return PlatformText(
             _setHeader(state: state),
             style: TextStyle(
-              color: Theme.of(context).colorScheme.textOnLight,
+              color: Theme.of(context).colorScheme.onPrimary,
               fontSize: _fontSize,
               fontWeight: FontWeight.w500
             ),

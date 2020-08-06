@@ -15,7 +15,7 @@ class TipScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomPadding: false,
-      appBar: BottomModalAppBar(backgroundColor: Theme.of(context).colorScheme.topAppBarLight),
+      appBar: BottomModalAppBar(backgroundColor: Theme.of(context).colorScheme.topAppBar),
       body: BlocProvider<TipFormBloc>(
         create: (BuildContext context) => TipFormBloc(accountRepository: _accountRepository, authenticationBloc: BlocProvider.of<AuthenticationBloc>(context)),
         child: TipForm(customer: BlocProvider.of<AuthenticationBloc>(context).customer),

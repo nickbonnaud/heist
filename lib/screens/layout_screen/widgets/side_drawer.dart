@@ -81,6 +81,7 @@ class _SideDrawerState extends State<SideDrawer> with SingleTickerProviderStateM
           floatingActionButton: state.buttonVisible ? Padding(
             padding: EdgeInsets.only(top: 200),
             child: FloatingActionButton(
+              backgroundColor: Theme.of(context).colorScheme.callToAction,
               heroTag: HERO_KEY,
               child: PlatformWidget(
                 android: (_) => Icon(Icons.menu),
@@ -306,7 +307,7 @@ class DrawerItem extends StatelessWidget {
                   padding: EdgeInsets.only(left: 16.0, right: 8.0),
                   child: _icon,
                 ),
-                BoldText3(text: _text, context: context, color: Theme.of(context).colorScheme.textOnDark)
+                BoldText3(text: _text, context: context, color: Theme.of(context).colorScheme.onSecondary)
               ],
             ),
           ),

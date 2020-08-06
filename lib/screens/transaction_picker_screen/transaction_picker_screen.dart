@@ -20,7 +20,7 @@ class TransactionPickerScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: BottomModalAppBar(backgroundColor: Theme.of(context).colorScheme.topAppBarLight, trailingWidget: InfoButton()),
+      appBar: BottomModalAppBar(backgroundColor: Theme.of(context).colorScheme.topAppBar, trailingWidget: InfoButton()),
       body: BlocProvider<TransactionPickerScreenBloc>(
         create: (BuildContext context) => TransactionPickerScreenBloc(transactionRepository: _transactionRepository)
           ..add(Fetch(businessIdentifier: _business.identifier)),

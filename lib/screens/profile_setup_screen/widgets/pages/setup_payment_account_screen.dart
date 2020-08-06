@@ -42,12 +42,12 @@ class _SetupPaymentAccountScreen extends State<SetupPaymentAccountScreen> {
                   RaisedButton(
                     shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
                     onPressed: () => _connectButtonPressed(),
-                    child: BoldText3(text: 'Connect', context: context, color: Theme.of(context).colorScheme.textOnDark)
+                    child: BoldText3(text: 'Connect', context: context, color: Theme.of(context).colorScheme.onSecondary)
                   ),
                   Text2(
                     text: "${Constants.appName} uses a secure 3rd party service to create your payment account.", 
                     context: context, 
-                    color: Theme.of(context).colorScheme.textOnLightSubdued
+                    color: Theme.of(context).colorScheme.onPrimarySubdued
                   ),
                 ],
               )
@@ -60,7 +60,7 @@ class _SetupPaymentAccountScreen extends State<SetupPaymentAccountScreen> {
                       return RaisedButton(
                         shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
                         onPressed: _isNextButtonEnabled(state) ? () => _nextButtonPressed(context) : null,
-                        child: BoldText3(text: 'Next', context: context, color: Theme.of(context).colorScheme.textOnDark)
+                        child: BoldText3(text: 'Next', context: context, color: Theme.of(context).colorScheme.onSecondary)
                       );
                     },
                   )

@@ -15,7 +15,6 @@ import 'package:heist/resources/helpers/text_styles.dart';
 import 'package:heist/screens/permission_screen/bloc/permission_screen_bloc.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:heist/themes/global_colors.dart';
 
 import 'bloc/permission_buttons_bloc.dart';
 
@@ -55,7 +54,7 @@ class _PermissionButtonsState extends State<PermissionButtons> {
                       ? () => _requestPermission(context, widget._permission, widget._controller)
                       : null,
                     shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
-                    child: BoldText3(text: 'Enable', context: context, color: Theme.of(context).colorScheme.textOnDark)
+                    child: BoldText3(text: 'Enable', context: context, color: Theme.of(context).colorScheme.onSecondary)
                   )),
                 SizedBox(width: SizeConfig.getWidth(20)),
               ]

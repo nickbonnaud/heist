@@ -66,7 +66,7 @@ class _DragArrowState extends State<DragArrow> with SingleTickerProviderStateMix
         android: (_) => Icon(
           Icons.arrow_upward,
           size: SizeConfig.getWidth(8),
-          color: Theme.of(context).colorScheme.textOnDark,
+          color: Theme.of(context).colorScheme.callToAction,
         ),
         ios: (_) => Icon(
           IconData(
@@ -74,7 +74,7 @@ class _DragArrowState extends State<DragArrow> with SingleTickerProviderStateMix
             fontFamily: CupertinoIcons.iconFont,
             fontPackage: CupertinoIcons.iconFontPackage
           ),
-          color: Theme.of(context).colorScheme.textOnDark,
+          color: Theme.of(context).colorScheme.callToAction,
           size: SizeConfig.getWidth(8),
         ),
       )

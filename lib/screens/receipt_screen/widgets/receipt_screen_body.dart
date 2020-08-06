@@ -57,7 +57,7 @@ class ReceiptScreenBody extends StatelessWidget {
         shrinkWrap: true,
         slivers: <Widget>[
           BottomModalAppBar(
-            backgroundColor: Theme.of(context).colorScheme.topAppBarLight,
+            backgroundColor: Theme.of(context).colorScheme.topAppBar,
             isSliver: true,
             trailingWidget: _trailingWidget(transactionResource: transactionResource)
           ),
@@ -100,7 +100,7 @@ class ReceiptScreenBody extends StatelessWidget {
             Text2(
               text: transactionResource.transaction.billUpdatedAt,
               context: context,
-              color: Theme.of(context).colorScheme.textOnLightSubdued,
+              color: Theme.of(context).colorScheme.onPrimarySubdued,
             )
           ],
         ),
@@ -164,7 +164,7 @@ class ReceiptScreenBody extends StatelessWidget {
         child: Text2(
           text: "Purchase Location", 
           context: context, 
-          color: Theme.of(context).colorScheme.textOnLightSubdued
+          color: Theme.of(context).colorScheme.onPrimarySubdued
         ),
       ),
       SizedBox(height: SizeConfig.getHeight(1)),
@@ -192,7 +192,7 @@ class ReceiptScreenBody extends StatelessWidget {
         child: Text3(
           text: "Transaction ID: ${transactionResource.transaction.identifier}",
           context: context, 
-          color: Theme.of(context).colorScheme.textOnLightSubdued
+          color: Theme.of(context).colorScheme.onPrimarySubdued
         ),
       ),
       SizedBox(height: SizeConfig.getHeight(2)),

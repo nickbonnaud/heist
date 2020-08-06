@@ -106,6 +106,7 @@ class _BusinessScreenState extends State<BusinessScreen> with SingleTickerProvid
                                       android: (_) => Icon(
                                         Icons.arrow_downward,
                                         size: SizeConfig.getWidth(7),
+                                        color: Theme.of(context).colorScheme.callToAction,
                                       ),
                                       ios: (_) => Icon(
                                         IconData(
@@ -113,6 +114,7 @@ class _BusinessScreenState extends State<BusinessScreen> with SingleTickerProvid
                                           fontFamily: CupertinoIcons.iconFont,
                                           fontPackage: CupertinoIcons.iconFontPackage
                                         ),
+                                        color: Theme.of(context).colorScheme.callToAction,
                                         size: SizeConfig.getWidth(7),
                                       ),
                                     ),
@@ -132,7 +134,7 @@ class _BusinessScreenState extends State<BusinessScreen> with SingleTickerProvid
                                   SizedBox(width: 16.0),
                                   GestureDetector(
                                     onTap: () => _navigateToWebsite(),
-                                    child: BoldText4(text: _formatWebsite(), context: context, color: Theme.of(context).colorScheme.clickable),
+                                    child: BoldText4(text: _formatWebsite(), context: context, color: Theme.of(context).colorScheme.callToAction),
                                   )
                                 ],
                               ),
@@ -146,7 +148,7 @@ class _BusinessScreenState extends State<BusinessScreen> with SingleTickerProvid
                                   SizedBox(width: 16),
                                   GestureDetector(
                                     onTap: () => launch("tel://${widget._business.profile.phone}"),
-                                    child: BoldText4(text: _formatPhone(), context: context, color: Theme.of(context).colorScheme.clickable),
+                                    child: BoldText4(text: _formatPhone(), context: context, color: Theme.of(context).colorScheme.callToAction),
                                   )
                                 ],
                               ),
@@ -169,7 +171,7 @@ class _BusinessScreenState extends State<BusinessScreen> with SingleTickerProvid
                               SizedBox(height: 20),
                               BoldText3(text: "About ${widget._business.profile.name}", context: context),
                               SizedBox(height: 10),
-                              Text2(text: widget._business.profile.description, context: context, color: Theme.of(context).colorScheme.textOnLightSubdued),
+                              Text2(text: widget._business.profile.description, context: context, color: Theme.of(context).colorScheme.onPrimarySubdued),
                             ],
                           ),
                         ),

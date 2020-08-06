@@ -122,7 +122,7 @@ class _OnboardBodyState extends State<OnboardBody> with SingleTickerProviderStat
                             child: BoldText3(
                               text: "Let's get Started! Don't worry it's only a few steps.",
                               context: context,
-                              color: Theme.of(context).colorScheme.textOnLightSubdued
+                              color: Theme.of(context).colorScheme.onPrimarySubdued
                             )
                           );
                         }
@@ -137,7 +137,7 @@ class _OnboardBodyState extends State<OnboardBody> with SingleTickerProviderStat
                           ? "Go to next step." 
                           : "First let's setup your Profile Account!",
                         context: context, 
-                        color: Theme.of(context).colorScheme.textOnLightSubdued
+                        color: Theme.of(context).colorScheme.onPrimarySubdued
                       ),
                       isActive: currentStep == 1,
                       state: _setCurrentStepState(currentStep: currentStep, stepIndex: 1)
@@ -147,7 +147,7 @@ class _OnboardBodyState extends State<OnboardBody> with SingleTickerProviderStat
                       content: BoldText3(
                         text: "Learn how to use ${Constants.appName}!", 
                         context: context, 
-                        color: Theme.of(context).colorScheme.textOnLightSubdued
+                        color: Theme.of(context).colorScheme.onPrimarySubdued
                       ),
                       isActive: currentStep == 2,
                       state: _setCurrentStepState(currentStep: currentStep, stepIndex: 2)
@@ -159,7 +159,7 @@ class _OnboardBodyState extends State<OnboardBody> with SingleTickerProviderStat
                           ? "Finish"
                           : "Lastly let's configure your permissions!", 
                         context: context, 
-                        color: Theme.of(context).colorScheme.textOnLightSubdued
+                        color: Theme.of(context).colorScheme.onPrimarySubdued
                       ),
                       isActive: currentStep == 3,
                       state: _setCurrentStepState(currentStep: currentStep, stepIndex: 3)
@@ -205,8 +205,8 @@ class _OnboardBodyState extends State<OnboardBody> with SingleTickerProviderStat
             text: title, 
             context: context, 
             color: currentStep == 0 
-              ? Theme.of(context).colorScheme.textOnLight
-              : Theme.of(context).colorScheme.textOnLightDisabled
+              ? Theme.of(context).colorScheme.onPrimary
+              : Theme.of(context).colorScheme.onPrimaryDisabled
           )
         );
       }

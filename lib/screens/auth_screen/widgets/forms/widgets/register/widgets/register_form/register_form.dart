@@ -100,16 +100,16 @@ class _RegisterFormState extends State<RegisterForm> {
                           autocorrect: false,
                           decoration: InputDecoration(
                             enabledBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Theme.of(context).colorScheme.textOnDark)
+                              borderSide: BorderSide(color: Theme.of(context).colorScheme.onSecondary)
                             ),
                             hintText: 'Email',
                             hintStyle: TextStyle(
-                              color: Theme.of(context).colorScheme.textOnDarkSubdued,
+                              color: Theme.of(context).colorScheme.onSecondarySubdued,
                               fontSize: SizeConfig.getWidth(6)
                             )
                           ),
                           style: TextStyle(
-                            color: Theme.of(context).colorScheme.textOnDark,
+                            color: Theme.of(context).colorScheme.onSecondary,
                             fontSize: SizeConfig.getWidth(6)
                           ),
                         );
@@ -131,16 +131,16 @@ class _RegisterFormState extends State<RegisterForm> {
                           autocorrect: false,
                           decoration: InputDecoration(
                             enabledBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Theme.of(context).colorScheme.textOnDark)
+                              borderSide: BorderSide(color: Theme.of(context).colorScheme.onSecondary)
                             ),
                             hintText: 'Password',
                             hintStyle: TextStyle(
-                              color: Theme.of(context).colorScheme.textOnDarkSubdued,
+                              color: Theme.of(context).colorScheme.onSecondarySubdued,
                               fontSize: SizeConfig.getWidth(6)
                             )
                           ),
                           style: TextStyle(
-                            color: Theme.of(context).colorScheme.textOnDark,
+                            color: Theme.of(context).colorScheme.onSecondary,
                             fontSize: SizeConfig.getWidth(6)
                           ),
                           obscureText: true,
@@ -163,16 +163,16 @@ class _RegisterFormState extends State<RegisterForm> {
                           autocorrect: false,
                           decoration: InputDecoration(
                             enabledBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Theme.of(context).colorScheme.textOnDark)
+                              borderSide: BorderSide(color: Theme.of(context).colorScheme.onSecondary)
                             ),
                             hintText: 'Password Confirmation',
                             hintStyle: TextStyle(
-                              color: Theme.of(context).colorScheme.textOnDarkSubdued,
+                              color: Theme.of(context).colorScheme.onSecondarySubdued,
                               fontSize: SizeConfig.getWidth(6)
                             )
                           ),
                           style: TextStyle(
-                            color: Theme.of(context).colorScheme.textOnDark,
+                            color: Theme.of(context).colorScheme.onSecondary,
                             fontSize: SizeConfig.getWidth(6)
                           ),
                           obscureText: true,
@@ -191,7 +191,7 @@ class _RegisterFormState extends State<RegisterForm> {
                             padding: EdgeInsets.symmetric(vertical: 10, horizontal: 0),
                             decoration: BoxDecoration(
                               border: (_isRegisterButtonEnabled(state) || state.isSubmitting)
-                                ? Border.all(color: Theme.of(context).colorScheme.textOnDark)
+                                ? Border.all(color: Theme.of(context).colorScheme.onSecondary)
                                 : null,
                               borderRadius: BorderRadius.circular(50)
                             ),
@@ -201,13 +201,13 @@ class _RegisterFormState extends State<RegisterForm> {
                                   text: ['Creating Account...'],
                                   textStyle: TextStyle(
                                     fontSize: SizeConfig.getWidth(7),
-                                    color: Theme.of(context).colorScheme.textOnDark,
+                                    color: Theme.of(context).colorScheme.onSecondary,
                                   ),
                                   textAlign: TextAlign.start,
                                   alignment: AlignmentDirectional.topStart,
                                 )
                               : (_isRegisterButtonEnabled(state)
-                                  ? Text1(text: 'Register', context: context, color: Theme.of(context).colorScheme.textOnDark)
+                                  ? Text1(text: 'Register', context: context, color: Theme.of(context).colorScheme.onSecondary)
                                   : null
                                 ),
                           ),
@@ -230,7 +230,7 @@ class _RegisterFormState extends State<RegisterForm> {
                           child: Text('Already have an Account?',
                             style: GoogleFonts.roboto(
                               textStyle: TextStyle(
-                                color: Theme.of(context).colorScheme.textOnDarkSubdued,
+                                color: Theme.of(context).colorScheme.callToAction,
                                 fontSize: SizeConfig.getWidth(4),
                                 decoration: TextDecoration.underline,
                                 letterSpacing: 0.5
@@ -291,7 +291,7 @@ class _RegisterFormState extends State<RegisterForm> {
 
   KeyboardActionsConfig _buildKeyboard({@required BuildContext context}) {
     return KeyboardActionsConfig(
-      keyboardBarColor: Theme.of(context).colorScheme.keyboardHelpBarOnDark,
+      keyboardBarColor: Theme.of(context).colorScheme.keyboardHelpBar,
       keyboardActionsPlatform: KeyboardActionsPlatform.ALL,
       actions: [
         KeyboardAction(
@@ -302,7 +302,7 @@ class _RegisterFormState extends State<RegisterForm> {
                 onTap: () => node.unfocus(),
                 child: Padding(
                   padding: EdgeInsets.only(right: 16.0),
-                  child: BoldText5(text: 'Done', context: context, color: Theme.of(context).colorScheme.primary),
+                  child: BoldText5(text: 'Done', context: context, color: Theme.of(context).colorScheme.callToAction),
                 ),
               );
             }
@@ -316,7 +316,7 @@ class _RegisterFormState extends State<RegisterForm> {
                 onTap: () => node.unfocus(),
                 child: Padding(
                   padding: EdgeInsets.only(right: 16.0),
-                  child: BoldText5(text: 'Done', context: context, color: Theme.of(context).colorScheme.primary),
+                  child: BoldText5(text: 'Done', context: context, color: Theme.of(context).colorScheme.callToAction),
                 ),
               );
             }
@@ -330,7 +330,7 @@ class _RegisterFormState extends State<RegisterForm> {
                 onTap: () => node.unfocus(),
                 child: Padding(
                   padding: EdgeInsets.only(right: 16.0),
-                  child: BoldText5(text: 'Done', context: context, color: Theme.of(context).colorScheme.primary),
+                  child: BoldText5(text: 'Done', context: context, color: Theme.of(context).colorScheme.callToAction),
                 ),
               );
             }

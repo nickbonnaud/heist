@@ -64,7 +64,7 @@ class _ProfilePhotoScreenState extends State<ProfilePhotoScreen> {
                         PlatformText(
                           "Your photo is used for your account security.",
                           style: TextStyle(
-                            color: Theme.of(context).colorScheme.textOnLightSubdued,
+                            color: Theme.of(context).colorScheme.onPrimarySubdued,
                             fontSize: SizeConfig.getWidth(5),
                           ),
                           textAlign: TextAlign.center,
@@ -73,7 +73,7 @@ class _ProfilePhotoScreenState extends State<ProfilePhotoScreen> {
                         PlatformText(
                           "Please use a photo from your shoulders up.",
                           style: TextStyle(
-                            color: Theme.of(context).colorScheme.textOnLightSubdued,
+                            color: Theme.of(context).colorScheme.onPrimarySubdued,
                             fontSize: SizeConfig.getWidth(5),
                           ),
                           textAlign: TextAlign.center,
@@ -82,7 +82,7 @@ class _ProfilePhotoScreenState extends State<ProfilePhotoScreen> {
                         PlatformText(
                           "This allows servers and cashiers to easily identify you.",
                           style: TextStyle(
-                            color: Theme.of(context).colorScheme.textOnLightSubdued,
+                            color: Theme.of(context).colorScheme.onPrimarySubdued,
                             fontSize: SizeConfig.getWidth(5),
                           ),
                           textAlign: TextAlign.center,
@@ -102,7 +102,7 @@ class _ProfilePhotoScreenState extends State<ProfilePhotoScreen> {
                       return RaisedButton(
                         shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
                         onPressed: _isNextButtonEnabled(state.customer) ? () => _nextButtonPressed(context) : null,
-                        child: BoldText3(text: 'Next', context: context, color: Theme.of(context).colorScheme.textOnDark)
+                        child: BoldText3(text: 'Next', context: context, color: Theme.of(context).colorScheme.onSecondary)
                       );
                     }
                   )

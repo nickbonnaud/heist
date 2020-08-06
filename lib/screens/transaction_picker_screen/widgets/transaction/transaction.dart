@@ -166,7 +166,7 @@ class _TransactionState extends State<Transaction> {
                       return Text3(
                         text: "Billed at: ${_formatTime(date)}",
                         context: context, 
-                        color: Theme.of(context).colorScheme.textOnLightSubdued,
+                        color: Theme.of(context).colorScheme.onPrimarySubdued,
                       );
                     }
                     return Container();
@@ -213,14 +213,14 @@ class _TransactionState extends State<Transaction> {
           textStyle: TextStyle(
             fontSize: SizeConfig.getWidth(6),
             fontWeight: FontWeight.w700,
-            color: Theme.of(context).colorScheme.textOnDark
+            color: Theme.of(context).colorScheme.onSecondary
           ),
         );
       } else {
-        return BoldText3(text: 'Claim', context: context, color: Theme.of(context).colorScheme.textOnDark);
+        return BoldText3(text: 'Claim', context: context, color: Theme.of(context).colorScheme.onSecondary);
       }
     }
-    return BoldText3(text: 'Claim', context: context, color: Theme.of(context).colorScheme.textOnDark);
+    return BoldText3(text: 'Claim', context: context, color: Theme.of(context).colorScheme.onSecondary);
   }
 
   void _claimButtonPressed(BuildContext context, int index) {
@@ -264,12 +264,12 @@ class _TransactionState extends State<Transaction> {
         Text2(
           text: title, 
           context: context, 
-          color: Theme.of(context).colorScheme.textOnLight
+          color: Theme.of(context).colorScheme.onPrimary
         ),
         Text2(
           text: Currency.create(cents: value), 
           context: context, 
-          color: Theme.of(context).colorScheme.textOnLight
+          color: Theme.of(context).colorScheme.onPrimary
         )
       ],
     );
@@ -289,7 +289,7 @@ class _TransactionState extends State<Transaction> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Expanded(
-                child: BoldText3(text: message, context: context, color: Theme.of(context).colorScheme.textOnDark)
+                child: BoldText3(text: message, context: context, color: Theme.of(context).colorScheme.onSecondary)
               ),
               PlatformWidget(
                 android: (_) => Icon(state.claimSuccess ? Icons.check_circle_outline : Icons.error),
@@ -299,7 +299,7 @@ class _TransactionState extends State<Transaction> {
                     fontFamily: CupertinoIcons.iconFont,
                     fontPackage: CupertinoIcons.iconFontPackage
                   ),
-                  color: Theme.of(context).colorScheme.textOnDark,
+                  color: Theme.of(context).colorScheme.onSecondary,
                 ),
               )
             ],

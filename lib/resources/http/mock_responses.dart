@@ -3381,110 +3381,109 @@ class MockResponses {
   
   static Map<String, dynamic> _mockFetchOpenTransaction() {
     return {
-      'data': [],
-      // 'data': [
-      //   {
-      //     "transaction": {
-      //     "identifier": "fake_open_transaction",
-      //     "employee_id": null,
-      //     "tax": "457",
-      //     "tip": "1636",
-      //     "net_sales": "6088",
-      //     "total": "8181",
-      //     "partial_payment": "0",
-      //     "locked": false,
-      //     "bill_created_at": "2020-05-26T22:04:56.000000Z",
-      //     "updated_at": "2020-05-26T22:04:56.000000Z",
-      //     "status": {
-      //       "name": "open",
-      //       "code": "100"
-      //     },
-      //     "purchased_items": [
-      //       {
-      //         "name": "numquam",
-      //         "sub_name": 'fbjdss',
-      //         "price": "2000",
-      //         "quantity": "3",
-      //         "total": "6000"
-      //       },
-      //       {
-      //         "name": "vel",
-      //         "sub_name": null,
-      //         "price": "500",
-      //         "quantity": "2",
-      //         "total": "1000"
-      //       }
-      //     ]
-      //   },
-      //   "business": {
-      //     "identifier": "3ff30c10-79c9-11ea-a2da-ebb755a8f3fd",
-      //     "profile": {
-      //       "name": "Spencer PLC",
-      //       "website": "wisozk.com",
-      //       "description": "Dignissimos cum quidem neque magnam qui et dolor. Voluptatem error maiores quia repellat veritatis possimus. Molestias id rem hic ipsam.",
-      //       "google_place_id": null,
-      //       "phone": "7912752600",
-      //       "hours": {
-      //         "monday": "Monday: 11:00 AM – 10:00 PM",
-      //         "tuesday": "Tuesday: 11:00 AM – 10:00 PM",
-      //         "wednesday": "Wednesday: 11:00 AM – 10:00 PM",
-      //         "thursday": "Thursday: 11:00 AM – 10:00 PM",
-      //         "friday": "Friday: 11:00 AM – 10:30 PM",
-      //         "saturday": "Saturday: 11:00 AM – 10:30 PM",
-      //         "sunday": "Sunday: 10:30 AM – 9:00 PM",
-      //       }
-      //     },
-      //     'photos': {
-      //     'logo': {
-      //       'name': "logo_2.png",
-      //       'small_url': "https://cdna.artstation.com/p/assets/images/images/021/760/294/micro_square/jip-scheepers-2018-04-25.jpg?1572865897",
-      //       'large_url': "https://cdna.artstation.com/p/assets/images/images/021/760/294/micro_square/jip-scheepers-2018-04-25.jpg?1572865897"
-      //     },
-      //     'banner': {
-      //       'name': "banner_1.png",
-      //       'small_url': "https://www.gerardhuerta.com/wp-content/uploads/2016/08/ACDC-1000x650.jpg",
-      //       'large_url': "https://www.gerardhuerta.com/wp-content/uploads/2016/08/ACDC-1000x650.jpg"
-      //     },
-      //   },
-      //     "location": {
-      //       "geo": {
-      //         "identifier": "3ff884f0-79c9-11ea-9cdf-4d873094dff7",
-      //         "lat": "40.748440",
-      //         "lng":"-73.985664",
-      //         "radius": "50",
-      //       },
-      //       "beacon": {
-      //         "identifier": "3ff884f0-79c9-11ea-9cdf-4d873094dff7",
-      //         "region_identifier": "3ff871d0-79c9-11ea-8a10-a7f913a9d44b",
-      //         "major": "0",
-      //         "minor": "1"
-      //       },
-      //       "region": {
-      //         "identifier": "3ff871d0-79c9-11ea-8a10-a7f913a9d44b",
-      //         "city": "prosaccoshire",
-      //         "state": "ne",
-      //         "zip": "41232",
-      //         "neighborhood": null
-      //       }
-      //     }
-      //   },
-      //   "refund": [
-      //     {
-      //       "identifier": "125d10b0-895a-11ea-95db-b1ba0de9dfd1",
-      //       "total": "952",
-      //       "created_at": "2020-04-28 14:10:53",
-      //       "status": "refund paid",
-      //     },
-      //     {
-      //       "identifier": "125d10b0-895a-11ea-95db-b1ba0de9vcd1",
-      //       "total": "500",
-      //       "created_at": "2020-04-28 14:10:53",
-      //       "status": "refund paid",
-      //     },
-      //   ],
-      //   'issue': null
-      //   },
-      // ],
+      'data': [
+        {
+          "transaction": {
+          "identifier": "fake_open_transaction",
+          "employee_id": null,
+          "tax": "457",
+          "tip": "1636",
+          "net_sales": "6088",
+          "total": "8181",
+          "partial_payment": "0",
+          "locked": false,
+          "bill_created_at": "2020-05-26T22:04:56.000000Z",
+          "updated_at": "2020-05-26T22:04:56.000000Z",
+          "status": {
+            "name": "open",
+            "code": "100"
+          },
+          "purchased_items": [
+            {
+              "name": "numquam",
+              "sub_name": 'fbjdss',
+              "price": "2000",
+              "quantity": "3",
+              "total": "6000"
+            },
+            {
+              "name": "vel",
+              "sub_name": null,
+              "price": "500",
+              "quantity": "2",
+              "total": "1000"
+            }
+          ]
+        },
+        "business": {
+          "identifier": "3ff30c10-79c9-11ea-a2da-ebb755a8f3fd",
+          "profile": {
+            "name": "Spencer PLC",
+            "website": "wisozk.com",
+            "description": "Dignissimos cum quidem neque magnam qui et dolor. Voluptatem error maiores quia repellat veritatis possimus. Molestias id rem hic ipsam.",
+            "google_place_id": null,
+            "phone": "7912752600",
+            "hours": {
+              "monday": "Monday: 11:00 AM – 10:00 PM",
+              "tuesday": "Tuesday: 11:00 AM – 10:00 PM",
+              "wednesday": "Wednesday: 11:00 AM – 10:00 PM",
+              "thursday": "Thursday: 11:00 AM – 10:00 PM",
+              "friday": "Friday: 11:00 AM – 10:30 PM",
+              "saturday": "Saturday: 11:00 AM – 10:30 PM",
+              "sunday": "Sunday: 10:30 AM – 9:00 PM",
+            }
+          },
+          'photos': {
+          'logo': {
+            'name': "logo_2.png",
+            'small_url': "https://cdna.artstation.com/p/assets/images/images/021/760/294/micro_square/jip-scheepers-2018-04-25.jpg?1572865897",
+            'large_url': "https://cdna.artstation.com/p/assets/images/images/021/760/294/micro_square/jip-scheepers-2018-04-25.jpg?1572865897"
+          },
+          'banner': {
+            'name': "banner_1.png",
+            'small_url': "https://www.gerardhuerta.com/wp-content/uploads/2016/08/ACDC-1000x650.jpg",
+            'large_url': "https://www.gerardhuerta.com/wp-content/uploads/2016/08/ACDC-1000x650.jpg"
+          },
+        },
+          "location": {
+            "geo": {
+              "identifier": "3ff884f0-79c9-11ea-9cdf-4d873094dff7",
+              "lat": "40.748440",
+              "lng":"-73.985664",
+              "radius": "50",
+            },
+            "beacon": {
+              "identifier": "3ff884f0-79c9-11ea-9cdf-4d873094dff7",
+              "region_identifier": "3ff871d0-79c9-11ea-8a10-a7f913a9d44b",
+              "major": "0",
+              "minor": "1"
+            },
+            "region": {
+              "identifier": "3ff871d0-79c9-11ea-8a10-a7f913a9d44b",
+              "city": "prosaccoshire",
+              "state": "ne",
+              "zip": "41232",
+              "neighborhood": null
+            }
+          }
+        },
+        "refund": [
+          {
+            "identifier": "125d10b0-895a-11ea-95db-b1ba0de9dfd1",
+            "total": "952",
+            "created_at": "2020-04-28 14:10:53",
+            "status": "refund paid",
+          },
+          {
+            "identifier": "125d10b0-895a-11ea-95db-b1ba0de9vcd1",
+            "total": "500",
+            "created_at": "2020-04-28 14:10:53",
+            "status": "refund paid",
+          },
+        ],
+        'issue': null
+        },
+      ],
       "links": {
         "first": "http://localhost/api/customer/transaction?page=1",
         "last": "http://localhost/api/customer/transaction?page=1",

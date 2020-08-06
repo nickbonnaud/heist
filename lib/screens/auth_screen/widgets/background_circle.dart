@@ -34,7 +34,7 @@ class _BackgroundCircle extends StatelessWidget {
           margin: EdgeInsets.only(bottom: SizeConfig.getWidth(65)),
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: Theme.of(context).colorScheme.textOnDarkSubdued
+            color: Theme.of(context).colorScheme.onSecondarySubdued
           ),
           width: size,
           height: size,

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:heist/resources/helpers/size_config.dart';
-import 'package:heist/themes/global_colors.dart';
 
 class VeryBoldText1 extends StatelessWidget {
   final String _text;
@@ -19,7 +18,7 @@ class VeryBoldText1 extends StatelessWidget {
       _text,
       style: TextStyle(
         fontWeight: FontWeight.w900,
-        color: color == null ? Theme.of(_context).colorScheme.textOnLight : color,
+        color: color == null ? Theme.of(_context).colorScheme.onPrimary : color,
         fontSize: SizeConfig.getWidth(10)
       ),
     );
@@ -42,7 +41,7 @@ class VeryBoldText2 extends StatelessWidget {
       _text,
       style: TextStyle(
         fontWeight: FontWeight.w900,
-        color: color == null ? Theme.of(_context).colorScheme.textOnLight : color,
+        color: color == null ? Theme.of(_context).colorScheme.onPrimary : color,
         fontSize: SizeConfig.getWidth(9),
       ),
     );
@@ -65,7 +64,7 @@ class VeryBoldText3 extends StatelessWidget {
       _text,
       style: TextStyle(
         fontWeight: FontWeight.w900,
-        color: color == null ? Theme.of(_context).colorScheme.textOnLight : color,
+        color: color == null ? Theme.of(_context).colorScheme.onPrimary : color,
         fontSize: SizeConfig.getWidth(8)
       ),
     );
@@ -88,7 +87,7 @@ class VeryBoldText4 extends StatelessWidget {
       _text,
       style: TextStyle(
         fontWeight: FontWeight.w900,
-        color: color == null ? Theme.of(_context).colorScheme.textOnLight : color,
+        color: color == null ? Theme.of(_context).colorScheme.onPrimary : color,
         fontSize: SizeConfig.getWidth(7)
       ),
     );
@@ -111,7 +110,7 @@ class VeryBoldText5 extends StatelessWidget {
       _text,
       style: TextStyle(
         fontWeight: FontWeight.w900,
-        color: color == null ? Theme.of(_context).colorScheme.textOnLight : color,
+        color: color == null ? Theme.of(_context).colorScheme.onPrimary : color,
         fontSize: SizeConfig.getWidth(6)
       ),
     );
@@ -136,7 +135,7 @@ class BoldTextCustom extends StatelessWidget {
       _text,
       style: TextStyle(
         fontWeight: FontWeight.bold,
-        color: color == null ? Theme.of(_context).colorScheme.textOnLight : color,
+        color: color == null ? Theme.of(_context).colorScheme.onPrimary : color,
         fontSize: _size
       ),
     );
@@ -159,7 +158,7 @@ class BoldText1 extends StatelessWidget {
       _text,
       style: TextStyle(
         fontWeight: FontWeight.bold,
-        color: color == null ? Theme.of(_context).colorScheme.textOnLight : color,
+        color: color == null ? Theme.of(_context).colorScheme.onPrimary : color,
         fontSize: SizeConfig.getWidth(8)
       ),
     );
@@ -182,7 +181,7 @@ class BoldText2 extends StatelessWidget {
       _text,
       style: TextStyle(
         fontWeight: FontWeight.bold,
-        color: color == null ? Theme.of(_context).colorScheme.textOnLight : color,
+        color: color == null ? Theme.of(_context).colorScheme.onPrimary : color,
         fontSize: SizeConfig.getWidth(7),
       ),
     );
@@ -205,7 +204,7 @@ class BoldText3 extends StatelessWidget {
       _text,
       style: TextStyle(
         fontWeight: FontWeight.bold,
-        color: color == null ? Theme.of(_context).colorScheme.textOnLight : color,
+        color: color == null ? Theme.of(_context).colorScheme.onPrimary : color,
         fontSize: SizeConfig.getWidth(6)
       ),
     );
@@ -228,7 +227,7 @@ class BoldText4 extends StatelessWidget {
       _text,
       style: TextStyle(
         fontWeight: FontWeight.bold,
-        color: color == null ? Theme.of(_context).colorScheme.textOnLight : color,
+        color: color == null ? Theme.of(_context).colorScheme.onPrimary : color,
         fontSize: SizeConfig.getWidth(5)
       ),
     );
@@ -251,7 +250,7 @@ class BoldText5 extends StatelessWidget {
       _text,
       style: TextStyle(
         fontWeight: FontWeight.bold,
-        color: color == null ? Theme.of(_context).colorScheme.textOnLight : color,
+        color: color == null ? Theme.of(_context).colorScheme.onPrimary : color,
         fontSize: SizeConfig.getWidth(4)
       ),
     );
@@ -276,7 +275,7 @@ class TextCustom extends StatelessWidget {
       _text,
       style: TextStyle(
         fontWeight: FontWeight.normal,
-        color: color == null ? Theme.of(_context).colorScheme.textOnLight : color,
+        color: color == null ? Theme.of(_context).colorScheme.onPrimary : color,
         fontSize: _size
       ),
     );
@@ -299,7 +298,7 @@ class Text1 extends StatelessWidget {
       _text,
       style: TextStyle(
         fontWeight: FontWeight.normal,
-        color: color == null ? Theme.of(_context).colorScheme.textOnLight : color,
+        color: color == null ? Theme.of(_context).colorScheme.onPrimary : color,
         fontSize: SizeConfig.getWidth(6)
       ),
     );
@@ -322,7 +321,7 @@ class Text2 extends StatelessWidget {
       _text,
       style: TextStyle(
         fontWeight: FontWeight.normal,
-        color: color == null ? Theme.of(_context).colorScheme.textOnLight : color,
+        color: color == null ? Theme.of(_context).colorScheme.onPrimary : color,
         fontSize: SizeConfig.getWidth(5),
       ),
     );
@@ -345,7 +344,7 @@ class Text3 extends StatelessWidget {
       _text,
       style: TextStyle(
         fontWeight: FontWeight.normal,
-        color: color == null ? Theme.of(_context).colorScheme.textOnLight : color,
+        color: color == null ? Theme.of(_context).colorScheme.onPrimary : color,
         fontSize: SizeConfig.getWidth(4)
       ),
     );
@@ -368,7 +367,7 @@ class Text4 extends StatelessWidget {
       _text,
       style: TextStyle(
         fontWeight: FontWeight.normal,
-        color: color == null ? Theme.of(_context).colorScheme.textOnLight : color,
+        color: color == null ? Theme.of(_context).colorScheme.onPrimary : color,
         fontSize: SizeConfig.getWidth(3)
       ),
     );
@@ -391,7 +390,7 @@ class Text5 extends StatelessWidget {
       _text,
       style: TextStyle(
         fontWeight: FontWeight.normal,
-        color: color == null ? Theme.of(_context).colorScheme.textOnLight : color,
+        color: color == null ? Theme.of(_context).colorScheme.onPrimary : color,
         fontSize: SizeConfig.getWidth(2)
       ),
     );

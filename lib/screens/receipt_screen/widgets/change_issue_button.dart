@@ -8,7 +8,6 @@ import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
 import 'package:heist/screens/issue_screen/issue_screen.dart';
 import 'package:heist/screens/receipt_screen/bloc/receipt_screen_bloc.dart';
-import 'package:heist/themes/global_colors.dart';
 
 enum Options {
   cancel,
@@ -35,7 +34,7 @@ class ChangeIssueButton extends StatelessWidget {
           android: (_) => Icon(
             Icons.more_vert,
             size: SizeConfig.getWidth(10),
-            color: Theme.of(context).colorScheme.textOnLight,
+            color: Theme.of(context).colorScheme.onPrimary,
           ),
           ios: (_) => Icon(
             IconData(
@@ -44,7 +43,7 @@ class ChangeIssueButton extends StatelessWidget {
               fontPackage: CupertinoIcons.iconFontPackage,
             ),
             size: SizeConfig.getWidth(10),
-            color: Theme.of(context).colorScheme.textOnLight,
+            color: Theme.of(context).colorScheme.onPrimary,
           ),
         ),
         itemBuilder: (BuildContext context) => <PopupMenuEntry<Options>>[
@@ -117,6 +116,6 @@ class ChangeIssueButton extends StatelessWidget {
   }
 
   Widget _createTitle({@required BuildContext context, @required String title}) {
-    return BoldText5(text: title, context: context, color: Theme.of(context).colorScheme.textOnLight);
+    return BoldText5(text: title, context: context, color: Theme.of(context).colorScheme.onPrimary);
   }
 }

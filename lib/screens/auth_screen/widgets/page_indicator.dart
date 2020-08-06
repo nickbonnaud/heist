@@ -23,8 +23,8 @@ class PageIndicator extends StatelessWidget {
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: notifier.page.round() == 0 
-                      ? Theme.of(context).colorScheme.textOnDark
-                      : Theme.of(context).colorScheme.textOnDarkSubdued
+                      ? Theme.of(context).colorScheme.onSecondary
+                      : Theme.of(context).colorScheme.onSecondarySubdued
                   ),
                   height: 6,
                   width: 6,
@@ -34,8 +34,8 @@ class PageIndicator extends StatelessWidget {
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: notifier.page.round() != 0 
-                      ? Theme.of(context).colorScheme.textOnDark
-                      : Theme.of(context).colorScheme.textOnDarkSubdued
+                      ? Theme.of(context).colorScheme.onSecondary
+                      : Theme.of(context).colorScheme.onSecondarySubdued
                   ),
                   height: 6,
                   width: 6,

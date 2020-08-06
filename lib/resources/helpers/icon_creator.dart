@@ -1,6 +1,6 @@
+import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
@@ -13,7 +13,7 @@ class IconCreator {
   final List<Business> _businesses;
 
   IconCreator({@required Size size, @required List<Business> businesses})
-    : assert(size != null),
+    : assert(size != null && businesses != null),
       _size = size,
       _businesses = businesses;
 
@@ -43,11 +43,11 @@ class IconCreator {
 
     final Radius radius = Radius.circular(size.width / 2);
 
-    final Paint shadowPaint = Paint()..color = Colors.blue.withAlpha(100);
-    final double shadowWidth = 15.0;
+    final Paint shadowPaint = Paint()..color = Color(0xFF016fb9);
+    final double shadowWidth = 8.0;
 
     final Paint borderPaint = Paint()..color = Colors.white;
-    final double borderWidth = 3.0;
+    final double borderWidth = 1.0;
 
     final double imageOffset = shadowWidth + borderWidth;
 

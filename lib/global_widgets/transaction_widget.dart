@@ -34,12 +34,12 @@ class TransactionWidget extends StatelessWidget {
         subtitle: Text2(
           text: 'Total: ${Currency.create(cents: _transactionResource.transaction.total)}', 
           context: context, 
-          color: Theme.of(context).colorScheme.textOnLightSubdued
+          color: Theme.of(context).colorScheme.onPrimarySubdued
         ),
         trailing: Text2(
           text: _transactionResource.transaction.billUpdatedAt, 
           context: context, 
-          color: Theme.of(context).colorScheme.textOnLightSubdued
+          color: Theme.of(context).colorScheme.onPrimarySubdued
         ),
         onTap: () => showFullTransaction(context),
       )

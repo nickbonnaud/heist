@@ -49,12 +49,12 @@ class LogoButtonsList extends StatelessWidget {
 
   double _getContainerHeight({@required LogoButtonsListState state}) {
     int logosLength = state.numberOpenTransactions + state.numberActiveLocations + state.numberNearbyLocations;
-    return sharedSizes.endMarginTop + ((logosLength + (state.numberOpenTransactions > 0 ? 1 : 0) + (state.numberActiveLocations > 0 ? 1 : 0)) * (sharedSizes.verticalSpacing + sharedSizes.endSize)) + (_topMargin * 2.5);
+    return sharedSizes.endMarginTop + (logosLength  * (sharedSizes.verticalSpacing + sharedSizes.endSize)) + (_topMargin * 2.5);
   }
 
   double _getContainerWidth({@required LogoButtonsListState state}) {
     int logosLength = state.numberOpenTransactions + state.numberActiveLocations + state.numberNearbyLocations;
-    return (logosLength + (state.numberOpenTransactions > 0 ? 1 : 0) + (state.numberActiveLocations > 0 ? 1 : 0)) * ((1.1 * sharedSizes.horizontalSpacing + sharedSizes.startSize));
+    return logosLength  * ((sharedSizes.horizontalSpacing + sharedSizes.startSize));
   }
 
   double lerp({@required double min, @required double max}) {

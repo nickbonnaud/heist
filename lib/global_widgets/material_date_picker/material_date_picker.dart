@@ -51,7 +51,7 @@ class _MaterialDatePicker extends State<MaterialDatePicker> {
                           state.startDate != null ? _formatDate(state.startDate) : "Select Start Date",
                           style: TextStyle(
                             fontWeight: FontWeight.w700,
-                            color: Theme.of(context).colorScheme.textOnLight,
+                            color: Theme.of(context).colorScheme.onPrimary,
                             fontSize: SizeConfig.getWidth(7),
                             decoration: state.active == Active.start ? TextDecoration.underline : null
                           ),
@@ -74,7 +74,7 @@ class _MaterialDatePicker extends State<MaterialDatePicker> {
                           _formatDate(state.endDate),
                           style: TextStyle(
                             fontWeight: FontWeight.w700,
-                            color: Theme.of(context).colorScheme.textOnLight,
+                            color: Theme.of(context).colorScheme.onPrimary,
                             fontSize: SizeConfig.getWidth(7),
                             decoration: state.active == Active.end ? TextDecoration.underline : null
                           ),
@@ -93,9 +93,9 @@ class _MaterialDatePicker extends State<MaterialDatePicker> {
                   Expanded(
                     child: OutlineButton(
                       borderSide: BorderSide(
-                        color: Theme.of(context).colorScheme.buttonOutlineCancel
+                        color: Theme.of(context).colorScheme.callToAction
                       ),
-                      disabledBorderColor: Theme.of(context).colorScheme.buttonOutlineCancelDisabled,
+                      disabledBorderColor: Theme.of(context).colorScheme.callToActionDisabled,
                       shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
                       onPressed: () => Navigator.of(context).pop(),
                       child: BoldText3(text: 'Cancel', context: context),
@@ -110,7 +110,7 @@ class _MaterialDatePicker extends State<MaterialDatePicker> {
                           onPressed: state.startDate != null && state.endDate != null && state.startDate.isBefore(state.endDate)
                             ? () => Navigator.of(context).pop(DateRange(startDate: state.startDate, endDate: state.endDate))
                             : null,
-                          child: BoldText3(text: 'Submit', context: context, color: Theme.of(context).colorScheme.textOnDark)
+                          child: BoldText3(text: 'Submit', context: context, color: Theme.of(context).colorScheme.onSecondary)
                         );
                       }
                     )

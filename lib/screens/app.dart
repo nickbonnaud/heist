@@ -49,7 +49,7 @@ class App extends StatelessWidget {
               BlocProvider.of<BeaconBloc>(context).add(StartBeaconMonitoring(businesses: state.businesses));
               BlocProvider.of<NotificationBootBloc>(context).add(NearbyBusinessesReady());
               // TEST: Building active locations
-              // state.businesses.forEach((business) {
+              // state.businesses.take(2).forEach((business) {
               //   BlocProvider.of<ActiveLocationBloc>(context).add(NewActiveLocation(beaconIdentifier: business.location.beacon.identifier));
               // });
             }

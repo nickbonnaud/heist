@@ -70,7 +70,7 @@ class _HistoricTransactionsBodyState extends State<HistoricTransactionsBody> {
       controller: _scrollController,
       slivers: <Widget>[
         DefaultAppBar(
-          backgroundColor: Theme.of(context).colorScheme.scrollBackgroundLight,
+          backgroundColor: Theme.of(context).colorScheme.scrollBackground,
           isSliver: true,
           title: "Transactions",
         ),
@@ -98,8 +98,8 @@ class _HistoricTransactionsBodyState extends State<HistoricTransactionsBody> {
       child: BlocProvider<FilterButtonBloc>(
         create: (_) => FilterButtonBloc(),
         child: FilterButton(
-          startColor: Theme.of(context).colorScheme.secondary,
-          endColor: Theme.of(context).colorScheme.secondaryVariant,
+          startColor: Theme.of(context).colorScheme.callToAction,
+          endColor: Theme.of(context).colorScheme.callToAction,
         ),
       )
     );

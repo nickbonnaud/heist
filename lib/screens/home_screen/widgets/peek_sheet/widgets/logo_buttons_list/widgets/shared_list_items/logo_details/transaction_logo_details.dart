@@ -16,6 +16,7 @@ class TransactionLogoDetails extends StatelessWidget {
   final double _borderRadius;
   final TransactionResource _transactionResource;
   final AnimationController _controller;
+  final int _index;
 
   TransactionLogoDetails({
     @required double topMargin,
@@ -23,7 +24,8 @@ class TransactionLogoDetails extends StatelessWidget {
     @required double height,
     @required double borderRadius,
     @required TransactionResource transactionResource,
-    @required AnimationController controller
+    @required AnimationController controller,
+    @required int index
   })
     : assert(
       topMargin != null &&
@@ -31,14 +33,16 @@ class TransactionLogoDetails extends StatelessWidget {
       height != null &&
       borderRadius != null &&
       transactionResource != null &&
-      controller != null
+      controller != null &&
+      index != null
     ),
       _topMargin = topMargin,
       _leftMargin = leftMargin,
       _height = height,
       _borderRadius = borderRadius,
       _transactionResource = transactionResource,
-      _controller = controller;
+      _controller = controller,
+      _index = index;
 
   @override
   Widget build(BuildContext context) {
@@ -47,21 +51,96 @@ class TransactionLogoDetails extends StatelessWidget {
       left: _leftMargin,
       height: _height,
       right: 16,
-      child: AnimatedOpacity(
-        opacity: _controller.status == AnimationStatus.completed ? 1 : 0, 
-        duration: Duration(milliseconds: 200),
-        child: GestureDetector(
-          onTap: () => _viewReceiptModal(context: context),
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(_borderRadius),
-              color: Theme.of(context).colorScheme.scrollBackgroundLight
+      child: _controller.status == AnimationStatus.completed
+        ? Details(
+          height: _height, 
+          borderRadius: _borderRadius, 
+          transactionResource: _transactionResource, 
+          controller: _controller, 
+          index: _index
+        )
+        : Container()
+    );
+  }
+}
+
+class Details extends StatefulWidget {
+  final double _height;
+  final double _borderRadius;
+  final TransactionResource _transactionResource;
+  final AnimationController _controller;
+  final int _index;
+
+  Details({
+    @required double height,
+    @required double borderRadius,
+    @required TransactionResource transactionResource,
+    @required AnimationController controller,
+    @required int index
+  })
+    : assert(
+      height != null &&
+      borderRadius != null &&
+      transactionResource != null &&
+      controller != null && 
+      index != null
+    ),
+      _height = height,
+      _borderRadius = borderRadius,
+      _transactionResource = transactionResource,
+      _controller = controller,
+      _index = index;
+
+  @override
+  State<Details> createState() => _DetailsState();
+}
+
+class _DetailsState extends State<Details> with SingleTickerProviderStateMixin {
+  AnimationController _detailsController;
+  bool _isPressed = false;
+  static const _curve = Curves.easeIn;
+  
+  @override
+  void initState() {
+    super.initState();
+    _detailsController = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 300),
+    );
+    
+    Future.delayed(Duration(milliseconds: 200 * widget._index), () => _detailsController.forward());
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: CurvedAnimation(parent: _detailsController, curve: _curve),
+      builder: (context, child) {
+        return Opacity(
+          opacity: _detailsController.value,
+          child: Padding(
+            padding: EdgeInsets.only(right: 4),
+            child: GestureDetector(
+              onTap: () => _viewReceiptModal(context: context),
+              onTapDown: (_) => setState(() => _isPressed = !_isPressed),
+              onTapUp: (_) => setState(() => _isPressed = !_isPressed),
+              onTapCancel: () => setState(() => _isPressed = !_isPressed),
+              child: Material(
+                elevation: _isPressed ? 0 : 5,
+                borderRadius: BorderRadius.circular(widget._borderRadius),
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(widget._borderRadius),
+                    color: Theme.of(context).colorScheme.scrollBackground
+                  ),
+                  padding: EdgeInsets.only(left: widget._height).add(EdgeInsets.all(8)),
+                  child: _buildContent(context: context),
+                ),
+              ),
             ),
-            padding: EdgeInsets.only(left: _height).add(EdgeInsets.all(8)),
-            child: _buildContent(context: context),
           ),
-        ),
-      )
+        );
+      }
     );
   }
 
@@ -70,11 +149,11 @@ class TransactionLogoDetails extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
         PlatformText(
-          "Bill at ${_transactionResource.business.profile.name}",
+          "Bill at ${widget._transactionResource.business.profile.name}",
           style: TextStyle(
-            fontSize: SizeConfig.getWidth(4) * _controller.value,
+            fontSize: SizeConfig.getWidth(4) * widget._controller.value,
             fontWeight: FontWeight.bold,
-            color: Theme.of(context).colorScheme.textOnLight
+            color: Theme.of(context).colorScheme.onPrimary
           ),
         ),
         Row(
@@ -83,17 +162,17 @@ class TransactionLogoDetails extends StatelessWidget {
             PlatformText(
               "Total:",
               style: TextStyle(
-                fontSize: SizeConfig.getWidth(4) * _controller.value,
+                fontSize: SizeConfig.getWidth(4) * widget._controller.value,
                 fontWeight: FontWeight.normal,
-                color: Theme.of(context).colorScheme.textOnLightSubdued,
+                color: Theme.of(context).colorScheme.onPrimarySubdued,
               ),
             ),
             PlatformText(
-              Currency.create(cents: _transactionResource.transaction.total),
+              Currency.create(cents: widget._transactionResource.transaction.total),
               style: TextStyle(
-                fontSize: SizeConfig.getWidth(4) * _controller.value,
+                fontSize: SizeConfig.getWidth(4) * widget._controller.value,
                 fontWeight: FontWeight.bold,
-                color: Theme.of(context).colorScheme.textOnLight
+                color: Theme.of(context).colorScheme.onPrimary
               ),
             ),
           ],
@@ -103,9 +182,10 @@ class TransactionLogoDetails extends StatelessWidget {
   }
 
   void _viewReceiptModal({@required BuildContext context}) {
-    showPlatformModalSheet(
-      context: context,
-      builder: (_) => ReceiptScreen(transactionResource: _transactionResource, receiptModalSheetBloc: BlocProvider.of<ReceiptModalSheetBloc>(context))
-    );
+    Navigator.of(context).push(PageRouteBuilder(
+      opaque: false,
+      fullscreenDialog: true,
+      pageBuilder: (BuildContext context, _, __) => ReceiptScreen(transactionResource: widget._transactionResource, receiptModalSheetBloc: BlocProvider.of<ReceiptModalSheetBloc>(context))
+    ));
   }
 }

@@ -184,12 +184,12 @@ class _ProfileNameBodyState extends State<ProfileNameBody> {
         text: ['Saving...'],
         textStyle: TextStyle(
           fontWeight: FontWeight.bold,
-          color: Theme.of(context).colorScheme.textOnDark,
+          color: Theme.of(context).colorScheme.onSecondary,
           fontSize: SizeConfig.getWidth(6)
         ),
       );
     } else {
-      return BoldText3(text: 'Save', context: context, color: Theme.of(context).colorScheme.textOnDark);
+      return BoldText3(text: 'Save', context: context, color: Theme.of(context).colorScheme.onSecondary);
     }
   }
 
@@ -212,7 +212,7 @@ class _ProfileNameBodyState extends State<ProfileNameBody> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Expanded(
-                child: BoldText3(text: message, context: context, color: Theme.of(context).colorScheme.textOnDark)
+                child: BoldText3(text: message, context: context, color: Theme.of(context).colorScheme.onSecondary)
               ),
               PlatformWidget(
                 android: (_) => Icon(state.isSuccess ? Icons.check_circle_outline : Icons.error),

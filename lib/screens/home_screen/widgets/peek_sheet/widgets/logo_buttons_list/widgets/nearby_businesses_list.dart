@@ -36,6 +36,7 @@ class NearbyBusinessesList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<NearbyBusinessesBloc, NearbyBusinessesState>(
+      buildWhen: (previousState, state) => previousState != state,
       builder: (context, state) {
         final currentState = state;
         if (currentState is NearbyBusinessLoaded) {
@@ -103,7 +104,8 @@ class NearbyBusinessesList extends StatelessWidget {
       height: _size, 
       controller: _controller,
       borderRadius: _borderRadius, 
-      business: business
+      business: business,
+      index: index
     );
   }
 

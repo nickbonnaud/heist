@@ -19,7 +19,7 @@ class HistoricTransactionsScreen extends StatelessWidget {
         create: (BuildContext context) => HistoricTransactionsBloc(transactionRepository: _transactionRepository)
           ..add(FetchHistoricTransactions()),
         child: Scaffold(
-          backgroundColor: Theme.of(context).colorScheme.scrollBackgroundLight,
+          backgroundColor: Theme.of(context).colorScheme.scrollBackground,
           body: HistoricTransactionsBody(),
         ),
       ) 

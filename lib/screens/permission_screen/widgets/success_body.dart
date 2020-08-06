@@ -26,7 +26,7 @@ class SuccessBody extends StatelessWidget {
             PlatformText('All your device permissions are set!',
               textAlign: TextAlign.center,
               style: TextStyle(
-                color: Theme.of(context).colorScheme.textOnLightSubdued,
+                color: Theme.of(context).colorScheme.onPrimarySubdued,
                 fontSize: SizeConfig.getWidth(5),
                 fontWeight: FontWeight.bold
               ),

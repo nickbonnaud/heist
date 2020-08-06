@@ -35,12 +35,12 @@ class RefundWidget extends StatelessWidget {
         subtitle: Text2(
           text: 'Refund: ${Currency.create(cents: _refundResource.refund.total)}',
           context: context,
-          color: Theme.of(context).colorScheme.textOnLightSubdued
+          color: Theme.of(context).colorScheme.onPrimarySubdued
         ),
         trailing: Text2(
           text: _refundResource.refund.createdAt,
           context: context,
-          color: Theme.of(context).colorScheme.textOnLightSubdued
+          color: Theme.of(context).colorScheme.onPrimarySubdued
         ),
         onTap: () => showFullTransaction(context),
       ),

@@ -26,7 +26,7 @@ class PurchasedItemWidget extends StatelessWidget {
         ? BoldText5(
           text: _purchasedItem.subName, 
           context: context, 
-          color: Theme.of(context).colorScheme.textOnLightSubdued
+          color: Theme.of(context).colorScheme.onPrimarySubdued
         )
         : null,
       trailing: BoldText4(

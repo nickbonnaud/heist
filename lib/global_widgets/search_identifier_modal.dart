@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:heist/global_widgets/bottom_modal_app_bar.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/themes/global_colors.dart';
@@ -18,14 +17,14 @@ class SearchIdentifierModal extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomPadding: false,
-      appBar: BottomModalAppBar(backgroundColor: Theme.of(context).colorScheme.scrollBackgroundLight),
-      backgroundColor: Theme.of(context).colorScheme.scrollBackgroundLight,
+      appBar: BottomModalAppBar(backgroundColor: Theme.of(context).colorScheme.scrollBackground),
+      backgroundColor: Theme.of(context).colorScheme.scrollBackground,
       body: Padding(
         padding: EdgeInsets.only(left: 16, right: 16),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            PlatformTextField(
+            TextField(
               focusNode: _identifierNode,
               autocorrect: false,
               autofocus: true,
@@ -35,26 +34,17 @@ class SearchIdentifierModal extends StatelessWidget {
                 fontWeight: FontWeight.w700,
                 fontSize: SizeConfig.getWidth(7),
               ),
-              inputFormatters: [_createInputFormatter()],
-              onSubmitted: (String identifier) => Navigator.of(context).pop(identifier),
-              android: (_) => MaterialTextFieldData(
-                decoration: InputDecoration(
-                  hintText: _hintText,
-                  hintStyle: TextStyle(
-                    fontWeight: FontWeight.w700,
-                    fontSize: SizeConfig.getWidth(7),
-                    color: Theme.of(context).colorScheme.textOnLightDisabled
-                  ),
-                ),
-              ),
-              ios: (_) => CupertinoTextFieldData(
-                placeholder: _hintText,
-                placeholderStyle: TextStyle(
+              decoration: InputDecoration(
+                hintText: _hintText,
+                hintStyle: TextStyle(
                   fontWeight: FontWeight.w700,
                   fontSize: SizeConfig.getWidth(7),
-                  color: Theme.of(context).colorScheme.textOnLightDisabled
+                  color: Theme.of(context).colorScheme.onPrimaryDisabled
                 ),
               ),
+              cursorColor: Theme.of(context).colorScheme.callToAction,
+              inputFormatters: [_createInputFormatter()],
+              onSubmitted: (String identifier) => Navigator.of(context).pop(identifier),
             )
           ],
         ),

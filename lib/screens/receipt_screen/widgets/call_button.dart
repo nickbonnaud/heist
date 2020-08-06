@@ -26,7 +26,7 @@ class CallButton extends StatelessWidget {
       color: Theme.of(context).colorScheme.info,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
       onPressed: () => launch("tel://${_transactionResource.business.profile.phone}"),
-      label: BoldText3(text: "Business", context: context, color: Theme.of(context).colorScheme.textOnDark),
+      label: BoldText3(text: "Business", context: context, color: Theme.of(context).colorScheme.onSecondary),
     );
   }
 }

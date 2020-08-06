@@ -52,11 +52,11 @@ class KeepOpenButton extends StatelessWidget {
         textStyle: TextStyle(
           fontSize: SizeConfig.getWidth(6),
           fontWeight: FontWeight.w700,
-          color: Theme.of(context).colorScheme.textOnDark
+          color: Theme.of(context).colorScheme.onSecondary
         ),
       );
     } else {
-      return BoldText3(text: 'Keep Open', context: context, color: Theme.of(context).colorScheme.textOnDark);
+      return BoldText3(text: 'Keep Open', context: context, color: Theme.of(context).colorScheme.onSecondary);
     }
   }
 
@@ -75,7 +75,7 @@ class KeepOpenButton extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Expanded(
-                child: BoldText3(text: message, context: context, color: Theme.of(context).colorScheme.textOnDark)
+                child: BoldText3(text: message, context: context, color: Theme.of(context).colorScheme.onSecondary)
               ),
               PlatformWidget(
                 android: (_) => Icon(state.isSubmitSuccess ? Icons.check_circle_outline : Icons.error),

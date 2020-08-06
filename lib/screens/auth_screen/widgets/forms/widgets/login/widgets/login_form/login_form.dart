@@ -93,16 +93,16 @@ class _LoginFormState extends State<LoginForm> {
                           autocorrect: false,
                           decoration: InputDecoration(
                             enabledBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Theme.of(context).colorScheme.textOnDark)
+                              borderSide: BorderSide(color: Theme.of(context).colorScheme.onSecondary)
                             ),
                             hintText: 'Email',
                             hintStyle: TextStyle(
-                              color: Theme.of(context).colorScheme.textOnDarkSubdued,
+                              color: Theme.of(context).colorScheme.onSecondarySubdued,
                               fontSize: SizeConfig.getWidth(6)
                             ),
                           ),
                           style: TextStyle(
-                            color: Theme.of(context).colorScheme.textOnDark,
+                            color: Theme.of(context).colorScheme.onSecondary,
                             fontSize: SizeConfig.getWidth(6)
                           ),
                         );
@@ -124,16 +124,16 @@ class _LoginFormState extends State<LoginForm> {
                           autocorrect: false,
                           decoration: InputDecoration(
                             enabledBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Theme.of(context).colorScheme.textOnDark),
+                              borderSide: BorderSide(color: Theme.of(context).colorScheme.onSecondary),
                             ),
                             hintText: 'Password',
                             hintStyle: TextStyle(
-                              color: Theme.of(context).colorScheme.textOnDarkSubdued,
+                              color: Theme.of(context).colorScheme.onSecondarySubdued,
                               fontSize: SizeConfig.getWidth(6)
                             )
                           ),
                           style: TextStyle(
-                            color: Theme.of(context).colorScheme.textOnDark,
+                            color: Theme.of(context).colorScheme.onSecondary,
                             fontSize: SizeConfig.getWidth(6)
                           ),
                           obscureText: true,
@@ -152,7 +152,7 @@ class _LoginFormState extends State<LoginForm> {
                             padding: EdgeInsets.symmetric(vertical: 10,horizontal: 0),
                             decoration: BoxDecoration(
                               border: (_isLoginButtonEnabled(state) || state.isSubmitting)
-                                ? Border.all(color: Theme.of(context).colorScheme.textOnDark)
+                                ? Border.all(color: Theme.of(context).colorScheme.onSecondary)
                                 : null,
                               borderRadius: BorderRadius.circular(50),
                             ),
@@ -161,14 +161,14 @@ class _LoginFormState extends State<LoginForm> {
                                   speed: Duration(milliseconds: 250),
                                   text: ['Logging in...'],
                                   textStyle: TextStyle(
-                                    color: Theme.of(context).colorScheme.textOnDark,
+                                    color: Theme.of(context).colorScheme.onSecondary,
                                     fontSize: SizeConfig.getWidth(7)
                                   ),
                                   textAlign: TextAlign.start,
                                   alignment: AlignmentDirectional.topStart,
                                 )
                               : (_isLoginButtonEnabled(state)
-                                  ? Text1(text: 'Login', context: context, color: Theme.of(context).colorScheme.textOnDark)
+                                  ? Text1(text: 'Login', context: context, color: Theme.of(context).colorScheme.onSecondary)
                                   : null
                                 ),
                           ),
@@ -190,7 +190,7 @@ class _LoginFormState extends State<LoginForm> {
                           },
                           child: Text("Don't have an account?",
                             style: TextStyle(
-                              color: Theme.of(context).colorScheme.textOnDarkSubdued,
+                              color: Theme.of(context).colorScheme.callToAction,
                               fontSize: SizeConfig.getWidth(4),
                               decoration: TextDecoration.underline,
                               letterSpacing: 0.5
@@ -245,7 +245,7 @@ class _LoginFormState extends State<LoginForm> {
 
   KeyboardActionsConfig _buildKeyboard({@required BuildContext context}) {
     return KeyboardActionsConfig(
-      keyboardBarColor: Theme.of(context).colorScheme.keyboardHelpBarOnDark,
+      keyboardBarColor: Theme.of(context).colorScheme.keyboardHelpBar,
       keyboardActionsPlatform: KeyboardActionsPlatform.ALL,
       actions: [
         KeyboardAction(
@@ -256,7 +256,7 @@ class _LoginFormState extends State<LoginForm> {
                 onTap: () => node.unfocus(),
                 child: Padding(
                   padding: EdgeInsets.only(right: 16.0),
-                  child: BoldText5(text: 'Done', context: context, color: Theme.of(context).colorScheme.primary),
+                  child: BoldText5(text: 'Done', context: context, color: Theme.of(context).colorScheme.callToAction),
                 ),
               );
             }
@@ -270,7 +270,7 @@ class _LoginFormState extends State<LoginForm> {
                 onTap: () => node.unfocus(),
                 child: Padding(
                   padding: EdgeInsets.only(right: 16.0),
-                  child: BoldText5(text: 'Done', context: context, color: Theme.of(context).colorScheme.primary),
+                  child: BoldText5(text: 'Done', context: context, color: Theme.of(context).colorScheme.callToAction),
                 ),
               );
             }

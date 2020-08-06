@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
-import 'package:flutter_typeahead/cupertino_flutter_typeahead.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:heist/global_widgets/cached_avatar.dart';
 import 'package:heist/models/business/business.dart';
@@ -20,20 +18,19 @@ class SearchBusinessNameModal extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomPadding: false,
-      appBar: BottomModalAppBar(backgroundColor: Theme.of(context).colorScheme.scrollBackgroundLight),
-      backgroundColor: Theme.of(context).colorScheme.scrollBackgroundLight,
+      appBar: BottomModalAppBar(backgroundColor: Theme.of(context).colorScheme.scrollBackground),
+      backgroundColor: Theme.of(context).colorScheme.scrollBackground,
       body: Padding(
         padding: EdgeInsets.only(left: 16, right: 16),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            PlatformWidget(
-              android: (_) => TypeAheadFormField(
+            TypeAheadFormField(
                 loadingBuilder: (BuildContext context) => Center(
                   child: LoadingWidget(),
                 ),
                 suggestionsBoxDecoration: SuggestionsBoxDecoration(
-                  color: Theme.of(context).colorScheme.scrollBackgroundLight,
+                  color: Theme.of(context).colorScheme.scrollBackground,
                   elevation: 0
                 ),
                 debounceDuration: Duration(milliseconds: 500),
@@ -48,9 +45,10 @@ class SearchBusinessNameModal extends StatelessWidget {
                     hintStyle: TextStyle(
                       fontWeight: FontWeight.w700,
                       fontSize: SizeConfig.getWidth(7),
-                      color: Theme.of(context).colorScheme.textOnLightDisabled
+                      color: Theme.of(context).colorScheme.onPrimaryDisabled
                     ),
                   ),
+                  cursorColor: Theme.of(context).colorScheme.callToAction,
                   autocorrect: false,
                   autofocus: true,
                   keyboardType: TextInputType.text,
@@ -65,39 +63,7 @@ class SearchBusinessNameModal extends StatelessWidget {
                   Navigator.of(context).pop(business);
                 },
                 hideSuggestionsOnKeyboardHide: false,
-              ),
-              ios: (_) => CupertinoTypeAheadFormField(
-                loadingBuilder: (BuildContext context) => Center(
-                  child: LoadingWidget(),
-                ),
-                suggestionsBoxDecoration: CupertinoSuggestionsBoxDecoration(
-                  color: Theme.of(context).colorScheme.scrollBackgroundLight,
-                ),
-                debounceDuration: Duration(milliseconds: 500),
-                textFieldConfiguration: CupertinoTextFieldConfiguration(
-                  focusNode: _businessNameNode,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w800,
-                    fontSize: SizeConfig.getWidth(7),
-                    color: Theme.of(context).colorScheme.textOnLightDisabled
-                  ),
-                  placeholder: "Business Name",
-                  keyboardType: TextInputType.text,
-                  textInputAction: TextInputAction.done,
-                  autocorrect: false,
-                  autofocus: true,
-                  onSubmitted: (_) => Navigator.of(context).pop()
-                ),
-                suggestionsCallback: _suggestionCallback,
-                itemBuilder: (context, Business business) {
-                  return _buildSuggestion(context: context, business: business);
-                },
-                onSuggestionSelected: (Business business) {
-                  Navigator.of(context).pop(business);
-                },
-                hideSuggestionsOnKeyboardHide: false,
-              ),
-            )
+              )
           ],
         ),
       ) 

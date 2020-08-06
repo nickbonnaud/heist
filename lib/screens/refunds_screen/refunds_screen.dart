@@ -18,7 +18,7 @@ class RefundsScreen extends StatelessWidget {
         create: (BuildContext context) => RefundsScreenBloc(refundRepository: _refundRepository)
           ..add(FetchAllRefunds()),
         child: Scaffold(
-          backgroundColor: Theme.of(context).colorScheme.scrollBackgroundLight,
+          backgroundColor: Theme.of(context).colorScheme.scrollBackground,
           body: RefundsScreenBody(),
         ),
       ),

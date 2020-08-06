@@ -41,7 +41,7 @@ class LocationBody extends StatelessWidget {
           ios: (_) => PlatformText(locationTextIos,
             textAlign: TextAlign.center,
             style: TextStyle(
-              color: Theme.of(context).colorScheme.textOnLightSubdued,
+              color: Theme.of(context).colorScheme.onPrimarySubdued,
               fontSize: SizeConfig.getWidth(5),
               fontWeight: FontWeight.bold
             )
@@ -49,7 +49,7 @@ class LocationBody extends StatelessWidget {
           android: (_) => PlatformText(locationTextAndroid,
             textAlign: TextAlign.center,
             style: TextStyle(
-              color: Theme.of(context).colorScheme.textOnLightSubdued,
+              color: Theme.of(context).colorScheme.onPrimarySubdued,
               fontSize: SizeConfig.getWidth(5),
               fontWeight: FontWeight.bold
             )
