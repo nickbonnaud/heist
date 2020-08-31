@@ -58,7 +58,6 @@ class _IntroScreenState extends State<IntroScreen> {
                 child: BlocBuilder<ProfileSetupScreenBloc, ProfileSetupScreenState>(
                   builder: (context, state) {
                     return RaisedButton(
-                      color: Colors.green,
                       shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
                       onPressed: () => _nextButtonPressed(context, state),
                       child: BoldText3(text: 'Next', context: context, color: Colors.white)

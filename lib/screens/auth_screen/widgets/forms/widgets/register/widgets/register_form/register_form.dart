@@ -7,6 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:heist/blocs/authentication/authentication_bloc.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
+import 'package:heist/screens/auth_screen/widgets/cubit/keyboard_visible_cubit.dart';
 import 'package:heist/screens/auth_screen/widgets/page_offset_notifier.dart';
 import 'package:heist/themes/global_colors.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
@@ -47,6 +48,10 @@ class _RegisterFormState extends State<RegisterForm> {
     _emailController.addListener(_onEmailChanged);
     _passwordController.addListener(_onPasswordChanged);
     _passwordConfirmationController.addListener(_onPasswordConfirmationChanged);
+
+    _emailFocus.addListener(keyboardVisibilityChanged);
+    _passwordFocus.addListener(keyboardVisibilityChanged);
+    _passwordConfirmationFocus.addListener(keyboardVisibilityChanged);
   }
   
   @override
@@ -63,14 +68,45 @@ class _RegisterFormState extends State<RegisterForm> {
       },
       child: Consumer2<PageOffsetNotifier, AnimationController>(
         builder: (context, notifier, animation, child) {
-          return Positioned(
-            top: (1 - animation.value) * MediaQuery.of(context).size.height,
-            left: SizeConfig.getWidth(1),
-            right: SizeConfig.getWidth(1),
-            child: Opacity(
-              opacity: math.max(0, 4 * notifier.page - 3),
-              child: child,
-            )
+          return Stack(
+            alignment: Alignment.center,
+            children: [
+              Positioned(
+                top: (1 - animation.value) * MediaQuery.of(context).size.height + SizeConfig.getHeight(6),
+                left: SizeConfig.getWidth(1),
+                right: SizeConfig.getWidth(1),
+                child: Opacity(
+                  opacity: math.max(0, 4 * notifier.page - 3),
+                  child: child,
+                )
+              ),
+              Positioned(
+                bottom: animation.value * SizeConfig.getHeight(10) - SizeConfig.getHeight(4),
+                child: Consumer2<PageOffsetNotifier, AnimationController>(
+                  builder: (context, notifier, animation, child) {
+                    return GestureDetector(
+                      onTap: () {
+                        if (animation.status != AnimationStatus.dismissed) {
+                          animation.reverse().then((_) {
+                            widget._pageController.previousPage(duration: Duration(seconds: 1), curve: Curves.decelerate);
+                          });
+                        } else {
+                          widget._pageController.previousPage(duration: Duration(seconds: 1), curve: Curves.decelerate);
+                        }
+                      },
+                      child: Text('Already have an Account?',
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.callToAction,
+                          fontSize: SizeConfig.getWidth(5),
+                          decoration: TextDecoration.underline,
+                          letterSpacing: 0.5
+                        )
+                      ),
+                    );
+                  }
+                )
+              )
+            ]
           );
         },
         child: Form(
@@ -80,6 +116,7 @@ class _RegisterFormState extends State<RegisterForm> {
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height,
               child: KeyboardActions(
+                tapOutsideToDismiss: true,
                 config: _buildKeyboard(context: context),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -91,6 +128,7 @@ class _RegisterFormState extends State<RegisterForm> {
                           controller: _emailController,
                           focusNode: _emailFocus,
                           keyboardType: TextInputType.emailAddress,
+                          keyboardAppearance: Brightness.light,
                           textInputAction: TextInputAction.next,
                           onFieldSubmitted: (_) {
                             _changeFocus(context, _emailFocus, _passwordFocus);
@@ -122,6 +160,7 @@ class _RegisterFormState extends State<RegisterForm> {
                           controller: _passwordController,
                           focusNode: _passwordFocus,
                           keyboardType: TextInputType.text,
+                          keyboardAppearance: Brightness.light,
                           textInputAction: TextInputAction.next,
                           onFieldSubmitted: (_) {
                             _changeFocus(context, _passwordFocus, _passwordConfirmationFocus);
@@ -154,6 +193,7 @@ class _RegisterFormState extends State<RegisterForm> {
                           controller: _passwordConfirmationController,
                           focusNode: _passwordConfirmationFocus,
                           keyboardType: TextInputType.text,
+                          keyboardAppearance: Brightness.light,
                           textInputAction: TextInputAction.done,
                           onFieldSubmitted: (_) {
                             _passwordConfirmationFocus.unfocus();
@@ -214,32 +254,6 @@ class _RegisterFormState extends State<RegisterForm> {
                         );
                       },
                     ),
-                    SizedBox(height: SizeConfig.getHeight(5)),
-                    Consumer2<PageOffsetNotifier, AnimationController>(
-                      builder: (context, notifier, animation, child) {
-                        return GestureDetector(
-                          onTap: () {
-                            if (animation.status != AnimationStatus.dismissed) {
-                              animation.reverse().then((_) {
-                                widget._pageController.previousPage(duration: Duration(seconds: 1), curve: Curves.decelerate);
-                              });
-                            } else {
-                              widget._pageController.previousPage(duration: Duration(seconds: 1), curve: Curves.decelerate);
-                            }
-                          },
-                          child: Text('Already have an Account?',
-                            style: GoogleFonts.roboto(
-                              textStyle: TextStyle(
-                                color: Theme.of(context).colorScheme.callToAction,
-                                fontSize: SizeConfig.getWidth(4),
-                                decoration: TextDecoration.underline,
-                                letterSpacing: 0.5
-                              )
-                            ),
-                          ),
-                        );
-                      }
-                    )
                   ],
                 ),
               ),
@@ -256,6 +270,11 @@ class _RegisterFormState extends State<RegisterForm> {
     _passwordController.dispose();
     _passwordConfirmationController.dispose();
     super.dispose();
+  }
+
+  void keyboardVisibilityChanged() {
+    final bool keyboardVisible = _emailFocus.hasFocus || _passwordFocus.hasFocus || _passwordConfirmationFocus.hasFocus;
+    context.bloc<KeyboardVisibleCubit>().toggle(isVisible: keyboardVisible);
   }
 
   void _onEmailChanged() {
@@ -291,7 +310,7 @@ class _RegisterFormState extends State<RegisterForm> {
 
   KeyboardActionsConfig _buildKeyboard({@required BuildContext context}) {
     return KeyboardActionsConfig(
-      keyboardBarColor: Theme.of(context).colorScheme.keyboardHelpBar,
+      keyboardBarColor: Theme.of(context).colorScheme.keyboardHelpBarLight,
       keyboardActionsPlatform: KeyboardActionsPlatform.ALL,
       actions: [
         KeyboardAction(

@@ -18,13 +18,12 @@ class Login extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Stack(
-      alignment: Alignment.center,
       children: <Widget>[
         WelcomeLabel(),
         BlocProvider<LoginBloc>(
           create: (_) => LoginBloc(customerRepository: _customerRepository),
           child: LoginForm(pageController: _pageController),
-        )
+        ),
       ],
     );
   }

@@ -1,19 +1,22 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:heist/screens/auth_screen/widgets/rocket.dart';
+import 'package:heist/screens/auth_screen/widgets/stars.dart';
 import 'package:provider/provider.dart';
 
 import 'widgets/app_name.dart';
-import 'widgets/background_circle.dart';
+import 'widgets/cubit/keyboard_visible_cubit.dart';
 import 'widgets/drag_arrow.dart';
-import 'widgets/first_image.dart';
 import 'widgets/form_animation_notifier.dart';
 import 'widgets/forms/forms.dart';
-import 'widgets/last_image.dart';
+import 'widgets/exhaust_path.dart';
 import 'widgets/page_indicator.dart';
 import 'widgets/page_offset_notifier.dart';
+import 'widgets/planets.dart';
 
-double topMargin({@required BuildContext context}) => MediaQuery.of(context).size.height > 700 ? 128 : 64;
+double topMargin({@required BuildContext context}) => MediaQuery.of(context).size.height > 700 ? 192 : 128;
 double mainSquareSize({@required BuildContext context}) => MediaQuery.of(context).size.height / 2;
 
 class AuthScreen extends StatefulWidget {
@@ -60,38 +63,41 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
         value: _animationController,
         child: ChangeNotifierProvider(
           create: (_) => FormAnimationNotifier(_formAnimationController),
-          child: Scaffold(
-            resizeToAvoidBottomPadding: true,
-            backgroundColor: Colors.grey.shade900,
-            body: Stack(
-              children: <Widget>[
-                SafeArea(
-                  child: GestureDetector(
-                    onVerticalDragUpdate: _handleDragUpdate,
-                    onVerticalDragEnd: _handleDragEnd,
-                    child: Stack(
-                      alignment: Alignment.center,
+          child: Stack(
+            children: <Widget>[
+              GestureDetector(
+                onVerticalDragUpdate: _handleDragUpdate,
+                onVerticalDragEnd: _handleDragEnd,
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: <Widget>[
+                    Stars(),
+                    PageView(
+                      controller: _pageController,
+                      physics: ClampingScrollPhysics(),
                       children: <Widget>[
-                        PageView(
-                          controller: _pageController,
-                          physics: ClampingScrollPhysics(),
-                          children: <Widget>[
-                            AppName(),
-                            BackgroundCircle()
-                          ],
-                        ),
-                        FirstImage(),
-                        LastImage(),
-                        Forms(pageController: _pageController),
-                        PageIndicator(),
-                        DragArrow()
+                        AppName(),
+                        Container()
                       ],
                     ),
-                  )
-                )
-              ],
-            ),
-          ),
+                    ExhaustPath(),
+                    Rocket(),
+                    Planets(),
+                    PageIndicator(),
+                    BlocProvider<KeyboardVisibleCubit>(
+                      create: (_) => KeyboardVisibleCubit(),
+                      child: Stack(
+                        children: [
+                          Forms(pageController: _pageController),
+                          DragArrow(),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            ],
+          )
         ) 
       ),
     );

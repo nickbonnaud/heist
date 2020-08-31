@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:heist/resources/constants.dart';
+import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/screens/auth_screen/auth_screen.dart';
 import 'package:heist/screens/auth_screen/widgets/page_offset_notifier.dart';
 import 'package:provider/provider.dart'; 
@@ -27,7 +28,7 @@ class AppName extends StatelessWidget {
             child: RotatedBox(
               quarterTurns: 1,
               child: SizedBox(
-                width: mainSquareSize(context: context),
+                width: mainSquareSize(context: context) - SizeConfig.getWidth(8),
                 child: FittedBox(
                   alignment: Alignment.topCenter,
                   fit: BoxFit.cover,

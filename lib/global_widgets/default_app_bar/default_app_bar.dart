@@ -34,7 +34,7 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   AppBar _buildDefaultAppBar({@required BuildContext context}) {
     return AppBar(
-      title: _title != null ? BoldText3(text: _title, context: context) : null,
+      title: _title != null ? BoldText2(text: _title, context: context) : null,
       elevation: 0,
       backgroundColor: _setBackgroundColor(context: context),
       leading: AnimatedLeadingIcon(),

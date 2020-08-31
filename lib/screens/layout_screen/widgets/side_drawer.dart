@@ -79,7 +79,7 @@ class _SideDrawerState extends State<SideDrawer> with SingleTickerProviderStateM
             child: _buildBody(state: state)
           ),
           floatingActionButton: state.buttonVisible ? Padding(
-            padding: EdgeInsets.only(top: 200),
+            padding: EdgeInsets.only(top: 25, left: 10),
             child: FloatingActionButton(
               backgroundColor: Theme.of(context).colorScheme.callToAction,
               heroTag: HERO_KEY,
@@ -207,12 +207,12 @@ class Drawer extends StatelessWidget {
                   ), 
                   text: 'Transactions',
                   icon: PlatformWidget(
-                    android: (_) => Icon(Icons.receipt),
+                    android: (_) => Icon(Icons.receipt, color: Theme.of(context).colorScheme.secondary),
                     ios: (_) => Icon(IconData(
                       0xF472,
                       fontFamily: CupertinoIcons.iconFont,
-                      fontPackage: CupertinoIcons.iconFontPackage
-                    )),
+                      fontPackage: CupertinoIcons.iconFontPackage,
+                    ), color: Theme.of(context).colorScheme.secondary),
                   )
                 ),
                 DrawerItem(
@@ -225,12 +225,12 @@ class Drawer extends StatelessWidget {
                   ), 
                   text: 'Refunds',
                   icon: PlatformWidget(
-                    android: (_) => Icon(Icons.undo),
+                    android: (_) => Icon(Icons.undo, color: Theme.of(context).colorScheme.secondary),
                     ios: (_) => Icon(IconData(
                       0xF21E,
                       fontFamily: CupertinoIcons.iconFont,
                       fontPackage: CupertinoIcons.iconFontPackage
-                    )),
+                    ), color: Theme.of(context).colorScheme.secondary),
                   )
                 ),
                 DrawerItem(
@@ -242,7 +242,7 @@ class Drawer extends StatelessWidget {
                     )
                   ),
                   text: 'Settings',
-                  icon: Icon(context.platformIcons.settings)
+                  icon: Icon(context.platformIcons.settings, color: Theme.of(context).colorScheme.secondary)
                 ),
                 DrawerItem(
                   onPressed: () => showPlatformModalSheet(
@@ -251,24 +251,24 @@ class Drawer extends StatelessWidget {
                   ),
                   text: 'Tutorial', 
                   icon: PlatformWidget(
-                    android: (_) => Icon(Icons.lightbulb_outline),
+                    android: (_) => Icon(Icons.lightbulb_outline, color: Theme.of(context).colorScheme.secondary),
                     ios: (_) => Icon(IconData(
                       0xF451,
                       fontFamily: CupertinoIcons.iconFont,
                       fontPackage: CupertinoIcons.iconFontPackage
-                    )),
+                    ), color: Theme.of(context).colorScheme.secondary),
                   )
                 ),
                 DrawerItem(
                   onPressed: () => print('pressed'),
                   text: 'Help',
                   icon: PlatformWidget(
-                    android: (_) => Icon(Icons.live_help),
+                    android: (_) => Icon(Icons.live_help, color: Theme.of(context).colorScheme.secondary),
                     ios: (_) => Icon(IconData(
                       0xF445,
                       fontFamily: CupertinoIcons.iconFont,
                       fontPackage: CupertinoIcons.iconFontPackage
-                    )),
+                    ), color: Theme.of(context).colorScheme.secondary),
                   )
                 )
               ],

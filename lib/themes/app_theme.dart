@@ -62,41 +62,6 @@ class AppTheme extends StatelessWidget {
     );
   }
 
-  // ThemeData _createTheme({@required BuildContext context}) {
-  //   return ThemeData(
-  //     iconTheme: IconThemeData(
-  //       color: Colors.orange
-  //     ),
-  //     appBarTheme: AppBarTheme(
-  //       textTheme: _getTextTheme(context: context)
-  //     ),
-  //     primarySwatch: Colors.green,
-  //     accentColor: Colors.orange,
-
-  //     colorScheme: ColorScheme(
-  //       primary: Colors.green, 
-  //       primaryVariant: Colors.green[800],
-  //       onPrimary: Colors.white,
-
-  //       secondary: Colors.orange, 
-  //       secondaryVariant: Colors.orange[800], 
-  //       onSecondary: Colors.white, 
-
-  //       surface: Colors.grey,
-  //       onSurface: Colors.green,
-  //       background: Colors.white,
-  //       onBackground: Colors.orange, 
-
-  //       error: Colors.red,  
-  //       onError: Colors.white, 
-  //       brightness: Brightness.light,
-  //     ),
-  //     textTheme: _getTextTheme(context: context),
-  //     buttonColor: Colors.orange,
-  //     disabledColor: Colors.orange.shade100,
-  //   );
-  // }
-
   ThemeData _createTheme({@required BuildContext context}) {
     final Color _primary = Colors.white;
     final Color _primaryVariant = Colors.grey[300];
@@ -108,7 +73,7 @@ class AppTheme extends StatelessWidget {
     
     return ThemeData(
       iconTheme: IconThemeData(
-        color: _secondary
+        color: Color(0xFF016fb9)
       ),
       appBarTheme: AppBarTheme(
         textTheme: _getTextTheme(context: context)

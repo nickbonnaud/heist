@@ -22,7 +22,11 @@ class Boot extends StatelessWidget {
             Duration(milliseconds: 500),
             () => showPlatformModalSheet(
               context: context, 
-              builder: (_) => AuthScreen()
+              builder: (_) => Scaffold(
+                resizeToAvoidBottomPadding: false,
+                body:  AuthScreen(),
+                backgroundColor: Colors.grey.shade900,
+              )
             )
           );
         }

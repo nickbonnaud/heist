@@ -17,70 +17,73 @@ class SettingsList extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: <Widget>[
-        BoldTextCustom(text: 'Settings', context: context, size: SizeConfig.getWidth(9)),
-        SizedBox(height: SizeConfig.getHeight(5)),
+        SizedBox(height: SizeConfig.getHeight(2)),
         ListTile(
           leading: PlatformWidget(
-            android: (_) => Icon(Icons.person),
+            android: (_) => Icon(Icons.person, size: SizeConfig.getWidth(8)),
             ios: (_) => Icon(
               IconData(
                 0xF41A,
                 fontFamily: CupertinoIcons.iconFont,
                 fontPackage: CupertinoIcons.iconFontPackage,
-              )
+              ),
+              size: SizeConfig.getWidth(8),
             ),
           ),
-          title: Text2(text: 'Change Profile', context: context, color: Theme.of(context).colorScheme.onPrimarySubdued),
+          title: Text1(text: 'Change Profile', context: context, color: Theme.of(context).colorScheme.onPrimarySubdued),
           onTap: () => _showModal(context: context, screen: ProfileScreen())
         ),
         ListTile(
           leading: PlatformWidget(
-            android: (_) => Icon(Icons.email),
+            android: (_) => Icon(Icons.email, size: SizeConfig.getWidth(8)),
             ios: (_) => Icon(
               IconData(
                 0xF474,
                 fontFamily: CupertinoIcons.iconFont,
                 fontPackage: CupertinoIcons.iconFontPackage
-              )
+              ),
+              size: SizeConfig.getWidth(8)
             ),
           ),
-          title: Text2(text: 'Change Email', context: context, color: Theme.of(context).colorScheme.onPrimarySubdued),
+          title: Text1(text: 'Change Email', context: context, color: Theme.of(context).colorScheme.onPrimarySubdued),
           onTap: () => _showModal(context: context, screen: EmailScreen())
         ),
         ListTile(
           leading: PlatformWidget(
-            android: (_) => Icon(Icons.lock),
+            android: (_) => Icon(Icons.lock, size: SizeConfig.getWidth(8)),
             ios: (_) => Icon(
               IconData(
                 0xF392,
                 fontFamily: CupertinoIcons.iconFont,
                 fontPackage: CupertinoIcons.iconFontPackage
-              )
+              ),
+              size: SizeConfig.getWidth(8)
             ),
           ),
-          title: Text2(text: 'Change Password', context: context, color: Theme.of(context).colorScheme.onPrimarySubdued),
+          title: Text1(text: 'Change Password', context: context, color: Theme.of(context).colorScheme.onPrimarySubdued),
           onTap: () => _showModal(context: context, screen: PasswordScreen())
         ),
         ListTile(
-          leading: Icon(Icons.payment),
-          title: Text2(text: 'Change Payment Method', context: context, color: Theme.of(context).colorScheme.onPrimarySubdued),
+          leading: Icon(Icons.payment, size: SizeConfig.getWidth(8)),
+          title: Text1(text: 'Change Payment Method', context: context, color: Theme.of(context).colorScheme.onPrimarySubdued),
           onTap: () => print('show payment screen'),
         ),
         ListTile(
           leading: PlatformWidget(
-            android: (_) => Icon(Icons.thumb_up),
+            android: (_) => Icon(Icons.thumb_up, size: SizeConfig.getWidth(8)),
             ios: (_) => Icon(
               IconData(
                 0xF388,
                 fontFamily: CupertinoIcons.iconFont,
                 fontPackage: CupertinoIcons.iconFontPackage
-              )
+              ),
+              size: SizeConfig.getWidth(8)
             ),
           ),
-          title: Text2(text: 'Change Tip Settings', context: context, color: Theme.of(context).colorScheme.onPrimarySubdued),
+          title: Text1(text: 'Change Tip Settings', context: context, color: Theme.of(context).colorScheme.onPrimarySubdued),
           onTap: () => _showModal(context: context, screen: TipScreen())
         ),
-        SizedBox(height: SizeConfig.getHeight(15))
+        SizedBox(height: SizeConfig.getHeight(10))
       ],
     );
   }

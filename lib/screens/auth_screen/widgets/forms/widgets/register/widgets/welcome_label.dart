@@ -1,8 +1,11 @@
 import "dart:math" as math;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
 import 'package:heist/screens/auth_screen/auth_screen.dart';
+import 'package:heist/screens/auth_screen/widgets/cubit/keyboard_visible_cubit.dart';
 import 'package:heist/screens/auth_screen/widgets/page_offset_notifier.dart';
 import 'package:provider/provider.dart';
 
@@ -14,11 +17,15 @@ class WelcomeLabel extends StatelessWidget {
     return Consumer2<PageOffsetNotifier, AnimationController>(
       builder: (context, notifier, animation, child) {
         return Positioned(
-          top: topMargin(context: context) + (1 - animation.value) * (mainSquareSize(context: context) + 32 - 4),
-          left: 24 + MediaQuery.of(context).size.width - notifier.offset,
-          child: Opacity(
-            opacity: math.max(0, 4 * notifier.page - 3),
-            child: child,
+          top: (1 - animation.value) * (mainSquareSize(context: context) + topMargin(context: context) + SizeConfig.getHeight(4)) + (animation.value * SizeConfig.getHeight(6)),
+          left: SizeConfig.getWidth(6) + MediaQuery.of(context).size.width - notifier.offset,
+          child: BlocBuilder<KeyboardVisibleCubit, bool>(
+            builder: (context, keyboardVisible) {
+              return Opacity(
+                opacity: _setVisibility(notifier: notifier, keyboardVisible: keyboardVisible),
+                child: child,
+              );
+            }
           )
         );
       },
@@ -28,5 +35,9 @@ class WelcomeLabel extends StatelessWidget {
         color: Theme.of(context).colorScheme.onSecondary,
       )
     );
+  }
+
+  double _setVisibility({@required PageOffsetNotifier notifier, @required bool keyboardVisible}) {
+    return keyboardVisible ? 0.2 : math.max(0, 4 * notifier.page - 3);
   }
 }
