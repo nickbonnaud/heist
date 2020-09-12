@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
-import 'package:heist/blocs/permissions/permissions_bloc.dart';
 import 'package:heist/resources/constants.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
@@ -174,7 +173,7 @@ class _OnboardBodyState extends State<OnboardBody> with SingleTickerProviderStat
                             child: FlatButton(
                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
                               onPressed: () => _showOnboardScreen(context, currentStep),
-                              child: BoldText3(text: _buttonText(currentStep), context: context, color: Theme.of(context).colorScheme.secondary),
+                              child: BoldText3(text: _buttonText(currentStep), context: context, color: Theme.of(context).colorScheme.callToAction),
                             ),
                           );
                         }
@@ -243,7 +242,7 @@ class _OnboardBodyState extends State<OnboardBody> with SingleTickerProviderStat
         _showModal(context: context, screen: TutorialScreen());
         break;
       case 3:
-        if (!widget._permissionsReady) _showModal(context: context, screen: PermissionsScreen(permissionsBloc: BlocProvider.of<PermissionsBloc>(context)), lastScreen: true);
+        if (!widget._permissionsReady) _showModal(context: context, screen: PermissionsScreen(), lastScreen: true);
         break;
     }
   }

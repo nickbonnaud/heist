@@ -19,6 +19,8 @@ enum Accuracy {
 class GeoLocationBloc extends Bloc<GeoLocationEvent, GeoLocationState> {
   final GeolocatorRepository _geolocatorRepository;
 
+  bool get isGeoLocationReady => state is LocationLoaded;
+  
   GeoLocationBloc({@required GeolocatorRepository geolocatorRepository})
     : assert(geolocatorRepository != null),
       _geolocatorRepository = geolocatorRepository,

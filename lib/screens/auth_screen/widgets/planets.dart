@@ -30,7 +30,6 @@ class Planets extends StatelessWidget {
           width: 350,
           child: FlareActor(
             'assets/theme.flr',
-            alignment: Alignment.center,
             animation: 'moon_orbit',
             artboard: 'earth_moon',
           ),

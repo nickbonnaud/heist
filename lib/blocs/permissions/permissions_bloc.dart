@@ -10,6 +10,13 @@ import 'package:permission_handler/permission_handler.dart';
 part 'permissions_event.dart';
 part 'permissions_state.dart';
 
+enum PermissionType {
+  beacon,
+  location,
+  notification,
+  bluetooth
+}
+
 class PermissionsBloc extends Bloc<PermissionsEvent, PermissionsState> {
   final InitialLoginRepository _initialLoginRepository;
 
@@ -25,6 +32,15 @@ class PermissionsBloc extends Bloc<PermissionsEvent, PermissionsState> {
   bool get areChecksComplete => state.checksComplete;
 
   bool get allPermissionsValid => state.bleEnabled && state.locationEnabled && state.notificationEnabled && state.beaconEnabled;
+
+  List<PermissionType> get invalidPermissions {
+    List<PermissionType> incompletePermissions = [];
+    if (!state.beaconEnabled) incompletePermissions.add(PermissionType.beacon);
+    if (!state.locationEnabled) incompletePermissions.add(PermissionType.location);
+    if (!state.notificationEnabled) incompletePermissions.add(PermissionType.notification);
+    if (!state.bleEnabled) incompletePermissions.add(PermissionType.bluetooth);
+    return incompletePermissions;
+  }
 
   @override
   Stream<PermissionsState> mapEventToState(PermissionsEvent event) async* {

@@ -9,6 +9,8 @@ part 'notification_boot_state.dart';
 
 class NotificationBootBloc extends Bloc<NotificationBootEvent, NotificationBootState> {
   
+  bool get isPermissionReady => state.permissionReady;
+  
   NotificationBootBloc() : super(NotificationBootState.initial());
 
   @override

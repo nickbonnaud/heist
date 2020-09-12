@@ -39,7 +39,7 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
     state.update(loading: true);
     try {
       // final bool isSignedIn = await _customerRepository.isSignedIn();
-      final isSignedIn = false;
+      final isSignedIn = true;
       
       if (isSignedIn) {
         final Customer customer = await _customerRepository.fetchCustomer();

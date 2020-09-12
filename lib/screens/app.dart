@@ -23,15 +23,15 @@ class App extends StatelessWidget {
       listeners: [
         BlocListener<PermissionsBloc, PermissionsState>(
           listener: (context, state) {
-            if (state.checksComplete) {
+            if (state.checksComplete && !BlocProvider.of<BootBloc>(context).arePermissionChecksComplete) {
               BlocProvider.of<BootBloc>(context).add(PermissionChecksComplete());
             }
             
-            if (state.onStartPermissionsValid) {
+            if (state.onStartPermissionsValid && !BlocProvider.of<GeoLocationBloc>(context).isGeoLocationReady) {
               BlocProvider.of<GeoLocationBloc>(context).add(GeoLocationReady());
             }
 
-            if (state.notificationEnabled) {
+            if (state.notificationEnabled && !BlocProvider.of<NotificationBootBloc>(context).isPermissionReady) {
               BlocProvider.of<NotificationBootBloc>(context).add(PermissionReady());
             }
           },
