@@ -10,6 +10,8 @@ class BootState {
   final bool beaconsLoaded;
 
   bool get isDataLoaded => openTransactionsLoaded && nearbyBusinessesLoaded && beaconsLoaded;
+  bool get areBusinessesLoaded => nearbyBusinessesLoaded;
+  bool get areBeaconsLoaded => beaconsLoaded;
 
   BootState({
     @required this.customerOnboarded,

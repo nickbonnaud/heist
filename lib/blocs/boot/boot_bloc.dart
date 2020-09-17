@@ -20,6 +20,8 @@ class BootBloc extends Bloc<BootEvent, BootState> {
 
   bool get isDataLoaded => state.isDataLoaded;
   bool get arePermissionChecksComplete => state.checksComplete;
+  bool get areBusinessesLoaded => state.areBusinessesLoaded;
+  bool get areBeaconsLoaded => state.areBeaconsLoaded;
 
   @override
   Stream<BootState> mapEventToState(BootEvent event) async* {

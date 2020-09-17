@@ -20,6 +20,13 @@ class GeoLocationBloc extends Bloc<GeoLocationEvent, GeoLocationState> {
   final GeolocatorRepository _geolocatorRepository;
 
   bool get isGeoLocationReady => state is LocationLoaded;
+  Map<String, double> get currentLocation {
+    final currentState = state;
+    if (currentState is LocationLoaded) {
+      return {'lat': currentState.latitude, 'lng': currentState.longitude};
+    }
+    return null;
+  }
   
   GeoLocationBloc({@required GeolocatorRepository geolocatorRepository})
     : assert(geolocatorRepository != null),

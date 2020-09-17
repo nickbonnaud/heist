@@ -46,15 +46,19 @@ class NearbyBusinessesBloc extends Bloc<NearbyBusinessesEvent, NearbyBusinessesS
         : null;
       
       yield NearbyBusinessLoaded(businesses: businesses, preMarkers: preMarkers);
-      _bootBloc.add(DataLoaded(type: DataType.businesses));
+      _updateBootBloc();
     } catch (e) {
       yield FailedToLoadNearby();
-      _bootBloc.add(DataLoaded(type: DataType.businesses));
+      _updateBootBloc();
     }
   }
 
   Future<List<PreMarker>> _createPreMarkers(List<Business> businesses) async {
     IconCreator iconCreator = IconCreator(size: Size(150, 150), businesses: businesses);
     return await iconCreator.createPreMarkers();
+  }
+
+  void _updateBootBloc() {
+    if (!_bootBloc.areBusinessesLoaded) _bootBloc.add(DataLoaded(type: DataType.businesses));
   }
 }

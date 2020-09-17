@@ -43,7 +43,7 @@ class _PermissionButtonsState extends State<PermissionButtons> {
                 onPressed: enabled 
                   ? () => _requestPermission(widget._permission)
                   : null,
-                shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
                 child: BoldText3(text: 'Enable', context: context, color: Theme.of(context).colorScheme.onSecondary)
               )),
             SizedBox(width: SizeConfig.getWidth(20)),

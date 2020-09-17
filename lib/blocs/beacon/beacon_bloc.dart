@@ -50,7 +50,7 @@ class BeaconBloc extends Bloc<BeaconEvent, BeaconState> {
       }
     });
     yield Monitoring();
-    _bootBloc.add(DataLoaded(type: DataType.beacons));
+    if (!_bootBloc.areBeaconsLoaded) _bootBloc.add(DataLoaded(type: DataType.beacons));
   }
 
   Stream<BeaconState> _mapBeaconCancelledToState() async* {
