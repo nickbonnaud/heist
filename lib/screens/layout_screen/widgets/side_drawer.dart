@@ -10,7 +10,7 @@ import 'package:heist/screens/historic_transactions_screen/historic_transactions
 import 'package:heist/screens/layout_screen/bloc/side_menu_bloc.dart';
 import 'package:heist/screens/refunds_screen/refunds_screen.dart';
 import 'package:heist/screens/settings_screen/settings_screen.dart';
-import 'package:heist/screens/tutorial_screen/tutorial_screen.dart';
+import 'package:heist/screens/tutorial/tutorial_screen.dart';
 import 'package:heist/themes/global_colors.dart';
 
 class SideDrawer extends StatefulWidget {
