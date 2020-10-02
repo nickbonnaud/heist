@@ -8,19 +8,8 @@ import 'package:heist/resources/helpers/text_styles.dart';
 import 'package:heist/screens/profile_setup_screen/bloc/profile_setup_screen_bloc.dart';
 import 'package:heist/themes/global_colors.dart';
 
-class SetupPaymentAccountScreen extends StatefulWidget {
-  final AnimationController _controller;
+class SetupPaymentAccountCard extends StatelessWidget {
 
-  SetupPaymentAccountScreen({@required AnimationController controller})
-    : assert(controller != null),
-      _controller = controller;
-
-  @override
-  State<SetupPaymentAccountScreen> createState() => _SetupPaymentAccountScreen();
-}
-
-class _SetupPaymentAccountScreen extends State<SetupPaymentAccountScreen> {
-  
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -41,7 +30,7 @@ class _SetupPaymentAccountScreen extends State<SetupPaymentAccountScreen> {
                   ),
                   RaisedButton(
                     shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
-                    onPressed: () => _connectButtonPressed(),
+                    onPressed: () => _connectButtonPressed(context: context),
                     child: BoldText3(text: 'Connect', context: context, color: Theme.of(context).colorScheme.onSecondary)
                   ),
                   Text2(
@@ -73,13 +62,7 @@ class _SetupPaymentAccountScreen extends State<SetupPaymentAccountScreen> {
     );
   }
 
-  @override
-  void dispose() {
-    widget._controller.removeStatusListener(_animationListener);
-    super.dispose();
-  }
-
-  void _connectButtonPressed() {
+  void _connectButtonPressed({@required BuildContext context}) {
     Customer customer = BlocProvider.of<AuthenticationBloc>(context).customer;
     Status status = Status(name: "pending", code: 120);
     Customer updatedCustomer = customer.update(status: status);
@@ -91,13 +74,6 @@ class _SetupPaymentAccountScreen extends State<SetupPaymentAccountScreen> {
   }
 
   void _nextButtonPressed(BuildContext context) {
-    widget._controller.addStatusListener(_animationListener);
-    widget._controller.forward();
-  }
-
-  void _animationListener(AnimationStatus status) {
-    if (status == AnimationStatus.completed) {
-      BlocProvider.of<ProfileSetupScreenBloc>(context).add(SectionCompleted(section: Section.paymentAccount));
-    }
+    BlocProvider.of<ProfileSetupScreenBloc>(context).add(SectionCompleted(section: Section.paymentAccount));
   }
 }

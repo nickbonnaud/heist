@@ -1,4 +1,4 @@
-part of 'setup_tip_screen_bloc.dart';
+part of 'setup_tip_card_bloc.dart';
 
 @immutable
 class SetupTipScreenState {

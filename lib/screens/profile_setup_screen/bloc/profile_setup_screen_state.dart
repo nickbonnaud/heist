@@ -16,6 +16,15 @@ class ProfileSetupScreenState {
   });
 
   bool get isComplete => this.isNameComplete && this.isPhotoComplete && this.isPaymentAccountComplete && this.isTipComplete;
+  List<Section> get incompleteSections {
+    List<Section> incompleteSections = [];
+    if (!this.isPaymentAccountComplete) incompleteSections.add(Section.paymentAccount);
+    if (!this.isTipComplete) incompleteSections.add(Section.tip);
+    if (!this.isPhotoComplete) incompleteSections.add(Section.photo);
+    if (!this.isNameComplete) incompleteSections.add(Section.name);
+
+    return incompleteSections;
+  }
 
   factory ProfileSetupScreenState.initial() {
     return ProfileSetupScreenState(

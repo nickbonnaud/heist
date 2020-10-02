@@ -7,17 +7,13 @@ import 'package:heist/blocs/authentication/authentication_bloc.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
 import 'package:heist/screens/profile_setup_screen/bloc/profile_setup_screen_bloc.dart';
-import 'package:heist/screens/profile_setup_screen/widgets/pages/profile_name_screen/widgets/bloc/profile_name_form_bloc.dart';
 import 'package:heist/themes/global_colors.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
 import 'package:vibrate/vibrate.dart';
 
-class ProfileNameBody extends StatefulWidget {
-  final AnimationController _controller;
+import 'bloc/profile_name_form_bloc.dart';
 
-  ProfileNameBody({@required AnimationController controller})
-    : assert(controller != null),
-      _controller = controller;
+class ProfileNameBody extends StatefulWidget {
 
   @override
   State<ProfileNameBody> createState() => _ProfileNameBodyState();
@@ -156,7 +152,6 @@ class _ProfileNameBodyState extends State<ProfileNameBody> {
   void dispose() {
     _firstNameController.dispose();
     _lastNameController.dispose();
-    widget._controller.removeStatusListener(_animationListener); 
     super.dispose();
   }
   
@@ -233,18 +228,11 @@ class _ProfileNameBodyState extends State<ProfileNameBody> {
         )
       ).closed.then((_) {
         if (state.isSuccess) {
-          widget._controller.addStatusListener(_animationListener);
-          widget._controller.forward();
+          BlocProvider.of<ProfileSetupScreenBloc>(context).add(SectionCompleted(section: Section.name));
         } else {
           BlocProvider.of<ProfileNameFormBloc>(context).add(Reset());
         }
       });
-  }
-
-  void _animationListener(AnimationStatus status) {
-    if (status == AnimationStatus.completed) {
-      BlocProvider.of<ProfileSetupScreenBloc>(context).add(SectionCompleted(section: Section.name));
-    }
   }
 
   KeyboardActionsConfig _buildKeyboard(BuildContext context) {

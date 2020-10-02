@@ -1,13 +1,13 @@
-part of 'setup_tip_screen_bloc.dart';
+part of 'setup_tip_card_bloc.dart';
 
-abstract class SetupTipScreenEvent extends Equatable {
-  const SetupTipScreenEvent();
+abstract class SetupTipCardEvent extends Equatable {
+  const SetupTipCardEvent();
 
   @override
   List<Object> get props => [];
 }
 
-class TipRateChanged extends SetupTipScreenEvent {
+class TipRateChanged extends SetupTipCardEvent {
   final int tipRate;
   
   const TipRateChanged({@required this.tipRate});
@@ -19,7 +19,7 @@ class TipRateChanged extends SetupTipScreenEvent {
   String toString() => 'TipRateChanged { tipRate: $tipRate }';
 }
 
-class QuickTipRateChanged extends SetupTipScreenEvent {
+class QuickTipRateChanged extends SetupTipCardEvent {
   final int quickTipRate;
   
   const QuickTipRateChanged({@required this.quickTipRate});
@@ -31,7 +31,7 @@ class QuickTipRateChanged extends SetupTipScreenEvent {
   String toString() => 'QuickTipRateChanged { quickTipRate: $quickTipRate }';
 }
 
-class Submitted extends SetupTipScreenEvent {
+class Submitted extends SetupTipCardEvent {
   final Customer customer;
   final int tipRate;
   final int quickTipRate;
@@ -45,4 +45,4 @@ class Submitted extends SetupTipScreenEvent {
   String toString() => 'Submitted { customer: $customer, tipRate: $tipRate, quickTipRate: $quickTipRate }';
 }
 
-class Reset extends SetupTipScreenEvent {}
+class Reset extends SetupTipCardEvent {}

@@ -9,17 +9,18 @@ part 'profile_setup_screen_event.dart';
 part 'profile_setup_screen_state.dart';
 
 enum Section {
-  intro,
-  name,
-  photo,
   paymentAccount,
-  tip
+  tip,
+  photo,
+  name,
 }
 
 class ProfileSetupScreenBloc extends Bloc<ProfileSetupScreenEvent, ProfileSetupScreenState> {
   
   ProfileSetupScreenBloc() : super(ProfileSetupScreenState.initial());
 
+  List<Section> get incompleteSections => state.incompleteSections;
+  
   @override
   Stream<ProfileSetupScreenState> mapEventToState(ProfileSetupScreenEvent event) async* {
     if (event is SectionCompleted) {
@@ -31,9 +32,6 @@ class ProfileSetupScreenBloc extends Bloc<ProfileSetupScreenEvent, ProfileSetupS
 
   Stream<ProfileSetupScreenState> _mapSectionCompletedToState(SectionCompleted event) async* {
     switch (event.section) {
-      case Section.intro:
-        yield state.update(isIntroComplete: true);
-        break;
       case Section.name:
         yield state.update(isNameComplete: true);
         break;

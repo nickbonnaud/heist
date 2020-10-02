@@ -5,8 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
-import 'package:heist/screens/tutorial/bloc/tutorial_screen_bloc.dart';
-import 'package:heist/screens/tutorial/models/tutorial.dart';
+import 'package:heist/screens/tutorial_screen/bloc/tutorial_screen_bloc.dart';
+import 'package:heist/screens/tutorial_screen/models/tutorial.dart';
 import 'package:heist/themes/global_colors.dart';
 
 import 'faq_body/bloc/faq_body_bloc.dart';

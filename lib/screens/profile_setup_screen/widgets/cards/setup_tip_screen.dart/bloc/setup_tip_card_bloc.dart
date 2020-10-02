@@ -9,21 +9,21 @@ import 'package:heist/resources/helpers/validators.dart';
 import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
 
-part 'setup_tip_screen_event.dart';
-part 'setup_tip_screen_state.dart';
+part 'setup_tip_card_event.dart';
+part 'setup_tip_card_state.dart';
 
-class SetupTipScreenBloc extends Bloc<SetupTipScreenEvent, SetupTipScreenState> {
+class SetupTipCardBloc extends Bloc<SetupTipCardEvent, SetupTipScreenState> {
   final AccountRepository _accountRepository;
   final AuthenticationBloc _authenticationBloc;
 
-  SetupTipScreenBloc({@required AccountRepository accountRepository, @required AuthenticationBloc authenticationBloc})
+  SetupTipCardBloc({@required AccountRepository accountRepository, @required AuthenticationBloc authenticationBloc})
     : assert(accountRepository != null && authenticationBloc != null),
       _accountRepository = accountRepository,
       _authenticationBloc = authenticationBloc,
       super(SetupTipScreenState.initial());
 
   @override
-  Stream<Transition<SetupTipScreenEvent, SetupTipScreenState>> transformEvents(Stream<SetupTipScreenEvent> events, transitionFn) {
+  Stream<Transition<SetupTipCardEvent, SetupTipScreenState>> transformEvents(Stream<SetupTipCardEvent> events, transitionFn) {
     final nonDebounceStream = events.where((event) => event is !TipRateChanged && event is !QuickTipRateChanged);
     final debounceStream = events.where((event) => event is TipRateChanged || event is QuickTipRateChanged)
       .debounceTime(Duration(milliseconds: 300));
@@ -31,7 +31,7 @@ class SetupTipScreenBloc extends Bloc<SetupTipScreenEvent, SetupTipScreenState> 
   }
   
   @override
-  Stream<SetupTipScreenState> mapEventToState(SetupTipScreenEvent event) async* {
+  Stream<SetupTipScreenState> mapEventToState(SetupTipCardEvent event) async* {
     if (event is TipRateChanged) {
       yield* _mapTipRateChangedToState(event);
     } else if (event is QuickTipRateChanged) {

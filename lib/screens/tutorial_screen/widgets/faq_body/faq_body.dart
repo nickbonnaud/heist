@@ -16,10 +16,9 @@ class FaqBody extends StatelessWidget {
           shrinkWrap: true,
           itemCount: state.faqs.length,
           separatorBuilder: (_, __) => SizedBox(height: SizeConfig.getHeight(3)),
+          padding: EdgeInsets.symmetric(horizontal: 8),
           itemBuilder: (BuildContext context, int index) {
-            return Card(
-              elevation: 0,
-              child: Column(
+            return Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   GestureDetector(
@@ -28,7 +27,7 @@ class FaqBody extends StatelessWidget {
                       textAlign: TextAlign.left,
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.callToAction,
-                        fontSize: SizeConfig.getWidth(5),
+                        fontSize: SizeConfig.getWidth(6),
                         fontWeight: FontWeight.bold
                       ),
                     ),
@@ -43,7 +42,7 @@ class FaqBody extends StatelessWidget {
                         textAlign: TextAlign.left,
                         style: TextStyle(
                           color: Theme.of(context).colorScheme.onPrimarySubdued,
-                          fontSize: SizeConfig.getWidth(5),
+                          fontSize: SizeConfig.getWidth(6),
                           fontWeight: FontWeight.bold
                         ),
                       ),
@@ -51,8 +50,7 @@ class FaqBody extends StatelessWidget {
                     )
                   )
                 ],
-              ),
-            );
+              );
           }
         );
       }

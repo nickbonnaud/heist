@@ -7,17 +7,12 @@ import 'package:heist/blocs/authentication/authentication_bloc.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
 import 'package:heist/screens/profile_setup_screen/bloc/profile_setup_screen_bloc.dart';
-import 'package:heist/screens/profile_setup_screen/widgets/pages/setup_tip_screen.dart/bloc/setup_tip_screen_bloc.dart';
+import 'package:heist/screens/profile_setup_screen/widgets/cards/setup_tip_screen.dart/bloc/setup_tip_card_bloc.dart';
 import 'package:heist/themes/global_colors.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
 import 'package:vibrate/vibrate.dart';
 
 class SetupTipBody extends StatefulWidget {
-  final AnimationController _controller;
-
-  SetupTipBody({@required AnimationController controller})
-    : assert(controller != null),
-      _controller = controller;
   
   @override
   State<SetupTipBody> createState() => _SetupTipBodyState();
@@ -31,19 +26,19 @@ class _SetupTipBodyState extends State<SetupTipBody> {
 
   bool get isPopulated => _tipRateController.text.isNotEmpty && _quickTipRateController.text.isNotEmpty;
 
-  SetupTipScreenBloc _setupTipScreenBloc;
+  SetupTipCardBloc _setupTipCardBloc;
 
   @override
   void initState() {
     super.initState();
-    _setupTipScreenBloc = BlocProvider.of<SetupTipScreenBloc>(context);
+    _setupTipCardBloc = BlocProvider.of<SetupTipCardBloc>(context);
     _tipRateController.addListener(_onTipRateChanged);
     _quickTipRateController.addListener(_onQuickTipRateChanged);
   }
   
   @override
   Widget build(BuildContext context) {
-    return BlocListener<SetupTipScreenBloc, SetupTipScreenState>(
+    return BlocListener<SetupTipCardBloc, SetupTipScreenState>(
       listener: (context, state) {
         if (state.isFailure) {
           _showSnackbar(context, 'Failed to save. Please try again.', state);
@@ -71,7 +66,7 @@ class _SetupTipBodyState extends State<SetupTipBody> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: <Widget>[
                           Expanded(
-                            child: BlocBuilder<SetupTipScreenBloc, SetupTipScreenState>(
+                            child: BlocBuilder<SetupTipCardBloc, SetupTipScreenState>(
                               builder: (context, state) {
                                 return TextFormField(
                                   decoration: InputDecoration(
@@ -106,7 +101,7 @@ class _SetupTipBodyState extends State<SetupTipBody> {
                           ),
                           SizedBox(width: SizeConfig.getWidth(10)),
                           Expanded(
-                            child: BlocBuilder<SetupTipScreenBloc, SetupTipScreenState>(
+                            child: BlocBuilder<SetupTipCardBloc, SetupTipScreenState>(
                               builder: (context, state) {
                                 return TextFormField(
                                   decoration: InputDecoration(
@@ -149,7 +144,7 @@ class _SetupTipBodyState extends State<SetupTipBody> {
               Row(
                 children: <Widget>[
                   Expanded(
-                    child: BlocBuilder<SetupTipScreenBloc, SetupTipScreenState>(
+                    child: BlocBuilder<SetupTipCardBloc, SetupTipScreenState>(
                       builder: (context, state) {
                         return RaisedButton(
                           shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
@@ -172,18 +167,17 @@ class _SetupTipBodyState extends State<SetupTipBody> {
   void dispose() {
     _tipRateController.dispose();
     _quickTipRateController.dispose();
-    widget._controller.removeStatusListener(_animationListener);
     super.dispose();
   }
 
   void _onTipRateChanged() {
     String rate = _tipRateController.text != "" ? _tipRateController.text : "0";
-    _setupTipScreenBloc.add(TipRateChanged(tipRate: int.parse(rate)));
+    _setupTipCardBloc.add(TipRateChanged(tipRate: int.parse(rate)));
   }
 
   void _onQuickTipRateChanged() {
     String rate = _tipRateController.text != "" ? _tipRateController.text : "0";
-    _setupTipScreenBloc.add(QuickTipRateChanged(quickTipRate: int.parse(rate)));
+    _setupTipCardBloc.add(QuickTipRateChanged(quickTipRate: int.parse(rate)));
   }
 
   bool _isSaveButtonEnabled(SetupTipScreenState state) {
@@ -192,7 +186,7 @@ class _SetupTipBodyState extends State<SetupTipBody> {
 
   void _saveButtonPressed(BuildContext context, SetupTipScreenState state) {
     if (_isSaveButtonEnabled(state)) {
-      _setupTipScreenBloc.add(Submitted(
+      _setupTipCardBloc.add(Submitted(
         customer: BlocProvider.of<AuthenticationBloc>(context).customer,
         tipRate: int.parse(_tipRateController.text),
         quickTipRate: int.parse(_quickTipRateController.text)
@@ -236,10 +230,9 @@ class _SetupTipBodyState extends State<SetupTipBody> {
         )
       ).closed.then((_) => {
         if (state.isSuccess) {
-          widget._controller.addStatusListener(_animationListener),
-          widget._controller.forward()
+          BlocProvider.of<ProfileSetupScreenBloc>(context).add(SectionCompleted(section: Section.tip))
         } else {
-          BlocProvider.of<SetupTipScreenBloc>(context).add(Reset())
+          BlocProvider.of<SetupTipCardBloc>(context).add(Reset())
         }
       });
   }
@@ -294,11 +287,5 @@ class _SetupTipBodyState extends State<SetupTipBody> {
         ),
       ]
     );
-  }
-
-  void _animationListener(AnimationStatus status) {
-    if (status == AnimationStatus.completed) {
-      BlocProvider.of<ProfileSetupScreenBloc>(context).add(SectionCompleted(section: Section.tip));
-    }
   }
 }

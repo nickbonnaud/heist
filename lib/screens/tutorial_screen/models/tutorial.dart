@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:heist/screens/tutorial/bloc/tutorial_screen_bloc.dart';
+import 'package:heist/screens/tutorial_screen/bloc/tutorial_screen_bloc.dart';
 
 class Tutorial extends Equatable {
   final TutorialCardType type;

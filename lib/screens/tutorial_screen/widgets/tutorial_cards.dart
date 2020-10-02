@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:heist/screens/tutorial/bloc/tutorial_screen_bloc.dart';
-import 'package:heist/screens/tutorial/models/tutorial.dart';
+import 'package:heist/screens/tutorial_screen/bloc/tutorial_screen_bloc.dart';
+import 'package:heist/screens/tutorial_screen/models/tutorial.dart';
 
 import 'tutorial_card.dart';
 

@@ -12,18 +12,7 @@ import 'package:heist/resources/helpers/text_styles.dart';
 import 'package:heist/screens/profile_setup_screen/bloc/profile_setup_screen_bloc.dart';
 import 'package:heist/themes/global_colors.dart';
 
-class ProfilePhotoScreen extends StatefulWidget {
-  final AnimationController _controller;
-
-  ProfilePhotoScreen({@required AnimationController controller})
-    : assert(controller != null),
-      _controller = controller;
-
-  @override
-  State<ProfilePhotoScreen> createState() => _ProfilePhotoScreenState();
-}
-
-class _ProfilePhotoScreenState extends State<ProfilePhotoScreen> {
+class ProfilePhotoCard extends StatelessWidget {
   final ProfileRepository _profileRepository = ProfileRepository();
 
   @override
@@ -101,7 +90,7 @@ class _ProfilePhotoScreenState extends State<ProfilePhotoScreen> {
                     builder: (context, state) {
                       return RaisedButton(
                         shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
-                        onPressed: _isNextButtonEnabled(state.customer) ? () => _nextButtonPressed(context) : null,
+                        onPressed: _isNextButtonEnabled(state.customer) ? () => _nextButtonPressed(context: context) : null,
                         child: BoldText3(text: 'Next', context: context, color: Theme.of(context).colorScheme.onSecondary)
                       );
                     }
@@ -114,26 +103,13 @@ class _ProfilePhotoScreenState extends State<ProfilePhotoScreen> {
       ),
     );
   }
-
-  @override
-  void dispose() {
-    widget._controller.removeStatusListener(_animationListener);
-    super.dispose();
-  }
-
+  
   bool _isNextButtonEnabled(Customer customer) {
     String photoName = customer?.profile?.photos?.name;
     return photoName != null;
   }
 
-  void _nextButtonPressed(BuildContext context) {
-    widget._controller.addStatusListener(_animationListener);
-    widget._controller.forward();
-  }
-
-  void _animationListener(AnimationStatus status) {
-    if (status == AnimationStatus.completed) {
-      BlocProvider.of<ProfileSetupScreenBloc>(context).add(SectionCompleted(section: Section.photo));
-    }
+  void _nextButtonPressed({@required BuildContext context}) {
+    BlocProvider.of<ProfileSetupScreenBloc>(context).add(SectionCompleted(section: Section.photo));
   }
 }

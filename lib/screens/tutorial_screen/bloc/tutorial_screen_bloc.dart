@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:heist/resources/constants.dart';
-import 'package:heist/screens/tutorial/models/tutorial.dart';
+import 'package:heist/screens/tutorial_screen/models/tutorial.dart';
 import 'package:meta/meta.dart';
 
 part 'tutorial_screen_event.dart';

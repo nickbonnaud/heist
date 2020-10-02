@@ -36,8 +36,12 @@ class PermissionCards extends StatelessWidget {
     List<PermissionType> currentInvalidPermissions = BlocProvider.of<PermissionsBloc>(context).invalidPermissions;
     return AnimatedPositioned(
       duration: Duration(milliseconds: 500),
-      top: currentInvalidPermissions.contains(permissionType) ? currentInvalidPermissions.indexOf(permissionType) * 10.0 : MediaQuery.of(context).size.height,
-      bottom: currentInvalidPermissions.contains(permissionType) ? 0 : - MediaQuery.of(context).size.height,
+      top: currentInvalidPermissions.contains(permissionType) 
+        ? currentInvalidPermissions.indexOf(permissionType) * 10.0 
+        : MediaQuery.of(context).size.height,
+      bottom: currentInvalidPermissions.contains(permissionType)
+        ? 0 
+        : - MediaQuery.of(context).size.height,
       child: Container(
         width: MediaQuery.of(context).size.width,
         padding: EdgeInsets.symmetric(horizontal: 8),
