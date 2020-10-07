@@ -29,21 +29,10 @@ class ReportIssueButton extends StatelessWidget {
       padding: EdgeInsets.only(right: 8),
       child: PopupMenuButton(
         onSelected: (Options selection) => _filterSelection(selection: selection, context: context),
-        icon: PlatformWidget(
-          android: (_) => Icon(
-            Icons.more_vert,
-            size: SizeConfig.getWidth(10),
-            color: Theme.of(context).colorScheme.topAppBarIcon,
-          ),
-          ios: (_) => Icon(
-            IconData(
-              0xF397,
-              fontFamily: CupertinoIcons.iconFont,
-              fontPackage: CupertinoIcons.iconFontPackage,
-            ),
-            size: SizeConfig.getWidth(10),
-            color: Theme.of(context).colorScheme.topAppBarIcon,
-          ),
+        icon: Icon(
+          Icons.more_vert,
+          size: SizeConfig.getWidth(10),
+          color: Theme.of(context).colorScheme.topAppBarIcon,
         ),
         itemBuilder: (BuildContext context) => <PopupMenuEntry<Options>>[
           PopupMenuItem<Options>(

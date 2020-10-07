@@ -91,7 +91,7 @@ class _SetupTipBodyState extends State<SetupTipBody> {
                                   keyboardType: TextInputType.number,
                                   textInputAction: TextInputAction.done,
                                   autocorrect: false,
-                                  autovalidate: true,
+                                  autovalidateMode: AutovalidateMode.onUserInteraction,
                                   textAlign: TextAlign.center,
                                   focusNode: _tipRateNode,
                                   validator: (_) => !state.isTipRateValid ? 'Must be between 0 and 30' : null,
@@ -126,7 +126,7 @@ class _SetupTipBodyState extends State<SetupTipBody> {
                                   keyboardType: TextInputType.number,
                                   textInputAction: TextInputAction.done,
                                   autocorrect: false,
-                                  autovalidate: true,
+                                  autovalidateMode: AutovalidateMode.onUserInteraction,
                                   textAlign: TextAlign.center,
                                   focusNode: _quickTipRateNode,
                                   validator: (_) => !state.isQuickTipRateValid ? 'Must be between 0 and 30' : null,
@@ -146,8 +146,7 @@ class _SetupTipBodyState extends State<SetupTipBody> {
                   Expanded(
                     child: BlocBuilder<SetupTipCardBloc, SetupTipScreenState>(
                       builder: (context, state) {
-                        return RaisedButton(
-                          shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
+                        return ElevatedButton(
                           onPressed: _isSaveButtonEnabled(state) ? () => _saveButtonPressed(context, state) : null,
                           child: _createButtonText(state),
                         );
@@ -211,17 +210,6 @@ class _SetupTipBodyState extends State<SetupTipBody> {
               Expanded(
                 child: BoldText3(text: message, context: context, color: Theme.of(context).colorScheme.onSecondary)
               ),
-              PlatformWidget(
-                android: (_) => Icon(state.isSuccess ? Icons.check_circle_outline : Icons.error),
-                ios: (_) => Icon(
-                  IconData(
-                    state.isSuccess ? 0xF3FE : 0xF35B,
-                    fontFamily: CupertinoIcons.iconFont,
-                    fontPackage: CupertinoIcons.iconFontPackage
-                  ),
-                  color: Theme.of(context).colorScheme.onError,
-                ),
-              )
             ],
           ),
           backgroundColor: state.isSuccess

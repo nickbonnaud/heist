@@ -88,8 +88,7 @@ class ProfilePhotoCard extends StatelessWidget {
                 Expanded(
                   child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
                     builder: (context, state) {
-                      return RaisedButton(
-                        shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
+                      return ElevatedButton(
                         onPressed: _isNextButtonEnabled(state.customer) ? () => _nextButtonPressed(context: context) : null,
                         child: BoldText3(text: 'Next', context: context, color: Theme.of(context).colorScheme.onSecondary)
                       );

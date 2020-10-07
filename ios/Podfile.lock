@@ -40,8 +40,6 @@ PODS:
     - Flutter
   - vibrate (0.0.1):
     - Flutter
-  - video_player (0.0.1):
-    - Flutter
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
@@ -60,7 +58,6 @@ DEPENDENCIES:
   - sqflite (from `.symlinks/plugins/sqflite/ios`)
   - url_launcher (from `.symlinks/plugins/url_launcher/ios`)
   - vibrate (from `.symlinks/plugins/vibrate/ios`)
-  - video_player (from `.symlinks/plugins/video_player/ios`)
 
 SPEC REPOS:
   trunk:
@@ -99,8 +96,6 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/url_launcher/ios"
   vibrate:
     :path: ".symlinks/plugins/vibrate/ios"
-  video_player:
-    :path: ".symlinks/plugins/video_player/ios"
 
 SPEC CHECKSUMS:
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
@@ -121,7 +116,6 @@ SPEC CHECKSUMS:
   sqflite: 4001a31ff81d210346b500c55b17f4d6c7589dd0
   url_launcher: a1c0cc845906122c4784c542523d8cacbded5626
   vibrate: 967ba16b8bd87d2fa3646472bb10429f1927c32f
-  video_player: 69c5f029fac4ffe4fc8a85ea7f7b793709661549
 
 PODFILE CHECKSUM: 6ce6557101d113b34e828f8a6eeb1552e5ec02d9
 

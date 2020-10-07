@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heist/global_widgets/default_app_bar/default_app_bar.dart';
+import 'package:heist/global_widgets/error_screen/error_screen.dart';
 import 'package:heist/global_widgets/transaction_widget.dart';
 import 'package:heist/resources/helpers/bottom_loader.dart';
 import 'package:heist/resources/helpers/loading_widget.dart';
@@ -38,34 +39,25 @@ class _HistoricTransactionsBodyState extends State<HistoricTransactionsBody> {
   Widget build(BuildContext context) {
     return BlocBuilder<HistoricTransactionsBloc, HistoricTransactionsState>(
       builder: (context, state) {
-        if (state is Uninitialized || state is Loading) {
-          return Center(
-            child: LoadingWidget(),
+        if (state is FetchFailure) {
+          return ErrorScreen(
+            body: "Oops! An error occurred fetching previous transactions!\n\n Please try again.",
+            buttonText: "Retry",
+            onButtonPressed: () => BlocProvider.of<HistoricTransactionsBloc>(context).add(FetchHistoricTransactions(reset: true)),
           );
-        } else if (state is FetchFailure) {
-          return Center(
-            child: BoldText4(text: 'Failed to Fetch Posts', context: context, color: Colors.black),
-          );
-        } else if (state is TransactionsLoaded) {
-          if (state.transactions.isEmpty) {
-            return Center(
-              child: BoldText4(text: 'No Transactions', context: context, color: Colors.black),
-            );
-          }
-          return Stack(
-            children: <Widget>[
-              _buildTransactionsList(state: state),
-              _buildFilterButton(context: context)
-            ],
-          );
-        } else {
-          return throw UnimplementedError();
         }
+
+        return Stack(
+          children: <Widget>[
+            _buildTransactionsBody(state: state),
+            _buildFilterButton(context: context, state: state)
+          ],
+        );
       },
     );
   }
 
-  Widget _buildTransactionsList({@required TransactionsLoaded state}) {
+  Widget _buildTransactionsBody({@required HistoricTransactionsState state}) {
     return CustomScrollView(
       controller: _scrollController,
       slivers: <Widget>[
@@ -74,35 +66,65 @@ class _HistoricTransactionsBodyState extends State<HistoricTransactionsBody> {
           isSliver: true,
           title: "Transactions",
         ),
-        SliverPadding(
-          padding: EdgeInsets.only(left: 8, right: 8),
-          sliver: SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (BuildContext context, int index) => index >= state.transactions.length
-                ? BottomLoader()
-                : TransactionWidget(transactionResource: state.transactions[index]),
-              childCount: state.hasReachedEnd
-                ? state.transactions.length
-                : state.transactions.length + 1
-            ),
-          ),
-        )
+        _buildList(state: state)
       ],
     );
   }
 
-  Widget _buildFilterButton({@required BuildContext context}) {
-    return Positioned(
-      bottom: -SizeConfig.getHeight(5),
-      right: -SizeConfig.getWidth(10 ),
-      child: BlocProvider<FilterButtonBloc>(
-        create: (_) => FilterButtonBloc(),
-        child: FilterButton(
-          startColor: Theme.of(context).colorScheme.callToAction,
-          endColor: Theme.of(context).colorScheme.callToAction,
+  Widget _buildList({@required HistoricTransactionsState state}) {
+    if (state is TransactionsLoaded) {
+      if (state.transactions.isEmpty) {
+        return SliverPadding(
+          padding: EdgeInsets.only(left: 8, right: 8),
+          sliver: SliverFillRemaining(
+            child: Center(
+              child: BoldText1(
+                text: 'No Transactions Found!', 
+                context: context, 
+              ),
+            ),
+            hasScrollBody: false,
+          ),
+        );
+      }
+      return SliverPadding(
+        padding: EdgeInsets.only(left: 8, right: 8),
+        sliver: SliverList(
+          delegate: SliverChildBuilderDelegate(
+            (BuildContext context, int index) => index >= state.transactions.length
+              ? BottomLoader()
+              : TransactionWidget(transactionResource: state.transactions[index]),
+            childCount: state.hasReachedEnd
+              ? state.transactions.length
+              : state.transactions.length + 1
+          ),
         ),
-      )
+      );
+    }
+    return SliverPadding(
+      padding: EdgeInsets.only(left: 8, right: 8),
+      sliver: SliverFillRemaining(
+        child: LoadingWidget(),
+        hasScrollBody: false,
+      ),
     );
+  }
+
+  Widget _buildFilterButton({@required BuildContext context, @required HistoricTransactionsState state}) {
+    if (state is TransactionsLoaded) {
+      return Positioned(
+        bottom: -SizeConfig.getHeight(5),
+        right: -SizeConfig.getWidth(10 ),
+        child: BlocProvider<FilterButtonBloc>(
+          create: (_) => FilterButtonBloc(),
+          child: FilterButton(
+            startColor: Theme.of(context).colorScheme.callToAction,
+            endColor: Theme.of(context).colorScheme.callToAction,
+          ),
+        )
+      );
+    }
+    return Container();
   }
 
   void _onScroll() {

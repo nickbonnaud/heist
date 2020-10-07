@@ -141,29 +141,23 @@ class _TutorialCardState extends State<TutorialCard> {
           Row(
             children: [
               Expanded(
-                child: OutlineButton(
+                child: OutlinedButton(
                   onPressed: state.currentIndex != state.tutorialCards.length - 1
                     ? () => BlocProvider.of<TutorialScreenBloc>(context).add(Previous())
                     : null,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
                   child: BoldText3(
                     text: 'Previous', 
                     context: context, 
                     color: state.currentIndex != state.tutorialCards.length - 1 ? Theme.of(context).colorScheme.callToAction : Theme.of(context).colorScheme.callToActionDisabled,
                   ),
-                  borderSide: BorderSide(
-                    color: Theme.of(context).colorScheme.callToAction
-                  ),
-                  disabledBorderColor: Theme.of(context).colorScheme.callToActionDisabled,
                 )
               ) ,
               SizedBox(width: SizeConfig.getWidth(4)),
               Expanded(
-                child: RaisedButton(
+                child: ElevatedButton(
                   onPressed: state.currentIndex != 0
                     ? () => BlocProvider.of<TutorialScreenBloc>(context).add(Next())
                     : null,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
                   child: BoldText3(
                     text: 'Next', 
                     context: context, 

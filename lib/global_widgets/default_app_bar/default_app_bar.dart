@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:heist/global_widgets/default_app_bar/bloc/default_app_bar_bloc.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
@@ -99,7 +98,7 @@ class _AnimatedLeadingIconState extends State<AnimatedLeadingIcon> with TickerPr
         builder: (context, child) => Transform.rotate(
           angle: _rotateAnimation.value,
           child: IconButton(
-            icon: Icon(context.platformIcons.back),
+            icon: Icon(Icons.arrow_back),
             onPressed: () => Navigator.of(context).pop(),
             color: Theme.of(context).colorScheme.topAppBarIcon,
             iconSize: SizeConfig.getWidth(10),

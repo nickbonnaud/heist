@@ -3,7 +3,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:heist/blocs/geo_location/geo_location_bloc.dart';
 import 'package:heist/global_widgets/cached_avatar_hero.dart';
@@ -78,13 +77,7 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
         ),
         floatingActionButton: FloatingActionButton(
           heroTag: MAP_KEY,
-          child: PlatformWidget(
-            android: (_) => Icon(Icons.my_location),
-            ios: (_) => Icon(IconData(0xF2E9,
-              fontFamily: CupertinoIcons.iconFont,
-              fontPackage: CupertinoIcons.iconFontPackage
-            )),
-          ),
+          child: Icon(Icons.my_location),
           onPressed: () => _changeLocation(context),
         ),
       )

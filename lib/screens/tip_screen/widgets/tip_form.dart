@@ -98,7 +98,7 @@ class _TipFormState extends State<TipForm> {
                                   keyboardType: TextInputType.number,
                                   textInputAction: TextInputAction.done,
                                   autocorrect: false,
-                                  autovalidate: true,
+                                  autovalidateMode: AutovalidateMode.onUserInteraction,
                                   textAlign: TextAlign.center,
                                   focusNode: _tipRateNode,
                                   validator: (_) => !state.isTipRateValid ? 'Must be between 0 and 30' : null,
@@ -133,7 +133,7 @@ class _TipFormState extends State<TipForm> {
                                   keyboardType: TextInputType.number,
                                   textInputAction: TextInputAction.done,
                                   autocorrect: false,
-                                  autovalidate: true,
+                                  autovalidateMode: AutovalidateMode.onUserInteraction,
                                   textAlign: TextAlign.center,
                                   focusNode: _quickTipRateNode,
                                   validator: (_) => !state.isQuickTipRateValid ? 'Must be between 0 and 30' : null,
@@ -155,12 +155,7 @@ class _TipFormState extends State<TipForm> {
                     Expanded(
                       child: BlocBuilder<TipFormBloc, TipFormState>(
                         builder: (context, state) {
-                          return OutlineButton(
-                            borderSide: BorderSide(
-                              color: Theme.of(context).colorScheme.callToAction
-                            ),
-                            disabledBorderColor: Theme.of(context).colorScheme.callToActionDisabled,
-                            shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
+                          return OutlinedButton(
                             onPressed: state.isSubmitting ? null : () => _cancelButtonPressed(context),
                             child: BoldText3(
                               text: 'Cancel', 
@@ -177,8 +172,7 @@ class _TipFormState extends State<TipForm> {
                     Expanded(
                       child: BlocBuilder<TipFormBloc, TipFormState>(
                         builder: (context, state) {
-                          return RaisedButton(
-                            shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
+                          return ElevatedButton(
                             onPressed: _isSaveButtonEnabled(state) ? () => _saveButtonPressed(state) : null,
                             child: _createButtonText(state),
                           );
@@ -265,17 +259,6 @@ class _TipFormState extends State<TipForm> {
               Expanded(
                 child: BoldText3(text: message, context: context, color: Theme.of(context).colorScheme.onSecondary)
               ),
-              PlatformWidget(
-                android: (_) => Icon(state.isSuccess ? Icons.check_circle_outline : Icons.error),
-                ios: (_) => Icon(
-                  IconData(
-                    state.isSuccess ? 0xF3FE : 0xF35B,
-                    fontFamily: CupertinoIcons.iconFont,
-                    fontPackage: CupertinoIcons.iconFontPackage
-                  ),
-                  color: Theme.of(context).colorScheme.onError,
-                ),
-              )
             ],
           ),
           backgroundColor: state.isSuccess

@@ -19,68 +19,48 @@ class SettingsList extends StatelessWidget {
       children: <Widget>[
         SizedBox(height: SizeConfig.getHeight(2)),
         ListTile(
-          leading: PlatformWidget(
-            android: (_) => Icon(Icons.person, size: SizeConfig.getWidth(8)),
-            ios: (_) => Icon(
-              IconData(
-                0xF41A,
-                fontFamily: CupertinoIcons.iconFont,
-                fontPackage: CupertinoIcons.iconFontPackage,
-              ),
-              size: SizeConfig.getWidth(8),
-            ),
+          leading: Icon(
+            Icons.person, 
+            color: Theme.of(context).colorScheme.secondary,
+            size: SizeConfig.getWidth(8)
           ),
-          title: Text1(text: 'Change Profile', context: context, color: Theme.of(context).colorScheme.onPrimarySubdued),
+          title: Text1(text: 'Change Profile', context: context, color: Theme.of(context).colorScheme.callToAction),
           onTap: () => _showModal(context: context, screen: ProfileScreen())
         ),
         ListTile(
-          leading: PlatformWidget(
-            android: (_) => Icon(Icons.email, size: SizeConfig.getWidth(8)),
-            ios: (_) => Icon(
-              IconData(
-                0xF474,
-                fontFamily: CupertinoIcons.iconFont,
-                fontPackage: CupertinoIcons.iconFontPackage
-              ),
-              size: SizeConfig.getWidth(8)
-            ),
+          leading: Icon(
+            Icons.email,
+            color: Theme.of(context).colorScheme.secondary,
+            size: SizeConfig.getWidth(8)
           ),
-          title: Text1(text: 'Change Email', context: context, color: Theme.of(context).colorScheme.onPrimarySubdued),
+          title: Text1(text: 'Change Email', context: context, color: Theme.of(context).colorScheme.callToAction),
           onTap: () => _showModal(context: context, screen: EmailScreen())
         ),
         ListTile(
-          leading: PlatformWidget(
-            android: (_) => Icon(Icons.lock, size: SizeConfig.getWidth(8)),
-            ios: (_) => Icon(
-              IconData(
-                0xF392,
-                fontFamily: CupertinoIcons.iconFont,
-                fontPackage: CupertinoIcons.iconFontPackage
-              ),
-              size: SizeConfig.getWidth(8)
-            ),
+          leading: Icon(
+            Icons.lock,
+            color: Theme.of(context).colorScheme.secondary,
+            size: SizeConfig.getWidth(8)
           ),
-          title: Text1(text: 'Change Password', context: context, color: Theme.of(context).colorScheme.onPrimarySubdued),
+          title: Text1(text: 'Change Password', context: context, color: Theme.of(context).colorScheme.callToAction),
           onTap: () => _showModal(context: context, screen: PasswordScreen())
         ),
         ListTile(
-          leading: Icon(Icons.payment, size: SizeConfig.getWidth(8)),
-          title: Text1(text: 'Change Payment Method', context: context, color: Theme.of(context).colorScheme.onPrimarySubdued),
+          leading: Icon(
+            Icons.payment,
+            color: Theme.of(context).colorScheme.secondary,
+            size: SizeConfig.getWidth(8)
+          ),
+          title: Text1(text: 'Change Payment Method', context: context, color: Theme.of(context).colorScheme.callToAction),
           onTap: () => print('show payment screen'),
         ),
         ListTile(
-          leading: PlatformWidget(
-            android: (_) => Icon(Icons.thumb_up, size: SizeConfig.getWidth(8)),
-            ios: (_) => Icon(
-              IconData(
-                0xF388,
-                fontFamily: CupertinoIcons.iconFont,
-                fontPackage: CupertinoIcons.iconFontPackage
-              ),
-              size: SizeConfig.getWidth(8)
-            ),
+          leading: Icon(
+            Icons.thumb_up,
+            color: Theme.of(context).colorScheme.secondary,
+            size: SizeConfig.getWidth(8)
           ),
-          title: Text1(text: 'Change Tip Settings', context: context, color: Theme.of(context).colorScheme.onPrimarySubdued),
+          title: Text1(text: 'Change Tip Settings', context: context, color: Theme.of(context).colorScheme.callToAction),
           onTap: () => _showModal(context: context, screen: TipScreen())
         ),
         SizedBox(height: SizeConfig.getHeight(10))

@@ -2,7 +2,6 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:heist/blocs/open_transactions/open_transactions_bloc.dart';
 import 'package:heist/models/transaction/transaction_resource.dart';
 import 'package:heist/resources/helpers/size_config.dart';
@@ -32,10 +31,15 @@ class KeepOpenButton extends StatelessWidget {
       },
       child: BlocBuilder<KeepOpenButtonBloc, KeepOpenButtonState>(
         builder: (context, state) {
-          return RaisedButton(
-            color: Theme.of(context).colorScheme.info,
-            disabledColor: Theme.of(context).colorScheme.infoDisabled,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
+          return ElevatedButton(
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.resolveWith<Color>((states) {
+                if (states.contains(MaterialState.disabled)) {
+                  return Theme.of(context).colorScheme.infoDisabled;
+                }
+                return Theme.of(context).colorScheme.info;
+              })
+            ),
             onPressed: () => BlocProvider.of<KeepOpenButtonBloc>(context).add(Submitted(transactionId: _transactionResource.transaction.identifier)),
             child: _createButtonText(context: context, state: state),
           );
@@ -77,17 +81,6 @@ class KeepOpenButton extends StatelessWidget {
               Expanded(
                 child: BoldText3(text: message, context: context, color: Theme.of(context).colorScheme.onSecondary)
               ),
-              PlatformWidget(
-                android: (_) => Icon(state.isSubmitSuccess ? Icons.check_circle_outline : Icons.error),
-                ios: (_) => Icon(
-                  IconData(
-                    state.isSubmitSuccess ? 0xF3FE : 0xF35B,
-                    fontFamily: CupertinoIcons.iconFont,
-                    fontPackage: CupertinoIcons.iconFontPackage
-                  ),
-                  color: Theme.of(context).colorScheme.onError,
-                ),
-              )
             ],
           ),
           backgroundColor: state.isSubmitSuccess 

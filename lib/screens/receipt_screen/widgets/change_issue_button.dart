@@ -30,21 +30,10 @@ class ChangeIssueButton extends StatelessWidget {
       padding: EdgeInsets.only(right: 8),
       child: PopupMenuButton(
         onSelected: (Options selection) => _filterSelection(selection: selection, context: context),
-        icon: PlatformWidget(
-          android: (_) => Icon(
-            Icons.more_vert,
-            size: SizeConfig.getWidth(10),
-            color: Theme.of(context).colorScheme.onPrimary,
-          ),
-          ios: (_) => Icon(
-            IconData(
-              0xF397,
-              fontFamily: CupertinoIcons.iconFont,
-              fontPackage: CupertinoIcons.iconFontPackage,
-            ),
-            size: SizeConfig.getWidth(10),
-            color: Theme.of(context).colorScheme.onPrimary,
-          ),
+        icon: Icon(
+          Icons.more_vert,
+          size: SizeConfig.getWidth(10),
+          color: Theme.of(context).colorScheme.onPrimary,
         ),
         itemBuilder: (BuildContext context) => <PopupMenuEntry<Options>>[
           if (_transaction.transaction.status.code != 500)

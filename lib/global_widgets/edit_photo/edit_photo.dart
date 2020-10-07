@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:heist/global_widgets/cached_avatar.dart';
 import 'package:heist/models/customer/customer.dart';
 import 'package:heist/repositories/photo_picker_repository.dart';
@@ -50,20 +49,10 @@ class EditPhoto extends StatelessWidget {
                     ? CircularProgressIndicator(
                       backgroundColor: Theme.of(context).colorScheme.primary,
                     )
-                    : PlatformWidget(
-                    ios: (_) => Icon(
-                      IconData(
-                        0xF2BF,
-                        fontFamily: CupertinoIcons.iconFont,
-                        fontPackage: CupertinoIcons.iconFontPackage
+                    : Icon(
+                        Icons.edit,
+                        color: Theme.of(context).colorScheme.onCallToAction,
                       ),
-                      color: Theme.of(context).colorScheme.onCallToAction,
-                    ),
-                    android: (_) => Icon(
-                      Icons.edit,
-                      color: Theme.of(context).colorScheme.onSecondary
-                    ),
-                  ),
                   shape: CircleBorder(),
                   elevation: 5.0,
                   fillColor: Theme.of(context).colorScheme.callToAction,
@@ -121,17 +110,6 @@ class EditPhoto extends StatelessWidget {
               Expanded(
                 child: BoldText3(text: message, context: context, color: Theme.of(context).colorScheme.onSecondary)
               ),
-              PlatformWidget(
-                android: (_) => Icon(isSuccess ? Icons.check_circle_outline : Icons.error),
-                ios: (_) => Icon(
-                  IconData(
-                    isSuccess ? 0xF3FE : 0xF35B,
-                    fontFamily: CupertinoIcons.iconFont,
-                    fontPackage: CupertinoIcons.iconFontPackage
-                  ),
-                  color: Theme.of(context).colorScheme.onError,
-                ),
-              )
             ],
           ),
           backgroundColor: isSuccess 

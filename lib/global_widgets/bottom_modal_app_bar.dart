@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/themes/global_colors.dart';
 
@@ -82,14 +81,7 @@ class _BottomModalAppBarState extends State<BottomModalAppBar> with TickerProvid
       builder: (context, child) => Transform.rotate(
         angle: _showAnimation.value,
         child: IconButton(
-          icon: PlatformWidget(
-            android: (_) => Icon(Icons.arrow_downward),
-            ios: (_) => Icon(IconData(
-              0xF35D,
-              fontFamily: CupertinoIcons.iconFont,
-              fontPackage: CupertinoIcons.iconFontPackage
-            )),
-          ),
+          icon: Icon(Icons.arrow_downward),
           onPressed: () => Navigator.of(context).pop(),
           color: Theme.of(context).colorScheme.topAppBarIcon,
           iconSize: SizeConfig.getWidth(10),

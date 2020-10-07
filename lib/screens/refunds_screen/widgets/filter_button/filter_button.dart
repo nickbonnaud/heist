@@ -77,19 +77,9 @@ class _FilterButtonState extends State<FilterButton> with SingleTickerProviderSt
                 _buildExpandedBackground(),
                 _buildOption(
                   option: Option.all, 
-                  icon: PlatformWidget(
-                    android: (_) => Icon(
-                      Icons.refresh, 
-                      color: Theme.of(context).colorScheme.onSecondary,
-                    ),
-                    ios: (_) => Icon(
-                      IconData(
-                        0xF21C,
-                        fontFamily: CupertinoIcons.iconFont,
-                        fontPackage: CupertinoIcons.iconFontPackage
-                      ),
-                      color: Theme.of(context).colorScheme.onSecondary,
-                    )
+                  icon: Icon(
+                    Icons.refresh, 
+                    color: Theme.of(context).colorScheme.onSecondary,
                   ), 
                   angle: _setAngle(index: 1)
                 ),
@@ -103,44 +93,24 @@ class _FilterButtonState extends State<FilterButton> with SingleTickerProviderSt
                 ),
                 _buildOption(
                   option: Option.date, 
-                  icon: PlatformWidget(
-                    android: (_) => Icon(
-                      Icons.event, 
-                      color: Theme.of(context).colorScheme.onSecondary,
-                    ),
-                    ios: (_) => Icon(
-                      IconData(
-                        0xF2D1,
-                        fontFamily: CupertinoIcons.iconFont,
-                        fontPackage: CupertinoIcons.iconFontPackage
-                      ),
-                      color: Theme.of(context).colorScheme.onSecondary,
-                    ),
+                  icon: Icon(
+                    Icons.event, 
+                    color: Theme.of(context).colorScheme.onSecondary,
                   ),
                   angle: _setAngle(index: 3)
                 ),
                 _buildOption(
                   option: Option.transactionId,
-                  icon: PlatformWidget(
-                    android: (_) => Icon(
-                      Icons.receipt, 
-                      color: Theme.of(context).colorScheme.onSecondary,
-                    ),
-                    ios: (_) => Icon(
-                      IconData(
-                        0xF472,
-                        fontFamily: CupertinoIcons.iconFont,
-                        fontPackage: CupertinoIcons.iconFontPackage
-                      ),
-                      color: Theme.of(context).colorScheme.onSecondary,
-                    )
+                  icon: Icon(
+                    Icons.receipt, 
+                    color: Theme.of(context).colorScheme.onSecondary,
                   ),
                   angle: _setAngle(index: 4)
                 ),
                 _buildOption(
                   option: Option.refundId, 
                   icon: Icon(
-                    Icons.undo,
+                    Icons.receipt_long,
                     color: Theme.of(context).colorScheme.onSecondary,
                   ), 
                   angle: _setAngle(index: 5)
@@ -207,22 +177,22 @@ class _FilterButtonState extends State<FilterButton> with SingleTickerProviderSt
 
   Widget _buildBaseButton() {
     double scaleFactor = 2 * (_controller.value - 0.5).abs();
-    return FloatingActionButton(
-      onPressed: () => BlocProvider.of<FilterButtonBloc>(context).add(Toggle()),
-      child: Transform(
-        alignment: Alignment.center,
-        transform: Matrix4.identity()..scale(1.0, scaleFactor),
-        child: Icon(
-          IconData(
-            _controller.value > 0.5 ? 0xF2D7 : 0xF38B,
-            fontFamily: CupertinoIcons.iconFont,
-            fontPackage: CupertinoIcons.iconFontPackage,
+    return BlocBuilder<FilterButtonBloc, FilterButtonState>(
+      builder: (context, state) {
+        return FloatingActionButton(
+          onPressed: () => BlocProvider.of<FilterButtonBloc>(context).add(Toggle()),
+          child: Transform(
+            alignment: Alignment.center,
+            transform: Matrix4.identity()..scale(1.0, scaleFactor),
+            child: Icon(
+              state.isActive ? Icons.close : Icons.filter_list,
+              size: SizeConfig.getWidth(10),
+              color: Theme.of(context).colorScheme.onSecondary,
+            ),
           ),
-          size: SizeConfig.getWidth(10),
-          color: Theme.of(context).colorScheme.onSecondary,
-        ),
-      ),
-      backgroundColor: _colorAnimation.value,
+          backgroundColor: _colorAnimation.value,
+        );
+      }
     );
   }
 

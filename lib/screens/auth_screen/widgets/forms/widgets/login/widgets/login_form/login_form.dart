@@ -126,7 +126,7 @@ class _LoginFormState extends State<LoginForm> {
                             _changeFocus(context, _emailFocus, _passwordFocus);
                           },
                           validator: (_) => !state.isEmailValid && _emailController.text.isNotEmpty ? 'Invalid email' : null,
-                          autovalidate: true,
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
                           autocorrect: false,
                           decoration: InputDecoration(
                             enabledBorder: UnderlineInputBorder(
@@ -158,7 +158,7 @@ class _LoginFormState extends State<LoginForm> {
                             _passwordFocus.unfocus();
                           },
                           validator: (_) => !state.isPasswordValid && _passwordController.text.isNotEmpty ? 'Invalid Password' : null,
-                          autovalidate: true,
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
                           autocorrect: false,
                           decoration: InputDecoration(
                             enabledBorder: UnderlineInputBorder(

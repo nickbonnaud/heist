@@ -1,7 +1,7 @@
 import 'dart:math' as math;
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:heist/themes/global_colors.dart';
 
 class DragButton extends StatelessWidget {
@@ -26,21 +26,10 @@ class DragButton extends StatelessWidget {
         angle: math.pi * _controller.value,
         child: GestureDetector(
           onTap: () => _toggle,
-          child: PlatformWidget(
-            android: (_) => Icon(
-              Icons.arrow_upward,
-              size: _size,
-              color: Theme.of(context).colorScheme.callToAction,
-            ),
-            ios: (_) => Icon(
-              IconData(
-                0xF366,
-                fontFamily: CupertinoIcons.iconFont,
-                fontPackage: CupertinoIcons.iconFontPackage
-              ),
-              color: Theme.of(context).colorScheme.callToAction,
-              size: _size,
-            ),
+          child: Icon(
+            Icons.arrow_upward,
+            size: _size,
+            color: Theme.of(context).colorScheme.callToAction,
           ),
         ),
       ),

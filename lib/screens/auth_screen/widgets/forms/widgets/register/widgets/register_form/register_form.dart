@@ -134,7 +134,7 @@ class _RegisterFormState extends State<RegisterForm> {
                             _changeFocus(context, _emailFocus, _passwordFocus);
                           },
                           validator: (_) => !state.isEmailValid && _emailController.text.isNotEmpty ? 'Invalid email' : null,
-                          autovalidate: true,
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
                           autocorrect: false,
                           decoration: InputDecoration(
                             enabledBorder: UnderlineInputBorder(
@@ -166,7 +166,7 @@ class _RegisterFormState extends State<RegisterForm> {
                             _changeFocus(context, _passwordFocus, _passwordConfirmationFocus);
                           },
                           validator: (_) => !state.isPasswordValid && _passwordController.text.isNotEmpty ? 'Min 6 characters, at least 1 letter, 1 number.' : null,
-                          autovalidate: true,
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
                           autocorrect: false,
                           decoration: InputDecoration(
                             enabledBorder: UnderlineInputBorder(
@@ -199,7 +199,7 @@ class _RegisterFormState extends State<RegisterForm> {
                             _passwordConfirmationFocus.unfocus();
                           },
                           validator: (_) => !state.isPasswordConfirmationValid && _passwordConfirmationController.text.isNotEmpty ? "Passwords are not matching" : null,
-                          autovalidate: true,
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
                           autocorrect: false,
                           decoration: InputDecoration(
                             enabledBorder: UnderlineInputBorder(

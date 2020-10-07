@@ -5,7 +5,6 @@ import 'package:heist/global_widgets/material_date_picker/bloc/material_date_pic
 import 'package:heist/models/date_range.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
-import 'package:heist/themes/global_colors.dart';
 import 'package:intl/intl.dart';
 
 class MaterialDatePicker extends StatefulWidget {
@@ -91,12 +90,7 @@ class _MaterialDatePicker extends State<MaterialDatePicker> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Expanded(
-                    child: OutlineButton(
-                      borderSide: BorderSide(
-                        color: Theme.of(context).colorScheme.callToAction
-                      ),
-                      disabledBorderColor: Theme.of(context).colorScheme.callToActionDisabled,
-                      shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
+                    child: OutlinedButton(
                       onPressed: () => Navigator.of(context).pop(),
                       child: BoldText3(text: 'Cancel', context: context),
                     )
@@ -105,8 +99,7 @@ class _MaterialDatePicker extends State<MaterialDatePicker> {
                   Expanded(
                     child: BlocBuilder<MaterialDatePickerBloc, MaterialDatePickerState>(
                       builder: (context, state) {
-                        return RaisedButton(
-                          shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
+                        return ElevatedButton(
                           onPressed: state.startDate != null && state.endDate != null && state.startDate.isBefore(state.endDate)
                             ? () => Navigator.of(context).pop(DateRange(startDate: state.startDate, endDate: state.endDate))
                             : null,

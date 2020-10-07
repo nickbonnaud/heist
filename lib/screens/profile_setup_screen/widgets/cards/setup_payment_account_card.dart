@@ -28,8 +28,7 @@ class SetupPaymentAccountCard extends StatelessWidget {
                     text: "Let's add your Payment Method!", 
                     context: context,
                   ),
-                  RaisedButton(
-                    shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
+                  ElevatedButton(
                     onPressed: () => _connectButtonPressed(context: context),
                     child: BoldText3(text: 'Connect', context: context, color: Theme.of(context).colorScheme.onSecondary)
                   ),
@@ -46,8 +45,7 @@ class SetupPaymentAccountCard extends StatelessWidget {
                 Expanded(
                   child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
                     builder: (context, state) {
-                      return RaisedButton(
-                        shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
+                      return ElevatedButton(
                         onPressed: _isNextButtonEnabled(state) ? () => _nextButtonPressed(context) : null,
                         child: BoldText3(text: 'Next', context: context, color: Theme.of(context).colorScheme.onSecondary)
                       );

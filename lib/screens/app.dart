@@ -13,7 +13,7 @@ import 'package:heist/resources/helpers/push_notification_handlers/app_opened_ha
 import 'package:heist/resources/helpers/push_notification_handlers/message_received_handler.dart';
 import 'package:heist/screens/layout_screen/layout_screen.dart';
 import 'package:heist/screens/onboard_screen/onboard_screen.dart';
-import 'package:heist/screens/splash_screen.dart';
+import 'package:heist/screens/splash_screen/splash_screen.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 class App extends StatelessWidget {
@@ -88,15 +88,16 @@ class App extends StatelessWidget {
         builder: (context, state) {
           if (state.checksComplete) {
             bool permissionsReady = BlocProvider.of<PermissionsBloc>(context).allPermissionsValid;
+            
             if (!state.customerOnboarded || !permissionsReady) {
               return OnboardScreen(customerOnboarded: state.customerOnboarded, permissionsReady: permissionsReady);
             } else if (state.isDataLoaded) {
               return LayoutScreen();
             } else {
-              return SplashScreen(shouldAnimate: true);
+              return SplashScreen();
             }
           } else {
-            return SplashScreen(shouldAnimate: true);
+            return SplashScreen();
           }
         }
       )

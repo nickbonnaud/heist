@@ -2,13 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
-import 'package:heist/resources/constants.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
 import 'package:heist/screens/permission_screen/widgets/permission_buttons/bloc/permission_buttons_bloc.dart';
 import 'package:heist/themes/global_colors.dart';
 
-import 'help_video.dart';
 import '../../permission_buttons/permission_buttons.dart';
 
 class BeaconBody extends StatelessWidget {
@@ -19,8 +17,9 @@ class BeaconBody extends StatelessWidget {
       _permissionButtons = permissionButtons;
 
   final String beaconText = 
-  'Beacons enable ${Constants.appName} to know when you enter and leave a business.\n\n'
-  "Beacon Settings are a part of Location Services, please change from 'While Using the App' to 'Always'.";
+  'Beacons ensure that you are in the correct Business.\n\n'
+  "Beacon Settings are a part of Location Services.\n\n"
+  "Press Enable > Select 'Location' > Change to 'Always'.";
 
   @override
   Widget build(BuildContext context) {
@@ -31,18 +30,8 @@ class BeaconBody extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             SizedBox(height: SizeConfig.getHeight(2)),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                VeryBoldText2(text: 'Beacons', context: context),
-                IconButton(
-                  iconSize: SizeConfig.getWidth(6),
-                  icon: Icon(Icons.help), 
-                  onPressed: () => _showHowModal(context),
-                )
-              ],
-            ),
-            SizedBox(height: SizeConfig.getHeight(1)),
+            VeryBoldText2(text: 'Beacons', context: context),
+            SizedBox(height: SizeConfig.getHeight(6)),
             PlatformText('Stage 4',
               textAlign: TextAlign.center,
               style: TextStyle(
@@ -60,7 +49,6 @@ class BeaconBody extends StatelessWidget {
                 fontWeight: FontWeight.bold
               ),
             ),
-            SizedBox(height: SizeConfig.getHeight(1)),
           ],
         ),
         BlocProvider<PermissionButtonsBloc>(
@@ -68,22 +56,6 @@ class BeaconBody extends StatelessWidget {
           child: _permissionButtons
         ),
       ],
-    );
-  }
-
-  void _showHowModal(BuildContext context) {
-    showPlatformDialog(
-      context: context,
-      builder: (_) => PlatformAlertDialog(
-        content: HelpVideo(),
-        actions: <Widget>[
-          PlatformDialogAction(
-            child: PlatformText('Close'),
-            onPressed: () => Navigator.pop(context)
-          )
-        ],
-        
-      )
     );
   }
 }

@@ -3,10 +3,9 @@ import 'dart:math' as math;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:heist/resources/helpers/size_config.dart';
-import 'package:provider/provider.dart';
 import 'package:heist/themes/global_colors.dart';
+import 'package:provider/provider.dart';
 
 import '../auth_screen.dart';
 import 'cubit/keyboard_visible_cubit.dart';
@@ -68,21 +67,10 @@ class _DragArrowState extends State<DragArrow> with SingleTickerProviderStateMix
         builder: (context, keyboardVisible) {
           return Opacity(
             opacity: keyboardVisible ? 0 : 1,
-            child: PlatformWidget(
-              android: (_) => Icon(
-                Icons.arrow_upward,
-                size: SizeConfig.getWidth(8),
-                color: Theme.of(context).colorScheme.callToAction,
-              ),
-              ios: (_) => Icon(
-                IconData(
-                  0xF366,
-                  fontFamily: CupertinoIcons.iconFont,
-                  fontPackage: CupertinoIcons.iconFontPackage
-                ),
-                color: Theme.of(context).colorScheme.callToAction,
-                size: SizeConfig.getWidth(8),
-              ),
+            child: Icon(
+              Icons.arrow_upward,
+              size: SizeConfig.getWidth(8),
+              color: Theme.of(context).colorScheme.callToAction,
             ),
           );
         },

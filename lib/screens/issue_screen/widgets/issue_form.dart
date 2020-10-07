@@ -2,16 +2,15 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:heist/models/transaction/transaction_resource.dart';
 import 'package:heist/resources/enums/issue_type.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
 import 'package:heist/screens/issue_screen/bloc/issue_form_bloc.dart';
+import 'package:heist/themes/global_colors.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
 import 'package:vibrate/vibrate.dart';
-import 'package:heist/themes/global_colors.dart';
 
 class IssueForm extends StatefulWidget {
   final IssueType _type;
@@ -86,7 +85,7 @@ class _IssueFormState extends State<IssueForm> {
                             focusNode: _messageFocusNode,
                             keyboardType: TextInputType.multiline,
                             autocorrect: true,
-                            autovalidate: true,
+                            autovalidateMode: AutovalidateMode.onUserInteraction,
                             validator: (_) => !state.isMessageValid && _messageController.text.length != 0 ? 'Issue must be at least 5 characters long' : null,
                             maxLines: null,
                           );
@@ -101,12 +100,7 @@ class _IssueFormState extends State<IssueForm> {
                         Expanded(
                           child: BlocBuilder<IssueFormBloc, IssueFormState>(
                             builder: (context, state) {
-                              return OutlineButton(
-                                borderSide: BorderSide(
-                                  color: Theme.of(context).colorScheme.callToAction
-                                ),
-                                disabledBorderColor: Theme.of(context).colorScheme.callToActionDisabled,
-                                shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
+                              return OutlinedButton(
                                 onPressed: state.isSubmitting ? null : () => _cancelButtonPressed(context),
                                 child: BoldText3(text: 'Cancel', context: context, color: state.isSubmitting 
                                   ? Theme.of(context).colorScheme.callToActionDisabled
@@ -120,8 +114,7 @@ class _IssueFormState extends State<IssueForm> {
                         Expanded(
                           child: BlocBuilder<IssueFormBloc, IssueFormState>(
                             builder: (context, state) {
-                              return RaisedButton(
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
+                              return ElevatedButton(
                                 onPressed: _isSaveButtonEnabled(state) ? () => _saveButtonPressed(state) : null,
                                 child: _createButtonText(context: context, state: state),
                               );
@@ -203,17 +196,6 @@ class _IssueFormState extends State<IssueForm> {
               Expanded(
                 child: BoldText3(text: message, context: context, color: Theme.of(context).colorScheme.onSecondary)
               ),
-              PlatformWidget(
-                android: (_) => Icon(state.isSuccess ? Icons.check_circle_outline : Icons.error),
-                ios: (_) => Icon(
-                  IconData(
-                    state.isSuccess ? 0xF3FE : 0xF35B,
-                    fontFamily: CupertinoIcons.iconFont,
-                    fontPackage: CupertinoIcons.iconFontPackage
-                  ),
-                  color: Theme.of(context).colorScheme.onSecondary,
-                ),
-              )
             ],
           ),
           backgroundColor: state.isSuccess 

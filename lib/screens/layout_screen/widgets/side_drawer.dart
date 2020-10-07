@@ -83,14 +83,7 @@ class _SideDrawerState extends State<SideDrawer> with SingleTickerProviderStateM
             child: FloatingActionButton(
               backgroundColor: Theme.of(context).colorScheme.callToAction,
               heroTag: HERO_KEY,
-              child: PlatformWidget(
-                android: (_) => Icon(Icons.menu),
-                ios: (_) => Icon(IconData(
-                  0xF394,
-                  fontFamily: CupertinoIcons.iconFont,
-                  fontPackage: CupertinoIcons.iconFontPackage
-                )),
-              ),
+              child: Icon(Icons.menu),
               onPressed: () => _onMenuPressed(context, state),
             ),
           ) : null,
@@ -167,19 +160,12 @@ class Drawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [Color.fromRGBO(255, 255, 255, 1.0), Color.fromRGBO(44, 72, 171, 1.0)],
-          tileMode: TileMode.repeated,
-        )
-      ),
       child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 64.0),
+        padding: EdgeInsets.symmetric(vertical: SizeConfig.getHeight(8)),
         child: ListView(
           physics: NeverScrollableScrollPhysics(),
           children: <Widget>[
+            SizedBox(height: SizeConfig.getHeight(5)),
             Container(
               child: Align(
                 alignment: Alignment.centerLeft,
@@ -187,13 +173,13 @@ class Drawer extends StatelessWidget {
                   padding: EdgeInsets.symmetric(horizontal: 16.0),
                   width: MediaQuery.of(context).size.width * 0.6,
                   child: Image.asset(
-                    'assets/flutter_icon.png',
+                    'assets/logo.png',
                     alignment: Alignment.centerLeft,
                   ),
                 ),
               ),
             ),
-            SizedBox(height: SizeConfig.getHeight(8)),
+            SizedBox(height: SizeConfig.getHeight(10)),
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -206,14 +192,10 @@ class Drawer extends StatelessWidget {
                     )
                   ), 
                   text: 'Transactions',
-                  icon: PlatformWidget(
-                    android: (_) => Icon(Icons.receipt, color: Theme.of(context).colorScheme.secondary),
-                    ios: (_) => Icon(IconData(
-                      0xF472,
-                      fontFamily: CupertinoIcons.iconFont,
-                      fontPackage: CupertinoIcons.iconFontPackage,
-                    ), color: Theme.of(context).colorScheme.secondary),
-                  )
+                  icon: Icon(
+                    Icons.receipt, 
+                    color: Theme.of(context).colorScheme.secondary
+                  ),
                 ),
                 DrawerItem(
                   onPressed: () => Navigator.push(
@@ -224,14 +206,10 @@ class Drawer extends StatelessWidget {
                     )
                   ), 
                   text: 'Refunds',
-                  icon: PlatformWidget(
-                    android: (_) => Icon(Icons.undo, color: Theme.of(context).colorScheme.secondary),
-                    ios: (_) => Icon(IconData(
-                      0xF21E,
-                      fontFamily: CupertinoIcons.iconFont,
-                      fontPackage: CupertinoIcons.iconFontPackage
-                    ), color: Theme.of(context).colorScheme.secondary),
-                  )
+                  icon: Icon(
+                    Icons.receipt_long,
+                    color: Theme.of(context).colorScheme.secondary
+                  ),
                 ),
                 DrawerItem(
                   onPressed: () => Navigator.push(
@@ -242,7 +220,10 @@ class Drawer extends StatelessWidget {
                     )
                   ),
                   text: 'Settings',
-                  icon: Icon(context.platformIcons.settings, color: Theme.of(context).colorScheme.secondary)
+                  icon: Icon(
+                    Icons.settings, 
+                    color: Theme.of(context).colorScheme.secondary
+                  )
                 ),
                 DrawerItem(
                   onPressed: () => showPlatformModalSheet(
@@ -250,26 +231,18 @@ class Drawer extends StatelessWidget {
                     builder: (_) => TutorialScreen()
                   ),
                   text: 'Tutorial', 
-                  icon: PlatformWidget(
-                    android: (_) => Icon(Icons.lightbulb_outline, color: Theme.of(context).colorScheme.secondary),
-                    ios: (_) => Icon(IconData(
-                      0xF451,
-                      fontFamily: CupertinoIcons.iconFont,
-                      fontPackage: CupertinoIcons.iconFontPackage
-                    ), color: Theme.of(context).colorScheme.secondary),
-                  )
+                  icon: Icon(
+                    Icons.lightbulb,
+                    color: Theme.of(context).colorScheme.secondary
+                  ),
                 ),
                 DrawerItem(
                   onPressed: () => print('pressed'),
                   text: 'Help',
-                  icon: PlatformWidget(
-                    android: (_) => Icon(Icons.live_help, color: Theme.of(context).colorScheme.secondary),
-                    ios: (_) => Icon(IconData(
-                      0xF445,
-                      fontFamily: CupertinoIcons.iconFont,
-                      fontPackage: CupertinoIcons.iconFontPackage
-                    ), color: Theme.of(context).colorScheme.secondary),
-                  )
+                  icon: Icon(
+                    Icons.contact_support,
+                    color: Theme.of(context).colorScheme.secondary
+                  ),
                 )
               ],
             )
@@ -307,7 +280,7 @@ class DrawerItem extends StatelessWidget {
                   padding: EdgeInsets.only(left: 16.0, right: 8.0),
                   child: _icon,
                 ),
-                BoldText3(text: _text, context: context, color: Theme.of(context).colorScheme.onSecondary)
+                BoldText3(text: _text, context: context, color: Theme.of(context).colorScheme.callToAction)
               ],
             ),
           ),

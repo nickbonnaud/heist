@@ -39,11 +39,10 @@ class _PermissionButtonsState extends State<PermissionButtons> {
         return Row(
           children: [
             SizedBox(width: SizeConfig.getWidth(20)),
-            Expanded(child: RaisedButton(
+            Expanded(child: ElevatedButton(
                 onPressed: enabled 
                   ? () => _requestPermission(widget._permission)
                   : null,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
                 child: BoldText3(text: 'Enable', context: context, color: Theme.of(context).colorScheme.onSecondary)
               )),
             SizedBox(width: SizeConfig.getWidth(20)),

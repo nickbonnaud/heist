@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heist/global_widgets/default_app_bar/default_app_bar.dart';
+import 'package:heist/global_widgets/error_screen/error_screen.dart';
 import 'package:heist/global_widgets/refund_widget.dart';
 import 'package:heist/resources/helpers/bottom_loader.dart';
 import 'package:heist/resources/helpers/loading_widget.dart';
@@ -35,34 +36,25 @@ class _RefundsScreenBodyState extends State<RefundsScreenBody> {
   Widget build(BuildContext context) {
     return BlocBuilder<RefundsScreenBloc, RefundsScreenState>(
       builder: (context, state) {
-        if (state is Uninitialized || state is Loading) {
-          return Center(
-            child: LoadingWidget(),
+        if (state is FetchFailure) {
+          return ErrorScreen(
+            body: "Oops! An error occurred fetching previous refunds!\n\n Please try again.",
+            buttonText: "Retry",
+            onButtonPressed: () => BlocProvider.of<RefundsScreenBloc>(context).add(FetchAllRefunds(reset: true)),
           );
-        } else if (state is FetchFailure) {
-          return Center(
-            child: BoldText4(text: 'Failed to Fetch Posts', context: context),
-          );
-        } else if (state is RefundsLoaded) {
-          if (state.refunds.isEmpty) {
-            return Center(
-              child: BoldText4(text: 'No Refunds', context: context),
-            );
-          }
-          return Stack(
-            children: <Widget>[
-              _buildRefundsList(state: state),
-              _buildFilterButton(context: context)
-            ],
-          );
-        } else {
-          return throw UnimplementedError();
         }
+
+        return Stack(
+          children: <Widget>[
+            _buildRefundsBody(state: state),
+            _buildFilterButton(context: context, state: state)
+          ],
+        );
       }
     );
   }
 
-  Widget _buildRefundsList({@required RefundsLoaded state}) {
+  Widget _buildRefundsBody({@required RefundsScreenState state}) {
     return CustomScrollView(
       controller: _scrollController,
       slivers: <Widget>[
@@ -71,36 +63,66 @@ class _RefundsScreenBodyState extends State<RefundsScreenBody> {
           isSliver: true,
           title: "Refunds",
         ),
-        SliverPadding(
-          padding: EdgeInsets.only(left: 8, right: 8),
-          sliver: SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (BuildContext context, int index) => index >= state.refunds.length
-                ? BottomLoader()
-                :  RefundWidget(refundResource: state.refunds[index]),
-              childCount: state.hasReachedEnd
-                ? state.refunds.length
-                : state.refunds.length +1,
-              
-            ),
-          ),
-        )
+        _buildList(state: state)
       ],
     );
   }
-
-  Widget _buildFilterButton({@required BuildContext context}) {
-    return Positioned(
-      bottom: -SizeConfig.getHeight(5),
-      right: -SizeConfig.getWidth(10 ),
-      child: BlocProvider<FilterButtonBloc>(
-        create: (_) => FilterButtonBloc(),
-        child: FilterButton(
-          startColor: Theme.of(context).colorScheme.callToAction,
-          endColor: Theme.of(context).colorScheme.callToAction,
+  
+  Widget _buildList({@required RefundsScreenState state}) {
+    if (state is RefundsLoaded) {
+      if (state.refunds.isEmpty) {
+        return SliverPadding(
+          padding: EdgeInsets.only(left: 8, right: 8),
+          sliver: SliverFillRemaining(
+            child: Center(
+              child: BoldText1(
+                text: 'No Refunds Found!', 
+                context: context,
+              ),
+            ),
+            hasScrollBody: false,
+          ),
+        );
+      }
+      return SliverPadding(
+        padding: EdgeInsets.only(left: 8, right: 8),
+        sliver: SliverList(
+          delegate: SliverChildBuilderDelegate(
+            (BuildContext context, int index) => index >= state.refunds.length
+              ? BottomLoader()
+              :  RefundWidget(refundResource: state.refunds[index]),
+            childCount: state.hasReachedEnd
+              ? state.refunds.length
+              : state.refunds.length +1,
+            
+          ),
         ),
-      )
+      );
+    }
+    return SliverPadding(
+      padding: EdgeInsets.only(left: 8, right: 8),
+      sliver: SliverFillRemaining(
+        child: LoadingWidget(),
+        hasScrollBody: false,
+      ),
     );
+  }
+
+  Widget _buildFilterButton({@required BuildContext context, @required RefundsScreenState state}) {
+    if (state is RefundsLoaded) {
+      return Positioned(
+        bottom: -SizeConfig.getHeight(5),
+        right: -SizeConfig.getWidth(10 ),
+        child: BlocProvider<FilterButtonBloc>(
+          create: (_) => FilterButtonBloc(),
+          child: FilterButton(
+            startColor: Theme.of(context).colorScheme.callToAction,
+            endColor: Theme.of(context).colorScheme.callToAction,
+          ),
+        )
+      );
+    }
+    return Container();
   }
   
   void _onScroll() {

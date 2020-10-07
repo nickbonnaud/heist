@@ -72,11 +72,7 @@ class IosDatePicker extends StatelessWidget {
                         if (state.active == Active.start) {
                           return CupertinoButton(
                             child: Icon(
-                              IconData(
-                                0xF3D0,
-                                fontFamily: CupertinoIcons.iconFont,
-                                fontPackage: CupertinoIcons.iconFontPackage
-                              ),
+                              Icons.keyboard_arrow_down,
                               color: Theme.of(context).colorScheme.callToAction,
                             ),
                             onPressed: () => BlocProvider.of<IosDatePickerBloc>(context).add(ActiveSelectionChanged(active: Active.end)),
@@ -84,11 +80,7 @@ class IosDatePicker extends StatelessWidget {
                         } else {
                           return CupertinoButton(
                             child: Icon(
-                              IconData(
-                                0xF3D8,
-                                fontFamily: CupertinoIcons.iconFont,
-                                fontPackage: CupertinoIcons.iconFontPackage
-                              ),
+                              Icons.keyboard_arrow_down,
                               color: Theme.of(context).colorScheme.callToAction,
                             ),
                             onPressed: () => BlocProvider.of<IosDatePickerBloc>(context).add(ActiveSelectionChanged(active: Active.start)),

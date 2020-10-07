@@ -2,15 +2,14 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:heist/global_widgets/cached_avatar_hero.dart';
 import 'package:heist/models/business/business.dart';
 import 'package:heist/models/business/hours.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
+import 'package:heist/themes/global_colors.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:heist/themes/global_colors.dart';
 
 class BusinessScreen extends StatefulWidget {
   final Business _business;
@@ -102,21 +101,10 @@ class _BusinessScreenState extends State<BusinessScreen> with SingleTickerProvid
                                   BoldText2(text: widget._business.profile.name, context: context, color: Theme.of(context).colorScheme.primary),
                                   GestureDetector(
                                     onTap: () => Navigator.of(context).pop(),
-                                    child: PlatformWidget(
-                                      android: (_) => Icon(
-                                        Icons.arrow_downward,
-                                        size: SizeConfig.getWidth(7),
-                                        color: Theme.of(context).colorScheme.callToAction,
-                                      ),
-                                      ios: (_) => Icon(
-                                        IconData(
-                                          0xF35D,
-                                          fontFamily: CupertinoIcons.iconFont,
-                                          fontPackage: CupertinoIcons.iconFontPackage
-                                        ),
-                                        color: Theme.of(context).colorScheme.callToAction,
-                                        size: SizeConfig.getWidth(7),
-                                      ),
+                                    child: Icon(
+                                      Icons.arrow_downward,
+                                      size: SizeConfig.getWidth(7),
+                                      color: Theme.of(context).colorScheme.callToAction,
                                     ),
                                   )
                                 ],
@@ -124,13 +112,7 @@ class _BusinessScreenState extends State<BusinessScreen> with SingleTickerProvid
                               SizedBox(height: 20),
                               Row(
                                 children: <Widget>[
-                                  PlatformWidget(
-                                    android: (_) => Icon(Icons.public),
-                                    ios: (_) => Icon(IconData(0xF4D2,
-                                      fontFamily: CupertinoIcons.iconFont,
-                                      fontPackage: CupertinoIcons.iconFontPackage
-                                    ))
-                                  ),
+                                  Icon(Icons.public),
                                   SizedBox(width: 16.0),
                                   GestureDetector(
                                     onTap: () => _navigateToWebsite(),
@@ -141,10 +123,7 @@ class _BusinessScreenState extends State<BusinessScreen> with SingleTickerProvid
                               SizedBox(height: 10),
                               Row(
                                 children: <Widget>[
-                                  PlatformWidget(
-                                    android: (_) => Icon(Icons.phone),
-                                    ios: (_) => Icon(CupertinoIcons.phone),
-                                  ),
+                                  Icon(Icons.phone),
                                   SizedBox(width: 16),
                                   GestureDetector(
                                     onTap: () => launch("tel://${widget._business.profile.phone}"),
@@ -155,10 +134,7 @@ class _BusinessScreenState extends State<BusinessScreen> with SingleTickerProvid
                               SizedBox(height: 10),
                               Row(
                                 children: <Widget>[
-                                  PlatformWidget(
-                                    android: (_) => Icon(Icons.access_time),
-                                    ios: (_) => Icon(CupertinoIcons.clock),
-                                  ),
+                                  Icon(Icons.access_time),
                                   SizedBox(width: 16),
                                   BoldText4(text: _formatOpenHour(), context: context)
                                 ],

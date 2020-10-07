@@ -9,7 +9,7 @@ class InfoButton extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.only(right: 16),
       child: PlatformIconButton(
-        icon: Icon(context.platformIcons.info, size: SizeConfig.getWidth(6), color: Theme.of(context).colorScheme.onPrimary),
+        icon: Icon(Icons.info, size: SizeConfig.getWidth(6), color: Theme.of(context).colorScheme.onPrimary),
         onPressed: () => _showInfoDialog(context),
       ),
     );

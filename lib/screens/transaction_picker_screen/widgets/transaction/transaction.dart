@@ -185,8 +185,7 @@ class _TransactionState extends State<Transaction> {
             Row(
               children: <Widget>[
                 Expanded(
-                  child: RaisedButton(
-                    shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
+                  child: ElevatedButton(
                     onPressed: () => _claimButtonPressed(context, index),
                     child: BlocBuilder<TransactionPickerScreenBloc, TransactionPickerScreenState>(
                       builder: (context, state) {
@@ -291,17 +290,6 @@ class _TransactionState extends State<Transaction> {
               Expanded(
                 child: BoldText3(text: message, context: context, color: Theme.of(context).colorScheme.onSecondary)
               ),
-              PlatformWidget(
-                android: (_) => Icon(state.claimSuccess ? Icons.check_circle_outline : Icons.error),
-                ios: (_) => Icon(
-                  IconData(
-                    state.claimSuccess ? 0xF3FE : 0xF35B,
-                    fontFamily: CupertinoIcons.iconFont,
-                    fontPackage: CupertinoIcons.iconFontPackage
-                  ),
-                  color: Theme.of(context).colorScheme.onSecondary,
-                ),
-              )
             ],
           ),
           backgroundColor: state.claimSuccess 

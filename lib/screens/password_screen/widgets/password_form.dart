@@ -2,7 +2,6 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:heist/models/customer/customer.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
@@ -82,7 +81,7 @@ class _PasswordFormState extends State<PasswordForm> {
                             keyboardType: TextInputType.text,
                             textInputAction: TextInputAction.send,
                             autocorrect: false,
-                            autovalidate: true,
+                            autovalidateMode: AutovalidateMode.onUserInteraction,
                             validator: (_) => !state.isOldPasswordValid && _oldPasswordController.text.isNotEmpty ? 'Invalid password' : null,
                             obscureText: true,
                             focusNode: _oldPasswordFocus,
@@ -107,7 +106,7 @@ class _PasswordFormState extends State<PasswordForm> {
                             keyboardType: TextInputType.text,
                             textInputAction: TextInputAction.next,
                             autocorrect: false,
-                            autovalidate: true,
+                            autovalidateMode: AutovalidateMode.onUserInteraction,
                             validator: (_) => !state.isPasswordValid && _passwordController.text.isNotEmpty ? 'Invalid password' : null,
                             obscureText: true,
                             focusNode: _passwordFocus,
@@ -133,7 +132,7 @@ class _PasswordFormState extends State<PasswordForm> {
                             keyboardType: TextInputType.text,
                             textInputAction: TextInputAction.done,
                             autocorrect: false,
-                            autovalidate: true,
+                            autovalidateMode: AutovalidateMode.onUserInteraction,
                             validator: (_) => !state.isPasswordConfirmationValid && _passwordConfirmationController.text.isNotEmpty ? 'Confirmation does not match' : null,
                             obscureText: true,
                             focusNode: _passwordConfirmationFocus,
@@ -156,12 +155,7 @@ class _PasswordFormState extends State<PasswordForm> {
                     Expanded(
                       child: BlocBuilder<PasswordFormBloc, PasswordFormState>(
                         builder: (context, state) {
-                          return OutlineButton(
-                            borderSide: BorderSide(
-                              color: Theme.of(context).colorScheme.callToAction
-                            ),
-                            disabledBorderColor: Theme.of(context).colorScheme.callToActionDisabled,
-                            shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
+                          return OutlinedButton(
                             onPressed: state.isSubmitting ? null : () => _cancelButtonPressed(context),
                             child: BoldText3(text: 'Cancel', context: context, color: state.isSubmitting 
                               ? Theme.of(context).colorScheme.callToActionDisabled
@@ -175,8 +169,7 @@ class _PasswordFormState extends State<PasswordForm> {
                     Expanded(
                       child: BlocBuilder<PasswordFormBloc, PasswordFormState>(
                         builder: (context, state) {
-                          return RaisedButton(
-                            shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
+                          return ElevatedButton(
                             onPressed: _canSubmit(state) ? () => _submit(state) : null,
                             child: _createButtonText(state),
                           );
@@ -264,17 +257,6 @@ class _PasswordFormState extends State<PasswordForm> {
               Expanded(
                 child: BoldText3(text: message, context: context, color: Theme.of(context).colorScheme.onSecondary)
               ),
-              PlatformWidget(
-                android: (_) => Icon(isSuccess ? Icons.check_circle_outline : Icons.error),
-                ios: (_) => Icon(
-                  IconData(
-                    isSuccess ? 0xF3FE : 0xF35B,
-                    fontFamily: CupertinoIcons.iconFont,
-                    fontPackage: CupertinoIcons.iconFontPackage
-                  ),
-                  color: Theme.of(context).colorScheme.onError,
-                ),
-              )
             ],
           ),
           backgroundColor: isSuccess 

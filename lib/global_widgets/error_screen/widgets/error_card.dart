@@ -55,9 +55,8 @@ class ErrorCard extends StatelessWidget {
                 children: [
                   SizedBox(width: SizeConfig.getWidth(20)),
                   Expanded(
-                    child: RaisedButton(
+                    child: ElevatedButton(
                       onPressed: _onButtonPressed,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
                       child: BoldText3(text: _buttonText, context: context, color: Theme.of(context).colorScheme.onSecondary),
                     )
                   ),

@@ -6,7 +6,7 @@ import 'package:heist/blocs/boot/boot_bloc.dart';
 import 'package:heist/blocs/open_transactions/open_transactions_bloc.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/screens/app.dart';
-import 'package:heist/screens/splash_screen.dart';
+import 'package:heist/screens/splash_screen/splash_screen.dart';
 
 import 'auth_screen/auth_screen.dart';
 
@@ -24,7 +24,7 @@ class Boot extends StatelessWidget {
               context: context, 
               builder: (_) => Scaffold(
                 resizeToAvoidBottomPadding: false,
-                body:  AuthScreen(),
+                body: AuthScreen(),
                 backgroundColor: Colors.grey.shade900,
               )
             )
@@ -41,7 +41,7 @@ class Boot extends StatelessWidget {
           if (state.authenticated) {
             return App();
           } else {
-            return SplashScreen(shouldAnimate: false);
+            return SplashScreen();
           }
         }
       )

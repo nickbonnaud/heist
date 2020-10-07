@@ -54,11 +54,10 @@ class NoLocationsCard extends StatelessWidget {
               Expanded(
                 child: BlocBuilder<GeoLocationBloc, GeoLocationState>(
                   builder: (context, state) {
-                    return RaisedButton(
+                    return ElevatedButton(
                       onPressed: state is Loading
                         ? null
                         : () => BlocProvider.of<GeoLocationBloc>(context).add(FetchLocation(accuracy: Accuracy.MEDIUM)),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
                       child: state is Loading 
                         ? BoldText3(text: 'Fetching', context: context, color: Theme.of(context).colorScheme.onSecondary)
                         : BoldText3(text: 'Fetch Location', context: context, color: Theme.of(context).colorScheme.onSecondary),
