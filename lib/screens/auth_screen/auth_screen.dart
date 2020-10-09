@@ -57,49 +57,53 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
   
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => PageOffsetNotifier(_pageController),
-      child: ListenableProvider.value(
-        value: _animationController,
-        child: ChangeNotifierProvider(
-          create: (_) => FormAnimationNotifier(_formAnimationController),
-          child: Stack(
-            children: <Widget>[
-              GestureDetector(
-                onVerticalDragUpdate: _handleDragUpdate,
-                onVerticalDragEnd: _handleDragEnd,
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: <Widget>[
-                    Stars(),
-                    PageView(
-                      controller: _pageController,
-                      physics: ClampingScrollPhysics(),
-                      children: <Widget>[
-                        AppName(),
-                        Container()
-                      ],
-                    ),
-                    ExhaustPath(),
-                    Rocket(),
-                    Planets(),
-                    PageIndicator(),
-                    BlocProvider<KeyboardVisibleCubit>(
-                      create: (_) => KeyboardVisibleCubit(),
-                      child: Stack(
-                        children: [
-                          Forms(pageController: _pageController),
-                          DragArrow(),
+    return Scaffold(
+      resizeToAvoidBottomPadding: false,
+      backgroundColor: Colors.grey.shade900,
+      body: ChangeNotifierProvider(
+        create: (_) => PageOffsetNotifier(_pageController),
+        child: ListenableProvider.value(
+          value: _animationController,
+          child: ChangeNotifierProvider(
+            create: (_) => FormAnimationNotifier(_formAnimationController),
+            child: Stack(
+              children: <Widget>[
+                GestureDetector(
+                  onVerticalDragUpdate: _handleDragUpdate,
+                  onVerticalDragEnd: _handleDragEnd,
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: <Widget>[
+                      Stars(),
+                      PageView(
+                        controller: _pageController,
+                        physics: ClampingScrollPhysics(),
+                        children: <Widget>[
+                          AppName(),
+                          Container()
                         ],
                       ),
-                    ),
-                  ],
-                ),
-              )
-            ],
-          )
-        ) 
-      ),
+                      ExhaustPath(),
+                      Rocket(),
+                      Planets(),
+                      PageIndicator(),
+                      BlocProvider<KeyboardVisibleCubit>(
+                        create: (_) => KeyboardVisibleCubit(),
+                        child: Stack(
+                          children: [
+                            Forms(pageController: _pageController),
+                            DragArrow(),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            )
+          ) 
+        ),
+      )
     );
   }
 

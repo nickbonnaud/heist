@@ -19,7 +19,29 @@ class CustomerStatusChanged extends BootEvent {
   String toString() => 'CustomerStatusChanged { customerStatus: $customerStatus }';
 }
 
-class PermissionChecksComplete extends BootEvent {}
+class PermissionChecksComplete extends BootEvent {
+  final bool permissionsReady;
+
+  const PermissionChecksComplete({@required this.permissionsReady});
+
+  @override
+  List<Object> get props => [permissionsReady];
+
+  @override
+  String toString() => 'PermissionChecksComplete { permissionsReady: $permissionsReady }';
+}
+
+class AuthCheckComplete extends BootEvent {
+  final bool isAuthenticated;
+  
+  const AuthCheckComplete({@required this.isAuthenticated});
+
+  @override
+  List<Object> get props => [isAuthenticated];
+
+  @override
+  String toString() => 'AuthCheckComplete { isAuthenticated: $isAuthenticated }';
+}
 
 class DataLoaded extends BootEvent {
   final DataType type;

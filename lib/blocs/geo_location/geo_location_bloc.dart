@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:heist/blocs/permissions/permissions_bloc.dart';
 import 'package:heist/repositories/geolocator_repository.dart';
 import 'package:meta/meta.dart';
 
@@ -19,6 +20,21 @@ enum Accuracy {
 class GeoLocationBloc extends Bloc<GeoLocationEvent, GeoLocationState> {
   final GeolocatorRepository _geolocatorRepository;
 
+  StreamSubscription _permissionsBlocSubscription;
+  
+  GeoLocationBloc({@required GeolocatorRepository geolocatorRepository, @required PermissionsBloc permissionsBloc})
+    : assert(geolocatorRepository != null && permissionsBloc != null),
+      _geolocatorRepository = geolocatorRepository,
+      super(Uninitialized()) {
+
+        _permissionsBlocSubscription = permissionsBloc.listen((PermissionsState state) { 
+          if (!this.isGeoLocationReady && state.onStartPermissionsValid) {
+            add(GeoLocationReady());
+          }
+        });
+      }
+
+
   bool get isGeoLocationReady => state is LocationLoaded;
   Map<String, double> get currentLocation {
     final currentState = state;
@@ -27,11 +43,6 @@ class GeoLocationBloc extends Bloc<GeoLocationEvent, GeoLocationState> {
     }
     return null;
   }
-  
-  GeoLocationBloc({@required GeolocatorRepository geolocatorRepository})
-    : assert(geolocatorRepository != null),
-      _geolocatorRepository = geolocatorRepository,
-      super(Uninitialized());
 
   @override
   Stream<GeoLocationState> mapEventToState(GeoLocationEvent event) async* {
@@ -40,6 +51,12 @@ class GeoLocationBloc extends Bloc<GeoLocationEvent, GeoLocationState> {
     } else if (event is FetchLocation) {
       yield* _mapFetchLocationToState(event);
     }
+  }
+
+  @override
+  Future<void> close() {
+    _permissionsBlocSubscription.cancel();
+    return super.close();
   }
 
   Stream<GeoLocationState> _mapAppReadyToState() async* {

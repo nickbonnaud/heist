@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:heist/blocs/boot/boot_bloc.dart';
+import 'package:heist/blocs/authentication/authentication_bloc.dart';
 import 'package:heist/models/transaction/transaction_resource.dart';
 import 'package:heist/repositories/transaction_repository.dart';
 import 'package:meta/meta.dart';
@@ -12,13 +12,17 @@ part 'open_transactions_state.dart';
 
 class OpenTransactionsBloc extends Bloc<OpenTransactionsEvent, OpenTransactionsState> {
   final TransactionRepository _transactionRepository;
-  final BootBloc _bootBloc;
 
-  OpenTransactionsBloc({@required TransactionRepository transactionRepository, @required BootBloc bootBloc})
-    : assert(transactionRepository != null && bootBloc != null),
+  StreamSubscription _authenticationBlocSubscription;
+
+  OpenTransactionsBloc({@required TransactionRepository transactionRepository, @required AuthenticationBloc authenticationBloc})
+    : assert(transactionRepository != null && authenticationBloc != null),
       _transactionRepository = transactionRepository,
-      _bootBloc = bootBloc,
-      super(Uninitialized());
+      super(Uninitialized()) {
+        _authenticationBlocSubscription = authenticationBloc.listen((AuthenticationState state) {
+          if (state.authenticated) add(FetchOpenTransactions()); 
+        });
+      }
 
   List<TransactionResource> get openTransactions => state.openTransactions;
 
@@ -35,14 +39,18 @@ class OpenTransactionsBloc extends Bloc<OpenTransactionsEvent, OpenTransactionsS
     }
   }
 
+  @override
+  Future<void> close() {
+    _authenticationBlocSubscription.cancel();
+    return super.close();
+  }
+
   Stream<OpenTransactionsState> _mapFetchOpenTransactionsToState() async* {
     try {
       List<TransactionResource> transactions = await _transactionRepository.fetchOpen();
       yield OpenTransactionsLoaded(transactions: transactions);
-      _bootBloc.add(DataLoaded(type: DataType.transactions));
     } catch (e) {
       yield FailedToFetchOpenTransactions();
-      _bootBloc.add(DataLoaded(type: DataType.transactions));
     }
   }
   

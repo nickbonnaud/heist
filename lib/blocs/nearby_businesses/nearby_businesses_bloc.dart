@@ -3,7 +3,7 @@ import 'dart:ui';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:heist/blocs/boot/boot_bloc.dart';
+import 'package:heist/blocs/geo_location/geo_location_bloc.dart';
 import 'package:heist/models/business/business.dart';
 import 'package:heist/repositories/location_repository.dart';
 import 'package:heist/resources/helpers/icon_creator.dart';
@@ -15,13 +15,20 @@ part 'nearby_businesses_state.dart';
 
 class NearbyBusinessesBloc extends Bloc<NearbyBusinessesEvent, NearbyBusinessesState> {
   final LocationRepository _locationRepository;
-  final BootBloc _bootBloc;
 
-  NearbyBusinessesBloc({@required LocationRepository locationRepository, @required BootBloc bootBloc})
-    : assert(locationRepository != null && bootBloc != null),
+  StreamSubscription _geoLocationBlocSubscription;
+
+  NearbyBusinessesBloc({@required LocationRepository locationRepository, @required GeoLocationBloc geoLocationBloc})
+    : assert(locationRepository != null && geoLocationBloc != null),
       _locationRepository = locationRepository,
-      _bootBloc = bootBloc,
-      super(NearbyUninitialized());
+      super(NearbyUninitialized()) {
+
+        _geoLocationBlocSubscription = geoLocationBloc.listen((GeoLocationState state) {
+          if (state is LocationLoaded) {
+            add(FetchNearby(lat: state.latitude, lng: state.longitude));
+          }
+        });
+      }
 
   List<Business> get businesses => state.businesses;
   
@@ -30,6 +37,12 @@ class NearbyBusinessesBloc extends Bloc<NearbyBusinessesEvent, NearbyBusinessesS
     if (event is FetchNearby) {
       yield* _mapFetchNearbyToState(event);
     }
+  }
+
+  @override
+  Future<void> close() {
+    _geoLocationBlocSubscription.cancel();
+    return super.close();
   }
 
   Stream<NearbyBusinessesState> _mapFetchNearbyToState(FetchNearby event) async* {
@@ -46,19 +59,13 @@ class NearbyBusinessesBloc extends Bloc<NearbyBusinessesEvent, NearbyBusinessesS
         : null;
       
       yield NearbyBusinessLoaded(businesses: businesses, preMarkers: preMarkers);
-      _updateBootBloc();
     } catch (e) {
       yield FailedToLoadNearby();
-      _updateBootBloc();
     }
   }
 
   Future<List<PreMarker>> _createPreMarkers(List<Business> businesses) async {
     IconCreator iconCreator = IconCreator(size: Size(150, 150), businesses: businesses);
     return await iconCreator.createPreMarkers();
-  }
-
-  void _updateBootBloc() {
-    if (!_bootBloc.areBusinessesLoaded) _bootBloc.add(DataLoaded(type: DataType.businesses));
   }
 }

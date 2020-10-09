@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
+import 'package:heist/blocs/boot/boot_bloc.dart';
 import 'package:heist/resources/constants.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
@@ -12,19 +13,15 @@ import 'package:heist/screens/tutorial_screen/tutorial_screen.dart';
 import 'package:heist/themes/global_colors.dart';
 
 class OnboardBody extends StatefulWidget {
-  final bool _customerOnboarded;
-  final bool _permissionsReady;
-
-  OnboardBody({@required bool customerOnboarded, @required permissionsReady})
-    : assert(customerOnboarded != null && permissionsReady != null),
-      _customerOnboarded = customerOnboarded,
-      _permissionsReady = permissionsReady;
 
   @override
   State<OnboardBody> createState() => _OnboardBodyState();
 }
 
 class _OnboardBodyState extends State<OnboardBody> with SingleTickerProviderStateMixin {
+  bool _customerOnboarded;
+  bool _permissionsReady;
+  
   AnimationController _animationController;
   Animation<Offset> _onboardTitleAnimation;
   Animation<Offset> _profileTitleAnimation;
@@ -35,6 +32,9 @@ class _OnboardBodyState extends State<OnboardBody> with SingleTickerProviderStat
 
   @override
   void initState() {
+    _customerOnboarded = BlocProvider.of<BootBloc>(context).isCustomerOnboarded;
+    _permissionsReady = BlocProvider.of<BootBloc>(context).arePermissionsReady;
+
     super.initState();
     _animationController = AnimationController(
       vsync: this,
@@ -132,7 +132,7 @@ class _OnboardBodyState extends State<OnboardBody> with SingleTickerProviderStat
                     Step(
                       title: _createTitle(title: "Profile", currentStep: currentStep, animation: _profileTitleAnimation), 
                       content: BoldText3(
-                        text: widget._customerOnboarded 
+                        text: _customerOnboarded 
                           ? "Go to next step." 
                           : "First let's setup your Profile Account!",
                         context: context, 
@@ -154,7 +154,7 @@ class _OnboardBodyState extends State<OnboardBody> with SingleTickerProviderStat
                     Step(
                       title: _createTitle(title: "Permissions", currentStep: currentStep, animation: _permissionsTitleAnimation), 
                       content: BoldText3(
-                        text: widget._permissionsReady 
+                        text: _permissionsReady 
                           ? "Finish"
                           : "Lastly let's configure your permissions!", 
                         context: context, 
@@ -213,11 +213,11 @@ class _OnboardBodyState extends State<OnboardBody> with SingleTickerProviderStat
   }
   
   StepState _setCurrentStepState({@required int currentStep, @required int stepIndex}) {
-    if (stepIndex == 1 && widget._customerOnboarded) {
+    if (stepIndex == 1 && _customerOnboarded) {
       return StepState.complete;
     }
 
-    if (stepIndex == 3 && widget._permissionsReady) {
+    if (stepIndex == 3 && _permissionsReady) {
       return StepState.complete;
     }
 
@@ -234,7 +234,7 @@ class _OnboardBodyState extends State<OnboardBody> with SingleTickerProviderStat
         BlocProvider.of<OnboardBloc>(context).add(OnboardEvent.next);
         break;
       case 1:
-        widget._customerOnboarded
+        _customerOnboarded
           ? BlocProvider.of<OnboardBloc>(context).add(OnboardEvent.next)
           : _showModal(context: context, screen: ProfileSetupScreen());
         break;
@@ -242,7 +242,7 @@ class _OnboardBodyState extends State<OnboardBody> with SingleTickerProviderStat
         _showModal(context: context, screen: TutorialScreen());
         break;
       case 3:
-        if (!widget._permissionsReady) _showModal(context: context, screen: PermissionsScreen(), lastScreen: true);
+        if (!_permissionsReady) _showModal(context: context, screen: PermissionsScreen(), lastScreen: true);
         break;
     }
   }
@@ -254,13 +254,13 @@ class _OnboardBodyState extends State<OnboardBody> with SingleTickerProviderStat
         buttonText = "Start";
         break;
       case 1:
-        buttonText = widget._customerOnboarded ? "Next Step" : "Setup Account";
+        buttonText = _customerOnboarded ? "Next Step" : "Setup Account";
         break;
       case 2:
         buttonText = "View Tutorial";
         break;
       case 3:
-        buttonText = widget._permissionsReady ? "Finish" : "Set Permissions";
+        buttonText = _permissionsReady ? "Finish" : "Set Permissions";
         break;
     }
     return buttonText;

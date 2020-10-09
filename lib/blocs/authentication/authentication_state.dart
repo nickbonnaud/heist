@@ -5,18 +5,21 @@ class AuthenticationState {
   final bool authenticated;
   final Customer customer;
   final bool loading;
+  final bool authCheckComplete;
 
   AuthenticationState({
     @required this.authenticated, 
     @required this.customer, 
-    @required this.loading
+    @required this.loading,
+    @required this.authCheckComplete
   });
 
   factory AuthenticationState.initial() {
     return AuthenticationState(
       authenticated: false,
       customer: null,
-      loading: true
+      loading: true,
+      authCheckComplete: false
     );
   }
 
@@ -24,7 +27,8 @@ class AuthenticationState {
     return AuthenticationState(
       authenticated: true,
       customer: customer,
-      loading: false
+      loading: false,
+      authCheckComplete: true
     );
   }
 
@@ -32,34 +36,39 @@ class AuthenticationState {
     return AuthenticationState(
       authenticated: false,
       customer: null,
-      loading: false
+      loading: false,
+      authCheckComplete: true
     );
   }
 
   AuthenticationState update({
     bool authenticated,
     Customer customer,
-    bool loading
+    bool loading,
+    bool authCheckComplete
   }) {
     return _copyWith(
       authenticated: authenticated,
       customer: customer,
-      loading: loading
+      loading: loading,
+      authCheckComplete: authCheckComplete
     );
   }
   
   AuthenticationState _copyWith({
     bool authenticated,
     Customer customer,
-    bool loading
+    bool loading,
+    bool authCheckComplete
   }) {
     return AuthenticationState(
       authenticated: authenticated ?? this.authenticated,
       customer: customer ?? this.customer,
-      loading: loading ?? this.loading
+      loading: loading ?? this.loading,
+      authCheckComplete: authCheckComplete ?? this.authCheckComplete
     );
   }
 
   @override
-  String toString() => 'AuthenticationState { authenticated: $authenticated, customer: $customer, loading: $loading }';
+  String toString() => 'AuthenticationState { authenticated: $authenticated, customer: $customer, loading: $loading, authCheckComplete: $authCheckComplete}';
 }

@@ -3,7 +3,10 @@ part of 'boot_bloc.dart';
 @immutable
 class BootState {
   final bool customerOnboarded;
-  final bool checksComplete;
+  final bool permissionChecksComplete;
+  final bool permissionsReady;
+  final bool authCheckComplete;
+  final bool isAuthenticated;
 
   final bool openTransactionsLoaded;
   final bool nearbyBusinessesLoaded;
@@ -12,10 +15,14 @@ class BootState {
   bool get isDataLoaded => openTransactionsLoaded && nearbyBusinessesLoaded && beaconsLoaded;
   bool get areBusinessesLoaded => nearbyBusinessesLoaded;
   bool get areBeaconsLoaded => beaconsLoaded;
+  bool get areOpenTransactionsLoaded => openTransactionsLoaded;
 
   BootState({
     @required this.customerOnboarded,
-    @required this.checksComplete,
+    @required this.permissionChecksComplete,
+    @required this.permissionsReady,
+    @required this.authCheckComplete,
+    @required this.isAuthenticated,
     @required this.openTransactionsLoaded,
     @required this.nearbyBusinessesLoaded,
     @required this.beaconsLoaded,
@@ -24,7 +31,10 @@ class BootState {
   factory BootState.initial() {
     return BootState(
       customerOnboarded: true,
-      checksComplete: false,
+      permissionChecksComplete: false,
+      permissionsReady: false,
+      authCheckComplete: false,
+      isAuthenticated: false,
       openTransactionsLoaded: false,
       nearbyBusinessesLoaded: false,
       beaconsLoaded: false,
@@ -33,14 +43,20 @@ class BootState {
 
   BootState update({
     bool customerOnboarded,
-    bool checksComplete,
+    bool permissionChecksComplete,
+    bool permissionsReady,
+    bool authCheckComplete,
+    bool isAuthenticated,
     bool openTransactionsLoaded,
     bool nearbyBusinessesLoaded,
     bool beaconsLoaded,
   }) {
     return _copyWith(
       customerOnboarded: customerOnboarded,
-      checksComplete: checksComplete,
+      permissionChecksComplete: permissionChecksComplete,
+      permissionsReady: permissionsReady,
+      authCheckComplete: authCheckComplete,
+      isAuthenticated: isAuthenticated,
       openTransactionsLoaded: openTransactionsLoaded,
       nearbyBusinessesLoaded: nearbyBusinessesLoaded,
       beaconsLoaded: beaconsLoaded,
@@ -49,14 +65,20 @@ class BootState {
 
   BootState _copyWith({
     bool customerOnboarded,
-    bool checksComplete,
+    bool permissionChecksComplete,
+    bool permissionsReady,
+    bool authCheckComplete,
+    bool isAuthenticated,
     bool openTransactionsLoaded,
     bool nearbyBusinessesLoaded,
     bool beaconsLoaded,
   }) {
     return BootState(
       customerOnboarded: customerOnboarded ?? this.customerOnboarded,
-      checksComplete: checksComplete ?? this.checksComplete,
+      permissionChecksComplete: permissionChecksComplete ?? this.permissionChecksComplete,
+      permissionsReady: permissionsReady ?? this.permissionsReady,
+      authCheckComplete: authCheckComplete ?? this.authCheckComplete,
+      isAuthenticated: isAuthenticated ?? this.isAuthenticated,
       openTransactionsLoaded: openTransactionsLoaded ?? this.openTransactionsLoaded,
       nearbyBusinessesLoaded: nearbyBusinessesLoaded ?? this.nearbyBusinessesLoaded,
       beaconsLoaded: beaconsLoaded ?? this.beaconsLoaded,
@@ -64,5 +86,5 @@ class BootState {
   }
 
   @override
-  String toString() => 'BootState { customerOnboarded: $customerOnboarded, checksComplete: $checksComplete, openTransactionsLoaded: $openTransactionsLoaded, nearbyBusinessesLoaded: $nearbyBusinessesLoaded, beaconsLoaded: $beaconsLoaded }';
+  String toString() => 'BootState { customerOnboarded: $customerOnboarded, permissionChecksComplete: $permissionChecksComplete, permissionsReady: $permissionsReady, authCheckComplete: $authCheckComplete, isAuthenticated: $isAuthenticated, openTransactionsLoaded: $openTransactionsLoaded, nearbyBusinessesLoaded: $nearbyBusinessesLoaded, beaconsLoaded: $beaconsLoaded }';
 }

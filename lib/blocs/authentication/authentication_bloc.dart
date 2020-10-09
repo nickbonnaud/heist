@@ -18,6 +18,7 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
       super(AuthenticationState.initial());
 
   Customer get customer => state.customer;
+  bool get isAuthenticated => state.authenticated;
 
   @override
   Stream<AuthenticationState> mapEventToState(AuthenticationEvent event) async* {
@@ -45,10 +46,10 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
         final Customer customer = await _customerRepository.fetchCustomer();
         yield AuthenticationState.authenticated(customer: customer);
       } else {
-        yield state.update(loading: false);
+        yield state.update(loading: false, authCheckComplete: true);
       }
     } catch (_) {
-      yield state.update(loading: false);
+      yield state.update(loading: false, authCheckComplete: true);
     }
   }
 
