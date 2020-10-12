@@ -1,14 +1,14 @@
 import "dart:math" as math;
 
-import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:heist/blocs/authentication/authentication_bloc.dart';
+import 'package:heist/global_widgets/route_builders/slide_up_route.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
 import 'package:heist/screens/auth_screen/widgets/cubit/keyboard_visible_cubit.dart';
 import 'package:heist/screens/auth_screen/widgets/page_offset_notifier.dart';
+import 'package:heist/screens/onboard_screen/onboard_screen.dart';
 import 'package:heist/themes/global_colors.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
 import 'package:provider/provider.dart';
@@ -61,9 +61,7 @@ class _RegisterFormState extends State<RegisterForm> {
         if (state.isFailure) {
           _errorRegister(context);
         } else if (state.isSuccess) {
-          BlocProvider.of<AuthenticationBloc>(context)
-            ..add(Registered(customer: state.customer));
-          Navigator.of(context).popUntil((route) => route.isFirst);
+          _navigateToNextPage();
         }
       },
       child: Consumer2<PageOffsetNotifier, AnimationController>(
@@ -236,16 +234,7 @@ class _RegisterFormState extends State<RegisterForm> {
                               borderRadius: BorderRadius.circular(50)
                             ),
                             child: state.isSubmitting
-                              ? TyperAnimatedTextKit(
-                                  speed: Duration(milliseconds: 250),
-                                  text: ['Creating Account...'],
-                                  textStyle: TextStyle(
-                                    fontSize: SizeConfig.getWidth(7),
-                                    color: Theme.of(context).colorScheme.onSecondary,
-                                  ),
-                                  textAlign: TextAlign.start,
-                                  alignment: AlignmentDirectional.topStart,
-                                )
+                              ? SizedBox(height: SizeConfig.getWidth(5), width: SizeConfig.getWidth(5), child: CircularProgressIndicator())
                               : (_isRegisterButtonEnabled(state)
                                   ? Text1(text: 'Register', context: context, color: Theme.of(context).colorScheme.onSecondary)
                                   : null
@@ -377,12 +366,17 @@ class _RegisterFormState extends State<RegisterForm> {
                   'Failed to Register. Please try again.',
                   style: GoogleFonts.roboto(fontSize: 16),
                 )
-              ),
-              Icon(Icons.error)
+              )
             ],
           ),
           backgroundColor: Colors.red,
         )
       );
+  }
+
+  void _navigateToNextPage() {
+    Navigator.of(context).pushReplacement(
+      SlideUpRoute(screen: OnboardScreen())
+    );
   }
 }

@@ -1,4 +1,3 @@
-import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -156,7 +155,7 @@ class _ProfileFormState extends State<ProfileForm> {
                         builder: (context, state) {
                           return ElevatedButton(
                             onPressed: _isSaveButtonEnabled(state) ? () => _saveButtonPressed(state) : null,
-                            child: _createButtonText(state),
+                            child: _buttonChild(state),
                           );
                         }
                       ) 
@@ -178,17 +177,9 @@ class _ProfileFormState extends State<ProfileForm> {
     super.dispose();
   }
 
-  Widget _createButtonText(ProfileFormState state) {
+  Widget _buttonChild(ProfileFormState state) {
     if (state.isSubmitting) {
-      return TyperAnimatedTextKit(
-        speed: Duration(milliseconds: 250),
-        text: ['Saving...'],
-        textStyle: TextStyle(
-          fontWeight: FontWeight.bold,
-          color: Theme.of(context).colorScheme.onSecondary,
-          fontSize: SizeConfig.getWidth(6)
-        ),
-      );
+      return SizedBox(height: SizeConfig.getWidth(5), width: SizeConfig.getWidth(5), child: CircularProgressIndicator());
     } else {
       return BoldText3(text: 'Save', context: context, color: Theme.of(context).colorScheme.onSecondary);
     }

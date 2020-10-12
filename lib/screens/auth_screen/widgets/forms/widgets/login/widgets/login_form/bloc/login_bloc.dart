@@ -4,6 +4,8 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:heist/blocs/authentication/authentication_bloc.dart';
+import 'package:heist/models/customer/customer.dart';
 import 'package:heist/repositories/customer_repository.dart';
 import 'package:heist/resources/helpers/validators.dart';
 import 'package:rxdart/rxdart.dart';
@@ -12,11 +14,13 @@ part 'login_event.dart';
 part 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
-  CustomerRepository _customerRepository;
+  final CustomerRepository _customerRepository;
+  final AuthenticationBloc _authenticationBloc;
 
-  LoginBloc({@required CustomerRepository customerRepository})
-    : assert(customerRepository != null),
+  LoginBloc({@required CustomerRepository customerRepository, @required AuthenticationBloc authenticationBloc})
+    : assert(customerRepository != null && authenticationBloc != null),
       _customerRepository = customerRepository,
+      _authenticationBloc = authenticationBloc,
       super(LoginState.empty());
 
   @override
@@ -49,7 +53,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   Stream<LoginState> _mapSubmittedToState({String email, String password}) async* {
     yield LoginState.loading();
     try {
-      await _customerRepository.login(email: email, password: password);
+     Customer customer = await _customerRepository.login(email: email, password: password);
+     _authenticationBloc.add(LoggedIn(customer: customer));
       yield LoginState.success();
     } catch (_) {
       yield LoginState.failure();

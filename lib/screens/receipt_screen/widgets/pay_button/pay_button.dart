@@ -1,4 +1,3 @@
-import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -34,24 +33,16 @@ class PayButton extends StatelessWidget {
             onPressed: state.isEnabled 
               ? () => BlocProvider.of<PayButtonBloc>(context).add(Submitted(transactionId: _transactionResource.transaction.identifier))
               : null,
-            child: _createButtonText(context: context, state: state),
+            child: _buttonChild(context: context, state: state),
           );
         }
       )
     );
   }
 
-  Widget _createButtonText({@required BuildContext context, @required PayButtonState state}) {
+  Widget _buttonChild({@required BuildContext context, @required PayButtonState state}) {
     if (state.isSubmitting) {
-      return TyperAnimatedTextKit(
-        speed: Duration(milliseconds: 250),
-        text: ['Paying...'],
-        textStyle: TextStyle(
-          fontSize: SizeConfig.getWidth(6),
-          fontWeight: FontWeight.w700,
-          color: Theme.of(context).colorScheme.onSecondary
-        ),
-      );
+      return SizedBox(height: SizeConfig.getWidth(5), width: SizeConfig.getWidth(5), child: CircularProgressIndicator());
     } else {
       return BoldText3(text: 'Pay', context: context, color: Theme.of(context).colorScheme.onSecondary);
     }

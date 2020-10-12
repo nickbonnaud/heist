@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:heist/blocs/authentication/authentication_bloc.dart';
 import 'package:heist/repositories/customer_repository.dart';
 
 import 'widgets/login_form/bloc/login_bloc.dart';
@@ -21,7 +22,7 @@ class Login extends StatelessWidget {
       children: <Widget>[
         WelcomeLabel(),
         BlocProvider<LoginBloc>(
-          create: (_) => LoginBloc(customerRepository: _customerRepository),
+          create: (_) => LoginBloc(customerRepository: _customerRepository, authenticationBloc: BlocProvider.of<AuthenticationBloc>(context)),
           child: LoginForm(pageController: _pageController),
         ),
       ],

@@ -32,6 +32,15 @@ class PermissionsBloc extends Bloc<PermissionsEvent, PermissionsState> {
   bool get areChecksComplete => state.checksComplete;
 
   bool get allPermissionsValid => state.bleEnabled && state.locationEnabled && state.notificationEnabled && state.beaconEnabled;
+  int get numberValidPermissions {
+    int validPermissions = 0;
+
+    if (state.bleEnabled) validPermissions++;
+    if (state.locationEnabled) validPermissions++;
+    if (state.notificationEnabled) validPermissions++;
+    if (state.beaconEnabled) validPermissions++;
+    return validPermissions;
+  }
 
   List<PermissionType> get invalidPermissions {
     List<PermissionType> incompletePermissions = [];

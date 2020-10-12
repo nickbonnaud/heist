@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -185,14 +184,17 @@ class _TransactionState extends State<Transaction> {
             Row(
               children: <Widget>[
                 Expanded(
-                  child: ElevatedButton(
-                    onPressed: () => _claimButtonPressed(context, index),
-                    child: BlocBuilder<TransactionPickerScreenBloc, TransactionPickerScreenState>(
-                      builder: (context, state) {
-                        return _createButtonText(context: context, state:state);
-                      }
-                    ) 
-                  )
+                  child: BlocBuilder<TransactionPickerScreenBloc, TransactionPickerScreenState>(
+                    builder: (context, state) {
+                      final TransactionPickerScreenState currentState = state;
+                      return ElevatedButton(
+                        onPressed: currentState is TransactionsLoaded && currentState.claiming
+                          ? null
+                          : () => _claimButtonPressed(context, index),
+                        child: _buttonChild(context: context, state: state)
+                      );
+                    }
+                  ) 
                 )
               ],
             )
@@ -202,19 +204,11 @@ class _TransactionState extends State<Transaction> {
     );
   }
 
-  Widget _createButtonText({@required BuildContext context, @required TransactionPickerScreenState state}) {
+  Widget _buttonChild({@required BuildContext context, @required TransactionPickerScreenState state}) {
     final currentState = state;
     if (currentState is TransactionsLoaded) {
       if (currentState.claiming) {
-        return TyperAnimatedTextKit(
-          speed: Duration(milliseconds: 250),
-          text: ['Claiming...'],
-          textStyle: TextStyle(
-            fontSize: SizeConfig.getWidth(6),
-            fontWeight: FontWeight.w700,
-            color: Theme.of(context).colorScheme.onSecondary
-          ),
-        );
+        SizedBox(height: SizeConfig.getWidth(5), width: SizeConfig.getWidth(5), child: CircularProgressIndicator());
       } else {
         return BoldText3(text: 'Claim', context: context, color: Theme.of(context).colorScheme.onSecondary);
       }

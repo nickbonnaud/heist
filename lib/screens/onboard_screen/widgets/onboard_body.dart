@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:heist/blocs/boot/boot_bloc.dart';
+import 'package:heist/global_widgets/route_builders/slide_up_route.dart';
 import 'package:heist/resources/constants.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
+import 'package:heist/screens/layout_screen/layout_screen.dart';
 import 'package:heist/screens/onboard_screen/bloc/onboard_bloc.dart';
 import 'package:heist/screens/permission_screen/permission_screen.dart';
 import 'package:heist/screens/profile_setup_screen/profile_setup_screen.dart';
@@ -28,6 +30,7 @@ class _OnboardBodyState extends State<OnboardBody> with SingleTickerProviderStat
   Animation<Offset> _tutorialTitleAnimation;
   Animation<Offset> _permissionsTitleAnimation;
   Animation<Offset> _onboardBodyAnimation;
+  Animation<Offset> _finishTitleAnimation;
   Animation<Offset> _buttonAnimation;
 
   @override
@@ -79,6 +82,14 @@ class _OnboardBodyState extends State<OnboardBody> with SingleTickerProviderStat
     ).animate(CurvedAnimation(
       parent: _animationController, 
       curve: Curves.linear
+    ));
+
+    _finishTitleAnimation = Tween<Offset>(
+      begin: Offset(0, 100),
+      end: Offset.zero
+    ).animate(CurvedAnimation(
+      parent: _animationController,
+      curve: Interval(0.3, 0.9, curve: ElasticOutCurve(0.8))
     ));
 
     _buttonAnimation = Tween<Offset>(
@@ -155,7 +166,7 @@ class _OnboardBodyState extends State<OnboardBody> with SingleTickerProviderStat
                       title: _createTitle(title: "Permissions", currentStep: currentStep, animation: _permissionsTitleAnimation), 
                       content: BoldText3(
                         text: _permissionsReady 
-                          ? "Finish"
+                          ? "Next Step"
                           : "Lastly let's configure your permissions!", 
                         context: context, 
                         color: Theme.of(context).colorScheme.onPrimarySubdued
@@ -163,6 +174,12 @@ class _OnboardBodyState extends State<OnboardBody> with SingleTickerProviderStat
                       isActive: currentStep == 3,
                       state: _setCurrentStepState(currentStep: currentStep, stepIndex: 3)
                     ),
+                    Step(
+                      title: _createTitle(title: "Finished!", currentStep: currentStep, animation: _finishTitleAnimation),
+                      content: BoldText3(text: "Onboarding Complete!", context: context, color: Theme.of(context).colorScheme.onPrimarySubdued),
+                      isActive: currentStep == 4,
+                      state: _setCurrentStepState(currentStep: currentStep, stepIndex: 4)
+                    )
                   ],
                   controlsBuilder: (BuildContext context, {VoidCallback onStepContinue,VoidCallback onStepCancel}) {
                       return AnimatedBuilder(
@@ -172,7 +189,7 @@ class _OnboardBodyState extends State<OnboardBody> with SingleTickerProviderStat
                             position: _buttonAnimation,
                             child: FlatButton(
                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
-                              onPressed: () => _showOnboardScreen(context, currentStep),
+                              onPressed: () => _buttonPressed(context, currentStep),
                               child: BoldText3(text: _buttonText(currentStep), context: context, color: Theme.of(context).colorScheme.callToAction),
                             ),
                           );
@@ -228,7 +245,7 @@ class _OnboardBodyState extends State<OnboardBody> with SingleTickerProviderStat
     } else return StepState.indexed;
   }
   
-  void _showOnboardScreen(BuildContext context, int currentStep) {
+  void _buttonPressed(BuildContext context, int currentStep) {
     switch (currentStep) {
       case 0:
         BlocProvider.of<OnboardBloc>(context).add(OnboardEvent.next);
@@ -242,7 +259,10 @@ class _OnboardBodyState extends State<OnboardBody> with SingleTickerProviderStat
         _showModal(context: context, screen: TutorialScreen());
         break;
       case 3:
-        if (!_permissionsReady) _showModal(context: context, screen: PermissionsScreen(), lastScreen: true);
+        if (!_permissionsReady) _showModal(context: context, screen: PermissionsScreen());
+        break;
+      case 4:
+        _navigateToNextScreen();
         break;
     }
   }
@@ -262,16 +282,24 @@ class _OnboardBodyState extends State<OnboardBody> with SingleTickerProviderStat
       case 3:
         buttonText = _permissionsReady ? "Finish" : "Set Permissions";
         break;
+      case 4:
+        buttonText = "Finish";
     }
     return buttonText;
   }
 
-  void _showModal({@required BuildContext context, @required Widget screen, bool lastScreen = false}) {
+  void _showModal({@required BuildContext context, @required Widget screen}) {
     showPlatformModalSheet(
       context: context, 
       builder: (_) => screen
     ).then((_) {
-      if (!lastScreen) BlocProvider.of<OnboardBloc>(context).add(OnboardEvent.next);
+      BlocProvider.of<OnboardBloc>(context).add(OnboardEvent.next);
     });
+  }
+
+  void _navigateToNextScreen() {
+    Navigator.of(context).pushReplacement(
+      SlideUpRoute(screen: LayoutScreen())
+    );
   }
 }

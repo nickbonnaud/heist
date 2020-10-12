@@ -33,6 +33,16 @@ class CustomerUpdated extends AuthenticationEvent {
   String toString() => 'CustomerUpdated { customer: $customer }';
 }
 
-class LoggedIn extends AuthenticationEvent {}
+class LoggedIn extends AuthenticationEvent {
+  final Customer customer;
+
+  const LoggedIn({@required this.customer});
+
+  @override
+  List<Object> get props => [customer];
+
+  @override
+  String toString() => 'LoggedIn { customer: $customer }';
+}
 
 class LoggedOut extends AuthenticationEvent {}

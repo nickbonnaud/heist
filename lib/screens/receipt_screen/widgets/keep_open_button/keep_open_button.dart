@@ -1,4 +1,3 @@
-import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -32,7 +31,7 @@ class KeepOpenButton extends StatelessWidget {
       child: BlocBuilder<KeepOpenButtonBloc, KeepOpenButtonState>(
         builder: (context, state) {
           return ElevatedButton(
-            style: ButtonStyle(
+            style: ElevatedButtonTheme.of(context).style.copyWith(
               backgroundColor: MaterialStateProperty.resolveWith<Color>((states) {
                 if (states.contains(MaterialState.disabled)) {
                   return Theme.of(context).colorScheme.infoDisabled;
@@ -41,24 +40,16 @@ class KeepOpenButton extends StatelessWidget {
               })
             ),
             onPressed: () => BlocProvider.of<KeepOpenButtonBloc>(context).add(Submitted(transactionId: _transactionResource.transaction.identifier)),
-            child: _createButtonText(context: context, state: state),
+            child: _buttonChild(context: context, state: state),
           );
         }
       ),
     );
   }
 
-  Widget _createButtonText({@required BuildContext context, @required KeepOpenButtonState state}) {
+  Widget _buttonChild({@required BuildContext context, @required KeepOpenButtonState state}) {
     if (state.isSubmitting) {
-      return TyperAnimatedTextKit(
-        speed: Duration(milliseconds: 250),
-        text: ['Submitting...'],
-        textStyle: TextStyle(
-          fontSize: SizeConfig.getWidth(6),
-          fontWeight: FontWeight.w700,
-          color: Theme.of(context).colorScheme.onSecondary
-        ),
-      );
+      return SizedBox(height: SizeConfig.getWidth(5), width: SizeConfig.getWidth(5), child: CircularProgressIndicator());
     } else {
       return BoldText3(text: 'Keep Open', context: context, color: Theme.of(context).colorScheme.onSecondary);
     }

@@ -1,8 +1,6 @@
-import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:heist/models/transaction/transaction_resource.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
@@ -62,7 +60,7 @@ class CancelIssueForm extends StatelessWidget {
                     builder: (context, state) {
                       return ElevatedButton(
                         onPressed: !state.isSubmitting ? () => _submitButtonPressed(context, state) : null,
-                        child: _createButtonText(context: context, state: state),
+                        child: _buttonChild(context: context, state: state),
                       );
                     }
                   ) 
@@ -87,19 +85,9 @@ class CancelIssueForm extends StatelessWidget {
     Navigator.pop(context);
   }
 
-  Widget _createButtonText({@required BuildContext context, @required CancelIssueFormState state}) {
+  Widget _buttonChild({@required BuildContext context, @required CancelIssueFormState state}) {
     if (state.isSubmitting) {
-      return TyperAnimatedTextKit(
-        speed: Duration(milliseconds: 250),
-        text: ['Cancelling...'],
-        textStyle: GoogleFonts.roboto(
-          textStyle: TextStyle(
-            fontSize: SizeConfig.getWidth(6),
-            fontWeight: FontWeight.w700
-          ),
-          color: Theme.of(context).colorScheme.onSecondary
-        ),
-      );
+      return SizedBox(height: SizeConfig.getWidth(5), width: SizeConfig.getWidth(5), child: CircularProgressIndicator());
     } else {
       return BoldText3(text: 'Cancel', context: context, color: Theme.of(context).colorScheme.onSecondary);
     }

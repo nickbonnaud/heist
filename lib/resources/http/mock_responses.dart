@@ -172,24 +172,24 @@ class MockResponses {
   }
 
   static Map<String, dynamic> _mockFetchCustomer() {
-    // return {
-    //   'data': {
-    //     'identifier': 'fake_identifier',
-    //     'email': 'fake@gmail.com',
-    //     'token': 'not_a_real_token',
-    //     'profile': null,
-    //     'account': {
-    //       'identifier': 'fake_identifier',
-    //       'tip_rate': '15',
-    //       'quick_tip_rate': '5',
-    //       'primary': 'ach'
-    //     },
-    //     'status': {
-    //       'name': 'Profile Account Incomplete',
-    //       'code': '100'
-    //     }
-    //   }
-    // };
+    return {
+      'data': {
+        'identifier': 'fake_identifier',
+        'email': 'fake@gmail.com',
+        'token': 'not_a_real_token',
+        'profile': null,
+        'account': {
+          'identifier': 'fake_identifier',
+          'tip_rate': '15',
+          'quick_tip_rate': '5',
+          'primary': 'ach'
+        },
+        'status': {
+          'name': 'Profile Account Incomplete',
+          'code': '100'
+        }
+      }
+    };
     
     
     return {
@@ -276,7 +276,7 @@ class MockResponses {
           },
           'status': {
             'name': 'Profile Account Incomplete',
-            'code': "100"
+            'code': "120"
           }
         }
       }

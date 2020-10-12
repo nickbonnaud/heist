@@ -1,11 +1,13 @@
-import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:heist/blocs/authentication/authentication_bloc.dart';
+import 'package:heist/blocs/boot/boot_bloc.dart';
+import 'package:heist/global_widgets/route_builders/slide_up_route.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
 import 'package:heist/screens/auth_screen/widgets/cubit/keyboard_visible_cubit.dart';
 import 'package:heist/screens/auth_screen/widgets/page_offset_notifier.dart';
+import 'package:heist/screens/layout_screen/layout_screen.dart';
+import 'package:heist/screens/onboard_screen/onboard_screen.dart';
 import 'package:heist/themes/global_colors.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
 import 'package:provider/provider.dart';
@@ -53,9 +55,7 @@ class _LoginFormState extends State<LoginForm> {
         if (state.isFailure) {
           _errorLogin(context);
         } else if (state.isSuccess) {
-          BlocProvider.of<AuthenticationBloc>(context)
-            .add(LoggedIn());
-          Navigator.of(context).popUntil((route) => route.isFirst);
+          _navigateToNextPage();
         }
       },
       child: Consumer2<PageOffsetNotifier, AnimationController>(
@@ -195,16 +195,7 @@ class _LoginFormState extends State<LoginForm> {
                               borderRadius: BorderRadius.circular(50),
                             ),
                             child: state.isSubmitting
-                              ? TyperAnimatedTextKit(
-                                  speed: Duration(milliseconds: 250),
-                                  text: ['Logging in...'],
-                                  textStyle: TextStyle(
-                                    color: Theme.of(context).colorScheme.onSecondary,
-                                    fontSize: SizeConfig.getWidth(7)
-                                  ),
-                                  textAlign: TextAlign.start,
-                                  alignment: AlignmentDirectional.topStart,
-                                )
+                              ? SizedBox(height: SizeConfig.getWidth(5), width: SizeConfig.getWidth(5), child: CircularProgressIndicator())
                               : (_isLoginButtonEnabled(state)
                                   ? Text1(text: 'Login', context: context, color: Theme.of(context).colorScheme.onSecondary)
                                   : null
@@ -318,11 +309,22 @@ class _LoginFormState extends State<LoginForm> {
                   context: context,
                   color: Theme.of(context).colorScheme.onError)
               ),
-              Icon(Icons.error)
             ],
           ),
           backgroundColor: Theme.of(context).colorScheme.error,
         )
       );
+  }
+
+  void _navigateToNextPage() {
+    if (!BlocProvider.of<BootBloc>(context).arePermissionsReady || !BlocProvider.of<BootBloc>(context).isCustomerOnboarded) {
+      Navigator.of(context).pushReplacement(
+        SlideUpRoute(screen: OnboardScreen())
+      );
+    } else {
+      Navigator.of(context).pushReplacement(
+        SlideUpRoute(screen: LayoutScreen())
+      );
+    }
   }
 }

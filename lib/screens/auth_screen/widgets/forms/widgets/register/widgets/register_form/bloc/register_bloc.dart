@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:heist/blocs/authentication/authentication_bloc.dart';
 import 'package:heist/models/customer/customer.dart';
 import 'package:heist/repositories/customer_repository.dart';
 import 'package:heist/resources/helpers/validators.dart';
@@ -13,10 +14,12 @@ part 'register_state.dart';
 
 class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   final CustomerRepository _customerRepository;
+  final AuthenticationBloc _authenticationBloc;
 
-  RegisterBloc({@required CustomerRepository customerRepository})
-    : assert(customerRepository != null),
+  RegisterBloc({@required CustomerRepository customerRepository, @required AuthenticationBloc authenticationBloc})
+    : assert(customerRepository != null && authenticationBloc != null),
       _customerRepository = customerRepository,
+      _authenticationBloc = authenticationBloc,
       super(RegisterState.empty());
 
   @override
@@ -59,7 +62,8 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     yield RegisterState.loading();
     try {
       Customer customer = await _customerRepository.register(email: email, password: password, passwordConfirmation: passwordConfirmation);
-      yield RegisterState.success(customer: customer);
+      _authenticationBloc.add(LoggedIn(customer: customer));
+      yield RegisterState.success();
     } catch (_) {
       yield RegisterState.failure();
     }

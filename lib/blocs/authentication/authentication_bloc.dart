@@ -25,9 +25,9 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
     if (event is AppStarted) {
       yield* _mapAppStartedToState();
     } else if (event is Registered) {
-      yield* _mapAuthenticatedToState(event);
+      yield* _mapAuthenticatedToState(event: event);
     } else if (event is LoggedIn) {
-      yield* _mapLoggedInToState();
+      yield* _mapLoggedInToState(event: event);
     } else if (event is LoggedOut) {
       yield* _mapLoggedOutToState();
     } else if (event is CustomerUpdated) {
@@ -53,13 +53,12 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
     }
   }
 
-  Stream<AuthenticationState> _mapAuthenticatedToState(Registered event) async* {
+  Stream<AuthenticationState> _mapAuthenticatedToState({@required Registered event}) async* {
     yield AuthenticationState.authenticated(customer: event.customer);
   }
 
-  Stream<AuthenticationState> _mapLoggedInToState() async* {
-    final Customer customer = await _customerRepository.fetchCustomer();
-    yield AuthenticationState.authenticated(customer: customer);
+  Stream<AuthenticationState> _mapLoggedInToState({@required LoggedIn event}) async* {
+    yield AuthenticationState.authenticated(customer: event.customer);
   }
 
   Stream<AuthenticationState> _mapLoggedOutToState() async* {
