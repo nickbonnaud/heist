@@ -5,7 +5,6 @@ import 'package:heist/global_widgets/default_app_bar/default_app_bar.dart';
 import 'package:heist/global_widgets/error_screen/error_screen.dart';
 import 'package:heist/global_widgets/refund_widget.dart';
 import 'package:heist/resources/helpers/bottom_loader.dart';
-import 'package:heist/resources/helpers/loading_widget.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
 import 'package:heist/screens/refunds_screen/bloc/refunds_screen_bloc.dart';
@@ -102,7 +101,9 @@ class _RefundsScreenBodyState extends State<RefundsScreenBody> {
     return SliverPadding(
       padding: EdgeInsets.only(left: 8, right: 8),
       sliver: SliverFillRemaining(
-        child: LoadingWidget(),
+        child: Center(
+          child: CircularProgressIndicator(),
+        ),
         hasScrollBody: false,
       ),
     );

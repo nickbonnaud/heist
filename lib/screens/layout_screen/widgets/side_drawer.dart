@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
+import 'package:heist/screens/help_tickets_screen/help_tickets_screen.dart';
 import 'package:heist/screens/historic_transactions_screen/historic_transactions_screen.dart';
 import 'package:heist/screens/layout_screen/bloc/side_menu_bloc.dart';
 import 'package:heist/screens/refunds_screen/refunds_screen.dart';
@@ -237,7 +238,13 @@ class Drawer extends StatelessWidget {
                   ),
                 ),
                 DrawerItem(
-                  onPressed: () => print('pressed'),
+                  onPressed: () => Navigator.push(
+                    context, 
+                    platformPageRoute(
+                      context: context, 
+                      builder: (_) => HelpTicketsScreen()
+                    )
+                  ),
                   text: 'Help',
                   icon: Icon(
                     Icons.contact_support,

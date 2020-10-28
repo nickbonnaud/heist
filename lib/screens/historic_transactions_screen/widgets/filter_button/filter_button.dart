@@ -59,7 +59,6 @@ class _FilterButtonState extends State<FilterButton> with SingleTickerProviderSt
 
   @override
   Widget build(BuildContext context) {
-
     return BlocListener<FilterButtonBloc, FilterButtonState>(
       listener: (context, state) {
         state.isActive ? _open() : _close();
@@ -148,9 +147,9 @@ class _FilterButtonState extends State<FilterButton> with SingleTickerProviderSt
 
   double _setAngle({@required int index}) {
     final double topPoint = 2 * math.pi * 1.2;
-    final double buttonPoint =  2 * math.pi * .68;
+    final double bottomPoint =  2 * math.pi * .68;
 
-    double length = (topPoint - buttonPoint) / Option.values.length;
+    double length = (topPoint - bottomPoint) / Option.values.length;
     return topPoint - (length * index);
   }
   

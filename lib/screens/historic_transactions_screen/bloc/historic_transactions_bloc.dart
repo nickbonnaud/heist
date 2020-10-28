@@ -38,11 +38,11 @@ class HistoricTransactionsBloc extends Bloc<HistoricTransactionsEvent, HistoricT
 
   Stream<HistoricTransactionsState> _mapFetchHistoricTransactionsToState(FetchHistoricTransactions event) async* {
     if (event.reset) {
-      yield* _fetchUnitialized(fetchFunction: () => _transactionRepository.fetchHistoric(nextPage: 1), state: state, currentQuery: Option.all, queryParams: null);
+      yield* _fetchUnitialized(fetchFunction: () => _transactionRepository.fetchHistoric(nextPage: 1), currentQuery: Option.all, queryParams: null);
     } else {
       final currentState = state;
       if (currentState is Uninitialized) {
-        yield* _fetchUnitialized(fetchFunction: () => _transactionRepository.fetchHistoric(nextPage: 1), state: currentState, currentQuery: Option.all, queryParams: null);
+        yield* _fetchUnitialized(fetchFunction: () => _transactionRepository.fetchHistoric(nextPage: 1), currentQuery: Option.all, queryParams: null);
       } else if (currentState is TransactionsLoaded) {
         yield* _fetchMore(fetchFunction: () => _transactionRepository.fetchHistoric(nextPage: currentState.nextPage), state: currentState, currentQuery: Option.all, queryParams: null);
       }
@@ -51,7 +51,7 @@ class HistoricTransactionsBloc extends Bloc<HistoricTransactionsEvent, HistoricT
 
   Stream<HistoricTransactionsState> _mapFetchTransactionsByDateRangeToState(FetchTransactionsByDateRange event) async* {
     if (event.reset) {
-      yield* _fetchUnitialized(fetchFunction: () => _transactionRepository.fetchDateRange(nextPage: 1, dateRange: event.dateRange), state: state, currentQuery: Option.date, queryParams: event.dateRange);
+      yield* _fetchUnitialized(fetchFunction: () => _transactionRepository.fetchDateRange(nextPage: 1, dateRange: event.dateRange), currentQuery: Option.date, queryParams: event.dateRange);
     } else {
       final currentState = state;
       if (currentState is TransactionsLoaded) {
@@ -62,7 +62,7 @@ class HistoricTransactionsBloc extends Bloc<HistoricTransactionsEvent, HistoricT
 
   Stream<HistoricTransactionsState> _mapFetchTransactionsByBusinessToState(FetchTransactionsByBusiness event) async* {
     if (event.reset) {
-      yield* _fetchUnitialized(fetchFunction: () => _transactionRepository.fetchByBusiness(nextPage: 1, identifier: event.identifier), state: state, currentQuery: Option.businessName, queryParams: event.identifier);
+      yield* _fetchUnitialized(fetchFunction: () => _transactionRepository.fetchByBusiness(nextPage: 1, identifier: event.identifier), currentQuery: Option.businessName, queryParams: event.identifier);
     } else {
       final currentState = state;
       if (currentState is TransactionsLoaded) {
@@ -73,7 +73,7 @@ class HistoricTransactionsBloc extends Bloc<HistoricTransactionsEvent, HistoricT
 
   Stream<HistoricTransactionsState> _mapFetchTransactionByIdentifierToState(FetchTransactionByIdentifier event) async* {
     if (event.reset) {
-      yield* _fetchUnitialized(fetchFunction: () => _transactionRepository.fetchByIdentifier(nextPage: 1, identifier: event.identifier), state: state, currentQuery: Option.transactionId, queryParams: event.identifier);
+      yield* _fetchUnitialized(fetchFunction: () => _transactionRepository.fetchByIdentifier(nextPage: 1, identifier: event.identifier), currentQuery: Option.transactionId, queryParams: event.identifier);
     } else {
       final currentState = state;
       if (currentState is TransactionsLoaded) {
@@ -103,7 +103,7 @@ class HistoricTransactionsBloc extends Bloc<HistoricTransactionsEvent, HistoricT
     }
   }
 
-  Stream<HistoricTransactionsState> _fetchUnitialized({@required Future<PaginateDataHolder>Function() fetchFunction, @required HistoricTransactionsState state, @required Option currentQuery, @required dynamic queryParams}) async* {
+  Stream<HistoricTransactionsState> _fetchUnitialized({@required Future<PaginateDataHolder>Function() fetchFunction, @required Option currentQuery, @required dynamic queryParams}) async* {
     try {
       yield Loading();
       final PaginateDataHolder paginateData = await fetchFunction();

@@ -56,7 +56,7 @@ class ProfileFormBloc extends Bloc<ProfileFormEvent, ProfileFormState> {
     yield state.update(isSubmitting: true);
     try {
       Profile profile = await _sendProfileData(event.firstName, event.lastName, event.customer);
-      _updAtauthenticationBloc(event.customer, profile);
+      _updateAuthenticationBloc(event.customer, profile);
       yield state.update(isSubmitting: false, isSuccess: true);
     } catch (_) {
       yield state.update(isSubmitting: false, isFailure: true);
@@ -71,7 +71,7 @@ class ProfileFormBloc extends Bloc<ProfileFormEvent, ProfileFormState> {
     return _profileRepository.update(firstName: firstName, lastName: lastName, profileIdentifier: customer.profile.identifier);
   }
 
-  void _updAtauthenticationBloc(Customer customer, Profile profile) {
+  void _updateAuthenticationBloc(Customer customer, Profile profile) {
     _authenticationBloc.add(CustomerUpdated(customer: customer.update(profile: profile)));
   }
 }

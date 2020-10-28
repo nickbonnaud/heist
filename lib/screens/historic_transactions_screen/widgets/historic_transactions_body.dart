@@ -5,7 +5,6 @@ import 'package:heist/global_widgets/default_app_bar/default_app_bar.dart';
 import 'package:heist/global_widgets/error_screen/error_screen.dart';
 import 'package:heist/global_widgets/transaction_widget.dart';
 import 'package:heist/resources/helpers/bottom_loader.dart';
-import 'package:heist/resources/helpers/loading_widget.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
 import 'package:heist/screens/historic_transactions_screen/bloc/historic_transactions_bloc.dart';
@@ -13,9 +12,6 @@ import 'package:heist/themes/global_colors.dart';
 
 import 'filter_button/bloc/filter_button_bloc.dart';
 import 'filter_button/filter_button.dart';
-
-
-
 
 class HistoricTransactionsBody extends StatefulWidget {
 
@@ -55,6 +51,12 @@ class _HistoricTransactionsBodyState extends State<HistoricTransactionsBody> {
         );
       },
     );
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 
   Widget _buildTransactionsBody({@required HistoricTransactionsState state}) {
@@ -104,7 +106,9 @@ class _HistoricTransactionsBodyState extends State<HistoricTransactionsBody> {
     return SliverPadding(
       padding: EdgeInsets.only(left: 8, right: 8),
       sliver: SliverFillRemaining(
-        child: LoadingWidget(),
+        child: Center(
+          child: CircularProgressIndicator(),
+        ),
         hasScrollBody: false,
       ),
     );
@@ -134,11 +138,5 @@ class _HistoricTransactionsBodyState extends State<HistoricTransactionsBody> {
     if (maxScroll - currentScroll <= _scrollThreshold) {
       _historicTransactionsBloc.add(FetchMoreTransactions());
     }
-  }
-
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
   }
 }

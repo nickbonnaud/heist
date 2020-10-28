@@ -67,6 +67,20 @@ class MockResponses {
       return _mockChangeTransactionIssue(options);
     } else if (options.path.contains('transaction-issue/') && options.method.toLowerCase() == 'delete') {
       return _mockDeleteIssue();
+    } else if (options.path.endsWith("help?page=1")) {
+      return _mockFetchAllHelpTickets();
+    } else if (options.path.contains("help?resolved=true")) {
+      return _mockFetchResolvedHelpTickets();
+    } else if (options.path.contains('help?resolved=false')) {
+      return _mockFetchUnresolvedHelpTickets();
+    } else if (options.path.endsWith('help-reply')) {
+      return _mockPostHelpTicketReply(options.data);
+    } else if (options.path.endsWith('help')) {
+      return _mockPostHelpTicket(options.data);
+    } else if (options.path.contains('/help-reply/')) {
+      return _mockPatchRepliesRead();
+    } else if (options.path.contains('/help/')) {
+      return _mockDeleteHelpTicket();
     } else {
       return null;
     }
@@ -172,24 +186,24 @@ class MockResponses {
   }
 
   static Map<String, dynamic> _mockFetchCustomer() {
-    return {
-      'data': {
-        'identifier': 'fake_identifier',
-        'email': 'fake@gmail.com',
-        'token': 'not_a_real_token',
-        'profile': null,
-        'account': {
-          'identifier': 'fake_identifier',
-          'tip_rate': '15',
-          'quick_tip_rate': '5',
-          'primary': 'ach'
-        },
-        'status': {
-          'name': 'Profile Account Incomplete',
-          'code': '100'
-        }
-      }
-    };
+    // return {
+    //   'data': {
+    //     'identifier': 'fake_identifier',
+    //     'email': 'fake@gmail.com',
+    //     'token': 'not_a_real_token',
+    //     'profile': null,
+    //     'account': {
+    //       'identifier': 'fake_identifier',
+    //       'tip_rate': '15',
+    //       'quick_tip_rate': '5',
+    //       'primary': 'ach'
+    //     },
+    //     'status': {
+    //       'name': 'Profile Account Incomplete',
+    //       'code': '100'
+    //     }
+    //   }
+    // };
     
     
     return {
@@ -9446,6 +9460,363 @@ class MockResponses {
         "per_page": "15",
         "to": "20",
         "total": "20",
+      }
+    };
+  }
+
+  static Map<String, dynamic> _mockFetchAllHelpTickets() {
+    return {
+      "data": [
+        {
+          'identifier': 'fake_identifier_1',
+          'subject': 'Fake issue number one.',
+          'message': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+          'read': true,
+          'resolved': false,
+          'updated_at': '2020-10-19T18:31:01.000000Z',
+          'replies': [
+            {
+              'message': "Pretium fusce id velit ut tortor pretium viverra suspendisse potenti. Odio pellentesque diam volutpat commodo. Vulputate ut pharetra sit amet aliquam id diam. Diam volutpat commodo sed egestas egestas fringilla phasellus faucibus.",
+              'from_customer': false,
+              'read': false,
+              'created_at': '2020-10-19T18:31:01.000000Z',
+              'updated_at': '2020-10-19T18:31:01.000000Z',
+            },
+          ]
+        },
+        {
+          'identifier': 'fake_identifier_2',
+          'subject': 'Mi bibendum neque egestas congue quisque. Egestas congue quisque egestas diam in arcu cursus.',
+          'message': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+          'read': false,
+          'resolved': false,
+          'updated_at': '2020-10-19T18:31:01.000000Z',
+          'replies': []
+        },
+        {
+          'identifier': 'fake_identifier_3',
+          'subject': 'Mattis enim ut tellus elementum sagittis. Turpis tincidunt id aliquet risus feugiat in ante metus dictum.',
+          'message': 'Tempor orci dapibus ultrices in iaculis nunc. Nibh sit amet commodo nulla facilisi nullam vehicula ipsum. Ornare lectus sit amet est placerat in egestas erat imperdiet. Aliquet sagittis id consectetur purus. Nunc eget lorem dolor sed viverra.',
+          'read': true,
+          'resolved': false,
+          'updated_at': '2020-10-19T18:31:01.000000Z',
+          'replies': [
+            {
+              'message': "One fusce id velit ut tortor pretium viverra suspendisse potenti. Odio pellentesque diam volutpat commodo. Vulputate ut pharetra sit amet aliquam id diam. Diam volutpat commodo sed egestas egestas fringilla phasellus faucibus.",
+              'from_customer': false,
+              'read': true,
+              'created_at': '2020-10-19T18:31:01.000000Z',
+              'updated_at': '2020-10-19T18:31:01.000000Z',
+            },
+            {
+              'message': "Two fusce id velit ut tortor pretium viverra suspendisse potenti. Odio pellentesque diam volutpat commodo. Vulputate ut pharetra sit amet aliquam id diam. Diam volutpat commodo sed egestas egestas fringilla phasellus faucibus.",
+              'from_customer': true,
+              'read': true,
+              'created_at': '2020-10-19T18:31:01.000000Z',
+              'updated_at': '2020-10-19T18:31:01.000000Z',
+            },
+            {
+              'message': "Three fusce id velit ut tortor pretium viverra suspendisse potenti. Odio pellentesque diam volutpat commodo. Vulputate ut pharetra sit amet aliquam id diam. Diam volutpat commodo sed egestas egestas fringilla phasellus faucibus.",
+              'from_customer': false,
+              'read': false,
+              'created_at': '2020-10-19T18:31:01.000000Z',
+              'updated_at': '2020-10-19T18:31:01.000000Z',
+            },
+          ]
+        },
+        {
+          'identifier': 'fake_identifier_4',
+          'subject': 'Check Mi bibendum neque egestas congue quisque. Egestas congue quisque egestas diam in arcu cursus.',
+          'message': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+          'read': true,
+          'resolved': false,
+          'updated_at': '2020-10-19T18:31:01.000000Z',
+          'replies': [
+            {
+              'message': "Pretium Zero fusce id velit ut tortor pretium viverra suspendisse potenti. Odio pellentesque diam volutpat commodo. Vulputate ut pharetra sit amet aliquam id diam. Diam volutpat commodo sed egestas egestas fringilla phasellus faucibus.",
+              'from_customer': true,
+              'read': true,
+              'created_at': '2020-10-19T18:31:01.000000Z',
+              'updated_at': '2020-10-19T18:31:01.000000Z',
+            },
+            {
+              'message': "Pretium One fusce id velit ut tortor pretium viverra suspendisse potenti. Odio pellentesque diam volutpat commodo. Vulputate ut pharetra sit amet aliquam id diam. Diam volutpat commodo sed egestas egestas fringilla phasellus faucibus.",
+              'from_customer': false,
+              'read': false,
+              'created_at': '2020-10-19T18:31:01.000000Z',
+              'updated_at': '2020-10-19T18:31:01.000000Z',
+            },
+            {
+              'message': "Pretium Two fusce id velit ut tortor pretium viverra suspendisse potenti. Odio pellentesque diam volutpat commodo. Vulputate ut pharetra sit amet aliquam id diam. Diam volutpat commodo sed egestas egestas fringilla phasellus faucibus.",
+              'from_customer': false,
+              'read': false,
+              'created_at': '2020-10-19T18:31:01.000000Z',
+              'updated_at': '2020-10-19T18:31:01.000000Z',
+            },
+            {
+              'message': "Pretium Three fusce id velit ut tortor pretium viverra suspendisse potenti. Odio pellentesque diam volutpat commodo. Vulputate ut pharetra sit amet aliquam id diam. Diam volutpat commodo sed egestas egestas fringilla phasellus faucibus.",
+              'from_customer': false,
+              'read': false,
+              'created_at': '2020-10-19T18:31:01.000000Z',
+              'updated_at': '2020-10-19T18:31:01.000000Z',
+            },
+            {
+              'message': "Pretium Four fusce id velit ut tortor pretium viverra suspendisse potenti. Odio pellentesque diam volutpat commodo. Vulputate ut pharetra sit amet aliquam id diam. Diam volutpat commodo sed egestas egestas fringilla phasellus faucibus.",
+              'from_customer': false,
+              'read': false,
+              'created_at': '2020-10-19T18:31:01.000000Z',
+              'updated_at': '2020-10-19T18:31:01.000000Z',
+            },
+          ]
+        },
+        {
+          'identifier': 'fake_identifier_5',
+          'subject': 'Mi bibendum neque egestas congue quisque. Egestas congue quisque egestas diam in arcu cursus.',
+          'message': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+          'read': true,
+          'resolved': true,
+          'updated_at': '2020-10-19T18:31:01.000000Z',
+          'replies': [
+            {
+              'message': "Pretium fusce id velit ut tortor pretium viverra suspendisse potenti. Odio pellentesque diam volutpat commodo. Vulputate ut pharetra sit amet aliquam id diam. Diam volutpat commodo sed egestas egestas fringilla phasellus faucibus.",
+              'from_customer': true,
+              'read': true,
+              'created_at': '2020-10-19T18:31:01.000000Z',
+              'updated_at': '2020-10-19T18:31:01.000000Z',
+            },
+            {
+              'message': "Pretium fusce id velit ut tortor pretium viverra suspendisse potenti. Odio pellentesque diam volutpat commodo. Vulputate ut pharetra sit amet aliquam id diam. Diam volutpat commodo sed egestas egestas fringilla phasellus faucibus.",
+              'from_customer': false,
+              'read': false,
+              'created_at': '2020-10-19T18:31:01.000000Z',
+              'updated_at': '2020-10-19T18:31:01.000000Z',
+            },
+          ]
+        },
+      ],
+      "links": {
+        "first": "http://localhost/api/customer/help?page=1",
+        "last": "http://localhost/api/customer/help?page=1",
+        "prev": null,
+        "next": null,
+      },
+      "meta": {
+        "current_page": 1,
+        "from": 1,
+        "last_page": 1,
+        "path": "http://localhost/api/customer/help",
+        "per_page": 15,
+        "to": 4,
+        "total": 4,
+      }
+    };
+  }
+
+  static Map<String, dynamic> _mockFetchResolvedHelpTickets() {
+    return {
+      "data": [
+        {
+          'identifier': 'fake_identifier_2',
+          'subject': 'Mi bibendum neque egestas congue quisque. Egestas congue quisque egestas diam in arcu cursus.',
+          'message': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+          'read': true,
+          'resolved': true,
+          'updated_at': '2020-10-19T18:31:01.000000Z',
+          'replies': []
+        },
+      ],
+      "links": {
+        "first": "http://localhost/api/customer/help?resolved=true&page=1",
+        "last": "http://localhost/api/customer/help?resolved=true&page=1",
+        "prev": null,
+        "next": null,
+      },
+      "meta": {
+        "current_page": 1,
+        "from": 1,
+        "last_page": 1,
+        "path": "http://localhost/api/customer/help",
+        "per_page": 15,
+        "to": 1,
+        "total": 1,
+      }
+    };
+  }
+
+  static Map<String, dynamic> _mockFetchUnresolvedHelpTickets() {
+    return {
+      "data": [
+        {
+          'identifier': 'fake_identifier_1',
+          'subject': 'Fake issue number one.',
+          'message': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+          'read': true,
+          'resolved': false,
+          'updated_at': '2020-10-19T18:31:01.000000Z',
+          'replies': [
+            {
+              'message': "Pretium fusce id velit ut tortor pretium viverra suspendisse potenti. Odio pellentesque diam volutpat commodo. Vulputate ut pharetra sit amet aliquam id diam. Diam volutpat commodo sed egestas egestas fringilla phasellus faucibus.",
+              'from_customer': false,
+              'read': false,
+              'created_at': '2020-10-19T18:31:01.000000Z',
+              'updated_at': '2020-10-19T18:31:01.000000Z',
+            }
+          ]
+        },
+        {
+          'identifier': 'fake_identifier_2',
+          'subject': 'Mi bibendum neque egestas congue quisque. Egestas congue quisque egestas diam in arcu cursus.',
+          'message': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+          'read': false,
+          'resolved': false,
+          'updated_at': '2020-10-19T18:31:01.000000Z',
+          'replies': []
+        },
+        {
+          'identifier': 'fake_identifier_3',
+          'subject': 'Mattis enim ut tellus elementum sagittis. Turpis tincidunt id aliquet risus feugiat in ante metus dictum.',
+          'message': 'Tempor orci dapibus ultrices in iaculis nunc. Nibh sit amet commodo nulla facilisi nullam vehicula ipsum. Ornare lectus sit amet est placerat in egestas erat imperdiet. Aliquet sagittis id consectetur purus. Nunc eget lorem dolor sed viverra.',
+          'read': true,
+          'resolved': false,
+          'updated_at': '2020-10-19T18:31:01.000000Z',
+          'replies': [
+            {
+              'message': "One fusce id velit ut tortor pretium viverra suspendisse potenti. Odio pellentesque diam volutpat commodo. Vulputate ut pharetra sit amet aliquam id diam. Diam volutpat commodo sed egestas egestas fringilla phasellus faucibus.",
+              'from_customer': false,
+              'read': true,
+              'created_at': '2020-10-19T18:31:01.000000Z',
+              'updated_at': '2020-10-19T18:31:01.000000Z',
+            },
+            {
+              'message': "Two fusce id velit ut tortor pretium viverra suspendisse potenti. Odio pellentesque diam volutpat commodo. Vulputate ut pharetra sit amet aliquam id diam. Diam volutpat commodo sed egestas egestas fringilla phasellus faucibus.",
+              'from_customer': true,
+              'read': true,
+              'created_at': '2020-10-19T18:31:01.000000Z',
+              'updated_at': '2020-10-19T18:31:01.000000Z',
+            },
+            {
+              'message': "Three fusce id velit ut tortor pretium viverra suspendisse potenti. Odio pellentesque diam volutpat commodo. Vulputate ut pharetra sit amet aliquam id diam. Diam volutpat commodo sed egestas egestas fringilla phasellus faucibus.",
+              'from_customer': false,
+              'read': false,
+              'created_at': '2020-10-19T18:31:01.000000Z',
+              'updated_at': '2020-10-19T18:31:01.000000Z',
+            },
+          ]
+        },
+      ],
+      "links": {
+        "first": "http://localhost/api/customer/help?resolved=false&page=1",
+        "last": "http://localhost/api/customer/help?resolved=false&page=1",
+        "prev": null,
+        "next": null,
+      },
+      "meta": {
+        "current_page": 1,
+        "from": 1,
+        "last_page": 1,
+        "path": "http://localhost/api/customer/help",
+        "per_page": 15,
+        "to": 3,
+        "total": 3,
+      }
+    };
+  }
+
+  static Map<String, dynamic> _mockPostHelpTicketReply(dynamic body) {
+    return {
+      'data': {
+        'identifier': body['ticket_identifier'],
+        'subject': 'Fake issue number one.',
+        'message': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+        'read': true,
+        'resolved': false,
+        'updated_at': '2020-10-19T18:31:01.000000Z',
+        'replies': [
+          {
+            'message': body['message'],
+            'from_customer': true,
+            'read': false,
+            'created_at': '2020-10-19T18:31:01.000000Z'
+          },
+          {
+            'message': "Pretium fusce id velit ut tortor pretium viverra suspendisse potenti. Odio pellentesque diam volutpat commodo. Vulputate ut pharetra sit amet aliquam id diam. Diam volutpat commodo sed egestas egestas fringilla phasellus faucibus.",
+            'from_customer': false,
+            'read': false,
+            'created_at': '2020-10-19T18:31:01.000000Z',
+          },
+        ]
+      }
+    };
+  }
+
+  static Map<String, dynamic> _mockPostHelpTicket(dynamic body) {
+    return {
+      'data': {
+        'identifier': body['subject'] + '_identifier',
+        'subject': body['subject'],
+        'message': body['message'],
+        'read': false,
+        'resolved': false,
+        'updated_at': DateTime.now().toIso8601String(),
+        'replies': []
+      }
+    };
+  }
+
+  static Map<String, dynamic> _mockPatchRepliesRead() {
+    return {
+      'data': {
+        'identifier': 'fake_identifier_4',
+        'subject': 'Check Mi bibendum neque egestas congue quisque. Egestas congue quisque egestas diam in arcu cursus.',
+        'message': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+        'read': true,
+        'resolved': false,
+        'updated_at': '2020-10-19T18:31:01.000000Z',
+        'replies': [
+          {
+            'message': "Pretium Zero fusce id velit ut tortor pretium viverra suspendisse potenti. Odio pellentesque diam volutpat commodo. Vulputate ut pharetra sit amet aliquam id diam. Diam volutpat commodo sed egestas egestas fringilla phasellus faucibus.",
+            'from_customer': true,
+            'read': true,
+            'created_at': '2020-10-19T18:31:01.000000Z',
+            'updated_at': '2020-10-19T18:31:01.000000Z',
+          },
+          {
+            'message': "Pretium One fusce id velit ut tortor pretium viverra suspendisse potenti. Odio pellentesque diam volutpat commodo. Vulputate ut pharetra sit amet aliquam id diam. Diam volutpat commodo sed egestas egestas fringilla phasellus faucibus.",
+            'from_customer': false,
+            'read': true,
+            'created_at': '2020-10-19T18:31:01.000000Z',
+            'updated_at': '2020-10-19T18:31:01.000000Z',
+          },
+          {
+            'message': "Pretium Two fusce id velit ut tortor pretium viverra suspendisse potenti. Odio pellentesque diam volutpat commodo. Vulputate ut pharetra sit amet aliquam id diam. Diam volutpat commodo sed egestas egestas fringilla phasellus faucibus.",
+            'from_customer': false,
+            'read': true,
+            'created_at': '2020-10-19T18:31:01.000000Z',
+            'updated_at': '2020-10-19T18:31:01.000000Z',
+          },
+          {
+            'message': "Pretium Three fusce id velit ut tortor pretium viverra suspendisse potenti. Odio pellentesque diam volutpat commodo. Vulputate ut pharetra sit amet aliquam id diam. Diam volutpat commodo sed egestas egestas fringilla phasellus faucibus.",
+            'from_customer': false,
+            'read': true,
+            'created_at': '2020-10-19T18:31:01.000000Z',
+            'updated_at': '2020-10-19T18:31:01.000000Z',
+          },
+          {
+            'message': "Pretium Four fusce id velit ut tortor pretium viverra suspendisse potenti. Odio pellentesque diam volutpat commodo. Vulputate ut pharetra sit amet aliquam id diam. Diam volutpat commodo sed egestas egestas fringilla phasellus faucibus.",
+            'from_customer': false,
+            'read': true,
+            'created_at': '2020-10-19T18:31:01.000000Z',
+            'updated_at': '2020-10-19T18:31:01.000000Z',
+          },
+        ]
+      }
+    };
+  }
+
+  static Map<String, dynamic> _mockDeleteHelpTicket() {
+    return {
+      'data': {
+        'deleted': true
       }
     };
   }

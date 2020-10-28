@@ -3,17 +3,20 @@ import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:heist/resources/helpers/size_config.dart';
+import 'package:heist/resources/helpers/text_styles.dart';
 import 'package:heist/themes/global_colors.dart';
 
 class BottomModalAppBar extends StatefulWidget implements PreferredSizeWidget {
   final Color _backgroundColor;
   final bool _isSliver;
   final Widget _trailingWidget;
+  final String _title;
 
-  BottomModalAppBar({Color backgroundColor, bool isSliver = false, Widget trailingWidget})
+  BottomModalAppBar({Color backgroundColor, bool isSliver = false, Widget trailingWidget, String title})
     : _backgroundColor = backgroundColor,
       _isSliver = isSliver,
-      _trailingWidget = trailingWidget;
+      _trailingWidget = trailingWidget,
+      _title = title;
   
   @override
   Size get preferredSize => Size.fromHeight(kToolbarHeight);
@@ -59,6 +62,7 @@ class _BottomModalAppBarState extends State<BottomModalAppBar> with TickerProvid
 
   AppBar _buildDefaultAppBar({@required BuildContext context}) {
     return AppBar(
+      title: widget._title != null ? BoldText2(text: widget._title, context: context) : null,
       elevation: 0,
       backgroundColor: _setBackgroundColor(context: context),
       actions: <Widget>[
