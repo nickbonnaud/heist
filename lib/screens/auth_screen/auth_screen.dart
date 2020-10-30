@@ -2,8 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:heist/screens/auth_screen/widgets/rocket.dart';
-import 'package:heist/screens/auth_screen/widgets/stars.dart';
+import 'package:heist/screens/auth_screen/widgets/background.dart';
 import 'package:provider/provider.dart';
 
 import 'widgets/app_name.dart';
@@ -11,10 +10,8 @@ import 'widgets/cubit/keyboard_visible_cubit.dart';
 import 'widgets/drag_arrow.dart';
 import 'widgets/form_animation_notifier.dart';
 import 'widgets/forms/forms.dart';
-import 'widgets/exhaust_path.dart';
 import 'widgets/page_indicator.dart';
 import 'widgets/page_offset_notifier.dart';
-import 'widgets/planets.dart';
 
 double topMargin({@required BuildContext context}) => MediaQuery.of(context).size.height > 700 ? 192 : 128;
 double mainSquareSize({@required BuildContext context}) => MediaQuery.of(context).size.height / 2;
@@ -44,7 +41,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
       duration: Duration(milliseconds: 300),
     );
 
-    Future.delayed(Duration(seconds: 1)).then((value) => _animationController.forward());
+    Future.delayed(Duration(milliseconds: 500)).then((value) => _animationController.forward());
 
     _pageController.addListener(() {
       if (_pageController.page == 1) {
@@ -74,7 +71,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
                   child: Stack(
                     alignment: Alignment.center,
                     children: <Widget>[
-                      Stars(),
+                      Background(),
                       PageView(
                         controller: _pageController,
                         physics: ClampingScrollPhysics(),
@@ -83,9 +80,6 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
                           Container()
                         ],
                       ),
-                      ExhaustPath(),
-                      Rocket(),
-                      Planets(),
                       PageIndicator(),
                       BlocProvider<KeyboardVisibleCubit>(
                         create: (_) => KeyboardVisibleCubit(),
