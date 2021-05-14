@@ -133,7 +133,7 @@ class ReceiptScreenBody extends StatelessWidget {
           shrinkWrap: true,
           children: <Widget>[
             SizedBox(height:SizeConfig.getHeight(3)),
-            _createFooterRow(context: context, title:"Subtotal", value:transactionResource.transaction.netSales),
+            _createFooterRow(context: context, title: "Subtotal", value: transactionResource.transaction.netSales),
             SizedBox(height:SizeConfig.getHeight(1)),
             _createFooterRow(context: context, title: "Tax", value: transactionResource.transaction.tax),
             if (transactionResource.transaction.tip != 0)

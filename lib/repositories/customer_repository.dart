@@ -1,5 +1,6 @@
 import 'package:heist/models/api_response.dart';
 import 'package:heist/models/customer/customer.dart';
+import 'package:heist/models/token.dart';
 import 'package:heist/providers/customer_provider.dart';
 import 'package:heist/repositories/token_repository.dart';
 import 'package:meta/meta.dart';
@@ -17,7 +18,7 @@ class CustomerRepository {
   }
 
   Future<Customer> login({@required String email, @required String password}) async {
-    final ApiResponse loginResponse =  await _customerProvider.login(email: email, password: password);
+    final ApiResponse loginResponse = await _customerProvider.login(email: email, password: password);
     if (loginResponse.isOK) {
       return _handleSuccess(loginResponse);
     }
@@ -77,7 +78,7 @@ class CustomerRepository {
   }
 
   Customer _handleSuccess(ApiResponse response) {
-    // _tokenRepository.saveToken(Token.fromJson(response.body));
+    _tokenRepository.saveToken(Token.fromJson(response.body));
     return Customer.fromJson(response.body);
   }
 }

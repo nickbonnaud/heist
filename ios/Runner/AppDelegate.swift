@@ -8,7 +8,7 @@ import GoogleMaps
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
-    GMSServices.provideAPIKey("AIzaSyB06i4_HAbrc4wt2bwag7QUOOAirDX0nbE")
+    GMSServices.provideAPIKey("AIzaSyA6dBckc7dPdoIxpCInR39ppxc9INtFPGw")
     GeneratedPluginRegistrant.register(with: self)
     
     let view_bill = UNNotificationAction(identifier: "view_bill", title: "View Bill", options: [.foreground])

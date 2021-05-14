@@ -223,7 +223,7 @@ class _LoginFormState extends State<LoginForm> {
 
   void keyboardVisibilityChanged() {
     final bool keyboardVisible = _emailFocus.hasFocus || _passwordFocus.hasFocus;
-    context.bloc<KeyboardVisibleCubit>().toggle(isVisible: keyboardVisible);
+    context.read<KeyboardVisibleCubit>().toggle(isVisible: keyboardVisible);
   }
   
   void _onEmailChanged() {

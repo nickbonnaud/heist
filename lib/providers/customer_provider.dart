@@ -11,7 +11,7 @@ class CustomerProvider {
     Map data = {
       "email": email,
       "password": password,
-      'passwordConfirmation': passwordConfirmation
+      'password_confirmation': passwordConfirmation
     };
     try {
       Response response = await this._api.post(url, data);

@@ -21,10 +21,10 @@ dependencies:
     sdk: flutter
   cached_network_image: ^2.2.0+1
   dio: ^3.0.8
-  equatable: ^1.2.0
+  equatable: ^1.2.5
   flare_flutter: ^2.0.6
   flutter_beacon: ^0.3.0
-  flutter_bloc: ^6.0.0
+  flutter_bloc: ^6.1.0
   flutter_cache_manager: ^1.4.0
   flutter_platform_widgets: ^0.32.4
   flutter_secure_storage: ^3.3.1+1

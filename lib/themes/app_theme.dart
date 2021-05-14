@@ -26,6 +26,7 @@ class AppTheme extends StatelessWidget {
       })
     );
   }
+  
   ThemeData _createTheme({@required BuildContext context}) {
     final Color _primary = Colors.white;
     final Color _primaryVariant = Colors.grey[300];

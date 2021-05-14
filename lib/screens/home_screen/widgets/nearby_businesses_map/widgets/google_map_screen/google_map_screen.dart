@@ -84,6 +84,12 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
     );
   }
 
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
   Marker _createCustomerLocationMarker() {
     return Marker(
       markerId: MarkerId('customer_marker'),

@@ -6,7 +6,7 @@ import 'package:heist/resources/http/api_interceptors.dart';
 
 class Api {
   final Dio _dio = Dio();
-  final String baseUrl = 'http://pockeyt.local/api/customer';
+  final String baseUrl = 'http://novapay.ai/api/customer';
 
   Api() {
     _dio.interceptors.add(ApiInterceptors(dio: _dio));

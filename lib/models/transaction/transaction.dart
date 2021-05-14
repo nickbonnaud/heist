@@ -33,10 +33,10 @@ class Transaction extends Equatable {
   static Transaction fromJson(Map<String, dynamic> json) {
     Transaction transaction = Transaction(
       identifier: json['identifier'],
-      tax: int.parse(json['tax']),
-      tip: int.parse(json['tip']),
-      netSales: int.parse(json['net_sales']),
-      total: int.parse(json['total']),
+      tax: json['tax'],
+      tip: json['tip'],
+      netSales: json['net_sales'],
+      total: json['total'],
       billCreatedAt: DateFormat('E, MMM d').format(DateTime.parse(json['bill_created_at'])),
       billUpdatedAt: DateFormat('E, MMM d').format(DateTime.parse(json['updated_at'])),
       status: Status.fromJson(json['status']),
