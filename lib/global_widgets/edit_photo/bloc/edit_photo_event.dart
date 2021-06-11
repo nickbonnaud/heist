@@ -8,16 +8,16 @@ abstract class EditPhotoEvent extends Equatable {
 }
 
 class ChangePhoto extends EditPhotoEvent {
-  final Customer customer;
-  final File photo;
+  final Profile profile;
+  final PickedFile photo;
 
-  ChangePhoto({@required this.customer, @required this.photo});
-
-  @override
-  List<Object> get props => [customer, photo];
+  ChangePhoto({required this.profile, required this.photo});
 
   @override
-  String toString() => 'ChangePhoto { customer: $customer, photo: $photo }';
+  List<Object> get props => [profile, photo];
+
+  @override
+  String toString() => 'ChangePhoto { profile: $profile, photo: $photo }';
 }
 
 class ResetPhotoForm extends EditPhotoEvent {}

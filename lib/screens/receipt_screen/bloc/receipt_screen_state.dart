@@ -1,33 +1,27 @@
 part of 'receipt_screen_bloc.dart';
 
 @immutable
-class ReceiptScreenState {
+class ReceiptScreenState extends Equatable {
   final TransactionResource transactionResource;
   final bool isButtonVisible;
 
-  ReceiptScreenState({@required this.transactionResource, @required this.isButtonVisible});
+  ReceiptScreenState({required this.transactionResource, required this.isButtonVisible});
 
-  factory ReceiptScreenState.initial({@required TransactionResource transactionResource, @required bool isButtonVisible }) {
+  factory ReceiptScreenState.initial({required TransactionResource transactionResource, required bool isButtonVisible }) {
     return ReceiptScreenState(transactionResource: transactionResource, isButtonVisible: isButtonVisible);
   }
 
   ReceiptScreenState update({
-    TransactionResource transactionResource,
-    bool isButtonVisible
-  }) {
-    return _copyWith(
-      transactionResource: transactionResource,
-      isButtonVisible: isButtonVisible
-    );
-  }
-  
-  ReceiptScreenState _copyWith({
-    TransactionResource transactionResource,
-    bool isButtonVisible
-  }) {
-    return ReceiptScreenState(
-      transactionResource: transactionResource ?? this.transactionResource,
-      isButtonVisible: isButtonVisible ?? this.isButtonVisible
-    );
-  }
+    TransactionResource? transactionResource,
+    bool? isButtonVisible
+  }) => ReceiptScreenState(
+    transactionResource: transactionResource ?? this.transactionResource,
+    isButtonVisible: isButtonVisible ?? this.isButtonVisible
+  );
+
+  @override
+  List<Object?> get props => [transactionResource, isButtonVisible];
+
+  @override
+  String toString() => 'ReceiptScreenState { transactionResource: $transactionResource, isButtonVisible: $isButtonVisible }';
 }

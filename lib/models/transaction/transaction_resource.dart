@@ -6,78 +6,45 @@ import 'issue.dart';
 import 'refund.dart';
 import 'transaction.dart';
 
+@immutable
 class TransactionResource extends Equatable {
   final Transaction transaction;
   final Business business;
   final List<Refund> refunds;
-  final Issue issue;
-  final String error;
+  final Issue? issue;
 
   TransactionResource({
-    @required this.transaction, 
-    @required this.business, 
-    @required this.refunds, 
-    @required this.issue,
-    @required this.error
+    required this.transaction, 
+    required this.business, 
+    required this.refunds, 
+    required this.issue
   });
 
-  static TransactionResource fromJson(Map<String, dynamic> json) {
-    return TransactionResource(
-      transaction: Transaction.fromJson(json['transaction']),
-      business: Business.fromJson(json['business']),
-      refunds: (json['refund'] as List).map((jsonRefund) {
-        return Refund.fromJson(jsonRefund);
+  TransactionResource.fromJson({required Map<String, dynamic> json})
+    : transaction = Transaction.fromJson(json: json['transaction']),
+      business = Business.fromJson(json: json['business']),
+      refunds = (json['refunds'] as List).map((jsonRefund) {
+        return Refund.fromJson(json: jsonRefund);
       }).toList(),
-      issue: json['issue'] != null ? Issue.fromJson(json['issue']) : null,
-      error: ''
-    );
-  }
-
-  static TransactionResource withError(String error) {
-    return TransactionResource(
-      transaction: null,
-      business: null,
-      refunds: null,
-      issue: null,
-      error: error
-    );
-  }
+      issue = json['issue'] != null 
+        ? Issue.fromJson(json: json['issue']) 
+        : null;
 
   TransactionResource update({
-    Transaction transaction,
-    Business business,
-    List<Refund> refunds,
-    Issue issue,
-    String error
-  }) {
-    return _copyWith(
-      transaction: transaction,
-      business: business,
-      refunds: refunds,
-      issue: issue,
-      error: error
-    );
-  }
-  
-  TransactionResource _copyWith({
-    Transaction transaction,
-    Business business,
-    List<Refund> refunds,
-    Issue issue,
-    String error
-  }) {
-    return TransactionResource(
-      transaction: transaction ?? this.transaction,
-      business: business ?? this.business,
-      refunds: refunds ?? this.refunds,
-      issue: issue ?? this.issue,
-      error: error?? this.error
-    );
-  }
+    Transaction? transaction,
+    Business? business,
+    List<Refund>? refunds,
+    Issue? issue
+  }) => TransactionResource(
+    transaction: transaction ?? this.transaction,
+    business: business ?? this.business,
+    refunds: refunds ?? this.refunds,
+    issue: issue ?? this.issue,
+  );
 
   @override
-  List<Object> get props => [transaction, business, refunds, issue, error];
+  List<Object?> get props => [transaction, business, refunds, issue];
 
   @override
-  String toString() => 'TransactionResource { transaction: $transaction, business: $business, refunds: $refunds, issue: $issue, error: $error }';
+  String toString() => 'TransactionResource { transaction: $transaction, business: $business, refunds: $refunds, issue: $issue }';
 }

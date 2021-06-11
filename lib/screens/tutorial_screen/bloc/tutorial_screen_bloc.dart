@@ -50,7 +50,7 @@ class TutorialScreenBloc extends Bloc<TutorialScreenEvent, TutorialScreenState> 
     )).toList();
   }
 
-  static String _setHeader({@required TutorialCardType type}) {
+  static String _setHeader({required TutorialCardType type}) {
     String header;
     switch (type) {
       case TutorialCardType.atRegister:
@@ -73,7 +73,7 @@ class TutorialScreenBloc extends Bloc<TutorialScreenEvent, TutorialScreenState> 
     return header;
   }
 
-  static String _setBody({@required TutorialCardType type}) {
+  static String _setBody({required TutorialCardType type}) {
     String body;
     switch (type) {
       case TutorialCardType.atRegister:
@@ -100,8 +100,8 @@ class TutorialScreenBloc extends Bloc<TutorialScreenEvent, TutorialScreenState> 
     return body;
   }
 
-  static String _setArtboard({@required TutorialCardType type}) {
-    String artboardName;
+  static String? _setArtboard({required TutorialCardType type}) {
+    String? artboardName;
     switch (type) {
       case TutorialCardType.atRegister:
         artboardName = 'at_register';

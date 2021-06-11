@@ -2,71 +2,73 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:heist/blocs/customer/customer_bloc.dart';
 import 'package:heist/models/customer/customer.dart';
-import 'package:heist/repositories/customer_repository.dart';
-import 'package:meta/meta.dart';
+import 'package:heist/repositories/authentication_repository.dart';
+import 'package:heist/resources/helpers/api_exception.dart';
 
 part 'authentication_event.dart';
 part 'authentication_state.dart';
 
 class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> {
-  final CustomerRepository _customerRepository;
+  final AuthenticationRepository _authenticationRepository;
+  final CustomerBloc _customerBloc;
 
-  AuthenticationBloc({@required CustomerRepository customerRepository})
-    : assert(customerRepository != null),
-      _customerRepository = customerRepository,
-      super(AuthenticationState.initial());
+  AuthenticationBloc({required AuthenticationRepository authenticationRepository, required CustomerBloc customerBloc})
+    : _authenticationRepository = authenticationRepository,
+      _customerBloc = customerBloc,
+      super(Unknown());
 
-  Customer get customer => state.customer;
-  bool get isAuthenticated => state.authenticated;
+  bool get isAuthenticated => state is Authenticated;
 
   @override
   Stream<AuthenticationState> mapEventToState(AuthenticationEvent event) async* {
-    if (event is AppStarted) {
-      yield* _mapAppStartedToState();
-    } else if (event is Registered) {
-      yield* _mapAuthenticatedToState(event: event);
+    if (event is Init) {
+      yield* _mapInitToState();
     } else if (event is LoggedIn) {
       yield* _mapLoggedInToState(event: event);
     } else if (event is LoggedOut) {
       yield* _mapLoggedOutToState();
-    } else if (event is CustomerUpdated) {
-      yield* _mapCustomerUpdatedToState(event);
+    }
+    
+    // if (event is AppStarted) {
+    //   yield* _mapAppStartedToState();
+    // } else if (event is Registered) {
+    //   yield* _mapRegisteredToState(event: event);
+    // } else if (event is LoggedIn) {
+    //   yield* _mapLoggedInToState(event: event);
+    // } else if (event is LoggedOut) {
+    //   yield* _mapLoggedOutToState();
+    // } else if (event is CustomerUpdated) {
+    //   yield* _mapCustomerUpdatedToState(event: event);
+    // }
+  }
+
+  Stream<AuthenticationState> _mapInitToState() async* {
+    final bool isSignedIn = await _authenticationRepository.isSignedIn();
+
+    if (isSignedIn) {
+      _customerBloc.add(CustomerAuthenticated());
+      yield Authenticated();
+    } else {
+      yield Unauthenticated();
     }
   }
 
-
-  Stream<AuthenticationState> _mapAppStartedToState() async* {
-    state.update(loading: true);
-    try {
-      // final bool isSignedIn = await _customerRepository.isSignedIn();
-      final isSignedIn = true;
-      
-      if (isSignedIn) {
-        final Customer customer = await _customerRepository.fetchCustomer();
-        yield AuthenticationState.authenticated(customer: customer);
-      } else {
-        yield state.update(loading: false, authCheckComplete: true);
-      }
-    } catch (_) {
-      yield state.update(loading: false, authCheckComplete: true);
-    }
-  }
-
-  Stream<AuthenticationState> _mapAuthenticatedToState({@required Registered event}) async* {
-    yield AuthenticationState.authenticated(customer: event.customer);
-  }
-
-  Stream<AuthenticationState> _mapLoggedInToState({@required LoggedIn event}) async* {
-    yield AuthenticationState.authenticated(customer: event.customer);
+  Stream<AuthenticationState> _mapLoggedInToState({required LoggedIn event}) async* {
+    _customerBloc.add(CustomerLoggedIn(customer: event.customer));
+    yield Authenticated();
   }
 
   Stream<AuthenticationState> _mapLoggedOutToState() async* {
-    _customerRepository.logout();
-    yield AuthenticationState.unAuthenticated();
-  }
-
-  Stream<AuthenticationState> _mapCustomerUpdatedToState(CustomerUpdated event) async* {
-    yield state.update(customer: event.customer);
+    try {
+      final bool loggedOut = await _authenticationRepository.logout();
+      if (loggedOut) {
+        _customerBloc.add(CustomerLoggedOut());
+        yield Unauthenticated();
+      }
+    } on ApiException catch (exception) {
+      yield Authenticated(errorMessage: exception.error);
+    }
   }
 }

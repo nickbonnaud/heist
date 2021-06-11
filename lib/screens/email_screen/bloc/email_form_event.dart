@@ -10,7 +10,7 @@ abstract class EmailFormEvent extends Equatable {
 class EmailChanged extends EmailFormEvent {
   final String email;
 
-  const EmailChanged({@required this.email});
+  const EmailChanged({required this.email});
 
   @override
   List<Object> get props => [email];
@@ -23,7 +23,7 @@ class Submitted extends EmailFormEvent {
   final String email;
   final Customer customer;
 
-  const Submitted({@required this.email, @required this.customer});
+  const Submitted({required this.email, required this.customer});
 
   @override
   List<Object> get props => [email, customer];

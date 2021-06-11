@@ -8,7 +8,10 @@ import 'bloc/help_tickets_screen_bloc.dart';
 import 'widgets/help_tickets_screen_body.dart';
 
 class HelpTicketsScreen extends StatelessWidget {
-  final HelpRepository _helpRepository = HelpRepository();
+  final HelpRepository _helpRepository;
+
+  HelpTicketsScreen({required HelpRepository helpRepository})
+    : _helpRepository = helpRepository;
 
   @override
   Widget build(BuildContext context) {

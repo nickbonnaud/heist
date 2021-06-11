@@ -2,12 +2,19 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
-import 'package:heist/blocs/boot/boot_bloc.dart';
-import 'package:heist/global_widgets/route_builders/slide_up_route.dart';
+import 'package:heist/blocs/customer/customer_bloc.dart';
+import 'package:heist/blocs/geo_location/geo_location_bloc.dart';
+import 'package:heist/blocs/permissions/permissions_bloc.dart';
+import 'package:heist/models/status.dart';
+import 'package:heist/repositories/account_repository.dart';
+import 'package:heist/repositories/initial_login_repository.dart';
+import 'package:heist/repositories/photo_picker_repository.dart';
+import 'package:heist/repositories/photo_repository.dart';
+import 'package:heist/repositories/profile_repository.dart';
 import 'package:heist/resources/constants.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
-import 'package:heist/screens/layout_screen/layout_screen.dart';
+import 'package:heist/routing/routes.dart';
 import 'package:heist/screens/onboard_screen/bloc/onboard_bloc.dart';
 import 'package:heist/screens/permission_screen/permission_screen.dart';
 import 'package:heist/screens/profile_setup_screen/profile_setup_screen.dart';
@@ -15,28 +22,58 @@ import 'package:heist/screens/tutorial_screen/tutorial_screen.dart';
 import 'package:heist/themes/global_colors.dart';
 
 class OnboardBody extends StatefulWidget {
+  final PermissionsBloc _permissionsBloc;
+  final InitialLoginRepository _initialLoginRepository;
+  final GeoLocationBloc _geoLocationBloc;
+  final CustomerBloc _customerBloc;
+  final ProfileRepository _profileRepository;
+  final PhotoRepository _photoRepository;
+  final AccountRepository _accountRepository;
+  final PhotoPickerRepository _photoPickerRepository;
+  final Status _customerStatus;
+
+  OnboardBody({
+    required PermissionsBloc permissionsBloc,
+    required InitialLoginRepository initialLoginRepository,
+    required GeoLocationBloc geoLocationBloc,
+    required CustomerBloc customerBloc,
+    required ProfileRepository profileRepository,
+    required PhotoRepository photoRepository,
+    required AccountRepository accountRepository,
+    required PhotoPickerRepository photoPickerRepository,
+    required Status customerStatus
+  })
+    : _permissionsBloc = permissionsBloc,
+      _initialLoginRepository = initialLoginRepository,
+      _geoLocationBloc = geoLocationBloc,
+      _customerBloc = customerBloc,
+      _profileRepository = profileRepository,
+      _photoRepository = photoRepository,
+      _accountRepository = accountRepository,
+      _photoPickerRepository = photoPickerRepository,
+      _customerStatus = customerStatus;
 
   @override
   State<OnboardBody> createState() => _OnboardBodyState();
 }
 
 class _OnboardBodyState extends State<OnboardBody> with SingleTickerProviderStateMixin {
-  bool _customerOnboarded;
-  bool _permissionsReady;
+  late bool _customerOnboarded;
+  late bool _permissionsReady;
   
-  AnimationController _animationController;
-  Animation<Offset> _onboardTitleAnimation;
-  Animation<Offset> _profileTitleAnimation;
-  Animation<Offset> _tutorialTitleAnimation;
-  Animation<Offset> _permissionsTitleAnimation;
-  Animation<Offset> _onboardBodyAnimation;
-  Animation<Offset> _finishTitleAnimation;
-  Animation<Offset> _buttonAnimation;
+  late AnimationController _animationController;
+  late Animation<Offset> _onboardTitleAnimation;
+  late Animation<Offset> _profileTitleAnimation;
+  late Animation<Offset> _tutorialTitleAnimation;
+  late Animation<Offset> _permissionsTitleAnimation;
+  late Animation<Offset> _onboardBodyAnimation;
+  late Animation<Offset> _finishTitleAnimation;
+  late Animation<Offset> _buttonAnimation;
 
   @override
   void initState() {
-    _customerOnboarded = BlocProvider.of<BootBloc>(context).isCustomerOnboarded;
-    _permissionsReady = BlocProvider.of<BootBloc>(context).arePermissionsReady;
+    _customerOnboarded = widget._customerStatus.code > 103;
+    _permissionsReady = widget._permissionsBloc.allPermissionsValid;
 
     super.initState();
     _animationController = AnimationController(
@@ -126,7 +163,7 @@ class _OnboardBodyState extends State<OnboardBody> with SingleTickerProviderStat
                       title: _createTitle(title: "Onboard", currentStep: currentStep, animation: _onboardTitleAnimation), 
                       content: AnimatedBuilder(
                         animation: _animationController,
-                        builder: (BuildContext context, Widget child) {
+                        builder: (BuildContext context, Widget? child) {
                           return SlideTransition(
                             position: _onboardBodyAnimation,
                             child: BoldText3(
@@ -181,14 +218,13 @@ class _OnboardBodyState extends State<OnboardBody> with SingleTickerProviderStat
                       state: _setCurrentStepState(currentStep: currentStep, stepIndex: 4)
                     )
                   ],
-                  controlsBuilder: (BuildContext context, {VoidCallback onStepContinue,VoidCallback onStepCancel}) {
+                  controlsBuilder: (BuildContext context, {VoidCallback? onStepContinue, VoidCallback? onStepCancel}) {
                       return AnimatedBuilder(
                         animation: _animationController, 
-                        builder: (BuildContext context, Widget child) {
+                        builder: (BuildContext context, Widget? child) {
                           return SlideTransition(
                             position: _buttonAnimation,
-                            child: FlatButton(
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
+                            child: TextButton(
                               onPressed: () => _buttonPressed(context, currentStep),
                               child: BoldText3(text: _buttonText(currentStep), context: context, color: Theme.of(context).colorScheme.callToAction),
                             ),
@@ -211,10 +247,10 @@ class _OnboardBodyState extends State<OnboardBody> with SingleTickerProviderStat
     super.dispose();
   }
 
-  AnimatedBuilder _createTitle({@required String title, @required int currentStep, @required Animation animation}) {
+  AnimatedBuilder _createTitle({required String title, required int currentStep, required Animation<Offset> animation}) {
     return AnimatedBuilder(
       animation: _animationController,
-      builder: (BuildContext context, Widget child) {
+      builder: (BuildContext context, Widget? child) {
         return SlideTransition(
           position: animation,
           child: BoldText1(
@@ -229,7 +265,7 @@ class _OnboardBodyState extends State<OnboardBody> with SingleTickerProviderStat
     );
   }
   
-  StepState _setCurrentStepState({@required int currentStep, @required int stepIndex}) {
+  StepState _setCurrentStepState({required int currentStep, required int stepIndex}) {
     if (stepIndex == 1 && _customerOnboarded) {
       return StepState.complete;
     }
@@ -253,13 +289,24 @@ class _OnboardBodyState extends State<OnboardBody> with SingleTickerProviderStat
       case 1:
         _customerOnboarded
           ? BlocProvider.of<OnboardBloc>(context).add(OnboardEvent.next)
-          : _showModal(context: context, screen: ProfileSetupScreen());
+          : _showModal(context: context, screen: ProfileSetupScreen(
+            customerBloc: widget._customerBloc,
+            profileRepository: widget._profileRepository,
+            photoRepository: widget._photoRepository,
+            accountRepository: widget._accountRepository,
+            photoPickerRepository: widget._photoPickerRepository,
+          ));
         break;
       case 2:
         _showModal(context: context, screen: TutorialScreen());
         break;
       case 3:
-        if (!_permissionsReady) _showModal(context: context, screen: PermissionsScreen());
+        if (!_permissionsReady) _showModal(context: context, screen: PermissionsScreen(
+          permissionsBloc: widget._permissionsBloc,
+          initialLoginRepository: widget._initialLoginRepository,
+          geoLocationBloc: widget._geoLocationBloc,
+          customerIdentifier: widget._customerBloc.customer!.identifier,
+        ));
         break;
       case 4:
         _navigateToNextScreen();
@@ -284,11 +331,14 @@ class _OnboardBodyState extends State<OnboardBody> with SingleTickerProviderStat
         break;
       case 4:
         buttonText = "Finish";
+        break;
+      default:
+        buttonText = "";
     }
     return buttonText;
   }
 
-  void _showModal({@required BuildContext context, @required Widget screen}) {
+  void _showModal({required BuildContext context, required Widget screen}) {
     showPlatformModalSheet(
       context: context, 
       builder: (_) => screen
@@ -298,8 +348,6 @@ class _OnboardBodyState extends State<OnboardBody> with SingleTickerProviderStat
   }
 
   void _navigateToNextScreen() {
-    Navigator.of(context).pushReplacement(
-      SlideUpRoute(screen: LayoutScreen())
-    );
+    Navigator.of(context).pushReplacementNamed(Routes.layout);
   }
 }

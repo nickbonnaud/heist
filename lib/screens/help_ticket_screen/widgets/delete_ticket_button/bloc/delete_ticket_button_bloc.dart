@@ -13,9 +13,8 @@ class DeleteTicketButtonBloc extends Bloc<DeleteTicketButtonEvent, DeleteTicketB
   final HelpRepository _helpRepository;
   final HelpTicketsScreenBloc _helpTicketsScreenBloc;
   
-  DeleteTicketButtonBloc({@required HelpRepository helpRepository, @required HelpTicketsScreenBloc helpTicketsScreenBloc})
-    : assert(helpRepository != null && helpTicketsScreenBloc != null),
-      _helpRepository = helpRepository,
+  DeleteTicketButtonBloc({required HelpRepository helpRepository, required HelpTicketsScreenBloc helpTicketsScreenBloc})
+    : _helpRepository = helpRepository,
       _helpTicketsScreenBloc = helpTicketsScreenBloc,
       super(DeleteTicketButtonState.initial());
 
@@ -28,7 +27,7 @@ class DeleteTicketButtonBloc extends Bloc<DeleteTicketButtonEvent, DeleteTicketB
     }
   }
 
-  Stream<DeleteTicketButtonState> _mapSubmittedToState({@required Submitted event}) async* {
+  Stream<DeleteTicketButtonState> _mapSubmittedToState({required Submitted event}) async* {
     yield state.update(isSubmitting: true);
 
     try {

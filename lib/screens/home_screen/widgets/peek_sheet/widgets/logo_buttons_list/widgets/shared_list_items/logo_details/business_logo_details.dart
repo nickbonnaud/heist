@@ -18,24 +18,15 @@ class BusinessLogoDetails extends StatelessWidget {
   final int _index;
 
   BusinessLogoDetails({
-    @required double topMargin,
-    @required double leftMargin,
-    @required double height,
-    @required double borderRadius,
-    @required Business business,
-    @required AnimationController controller,
-    @required int index
+    required double topMargin,
+    required double leftMargin,
+    required double height,
+    required double borderRadius,
+    required Business business,
+    required AnimationController controller,
+    required int index
   })
-    : assert(
-      topMargin != null &&
-      leftMargin != null &&
-      height != null &&
-      borderRadius != null &&
-      business != null &&
-      controller != null &&
-      index != null
-    ),
-      _topMargin = topMargin,
+    : _topMargin = topMargin,
       _leftMargin = leftMargin,
       _height = height,
       _borderRadius = borderRadius,
@@ -72,20 +63,13 @@ class Details extends StatefulWidget {
   final int _index;
 
   Details({
-    @required double height,
-    @required double borderRadius,
-    @required Business business,
-    @required AnimationController controller,
-    @required int index
+    required double height,
+    required double borderRadius,
+    required Business business,
+    required AnimationController controller,
+    required int index
   })
-    : assert(
-      height != null &&
-      borderRadius != null &&
-      business != null &&
-      controller != null && 
-      index != null
-    ),
-      _height = height,
+    : _height = height,
       _borderRadius = borderRadius,
       _business = business,
       _controller = controller,
@@ -96,7 +80,7 @@ class Details extends StatefulWidget {
 }
 
 class _DetailsState extends State<Details> with SingleTickerProviderStateMixin {
-  AnimationController _detailsController;
+  late AnimationController _detailsController;
   bool _isPressed = false;
   static const _curve = Curves.easeIn;
   
@@ -150,7 +134,7 @@ class _DetailsState extends State<Details> with SingleTickerProviderStateMixin {
     super.dispose();
   }
 
-  Widget _buildContent({@required BuildContext context}) {
+  Widget _buildContent({required BuildContext context}) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
@@ -187,7 +171,7 @@ class _DetailsState extends State<Details> with SingleTickerProviderStateMixin {
     );
   }
 
-  void _viewBusinessModal({@required BuildContext context}) {
+  void _viewBusinessModal({required BuildContext context}) {
     Navigator.of(context).push(PageRouteBuilder(
       opaque: false,
       fullscreenDialog: true,
@@ -195,7 +179,7 @@ class _DetailsState extends State<Details> with SingleTickerProviderStateMixin {
     ));
   }
 
-  String _getDistance({@required LocationLoaded state}) {
+  double _getDistance({required LocationLoaded state}) {
     return DistanceCalculator.getDistance(
       lat1: state.latitude,
       lng1: state.longitude, 

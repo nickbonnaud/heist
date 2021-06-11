@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
+import 'package:heist/resources/helpers/vibrate.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
-import 'package:vibrate/vibrate.dart';
 import 'package:heist/themes/global_colors.dart';
 
 import '../bloc/help_ticket_form_bloc.dart';
@@ -14,11 +14,11 @@ class HelpTicketForm extends StatefulWidget {
 }
 
 class _HelpTicketFormState extends State<HelpTicketForm> {
-  TextEditingController _subjectController;
+  late TextEditingController _subjectController;
   final FocusNode _subjectFocus = FocusNode();
-  TextEditingController _messageController;
+  late TextEditingController _messageController;
   final FocusNode _messageFocus = FocusNode();
-  HelpTicketFormBloc _helpTicketFormBloc;
+  late HelpTicketFormBloc _helpTicketFormBloc;
 
   bool get isPopulated => _subjectController.text.isNotEmpty && _messageController.text.isNotEmpty;
   
@@ -172,11 +172,11 @@ class _HelpTicketFormState extends State<HelpTicketForm> {
     Navigator.of(context).pop();
   }
 
-  bool _isSubmitButtonEnabled({@required HelpTicketFormState state}) {
+  bool _isSubmitButtonEnabled({required HelpTicketFormState state}) {
     return state.isFormValid && isPopulated && !state.isSubmitting;
   }
 
-  void _submitButtonPressed({@required HelpTicketFormState state}) {
+  void _submitButtonPressed({required HelpTicketFormState state}) {
     if (_isSubmitButtonEnabled(state: state)) {
       _helpTicketFormBloc.add(Submitted(
         subject: _subjectController.text,
@@ -185,37 +185,35 @@ class _HelpTicketFormState extends State<HelpTicketForm> {
     }
   }
   
-  void _showSnackbar({@required String text, @required HelpTicketFormState state}) async {
-    bool canVibrate = await Vibrate.canVibrate;
-    if (canVibrate) {
-      Vibrate.feedback(state.isSuccess ? FeedbackType.success : FeedbackType.error);
-    }
+  void _showSnackbar({required String text, required HelpTicketFormState state}) async {
+    state.isSuccess ? Vibrate.success() : Vibrate.error();
+    final SnackBar snackBar = SnackBar(
+      content: Row(
+        children: [
+          Expanded(
+            child: BoldText3(text: text, context: context, color: Theme.of(context).colorScheme.onSecondary)
+          )
+        ],
+      ),
+      backgroundColor: state.isSuccess
+        ? Theme.of(context).colorScheme.success
+        : Theme.of(context).colorScheme.error
+    );
 
-    Scaffold.of(context)
+    ScaffoldMessenger.of(context)
       ..hideCurrentSnackBar()
-      ..showSnackBar(
-        SnackBar(
-          content: Row(
-            children: [
-              Expanded(
-                child: BoldText3(text: text, context: context, color: Theme.of(context).colorScheme.onSecondary)
-              )
-            ],
-          ),
-          backgroundColor: state.isSuccess
-            ? Theme.of(context).colorScheme.success
-            : Theme.of(context).colorScheme.error
-        )
-      ).closed.then((_) {
+      ..showSnackBar(snackBar)
+      .closed.then((_) {
         if (state.isSuccess) {
           Navigator.of(context).pop();
         } else {
           BlocProvider.of<HelpTicketFormBloc>(context).add(Reset());
         }
-      });
+      }
+    );
   }
 
-  Widget _buttonChild({@required HelpTicketFormState state}) {
+  Widget _buttonChild({required HelpTicketFormState state}) {
     if (state.isSubmitting) {
       return SizedBox(height: SizeConfig.getWidth(5), width: SizeConfig.getWidth(5), child: CircularProgressIndicator());
     }
@@ -226,13 +224,13 @@ class _HelpTicketFormState extends State<HelpTicketForm> {
     return KeyboardActionsConfig(
       keyboardActionsPlatform: KeyboardActionsPlatform.ALL,
       actions: [
-        KeyboardAction(
+        KeyboardActionsItem(
           focusNode: _subjectFocus,
           toolbarButtons: [
             (node) => _toolBarButton(node: node)
           ]
         ),
-        KeyboardAction(
+        KeyboardActionsItem(
           focusNode: _messageFocus,
           toolbarButtons: [
             (node) => _toolBarButton(node: node)
@@ -242,7 +240,7 @@ class _HelpTicketFormState extends State<HelpTicketForm> {
     );
   }
 
-  Widget _toolBarButton({@required FocusNode node}) {
+  Widget _toolBarButton({required FocusNode node}) {
     return GestureDetector(
       onTap: () => node.unfocus(),
       child: Padding(

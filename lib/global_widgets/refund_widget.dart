@@ -5,7 +5,9 @@ import 'package:heist/global_widgets/cached_avatar_hero.dart';
 import 'package:heist/models/transaction/refund_resource.dart';
 import 'package:heist/models/transaction/transaction_resource.dart';
 import 'package:heist/resources/helpers/currency.dart';
+import 'package:heist/resources/helpers/date_formatter.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
+import 'package:heist/routing/routes.dart';
 import 'package:heist/screens/receipt_screen/receipt_screen.dart';
 import 'package:heist/themes/global_colors.dart';
 
@@ -14,9 +16,8 @@ import 'default_app_bar/bloc/default_app_bar_bloc.dart';
 class RefundWidget extends StatelessWidget {
   final RefundResource _refundResource;
 
-  const RefundWidget({Key key, @required RefundResource refundResource})
-    : assert(refundResource != null),
-      _refundResource = refundResource,
+  const RefundWidget({required RefundResource refundResource, Key? key})
+    : _refundResource = refundResource,
       super(key: key);
 
   @override
@@ -38,28 +39,26 @@ class RefundWidget extends StatelessWidget {
           color: Theme.of(context).colorScheme.onPrimarySubdued
         ),
         trailing: Text2(
-          text: _refundResource.refund.createdAt,
+          text: DateFormatter.toStandardDate(date: _refundResource.refund.createdAt),
           context: context,
           color: Theme.of(context).colorScheme.onPrimarySubdued
         ),
-        onTap: () => showFullTransaction(context),
+        onTap: () => showFullTransaction(context: context),
       ),
     );
   }
 
-  void showFullTransaction(BuildContext context) {
-    TransactionResource transactionResource = TransactionResource(
+  void showFullTransaction({required BuildContext context}) {
+    final TransactionResource transactionResource = TransactionResource(
       transaction: _refundResource.transaction,
       business: _refundResource.business,
       refunds: [_refundResource.refund].toList(),
       issue: _refundResource.issue,
-      error: null
     );
+
     BlocProvider.of<DefaultAppBarBloc>(context).add(Rotate());
-    Navigator.of(context).push(MaterialPageRoute<void>(
-      fullscreenDialog: true,
-      builder: (context) => ReceiptScreen(transactionResource: transactionResource, receiptModalSheetBloc: BlocProvider.of<ReceiptModalSheetBloc>(context))
-    )).then((_) {
+    
+    Navigator.of(context).pushNamed(Routes.receipt, arguments: transactionResource).then((_) {
       BlocProvider.of<DefaultAppBarBloc>(context).add(Reset());
     });
   }

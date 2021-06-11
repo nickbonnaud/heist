@@ -9,11 +9,13 @@ import 'package:heist/themes/global_colors.dart';
 class BottomModalAppBar extends StatefulWidget implements PreferredSizeWidget {
   final Color _backgroundColor;
   final bool _isSliver;
-  final Widget _trailingWidget;
-  final String _title;
+  final Widget? _trailingWidget;
+  final String? _title;
 
-  BottomModalAppBar({Color backgroundColor, bool isSliver = false, Widget trailingWidget, String title})
-    : _backgroundColor = backgroundColor,
+  BottomModalAppBar({required BuildContext context, bool isSliver = false, Widget? trailingWidget, Color? backgroundColor, String? title})
+    : _backgroundColor = backgroundColor == null
+        ? Theme.of(context).colorScheme.background
+        : backgroundColor,
       _isSliver = isSliver,
       _trailingWidget = trailingWidget,
       _title = title;
@@ -26,8 +28,8 @@ class BottomModalAppBar extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _BottomModalAppBarState extends State<BottomModalAppBar> with TickerProviderStateMixin {
-  Animation _showAnimation;
-  AnimationController _showAnimationController;
+  late Animation _showAnimation;
+  late AnimationController _showAnimationController;
   
   @override
   void initState() {
@@ -45,41 +47,35 @@ class _BottomModalAppBarState extends State<BottomModalAppBar> with TickerProvid
     return _buildDefaultAppBar(context: context);
   }
 
-  SliverAppBar _buildSliverAppBar({@required BuildContext context}) {
+  SliverAppBar _buildSliverAppBar({required BuildContext context}) {
     return SliverAppBar(
       floating: true,
       pinned: false,
       snap: false,
       elevation: 0,
-      backgroundColor: _setBackgroundColor(context: context),
+      backgroundColor: widget._backgroundColor,
       actions: <Widget>[
         if (widget._trailingWidget != null)
-          widget._trailingWidget
+          widget._trailingWidget!
       ],
       leading: _builder(context: context),
     );
   }
 
-  AppBar _buildDefaultAppBar({@required BuildContext context}) {
+  AppBar _buildDefaultAppBar({required BuildContext context}) {
     return AppBar(
-      title: widget._title != null ? BoldText2(text: widget._title, context: context) : null,
+      title: widget._title != null ? BoldText2(text: widget._title!, context: context) : null,
       elevation: 0,
-      backgroundColor: _setBackgroundColor(context: context),
+      backgroundColor: widget._backgroundColor,
       actions: <Widget>[
         if (widget._trailingWidget != null)
-          widget._trailingWidget
+          widget._trailingWidget!
       ],
       leading: _builder(context: context)
     );
   }
 
-  Color _setBackgroundColor({@required BuildContext context}) {
-    return widget._backgroundColor == null 
-        ? Theme.of(context).colorScheme.background
-        : widget._backgroundColor;
-  }
-
-  AnimatedBuilder _builder({@required BuildContext context}) {
+  AnimatedBuilder _builder({required BuildContext context}) {
     return AnimatedBuilder(
       animation: _showAnimationController, 
       builder: (context, child) => Transform.rotate(

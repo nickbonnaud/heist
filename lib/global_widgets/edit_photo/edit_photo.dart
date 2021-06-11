@@ -1,29 +1,27 @@
-import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heist/global_widgets/cached_avatar.dart';
-import 'package:heist/models/customer/customer.dart';
+import 'package:heist/models/customer/profile.dart';
 import 'package:heist/repositories/photo_picker_repository.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
+import 'package:heist/resources/helpers/vibrate.dart';
 import 'package:heist/themes/global_colors.dart';
-import 'package:vibrate/vibrate.dart';
+import 'package:image_picker/image_picker.dart';
 
 import 'bloc/edit_photo_bloc.dart';
 import 'widgets/fade_in_file.dart';
 
 class EditPhoto extends StatelessWidget {
   final PhotoPickerRepository _photoPicker;
-  final Customer _customer;
   final bool _autoDismiss;
+  final Profile _profile;
 
-  EditPhoto({@required PhotoPickerRepository photoPicker, Customer customer, bool autoDismiss})
-    : assert(photoPicker != null),
-      _photoPicker = photoPicker,
-      _customer = customer,
-      _autoDismiss = autoDismiss;
+  EditPhoto({required PhotoPickerRepository photoPicker, required Profile profile, bool autoDismiss = false})
+    : _photoPicker = photoPicker,
+      _autoDismiss = autoDismiss,
+      _profile = profile;
 
   @override
   Widget build(BuildContext context) {
@@ -67,10 +65,15 @@ class EditPhoto extends StatelessWidget {
   }
 
   Widget _createAvatar(EditPhotoState state) {
-   if (state is Submitting || state is SubmitSuccess) {
-      File photo = state is Submitting ? state.photo : state is SubmitSuccess ? state.photo : null;
-      return FadeInFile(imageFile: photo);
-    } else if (_customer?.profile?.photos == null) {
+    if (state is Submitting || state is SubmitSuccess) {
+      PickedFile? photo = state is Submitting 
+        ? state.photo 
+        : state is SubmitSuccess 
+          ? state.photo 
+          : null;
+      
+      return FadeInFile(imageFile: photo!);
+    } else if (_profile.photos.largeUrl.isEmpty) {
       return CircleAvatar(
         child: Image.asset('assets/profile_customer.png'),
         radius: SizeConfig.getWidth(25),
@@ -78,7 +81,7 @@ class EditPhoto extends StatelessWidget {
       );
     } else {
       return CachedAvatar(
-        url: _customer.profile?.photos?.largeUrl, 
+        url: _profile.photos.largeUrl, 
         radius: 25,
         showLoading: true,
       );
@@ -87,36 +90,36 @@ class EditPhoto extends StatelessWidget {
 
   void _editPhoto(BuildContext context, EditPhotoState state) async {
     if (state is !Submitting) {
-      File photo = await _photoPicker.pickPhoto();
-      BlocProvider.of<EditPhotoBloc>(context).add(ChangePhoto(customer: _customer, photo: photo));
+      PickedFile? photo = await _photoPicker.pickPhoto();
+      if (photo != null) {
+        BlocProvider.of<EditPhotoBloc>(context).add(ChangePhoto(profile: _profile, photo: photo));
+      }
     }
   }
 
   void _showSnackbar(BuildContext context, String message, EditPhotoState state) async {
-    bool canVibrate = await Vibrate.canVibrate;
-    bool isSuccess = state is SubmitSuccess;
-    if (canVibrate) {
-      Vibrate.feedback(isSuccess ? FeedbackType.success : FeedbackType.error);
-    }
+    final bool isSuccess = state is SubmitSuccess;
+    isSuccess ? Vibrate.success() : Vibrate.error();
 
-    Scaffold.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(
-        SnackBar(
-          duration: Duration(seconds: 1),
-          content: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Expanded(
-                child: BoldText3(text: message, context: context, color: Theme.of(context).colorScheme.onSecondary)
-              ),
-            ],
+    final SnackBar snackBar = SnackBar(
+      duration: Duration(seconds: 1),
+      content: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Expanded(
+            child: BoldText3(text: message, context: context, color: Theme.of(context).colorScheme.onSecondary)
           ),
-          backgroundColor: isSuccess 
-            ? Theme.of(context).colorScheme.success
-            : Theme.of(context).colorScheme.error,
-        )
-      ).closed.then((_) => {
+        ],
+      ),
+      backgroundColor: isSuccess 
+        ? Theme.of(context).colorScheme.success
+        : Theme.of(context).colorScheme.error,
+    );
+
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(snackBar)
+      .closed.then((_) => {
         if (isSuccess) {
           if (_autoDismiss) {
             Navigator.of(context).pop()
@@ -124,6 +127,7 @@ class EditPhoto extends StatelessWidget {
         } else {
           BlocProvider.of<EditPhotoBloc>(context).add(ResetPhotoForm())
         }
-      });
+      }
+    );
   }
 }

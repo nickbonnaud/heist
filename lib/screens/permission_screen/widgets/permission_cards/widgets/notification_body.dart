@@ -13,9 +13,8 @@ import '../../permission_buttons/permission_buttons.dart';
 class NotificationBody extends StatelessWidget {
   final PermissionButtons _permissionButtons;
   
-  NotificationBody({@required PermissionButtons permissionButtons})
-    : assert(permissionButtons != null),
-      _permissionButtons = permissionButtons;
+  NotificationBody({required PermissionButtons permissionButtons})
+    : _permissionButtons = permissionButtons;
 
   final String notificationText = 
   'Please allow ${Constants.appName} to send you notifications.\n\n'

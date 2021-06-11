@@ -10,9 +10,9 @@ abstract class EditPhotoState extends Equatable {
 class PhotoUnchanged extends EditPhotoState {}
 
 class Submitting extends EditPhotoState {
-  final File photo;
+  final PickedFile photo;
 
-  Submitting({@required this.photo});
+  Submitting({required this.photo});
 
   @override
   List<Object> get props => [photo];
@@ -22,9 +22,9 @@ class Submitting extends EditPhotoState {
 }
 
 class SubmitSuccess extends EditPhotoState {
-  final File photo;
+  final PickedFile photo;
 
-  SubmitSuccess({@required this.photo});
+  SubmitSuccess({required this.photo});
 
   @override
   List<Object> get props => [photo];

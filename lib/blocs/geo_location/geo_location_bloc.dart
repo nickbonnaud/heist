@@ -20,14 +20,13 @@ enum Accuracy {
 class GeoLocationBloc extends Bloc<GeoLocationEvent, GeoLocationState> {
   final GeolocatorRepository _geolocatorRepository;
 
-  StreamSubscription _permissionsBlocSubscription;
+  late StreamSubscription _permissionsBlocSubscription;
   
-  GeoLocationBloc({@required GeolocatorRepository geolocatorRepository, @required PermissionsBloc permissionsBloc})
-    : assert(geolocatorRepository != null && permissionsBloc != null),
-      _geolocatorRepository = geolocatorRepository,
+  GeoLocationBloc({required GeolocatorRepository geolocatorRepository, required PermissionsBloc permissionsBloc})
+    : _geolocatorRepository = geolocatorRepository,
       super(Uninitialized()) {
 
-        _permissionsBlocSubscription = permissionsBloc.listen((PermissionsState state) { 
+        _permissionsBlocSubscription = permissionsBloc.stream.listen((PermissionsState state) { 
           if (!this.isGeoLocationReady && state.onStartPermissionsValid) {
             add(GeoLocationReady());
           }
@@ -36,7 +35,8 @@ class GeoLocationBloc extends Bloc<GeoLocationEvent, GeoLocationState> {
 
 
   bool get isGeoLocationReady => state is LocationLoaded;
-  Map<String, double> get currentLocation {
+
+  Map<String, double>? get currentLocation {
     final currentState = state;
     if (currentState is LocationLoaded) {
       return {'lat': currentState.latitude, 'lng': currentState.longitude};
@@ -49,7 +49,7 @@ class GeoLocationBloc extends Bloc<GeoLocationEvent, GeoLocationState> {
     if (event is GeoLocationReady) {
       yield* _mapAppReadyToState();
     } else if (event is FetchLocation) {
-      yield* _mapFetchLocationToState(event);
+      yield* _mapFetchLocationToState(event: event);
     }
   }
 
@@ -64,12 +64,12 @@ class GeoLocationBloc extends Bloc<GeoLocationEvent, GeoLocationState> {
     try {
       Position position = await _geolocatorRepository.fetchMed();
       yield LocationLoaded(latitude: position.latitude, longitude: position.longitude);
-    } catch (_) {
+    } on TimeoutException catch (_) {
       yield FetchFailure();
     }
   }
 
-  Stream<GeoLocationState> _mapFetchLocationToState(FetchLocation event) async* {
+  Stream<GeoLocationState> _mapFetchLocationToState({required FetchLocation event}) async* {
     yield Loading();
     try {
       Position position;
@@ -88,7 +88,7 @@ class GeoLocationBloc extends Bloc<GeoLocationEvent, GeoLocationState> {
           break;
       }
       yield LocationLoaded(latitude: position.latitude, longitude: position.longitude);
-    } catch (_) {
+    } on TimeoutException catch (_) {
       yield FetchFailure();
     }
   }

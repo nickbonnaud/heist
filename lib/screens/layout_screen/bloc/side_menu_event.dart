@@ -11,7 +11,7 @@ abstract class SideMenuEvent extends Equatable {
 class MenuStatusChanged extends SideMenuEvent {
   final bool menuOpen;
 
-  MenuStatusChanged({@required this.menuOpen});
+  MenuStatusChanged({required this.menuOpen});
 
   @override
   List<Object> get props => [menuOpen];
@@ -24,7 +24,7 @@ class MenuStatusChanged extends SideMenuEvent {
 class ToggleButtonVisibility extends SideMenuEvent {
   final bool isVisible;
 
-  ToggleButtonVisibility({@required this.isVisible});
+  ToggleButtonVisibility({required this.isVisible});
 
   @override
   List<Object> get props => [isVisible];

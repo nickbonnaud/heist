@@ -2,12 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:heist/blocs/active_location/active_location_bloc.dart';
+import 'package:heist/blocs/open_transactions/open_transactions_bloc.dart';
 import 'package:heist/global_widgets/bottom_modal_app_bar.dart';
 import 'package:heist/global_widgets/cached_avatar_hero.dart';
 import 'package:heist/models/customer/active_location.dart';
 import 'package:heist/models/transaction/transaction_resource.dart';
+import 'package:heist/repositories/transaction_issue_repository.dart';
 import 'package:heist/repositories/transaction_repository.dart';
 import 'package:heist/resources/helpers/currency.dart';
+import 'package:heist/resources/helpers/date_formatter.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
 import 'package:heist/screens/receipt_screen/bloc/receipt_screen_bloc.dart';
@@ -24,10 +27,20 @@ import 'purchased_item_widget.dart';
 
 class ReceiptScreenBody extends StatelessWidget {
   final bool _showAppBar;
-  final TransactionRepository _transactionRepository = TransactionRepository();
+  final TransactionRepository _transactionRepository;
+  final OpenTransactionsBloc _openTransactionsBloc;
+  final TransactionIssueRepository _transactionIssueRepository;
 
-  ReceiptScreenBody({bool showAppBar = true})
-    : _showAppBar = showAppBar;
+  ReceiptScreenBody({
+    required TransactionRepository transactionRepository,
+    required OpenTransactionsBloc openTransactionsBloc,
+    required TransactionIssueRepository transactionIssueRepository,
+    bool showAppBar = true
+  })
+    : _transactionRepository = transactionRepository,
+      _openTransactionsBloc = openTransactionsBloc,
+      _transactionIssueRepository = transactionIssueRepository,
+      _showAppBar = showAppBar;
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +52,9 @@ class ReceiptScreenBody extends StatelessWidget {
           bottomNavigationBar: state.isButtonVisible ? BlocProvider<PayButtonBloc>(
             create: (_) => PayButtonBloc(
               transactionRepository: _transactionRepository,
-              transactionResource: _transactionResource
+              transactionResource: _transactionResource,
+              openTransactionsBloc: _openTransactionsBloc,
+              receiptScreenBloc: BlocProvider.of<ReceiptScreenBloc>(context)
             ),
             child: Padding(
               padding: EdgeInsets.only(left: 16, right: 16, bottom: 16),
@@ -51,12 +66,13 @@ class ReceiptScreenBody extends StatelessWidget {
     ); 
   }
 
-  Widget _createScrollableContent({@required BuildContext context, @required TransactionResource transactionResource}) {
+  Widget _createScrollableContent({required BuildContext context, required TransactionResource transactionResource}) {
     if (_showAppBar) {
       return CustomScrollView(
         shrinkWrap: true,
         slivers: <Widget>[
           BottomModalAppBar(
+            context: context,
             backgroundColor: Theme.of(context).colorScheme.topAppBar,
             isSliver: true,
             trailingWidget: _trailingWidget(transactionResource: transactionResource)
@@ -79,7 +95,7 @@ class ReceiptScreenBody extends StatelessWidget {
     }
   }
   
-  List<Widget> _buildBody({@required BuildContext context, @required TransactionResource transactionResource}) {
+  List<Widget> _buildBody({required BuildContext context, required TransactionResource transactionResource}) {
     return <Widget>[
       Padding(
         padding: EdgeInsets.only(left: 16, right: 16),
@@ -98,14 +114,14 @@ class ReceiptScreenBody extends StatelessWidget {
               ),
             ),
             Text2(
-              text: transactionResource.transaction.billUpdatedAt,
+              text: DateFormatter.toStandardDate(date: transactionResource.transaction.billUpdatedAt),
               context: context,
               color: Theme.of(context).colorScheme.onPrimarySubdued,
             )
           ],
         ),
       ),
-      if (transactionResource.issue != null && !transactionResource.issue.resolved)
+      if (transactionResource.issue != null && !transactionResource.issue!.resolved)
         Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -199,17 +215,17 @@ class ReceiptScreenBody extends StatelessWidget {
     ];
   }
   
-  Widget _numberWarningsLeft({@required BuildContext context, @required TransactionResource transactionResource}) {
-    if (transactionResource.issue.warningsSent == 3) {
+  Widget _numberWarningsLeft({required BuildContext context, required TransactionResource transactionResource}) {
+    if (transactionResource.issue!.warningsSent == 3) {
       return Text2(text: "Response required to avoid autopay", context: context, color: Theme.of(context).colorScheme.danger);
-    } else if (transactionResource.issue.warningsSent > 0) {
-      return Text2(text: "${3 - transactionResource.issue.warningsSent} warnings left", context: context, color: Theme.of(context).colorScheme.warning);
+    } else if (transactionResource.issue!.warningsSent > 0) {
+      return Text2(text: "${3 - transactionResource.issue!.warningsSent} warnings left", context: context, color: Theme.of(context).colorScheme.warning);
     } else {
       return Container();
     }
   }
   
-  Widget _createFooterButtons({@required ReceiptScreenState receiptState, @required TransactionResource transactionResource}) {
+  Widget _createFooterButtons({required ReceiptScreenState receiptState, required TransactionResource transactionResource}) {
     int statusCode = receiptState.transactionResource.transaction.status.code;
     if (statusCode == 105) {
       return BlocBuilder<ActiveLocationBloc, ActiveLocationState>(
@@ -223,7 +239,9 @@ class ReceiptScreenBody extends StatelessWidget {
               Expanded(
                 child: BlocProvider<KeepOpenButtonBloc>(
                   create: (BuildContext context) => KeepOpenButtonBloc(
-                    transactionRepository: _transactionRepository
+                    transactionRepository: _transactionRepository,
+                    openTransactionsBloc: _openTransactionsBloc,
+                    receiptScreenBloc: BlocProvider.of<ReceiptScreenBloc>(context)
                   ),
                   child: KeepOpenButton(transactionResource: transactionResource),
                 )
@@ -253,14 +271,14 @@ class ReceiptScreenBody extends StatelessWidget {
     }
   }
 
-  int _setTotal({@required TransactionResource transactionResource}) {
+  int _setTotal({required TransactionResource transactionResource}) {
     if (transactionResource.refunds.length > 0) {
       return transactionResource.transaction.total - transactionResource.refunds.fold(0, (total, refund) => total + refund.total);
     }
     return transactionResource.transaction.total;
   }
 
-  Widget _createRefundRow({@required BuildContext context, @required TransactionResource transactionResource}) {
+  Widget _createRefundRow({required BuildContext context, required TransactionResource transactionResource}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
@@ -278,7 +296,7 @@ class ReceiptScreenBody extends StatelessWidget {
     );
   }
 
-  Widget _createFooterRow({@required BuildContext context, @required String title, @required int value}) {
+  Widget _createFooterRow({required BuildContext context, required String title, required int value}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
@@ -294,9 +312,9 @@ class ReceiptScreenBody extends StatelessWidget {
     );
   }
 
-  Widget _trailingWidget({@required TransactionResource transactionResource}) {
+  Widget? _trailingWidget({required TransactionResource transactionResource}) {
     int code = transactionResource.transaction.status.code;
-    Widget trailing;
+    Widget? trailing;
     switch (code) {
       case 103:
       case 104:
@@ -309,12 +327,12 @@ class ReceiptScreenBody extends StatelessWidget {
       case 1021:
       case 1022:
       case 502:
-        trailing = ReportIssueButton(transaction: transactionResource);
+        trailing = ReportIssueButton(transaction: transactionResource, transactionIssueRepository: _transactionIssueRepository);
         break;
       case 500:
       case 501:
       case 503:
-        trailing = ChangeIssueButton(transaction: transactionResource);
+        trailing = ChangeIssueButton(transaction: transactionResource, transactionIssueRepository: _transactionIssueRepository);
         break;
     }
     return trailing;

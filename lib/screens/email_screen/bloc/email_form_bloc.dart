@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:heist/blocs/authentication/authentication_bloc.dart';
+import 'package:heist/blocs/customer/customer_bloc.dart';
 import 'package:heist/models/customer/customer.dart';
 import 'package:heist/repositories/customer_repository.dart';
 import 'package:heist/resources/helpers/validators.dart';
@@ -14,13 +15,12 @@ part 'email_form_state.dart';
 
 class EmailFormBloc extends Bloc<EmailFormEvent, EmailFormState> {
   final CustomerRepository _customerRepository;
-  final AuthenticationBloc _authenticationBloc;
+  final CustomerBloc _customerBloc;
 
 
-  EmailFormBloc({@required CustomerRepository customerRepository, @required AuthenticationBloc authenticationBloc})
-    : assert(customerRepository != null && authenticationBloc != null),
-      _customerRepository = customerRepository,
-      _authenticationBloc = authenticationBloc,
+  EmailFormBloc({required CustomerRepository customerRepository, required CustomerBloc customerBloc})
+    : _customerRepository = customerRepository,
+      _customerBloc = customerBloc,
       super(EmailFormState.initial());
 
   @override
@@ -43,15 +43,15 @@ class EmailFormBloc extends Bloc<EmailFormEvent, EmailFormState> {
   }
 
   Stream<EmailFormState> _mapEmailChangedToState(EmailChanged event) async* {
-    yield state.update(isEmailValid: Validators.isValidEmail(event.email));
+    yield state.update(isEmailValid: Validators.isValidEmail(email: event.email));
   }
 
   Stream<EmailFormState> _mapSubmittedToState(Submitted event) async* {
     yield state.update(isSubmitting: true);
     try {
-      Customer customer = await _customerRepository.updateEmail(event.email, event.customer.identifier);
+      Customer customer = await _customerRepository.updateEmail(email: event.email, customerId: event.customer.identifier);
       yield state.update(isSubmitting: false, isSuccess: true);
-      _authenticationBloc.add(CustomerUpdated(customer: customer));
+      _customerBloc.add(CustomerUpdated(customer: customer));
     } catch (_) {
       yield state.update(isSubmitting: false, isFailure: true);
     }

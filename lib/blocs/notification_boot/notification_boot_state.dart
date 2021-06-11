@@ -1,7 +1,7 @@
 part of 'notification_boot_bloc.dart';
 
 @immutable
-class NotificationBootState {
+class NotificationBootState extends Equatable {
   final bool nearbyBusinessesReady;
   final bool openTransactionsReady;
   final bool permissionReady;
@@ -9,9 +9,9 @@ class NotificationBootState {
   bool get isReady => nearbyBusinessesReady && openTransactionsReady && permissionReady;
 
   NotificationBootState({
-    @required this.nearbyBusinessesReady,
-    @required this.openTransactionsReady,
-    @required this.permissionReady
+    required this.nearbyBusinessesReady,
+    required this.openTransactionsReady,
+    required this.permissionReady
   });
 
   factory NotificationBootState.initial() {
@@ -23,29 +23,19 @@ class NotificationBootState {
   }
 
   NotificationBootState update({
-    bool nearbyBusinessesReady,
-    bool openTransactionsReady,
-    bool permissionReady
-  }) {
-    return _copyWith(
-      nearbyBusinessesReady: nearbyBusinessesReady,
-      openTransactionsReady: openTransactionsReady,
-      permissionReady: permissionReady
-    );
-  }
+    bool? nearbyBusinessesReady,
+    bool? openTransactionsReady,
+    bool? permissionReady
+  }) => NotificationBootState(
+    nearbyBusinessesReady: nearbyBusinessesReady ?? this.nearbyBusinessesReady,
+    openTransactionsReady: openTransactionsReady ?? this.openTransactionsReady,
+    permissionReady: permissionReady ?? this.permissionReady
+  );
   
-  NotificationBootState _copyWith({
-    bool nearbyBusinessesReady,
-    bool openTransactionsReady,
-    bool permissionReady
-  }) {
-    return NotificationBootState(
-      nearbyBusinessesReady: nearbyBusinessesReady ?? this.nearbyBusinessesReady,
-      openTransactionsReady: openTransactionsReady ?? this.openTransactionsReady,
-      permissionReady: permissionReady ?? this.permissionReady
-    );
-  }
 
+  @override
+  List<Object?> get props => [nearbyBusinessesReady, openTransactionsReady, permissionReady];
+  
   @override
   String toString() => 'NotificationBootState { nearbyBusinessesReady: $nearbyBusinessesReady, openTransactionsReady: $openTransactionsReady, permissionReady: $permissionReady }';
 }

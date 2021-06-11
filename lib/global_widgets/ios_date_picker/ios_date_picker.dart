@@ -14,7 +14,7 @@ class IosDatePicker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: BottomModalAppBar(backgroundColor: Colors.grey.shade300.withOpacity(.90)),
+      appBar: BottomModalAppBar(context: context, backgroundColor: Colors.grey.shade300.withOpacity(.90)),
       backgroundColor: Colors.grey.shade300.withOpacity(.90),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -28,7 +28,7 @@ class IosDatePicker extends StatelessWidget {
                 child: BlocBuilder<IosDatePickerBloc, IosDatePickerState>(
                   builder: (context, state) {
                     return Text(
-                      state.startDate != null ? _formatDate(state.startDate) : "Select Start Date",
+                      state.startDate != null ? _formatDate(state.startDate!) : "Select Start Date",
                       style: TextStyle(
                         fontWeight: FontWeight.w700,
                         color: Theme.of(context).colorScheme.onPrimary,
@@ -90,17 +90,16 @@ class IosDatePicker extends StatelessWidget {
                     ),
                     BlocBuilder<IosDatePickerBloc, IosDatePickerState>(
                       builder: (context, state) {
-                        return FlatButton(
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
+                        return TextButton(
                           child: BoldText4(
                             text: 'Submit', 
                             context: context, 
-                            color: state.startDate != null && state.endDate != null
+                            color: state.startDate != null
                               ? Theme.of(context).colorScheme.callToAction 
                               : Theme.of(context).colorScheme.callToActionDisabled
                           ),
-                          onPressed: () => state.startDate != null && state.endDate != null && state.startDate.isBefore(state.endDate)
-                            ? Navigator.of(context).pop(DateRange(startDate: state.startDate, endDate: state.endDate)) : null
+                          onPressed: () => state.startDate != null && state.startDate!.isBefore(state.endDate)
+                            ? Navigator.of(context).pop(DateRange(startDate: state.startDate!, endDate: state.endDate)) : null
                         );
                       },
                     )

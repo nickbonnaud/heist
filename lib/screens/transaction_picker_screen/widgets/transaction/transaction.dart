@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:another_transformer_page_view/another_transformer_page_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,23 +10,22 @@ import 'package:heist/global_widgets/dots.dart';
 import 'package:heist/models/transaction/purchased_item.dart';
 import 'package:heist/models/unassigned_transaction/unassigned_transaction_resource.dart';
 import 'package:heist/resources/helpers/currency.dart';
+import 'package:heist/resources/helpers/date_formatter.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
+import 'package:heist/resources/helpers/vibrate.dart';
 import 'package:heist/screens/receipt_screen/widgets/purchased_item_widget.dart';
 import 'package:heist/screens/transaction_picker_screen/bloc/transaction_picker_screen_bloc.dart';
 import 'package:heist/screens/transaction_picker_screen/helpers/picker_transformer.dart';
 import 'package:heist/screens/transaction_picker_screen/widgets/transaction/bloc/transaction_bloc.dart';
 import 'package:heist/themes/global_colors.dart';
 import 'package:intl/intl.dart';
-import 'package:transformer_page_view/transformer_page_view.dart';
-import 'package:vibrate/vibrate.dart';
 
 class Transaction extends StatefulWidget {
   final List<UnassignedTransactionResource> _transactions;
 
-  Transaction({@required List<UnassignedTransactionResource> transactions})
-    : assert(transactions != null),
-      _transactions = transactions;
+  Transaction({required List<UnassignedTransactionResource> transactions})
+    : _transactions = transactions;
 
   State<Transaction> createState() => _TransactionState();
 }
@@ -127,8 +127,10 @@ class _TransactionState extends State<Transaction> {
       transformer: PickerTransformer(),
       itemCount: widget._transactions.length,
       onPageChanged: (index) {
-        _underlayController.animateToPage(index, duration: Duration(milliseconds: 300), curve: Curves.ease);
-        BlocProvider.of<TransactionBloc>(context).add(PickerChanged(transactionResource: widget._transactions[index]));
+        if (index != null) {
+          _underlayController.animateToPage(index, duration: Duration(milliseconds: 300), curve: Curves.ease);
+          BlocProvider.of<TransactionBloc>(context).add(PickerChanged(transactionResource: widget._transactions[index]));
+        }
       },
       itemBuilder: (BuildContext context, int index) {
         return Scaffold(
@@ -159,11 +161,11 @@ class _TransactionState extends State<Transaction> {
                     context: context,
                   )
                 ),
-                BlocBuilder<TransactionBloc, String>(
+                BlocBuilder<TransactionBloc, DateTime?>(
                   builder: (context, date) {
-                    if (date.length != 0) {
+                    if (date != null) {
                       return Text3(
-                        text: "Billed at: ${_formatTime(date)}",
+                        text: "Billed at: ${DateFormatter.toStringDateTime(date: date)}",
                         context: context, 
                         color: Theme.of(context).colorScheme.onPrimarySubdued,
                       );
@@ -204,7 +206,7 @@ class _TransactionState extends State<Transaction> {
     );
   }
 
-  Widget _buttonChild({@required BuildContext context, @required TransactionPickerScreenState state}) {
+  Widget _buttonChild({required BuildContext context, required TransactionPickerScreenState state}) {
     final currentState = state;
     if (currentState is TransactionsLoaded) {
       if (currentState.claiming) {
@@ -250,7 +252,7 @@ class _TransactionState extends State<Transaction> {
     );
   }
 
-  Widget _createFooterRow({@required BuildContext context, @required String title, @required int value}) {
+  Widget _createFooterRow({required BuildContext context, required String title, required int value}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
@@ -269,32 +271,30 @@ class _TransactionState extends State<Transaction> {
   }
 
   void _showSnackbar(BuildContext context, String message, TransactionsLoaded state) async {
-    bool canVibrate = await Vibrate.canVibrate;
-    if (canVibrate) {
-      Vibrate.feedback(state.claimSuccess ? FeedbackType.success : FeedbackType.error);
-    }
-
-    Scaffold.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(
-        SnackBar(
-          content: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Expanded(
-                child: BoldText3(text: message, context: context, color: Theme.of(context).colorScheme.onSecondary)
-              ),
-            ],
+    state.claimSuccess ? Vibrate.success() : Vibrate.error();
+    final SnackBar snackBar = SnackBar(
+      content: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Expanded(
+            child: BoldText3(text: message, context: context, color: Theme.of(context).colorScheme.onSecondary)
           ),
-          backgroundColor: state.claimSuccess 
-            ? Theme.of(context).colorScheme.iconPrimary
-            : Theme.of(context).colorScheme.error,
-        )
-      ).closed.then((_) => {
+        ],
+      ),
+      backgroundColor: state.claimSuccess 
+        ? Theme.of(context).colorScheme.iconPrimary
+        : Theme.of(context).colorScheme.error,
+    );
+
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(snackBar)
+      .closed.then((_) => {
         if (state.claimFailure) {
           BlocProvider.of<TransactionPickerScreenBloc>(context).add(Reset())
         }
-      });
+      }
+    );
   }
 
   void _showConfirmDialog(BuildContext context, int index) {

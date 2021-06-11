@@ -7,9 +7,8 @@ import 'package:heist/themes/global_colors.dart';
 class MessageBubble extends StatelessWidget {
   final Reply _reply;
 
-  MessageBubble({@required Reply reply})
-    : assert(reply != null),
-      _reply = reply;
+  MessageBubble({required Reply reply})
+    : _reply = reply;
 
   @override
   Widget build(BuildContext context) {

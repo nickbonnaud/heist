@@ -15,9 +15,8 @@ class MessageInputBloc extends Bloc<MessageInputEvent, MessageInputState> {
   final HelpRepository _helpRepository;
   final HelpTicketsScreenBloc _helpTicketsScreenBloc;
 
-  MessageInputBloc({@required HelpRepository helpRepository, @required HelpTicketsScreenBloc helpTicketsScreenBloc})
-    : assert(helpRepository != null && helpTicketsScreenBloc != null),
-      _helpRepository = helpRepository,
+  MessageInputBloc({required HelpRepository helpRepository, required HelpTicketsScreenBloc helpTicketsScreenBloc})
+    : _helpRepository = helpRepository,
       _helpTicketsScreenBloc = helpTicketsScreenBloc,
       super(MessageInputState.initial());
 
@@ -40,11 +39,11 @@ class MessageInputBloc extends Bloc<MessageInputEvent, MessageInputState> {
     }
   }
 
-  Stream<MessageInputState> _mapMessageChangedToState({@required MessageChanged event}) async* {
+  Stream<MessageInputState> _mapMessageChangedToState({required MessageChanged event}) async* {
     yield state.update(isInputValid: event.message.trim().isNotEmpty);
   }
 
-  Stream<MessageInputState> _mapSubmittedToState({@required Submitted event}) async* {
+  Stream<MessageInputState> _mapSubmittedToState({required Submitted event}) async* {
     yield state.update(isSubmitting: true);
     try {
       HelpTicket helpTicket = await _helpRepository.storeReply(identifier: event.helpTicketIdentifier, message: event.message);
@@ -59,7 +58,7 @@ class MessageInputBloc extends Bloc<MessageInputEvent, MessageInputState> {
     yield state.update(isSuccess: false, isFailure: false);
   }
 
-  void _updateHelpTicket({@required HelpTicket helpTicket}) {
+  void _updateHelpTicket({required HelpTicket helpTicket}) {
     _helpTicketsScreenBloc.add(HelpTicketUpdated(helpTicket: helpTicket));
   }
 }

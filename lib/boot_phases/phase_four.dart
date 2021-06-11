@@ -7,12 +7,20 @@ import 'package:heist/blocs/notification_boot/notification_boot_bloc.dart';
 import 'package:heist/blocs/open_transactions/open_transactions_bloc.dart';
 import 'package:heist/blocs/permissions/permissions_bloc.dart';
 import 'package:heist/blocs/receipt_modal_sheet/receipt_modal_sheet_bloc.dart';
+import 'package:heist/boot_phases/phase_five.dart';
+import 'package:heist/providers/beacon_provider.dart';
 import 'package:heist/repositories/beacon_repository.dart';
-import 'package:heist/screens/boot.dart';
+import 'package:heist/repositories/transaction_repository.dart';
 
 class PhaseFour extends StatelessWidget {
-  final BeaconRepository _beaconRepository = BeaconRepository();
+  final TransactionRepository _transactionRepository;
+  final MaterialApp? _testApp;
+  final BeaconRepository _beaconRepository = BeaconRepository(beaconProvider: BeaconProvider());
 
+  PhaseFour({required TransactionRepository transactionRepository, MaterialApp? testApp,})
+    : _transactionRepository = transactionRepository,
+      _testApp = testApp;
+  
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
@@ -37,7 +45,7 @@ class PhaseFour extends StatelessWidget {
           create: (_) => ReceiptModalSheetBloc(),
         ),
       ], 
-      child: Boot()
+      child: PhaseFive(transactionRepository: _transactionRepository, testApp: _testApp)
     );
   }
 }

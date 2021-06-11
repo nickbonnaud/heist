@@ -1,10 +1,9 @@
-import 'dart:ui';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heist/blocs/receipt_modal_sheet/receipt_modal_sheet_bloc.dart';
 import 'package:heist/models/transaction/transaction_resource.dart';
+import 'package:heist/routing/routes.dart';
 import 'package:heist/screens/receipt_screen/receipt_screen.dart';
 import 'package:heist/themes/global_colors.dart';
 import 'package:transparent_image/transparent_image.dart';
@@ -17,12 +16,11 @@ class LogoTransactionButton extends StatefulWidget {
   final double _warningIconSize;
 
   LogoTransactionButton({
-    @required TransactionResource transactionResource,
-    @required double logoBorderRadius,
-    @required double warningIconSize
+    required TransactionResource transactionResource,
+    required double logoBorderRadius,
+    required double warningIconSize
   })
-    : assert(transactionResource != null && logoBorderRadius != null && warningIconSize != null),
-      _transactionResource = transactionResource,
+    : _transactionResource = transactionResource,
       _logoBorderRadius = logoBorderRadius,
       _warningIconSize = warningIconSize;
 
@@ -31,7 +29,7 @@ class LogoTransactionButton extends StatefulWidget {
 }
 
 class _LogoTransactionButtonState extends State<LogoTransactionButton> with SingleTickerProviderStateMixin {
-  AnimationController _controller;
+  late AnimationController _controller;
 
   @override
   void initState() {
@@ -103,9 +101,9 @@ class _LogoTransactionButtonState extends State<LogoTransactionButton> with Sing
             ),
             shape: CircleBorder(),
             elevation: state.pressed ? 0 : 5,
-            fillColor: widget._transactionResource.issue.warningsSent == 1
+            fillColor: widget._transactionResource.issue!.warningsSent == 1
               ? Theme.of(context).colorScheme.info
-              : widget._transactionResource.issue.warningsSent == 2 
+              : widget._transactionResource.issue!.warningsSent == 2 
               ? Theme.of(context).colorScheme.warning
               : Theme.of(context).colorScheme.danger,
           );
@@ -114,15 +112,12 @@ class _LogoTransactionButtonState extends State<LogoTransactionButton> with Sing
     );
   }
 
-  void _toggleButtonPress({@required BuildContext context}) {
+  void _toggleButtonPress({required BuildContext context}) {
     BlocProvider.of<LogoTransactionButtonBloc>(context).add(TogglePressed());
   }
 
-  void _showCurrentTransaction({@required BuildContext context}) {
-    Navigator.of(context).push(MaterialPageRoute<void>(
-      fullscreenDialog: true,
-      builder: (context) => ReceiptScreen(transactionResource: widget._transactionResource, receiptModalSheetBloc: BlocProvider.of<ReceiptModalSheetBloc>(context))
-    ));
+  void _showCurrentTransaction({required BuildContext context}) {
+    Navigator.of(context).pushNamed(Routes.receipt, arguments: widget._transactionResource);
   }
   
   @override

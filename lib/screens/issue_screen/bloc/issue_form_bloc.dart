@@ -17,9 +17,8 @@ class IssueFormBloc extends Bloc<IssueFormEvent, IssueFormState> {
   final TransactionIssueRepository _issueRepository;
   final OpenTransactionsBloc _openTransactionsBloc;
 
-  IssueFormBloc({@required TransactionIssueRepository issueRepository, @required OpenTransactionsBloc openTransactionsBloc, @required TransactionResource transactionResource})
-    : assert(issueRepository != null && openTransactionsBloc != null && transactionResource != null),
-      _issueRepository = issueRepository,
+  IssueFormBloc({required TransactionIssueRepository issueRepository, required OpenTransactionsBloc openTransactionsBloc, required TransactionResource transactionResource})
+    : _issueRepository = issueRepository,
       _openTransactionsBloc = openTransactionsBloc,
       super(IssueFormState.initial(transactionResource: transactionResource));
 

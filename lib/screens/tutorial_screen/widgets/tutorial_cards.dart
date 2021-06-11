@@ -16,7 +16,7 @@ class TutorialCards extends StatelessWidget {
     );
   }
 
-  List<Widget> _createTutorialCards({@required BuildContext context}) {
+  List<Widget> _createTutorialCards({required BuildContext context}) {
     List<Widget> cards = [];
 
     BlocProvider.of<TutorialScreenBloc>(context).tutorialCards.forEach((card) {
@@ -25,7 +25,7 @@ class TutorialCards extends StatelessWidget {
     return cards;
   }
 
-  Widget _createCard({@required Tutorial card}) {
+  Widget _createCard({required Tutorial card}) {
     return TutorialCard(tutorialCard: card);
   }
 }

@@ -10,7 +10,7 @@ abstract class MessageInputEvent extends Equatable {
 class MessageChanged extends MessageInputEvent {
   final String message;
 
-  const MessageChanged({@required this.message});
+  const MessageChanged({required this.message});
 
   @override
   List<Object> get props => [message];
@@ -23,7 +23,7 @@ class Submitted extends MessageInputEvent {
   final String helpTicketIdentifier;
   final String message;
 
-  const Submitted({@required this.message, @required this.helpTicketIdentifier});
+  const Submitted({required this.message, required this.helpTicketIdentifier});
 
   @override
   List<Object> get props => [message, helpTicketIdentifier];

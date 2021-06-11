@@ -10,11 +10,13 @@ import 'package:heist/themes/global_colors.dart';
 class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Color _backgroundColor;
   final bool _isSliver;
-  final Widget _trailingWidget;
-  final String _title;
+  final Widget? _trailingWidget;
+  final String? _title;
 
-  DefaultAppBar({Color backgroundColor, bool isSliver = false, Widget trailingWidget, String title})
-    : _backgroundColor = backgroundColor,
+  DefaultAppBar({required BuildContext context, bool isSliver = false, Widget? trailingWidget, Color? backgroundColor, String? title})
+    : _backgroundColor = backgroundColor == null
+        ? Theme.of(context).colorScheme.topAppBar
+        : backgroundColor,
       _isSliver = isSliver,
       _trailingWidget = trailingWidget,
       _title = title;
@@ -31,39 +33,33 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
     
   }
 
-  AppBar _buildDefaultAppBar({@required BuildContext context}) {
+  AppBar _buildDefaultAppBar({required BuildContext context}) {
     return AppBar(
-      title: _title != null ? BoldText2(text: _title, context: context) : null,
+      title: _title != null ? BoldText2(text: _title!, context: context) : null,
       elevation: 0,
-      backgroundColor: _setBackgroundColor(context: context),
+      backgroundColor: _backgroundColor,
       leading: AnimatedLeadingIcon(),
       actions: <Widget>[
         if (_trailingWidget != null)
-          _trailingWidget
+          _trailingWidget!
       ],
     );
   }
 
-  SliverAppBar _buildSliverAppBar({@required BuildContext context}) {
+  SliverAppBar _buildSliverAppBar({required BuildContext context}) {
     return SliverAppBar(
-      title: _title != null ? BoldText2(text: _title, context: context) : null,
+      title: _title != null ? BoldText2(text: _title!, context: context) : null,
       elevation: 0,
-      backgroundColor: _setBackgroundColor(context: context) ,
+      backgroundColor: _backgroundColor,
       leading: AnimatedLeadingIcon(),
       actions: <Widget>[
         if (_trailingWidget != null)
-          _trailingWidget
+          _trailingWidget!
       ],
       floating: true,
       pinned: false,
       snap: false,
     );
-  }
-
-  Color _setBackgroundColor({@required BuildContext context}) {
-    return _backgroundColor == null 
-      ? Theme.of(context).colorScheme.topAppBar
-      : _backgroundColor;
   }
 }
 
@@ -73,8 +69,8 @@ class AnimatedLeadingIcon extends StatefulWidget{
 }
 
 class _AnimatedLeadingIconState extends State<AnimatedLeadingIcon> with TickerProviderStateMixin {
-  Animation _rotateAnimation;
-  AnimationController _rotateAnimationController;
+  late Animation _rotateAnimation;
+  late AnimationController _rotateAnimationController;
   
   @override
   void initState() {

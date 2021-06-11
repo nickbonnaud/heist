@@ -10,7 +10,7 @@ abstract class MessageListEvent extends Equatable {
 class ReplyAdded extends MessageListEvent {
   final HelpTicket helpTicket;
 
-  const ReplyAdded({@required this.helpTicket});
+  const ReplyAdded({required this.helpTicket});
 
   @override
   List<Object> get props => [helpTicket];

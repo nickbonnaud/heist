@@ -9,15 +9,14 @@ class SearchIdentifierModal extends StatelessWidget {
   final FocusNode _identifierNode = FocusNode();
   final String _hintText;
 
-  SearchIdentifierModal({@required String hintText})
-    : assert(hintText != null),
-      _hintText = hintText;
+  SearchIdentifierModal({required String hintText})
+    : _hintText = hintText;
   
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomPadding: false,
-      appBar: BottomModalAppBar(backgroundColor: Theme.of(context).colorScheme.scrollBackground),
+      resizeToAvoidBottomInset: false,
+      appBar: BottomModalAppBar(context: context, backgroundColor: Theme.of(context).colorScheme.scrollBackground),
       backgroundColor: Theme.of(context).colorScheme.scrollBackground,
       body: Padding(
         padding: EdgeInsets.only(left: 16, right: 16),

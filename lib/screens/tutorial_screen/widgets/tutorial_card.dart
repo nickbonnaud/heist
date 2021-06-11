@@ -16,9 +16,8 @@ import 'faq_body/faq_body.dart';
 class TutorialCard extends StatefulWidget {
   final Tutorial _tutorialCard;
 
-  TutorialCard({@required Tutorial tutorialCard})
-    : assert(tutorialCard != null),
-      _tutorialCard = tutorialCard;
+  TutorialCard({required Tutorial tutorialCard})
+    : _tutorialCard = tutorialCard;
       
   @override
   State<TutorialCard> createState() => _TutorialCardState();
@@ -61,7 +60,7 @@ class _TutorialCardState extends State<TutorialCard> {
     );
   }
 
-  Widget _getScaffold({@required BuildContext context, @required TutorialScreenState state}) {
+  Widget _getScaffold({required BuildContext context, required TutorialScreenState state}) {
     if (widget._tutorialCard.type != TutorialCardType.faq) {
       return Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -92,7 +91,7 @@ class _TutorialCardState extends State<TutorialCard> {
     ); 
   }
 
-  Widget _getBody({@required BuildContext context, @required TutorialScreenState state}) {
+  Widget _getBody({required BuildContext context, required TutorialScreenState state}) {
     return Padding(
       padding: EdgeInsets.only(left: 8, right: 8, bottom: 20),
       child: Column(
@@ -172,7 +171,7 @@ class _TutorialCardState extends State<TutorialCard> {
     );
   }
 
-  bool _isPaused({@required TutorialScreenState state}) {
+  bool _isPaused({required TutorialScreenState state}) {
     return state.tutorialCards.indexOf(widget._tutorialCard) != state.currentIndex;
   }
 }

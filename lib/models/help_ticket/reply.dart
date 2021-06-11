@@ -1,52 +1,43 @@
 import 'package:equatable/equatable.dart';
-import 'package:intl/intl.dart';
+import 'package:heist/resources/helpers/date_formatter.dart';
 import 'package:meta/meta.dart';
 
+@immutable
 class Reply extends Equatable {
   final String message;
   final bool fromCustomer;
-  final String createdAt;
+  final DateTime createdAt;
   final bool read;
-  final String error;
 
-  Reply({this.message, this.fromCustomer, this.createdAt, this.read, this.error});
+  Reply({
+    required this.message,
+    required this.fromCustomer,
+    required this.createdAt,
+    required this.read
+  });
 
-  Reply.fromJson(Map<String, dynamic> json)
+  Reply.fromJson({required Map<String, dynamic> json})
     : message = json['message'],
       fromCustomer = json['from_customer'],
-      createdAt = formatDateTime(dateTime: json['created_at']),
-      read = json['read'],
-      error = "";
+      createdAt = DateFormatter.toDateTime(date: json['created_at']),
+      read = json['read'];
 
-  Reply.withError(String error)
-    : message = null,
-      fromCustomer = null,
-      createdAt = null,
-      read = null,
-      error = error;
 
-  Reply update({String message, bool fromCustomer, String createdAt, bool read}) {
-    return _copyWith(message: message, fromCustomer: fromCustomer, createdAt: createdAt, read: read);
-  }
-  
-  Reply _copyWith({String message, bool fromCustomer, String createdAt, bool read}) {
-    return Reply(
-      message: message ?? this.message,
-      fromCustomer: fromCustomer ?? this.fromCustomer,
-      createdAt: createdAt ?? this.createdAt,
-      read: read ?? this.read,
-      error: ''
-    );
-  }
-  
-  static String formatDateTime({@required String dateTime}) {
-    return DateFormat('dd MMM').add_jm()
-      .format(DateTime.parse(dateTime));
-  }
+  Reply update({
+    String? message,
+    bool? fromCustomer,
+    DateTime? createdAt,
+    bool? read
+  }) => Reply(
+    message: message ?? this.message,
+    fromCustomer: fromCustomer ?? this.fromCustomer,
+    createdAt: createdAt ?? this.createdAt,
+    read: read ?? this.read
+  );
 
   @override
-  List<Object> get props => [message, fromCustomer, createdAt, read, error];
+  List<Object> get props => [message, fromCustomer, createdAt, read];
 
   @override
-  String toString() => 'Reply { message: $message, fromCustomer: $fromCustomer, createdAt: $createdAt, read: $read, error: $error }';
+  String toString() => 'Reply { message: $message, fromCustomer: $fromCustomer, createdAt: $createdAt, read: $read }';
 }

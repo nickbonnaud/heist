@@ -6,9 +6,9 @@ class SlideUpRoute extends PageRouteBuilder {
   static final Curve _curve = Curves.easeInOut; 
   
   
-  SlideUpRoute({@required Widget screen, Duration transitionDuration})
-    : assert(screen != null),
-      super(
+  SlideUpRoute({required Widget screen, required String name, Duration? transitionDuration})
+    : super(
+        settings: RouteSettings(name: name),
         pageBuilder: (
           context, 
           animation, 

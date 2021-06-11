@@ -10,7 +10,7 @@ abstract class IssueFormEvent extends Equatable {
 class MessageChanged extends IssueFormEvent {
   final String message;
 
-  const MessageChanged({@required this.message});
+  const MessageChanged({required this.message});
 
   @override
   List<Object> get props => [message];
@@ -24,7 +24,7 @@ class Submitted extends IssueFormEvent {
   final IssueType type;
   final TransactionResource transaction;
 
-  const Submitted({@required this.message, @required this.type, @required this.transaction});
+  const Submitted({required this.message, required this.type, required this.transaction});
 
   @override
   List<Object> get props => [message, type, transaction];

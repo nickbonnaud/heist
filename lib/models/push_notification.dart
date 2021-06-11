@@ -3,47 +3,43 @@ import 'package:heist/resources/enums/notification_type.dart';
 import 'package:meta/meta.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 
+@immutable
 class PushNotification extends Equatable {
   final String title;
   final String body;
   final NotificationType type;
-  final String transactionIdentifier;
-  final String businessIdentifier;
-  final int warningsSent;
+  final String? transactionIdentifier;
+  final String? businessIdentifier;
+  final int? warningsSent;
 
   const PushNotification({
-    @required this.title,
-    @required this.body,
-    @required this.type,
-    @required this.transactionIdentifier,
-    @required this.businessIdentifier,
-    @required this.warningsSent
+    required this.title,
+    required this.body,
+    required this.type,
+    required this.transactionIdentifier,
+    required this.businessIdentifier,
+    required this.warningsSent
   });
 
-  static PushNotification fromOsNotification({@required OSNotification notification}) {
-    return PushNotification(
-      title: notification.payload.title,
-      body: notification.payload.body,
-      type: typeToEnum(notification.payload.additionalData['type']),
-      transactionIdentifier: notification.payload.additionalData['transaction_identifier'],
-      businessIdentifier: notification.payload.additionalData['business_identifier'],
-      warningsSent: notification.payload.additionalData['warnings_sent'].toString() != 'null' ? int.parse(notification.payload.additionalData['warnings_sent']) : null
-    );
-  }
+  PushNotification.fromOsNotification({required OSNotification notification})
+    : title = notification.title!,
+      body = notification.body!,
+      type = typeToEnum(jsonType: notification.additionalData!['type']),
+      transactionIdentifier = notification.additionalData?['transaction_identifier'],
+      businessIdentifier = notification.additionalData?['business_identifier'],
+      warningsSent = notification.additionalData?['warnings_sent'];
 
-  static PushNotification fromOsNotificationOpened({@required OSNotificationOpenedResult interaction}) {
-    return PushNotification(
-      title: interaction.notification.payload.title,
-      body: interaction.notification.payload.body,
-      type: typeToEnum(interaction.notification.payload.additionalData['type']),
-      transactionIdentifier: interaction.notification.payload.additionalData['transaction_identifier'],
-      businessIdentifier: interaction.notification.payload.additionalData['business_identifier'],
-      warningsSent: interaction.notification.payload.additionalData['warnings_sent'].toString() != 'null' ? int.parse(interaction.notification.payload.additionalData['warnings_sent']) : null
-    );
-  }
+  PushNotification.fromOsNotificationOpened({required OSNotificationOpenedResult interaction})
+    : title = interaction.notification.title!,
+      body = interaction.notification.body!,
+      type = typeToEnum(jsonType: interaction.notification.additionalData!['type']),
+      transactionIdentifier = interaction.notification.additionalData?['transaction_identifier'],
+      businessIdentifier = interaction.notification.additionalData?['business_identifier'],
+      warningsSent = interaction.notification.additionalData?['warnings_sent'];
 
-  static NotificationType typeToEnum(String jsonType) {
+  static NotificationType typeToEnum({required String jsonType}) {
     NotificationType type;
+    
     switch (jsonType) {
       case 'enter':
         type = NotificationType.enter;
@@ -60,12 +56,14 @@ class PushNotification extends Equatable {
       case 'fix_bill':
         type = NotificationType.fix_bill;
         break;
+      default:
+        type = NotificationType.other;
     }
     return type;
   }
 
   @override
-  List<Object> get props => [title, body, type, transactionIdentifier, businessIdentifier, warningsSent];
+  List<Object?> get props => [title, body, type, transactionIdentifier, businessIdentifier, warningsSent];
 
   @override
   String toString() => '''PushNotification {

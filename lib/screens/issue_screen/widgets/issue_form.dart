@@ -6,18 +6,17 @@ import 'package:heist/models/transaction/transaction_resource.dart';
 import 'package:heist/resources/enums/issue_type.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
+import 'package:heist/resources/helpers/vibrate.dart';
 import 'package:heist/screens/issue_screen/bloc/issue_form_bloc.dart';
 import 'package:heist/themes/global_colors.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
-import 'package:vibrate/vibrate.dart';
 
 class IssueForm extends StatefulWidget {
   final IssueType _type;
   final TransactionResource _transaction;
 
-  IssueForm({@required IssueType type, @required TransactionResource transaction})
-    : assert(type != null && transaction != null),
-      _type = type,
+  IssueForm({required IssueType type, required TransactionResource transaction})
+    : _type = type,
       _transaction = transaction;
   
   @override
@@ -25,10 +24,10 @@ class IssueForm extends StatefulWidget {
 }
 
 class _IssueFormState extends State<IssueForm> {
-  TextEditingController _messageController;
+  late TextEditingController _messageController;
   final FocusNode _messageFocusNode = FocusNode();
 
-  IssueFormBloc _issueFormBloc;
+  late IssueFormBloc _issueFormBloc;
 
   @override
   void initState() {
@@ -161,7 +160,7 @@ class _IssueFormState extends State<IssueForm> {
     }
   }
 
-  Widget _buttonChild({@required BuildContext context, @required IssueFormState state}) {
+  Widget _buttonChild({required BuildContext context, required IssueFormState state}) {
     if (state.isSubmitting) {
       return SizedBox(height: SizeConfig.getWidth(5), width: SizeConfig.getWidth(5), child: CircularProgressIndicator());
     } else {
@@ -170,34 +169,32 @@ class _IssueFormState extends State<IssueForm> {
   }
 
   void _showSnackbar(BuildContext context, String message, IssueFormState state) async {
-    bool canVibrate = await Vibrate.canVibrate;
-    if (canVibrate) {
-      Vibrate.feedback(state.isSuccess ? FeedbackType.success : FeedbackType.error);
-    }
-
-    Scaffold.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(
-        SnackBar(
-          content: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Expanded(
-                child: BoldText3(text: message, context: context, color: Theme.of(context).colorScheme.onSecondary)
-              ),
-            ],
+    state.isSuccess ? Vibrate.success() : Vibrate.error();
+    final SnackBar snackBar = SnackBar(
+      content: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Expanded(
+            child: BoldText3(text: message, context: context, color: Theme.of(context).colorScheme.onSecondary)
           ),
-          backgroundColor: state.isSuccess 
-            ? Theme.of(context).colorScheme.success
-            : Theme.of(context).colorScheme.error,
-        )
-      ).closed.then((_) => {
+        ],
+      ),
+      backgroundColor: state.isSuccess 
+        ? Theme.of(context).colorScheme.success
+        : Theme.of(context).colorScheme.error,
+    );
+
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(snackBar)
+      .closed.then((_) => {
         if (state.isSuccess) {
           Navigator.of(context).pop(state.transactionResource)
         } else {
           BlocProvider.of<IssueFormBloc>(context).add(Reset())
         }
-      });
+      }
+    );
   }
 
   String _formatIssueType() {
@@ -214,7 +211,7 @@ class _IssueFormState extends State<IssueForm> {
     return KeyboardActionsConfig(
       keyboardActionsPlatform: KeyboardActionsPlatform.ALL,
       actions: [
-        KeyboardAction(
+        KeyboardActionsItem(
           displayArrows: false,
           focusNode: _messageFocusNode,
           toolbarButtons: [

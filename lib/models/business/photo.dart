@@ -1,19 +1,22 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 
+@immutable
 class Photo extends Equatable {
   final String name;
   final String smallUrl;
   final String largeUrl;
 
-  Photo({this.name, this.smallUrl, this.largeUrl});
+  Photo({
+    required this.name,
+    required this.smallUrl,
+    required this.largeUrl
+  });
 
-  static Photo fromJson(Map<String, dynamic> json) {
-    return Photo(
-      name: json['name'],
-      smallUrl: json['small_url'],
-      largeUrl: json['large_url']
-    );
-  }
+  Photo.fromJson({required Map<String, dynamic> json}) 
+    : name = json['name'],
+      smallUrl = json['small_url'],
+      largeUrl = json['large_url'];
 
   @override
   List<Object> get props => [name, smallUrl, largeUrl];

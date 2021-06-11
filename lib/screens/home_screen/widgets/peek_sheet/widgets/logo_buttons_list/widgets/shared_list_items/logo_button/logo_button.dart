@@ -19,23 +19,22 @@ class LogoButton extends StatelessWidget {
   final bool _isTransaction;
   final double _logoSize;
   final double _borderRadius;
-  final TransactionResource _transactionResource;
-  final Business _business;
+  final TransactionResource? _transactionResource;
+  final Business? _business;
 
   final SharedSizes sharedSizes = SharedSizes();
   
   LogoButton({
-    @required AnimationController controller,
-    @required double topMargin,
-    @required double leftMargin,
-    @required bool isTransaction,
-    @required double logoSize,
-    @required double borderRadius,
-    TransactionResource transactionResource,
-    Business business
+    required AnimationController controller,
+    required double topMargin,
+    required double leftMargin,
+    required bool isTransaction,
+    required double logoSize,
+    required double borderRadius,
+    TransactionResource? transactionResource,
+    Business? business
   })
-    : assert(controller != null && topMargin != null && leftMargin != null && isTransaction != null && logoSize != null && borderRadius != null),
-      _controller = controller,
+    : _controller = controller,
       _topMargin = topMargin,
       _leftMargin = leftMargin,
       _isTransaction = isTransaction,
@@ -55,7 +54,7 @@ class LogoButton extends StatelessWidget {
         ? BlocProvider<LogoTransactionButtonBloc>(
             create: (_) => LogoTransactionButtonBloc(), 
             child: LogoTransactionButton(
-              transactionResource: _transactionResource,
+              transactionResource: _transactionResource!,
               logoBorderRadius: _borderRadius,
               warningIconSize: _logoSize / 2,
             )
@@ -63,14 +62,14 @@ class LogoButton extends StatelessWidget {
         : BlocProvider<LogoBusinessButtonBloc>(
             create: (_) => LogoBusinessButtonBloc(),
             child: LogoBusinessButton(
-              business: _business,
+              business: _business!,
               logoBorderRadius: _borderRadius,
             )
           )
     );
   }
 
-  double lerp({@required double min, @required double max}) {
-    return lerpDouble(min, max, _controller.value);
+  double lerp({required double min, required double max}) {
+    return lerpDouble(min, max, _controller.value)!;
   }
 }

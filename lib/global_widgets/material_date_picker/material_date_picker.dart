@@ -17,7 +17,7 @@ class _MaterialDatePicker extends State<MaterialDatePicker> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
+    WidgetsBinding.instance!.addPostFrameCallback((_) async {
       _showDatePicker(active: Active.start, context: context); 
     });
   }
@@ -25,8 +25,8 @@ class _MaterialDatePicker extends State<MaterialDatePicker> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomPadding: false,
-      appBar: BottomModalAppBar(backgroundColor: Colors.grey.shade300.withOpacity(.90)),
+      resizeToAvoidBottomInset: false,
+      appBar: BottomModalAppBar(context: context, backgroundColor: Colors.grey.shade300.withOpacity(.90)),
       backgroundColor: Colors.grey.shade300.withOpacity(.90),
       body: Padding(
         padding: EdgeInsets.only(left: 16.0, right: 16.0),
@@ -47,7 +47,7 @@ class _MaterialDatePicker extends State<MaterialDatePicker> {
                           state: state
                         ),
                         child: Text(
-                          state.startDate != null ? _formatDate(state.startDate) : "Select Start Date",
+                          state.startDate != null ? _formatDate(date: state.startDate!) : "Select Start Date",
                           style: TextStyle(
                             fontWeight: FontWeight.w700,
                             color: Theme.of(context).colorScheme.onPrimary,
@@ -70,7 +70,7 @@ class _MaterialDatePicker extends State<MaterialDatePicker> {
                           state: state
                         ),
                         child: Text(
-                          _formatDate(state.endDate),
+                          _formatDate(date: state.endDate),
                           style: TextStyle(
                             fontWeight: FontWeight.w700,
                             color: Theme.of(context).colorScheme.onPrimary,
@@ -100,8 +100,8 @@ class _MaterialDatePicker extends State<MaterialDatePicker> {
                     child: BlocBuilder<MaterialDatePickerBloc, MaterialDatePickerState>(
                       builder: (context, state) {
                         return ElevatedButton(
-                          onPressed: state.startDate != null && state.endDate != null && state.startDate.isBefore(state.endDate)
-                            ? () => Navigator.of(context).pop(DateRange(startDate: state.startDate, endDate: state.endDate))
+                          onPressed: state.startDate != null && state.startDate!.isBefore(state.endDate)
+                            ? () => Navigator.of(context).pop(DateRange(startDate: state.startDate!, endDate: state.endDate))
                             : null,
                           child: BoldText3(text: 'Submit', context: context, color: Theme.of(context).colorScheme.onSecondary)
                         );
@@ -117,14 +117,14 @@ class _MaterialDatePicker extends State<MaterialDatePicker> {
     );
   }
 
-  String _formatDate(DateTime date) {
+  String _formatDate({required DateTime date}) {
     DateFormat formatter = DateFormat('MMMM d y');
     return formatter.format(date);
   }
 
-  void _showDatePicker({@required Active active, @required BuildContext context, MaterialDatePickerState state}) async {
+  void _showDatePicker({required Active active, required BuildContext context, MaterialDatePickerState? state}) async {
     BlocProvider.of<MaterialDatePickerBloc>(context).add(ActiveSelectionChanged(active: active));
-    DateTime date = await showDatePicker(
+    DateTime? date = await showDatePicker(
       context: context,
       initialDate: state == null || active == Active.end ? DateTime.now() : state.endDate,
       firstDate: DateTime(2015), 
@@ -132,6 +132,9 @@ class _MaterialDatePicker extends State<MaterialDatePicker> {
       helpText: active == Active.start ? "Set Start date" : "Set end Date",
       confirmText: "SET",
     );
-    BlocProvider.of<MaterialDatePickerBloc>(context).add(DateChanged(date: date));
+
+    if (date != null) {
+      BlocProvider.of<MaterialDatePickerBloc>(context).add(DateChanged(date: date));
+    }
   }
 }

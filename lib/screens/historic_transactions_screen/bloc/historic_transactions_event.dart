@@ -20,10 +20,10 @@ class FetchHistoricTransactions extends HistoricTransactionsEvent {
 }
 
 class FetchTransactionsByDateRange extends HistoricTransactionsEvent {
-  final DateRange dateRange;
+  final DateTimeRange dateRange;
   final bool reset;
 
-  const FetchTransactionsByDateRange({@required this.dateRange, this.reset = false});
+  const FetchTransactionsByDateRange({required this.dateRange, this.reset = false});
 
   @override
   List<Object> get props => [dateRange, reset];
@@ -36,7 +36,7 @@ class FetchTransactionsByBusiness extends HistoricTransactionsEvent {
   final String identifier;
   final bool reset;
 
-  const FetchTransactionsByBusiness({@required this.identifier, this.reset = false});
+  const FetchTransactionsByBusiness({required this.identifier, this.reset = false});
 
   @override
   List<Object> get props => [identifier, reset];
@@ -49,7 +49,7 @@ class FetchTransactionByIdentifier extends HistoricTransactionsEvent {
   final String identifier;
   final bool reset;
 
-  const FetchTransactionByIdentifier({@required this.identifier, @required this.reset});
+  const FetchTransactionByIdentifier({required this.identifier, required this.reset});
 
   @override
   List<Object> get props => [identifier, reset];

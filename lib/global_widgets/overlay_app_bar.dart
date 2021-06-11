@@ -7,10 +7,12 @@ import 'package:heist/themes/global_colors.dart';
 
 class OverlayAppBar extends StatefulWidget implements PreferredSizeWidget {
   final Color _backgroundColor;
-  final Widget _trailingWidget;
+  final Widget? _trailingWidget;
 
-  OverlayAppBar({Color backgroundColor, Widget trailingWidget})
-    : _backgroundColor = backgroundColor,
+  OverlayAppBar({required BuildContext context, Color? backgroundColor, Widget? trailingWidget})
+    : _backgroundColor = backgroundColor == null
+        ? Theme.of(context).colorScheme.background
+        : backgroundColor,
       _trailingWidget = trailingWidget;
 
   @override
@@ -21,8 +23,8 @@ class OverlayAppBar extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _OverlayAppBarState extends State<OverlayAppBar> with TickerProviderStateMixin {
-  Animation _showAnimation;
-  AnimationController _showAnimationController;
+  late Animation _showAnimation;
+  late AnimationController _showAnimationController;
 
   @override
   void initState() {
@@ -36,12 +38,10 @@ class _OverlayAppBarState extends State<OverlayAppBar> with TickerProviderStateM
   Widget build(BuildContext context) {
     return AppBar(
       elevation: 0,
-      backgroundColor: widget._backgroundColor == null  
-        ? Theme.of(context).colorScheme.background
-        : widget._backgroundColor,
+      backgroundColor: widget._backgroundColor,
       actions: <Widget>[
         if (widget._trailingWidget != null)
-          widget._trailingWidget
+          widget._trailingWidget!
       ],
       leading: AnimatedBuilder(
         animation: _showAnimationController, 

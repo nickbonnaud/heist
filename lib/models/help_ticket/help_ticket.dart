@@ -1,94 +1,54 @@
 import 'package:equatable/equatable.dart';
-import 'package:intl/intl.dart';
+import 'package:heist/resources/helpers/date_formatter.dart';
 import 'package:meta/meta.dart';
 
 import 'reply.dart';
 
+@immutable
 class HelpTicket extends Equatable {
   final String identifier;
   final String subject;
   final String message;
   final bool read;
   final bool resolved;
-  final String updatedAt;
+  final DateTime updatedAt;
   final List<Reply> replies;
-  final String error;
 
   HelpTicket({
-    this.identifier,
-    this.subject,
-    this.message,
-    this.read,
-    this.resolved,
-    this.updatedAt,
-    this.replies,
-    this.error
+    required this.identifier,
+    required this.subject,
+    required this.message,
+    required this.read,
+    required this.resolved,
+    required this.updatedAt,
+    required this.replies,
   });
 
-  HelpTicket.fromJson(Map<String, dynamic> json)
+  HelpTicket.fromJson({required Map<String, dynamic> json})
     : identifier = json['identifier'],
       subject = json['subject'],
       message = json['message'],
       read = json['read'],
       resolved = json['resolved'],
-      updatedAt = formatDateTime(dateTime: json['updated_at']),
-      replies = (json['replies'] as List).map((jsonReply) => Reply.fromJson(jsonReply)).toList(),
-      error = '';
-
-  HelpTicket.withError(String error)
-    : identifier = null,
-    subject = null,
-    message = null,
-    read = null,
-    resolved = null,
-    updatedAt = null,
-    replies = null,
-    error = error;
+      updatedAt = DateFormatter.toDateTime(date: json['updated_at']),
+      replies = (json['replies'] as List).map((jsonReply) => Reply.fromJson(json: jsonReply)).toList();
 
   HelpTicket update({
-    String identifier,
-    String subject,
-    String message,
-    bool read,
-    bool resolved,
-    String updatedAt,
-    List<Reply> replies
-  }) {
-    return _copyWith(
-      identifier: identifier,
-      subject: subject,
-      message: message,
-      read: read,
-      resolved: resolved,
-      updatedAt: updatedAt,
-      replies: replies
-    );
-  }
-  
-  HelpTicket _copyWith({
-    String identifier,
-    String subject,
-    String message,
-    bool read,
-    bool resolved,
-    String updatedAt,
-    List<Reply> replies
-  }) {
-    return HelpTicket(
-      identifier: identifier ?? this.identifier,
-      subject: subject ?? this.subject,
-      message: message ?? this.message,
-      read: read ?? this.read,
-      resolved: resolved ?? this.resolved,
-      updatedAt: updatedAt ?? this.updatedAt,
-      replies: replies ?? this.replies
-    );
-  }
-
-  static String formatDateTime({@required String dateTime}) {
-    return DateFormat('dd MMM').add_jm()
-      .format(DateTime.parse(dateTime));
-  }
+    String? subject,
+    String? message,
+    bool? read,
+    bool? resolved,
+    DateTime? updatedAt,
+    List<Reply>? replies
+  }) => HelpTicket(
+    identifier: this.identifier,
+    subject: subject ?? this.subject,
+    message: message ?? this.message,
+    read: read ?? this.read,
+    resolved: resolved ?? this.resolved,
+    updatedAt: updatedAt ?? this.updatedAt,
+    replies: replies ?? this.replies
+  );
 
   @override
   List<Object> get props => [identifier, subject, message, read, resolved, updatedAt, replies];

@@ -1,77 +1,80 @@
-import 'package:heist/models/api_response.dart';
+import 'package:flutter/material.dart';
 import 'package:heist/models/help_ticket/help_ticket.dart';
 import 'package:heist/models/paginate_data_holder.dart';
-import 'package:heist/models/paginated_api_response.dart';
 import 'package:heist/providers/help_provider.dart';
-import 'package:meta/meta.dart';
+import 'package:heist/repositories/base_repository.dart';
 
-class HelpRepository {
-  final HelpProvider _helpProvider = HelpProvider();
+@immutable
+class HelpRepository extends BaseRepository {
+  final HelpProvider _helpProvider;
 
-  Future<PaginateDataHolder> fetchAll({@required int nextPage}) async {
-    final PaginatedApiResponse response = await _helpProvider.fetchHelpTickets(query: 'page=$nextPage');
-    if (response.isOK) {
-      return _handlePaginatedSuccess(response: response);
-    }
-    return _handlePaginatedFailure(error: response.error);
+  HelpRepository({required HelpProvider helpProvider})
+    : _helpProvider = helpProvider;
+
+  Future<PaginateDataHolder> fetchAll() async {
+    final PaginateDataHolder holder = await this.sendPaginated(request: _helpProvider.fetchHelpTickets());
+    return deserialize(holder: holder);
   }
 
-  Future<PaginateDataHolder> fetchResolved({@required int nextPage}) async {
-    final PaginatedApiResponse response = await _helpProvider.fetchHelpTickets(query: 'resolved=true&page=$nextPage');
-    if (response.isOK) {
-      return _handlePaginatedSuccess(response: response);
-    }
-    return _handlePaginatedFailure(error: response.error);
+  Future<PaginateDataHolder> fetchResolved() async {
+    final String query = this.formatQuery(baseQuery: "resolved=true");
+
+    final PaginateDataHolder holder = await this.sendPaginated(request: _helpProvider.fetchHelpTickets(query: query));
+    return deserialize(holder: holder);
   }
 
-  Future<PaginateDataHolder> fetchOpen({@required int nextPage}) async {
-    final PaginatedApiResponse response = await _helpProvider.fetchHelpTickets(query: 'resolved=false&page=$nextPage');
-    if (response.isOK) {
-      return _handlePaginatedSuccess(response: response);
-    }
-    return _handlePaginatedFailure(error: response.error);
+  Future<PaginateDataHolder> fetchOpen() async {
+    final String query = this.formatQuery(baseQuery: "resolved=false");
+
+    final PaginateDataHolder holder = await this.sendPaginated(request: _helpProvider.fetchHelpTickets(query: query));
+    return deserialize(holder: holder);
+  }
+
+  Future<PaginateDataHolder> paginate({required String url}) async {
+    final PaginateDataHolder holder = await this.sendPaginated(request: _helpProvider.fetchHelpTickets(paginateUrl: url));
+    return deserialize(holder: holder);
   }
   
-  Future<HelpTicket> storeHelpTicket({@required String subject, @required String message}) async {
-    final ApiResponse response = await _helpProvider.storeHelpTicket(subject: subject, message: message);
-    if (response.isOK) {
-      return HelpTicket.fromJson(response.body);
+  Future<HelpTicket> storeHelpTicket({required String subject, required String message}) async {
+    final Map<String, dynamic> body = {
+      'subject': subject,
+      'message': message
+    };
+
+    final Map<String, dynamic> json = await this.send(request: _helpProvider.storeHelpTicket(body: body));
+    return deserialize(json: json);
+  }
+
+  Future<HelpTicket> storeReply({required String identifier, required String message}) async {
+    final Map<String, dynamic> body = {
+      'ticket_identifier': identifier,
+      'message': message
+    };
+
+    final Map<String, dynamic> json = await this.send(request: _helpProvider.storeReply(body: body));
+    return deserialize(json: json);
+  }
+
+  Future<HelpTicket> updateRepliesAsRead({required String ticketIdentifier}) async {
+    final Map<String, dynamic> body = {'read': true};
+
+    final Map<String, dynamic> json = await this.send(request: _helpProvider.updateReplies(body: body, ticketIdentifier: ticketIdentifier));
+    return deserialize(json: json);
+  }
+
+  Future<bool> deleteHelpTicket({required String identifier}) async {
+    return await this.send(request: _helpProvider.deleteHelpTicket(identifier: identifier))
+      .then((json) => json['deleted']);
+  }
+
+  @override
+  deserialize({PaginateDataHolder? holder, Map<String, dynamic>? json}) {
+    if (holder != null) {
+      return holder.update(
+        data: holder.data.map((helpTicket) => HelpTicket.fromJson(json: helpTicket)).toList()
+      );
     }
-    return HelpTicket.withError(response.error);
-  }
 
-  Future<HelpTicket> storeReply({@required String identifier, @required String message}) async {
-    final ApiResponse response = await _helpProvider.storeReply(identifier: identifier, message: message);
-    if (response.isOK) {
-      return HelpTicket.fromJson(response.body);
-    }
-    return HelpTicket.withError(response.error);
-  }
-
-  Future<HelpTicket> updateRepliesAsRead({@required String ticketIdentifier}) async {
-    final Map<String, bool> body = {'read': true};
-    final ApiResponse response = await _helpProvider.updateReplies(ticketIdentifier: ticketIdentifier, body: body);
-    if (response.isOK) {
-      return HelpTicket.fromJson(response.body);
-    }
-    return HelpTicket.withError(response.error);
-  }
-
-  Future<bool> deleteHelpTicket({@required String identifier}) async {
-    final ApiResponse response = await _helpProvider.deleteHelpTicket(identifier: identifier);
-    if (response.isOK) {
-      return response.body['deleted'];
-    }
-    return response.isOK;
-  }
-
-  PaginateDataHolder _handlePaginatedSuccess({@required PaginatedApiResponse response}) {
-    final rawData = response.body as List;
-    List<HelpTicket> data = rawData.map((rawHelpTicket) => HelpTicket.fromJson(rawHelpTicket)).toList();
-    return PaginateDataHolder(data: data, nextPage: response.nextPage);
-  }
-
-  PaginateDataHolder _handlePaginatedFailure({@required String error}) {
-    return PaginateDataHolder(data: [HelpTicket.withError(error)].toList(), nextPage: null);
+    return HelpTicket.fromJson(json: json!);
   }
 }

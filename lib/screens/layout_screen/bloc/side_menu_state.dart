@@ -1,13 +1,13 @@
 part of 'side_menu_bloc.dart';
 
 @immutable
-class SideMenuState {
+class SideMenuState extends Equatable {
   final bool menuOpened;
   final bool buttonVisible;
 
   SideMenuState({
-    @required this.menuOpened,
-    @required this.buttonVisible
+    required this.menuOpened,
+    required this.buttonVisible
   });
 
   factory SideMenuState.initial() {
@@ -18,24 +18,15 @@ class SideMenuState {
   }
 
   SideMenuState update({
-    bool menuOpened,
-    bool buttonVisible
-  }) {
-    return copyWith(
-      menuOpened: menuOpened,
-      buttonVisible: buttonVisible
-    );
-  }
+    bool? menuOpened,
+    bool? buttonVisible
+  }) => SideMenuState(
+    menuOpened: menuOpened ?? this.menuOpened,
+    buttonVisible: buttonVisible ?? this.buttonVisible
+  );
 
-  SideMenuState copyWith({
-    bool menuOpened,
-    bool buttonVisible
-  }) {
-    return SideMenuState(
-      menuOpened: menuOpened ?? this.menuOpened,
-      buttonVisible: buttonVisible ?? this.buttonVisible
-    );
-  }
+  @override
+  List<Object> get props => [menuOpened, buttonVisible];
 
   @override
   String toString() => 'SideMenuState { menuOpened: $menuOpened, buttonVisible: $buttonVisible }';

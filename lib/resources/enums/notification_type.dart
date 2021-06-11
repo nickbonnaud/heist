@@ -3,5 +3,6 @@ enum NotificationType {
   bill_closed,
   enter,
   exit,
-  fix_bill
+  fix_bill,
+  other
 }

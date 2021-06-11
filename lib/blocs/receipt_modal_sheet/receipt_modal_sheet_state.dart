@@ -4,13 +4,13 @@ part of 'receipt_modal_sheet_bloc.dart';
 class ReceiptModalSheetState {
   final bool visible;
 
-  ReceiptModalSheetState({@required this.visible});
+  ReceiptModalSheetState({required this.visible});
 
   factory ReceiptModalSheetState.initial() {
     return ReceiptModalSheetState(visible: false);
   }
 
-  ReceiptModalSheetState update({@required bool visible}) {
+  ReceiptModalSheetState update({required bool visible}) {
     return ReceiptModalSheetState(visible: visible);
   }
 

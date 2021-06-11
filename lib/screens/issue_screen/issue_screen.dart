@@ -13,21 +13,23 @@ import 'widgets/issue_form.dart';
 
 
 class IssueScreen extends StatelessWidget {
-  final TransactionIssueRepository _issueRepository = TransactionIssueRepository();
+  final TransactionIssueRepository _issueRepository;
   final IssueType _type;
   final TransactionResource _transaction;
 
-  IssueScreen({@required IssueType type, @required TransactionResource transaction})
-    : assert(type != null && transaction != null),
+
+
+  IssueScreen({required TransactionIssueRepository issueRepository, required IssueType type, required TransactionResource transaction})
+    : _issueRepository = issueRepository,
       _type = type,
       _transaction = transaction;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomPadding: false,
+      resizeToAvoidBottomInset: false,
       backgroundColor: Theme.of(context).colorScheme.background,
-      appBar: OverlayAppBar(),
+      appBar: OverlayAppBar(context: context),
       body: _type != IssueType.cancel
         ? BlocProvider<IssueFormBloc>(
             create: (BuildContext context) => IssueFormBloc(

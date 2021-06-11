@@ -7,7 +7,7 @@ abstract class LogoButtonsListEvent extends Equatable {
 class NumberOpenTransactionsChanged extends LogoButtonsListEvent {
   final int numberOpenTransactions;
 
-  const NumberOpenTransactionsChanged({@required this.numberOpenTransactions});
+  const NumberOpenTransactionsChanged({required this.numberOpenTransactions});
 
   @override
   List<Object> get props => [numberOpenTransactions];
@@ -19,7 +19,7 @@ class NumberOpenTransactionsChanged extends LogoButtonsListEvent {
 class NumberActiveLocationsChanged extends LogoButtonsListEvent {
   final int numberActiveLocations;
 
-  const NumberActiveLocationsChanged({@required this.numberActiveLocations});
+  const NumberActiveLocationsChanged({required this.numberActiveLocations});
 
   @override
   List<Object> get props => [numberActiveLocations];
@@ -31,7 +31,7 @@ class NumberActiveLocationsChanged extends LogoButtonsListEvent {
 class NumberNearbyBusinessesChanged extends LogoButtonsListEvent {
   final int numberNearbyBusinesses;
 
-  const NumberNearbyBusinessesChanged({@required this.numberNearbyBusinesses});
+  const NumberNearbyBusinessesChanged({required this.numberNearbyBusinesses});
 
   @override
   List<Object> get props => [numberNearbyBusinesses];

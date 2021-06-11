@@ -10,7 +10,7 @@ abstract class RegisterEvent extends Equatable {
 class EmailChanged extends RegisterEvent {
   final String email;
 
-  const EmailChanged({@required this.email});
+  const EmailChanged({required this.email});
 
   @override
   List<Object> get props => [email];
@@ -23,7 +23,7 @@ class PasswordChanged extends RegisterEvent {
   final String password;
   final String passwordConfirmation;
 
-  const PasswordChanged({@required this.password, @required this.passwordConfirmation});
+  const PasswordChanged({required this.password, required this.passwordConfirmation});
 
   @override
   List<Object> get props => [password, passwordConfirmation];
@@ -36,7 +36,7 @@ class PasswordConfirmationChanged extends RegisterEvent {
   final String passwordConfirmation;
   final String password;
 
-  const PasswordConfirmationChanged({@required this.passwordConfirmation, @required this.password});
+  const PasswordConfirmationChanged({required this.passwordConfirmation, required this.password});
 
   @override
   List<Object> get props => [passwordConfirmation, password];
@@ -50,7 +50,7 @@ class Submitted extends RegisterEvent {
   final String password;
   final String passwordConfirmation;
 
-  Submitted({@required this.email, @required this.password, @required this.passwordConfirmation});
+  Submitted({required this.email, required this.password, required this.passwordConfirmation});
 
   @override
   List<Object> get props => [email, password, passwordConfirmation];

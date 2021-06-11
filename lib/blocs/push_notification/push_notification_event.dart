@@ -5,10 +5,10 @@ abstract class PushNotificationEvent extends Equatable {
 }
 
 class StartPushNotificationMonitoring extends PushNotificationEvent {
-  final Function onMessageReceived;
-  final Function onMessageInteraction;
+  final NotificationReceivedCallback onMessageReceived;
+  final NotificationOpenedCallback onMessageInteraction;
 
-  const StartPushNotificationMonitoring({@required this.onMessageReceived, @required this.onMessageInteraction});
+  const StartPushNotificationMonitoring({required this.onMessageReceived, required this.onMessageInteraction});
   
   @override
   List<Object> get props => [onMessageReceived, onMessageInteraction];

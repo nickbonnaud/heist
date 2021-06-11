@@ -4,10 +4,10 @@ class PageOffsetNotifier with ChangeNotifier {
   double _offset = 0;
   double _page = 0;
 
-  PageOffsetNotifier(PageController pageController) {
+  PageOffsetNotifier({required PageController pageController}) {
     pageController.addListener(() {
       _offset = pageController.offset;
-      _page = pageController.page;
+      _page = pageController.page ?? _page;
       notifyListeners();
     });
   }

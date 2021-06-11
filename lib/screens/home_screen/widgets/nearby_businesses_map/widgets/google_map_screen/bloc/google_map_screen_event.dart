@@ -11,7 +11,7 @@ class Tapped extends GoogleMapScreenEvent {
   final ScreenCoordinate screenCoordinate;
   final Business business;
 
-  const Tapped({@required this.screenCoordinate, @required this.business});
+  const Tapped({required this.screenCoordinate, required this.business});
 
   @override
   List<Object> get props => [screenCoordinate, business];

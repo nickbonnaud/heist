@@ -12,9 +12,8 @@ import '../../permission_buttons/permission_buttons.dart';
 class LocationBody extends StatelessWidget {
   final PermissionButtons _permissionButtons;
   
-  LocationBody({@required PermissionButtons permissionButtons})
-    : assert(permissionButtons != null),
-      _permissionButtons = permissionButtons;
+  LocationBody({required PermissionButtons permissionButtons})
+    : _permissionButtons = permissionButtons;
 
   final String locationTextIos = 
     "Please set Location Services to 'While in Use'.\n\n"
@@ -45,7 +44,7 @@ class LocationBody extends StatelessWidget {
               ),
             ),
             PlatformWidget(
-              ios: (_) => PlatformText(locationTextIos,
+              cupertino: (_, __) => PlatformText(locationTextIos,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.onPrimarySubdued,
@@ -53,7 +52,7 @@ class LocationBody extends StatelessWidget {
                   fontWeight: FontWeight.bold
                 )
               ),
-              android: (_) => PlatformText(locationTextAndroid,
+              material: (_, __) => PlatformText(locationTextAndroid,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.onPrimarySubdued,

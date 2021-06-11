@@ -2,14 +2,13 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:heist/resources/http/api_interceptors.dart';
 
 class Api {
   final Dio _dio = Dio();
   final String baseUrl = 'http://novapay.ai/api/customer';
 
   Api() {
-    _dio.interceptors.add(ApiInterceptors(dio: _dio));
+    // _dio.interceptors.add(ApiInterceptors(dio: _dio));
     (_dio.transformer as DefaultTransformer).jsonDecodeCallback = parseJson;
   }
 

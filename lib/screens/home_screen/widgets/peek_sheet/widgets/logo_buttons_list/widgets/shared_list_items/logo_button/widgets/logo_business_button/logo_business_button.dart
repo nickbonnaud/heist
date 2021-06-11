@@ -12,11 +12,10 @@ class LogoBusinessButton extends StatelessWidget {
   final double _logoBorderRadius;
 
   LogoBusinessButton({
-    @required Business business,
-    @required double logoBorderRadius,
+    required Business business,
+    required double logoBorderRadius,
   })
-    : assert(business != null && logoBorderRadius != null),
-      _business = business,
+    : _business = business,
       _logoBorderRadius = logoBorderRadius;
 
   
@@ -50,11 +49,11 @@ class LogoBusinessButton extends StatelessWidget {
     );
   }
 
-  void _toggleButtonPress({@required BuildContext context}) {
+  void _toggleButtonPress({required BuildContext context}) {
     BlocProvider.of<LogoBusinessButtonBloc>(context).add(TogglePressed());
   }
 
-  void _showBusinessSheet({@required BuildContext context}) {
+  void _showBusinessSheet({required BuildContext context}) {
     Navigator.of(context).push(PageRouteBuilder(
       opaque: false,
       fullscreenDialog: true,

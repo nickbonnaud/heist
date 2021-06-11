@@ -1,7 +1,7 @@
 part of 'help_ticket_form_bloc.dart';
 
 @immutable
-class HelpTicketFormState {
+class HelpTicketFormState extends Equatable {
   final bool isSubjectValid;
   final bool isMessageValid;
   final bool isSubmitting;
@@ -11,11 +11,11 @@ class HelpTicketFormState {
   bool get isFormValid => isSubjectValid && isMessageValid;
 
   HelpTicketFormState({
-    @required this.isSubjectValid,
-    @required this.isMessageValid,
-    @required this.isSubmitting,
-    @required this.isFailure,
-    @required this.isSuccess
+    required this.isSubjectValid,
+    required this.isMessageValid,
+    required this.isSubmitting,
+    required this.isFailure,
+    required this.isSuccess
   });
 
   factory HelpTicketFormState.initial() {
@@ -29,36 +29,21 @@ class HelpTicketFormState {
   }
 
   HelpTicketFormState update({
-    bool isSubjectValid,
-    bool isMessageValid,
-    bool isSubmitting,
-    bool isFailure,
-    bool isSuccess
-  }) {
-    return _copyWith(
-      isSubjectValid: isSubjectValid,
-      isMessageValid: isMessageValid,
-      isSubmitting: isSubmitting,
-      isFailure: isFailure,
-      isSuccess: isSuccess
-    );
-  }
+    bool? isSubjectValid,
+    bool? isMessageValid,
+    bool? isSubmitting,
+    bool? isFailure,
+    bool? isSuccess
+  }) => HelpTicketFormState(
+    isSubjectValid:  isSubjectValid ?? this.isSubjectValid,
+    isMessageValid: isMessageValid ?? this.isMessageValid,
+    isSubmitting: isSubmitting ?? this.isSubmitting,
+    isFailure: isFailure ?? this.isFailure,
+    isSuccess: isSuccess ?? this.isSuccess
+  );
   
-  HelpTicketFormState _copyWith({
-    bool isSubjectValid,
-    bool isMessageValid,
-    bool isSubmitting,
-    bool isFailure,
-    bool isSuccess
-  }) {
-    return HelpTicketFormState(
-      isSubjectValid:  isSubjectValid ?? this.isSubjectValid,
-      isMessageValid: isMessageValid ?? this.isMessageValid,
-      isSubmitting: isSubmitting ?? this.isSubmitting,
-      isFailure: isFailure ?? this.isFailure,
-      isSuccess: isSuccess ?? this.isSuccess
-    );
-  }
+  @override
+  List<Object> get props => [isSubjectValid, isMessageValid, isSubmitting, isSuccess, isFailure];
 
   @override
   String toString() {

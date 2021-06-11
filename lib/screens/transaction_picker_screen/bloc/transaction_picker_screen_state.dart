@@ -4,7 +4,7 @@ abstract class TransactionPickerScreenState extends Equatable {
   const TransactionPickerScreenState();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class Uninitialized extends TransactionPickerScreenState {}
@@ -16,17 +16,22 @@ class TransactionsLoaded extends TransactionPickerScreenState {
   final bool claiming;
   final bool claimSuccess;
   final bool claimFailure;
-  final TransactionResource transaction;
+  final TransactionResource? transaction;
 
   const TransactionsLoaded({
-    @required this.transactions,
+    required this.transactions,
     this.claiming = false,
     this.claimSuccess = false,
     this.claimFailure = false,
     this.transaction
   });
 
-  TransactionsLoaded update({bool claiming, bool claimSuccess, bool claimFailure, TransactionResource transaction}) {
+  TransactionsLoaded update({
+    bool? claiming,
+    bool? claimSuccess,
+    bool? claimFailure,
+    TransactionResource? transaction
+  }) {
     return copyWith(
       claiming: claiming,
       claimSuccess: claimSuccess,
@@ -36,10 +41,10 @@ class TransactionsLoaded extends TransactionPickerScreenState {
   }
   
   TransactionsLoaded copyWith({
-    bool claiming,
-    bool claimSuccess,
-    bool claimFailure,
-    TransactionResource transaction
+    bool? claiming,
+    bool? claimSuccess,
+    bool? claimFailure,
+    TransactionResource? transaction
   }) {
     return TransactionsLoaded(
       transactions: this.transactions,
@@ -51,7 +56,7 @@ class TransactionsLoaded extends TransactionPickerScreenState {
   }
 
   @override
-  List<Object> get props => [transactions, claiming, claimSuccess, claimFailure, transaction];
+  List<Object?> get props => [transactions, claiming, claimSuccess, claimFailure, transaction];
 
   @override
   String toString() => 'TransactionsLoaded { transactions: $transactions, claiming: $claiming, claimSuccess: $claimSuccess, claimFailure: $claimFailure, transaction: $transaction }';

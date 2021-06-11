@@ -10,7 +10,7 @@ abstract class PasswordFormEvent extends Equatable {
 class OldPasswordChanged extends PasswordFormEvent {
   final String oldPassword;
 
-  const OldPasswordChanged({@required this.oldPassword});
+  const OldPasswordChanged({required this.oldPassword});
 
   @override
   List<Object> get props => [oldPassword];
@@ -23,7 +23,7 @@ class PasswordChanged extends PasswordFormEvent {
   final String password;
   final String passwordConfirmation;
 
-  const PasswordChanged({@required this.password, @required this.passwordConfirmation});
+  const PasswordChanged({required this.password, required this.passwordConfirmation});
 
   @override
   List<Object> get props => [password, passwordConfirmation];
@@ -36,7 +36,7 @@ class PasswordConfirmationChanged extends PasswordFormEvent {
   final String passwordConfirmation;
   final String password;
 
-  const PasswordConfirmationChanged({@required this.passwordConfirmation, @required this.password});
+  const PasswordConfirmationChanged({required this.passwordConfirmation, required this.password});
 
   @override
   List<Object> get props => [passwordConfirmation, password];
@@ -48,7 +48,7 @@ class PasswordConfirmationChanged extends PasswordFormEvent {
 class OldPasswordSubmitted extends PasswordFormEvent {
   final String oldPassword;
 
-  const OldPasswordSubmitted({@required this.oldPassword});
+  const OldPasswordSubmitted({required this.oldPassword});
 
   @override
   List<Object> get props => [oldPassword];
@@ -63,7 +63,7 @@ class NewPasswordSubmitted extends PasswordFormEvent {
   final String passwordConfirmation;
   final Customer customer;
 
-  const NewPasswordSubmitted({@required this.oldPassword, @required this.password, @required this.passwordConfirmation, @required this.customer});
+  const NewPasswordSubmitted({required this.oldPassword, required this.password, required this.passwordConfirmation, required this.customer});
 
   @override
   List<Object> get props => [oldPassword, password, passwordConfirmation, customer];

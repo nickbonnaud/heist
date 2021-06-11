@@ -1,42 +1,34 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 
 import 'hours.dart';
 
+@immutable
 class Profile extends Equatable {
   final String name;
   final String website;
   final String phone;
   final String description;
   final Hours hours;
-  final String error;
   
-  Profile({this.name, this.website, this.phone, this.description, this.hours, this.error});
+  Profile({
+    required this.name,
+    required this.website,
+    required this.phone,
+    required this.description,
+    required this.hours,
+  });
 
-  static Profile fromJson(Map<String, dynamic> json) {
-    return Profile(
-      name: json['name'],
-      website: json['website'],
-      phone: json['phone'],
-      description: json['description'],
-      hours: Hours.fromJson(json['hours']),
-      error: ''
-    );
-  }
-
-  static Profile withError(String error) {
-    return Profile(
-      name: "",
-      website: "",
-      phone: "",
-      description: "",
-      hours: null,
-      error: error
-    );
-  }
+  Profile.fromJson({required Map<String, dynamic> json})
+    : name = json['name'],
+      website = json['website'],
+      phone = json['phone'],
+      description = json['description'],
+      hours = Hours.fromJson(json: json['hours']);
   
   @override
-  List<Object> get props => [name, website, description, hours, error];
+  List<Object> get props => [name, website, description, hours];
 
   @override
-  String toString() => 'Profile { name: $name, website: $website, phone: $phone, description: $description, hours: $hours, error: $error }';
+  String toString() => 'Profile { name: $name, website: $website, phone: $phone, description: $description, hours: $hours }';
 }

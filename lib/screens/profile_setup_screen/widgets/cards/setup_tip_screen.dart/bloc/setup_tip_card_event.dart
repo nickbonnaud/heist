@@ -10,7 +10,7 @@ abstract class SetupTipCardEvent extends Equatable {
 class TipRateChanged extends SetupTipCardEvent {
   final int tipRate;
   
-  const TipRateChanged({@required this.tipRate});
+  const TipRateChanged({required this.tipRate});
 
   @override
   List<Object> get props => [tipRate];
@@ -22,7 +22,7 @@ class TipRateChanged extends SetupTipCardEvent {
 class QuickTipRateChanged extends SetupTipCardEvent {
   final int quickTipRate;
   
-  const QuickTipRateChanged({@required this.quickTipRate});
+  const QuickTipRateChanged({required this.quickTipRate});
 
   @override
   List<Object> get props => [quickTipRate];
@@ -32,17 +32,16 @@ class QuickTipRateChanged extends SetupTipCardEvent {
 }
 
 class Submitted extends SetupTipCardEvent {
-  final Customer customer;
   final int tipRate;
   final int quickTipRate;
 
-  Submitted({@required this.customer, @required this.tipRate, @required this.quickTipRate});
+  Submitted({required this.tipRate, required this.quickTipRate});
 
   @override
-  List<Object> get props => [customer, tipRate, quickTipRate];
+  List<Object> get props => [tipRate, quickTipRate];
 
   @override
-  String toString() => 'Submitted { customer: $customer, tipRate: $tipRate, quickTipRate: $quickTipRate }';
+  String toString() => 'Submitted { tipRate: $tipRate, quickTipRate: $quickTipRate }';
 }
 
 class Reset extends SetupTipCardEvent {}

@@ -7,7 +7,7 @@ abstract class ReceiptScreenEvent extends Equatable {
 class TransactionChanged extends ReceiptScreenEvent {
   final TransactionResource transactionResource;
 
-  const TransactionChanged({@required this.transactionResource});
+  const TransactionChanged({required this.transactionResource});
 
   @override
   List<Object> get props => [transactionResource];

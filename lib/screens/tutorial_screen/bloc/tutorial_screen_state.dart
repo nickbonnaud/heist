@@ -6,11 +6,11 @@ class TutorialScreenState {
   final int currentIndex;
 
   TutorialScreenState({
-    @required this.tutorialCards,
-    @required this.currentIndex,
+    required this.tutorialCards,
+    required this.currentIndex,
   });
 
-  factory TutorialScreenState.initial({@required List<Tutorial> tutorialCards}) {
+  factory TutorialScreenState.initial({required List<Tutorial> tutorialCards}) {
     return TutorialScreenState(
       tutorialCards: tutorialCards,
       currentIndex: tutorialCards.length - 1,

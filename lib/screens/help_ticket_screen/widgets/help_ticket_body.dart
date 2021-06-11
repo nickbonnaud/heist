@@ -14,9 +14,8 @@ class HelpTicketBody extends StatefulWidget {
   final HelpTicket _helpTicket;
   final HelpRepository _helpRepository;
 
-  HelpTicketBody({@required HelpTicketsScreenBloc helpTicketsScreenBloc, @required HelpTicket helpTicket, @required HelpRepository helpRepository})
-    : assert(helpTicketsScreenBloc != null && helpTicket != null && helpRepository != null),
-      _helpTicketsScreenBloc = helpTicketsScreenBloc,
+  HelpTicketBody({required HelpTicketsScreenBloc helpTicketsScreenBloc, required HelpTicket helpTicket, required HelpRepository helpRepository})
+    : _helpTicketsScreenBloc = helpTicketsScreenBloc,
       _helpTicket = helpTicket,
       _helpRepository = helpRepository;
 
@@ -25,7 +24,7 @@ class HelpTicketBody extends StatefulWidget {
 }
 
 class _HelpTicketBodyState extends State<HelpTicketBody> {
-  ScrollController _scrollController;
+  late ScrollController _scrollController;
 
   @override
   void initState() {

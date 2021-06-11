@@ -22,7 +22,7 @@ class FetchAll extends HelpTicketsScreenEvent {
 class FetchResolved extends HelpTicketsScreenEvent {
   final bool reset;
   
-  const FetchResolved({@required this.reset});
+  const FetchResolved({required this.reset});
 
   @override
   List<Object> get props => [reset];
@@ -34,7 +34,7 @@ class FetchResolved extends HelpTicketsScreenEvent {
 class FetchOpen extends HelpTicketsScreenEvent {
   final bool reset;
 
-  const FetchOpen({@required this.reset});
+  const FetchOpen({required this.reset});
 
   @override
   List<Object> get props => [reset];
@@ -48,7 +48,7 @@ class FetchMore extends HelpTicketsScreenEvent {}
 class HelpTicketUpdated extends HelpTicketsScreenEvent {
   final HelpTicket helpTicket;
 
-  const HelpTicketUpdated({@required this.helpTicket});
+  const HelpTicketUpdated({required this.helpTicket});
   
   @override
   List<Object> get props => [helpTicket];
@@ -60,7 +60,7 @@ class HelpTicketUpdated extends HelpTicketsScreenEvent {
 class HelpTicketAdded extends HelpTicketsScreenEvent {
   final HelpTicket helpTicket;
 
-  const HelpTicketAdded({@required this.helpTicket});
+  const HelpTicketAdded({required this.helpTicket});
 
   @override
   List<Object> get props => [helpTicket];
@@ -72,7 +72,7 @@ class HelpTicketAdded extends HelpTicketsScreenEvent {
 class HelpTicketDeleted extends HelpTicketsScreenEvent {
   final String helpTicketIdentifier;
 
-  const HelpTicketDeleted({@required this.helpTicketIdentifier});
+  const HelpTicketDeleted({required this.helpTicketIdentifier});
 
   @override
   List<Object> get props => [helpTicketIdentifier];

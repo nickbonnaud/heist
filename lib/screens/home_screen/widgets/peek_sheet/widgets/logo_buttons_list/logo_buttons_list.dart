@@ -15,9 +15,8 @@ class LogoButtonsList extends StatelessWidget {
 
   final SharedSizes sharedSizes = SharedSizes();
 
-  LogoButtonsList({@required AnimationController controller, @required double topMargin})
-    : assert(controller != null && topMargin != null),
-      _controller = controller,
+  LogoButtonsList({required AnimationController controller, required double topMargin})
+    : _controller = controller,
       _topMargin = topMargin;
 
   @override
@@ -47,17 +46,17 @@ class LogoButtonsList extends StatelessWidget {
     );
   }
 
-  double _getContainerHeight({@required LogoButtonsListState state}) {
+  double _getContainerHeight({required LogoButtonsListState state}) {
     int logosLength = state.numberOpenTransactions + state.numberActiveLocations + state.numberNearbyLocations;
     return sharedSizes.endMarginTop + (logosLength  * (sharedSizes.verticalSpacing + sharedSizes.endSize)) + (_topMargin * 2.5);
   }
 
-  double _getContainerWidth({@required LogoButtonsListState state}) {
+  double _getContainerWidth({required LogoButtonsListState state}) {
     int logosLength = state.numberOpenTransactions + state.numberActiveLocations + state.numberNearbyLocations;
     return logosLength  * ((sharedSizes.horizontalSpacing + sharedSizes.startSize));
   }
 
-  double lerp({@required double min, @required double max}) {
-    return lerpDouble(min, max, _controller.value);
+  double lerp({required double min, required double max}) {
+    return lerpDouble(min, max, _controller.value)!;
   }
 }

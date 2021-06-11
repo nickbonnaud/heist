@@ -4,7 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:heist/blocs/authentication/authentication_bloc.dart';
 import 'package:heist/models/customer/customer.dart';
-import 'package:heist/repositories/customer_repository.dart';
+import 'package:heist/repositories/authentication_repository.dart';
 import 'package:heist/resources/helpers/validators.dart';
 import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
@@ -13,12 +13,11 @@ part 'register_event.dart';
 part 'register_state.dart';
 
 class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
-  final CustomerRepository _customerRepository;
+  final AuthenticationRepository _authenticationRepository;
   final AuthenticationBloc _authenticationBloc;
 
-  RegisterBloc({@required CustomerRepository customerRepository, @required AuthenticationBloc authenticationBloc})
-    : assert(customerRepository != null && authenticationBloc != null),
-      _customerRepository = customerRepository,
+  RegisterBloc({required AuthenticationRepository authenticationRepository, required AuthenticationBloc authenticationBloc})
+    : _authenticationRepository = authenticationRepository,
       _authenticationBloc = authenticationBloc,
       super(RegisterState.empty());
 
@@ -44,24 +43,24 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   }
 
   Stream<RegisterState> _mapEmailChangedToState(String email) async* {
-    yield state.update(isEmailValid: Validators.isValidEmail(email));
+    yield state.update(isEmailValid: Validators.isValidEmail(email: email));
   }
 
   Stream<RegisterState> _mapPasswordChangedToState(String password, String passwordConfirmation) async* {
     final bool isPasswordConfirmationValid = passwordConfirmation.isNotEmpty
-      ? Validators.isPasswordConfirmationValid(password, passwordConfirmation)
+      ? Validators.isPasswordConfirmationValid(password: password, passwordConfirmation: passwordConfirmation)
       : true;
-    yield state.update(isPasswordValid: Validators.isValidPassword(password), isPasswordConfirmationValid: isPasswordConfirmationValid);
+    yield state.update(isPasswordValid: Validators.isValidPassword(password: password), isPasswordConfirmationValid: isPasswordConfirmationValid);
   }
 
   Stream<RegisterState> _mapPasswordConfirmationChangedToState(String password, String passwordConfirmation) async* {
-    yield state.update(isPasswordConfirmationValid: Validators.isPasswordConfirmationValid(password, passwordConfirmation));
+    yield state.update(isPasswordConfirmationValid: Validators.isPasswordConfirmationValid(password: password, passwordConfirmation: passwordConfirmation));
   }
 
   Stream<RegisterState> _mapSubmittedToState(String email, String password, String passwordConfirmation) async* {
     yield RegisterState.loading();
     try {
-      Customer customer = await _customerRepository.register(email: email, password: password, passwordConfirmation: passwordConfirmation);
+      Customer customer = await _authenticationRepository.register(email: email, password: password, passwordConfirmation: passwordConfirmation);
       _authenticationBloc.add(LoggedIn(customer: customer));
       yield RegisterState.success();
     } catch (_) {

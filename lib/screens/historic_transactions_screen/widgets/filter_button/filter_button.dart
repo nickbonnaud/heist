@@ -12,7 +12,7 @@ import 'package:heist/global_widgets/material_date_picker/material_date_picker.d
 import 'package:heist/global_widgets/search_business_name_modal.dart';
 import 'package:heist/global_widgets/search_identifier_modal.dart';
 import 'package:heist/models/business/business.dart';
-import 'package:heist/models/date_range.dart';
+import 'package:heist/repositories/business_repository.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/screens/historic_transactions_screen/bloc/historic_transactions_bloc.dart';
 
@@ -26,11 +26,16 @@ enum Option {
 }
 
 class FilterButton extends StatefulWidget {
+  final BusinessRepository _businessRepository;
   final Color _startColor;
   final Color _endColor;
 
-  FilterButton({@required Color startColor, @required Color endColor})
-    : assert(startColor != null && endColor != null),
+  FilterButton({
+    required Color startColor,
+    required Color endColor,
+    required BusinessRepository businessRepository
+  })
+    : _businessRepository = businessRepository,
       _startColor = startColor,
       _endColor = endColor;
 
@@ -40,8 +45,8 @@ class FilterButton extends StatefulWidget {
 class _FilterButtonState extends State<FilterButton> with SingleTickerProviderStateMixin {
   final double _expandedSize = SizeConfig.getWidth(60);
   final double _hiddenSize = SizeConfig.getWidth(1);
-  AnimationController _controller;
-  Animation<Color> _colorAnimation;
+  late AnimationController _controller;
+  late Animation<Color?> _colorAnimation;
 
   
   @override
@@ -68,7 +73,7 @@ class _FilterButtonState extends State<FilterButton> with SingleTickerProviderSt
         height: _expandedSize,
         child: AnimatedBuilder(
           animation: _controller,
-          builder: (BuildContext context, Widget child) {
+          builder: (BuildContext context, Widget? child) {
             return Stack(
               alignment: Alignment.center,
               children: <Widget>[
@@ -114,7 +119,7 @@ class _FilterButtonState extends State<FilterButton> with SingleTickerProviderSt
     );
   }
   
-  Widget _buildOption({@required Option option, @required Widget icon, @required double angle}) {
+  Widget _buildOption({required Option option, required Widget icon, required double angle}) {
     if (_controller.isDismissed) {
       return Container();
     }
@@ -145,7 +150,7 @@ class _FilterButtonState extends State<FilterButton> with SingleTickerProviderSt
     );
   }
 
-  double _setAngle({@required int index}) {
+  double _setAngle({required int index}) {
     final double topPoint = 2 * math.pi * 1.2;
     final double bottomPoint =  2 * math.pi * .68;
 
@@ -153,7 +158,7 @@ class _FilterButtonState extends State<FilterButton> with SingleTickerProviderSt
     return topPoint - (length * index);
   }
   
-  void _onSelection({@required Option option}) {
+  void _onSelection({required Option option}) {
     BlocProvider.of<FilterButtonBloc>(context).add(Toggle());
     switch (option) {
       case Option.date:
@@ -172,7 +177,7 @@ class _FilterButtonState extends State<FilterButton> with SingleTickerProviderSt
   }
 
   void _searchByDate(BuildContext context) async {
-    DateRange range;
+    DateTimeRange? range;
     if (Platform.isIOS) {
       range = await showPlatformModalSheet(
         context: context,
@@ -190,15 +195,17 @@ class _FilterButtonState extends State<FilterButton> with SingleTickerProviderSt
         )
       );
     }
-    if (range != null && range.startDate != null && range.endDate != null) {
+    if (range != null) {
       BlocProvider.of<HistoricTransactionsBloc>(context).add(FetchTransactionsByDateRange(dateRange: range, reset: true));
     }
   }
 
   void _searchByName(BuildContext context) async {
-    Business business = await showPlatformModalSheet(
+    Business? business = await showPlatformModalSheet(
       context: context,
-      builder: (_) => SearchBusinessNameModal()
+      builder: (_) => SearchBusinessNameModal(
+        businessRepository: widget._businessRepository,
+      )
     );
     if (business != null) {
       BlocProvider.of<HistoricTransactionsBloc>(context).add(FetchTransactionsByBusiness(identifier: business.identifier, reset: true));

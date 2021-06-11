@@ -10,7 +10,7 @@ abstract class BeaconEvent extends Equatable {
 class StartBeaconMonitoring extends BeaconEvent {
   final List<Business> businesses;
 
-  StartBeaconMonitoring({@required this.businesses});
+  StartBeaconMonitoring({required this.businesses});
 
   @override
   List<Object> get props => [businesses];
@@ -22,7 +22,7 @@ class StartBeaconMonitoring extends BeaconEvent {
 class Enter extends BeaconEvent {
   final Region region;
 
-  Enter({@required this.region});
+  Enter({required this.region});
 
   @override
   List<Object> get props => [region];
@@ -34,7 +34,7 @@ class Enter extends BeaconEvent {
 class Exit extends BeaconEvent {
   final Region region;
 
-  Exit({@required this.region});
+  Exit({required this.region});
 
   @override
   List<Object> get props => [region];

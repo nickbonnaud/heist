@@ -4,7 +4,7 @@ abstract class RefundsScreenState extends Equatable {
   const RefundsScreenState();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class Uninitialized extends RefundsScreenState {}
@@ -13,23 +13,33 @@ class Loading extends RefundsScreenState {}
 
 class RefundsLoaded extends RefundsScreenState {
   final List<RefundResource> refunds;
-  final int nextPage;
+  final String? nextUrl;
+  final bool paginating;
   final bool hasReachedEnd;
   final Option currentQuery;
   final dynamic queryParams;
 
-  const RefundsLoaded({@required this.refunds, @required this.nextPage, @required this.hasReachedEnd, @required this.currentQuery, @required this.queryParams});
+  const RefundsLoaded({
+    required this.refunds,
+    this.nextUrl,
+    required this.paginating,
+    required this.hasReachedEnd,
+    required this.currentQuery,
+    required this.queryParams
+  });
 
-  RefundsLoaded copyWith({
-    List<RefundResource> refunds,
-    int nextPage,
-    bool hasReachedEnd,
-    Option currentQuery,
+  RefundsLoaded update({
+    List<RefundResource>? refunds,
+    String? nextUrl,
+    bool? paginating,
+    bool? hasReachedEnd,
+    Option? currentQuery,
     dynamic queryParams
   }) {
     return RefundsLoaded(
       refunds: refunds ?? this.refunds,
-      nextPage: nextPage ?? this.nextPage,
+      nextUrl: nextUrl ?? this.nextUrl,
+      paginating: paginating ?? this.paginating,
       hasReachedEnd: hasReachedEnd ?? this.hasReachedEnd,
       currentQuery: currentQuery ?? this.currentQuery,
       queryParams: queryParams ?? this.queryParams
@@ -37,10 +47,10 @@ class RefundsLoaded extends RefundsScreenState {
   }
   
   @override
-  List<Object> get props => [refunds, nextPage, hasReachedEnd, currentQuery, queryParams];
+  List<Object?> get props => [refunds, nextUrl, paginating, hasReachedEnd, currentQuery, queryParams];
 
   @override
-  String toString() => 'RefundsLoaded { refunds: $refunds, nextPage: $nextPage, hasReachedEnd: $hasReachedEnd, currentQuery: $currentQuery, queryParams: $queryParams }';
+  String toString() => 'RefundsLoaded { refunds: $refunds, nextUrl: $nextUrl, paginating: $paginating, hasReachedEnd: $hasReachedEnd, currentQuery: $currentQuery, queryParams: $queryParams }';
 }
 
 class FetchFailure extends RefundsScreenState {}

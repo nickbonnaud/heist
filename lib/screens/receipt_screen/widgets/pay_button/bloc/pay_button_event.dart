@@ -10,7 +10,7 @@ abstract class PayButtonEvent extends Equatable {
 class TransactionStatusChanged extends PayButtonEvent {
   final TransactionResource transactionResource;
 
-  const TransactionStatusChanged({@required this.transactionResource});
+  const TransactionStatusChanged({required this.transactionResource});
 
   @override
   List<Object> get props => [transactionResource];
@@ -22,7 +22,7 @@ class TransactionStatusChanged extends PayButtonEvent {
 class Submitted extends PayButtonEvent {
   final String transactionId;
 
-  const Submitted({@required this.transactionId});
+  const Submitted({required this.transactionId});
 
   @override
   List<Object> get props => [transactionId];
@@ -31,4 +31,14 @@ class Submitted extends PayButtonEvent {
   String toString() => 'Submitted { transactionId: $transactionId }';
 }
 
-class Reset extends PayButtonEvent {}
+class Reset extends PayButtonEvent {
+  final TransactionResource transactionResource;
+
+  const Reset({required this.transactionResource});
+
+  @override
+  List<Object> get props => [transactionResource];
+
+  @override
+  String toString() => 'Reset { transactionResource: $transactionResource }';
+}

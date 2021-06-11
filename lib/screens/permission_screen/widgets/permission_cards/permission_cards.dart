@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:heist/blocs/authentication/authentication_bloc.dart';
+import 'package:heist/blocs/customer/customer_bloc.dart';
+import 'package:heist/blocs/geo_location/geo_location_bloc.dart';
 import 'package:heist/blocs/permissions/permissions_bloc.dart';
+import 'package:heist/repositories/initial_login_repository.dart';
 import 'package:heist/screens/permission_screen/widgets/permission_buttons/permission_buttons.dart';
 
 import 'widgets/beacon_body.dart';
@@ -10,7 +14,22 @@ import 'widgets/notification_body.dart';
 
 
 class PermissionCards extends StatelessWidget {
+  final PermissionsBloc _permissionsBloc;
+  final GeoLocationBloc _geoLocationBloc;
+  final InitialLoginRepository _initialLoginRepository;
+  final String _customerIdentifier;
 
+  PermissionCards({
+    required PermissionsBloc permissionsBloc,
+    required GeoLocationBloc geoLocationBloc,
+    required InitialLoginRepository initialLoginRepository,
+    required String customerIdentifier
+  })
+    : _permissionsBloc = permissionsBloc,
+      _geoLocationBloc = geoLocationBloc,
+      _initialLoginRepository = initialLoginRepository,
+      _customerIdentifier = customerIdentifier;
+  
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<PermissionsBloc, PermissionsState>(
@@ -24,7 +43,7 @@ class PermissionCards extends StatelessWidget {
     );
   }
 
-  List<Widget> _createCards({@required BuildContext context}) {
+  List<Widget> _createCards({required BuildContext context}) {
     List<Widget> cards = [];
     PermissionType.values.forEach((type) {
       cards.add(_createCard(context: context, permissionType: type));
@@ -32,8 +51,8 @@ class PermissionCards extends StatelessWidget {
     return cards;
   }
 
-  Widget _createCard({@required BuildContext context, @required PermissionType permissionType}) {
-    List<PermissionType> currentInvalidPermissions = BlocProvider.of<PermissionsBloc>(context).invalidPermissions;
+  Widget _createCard({required BuildContext context, required PermissionType permissionType}) {
+    List<PermissionType> currentInvalidPermissions = _permissionsBloc.invalidPermissions;
     return AnimatedPositioned(
       duration: Duration(milliseconds: 500),
       top: currentInvalidPermissions.contains(permissionType) 
@@ -61,20 +80,44 @@ class PermissionCards extends StatelessWidget {
     );
   }
 
-  Widget _createCardBody({@required PermissionType permissionType}) {
+  Widget _createCardBody({required PermissionType permissionType}) {
     Widget body;
     switch (permissionType) {
       case PermissionType.bluetooth:
-        body = BluetoothBody(permissionButtons: PermissionButtons(permission: PermissionType.bluetooth));
+        body = BluetoothBody(permissionButtons: PermissionButtons(
+          permission: PermissionType.bluetooth,
+          customerIdentifier: _customerIdentifier,
+          permissionsBloc: _permissionsBloc,
+          geoLocationBloc: _geoLocationBloc,
+          initialLoginRepository: _initialLoginRepository,
+        ));
         break;
       case PermissionType.location:
-        body = LocationBody(permissionButtons: PermissionButtons(permission: PermissionType.location));
+        body = LocationBody(permissionButtons: PermissionButtons(
+          permission: PermissionType.location,
+          customerIdentifier: _customerIdentifier,
+          permissionsBloc: _permissionsBloc,
+          geoLocationBloc: _geoLocationBloc,
+          initialLoginRepository: _initialLoginRepository,
+        ));
         break;
       case PermissionType.notification:
-        body = NotificationBody(permissionButtons: PermissionButtons(permission: PermissionType.notification));
+        body = NotificationBody(permissionButtons: PermissionButtons(
+          permission: PermissionType.notification,
+          customerIdentifier: _customerIdentifier,
+          permissionsBloc: _permissionsBloc,
+          geoLocationBloc: _geoLocationBloc,
+          initialLoginRepository: _initialLoginRepository,
+        ));
         break;
       case PermissionType.beacon:
-        body = BeaconBody(permissionButtons: PermissionButtons(permission: PermissionType.beacon));
+        body = BeaconBody(
+          permissionButtons: PermissionButtons(permission: PermissionType.beacon,
+          customerIdentifier: _customerIdentifier,
+          permissionsBloc: _permissionsBloc,
+          geoLocationBloc: _geoLocationBloc,
+          initialLoginRepository: _initialLoginRepository,
+        ));
         break;
     }
     return Padding(padding: EdgeInsets.only(bottom: 20), child: body);

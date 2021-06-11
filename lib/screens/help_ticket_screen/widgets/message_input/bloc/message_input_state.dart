@@ -1,17 +1,17 @@
 part of 'message_input_bloc.dart';
 
 @immutable
-class MessageInputState {
+class MessageInputState extends Equatable {
   final bool isInputValid;
   final bool isSubmitting;
   final bool isFailure;
   final bool isSuccess;
 
   MessageInputState({
-    @required this.isInputValid,
-    @required this.isSubmitting,
-    @required this.isFailure,
-    @required this.isSuccess
+    required this.isInputValid,
+    required this.isSubmitting,
+    required this.isFailure,
+    required this.isSuccess
   });
 
   factory MessageInputState.initial() {
@@ -24,32 +24,19 @@ class MessageInputState {
   }
 
   MessageInputState update({
-    bool isInputValid,
-    bool isSubmitting,
-    bool isFailure,
-    bool isSuccess
-  }) {
-    return _copyWith(
-      isInputValid: isInputValid,
-      isSubmitting: isSubmitting,
-      isFailure: isFailure,
-      isSuccess: isSuccess
-    );
-  }
+    bool? isInputValid,
+    bool? isSubmitting,
+    bool? isFailure,
+    bool? isSuccess
+  }) => MessageInputState(
+    isInputValid: isInputValid ?? this.isInputValid,
+    isSubmitting: isSubmitting ?? this.isSubmitting,
+    isFailure: isFailure ?? this.isFailure,
+    isSuccess: isSuccess ?? this.isSuccess
+  );
   
-  MessageInputState _copyWith({
-    bool isInputValid,
-    bool isSubmitting,
-    bool isFailure,
-    bool isSuccess
-  }) {
-    return MessageInputState(
-      isInputValid: isInputValid ?? this.isInputValid,
-      isSubmitting: isSubmitting ?? this.isSubmitting,
-      isFailure: isFailure ?? this.isFailure,
-      isSuccess: isSuccess ?? this.isSuccess
-    );
-  }
+  @override
+  List<Object?> get props => [isInputValid, isSubmitting, isFailure, isSuccess];
 
   @override
   String toString() => 'MessageInputState { isInputValid: $isInputValid, isSubmitting: $isSubmitting, isFailure: $isFailure, isSuccess: $isSuccess }';

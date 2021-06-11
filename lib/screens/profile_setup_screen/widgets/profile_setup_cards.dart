@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:heist/blocs/customer/customer_bloc.dart';
+import 'package:heist/repositories/account_repository.dart';
+import 'package:heist/repositories/photo_picker_repository.dart';
+import 'package:heist/repositories/photo_repository.dart';
+import 'package:heist/repositories/profile_repository.dart';
 import 'package:heist/screens/profile_setup_screen/bloc/profile_setup_screen_bloc.dart';
 
 import 'cards/profile_name_card/profile_name_card.dart';
@@ -8,6 +13,24 @@ import 'cards/setup_payment_account_card.dart';
 import 'cards/setup_tip_screen.dart/setup_tip_card.dart';
 
 class ProfileSetupCards extends StatelessWidget {
+  final CustomerBloc _customerBloc;
+  final ProfileRepository _profileRepository;
+  final PhotoRepository _photoRepository;
+  final PhotoPickerRepository _photoPickerRepository;
+  final AccountRepository _accountRepository;
+
+  ProfileSetupCards({
+    required CustomerBloc customerBloc,
+    required ProfileRepository profileRepository,
+    required PhotoRepository photoRepository,
+    required PhotoPickerRepository photoPickerRepository,
+    required AccountRepository accountRepository
+  })
+    : _customerBloc = customerBloc,
+      _profileRepository = profileRepository,
+      _photoRepository = photoRepository,
+      _photoPickerRepository = photoPickerRepository,
+      _accountRepository = accountRepository;
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +48,7 @@ class ProfileSetupCards extends StatelessWidget {
     );
   }
 
-  List<Widget> _createCards({@required BuildContext context}) {
+  List<Widget> _createCards({required BuildContext context}) {
     List<Widget> cards = [];
     Section.values.forEach((section) { 
       cards.add(_createCard(context: context, section: section));
@@ -33,7 +56,7 @@ class ProfileSetupCards extends StatelessWidget {
     return cards;
   }
 
-  Widget _createCard({@required BuildContext context, @required Section section}) {
+  Widget _createCard({required BuildContext context, required Section section}) {
     List<Section> currentIncompleteSections = BlocProvider.of<ProfileSetupScreenBloc>(context).incompleteSections;
     return AnimatedPositioned(
       duration: Duration(milliseconds: 500),
@@ -63,20 +86,33 @@ class ProfileSetupCards extends StatelessWidget {
     );
   }
 
-  Widget _setBody({@required Section section}) {
+  Widget _setBody({required Section section}) {
     Widget screen;
     switch (section) {
       case Section.name:
-        screen = ProfileNameCard();
+        screen = ProfileNameCard(
+          customerBloc: _customerBloc,
+          profileRepository: _profileRepository,
+        );
         break;
       case Section.photo:
-        screen = ProfilePhotoCard();
+        screen = ProfilePhotoCard(
+          profile: _customerBloc.state.customer!.profile,
+          photoRepository: _photoRepository,
+          photoPickerRepository: _photoPickerRepository,
+          customerBloc: _customerBloc,
+        );
         break;
       case Section.paymentAccount:
-        screen = SetupPaymentAccountCard();
+        screen = SetupPaymentAccountCard(
+          customerBloc: _customerBloc,
+        );
         break;
       case Section.tip:
-        screen = SetupTipCard();
+        screen = SetupTipCard(
+          customerBloc: _customerBloc,
+          accountRepository: _accountRepository,
+        );
         break;
       default: screen = Container();
     }

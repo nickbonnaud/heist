@@ -4,17 +4,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heist/models/customer/customer.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
+import 'package:heist/resources/helpers/vibrate.dart';
 import 'package:heist/screens/password_screen/bloc/password_form_bloc.dart';
 import 'package:heist/themes/global_colors.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
-import 'package:vibrate/vibrate.dart';
 
 class PasswordForm extends StatefulWidget {
   final Customer _customer;
 
-  PasswordForm({@required Customer customer})
-    : assert(customer != null),
-      _customer = customer;
+  PasswordForm({required Customer customer})
+    : _customer = customer;
 
   @override
   State<PasswordForm> createState() => _PasswordFormState();
@@ -29,7 +28,7 @@ class _PasswordFormState extends State<PasswordForm> {
   final FocusNode _passwordConfirmationFocus = FocusNode();
 
 
-  PasswordFormBloc _passwordFormBloc;
+  late PasswordFormBloc _passwordFormBloc;
 
   @override
   Widget build(BuildContext context) {
@@ -240,35 +239,34 @@ class _PasswordFormState extends State<PasswordForm> {
   }
 
   void _showSnackbar(BuildContext context, String message, PasswordFormState state) async  {
-    bool canVibrate = await Vibrate.canVibrate;
     bool isSuccess = state.isSuccess || state.isSuccessOldPassword;
-    if (canVibrate) {
-      Vibrate.feedback(isSuccess ? FeedbackType.success : FeedbackType.error);
-    }
+    isSuccess ? Vibrate.success() : Vibrate.error();
 
-    Scaffold.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(
-        SnackBar(
-          content: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Expanded(
-                child: BoldText3(text: message, context: context, color: Theme.of(context).colorScheme.onSecondary)
-              ),
-            ],
+    final SnackBar snackBar = SnackBar(
+      content: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Expanded(
+            child: BoldText3(text: message, context: context, color: Theme.of(context).colorScheme.onSecondary)
           ),
-          backgroundColor: isSuccess 
-            ? Theme.of(context).colorScheme.success
-            : Theme.of(context).colorScheme.error,
-        )
-      ).closed.then((_) => {
+        ],
+      ),
+      backgroundColor: isSuccess 
+        ? Theme.of(context).colorScheme.success
+        : Theme.of(context).colorScheme.error,
+    );
+
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(snackBar)
+      .closed.then((_) => {
         if (state.isSuccess) {
           Navigator.of(context).pop()
         } else {
           BlocProvider.of<PasswordFormBloc>(context).add(Reset())
         }
-      });
+      }
+    );
   }
 
   Widget _buttonChild(PasswordFormState state) {
@@ -285,7 +283,7 @@ class _PasswordFormState extends State<PasswordForm> {
       keyboardActionsPlatform: KeyboardActionsPlatform.ALL,
       actions: [
         if (!state.isOldPasswordVerified) 
-          KeyboardAction(
+          KeyboardActionsItem(
             displayArrows: false,
             focusNode: _oldPasswordFocus,
             toolbarButtons: [
@@ -300,7 +298,7 @@ class _PasswordFormState extends State<PasswordForm> {
               }
             ]
           ),
-        KeyboardAction(
+        KeyboardActionsItem(
           focusNode: _passwordFocus,
           toolbarButtons: [
             (node) {
@@ -314,7 +312,7 @@ class _PasswordFormState extends State<PasswordForm> {
             }
           ]
         ),
-        KeyboardAction(
+        KeyboardActionsItem(
           focusNode: _passwordConfirmationFocus,
           toolbarButtons: [
             (node) {

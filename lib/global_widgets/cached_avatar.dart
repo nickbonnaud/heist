@@ -8,9 +8,8 @@ class CachedAvatar extends StatelessWidget {
   final int _radius;
   final bool _showLoading;
 
-  CachedAvatar({@required String url, @required int radius, bool showLoading = false})
-    : assert(url != null && radius != null),
-      _url = url,
+  CachedAvatar({required String url, required int radius, bool showLoading = false})
+    : _url = url,
       _radius = radius,
       _showLoading = showLoading;
 
@@ -25,7 +24,7 @@ class CachedAvatar extends StatelessWidget {
       placeholder: (_,__) => Image.memory(kTransparentImage),
       progressIndicatorBuilder: (_, __, ___) => _showLoading
         ? CircularProgressIndicator()
-        : null,
+        : Container(),
     );
   }
 }

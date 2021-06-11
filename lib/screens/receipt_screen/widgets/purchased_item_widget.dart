@@ -7,9 +7,8 @@ import 'package:heist/themes/global_colors.dart';
 class PurchasedItemWidget extends StatelessWidget {
   final PurchasedItem _purchasedItem;
 
-  const PurchasedItemWidget({@required PurchasedItem purchasedItem})
-    : assert(purchasedItem != null),
-      _purchasedItem = purchasedItem;
+  const PurchasedItemWidget({required PurchasedItem purchasedItem})
+    : _purchasedItem = purchasedItem;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +23,7 @@ class PurchasedItemWidget extends StatelessWidget {
       ),
       subtitle: _purchasedItem.subName != null
         ? BoldText5(
-          text: _purchasedItem.subName, 
+          text: _purchasedItem.subName!, 
           context: context, 
           color: Theme.of(context).colorScheme.onPrimarySubdued
         )

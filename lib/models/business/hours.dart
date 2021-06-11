@@ -1,5 +1,7 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 
+@immutable
 class Hours extends Equatable {
   final String monday;
   final String tuesday;
@@ -10,26 +12,23 @@ class Hours extends Equatable {
   final String sunday;
 
   Hours({
-    this.monday,
-    this.tuesday,
-    this.wednesday,
-    this.thursday,
-    this.friday,
-    this.saturday,
-    this.sunday
+    required this.monday,
+    required this.tuesday,
+    required this.wednesday,
+    required this.thursday,
+    required this.friday,
+    required this.saturday,
+    required this.sunday
   });
 
-  static Hours fromJson(Map<String, dynamic> json) {
-    return Hours(
-      monday: json['monday'],
-      tuesday: json['tuesday'],
-      wednesday: json['wednesday'],
-      thursday: json['thursday'],
-      friday: json['friday'],
-      saturday: json['saturday'],
-      sunday: json['sunday']
-    );
-  }
+  Hours.fromJson({required Map<String, dynamic> json})
+    : monday = json['monday'],
+      tuesday = json['tuesday'],
+      wednesday = json['wednesday'],
+      thursday = json['thursday'],
+      friday = json['friday'],
+      saturday = json['saturday'],
+      sunday = json['sunday'];
   
   @override
   List<Object> get props => [monday, tuesday, wednesday, thursday, friday, saturday, sunday];

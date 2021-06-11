@@ -6,12 +6,11 @@ import 'package:heist/themes/global_colors.dart';
 
 class ErrorCard extends StatelessWidget {
   final String _body;
-  final String _buttonText;
-  final Function _onButtonPressed;
+  final String? _buttonText;
+  final VoidCallback? _onButtonPressed;
 
-  ErrorCard({@required String body, String buttonText, Function onButtonPressed})
-    : assert(body != null),
-      _body = body,
+  ErrorCard({required String body, String? buttonText, VoidCallback? onButtonPressed})
+    : _body = body,
       _buttonText = buttonText,
       _onButtonPressed = onButtonPressed;
 
@@ -57,7 +56,7 @@ class ErrorCard extends StatelessWidget {
                   Expanded(
                     child: ElevatedButton(
                       onPressed: _onButtonPressed,
-                      child: BoldText3(text: _buttonText, context: context, color: Theme.of(context).colorScheme.onSecondary),
+                      child: BoldText3(text: _buttonText!, context: context, color: Theme.of(context).colorScheme.onSecondary),
                     )
                   ),
                   SizedBox(width: SizeConfig.getWidth(20)),

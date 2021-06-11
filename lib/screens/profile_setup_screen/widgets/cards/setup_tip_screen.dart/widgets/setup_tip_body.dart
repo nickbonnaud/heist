@@ -5,11 +5,11 @@ import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:heist/blocs/authentication/authentication_bloc.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
+import 'package:heist/resources/helpers/vibrate.dart';
 import 'package:heist/screens/profile_setup_screen/bloc/profile_setup_screen_bloc.dart';
 import 'package:heist/screens/profile_setup_screen/widgets/cards/setup_tip_screen.dart/bloc/setup_tip_card_bloc.dart';
 import 'package:heist/themes/global_colors.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
-import 'package:vibrate/vibrate.dart';
 
 class SetupTipBody extends StatefulWidget {
   
@@ -18,14 +18,14 @@ class SetupTipBody extends StatefulWidget {
 }
 
 class _SetupTipBodyState extends State<SetupTipBody> {
-  TextEditingController _tipRateController = TextEditingController(text: "15");
+  late TextEditingController _tipRateController = TextEditingController(text: "15");
   final FocusNode _tipRateNode = FocusNode();
-  TextEditingController _quickTipRateController = TextEditingController(text: "5");
+  late TextEditingController _quickTipRateController = TextEditingController(text: "5");
   final FocusNode _quickTipRateNode = FocusNode();
 
   bool get isPopulated => _tipRateController.text.isNotEmpty && _quickTipRateController.text.isNotEmpty;
 
-  SetupTipCardBloc _setupTipCardBloc;
+  late SetupTipCardBloc _setupTipCardBloc;
 
   @override
   void initState() {
@@ -185,7 +185,6 @@ class _SetupTipBodyState extends State<SetupTipBody> {
   void _saveButtonPressed(BuildContext context, SetupTipScreenState state) {
     if (_isSaveButtonEnabled(state)) {
       _setupTipCardBloc.add(Submitted(
-        customer: BlocProvider.of<AuthenticationBloc>(context).customer,
         tipRate: int.parse(_tipRateController.text),
         quickTipRate: int.parse(_quickTipRateController.text)
       ));
@@ -193,35 +192,33 @@ class _SetupTipBodyState extends State<SetupTipBody> {
   }
 
   void _showSnackbar(BuildContext context, String message, SetupTipScreenState state) async {
-    bool canVibrate = await Vibrate.canVibrate;
-    if (canVibrate) {
-      Vibrate.feedback(state.isSuccess ? FeedbackType.success : FeedbackType.error);
-    }
-
-    Scaffold.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(
-        SnackBar(
-          duration: Duration(seconds: 1),
-          content: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Expanded(
-                child: BoldText3(text: message, context: context, color: Theme.of(context).colorScheme.onSecondary)
-              ),
-            ],
+    state.isSuccess ? Vibrate.success() : Vibrate.error();
+    final SnackBar snackBar = SnackBar(
+      duration: Duration(seconds: 1),
+      content: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Expanded(
+            child: BoldText3(text: message, context: context, color: Theme.of(context).colorScheme.onSecondary)
           ),
-          backgroundColor: state.isSuccess
-            ? Theme.of(context).colorScheme.success
-            : Theme.of(context).colorScheme.error,
-        )
-      ).closed.then((_) => {
+        ],
+      ),
+      backgroundColor: state.isSuccess
+        ? Theme.of(context).colorScheme.success
+        : Theme.of(context).colorScheme.error,
+    );
+
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(snackBar)
+      .closed.then((_) => {
         if (state.isSuccess) {
           BlocProvider.of<ProfileSetupScreenBloc>(context).add(SectionCompleted(section: Section.tip))
         } else {
           BlocProvider.of<SetupTipCardBloc>(context).add(Reset())
         }
-      });
+      }
+    );
   }
 
   Widget _buttonChild(SetupTipScreenState state) {
@@ -236,7 +233,7 @@ class _SetupTipBodyState extends State<SetupTipBody> {
     return KeyboardActionsConfig(
       keyboardActionsPlatform: KeyboardActionsPlatform.ALL,
       actions: [
-        KeyboardAction(
+        KeyboardActionsItem(
           focusNode: _tipRateNode,
           toolbarButtons: [
             (node) {
@@ -250,7 +247,7 @@ class _SetupTipBodyState extends State<SetupTipBody> {
             }
           ]
         ),
-        KeyboardAction(
+        KeyboardActionsItem(
           focusNode: _quickTipRateNode,
           toolbarButtons: [
             (node) {

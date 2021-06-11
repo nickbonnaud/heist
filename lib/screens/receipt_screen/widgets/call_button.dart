@@ -8,19 +8,20 @@ import 'package:url_launcher/url_launcher.dart';
 class CallButton extends StatelessWidget {
   final TransactionResource _transactionResource;
 
-  CallButton({@required TransactionResource transactionResource})
-    : assert (transactionResource != null),
-      _transactionResource = transactionResource;
+  CallButton({required TransactionResource transactionResource})
+    : _transactionResource = transactionResource;
   
   @override
   Widget build(BuildContext context) {
-    return RaisedButton.icon(
+    return ElevatedButton.icon(
       icon: Icon(
         Icons.phone, 
         color: Theme.of(context).colorScheme.onError
       ),
-      color: Theme.of(context).colorScheme.info,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
+      style: ButtonStyle(
+        shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0))),
+        backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.info)
+      ),
       onPressed: () => launch("tel://${_transactionResource.business.profile.phone}"),
       label: BoldText3(text: "Business", context: context, color: Theme.of(context).colorScheme.onSecondary),
     );

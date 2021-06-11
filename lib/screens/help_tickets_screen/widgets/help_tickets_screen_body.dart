@@ -5,7 +5,7 @@ import 'package:heist/global_widgets/default_app_bar/bloc/default_app_bar_bloc.d
 import 'package:heist/global_widgets/default_app_bar/default_app_bar.dart';
 import 'package:heist/global_widgets/error_screen/error_screen.dart';
 import 'package:heist/repositories/help_repository.dart';
-import 'package:heist/resources/helpers/bottom_loader.dart';
+import 'package:heist/global_widgets/bottom_loader.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
 import 'package:heist/screens/help_tickets_screen/bloc/help_tickets_screen_bloc.dart';
@@ -20,9 +20,8 @@ import 'widgets/new_help_ticket_screen/new_help_ticket_screen.dart';
 class HelpTicketsScreenBody extends StatefulWidget {
   final HelpRepository _helpRepository;
 
-  HelpTicketsScreenBody({@required HelpRepository helpRepository})
-    : assert(helpRepository != null),
-      _helpRepository = helpRepository;
+  HelpTicketsScreenBody({required HelpRepository helpRepository})
+    : _helpRepository = helpRepository;
   
   @override
   State<HelpTicketsScreenBody> createState() => _HelpTicketsScreenBodyState();
@@ -31,7 +30,8 @@ class HelpTicketsScreenBody extends StatefulWidget {
 class _HelpTicketsScreenBodyState extends State<HelpTicketsScreenBody> {
   final ScrollController _scrollController = ScrollController();
   final double _scrollThreshold = 200.0;
-  HelpTicketsScreenBloc _helpTicketsScreenBloc;
+  
+  late HelpTicketsScreenBloc _helpTicketsScreenBloc;
   
   @override
   void initState() {
@@ -68,11 +68,12 @@ class _HelpTicketsScreenBodyState extends State<HelpTicketsScreenBody> {
     super.dispose();
   }
 
-  Widget _buildHelpTicketsBody({@required HelpTicketsScreenState state}) {
+  Widget _buildHelpTicketsBody({required HelpTicketsScreenState state}) {
     return CustomScrollView(
       controller: _scrollController,
       slivers: [
         DefaultAppBar(
+          context: context,
           backgroundColor: Theme.of(context).colorScheme.scrollBackground,
           isSliver: true,
           title: "Help",
@@ -90,7 +91,7 @@ class _HelpTicketsScreenBodyState extends State<HelpTicketsScreenBody> {
     );
   }
 
-  Widget _buildHelpTicketList({@required HelpTicketsScreenState state}) {
+  Widget _buildHelpTicketList({required HelpTicketsScreenState state}) {
     if (state is Loaded) {
       if (state.helpTickets.isEmpty) {
         return SliverPadding(
@@ -113,6 +114,7 @@ class _HelpTicketsScreenBodyState extends State<HelpTicketsScreenBody> {
             ? BottomLoader()
             : HelpTicketWidget(
               helpTicket: state.helpTickets[index],
+              helpRepository: widget._helpRepository,
               helpTicketsScreenBloc: _helpTicketsScreenBloc,
             ),
             childCount: state.hasReachedEnd
@@ -133,7 +135,7 @@ class _HelpTicketsScreenBodyState extends State<HelpTicketsScreenBody> {
     );
   }
 
-  Widget _buildFilterButton({@required BuildContext context, @required HelpTicketsScreenState state}) {
+  Widget _buildFilterButton({required BuildContext context, required HelpTicketsScreenState state}) {
     if (state is Loaded) {
       return Positioned(
         bottom: -SizeConfig.getHeight(5),

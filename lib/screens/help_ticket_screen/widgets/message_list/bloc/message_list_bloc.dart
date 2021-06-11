@@ -11,19 +11,19 @@ part 'message_list_event.dart';
 part 'message_list_state.dart';
 
 class MessageListBloc extends Bloc<MessageListEvent, MessageListState> {
-  StreamSubscription helpTicketsScreenBlocSubscription;
   final HelpTicketsScreenBloc _helpTicketsScreenBloc;
   final HelpTicket _helpTicket;
   final HelpRepository _helpRepository;
+
+  late StreamSubscription helpTicketsScreenBlocSubscription;
   
-  MessageListBloc({@required HelpTicket helpTicket, @required HelpTicketsScreenBloc helpTicketsScreenBloc, @required HelpRepository helpRepository})
-    : assert(helpTicket != null && helpTicketsScreenBloc != null && helpRepository != null),
-      _helpTicketsScreenBloc = helpTicketsScreenBloc,
+  MessageListBloc({required HelpTicket helpTicket, required HelpTicketsScreenBloc helpTicketsScreenBloc, required HelpRepository helpRepository})
+    : _helpTicketsScreenBloc = helpTicketsScreenBloc,
       _helpTicket = helpTicket,
       _helpRepository = helpRepository,
       super(MessageListState.initial(helpTicket: helpTicket)) {
     
-      helpTicketsScreenBlocSubscription = helpTicketsScreenBloc.listen((HelpTicketsScreenState helpTicketsScreenstate) {
+      helpTicketsScreenBlocSubscription = helpTicketsScreenBloc.stream.listen((HelpTicketsScreenState helpTicketsScreenstate) {
         add(ReplyAdded(
           helpTicket: (helpTicketsScreenstate as Loaded).helpTickets.firstWhere((helpTicket) 
             => helpTicket.identifier == state.getHelpTicket.identifier)

@@ -5,12 +5,11 @@ import 'widgets/error_card.dart';
 
 class ErrorScreen extends StatelessWidget {
   final String _body;
-  final String  _buttonText;
-  final Function _onButtonPressed;
+  final String?  _buttonText;
+  final VoidCallback? _onButtonPressed;
 
-  ErrorScreen({@required String body, String buttonText, Function onButtonPressed})
-    : assert(body != null),
-      _body = body,
+  ErrorScreen({required String body, String? buttonText, VoidCallback? onButtonPressed})
+    : _body = body,
       _buttonText = buttonText,
       _onButtonPressed = onButtonPressed;
 

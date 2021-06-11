@@ -5,7 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:heist/blocs/authentication/authentication_bloc.dart';
 import 'package:heist/models/transaction/transaction_resource.dart';
 import 'package:heist/repositories/transaction_repository.dart';
-import 'package:meta/meta.dart';
+import 'package:heist/resources/helpers/api_exception.dart';
 
 part 'open_transactions_event.dart';
 part 'open_transactions_state.dart';
@@ -13,14 +13,17 @@ part 'open_transactions_state.dart';
 class OpenTransactionsBloc extends Bloc<OpenTransactionsEvent, OpenTransactionsState> {
   final TransactionRepository _transactionRepository;
 
-  StreamSubscription _authenticationBlocSubscription;
+  late StreamSubscription _authenticationBlocSubscription;
+  late AuthenticationState _previousAuthenticationState;
 
-  OpenTransactionsBloc({@required TransactionRepository transactionRepository, @required AuthenticationBloc authenticationBloc})
-    : assert(transactionRepository != null && authenticationBloc != null),
-      _transactionRepository = transactionRepository,
+  OpenTransactionsBloc({required TransactionRepository transactionRepository, required AuthenticationBloc authenticationBloc})
+    : _transactionRepository = transactionRepository,
       super(Uninitialized()) {
-        _authenticationBlocSubscription = authenticationBloc.listen((AuthenticationState state) {
-          if (state.authenticated) add(FetchOpenTransactions()); 
+        _authenticationBlocSubscription = authenticationBloc.stream.listen((AuthenticationState state) {
+          if (state is Authenticated && (_previousAuthenticationState is Unknown || _previousAuthenticationState is Unauthenticated)) {
+            add(FetchOpenTransactions());
+          }
+          _previousAuthenticationState = state;
         });
       }
 
@@ -49,8 +52,8 @@ class OpenTransactionsBloc extends Bloc<OpenTransactionsEvent, OpenTransactionsS
     try {
       List<TransactionResource> transactions = await _transactionRepository.fetchOpen();
       yield OpenTransactionsLoaded(transactions: transactions);
-    } catch (e) {
-      yield FailedToFetchOpenTransactions();
+    } on ApiException catch (exception) {
+      yield FailedToFetchOpenTransactions(errorMessage: exception.error);
     }
   }
   

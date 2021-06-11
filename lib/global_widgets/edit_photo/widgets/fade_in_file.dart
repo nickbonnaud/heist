@@ -1,15 +1,13 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:heist/resources/helpers/size_config.dart';
+import 'package:image_picker/image_picker.dart';
 
 class FadeInFile extends StatefulWidget {
-  final File _imageFile;
+  final PickedFile _imageFile;
   final double _size;
 
-  FadeInFile({@required File imageFile, double size = 25})
-    : assert(imageFile != null),
-      _imageFile = imageFile,
+  FadeInFile({required PickedFile imageFile, double size = 25})
+    : _imageFile = imageFile,
       _size = size;
 
   @override
@@ -17,7 +15,7 @@ class FadeInFile extends StatefulWidget {
 }
 
 class _FadeInFileState extends State<FadeInFile> with SingleTickerProviderStateMixin {
-  AnimationController _controller;
+  late AnimationController _controller;
 
   @override
   void initState() {
@@ -34,7 +32,7 @@ class _FadeInFileState extends State<FadeInFile> with SingleTickerProviderStateM
       opacity: _controller.value, 
       duration: Duration(milliseconds: 800),
       child: CircleAvatar(
-        backgroundImage: Image.file(widget._imageFile).image,
+        backgroundImage: NetworkImage(widget._imageFile.path),
         radius: SizeConfig.getWidth(widget._size),
         backgroundColor: Colors.transparent,
       )

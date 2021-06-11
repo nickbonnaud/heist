@@ -10,7 +10,7 @@ abstract class MaterialDatePickerEvent extends Equatable {
 class DateChanged extends MaterialDatePickerEvent {
   final DateTime date;
 
-  const DateChanged({@required this.date});
+  const DateChanged({required this.date});
 
   @override
   List<Object> get props => [date];
@@ -22,7 +22,7 @@ class DateChanged extends MaterialDatePickerEvent {
 class ActiveSelectionChanged extends MaterialDatePickerEvent {
   final Active active;
 
-  const ActiveSelectionChanged({@required this.active});
+  const ActiveSelectionChanged({required this.active});
 
   @override
   String toString() => 'ActiveSelectionChanged { active: $active }';

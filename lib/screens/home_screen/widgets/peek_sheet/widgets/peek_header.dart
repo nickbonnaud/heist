@@ -11,7 +11,7 @@ class PeekHeader extends StatelessWidget {
   final double _buttonSize;
   final AnimationController _controller;
 
-  PeekHeader({@required double fontSize, @required double topMargin, @required double buttonSize, @required AnimationController controller})
+  PeekHeader({required double fontSize, required double topMargin, required double buttonSize, required AnimationController controller})
     : assert(fontSize != null && topMargin != null && buttonSize != null && controller != null),
       _fontSize = fontSize,
       _topMargin = topMargin,
@@ -39,7 +39,7 @@ class PeekHeader extends StatelessWidget {
     );
   }
 
-  String _setHeader({@required LogoButtonsListState state}) {
+  String _setHeader({required LogoButtonsListState state}) {
     if (_controller.status == AnimationStatus.completed) {
       if (state.numberOpenTransactions > 0) {
         return  state.numberOpenTransactions > 1 ? "Open Transactions" : "Open Transaction";

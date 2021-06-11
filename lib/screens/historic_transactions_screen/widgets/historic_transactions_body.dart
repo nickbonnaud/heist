@@ -4,7 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heist/global_widgets/default_app_bar/default_app_bar.dart';
 import 'package:heist/global_widgets/error_screen/error_screen.dart';
 import 'package:heist/global_widgets/transaction_widget.dart';
-import 'package:heist/resources/helpers/bottom_loader.dart';
+import 'package:heist/repositories/business_repository.dart';
+import 'package:heist/global_widgets/bottom_loader.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
 import 'package:heist/screens/historic_transactions_screen/bloc/historic_transactions_bloc.dart';
@@ -14,6 +15,10 @@ import 'filter_button/bloc/filter_button_bloc.dart';
 import 'filter_button/filter_button.dart';
 
 class HistoricTransactionsBody extends StatefulWidget {
+  final BusinessRepository _businessRepository;
+
+  HistoricTransactionsBody({required BusinessRepository businessRepository})
+    : _businessRepository = businessRepository;
 
   @override
   State<HistoricTransactionsBody> createState() => _HistoricTransactionsBodyState();
@@ -22,7 +27,7 @@ class HistoricTransactionsBody extends StatefulWidget {
 class _HistoricTransactionsBodyState extends State<HistoricTransactionsBody> {
   final ScrollController _scrollController = ScrollController();
   final double _scrollThreshold = 200.0;
-  HistoricTransactionsBloc _historicTransactionsBloc;
+  late HistoricTransactionsBloc _historicTransactionsBloc;
   
   @override
   void initState() {
@@ -59,11 +64,12 @@ class _HistoricTransactionsBodyState extends State<HistoricTransactionsBody> {
     super.dispose();
   }
 
-  Widget _buildTransactionsBody({@required HistoricTransactionsState state}) {
+  Widget _buildTransactionsBody({required HistoricTransactionsState state}) {
     return CustomScrollView(
       controller: _scrollController,
       slivers: <Widget>[
         DefaultAppBar(
+          context: context,
           backgroundColor: Theme.of(context).colorScheme.scrollBackground,
           isSliver: true,
           title: "Transactions",
@@ -73,7 +79,7 @@ class _HistoricTransactionsBodyState extends State<HistoricTransactionsBody> {
     );
   }
 
-  Widget _buildList({@required HistoricTransactionsState state}) {
+  Widget _buildList({required HistoricTransactionsState state}) {
     if (state is TransactionsLoaded) {
       if (state.transactions.isEmpty) {
         return SliverPadding(
@@ -114,7 +120,7 @@ class _HistoricTransactionsBodyState extends State<HistoricTransactionsBody> {
     );
   }
 
-  Widget _buildFilterButton({@required BuildContext context, @required HistoricTransactionsState state}) {
+  Widget _buildFilterButton({required BuildContext context, required HistoricTransactionsState state}) {
     if (state is TransactionsLoaded) {
       return Positioned(
         bottom: -SizeConfig.getHeight(5),
@@ -122,6 +128,7 @@ class _HistoricTransactionsBodyState extends State<HistoricTransactionsBody> {
         child: BlocProvider<FilterButtonBloc>(
           create: (_) => FilterButtonBloc(),
           child: FilterButton(
+            businessRepository: widget._businessRepository,
             startColor: Theme.of(context).colorScheme.callToAction,
             endColor: Theme.of(context).colorScheme.callToAction,
           ),

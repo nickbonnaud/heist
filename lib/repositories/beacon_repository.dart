@@ -1,13 +1,18 @@
 import 'dart:async';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_beacon/flutter_beacon.dart';
 import 'package:heist/models/business/business.dart';
 import 'package:heist/providers/beacon_provider.dart';
 
+@immutable
 class BeaconRepository {
-  final BeaconProvider _beaconProvider = BeaconProvider();
+  final BeaconProvider _beaconProvider;
 
-  Stream<MonitoringResult> startMonitoring(List<Business> businesses) {
-    return _beaconProvider.startMonitoring(businesses);
+  const BeaconRepository({required BeaconProvider beaconProvider})
+    : _beaconProvider = beaconProvider;
+
+  Stream<MonitoringResult> startMonitoring({required List<Business> businesses}) {
+    return _beaconProvider.startMonitoring(businesses: businesses);
   }
 }

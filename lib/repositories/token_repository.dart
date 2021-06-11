@@ -1,42 +1,39 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:heist/models/token.dart';
 import 'package:heist/providers/storage_provider.dart';
-import 'package:jaguar_jwt/jaguar_jwt.dart';
+import 'package:heist/resources/helpers/invalid_token_exception.dart';
 
+@immutable
 class TokenRepository {
-  final StorageProvider _tokenProvider = StorageProvider();
+  final StorageProvider _tokenProvider;
   static const String TOKEN_KEY = 'token';
 
-  Future<void> saveToken(Token token) async {
-    return await _tokenProvider.write(TOKEN_KEY, jsonEncode(token.toJson()));
+  TokenRepository({required StorageProvider tokenProvider})
+    : _tokenProvider = tokenProvider;
+  
+  Future<void> saveToken({required Token token}) async {
+    return await _tokenProvider.write(key: TOKEN_KEY, value: jsonEncode(token.value));
   }
 
   Future<void> deleteToken() async {
-    return await _tokenProvider.delete(TOKEN_KEY);
+    return await _tokenProvider.delete(key: TOKEN_KEY);
   }
 
-  Future<Token> fetchToken() async {
-    return jsonDecode(await _tokenProvider.read(TOKEN_KEY));
+  Future<Token?> fetchToken() async {
+    final String? value = await _tokenProvider.read(key: TOKEN_KEY);
+    return value != null ? Token(value: value) : null; 
   }
 
   Future<bool> hasValidToken() async {
-    Token token = await fetchToken();
-    return _isValidToken(token.value);
-  }
-
-
-  bool _isValidToken(String token) {
-    int expiry = getExpiry(token);
-    if (expiry == null) return false;
-    int now = DateTime.now().millisecondsSinceEpoch;
-    return expiry > now;
-  }
-
-  static int getExpiry(String token) {
-    final parts = token.split('.');
-    final payload = parts[1];
-    final decoded = jsonDecode(B64urlEncRfc7515.decodeUtf8(payload));
-    return decoded['exp'] ?? null;
+    final Token? token = await fetchToken();
+    if (token == null) return false;
+    
+    try {
+      return token.valid;
+    } on InvalidTokenException catch (_) {
+      return false;
+    } 
   }
 }

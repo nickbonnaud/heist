@@ -2,6 +2,8 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:heist/repositories/authentication_repository.dart';
+import 'package:heist/repositories/customer_repository.dart';
 import 'package:heist/screens/auth_screen/widgets/background.dart';
 import 'package:provider/provider.dart';
 
@@ -13,18 +15,30 @@ import 'widgets/forms/forms.dart';
 import 'widgets/page_indicator.dart';
 import 'widgets/page_offset_notifier.dart';
 
-double topMargin({@required BuildContext context}) => MediaQuery.of(context).size.height > 700 ? 192 : 128;
-double mainSquareSize({@required BuildContext context}) => MediaQuery.of(context).size.height / 2;
+double topMargin({required BuildContext context}) => MediaQuery.of(context).size.height > 700 ? 192 : 128;
+double mainSquareSize({required BuildContext context}) => MediaQuery.of(context).size.height / 2;
 
 class AuthScreen extends StatefulWidget {
+  final AuthenticationRepository _authenticationRepository;
+  final bool _permissionsReady;
+  final bool _customerOnboarded; 
+
+  AuthScreen({
+    required AuthenticationRepository authenticationRepository,
+    required bool permissionsReady,
+    required bool customerOnboarded
+  })
+    : _authenticationRepository = authenticationRepository,
+      _permissionsReady = permissionsReady,
+      _customerOnboarded = customerOnboarded;
 
   State<AuthScreen> createState() => _AuthScreenState();
 }
 
 class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
   final PageController _pageController = PageController();
-  AnimationController _animationController;
-  AnimationController _formAnimationController;
+  late AnimationController _animationController;
+  late AnimationController _formAnimationController;
 
   double get maxHeight => mainSquareSize(context: context) + 32 + 24;
 
@@ -55,10 +69,10 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomPadding: false,
+      resizeToAvoidBottomInset: false,
       backgroundColor: Colors.grey.shade900,
       body: ChangeNotifierProvider(
-        create: (_) => PageOffsetNotifier(_pageController),
+        create: (_) => PageOffsetNotifier(pageController: _pageController),
         child: ListenableProvider.value(
           value: _animationController,
           child: ChangeNotifierProvider(
@@ -85,7 +99,12 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
                         create: (_) => KeyboardVisibleCubit(),
                         child: Stack(
                           children: [
-                            Forms(pageController: _pageController),
+                            Forms(
+                              authenticationRepository: widget._authenticationRepository,
+                              pageController: _pageController,
+                              permissionsReady: widget._permissionsReady,
+                              customerOnboarded: widget._customerOnboarded,
+                            ),
                             DragArrow(),
                           ],
                         ),
@@ -102,7 +121,9 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
   }
 
   void _handleDragUpdate(DragUpdateDetails details) {
-    _animationController.value -= details.primaryDelta / maxHeight;
+    if (details.primaryDelta != null) {
+      _animationController.value -= details.primaryDelta! / maxHeight;
+    }
   }
 
   void _handleDragEnd(DragEndDetails details) {

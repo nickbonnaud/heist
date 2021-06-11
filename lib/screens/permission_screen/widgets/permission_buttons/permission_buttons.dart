@@ -6,6 +6,7 @@ import 'package:flutter_beacon/flutter_beacon.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:heist/blocs/authentication/authentication_bloc.dart';
+import 'package:heist/blocs/customer/customer_bloc.dart';
 import 'package:heist/blocs/geo_location/geo_location_bloc.dart';
 import 'package:heist/blocs/permissions/permissions_bloc.dart';
 import 'package:heist/repositories/initial_login_repository.dart';
@@ -20,17 +21,30 @@ import 'bloc/permission_buttons_bloc.dart';
 
 class PermissionButtons extends StatefulWidget {
   final PermissionType _permission;
+  final InitialLoginRepository _initialLoginRepository;
+  final GeoLocationBloc _geoLocationBloc;
+  final PermissionsBloc _permissionsBloc;
+  final String _customerIdentifier;
 
-  PermissionButtons({@required PermissionType permission})
-    : assert(permission != null),
-      _permission = permission;
+  PermissionButtons({
+    required PermissionType permission,
+    required InitialLoginRepository initialLoginRepository,
+    required GeoLocationBloc geoLocationBloc,
+    required PermissionsBloc permissionsBloc,
+    required String customerIdentifier
+  })
+    : _permission = permission,
+      _initialLoginRepository = initialLoginRepository,
+      _geoLocationBloc = geoLocationBloc,
+      _customerIdentifier = customerIdentifier,
+      _permissionsBloc = permissionsBloc;
 
   @override
   State<PermissionButtons> createState() => _PermissionButtonsState();
 }
 
 class _PermissionButtonsState extends State<PermissionButtons> {
-  StreamSubscription<BluetoothState> _bleStatusWatcher;
+  late StreamSubscription<BluetoothState> _bleStatusWatcher;
   
   @override
   Widget build(BuildContext context) {
@@ -54,7 +68,7 @@ class _PermissionButtonsState extends State<PermissionButtons> {
 
   @override
   void dispose() {
-    _bleStatusWatcher?.cancel();
+    _bleStatusWatcher.cancel();
     super.dispose();
   }
 
@@ -64,39 +78,38 @@ class _PermissionButtonsState extends State<PermissionButtons> {
       BluetoothState currentBleState = await flutterBeacon.bluetoothState;
       if (currentBleState == BluetoothState.stateUnknown) {
         flutterBeacon.bluetoothStateChanged().listen((BluetoothState state) {
-          InitialLoginRepository().setIsInitialLogin(false).then((_) {
+          widget._initialLoginRepository.setIsInitialLogin(isInitial: false).then((_) {
             _updateIfGranted(granted: state == BluetoothState.stateOn, type: permission);
           });
         });
       } else {
-        InitialLoginRepository().setIsInitialLogin(false).then((_) {
+         widget._initialLoginRepository.setIsInitialLogin(isInitial: false).then((_) {
           _updateIfGranted(granted: currentBleState == BluetoothState.stateOn, type: permission);
         });
       }
     } else if (permission == PermissionType.location) {
-      final Map<PermissionGroup, PermissionStatus> status = await PermissionHandler().requestPermissions([PermissionGroup.locationWhenInUse]);
-      if (status[PermissionGroup.locationWhenInUse] == PermissionStatus.granted) {
-        BlocProvider.of<GeoLocationBloc>(context).add(GeoLocationReady());
+      final PermissionStatus status = await Permission.locationWhenInUse.request();
+      if (status.isGranted) {
+        widget._geoLocationBloc.add(GeoLocationReady());
       }
-      _updateIfGranted(granted: status[PermissionGroup.locationWhenInUse] == PermissionStatus.granted, type: permission);
+      _updateIfGranted(granted: status.isGranted, type: permission);
     } else if (permission == PermissionType.notification) {
       bool status = await OneSignal.shared.promptUserForPushNotificationPermission(fallbackToSettings: true);
       if (status) {
-        OneSignal.shared.setExternalUserId(BlocProvider.of<AuthenticationBloc>(context).customer.identifier);
+        OneSignal.shared.setExternalUserId(widget._customerIdentifier);
       }
       _updateIfGranted(granted: status, type: permission);
     } else if (permission == PermissionType.beacon) {
-      BlocProvider.of<PermissionButtonsBloc>(context).add(PermissionButtonsEvent.enable);
-      PermissionStatus status = await PermissionHandler().checkPermissionStatus(PermissionGroup.locationAlways);
-      if (status == PermissionStatus.granted) {
+     BlocProvider.of<PermissionButtonsBloc>(context).add(PermissionButtonsEvent.enable);
+      if (await Permission.locationAlways.isGranted) {
         _updateIfGranted(granted: true, type: permission);
       } else {
-        _openAppSettings();
+        openAppSettings();
       }
     }
   }
 
-  void _updateIfGranted({@required bool granted, @required PermissionType type}) {
+  void _updateIfGranted({required bool granted, required PermissionType type}) {
     BlocProvider.of<PermissionButtonsBloc>(context).add(PermissionButtonsEvent.enable);
     _updatePermissionsBloc(granted, type);
     if (!granted) {
@@ -107,16 +120,16 @@ class _PermissionButtonsState extends State<PermissionButtons> {
   void _updatePermissionsBloc(bool granted, PermissionType type) {
     switch (type) {
       case PermissionType.bluetooth:
-        BlocProvider.of<PermissionsBloc>(context).add(BleStatusChanged(granted: granted));
+        widget._permissionsBloc.add(BleStatusChanged(granted: granted));
         break;
       case PermissionType.location:
-        BlocProvider.of<PermissionsBloc>(context).add(LocationStatusChanged(granted: granted));
+        widget._permissionsBloc.add(LocationStatusChanged(granted: granted));
         break;
       case PermissionType.notification:
-        BlocProvider.of<PermissionsBloc>(context).add(NotificationStatusChanged(granted: granted));
+        widget._permissionsBloc.add(NotificationStatusChanged(granted: granted));
         break;
       case PermissionType.beacon:
-        BlocProvider.of<PermissionsBloc>(context).add(BeaconStatusChanged(granted: granted));
+        widget._permissionsBloc.add(BeaconStatusChanged(granted: granted));
         break;
     }
   }
@@ -164,16 +177,12 @@ class _PermissionButtonsState extends State<PermissionButtons> {
           PlatformDialogAction(
             child: PlatformText('Enable'),
             onPressed: () {
-              _openAppSettings();
+              openAppSettings();
               return Navigator.pop(context);
             }
           )
         ],
       )
     );
-  }
-
-  void _openAppSettings() async {
-    await PermissionHandler().openAppSettings();
   }
 }

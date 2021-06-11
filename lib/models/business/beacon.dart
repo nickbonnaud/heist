@@ -1,21 +1,25 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 
+@immutable
 class Beacon extends Equatable {
   final String regionIdentifier;
   final String identifier;
   final int major;
   final int minor;
 
-  Beacon({this.identifier, this.major, this.minor, this.regionIdentifier});
+  Beacon({
+    required this.identifier,
+    required this.major,
+    required this.minor,
+    required this.regionIdentifier
+  });
 
-  static Beacon fromJson(Map<String, dynamic> json) {
-    return Beacon(
-      regionIdentifier: json['region_identifier'],
-      identifier: json['identifier'],
-      major: int.parse(json['major']),
-      minor: int.parse(json['minor'])
-    );
-  }
+  Beacon.fromJson({required Map<String, dynamic> json}) 
+    : regionIdentifier = json['region_identifier'],
+      identifier = json['identifier'],
+      major = json['major'],
+      minor = json['minor'];
   
   @override
   List<Object> get props => [identifier, major, minor, regionIdentifier];

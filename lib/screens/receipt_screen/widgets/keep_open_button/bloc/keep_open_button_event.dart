@@ -10,7 +10,7 @@ abstract class KeepOpenButtonEvent extends Equatable {
 class Submitted extends KeepOpenButtonEvent {
   final String transactionId;
 
-  const Submitted({@required this.transactionId});
+  const Submitted({required this.transactionId});
 
   @override
   List<Object> get props => [transactionId];

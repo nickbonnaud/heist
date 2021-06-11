@@ -1,19 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
-import 'package:heist/blocs/authentication/authentication_bloc.dart';
+import 'package:heist/blocs/customer/customer_bloc.dart';
 import 'package:heist/global_widgets/edit_photo/bloc/edit_photo_bloc.dart';
 import 'package:heist/global_widgets/edit_photo/edit_photo.dart';
 import 'package:heist/models/customer/customer.dart';
+import 'package:heist/models/customer/profile.dart';
 import 'package:heist/repositories/photo_picker_repository.dart';
-import 'package:heist/repositories/profile_repository.dart';
+import 'package:heist/repositories/photo_repository.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
 import 'package:heist/screens/profile_setup_screen/bloc/profile_setup_screen_bloc.dart';
 import 'package:heist/themes/global_colors.dart';
 
 class ProfilePhotoCard extends StatelessWidget {
-  final ProfileRepository _profileRepository = ProfileRepository();
+  final PhotoRepository _photoRepository;
+  final PhotoPickerRepository _photoPickerRepository;
+  final CustomerBloc _customerBloc;
+  final Profile _profile;
+
+
+  ProfilePhotoCard({
+    required PhotoRepository photoRepository,
+    required PhotoPickerRepository photoPickerRepository,
+    required CustomerBloc customerBloc,
+    required Profile profile
+  })
+    : _photoRepository = photoRepository,
+      _photoPickerRepository = photoPickerRepository,
+      _customerBloc = customerBloc,
+      _profile = profile;
 
   @override
   Widget build(BuildContext context) {
@@ -37,13 +53,12 @@ class ProfilePhotoCard extends StatelessWidget {
                   ),
                   BlocProvider<EditPhotoBloc>(
                     create: (BuildContext context) => EditPhotoBloc(
-                      profileRepository: _profileRepository,
-                      authenticationBloc: BlocProvider.of<AuthenticationBloc>(context)
+                      photoRepository: _photoRepository,
+                      customerBloc: _customerBloc,
                     ),
                     child: EditPhoto(
-                      photoPicker: PhotoPickerRepository(),
-                      customer: BlocProvider.of<AuthenticationBloc>(context).customer.profile != null
-                        ? BlocProvider.of<AuthenticationBloc>(context).customer : null,
+                      photoPicker: _photoPickerRepository,
+                      profile: _profile,
                       autoDismiss: false,
                     ),
                   ),
@@ -86,10 +101,10 @@ class ProfilePhotoCard extends StatelessWidget {
             Row(
               children: <Widget>[
                 Expanded(
-                  child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+                  child: BlocBuilder<CustomerBloc, CustomerState>(
                     builder: (context, state) {
                       return ElevatedButton(
-                        onPressed: _isNextButtonEnabled(state.customer) ? () => _nextButtonPressed(context: context) : null,
+                        onPressed: _isNextButtonEnabled(customer: state.customer!) ? () => _nextButtonPressed(context: context) : null,
                         child: BoldText3(text: 'Next', context: context, color: Theme.of(context).colorScheme.onSecondary)
                       );
                     }
@@ -103,12 +118,11 @@ class ProfilePhotoCard extends StatelessWidget {
     );
   }
   
-  bool _isNextButtonEnabled(Customer customer) {
-    String photoName = customer?.profile?.photos?.name;
-    return photoName != null;
+  bool _isNextButtonEnabled({required Customer customer}) {
+    return customer.profile.photos.name.isNotEmpty;
   }
 
-  void _nextButtonPressed({@required BuildContext context}) {
+  void _nextButtonPressed({required BuildContext context}) {
     BlocProvider.of<ProfileSetupScreenBloc>(context).add(SectionCompleted(section: Section.photo));
   }
 }

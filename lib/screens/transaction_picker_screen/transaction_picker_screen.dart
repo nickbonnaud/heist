@@ -10,17 +10,17 @@ import 'bloc/transaction_picker_screen_bloc.dart';
 import 'widgets/transaction_picker_body.dart';
 
 class TransactionPickerScreen extends StatelessWidget {
-  final TransactionRepository _transactionRepository = TransactionRepository();
+  final TransactionRepository _transactionRepository;
   final Business _business;
 
-  TransactionPickerScreen({@required Business business})
-    : assert(business != null),
+  TransactionPickerScreen({required TransactionRepository transactionRepository, required Business business})
+    : _transactionRepository = transactionRepository,
       _business = business;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: BottomModalAppBar(backgroundColor: Theme.of(context).colorScheme.topAppBar, trailingWidget: InfoButton()),
+      appBar: BottomModalAppBar(context: context, backgroundColor: Theme.of(context).colorScheme.topAppBar, trailingWidget: InfoButton()),
       body: BlocProvider<TransactionPickerScreenBloc>(
         create: (BuildContext context) => TransactionPickerScreenBloc(transactionRepository: _transactionRepository)
           ..add(Fetch(businessIdentifier: _business.identifier)),

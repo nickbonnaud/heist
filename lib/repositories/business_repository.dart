@@ -1,42 +1,41 @@
-import 'package:heist/models/api_response.dart';
 import 'package:heist/models/business/business.dart';
+import 'package:heist/models/paginate_data_holder.dart';
 import 'package:heist/providers/business_provider.dart';
+import 'package:heist/repositories/base_repository.dart';
 import 'package:meta/meta.dart';
 
-class BusinessRepository {
-  final BusinessProvider _businessProvider = BusinessProvider();
+@immutable
+class BusinessRepository extends BaseRepository {
+  final BusinessProvider _businessProvider;
 
-  Future<List<Business>> fetchByName({@required String name}) async {
-    final String query = 'name=$name';
-    final ApiResponse response = await _businessProvider.fetch(query: query);
-    if (response.isOK) {
-      return _handleSuccess(response);
-    }
-    return [Business.withError((response.error))].toList();
+  BusinessRepository({required BusinessProvider businessProvider})
+    : _businessProvider = businessProvider;
+
+  Future<PaginateDataHolder> fetchByName({required String name}) async {
+    final String query = this.formatQuery(baseQuery: 'name=$name');
+    final PaginateDataHolder holder = await this.sendPaginated(request: _businessProvider.fetch(query: query));
+    
+    return deserialize(holder: holder);
   }
 
-  Future<List<Business>> fetchByIdentifier({@required String identifier}) async {
-    final String query = 'id=$identifier';
-    final ApiResponse response = await _businessProvider.fetch(query: query);
-    if (response.isOK) {
-      return _handleSuccess(response);
-    }
-    return [Business.withError((response.error))].toList();
+  Future<PaginateDataHolder> fetchByIdentifier({required String identifier}) async {
+    final String query = this.formatQuery(baseQuery: 'id=$identifier');
+    final PaginateDataHolder holder = await this.sendPaginated(request: _businessProvider.fetch(query: query));
+    
+    return deserialize(holder: holder);
   }
 
-  Future<List<Business>> fetchByBeaconIdentifier({@required String identifier}) async {
-    final String query = 'beacon=$identifier';
-    final ApiResponse response = await _businessProvider.fetch(query: query);
-    if (response.isOK) {
-      return _handleSuccess(response);
-    }
-    return [Business.withError((response.error))].toList();
+  Future<PaginateDataHolder> fetchByBeaconIdentifier({required String identifier}) async {
+    final String query = this.formatQuery(baseQuery: 'beacon=$identifier');
+    final PaginateDataHolder holder = await this.sendPaginated(request: _businessProvider.fetch(query: query));
+    
+    return deserialize(holder: holder);
   }
 
-  List<Business> _handleSuccess(ApiResponse response) {
-    final data = response.body as List;
-    return data.map((rawBusiness) {
-      return Business.fromJson(rawBusiness);
-    }).toList();
+  @override
+  deserialize({PaginateDataHolder? holder, Map<String, dynamic>? json}) {
+    return holder!.update(
+      data: holder.data.map((business) => Business.fromJson(json: business)).toList()
+    );
   }
 }

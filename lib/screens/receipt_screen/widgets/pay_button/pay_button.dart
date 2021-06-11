@@ -5,17 +5,16 @@ import 'package:heist/blocs/open_transactions/open_transactions_bloc.dart';
 import 'package:heist/models/transaction/transaction_resource.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
+import 'package:heist/resources/helpers/vibrate.dart';
 import 'package:heist/screens/receipt_screen/bloc/receipt_screen_bloc.dart';
 import 'package:heist/screens/receipt_screen/widgets/pay_button/bloc/pay_button_bloc.dart';
 import 'package:heist/themes/global_colors.dart';
-import 'package:vibrate/vibrate.dart';
 
 class PayButton extends StatelessWidget {
   final TransactionResource _transactionResource;
 
-  PayButton({@required TransactionResource transactionResource})
-    : assert(transactionResource != null),
-      _transactionResource = transactionResource;
+  PayButton({required TransactionResource transactionResource})
+    : _transactionResource = transactionResource;
   
   @override
   Widget build(BuildContext context) {
@@ -40,7 +39,7 @@ class PayButton extends StatelessWidget {
     );
   }
 
-  Widget _buttonChild({@required BuildContext context, @required PayButtonState state}) {
+  Widget _buttonChild({required BuildContext context, required PayButtonState state}) {
     if (state.isSubmitting) {
       return SizedBox(height: SizeConfig.getWidth(5), width: SizeConfig.getWidth(5), child: CircularProgressIndicator());
     } else {
@@ -49,34 +48,29 @@ class PayButton extends StatelessWidget {
   }
 
   void _showSnackbar(BuildContext context, String message, PayButtonState state) async {
-    bool canVibrate = await Vibrate.canVibrate;
-    if (canVibrate) {
-      Vibrate.feedback(state.isSubmitSuccess ? FeedbackType.success : FeedbackType.error);
-    }
-
-    Scaffold.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(
-        SnackBar(
-          content: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Expanded(
-                child: BoldText3(text: message, context: context, color: Theme.of(context).colorScheme.onSecondary)
-              ),
-            ],
+    state.isSubmitSuccess ? Vibrate.success() : Vibrate.error();
+    final SnackBar snackBar = SnackBar(
+      content: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Expanded(
+            child: BoldText3(text: message, context: context, color: Theme.of(context).colorScheme.onSecondary)
           ),
-          backgroundColor: state.isSubmitSuccess 
-            ? Theme.of(context).colorScheme.success
-            : Theme.of(context).colorScheme.error
-        )
-      ).closed.then((_) => {
-        if (state.isSubmitSuccess) {
-          BlocProvider.of<ReceiptScreenBloc>(context).add(TransactionChanged(transactionResource: state.transactionResource)),
-          BlocProvider.of<OpenTransactionsBloc>(context).add(RemoveOpenTransaction(transaction: state.transactionResource))
-        } else {
-          BlocProvider.of<PayButtonBloc>(context).add(Reset())
+        ],
+      ),
+      backgroundColor: state.isSubmitSuccess 
+        ? Theme.of(context).colorScheme.success
+        : Theme.of(context).colorScheme.error
+    );
+
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(snackBar)
+      .closed.then((_) => {
+        if (!state.isSubmitSuccess) {
+          BlocProvider.of<PayButtonBloc>(context).add(Reset(transactionResource: _transactionResource))
         }
-      });
+      }
+    );
   }
 }

@@ -1,24 +1,30 @@
-import 'package:heist/models/api_response.dart';
 import 'package:heist/models/customer/active_location.dart';
+import 'package:heist/models/paginate_data_holder.dart';
 import 'package:heist/providers/active_location_provider.dart';
+import 'package:heist/repositories/base_repository.dart';
 import 'package:meta/meta.dart';
 
-class ActiveLocationRepository {
-  final ActiveLocationProvider _activeLocationProvider = ActiveLocationProvider();
+@immutable
+class ActiveLocationRepository extends BaseRepository {
+  final ActiveLocationProvider _activeLocationProvider;
 
-  Future<ActiveLocation> enterBusiness({@required String beaconIdentifier}) async {
-    final ApiResponse response = await _activeLocationProvider.enterBusiness(beaconIdentifier: beaconIdentifier);
-    if (response.isOK) {
-      return ActiveLocation.fromJson(response.body);
-    }
-    return ActiveLocation.withError(response.error);
+  ActiveLocationRepository({required ActiveLocationProvider activeLocationProvider})
+    : _activeLocationProvider = activeLocationProvider;
+
+  Future<ActiveLocation> enterBusiness({required String beaconIdentifier}) async {
+    final Map<String, dynamic> body = {'beacon_identifier': beaconIdentifier};
+    
+    final Map<String, dynamic> json = await this.send(request: _activeLocationProvider.enterBusiness(body: body));
+    return deserialize(json: json);
   }
 
-  Future<bool> exitBusiness({@required String activeLocationId}) async {
-    final ApiResponse response = await _activeLocationProvider.exitBusiness(activeLocationId: activeLocationId);
-    if (response.isOK) {
-      return response.body['deleted'].toString() == 'true';
-    }
-    return false;
+  Future<bool> exitBusiness({required String activeLocationId}) async {
+    final Map<String, dynamic> json = await this.send(request: _activeLocationProvider.exitBusiness(activeLocationId: activeLocationId));
+    return json['deleted'];
+  }
+
+  @override
+  deserialize({PaginateDataHolder? holder, Map<String, dynamic>? json}) {
+    return ActiveLocation.fromJson(json: json!);
   }
 }

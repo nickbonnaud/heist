@@ -14,7 +14,7 @@ class Uninitialized extends OpenTransactionsState {}
 class OpenTransactionsLoaded extends OpenTransactionsState {
   final List<TransactionResource> transactions;
 
-  const OpenTransactionsLoaded({@required this.transactions});
+  const OpenTransactionsLoaded({required this.transactions});
 
   @override
   List<Object> get props => [transactions];
@@ -26,4 +26,14 @@ class OpenTransactionsLoaded extends OpenTransactionsState {
   String toString() => 'OpenTransactionsLoaded { transactions: $transactions }';
 }
 
-class FailedToFetchOpenTransactions extends OpenTransactionsState {}
+class FailedToFetchOpenTransactions extends OpenTransactionsState {
+  final String errorMessage;
+
+  const FailedToFetchOpenTransactions({required this.errorMessage});
+
+  @override
+  List<Object> get props => [errorMessage];
+
+  @override
+  String toString() => 'FailedToFetchOpenTransactions { errorMessage: $errorMessage }';
+}

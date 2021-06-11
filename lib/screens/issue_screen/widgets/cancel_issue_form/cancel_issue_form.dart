@@ -4,16 +4,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heist/models/transaction/transaction_resource.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
+import 'package:heist/resources/helpers/vibrate.dart';
 import 'package:heist/screens/issue_screen/widgets/cancel_issue_form/bloc/cancel_issue_form_bloc.dart';
 import 'package:heist/themes/global_colors.dart';
-import 'package:vibrate/vibrate.dart';
 
 class CancelIssueForm extends StatelessWidget {
   final TransactionResource _transactionResource;
 
-  CancelIssueForm({@required TransactionResource transactionResource})
-    : assert(transactionResource != null),
-      _transactionResource = transactionResource;
+  CancelIssueForm({required TransactionResource transactionResource})
+    : _transactionResource = transactionResource;
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +35,7 @@ class CancelIssueForm extends StatelessWidget {
                 SizedBox(height: SizeConfig.getHeight(3)),
                 BoldTextCustom(text: "Cancel Issue?", context: context, size: SizeConfig.getWidth(9)),
                 SizedBox(height: SizeConfig.getHeight(15)),
-                BoldText2(text: "${_transactionResource.issue.message} is no longer a problem?", context: context, color: Theme.of(context).colorScheme.onPrimarySubdued)
+                BoldText2(text: "${_transactionResource.issue!.message} is no longer a problem?", context: context, color: Theme.of(context).colorScheme.onPrimarySubdued)
               ],
             ),
             Row(
@@ -76,7 +75,7 @@ class CancelIssueForm extends StatelessWidget {
   void _submitButtonPressed(BuildContext context, CancelIssueFormState state) {
     if (!state.isSubmitting) {
       BlocProvider.of<CancelIssueFormBloc>(context).add(Submitted(
-        issueIdentifier: _transactionResource.issue.identifier
+        issueIdentifier: _transactionResource.issue!.identifier
       ));
     }
   }
@@ -85,7 +84,7 @@ class CancelIssueForm extends StatelessWidget {
     Navigator.pop(context);
   }
 
-  Widget _buttonChild({@required BuildContext context, @required CancelIssueFormState state}) {
+  Widget _buttonChild({required BuildContext context, required CancelIssueFormState state}) {
     if (state.isSubmitting) {
       return SizedBox(height: SizeConfig.getWidth(5), width: SizeConfig.getWidth(5), child: CircularProgressIndicator());
     } else {
@@ -94,33 +93,31 @@ class CancelIssueForm extends StatelessWidget {
   }
 
   void _showSnackbar(BuildContext context, String message, CancelIssueFormState state) async {
-    bool canVibrate = await Vibrate.canVibrate;
-    if (canVibrate) {
-      Vibrate.feedback(state.isSuccess ? FeedbackType.success : FeedbackType.error);
-    }
-
-    Scaffold.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(
-        SnackBar(
-          content: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Expanded(
-                child: BoldText3(text: message, context: context, color: Theme.of(context).colorScheme.onSecondary)
-              ),
-            ],
+    state.isSuccess ? Vibrate.success() : Vibrate.error();
+    final SnackBar snackBar = SnackBar(
+      content: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Expanded(
+            child: BoldText3(text: message, context: context, color: Theme.of(context).colorScheme.onSecondary)
           ),
-          backgroundColor: state.isSuccess
-          ? Theme.of(context).colorScheme.success
-          : Theme.of(context).colorScheme.error,
-        )
-      ).closed.then((_) => {
+        ],
+      ),
+      backgroundColor: state.isSuccess
+      ? Theme.of(context).colorScheme.success
+      : Theme.of(context).colorScheme.error,
+    );
+
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(snackBar)
+      .closed.then((_) => {
         if (state.isSuccess) {
           Navigator.of(context).pop(state.transactionResource)
         } else {
           BlocProvider.of<CancelIssueFormBloc>(context).add(Reset())
         }
-      });
+      }
+    );
   }
 }

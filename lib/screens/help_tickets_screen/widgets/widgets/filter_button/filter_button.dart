@@ -11,9 +11,8 @@ class FilterButton extends StatefulWidget {
   final Color _startColor;
   final Color _endColor;
 
-  FilterButton({@required Color startColor, @required Color endColor})
-    : assert(startColor != null && endColor != null),
-      _startColor = startColor,
+  FilterButton({required Color startColor, required Color endColor})
+    : _startColor = startColor,
       _endColor = endColor;
 
   @override
@@ -25,8 +24,9 @@ class _FilterButtonState extends State<FilterButton> with SingleTickerProviderSt
   final double _hiddenSize = SizeConfig.getWidth(1);
   final double _topPoint = 2 * math.pi * 1.2;
   final double _bottomPoint =  2 * math.pi * .68;
-  AnimationController _controller;
-  Animation<Color> _colorAnimation;
+  
+  late AnimationController _controller;
+  late Animation<Color?> _colorAnimation;
   
   @override
   void initState() {
@@ -52,7 +52,7 @@ class _FilterButtonState extends State<FilterButton> with SingleTickerProviderSt
         height: _expandedSize,
         child: AnimatedBuilder(
           animation: _controller, 
-          builder: (BuildContext context, Widget child) {
+          builder: (BuildContext context, Widget? child) {
             return Stack(
               alignment: Alignment.center,
               children: [
@@ -99,12 +99,12 @@ class _FilterButtonState extends State<FilterButton> with SingleTickerProviderSt
     );
   }
 
-  double _setAngle({@required int index}) {
+  double _setAngle({required int index}) {
     final double length = (_topPoint - _bottomPoint) / Option.values.length;
     return _topPoint - (length * index);
   }
   
-  Widget _buildOption({@required Option option, @required Widget icon, @required double angle}) {
+  Widget _buildOption({required Option option, required Widget icon, required double angle}) {
     if (_controller.isDismissed) {
       return Container();
     }
@@ -135,7 +135,7 @@ class _FilterButtonState extends State<FilterButton> with SingleTickerProviderSt
     );
   }
 
-  void _onSelection({@required Option option}) {
+  void _onSelection({required Option option}) {
     BlocProvider.of<FilterButtonBloc>(context).add(Toggle());
     switch (option) {
       case Option.all:

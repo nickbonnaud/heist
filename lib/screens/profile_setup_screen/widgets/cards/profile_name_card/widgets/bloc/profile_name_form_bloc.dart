@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:heist/blocs/authentication/authentication_bloc.dart';
+import 'package:heist/blocs/customer/customer_bloc.dart';
 import 'package:heist/models/customer/customer.dart';
 import 'package:heist/repositories/profile_repository.dart';
 import 'package:heist/resources/helpers/validators.dart';
@@ -14,12 +14,11 @@ part 'profile_name_form_state.dart';
 
 class ProfileNameFormBloc extends Bloc<ProfileNameFormEvent, ProfileNameFormState> {
   final ProfileRepository _profileRepository;
-  final AuthenticationBloc _authenticationBloc;
+  final CustomerBloc _customerBloc;
   
-  ProfileNameFormBloc({@required ProfileRepository profileRepository, @required AuthenticationBloc authenticationBloc})
-    : assert(profileRepository != null && authenticationBloc != null),
-      _profileRepository = profileRepository,
-      _authenticationBloc = authenticationBloc,
+  ProfileNameFormBloc({required ProfileRepository profileRepository, required CustomerBloc customerBloc})
+    : _profileRepository = profileRepository,
+      _customerBloc = customerBloc,
       super(ProfileNameFormState.initial());
 
   @override
@@ -44,17 +43,17 @@ class ProfileNameFormBloc extends Bloc<ProfileNameFormEvent, ProfileNameFormStat
   }
 
   Stream<ProfileNameFormState> _mapFirstNameChangedToState(FirstNameChanged event) async* {
-    yield state.update(isFirstNameValid: Validators.isValidName(event.firstName));
+    yield state.update(isFirstNameValid: Validators.isValidName(name: event.firstName));
   }
 
   Stream<ProfileNameFormState> _mapLastNameChangedToState(LastNameChanged event) async* {
-    yield state.update(isLastNameValid: Validators.isValidName(event.lastName));
+    yield state.update(isLastNameValid: Validators.isValidName(name: event.lastName));
   }
 
   Stream<ProfileNameFormState> _mapSubmittedToState(Submitted event) async* {
     yield state.update(isSubmitting: true);
     try {
-      Customer customer = await _sendProfileData(firstName: event.firstName, lastName: event.lastName, customer: event.customer);
+      Customer customer = await _sendProfileData(firstName: event.firstName, lastName: event.lastName);
       _updatAuthenticationBloc(customer: customer);
       yield state.update(isSubmitting: false, isSuccess: true);
     } catch (_) {
@@ -66,11 +65,11 @@ class ProfileNameFormBloc extends Bloc<ProfileNameFormEvent, ProfileNameFormStat
     yield state.update(isSuccess: false, isFailure: false);
   }
 
-  Future<Customer> _sendProfileData({@required String firstName, @required String lastName, @required Customer customer}) {
+  Future<Customer> _sendProfileData({required String firstName, required String lastName}) {
     return _profileRepository.store(firstName: firstName, lastName: lastName);
   }
 
-  void _updatAuthenticationBloc({@required Customer customer}) {
-    _authenticationBloc.add(CustomerUpdated(customer: customer));
+  void _updatAuthenticationBloc({required Customer customer}) {
+    _customerBloc.add(CustomerUpdated(customer: customer));
   }
 }

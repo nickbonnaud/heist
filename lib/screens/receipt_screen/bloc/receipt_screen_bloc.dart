@@ -10,9 +10,8 @@ part 'receipt_screen_state.dart';
 
 class ReceiptScreenBloc extends Bloc<ReceiptScreenEvent, ReceiptScreenState> {
 
-  ReceiptScreenBloc({@required TransactionResource transactionResource})
-    : assert(transactionResource != null),
-      super(ReceiptScreenState.initial(transactionResource: transactionResource, isButtonVisible: _isButtonVisible(transactionResource: transactionResource)));
+  ReceiptScreenBloc({required TransactionResource transactionResource})
+    : super(ReceiptScreenState.initial(transactionResource: transactionResource, isButtonVisible: _isButtonVisible(transactionResource: transactionResource)));
 
   @override
   Stream<ReceiptScreenState> mapEventToState(ReceiptScreenEvent event) async* {
@@ -21,7 +20,7 @@ class ReceiptScreenBloc extends Bloc<ReceiptScreenEvent, ReceiptScreenState> {
     }
   }
 
-  static bool _isButtonVisible({@required TransactionResource transactionResource}) {
+  static bool _isButtonVisible({required TransactionResource transactionResource}) {
     List<int> visibleStatusCodes = [101, 1020, 1021, 1022, 105, 500, 501, 502, 503];
     return visibleStatusCodes.contains(transactionResource.transaction.status.code);
   }

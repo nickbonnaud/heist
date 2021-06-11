@@ -15,7 +15,7 @@ class NearbyBusinessLoaded extends NearbyBusinessesState {
   final List<Business> businesses;
   final List<PreMarker> preMarkers;
 
-  const NearbyBusinessLoaded({@required this.businesses, @required this.preMarkers});
+  const NearbyBusinessLoaded({required this.businesses, required this.preMarkers});
 
   @override
   List<Object> get props => [businesses, preMarkers];
@@ -24,4 +24,14 @@ class NearbyBusinessLoaded extends NearbyBusinessesState {
   String toString() => 'NearbyBusinessLoaded {businesses: $businesses, preMarkers: $preMarkers }';
 }
 
-class FailedToLoadNearby extends NearbyBusinessesState {}
+class FailedToLoadNearby extends NearbyBusinessesState {
+  final String error;
+
+  const FailedToLoadNearby({required this.error});
+
+  @override
+  List<Object> get props => [error];
+
+  @override
+  String toString() => 'FailedToLoadNearby { error: $error }';
+}

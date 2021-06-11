@@ -1,18 +1,28 @@
+import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
-class PaginatedApiResponse {
-  final dynamic body;
+@immutable
+class PaginatedApiResponse extends Equatable {
+  final List<Map<String, dynamic>> body;
   final String error;
   final bool isOK;
-  final int nextPage;
+  final String? next;
 
   PaginatedApiResponse({
-    @required this.body,
-    @required this.error,
-    @required this.isOK,
-    @required String nextPageString
-  }) :
-    nextPage = nextPageString != 'null' 
-      ? int.parse(nextPageString.substring(nextPageString.indexOf("page=") + 5))
-      : null;
+    required this.body,
+    this.error = "",
+    required this.isOK,
+    this.next
+  });
+
+  @override
+  List<Object?> get props => [body, error, isOK, next];
+
+  @override
+  String toString() => '''PaginatedApiResponse {
+    body: $body,
+    error: $error,
+    isOk: $isOK,
+    next: $next
+  }''';
 }

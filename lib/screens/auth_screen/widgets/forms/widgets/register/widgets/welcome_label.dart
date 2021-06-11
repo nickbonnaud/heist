@@ -37,7 +37,7 @@ class WelcomeLabel extends StatelessWidget {
     );
   }
 
-  double _setVisibility({@required PageOffsetNotifier notifier, @required bool keyboardVisible}) {
+  double _setVisibility({required PageOffsetNotifier notifier, required bool keyboardVisible}) {
     return keyboardVisible ? 0.2 : math.max(0, 4 * notifier.page - 3);
   }
 }

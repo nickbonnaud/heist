@@ -1,63 +1,60 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 
+enum PrimaryType {
+  ach,
+  credit,
+  unknown
+}
+
+@immutable
 class Account extends Equatable {
   final String identifier;
   final int tipRate;
   final int quickTipRate;
-  final String primary;
-  final String error;
+  final PrimaryType primary;
 
-  Account({this.identifier, this.tipRate, this.quickTipRate, this.primary, this.error});
+  Account({
+    required this.identifier,
+    required this.tipRate,
+    required this.quickTipRate,
+    required this.primary
+  });
 
-  Account.fromJson(Map<String, dynamic> json)
+  String get primaryToString => primary.toString().substring(primary.toString().indexOf('.') + 1).toLowerCase();
+
+  Account.fromJson({required Map<String, dynamic> json})
     : identifier = json['identifier'],
-      tipRate = int.parse(json['tip_rate']),
-      quickTipRate = int.parse(json['quick_tip_rate']),
-      primary = json['primary'],
-      error = '';
+      tipRate = json['tip_rate'],
+      quickTipRate = json['quick_tip_rate'],
+      primary = _stringToPrimaryType(primaryTypeString: json['primary']);
 
-  Account.withError(String error)
-    : identifier = null,
-      tipRate = null,
-      quickTipRate = null,
-      primary = null,
-      error = error;
+  Account.empty()
+    : identifier = "",
+      tipRate = 20,
+      quickTipRate = 15,
+      primary = PrimaryType.unknown;
 
   Account update({
-    String identifier,
-    int tipRate,
-    int quickTipRate,
-    String primary,
-    String error
-  }) {
-    return _copyWith(
-      identifier: identifier,
-      tipRate: tipRate,
-      quickTipRate: quickTipRate,
-      primary: primary,
-      error: error
-    );
-  }
+    int? tipRate,
+    int? quickTipRate,
+    PrimaryType? primary,
+  }) => Account(
+    identifier: this.identifier,
+    tipRate: tipRate ?? this.tipRate,
+    quickTipRate: quickTipRate ?? this.quickTipRate,
+    primary: primary ?? this.primary,
+  );
 
-  Account _copyWith({
-    String identifier,
-    int tipRate,
-    int quickTipRate,
-    String primary,
-    String error
-  }) {
-    return Account(
-      identifier: identifier ?? this.identifier,
-      tipRate: tipRate ?? this.tipRate,
-      quickTipRate: quickTipRate ?? this.quickTipRate,
-      primary: primary ?? this.primary,
-      error: error ?? this.error
-    );
+  static PrimaryType _stringToPrimaryType({required String primaryTypeString}) {
+    return PrimaryType.values.firstWhere((primaryType) {
+      return primaryType.toString().substring(primaryType.toString().indexOf('.') + 1).toLowerCase() == primaryTypeString.toLowerCase();
+    });
   }
 
   @override
-  List<Object> get props => [identifier, tipRate, quickTipRate, primary, error];
+  List<Object> get props => [identifier, tipRate, quickTipRate, primary];
 
   @override
-  String toString() => 'Account { identifier: $identifier, tipRate: $tipRate, quickTipRate: $quickTipRate, primary: $primary, error: $error }';
+  String toString() => 'Account { identifier: $identifier, tipRate: $tipRate, quickTipRate: $quickTipRate, primary: $primary }';
 }

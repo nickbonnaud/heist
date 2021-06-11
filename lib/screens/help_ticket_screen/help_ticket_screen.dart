@@ -15,12 +15,16 @@ import 'widgets/message_list/bloc/message_list_bloc.dart';
 class HelpTicketScreen extends StatelessWidget {
   final HelpTicket _helpTicket;
   final HelpTicketsScreenBloc _helpTicketsScreenBloc;
-  final HelpRepository _helpRepository = HelpRepository();
+  final HelpRepository _helpRepository;
 
-  HelpTicketScreen({@required HelpTicket helpTicket, @required HelpTicketsScreenBloc helpTicketsScreenBloc})
-    : assert(helpTicket != null && helpTicketsScreenBloc != null),
-      _helpTicket = helpTicket,
-      _helpTicketsScreenBloc = helpTicketsScreenBloc;
+  HelpTicketScreen({
+    required HelpTicket helpTicket,
+    required HelpTicketsScreenBloc helpTicketsScreenBloc,
+    required HelpRepository helpRepository
+  })
+    : _helpTicket = helpTicket,
+      _helpTicketsScreenBloc = helpTicketsScreenBloc,
+      _helpRepository = helpRepository;
   
 @override
   Widget build(BuildContext context) {
@@ -29,6 +33,7 @@ class HelpTicketScreen extends StatelessWidget {
       child: Scaffold(
         backgroundColor: Theme.of(context).colorScheme.scrollBackground,
         appBar: BottomModalAppBar(
+          context: context,
           backgroundColor: Theme.of(context).colorScheme.scrollBackground,
           title: _helpTicket.subject,
           trailingWidget: _helpTicket.resolved

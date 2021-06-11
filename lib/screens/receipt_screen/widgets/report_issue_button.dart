@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:heist/models/transaction/transaction_resource.dart';
+import 'package:heist/repositories/transaction_issue_repository.dart';
 import 'package:heist/resources/enums/issue_type.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
@@ -18,10 +19,11 @@ enum Options {
 
 class ReportIssueButton extends StatelessWidget {
   final TransactionResource _transaction;
+  final TransactionIssueRepository _transactionIssueRepository;
 
-  ReportIssueButton({@required TransactionResource transaction})
-    : assert(transaction != null),
-      _transaction = transaction;
+  ReportIssueButton({required TransactionResource transaction, required TransactionIssueRepository transactionIssueRepository})
+    : _transaction = transaction,
+      _transactionIssueRepository = transactionIssueRepository;
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +63,7 @@ class ReportIssueButton extends StatelessWidget {
     );
   }
 
-  _filterSelection({@required Options selection, @required BuildContext context}) async {
+  _filterSelection({required Options selection, required BuildContext context}) async {
     IssueType type;
     switch (selection) {
       case Options.wrongBill:
@@ -75,9 +77,9 @@ class ReportIssueButton extends StatelessWidget {
         break;
     }
 
-    TransactionResource transactionResource = await showPlatformModalSheet(
+    TransactionResource? transactionResource = await showPlatformModalSheet(
       context: context, 
-      builder: (_) => IssueScreen(type: type, transaction: _transaction)
+      builder: (_) => IssueScreen(type: type, transaction: _transaction, issueRepository: _transactionIssueRepository)
     );
 
     if (transactionResource != null) {
@@ -85,13 +87,13 @@ class ReportIssueButton extends StatelessWidget {
     }
   }
 
-  ListTile _createTile({@required BuildContext context, @required String title}) {
+  ListTile _createTile({required BuildContext context, required String title}) {
     return ListTile(
       title: _createTitle(context: context, title: title),
     );
   }
 
-  Widget _createTitle({@required BuildContext context, @required String title}) {
+  Widget _createTitle({required BuildContext context, required String title}) {
     return BoldText5(text: title, context: context);
   }
 }

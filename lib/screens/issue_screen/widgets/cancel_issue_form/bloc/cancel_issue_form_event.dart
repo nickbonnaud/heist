@@ -11,7 +11,7 @@ abstract class CancelIssueFormEvent extends Equatable {
 class Submitted extends CancelIssueFormEvent {
   final String issueIdentifier;
 
-  const Submitted({@required this.issueIdentifier});
+  const Submitted({required this.issueIdentifier});
 
   @override
   List<Object> get props => [issueIdentifier];

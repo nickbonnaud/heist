@@ -4,7 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heist/global_widgets/default_app_bar/default_app_bar.dart';
 import 'package:heist/global_widgets/error_screen/error_screen.dart';
 import 'package:heist/global_widgets/refund_widget.dart';
-import 'package:heist/resources/helpers/bottom_loader.dart';
+import 'package:heist/repositories/business_repository.dart';
+import 'package:heist/global_widgets/bottom_loader.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
 import 'package:heist/screens/refunds_screen/bloc/refunds_screen_bloc.dart';
@@ -14,6 +15,10 @@ import 'filter_button/bloc/filter_button_bloc.dart';
 import 'filter_button/filter_button.dart';
 
 class RefundsScreenBody extends StatefulWidget {
+  final BusinessRepository _businessRepository;
+
+  RefundsScreenBody({required BusinessRepository businessRepository})
+    : _businessRepository = businessRepository;
 
   @override
   State<RefundsScreenBody> createState() => _RefundsScreenBodyState();
@@ -22,7 +27,7 @@ class RefundsScreenBody extends StatefulWidget {
 class _RefundsScreenBodyState extends State<RefundsScreenBody> {
   final ScrollController _scrollController = ScrollController();
   final double _scrollThreshold = 200.0;
-  RefundsScreenBloc _refundsScreenBloc;
+  late RefundsScreenBloc _refundsScreenBloc;
 
   @override
   void initState() {
@@ -53,11 +58,12 @@ class _RefundsScreenBodyState extends State<RefundsScreenBody> {
     );
   }
 
-  Widget _buildRefundsBody({@required RefundsScreenState state}) {
+  Widget _buildRefundsBody({required RefundsScreenState state}) {
     return CustomScrollView(
       controller: _scrollController,
       slivers: <Widget>[
         DefaultAppBar(
+          context: context,
           backgroundColor: Theme.of(context).colorScheme.scrollBackground,
           isSliver: true,
           title: "Refunds",
@@ -67,7 +73,7 @@ class _RefundsScreenBodyState extends State<RefundsScreenBody> {
     );
   }
   
-  Widget _buildList({@required RefundsScreenState state}) {
+  Widget _buildList({required RefundsScreenState state}) {
     if (state is RefundsLoaded) {
       if (state.refunds.isEmpty) {
         return SliverPadding(
@@ -109,7 +115,7 @@ class _RefundsScreenBodyState extends State<RefundsScreenBody> {
     );
   }
 
-  Widget _buildFilterButton({@required BuildContext context, @required RefundsScreenState state}) {
+  Widget _buildFilterButton({required BuildContext context, required RefundsScreenState state}) {
     if (state is RefundsLoaded) {
       return Positioned(
         bottom: -SizeConfig.getHeight(5),
@@ -117,6 +123,7 @@ class _RefundsScreenBodyState extends State<RefundsScreenBody> {
         child: BlocProvider<FilterButtonBloc>(
           create: (_) => FilterButtonBloc(),
           child: FilterButton(
+            businessRepository: widget._businessRepository,
             startColor: Theme.of(context).colorScheme.callToAction,
             endColor: Theme.of(context).colorScheme.callToAction,
           ),

@@ -5,33 +5,32 @@ import 'package:heist/blocs/open_transactions/open_transactions_bloc.dart';
 import 'package:heist/models/transaction/transaction_resource.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
+import 'package:heist/resources/helpers/vibrate.dart';
 import 'package:heist/screens/receipt_screen/bloc/receipt_screen_bloc.dart';
 import 'package:heist/themes/global_colors.dart';
-import 'package:vibrate/vibrate.dart';
 
 import 'bloc/keep_open_button_bloc.dart';
 
 class KeepOpenButton extends StatelessWidget {
   final TransactionResource _transactionResource;
 
-  KeepOpenButton({@required TransactionResource transactionResource})
-    : assert(transactionResource != null),
-      _transactionResource = transactionResource;
+  KeepOpenButton({required TransactionResource transactionResource})
+    : _transactionResource = transactionResource;
 
   @override
   Widget build(BuildContext context) {
     return BlocListener<KeepOpenButtonBloc, KeepOpenButtonState>(
       listener: (context, state) {
         if (state.isSubmitFailure) {
-          _showSnackbar(context, "Failed to send request. Please try again.", state);
+          _showSnackbar(context: context, message: "Failed to send request. Please try again.", state: state);
         } else if (state.isSubmitSuccess) {
-          _showSnackbar(context, "Success! Bill will be kept open for 10 minutes. Please return to ${_transactionResource.business.profile.name} before then.", state);
+          _showSnackbar(context: context, message: "Success! Bill will be kept open for 10 minutes. Please return to ${_transactionResource.business.profile.name} before then.", state: state);
         }
       },
       child: BlocBuilder<KeepOpenButtonBloc, KeepOpenButtonState>(
         builder: (context, state) {
           return ElevatedButton(
-            style: ElevatedButtonTheme.of(context).style.copyWith(
+            style: ElevatedButtonTheme.of(context).style!.copyWith(
               backgroundColor: MaterialStateProperty.resolveWith<Color>((states) {
                 if (states.contains(MaterialState.disabled)) {
                   return Theme.of(context).colorScheme.infoDisabled;
@@ -47,7 +46,7 @@ class KeepOpenButton extends StatelessWidget {
     );
   }
 
-  Widget _buttonChild({@required BuildContext context, @required KeepOpenButtonState state}) {
+  Widget _buttonChild({required BuildContext context, required KeepOpenButtonState state}) {
     if (state.isSubmitting) {
       return SizedBox(height: SizeConfig.getWidth(5), width: SizeConfig.getWidth(5), child: CircularProgressIndicator());
     } else {
@@ -56,35 +55,30 @@ class KeepOpenButton extends StatelessWidget {
   }
 
 
-  void _showSnackbar(BuildContext context, String message, KeepOpenButtonState state) async {
-    bool canVibrate = await Vibrate.canVibrate;
-    if (canVibrate) {
-      Vibrate.feedback(state.isSubmitSuccess ? FeedbackType.success : FeedbackType.error);
-    }
-
-    Scaffold.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(
-        SnackBar(
-          content: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Expanded(
-                child: BoldText3(text: message, context: context, color: Theme.of(context).colorScheme.onSecondary)
-              ),
-            ],
+  void _showSnackbar({required BuildContext context, required String message, required KeepOpenButtonState state}) async {
+    state.isSubmitSuccess ? Vibrate.success() : Vibrate.error();
+    final SnackBar snackBar = SnackBar(
+      content: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Expanded(
+            child: BoldText3(text: message, context: context, color: Theme.of(context).colorScheme.onSecondary)
           ),
-          backgroundColor: state.isSubmitSuccess 
-            ? Theme.of(context).colorScheme.success
-            : Theme.of(context).colorScheme.error
-        )
-      ).closed.then((_) => {
-        if (state.isSubmitSuccess) {
-          BlocProvider.of<ReceiptScreenBloc>(context).add(TransactionChanged(transactionResource: state.transactionResource)),
-          BlocProvider.of<OpenTransactionsBloc>(context).add(UpdateOpenTransaction(transaction: state.transactionResource))
-        } else {
+        ],
+      ),
+      backgroundColor: state.isSubmitSuccess 
+        ? Theme.of(context).colorScheme.success
+        : Theme.of(context).colorScheme.error
+    );
+
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(snackBar)
+      .closed.then((_) => {
+        if (!state.isSubmitSuccess) {
           BlocProvider.of<KeepOpenButtonBloc>(context).add(Reset())
         }
-      });
+      }
+    );
   }
 }

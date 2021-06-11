@@ -22,7 +22,7 @@ class PeekSheet extends StatefulWidget {
 }
 
 class _PeekSheetState extends State<PeekSheet> with SingleTickerProviderStateMixin {
-  AnimationController _controller;
+  late AnimationController _controller;
 
   double get _maxHeight => MediaQuery.of(context).size.height;
   double get _topMargin => lerp(min: 20, max: 20 + MediaQuery.of(context).padding.top);
@@ -76,8 +76,8 @@ class _PeekSheetState extends State<PeekSheet> with SingleTickerProviderStateMix
                 activeLocationBloc: BlocProvider.of<ActiveLocationBloc>(context),
                 nearbyBusinessesBloc: BlocProvider.of<NearbyBusinessesBloc>(context),
                 numberOpenTransactions: BlocProvider.of<OpenTransactionsBloc>(context).openTransactions.length,
-                numberActiveLocations: BlocProvider.of<ActiveLocationBloc>(context).locations.length,
-                numberNearbyLocations: BlocProvider.of<NearbyBusinessesBloc>(context).businesses.length
+                numberActiveLocations: BlocProvider.of<ActiveLocationBloc>(context).state.activeLocations.length,
+                numberNearbyLocations: BlocProvider.of<NearbyBusinessesBloc>(context).state.businesses.length
               ),
               child: Stack(
                 children: <Widget>[
@@ -127,7 +127,9 @@ class _PeekSheetState extends State<PeekSheet> with SingleTickerProviderStateMix
   }
 
   void _handleDragUpdate(DragUpdateDetails details) {
-    _controller.value -= details.primaryDelta / _maxHeight;
+    if (details.primaryDelta != null) {
+      _controller.value -= details.primaryDelta! / _maxHeight;
+    }
   }
 
   void _handleDragEnd(DragEndDetails details) {
@@ -143,8 +145,8 @@ class _PeekSheetState extends State<PeekSheet> with SingleTickerProviderStateMix
     }
   }
   
-  double lerp({@required double min, @required double max}) {
-    return lerpDouble(min, max, _controller.value);
+  double lerp({required double min, required double max}) {
+    return lerpDouble(min, max, _controller.value)!;
   }
 
   void _toggle() {

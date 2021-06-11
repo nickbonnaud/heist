@@ -5,6 +5,12 @@ import 'package:heist/blocs/nearby_businesses/nearby_businesses_bloc.dart';
 import 'package:heist/global_widgets/error_screen/error_screen.dart';
 
 class FetchBusinessesFailScreen extends StatelessWidget {
+  final NearbyBusinessesBloc _nearbyBusinessesBloc;
+  final GeoLocationBloc _geoLocationBloc;
+
+  FetchBusinessesFailScreen({required NearbyBusinessesBloc nearbyBusinessesBloc, required GeoLocationBloc geoLocationBloc})
+    : _nearbyBusinessesBloc = nearbyBusinessesBloc,
+      _geoLocationBloc = geoLocationBloc;
   
   @override
   Widget build(BuildContext context) {
@@ -15,9 +21,9 @@ class FetchBusinessesFailScreen extends StatelessWidget {
           buttonText: state is Loading ? "Fetching" : "Retry",
           onButtonPressed: state is Loading 
             ? null 
-            : () => BlocProvider.of<NearbyBusinessesBloc>(context).add(FetchNearby(
-                lat: BlocProvider.of<GeoLocationBloc>(context).currentLocation['lat'],
-                lng: BlocProvider.of<GeoLocationBloc>(context).currentLocation['lng'],
+            : () => _nearbyBusinessesBloc.add(FetchNearby(
+                lat: _geoLocationBloc.currentLocation!['lat']!,
+                lng: _geoLocationBloc.currentLocation!['lng']!,
               )),
         );
       },

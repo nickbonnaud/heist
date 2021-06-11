@@ -6,13 +6,13 @@ class MessageListState {
 
   HelpTicket get getHelpTicket => helpTicket;
   
-  MessageListState({@required this.helpTicket});
+  MessageListState({required this.helpTicket});
 
-  factory MessageListState.initial({@required HelpTicket helpTicket}) {
+  factory MessageListState.initial({required HelpTicket helpTicket}) {
     return MessageListState(helpTicket: helpTicket);
   }
 
-  MessageListState update({@required HelpTicket helpTicket}) {
+  MessageListState update({required HelpTicket helpTicket}) {
     return MessageListState(helpTicket: helpTicket);
   }
   

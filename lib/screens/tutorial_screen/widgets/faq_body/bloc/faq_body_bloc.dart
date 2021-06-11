@@ -31,7 +31,7 @@ class FaqBodyBloc extends Bloc<FaqBodyEvent, FaqBodyState> {
     }
   }
 
-  Stream<FaqBodyState> _mapToggleAnswerVisibilityToState({@required Faq faqToUpdate}) async* {
+  Stream<FaqBodyState> _mapToggleAnswerVisibilityToState({required Faq faqToUpdate}) async* {
     final List<Faq> updatedFaqs = state.faqs.map((faq){
       return faq == faqToUpdate 
         ? faqToUpdate.update(answerVisible: !faqToUpdate.answerVisible) 

@@ -1,5 +1,5 @@
+import 'package:another_transformer_page_view/another_transformer_page_view.dart';
 import 'package:flutter/material.dart';
-import 'package:transformer_page_view/transformer_page_view.dart';
 import 'dart:math' as Math;
 
 class PickerTransformer extends PageTransformer {
@@ -8,9 +8,11 @@ class PickerTransformer extends PageTransformer {
 
   @override
   Widget transform(Widget child, TransformInfo info) {
-    double position = info.position;
-    double pageWidth = info.width;
-    double pageHeight = info.height;
+    double? position = info.position;
+    double? pageWidth = info.width;
+    double? pageHeight = info.height;
+
+    if (position == null || pageWidth == null || pageHeight == null) return child;
 
     if (position < -1) {
       // [-Infinity,-1)

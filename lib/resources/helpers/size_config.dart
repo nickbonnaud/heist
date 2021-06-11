@@ -1,25 +1,23 @@
 import 'package:flutter/widgets.dart';
 
+@immutable
 class SizeConfig {
-  static MediaQueryData _mediaQueryData;
-  static double _screenWidth;
-  static double _screenHeight;
-  static double _blockSizeHorizontal;
-  static double _blockSizeVertical;
+  static double? _blockSizeHorizontal;
+  static double? _blockSizeVertical;
 
   void init(BuildContext context) {
-    _mediaQueryData = MediaQuery.of(context);
-    _screenWidth = _mediaQueryData.size.width;
-    _screenHeight = _mediaQueryData.size.height;
-    _blockSizeHorizontal = _screenWidth / 100;
-    _blockSizeVertical = _screenHeight / 100;
+    final MediaQueryData mediaQueryData = MediaQuery.of(context);
+    final double screenWidth = mediaQueryData.size.width;
+    final double screenHeight = mediaQueryData.size.height;
+    _blockSizeHorizontal = screenWidth / 100;
+    _blockSizeVertical = screenHeight / 100;
   }
 
   static double getHeight(double heightPercent) {
-    return _blockSizeVertical * heightPercent;
+    return _blockSizeVertical! * heightPercent;
   }
 
   static double getWidth(double widthPercent) {
-    return _blockSizeHorizontal * widthPercent;
+    return _blockSizeHorizontal! * widthPercent;
   }
 }

@@ -1,23 +1,29 @@
-import 'package:heist/models/api_response.dart';
 import 'package:heist/models/business/business.dart';
+import 'package:heist/models/paginate_data_holder.dart';
 import 'package:heist/providers/location_provider.dart';
+import 'package:heist/repositories/base_repository.dart';
 import 'package:meta/meta.dart';
 
-class LocationRepository {
-  final LocationProvider _locationProvider = LocationProvider();
+@immutable
+class LocationRepository extends BaseRepository {
+  final LocationProvider _locationProvider;
 
-  Future<List<Business>> sendLocation({@required double lat, @required double lng, @required bool startLocation}) async {
-    final ApiResponse response = await _locationProvider.sendLocation(lat: lat, lng: lng, startLocation: startLocation);
-    if (response.isOK) {
-      return _handleSuccess(response);
-    }
-    return [Business.withError(response.error)].toList();
+  LocationRepository({required LocationProvider locationProvider})
+    : _locationProvider = locationProvider;
+
+  Future<List<Business>> sendLocation({required double lat, required double lng, required bool startLocation}) async {
+    final Map<String, dynamic> body = {
+      "lat": lat,
+      "lng": lng,
+      "start_location": startLocation
+    };
+
+    final PaginateDataHolder holder = await this.sendPaginated(request:  _locationProvider.sendLocation(body: body));
+    return deserialize(holder: holder);
   }
 
-  List<Business> _handleSuccess(ApiResponse response) {
-    final data = response.body as List;
-    return data.map((rawBusiness) {
-      return Business.fromJson(rawBusiness);
-    }).toList();
+  @override
+  deserialize({PaginateDataHolder? holder, Map<String, dynamic>? json}) {
+    return holder!.data.map((business) => Business.fromJson(json: business)).toList();
   }
 }

@@ -15,36 +15,36 @@ class LogoButtonsListBloc extends Bloc<LogoButtonsListEvent, LogoButtonsListStat
   final OpenTransactionsBloc openTransactionsBloc;
   final ActiveLocationBloc activeLocationBloc;
   final NearbyBusinessesBloc nearbyBusinessesBloc;
-  StreamSubscription openTransactionsSubscription;
-  StreamSubscription activeLocationSubscription;
-  StreamSubscription nearbyBusinessesSubscription;
+  late StreamSubscription openTransactionsSubscription;
+  late StreamSubscription activeLocationSubscription;
+  late StreamSubscription nearbyBusinessesSubscription;
 
   
   LogoButtonsListBloc({
-    @required this.openTransactionsBloc, 
-    @required this.activeLocationBloc, 
-    @required this.nearbyBusinessesBloc,
-    @required int numberOpenTransactions,
-    @required int numberActiveLocations,
-    @required int numberNearbyLocations
+    required this.openTransactionsBloc, 
+    required this.activeLocationBloc, 
+    required this.nearbyBusinessesBloc,
+    required int numberOpenTransactions,
+    required int numberActiveLocations,
+    required int numberNearbyLocations
   }) : super(LogoButtonsListState.initial(
       numberOpenTransactions: numberOpenTransactions,
       numberActiveLocations: numberActiveLocations,
       numberNearbyLocations: numberNearbyLocations
     )) {
-      openTransactionsSubscription = openTransactionsBloc.listen((OpenTransactionsState openTransactionsState) {
+      openTransactionsSubscription = openTransactionsBloc.stream.listen((OpenTransactionsState openTransactionsState) {
         if (openTransactionsState is OpenTransactionsLoaded) {
           add(NumberOpenTransactionsChanged(numberOpenTransactions: openTransactionsState.openTransactions.length));
         }
       });
 
-      activeLocationSubscription = activeLocationBloc.listen((ActiveLocationState activeLocationState) {
+      activeLocationSubscription = activeLocationBloc.stream.listen((ActiveLocationState activeLocationState) {
         if (numberActiveLocations != activeLocationState.activeLocations.length) {
           add(NumberActiveLocationsChanged(numberActiveLocations: activeLocationState.activeLocations.length));
         }
       });
 
-      nearbyBusinessesSubscription = nearbyBusinessesBloc.listen((NearbyBusinessesState nearbyBusinessesState) {
+      nearbyBusinessesSubscription = nearbyBusinessesBloc.stream.listen((NearbyBusinessesState nearbyBusinessesState) {
         if (nearbyBusinessesState is NearbyBusinessLoaded) {
           add(NumberNearbyBusinessesChanged(numberNearbyBusinesses: nearbyBusinessesState.businesses.length));
         } else {

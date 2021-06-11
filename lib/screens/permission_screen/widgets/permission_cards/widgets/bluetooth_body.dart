@@ -12,9 +12,8 @@ import '../../permission_buttons/permission_buttons.dart';
 class BluetoothBody extends StatelessWidget {
   final PermissionButtons _permissionButtons;
   
-  BluetoothBody({@required PermissionButtons permissionButtons})
-    : assert(permissionButtons != null),
-      _permissionButtons = permissionButtons;
+  BluetoothBody({required PermissionButtons permissionButtons})
+    : _permissionButtons = permissionButtons;
 
   final String bluetoothText = 
   'Bluetooth is a core part of ${Constants.appName}.\n\n'

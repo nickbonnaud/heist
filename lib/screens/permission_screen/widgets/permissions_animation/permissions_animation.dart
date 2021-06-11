@@ -8,6 +8,10 @@ import 'package:heist/blocs/permissions/permissions_bloc.dart';
 import 'widgets/takeoff_control.dart';
 
 class PermissionsAnimation extends StatefulWidget {
+  final PermissionsBloc _permissionsBloc;
+
+  PermissionsAnimation({required PermissionsBloc permissionsBloc})
+    : _permissionsBloc = permissionsBloc;
 
   @override
   State<PermissionsAnimation> createState() => _PermissionsAnimationState();
@@ -16,16 +20,16 @@ class PermissionsAnimation extends StatefulWidget {
 class _PermissionsAnimationState extends State<PermissionsAnimation> {
   final TakeoffControl _controls = TakeoffControl();
 
-  StreamSubscription _animationCompleteListener;
-  List<PermissionType> _invalidPermissions;
-  String _initialAnimation;
-  String _currentAnimation;
-  String _nextAnimation;
+  late StreamSubscription _animationCompleteListener;
+  late List<PermissionType> _invalidPermissions;
+  late String _initialAnimation;
+  late String _currentAnimation;
+  late String _nextAnimation;
   
   @override
   void initState() {
     super.initState();
-    _invalidPermissions = BlocProvider.of<PermissionsBloc>(context).invalidPermissions;
+    _invalidPermissions = widget._permissionsBloc.invalidPermissions;
     _initialAnimation = _setInitialAnimation(incompletePermissions: _invalidPermissions.length);
     _currentAnimation = _initialAnimation;
     _nextAnimation = _setNextAnimation();
@@ -89,11 +93,12 @@ class _PermissionsAnimationState extends State<PermissionsAnimation> {
         nextAnimation = 'end';
         break;
       default:
+        nextAnimation = "";
     }
     return nextAnimation;
   }
   
-  String _setInitialAnimation({@required int incompletePermissions}) {
+  String _setInitialAnimation({required int incompletePermissions}) {
     String animationName;
     switch (incompletePermissions) {
       case 4:
@@ -108,11 +113,13 @@ class _PermissionsAnimationState extends State<PermissionsAnimation> {
       case 1:
         animationName = 'stage_4';
         break;
+      default:
+        animationName = "";
     }
     return animationName;
   }
   
-  void _animationListener({@required BuildContext context}) {
+  void _animationListener({required BuildContext context}) {
     _animationCompleteListener = _controls.animationCompleted.listen((animationName) { 
       if (animationName == 'stage_2_3_transition') {
         _playNext();

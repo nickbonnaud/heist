@@ -10,7 +10,7 @@ abstract class HelpTicketFormEvent extends Equatable {
 class SubjectChanged extends HelpTicketFormEvent {
   final String subject;
 
-  const SubjectChanged({@required this.subject});
+  const SubjectChanged({required this.subject});
 
   @override
   List<Object> get props => [subject];
@@ -22,7 +22,7 @@ class SubjectChanged extends HelpTicketFormEvent {
 class MessageChanged extends HelpTicketFormEvent {
   final String message;
 
-  const MessageChanged({@required this.message});
+  const MessageChanged({required this.message});
 
   @override
   List<Object> get props => [message];
@@ -35,7 +35,7 @@ class Submitted extends HelpTicketFormEvent {
   final String subject;
   final String message;
 
-  const Submitted({@required this.subject, @required this.message});
+  const Submitted({required this.subject, required this.message});
 
   @override
   List<Object> get props => [subject, message];

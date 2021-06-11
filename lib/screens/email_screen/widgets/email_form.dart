@@ -4,27 +4,26 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heist/models/customer/customer.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
+import 'package:heist/resources/helpers/vibrate.dart';
 import 'package:heist/screens/email_screen/bloc/email_form_bloc.dart';
 import 'package:heist/themes/global_colors.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
-import 'package:vibrate/vibrate.dart';
 
 class EmailForm extends StatefulWidget {
   final Customer _customer;
 
-  EmailForm({@required Customer customer})
-    : assert(customer != null),
-      _customer = customer;
+  EmailForm({required Customer customer})
+    : _customer = customer;
 
   @override
   State<EmailForm> createState() => _EmailFormState();
 }
 
 class _EmailFormState extends State<EmailForm> {
-  TextEditingController _emailController;
   final FocusNode _emailFocusNode = FocusNode();
+  late TextEditingController _emailController;
 
-  EmailFormBloc _emailFormBloc;
+  late EmailFormBloc _emailFormBloc;
   
   @override
   void initState() {
@@ -130,39 +129,38 @@ class _EmailFormState extends State<EmailForm> {
     super.dispose();
   }
 
-  void _showSnackbar({@required BuildContext context, @required bool isSuccess}) async {
-    bool canVibrate = await Vibrate.canVibrate;
-    if (canVibrate) {
-      Vibrate.feedback(isSuccess ? FeedbackType.success : FeedbackType.error);
-    }
+  void _showSnackbar({required BuildContext context, required bool isSuccess}) async {
+    isSuccess ? Vibrate.success() : Vibrate.error();
 
     final String text = isSuccess
       ? 'Email Updated!'
       : 'Failed to save new email. Please try again.';
 
-    Scaffold.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(
-        SnackBar(
-          content: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Expanded(
-                child: BoldText3(text: text, context: context, color: Theme.of(context).colorScheme.onSecondary)
-              ),
-            ],
+    final SnackBar snackBar = SnackBar(
+      content: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Expanded(
+            child: BoldText3(text: text, context: context, color: Theme.of(context).colorScheme.onSecondary)
           ),
-          backgroundColor: isSuccess
-            ? Theme.of(context).colorScheme.success
-            : Theme.of(context).colorScheme.error,
-        )
-      ).closed.then((_) => {
+        ],
+      ),
+      backgroundColor: isSuccess
+        ? Theme.of(context).colorScheme.success
+        : Theme.of(context).colorScheme.error,
+    );
+
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(snackBar)
+      .closed.then((_) => {
         if (isSuccess) {
           Navigator.of(context).pop()
         } else {
           BlocProvider.of<EmailFormBloc>(context).add(Reset())
         }
-      });
+      }
+    );
   }
 
   void _cancelButtonPressed(BuildContext context) {
@@ -174,7 +172,7 @@ class _EmailFormState extends State<EmailForm> {
   }
 
   bool _emailChanged() {
-    return widget._customer?.email != _emailController.text;
+    return widget._customer.email != _emailController.text;
   }
 
   void _onEmailChanged() {
@@ -199,7 +197,7 @@ class _EmailFormState extends State<EmailForm> {
     return KeyboardActionsConfig(
       keyboardActionsPlatform: KeyboardActionsPlatform.ALL,
       actions: [
-        KeyboardAction(
+        KeyboardActionsItem(
           focusNode: _emailFocusNode,
           toolbarButtons: [
             (node) {

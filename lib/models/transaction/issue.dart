@@ -1,44 +1,37 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:heist/resources/enums/issue_type.dart';
-import 'package:intl/intl.dart';
-import 'package:meta/meta.dart';
+import 'package:heist/resources/helpers/date_formatter.dart';
 
+@immutable
 class Issue extends Equatable {
   final String identifier;
   final IssueType type;
   final String message;
   final bool resolved;
   final int warningsSent;
-  final String updatedAt;
-  final String formattedUpdatedAt;
+  final DateTime updatedAt;
 
   Issue({
-    @required this.identifier,
-    @required this.type,
-    @required this.message,
-    @required this.resolved,
-    @required this.warningsSent,
-    @required this.updatedAt,
-    @required this.formattedUpdatedAt
+    required this.identifier,
+    required this.type,
+    required this.message,
+    required this.resolved,
+    required this.warningsSent,
+    required this.updatedAt
   });
 
-  static Issue fromJson(Map<String, dynamic> json) {
-    return Issue(
-      identifier: json['identifier'],
-      type: typeToEnum(json['type']),
-      message: json['issue'],
-      resolved: json['resolved'],
-      warningsSent: int.parse(json['warnings_sent']),
-      updatedAt: json['updated_at'],
-      formattedUpdatedAt: _formatDate(json['updated_at'])
-    );
-  }
+  String get typeToString => type.toString().substring(type.toString().indexOf('.') + 1).toLowerCase();
 
-  static String _formatDate(String date) {
-    return DateFormat('E, MMM d').format(DateTime.parse(date));
-  }
+  Issue.fromJson({required Map<String, dynamic> json})
+    : identifier = json['identifier'],
+      type = typeToEnum(jsonType: json['type']),
+      message = json['issue'],
+      resolved = json['resolved'],
+      warningsSent = json['warnings_sent'],
+      updatedAt = DateFormatter.toDateTime(date: json['updated_at']);
 
-  static IssueType typeToEnum(String jsonType) {
+  static IssueType typeToEnum({required String jsonType}) {
     if (jsonType == 'wrong_bill') {
       return IssueType.wrong_bill;
     } else if (jsonType == 'error_in_bill') {
@@ -48,7 +41,7 @@ class Issue extends Equatable {
     }
   }
 
-  static String enumToString(IssueType type) {
+  static String enumToString({required IssueType type}) {
     if (type == IssueType.wrong_bill) {
       return 'wrong_bill';
     } else if (type == IssueType.error_in_bill) {
@@ -59,47 +52,22 @@ class Issue extends Equatable {
   }
 
   Issue update({
-    String identifier,
-    IssueType type,
-    String message,
-    bool resolved,
-    int warningsSent,
-    String updatedAt,
-    String formattedUpdatedAt
-  }) {
-    return _copyWith(
-      identifier: identifier,
-      type: type,
-      message: message,
-      resolved: resolved,
-      warningsSent: warningsSent,
-      updatedAt: updatedAt,
-      formattedUpdatedAt: formattedUpdatedAt
-    );
-  }
-  
-  Issue _copyWith({
-    String identifier,
-    IssueType type,
-    String message,
-    bool resolved,
-    int warningsSent,
-    String updatedAt,
-    String formattedUpdatedAt
-  }) {
-    return Issue(
-      identifier: identifier ?? this.identifier,
-      type: type ?? this.type,
-      message: message ?? this.message,
-      resolved: resolved ?? this.resolved,
-      warningsSent: warningsSent ?? this.warningsSent,
-      updatedAt: updatedAt ?? this.updatedAt,
-      formattedUpdatedAt: formattedUpdatedAt ?? this.formattedUpdatedAt
-    );
-  }
+    IssueType? type,
+    String? message,
+    bool? resolved,
+    int? warningsSent,
+    DateTime? updatedAt,
+  }) => Issue(
+    identifier: this.identifier,
+    type: type ?? this.type,
+    message: message ?? this.message,
+    resolved: resolved ?? this.resolved,
+    warningsSent: warningsSent ?? this.warningsSent,
+    updatedAt: updatedAt ?? this.updatedAt,
+  );
 
   @override
-  List<Object> get props => [identifier, type, message, resolved, warningsSent, updatedAt, formattedUpdatedAt];
+  List<Object> get props => [identifier, type, message, resolved, warningsSent, updatedAt];
 
   @override
   String toString() => '''Issue {
@@ -109,6 +77,5 @@ class Issue extends Equatable {
     resolved: $resolved,
     warningsSent: $warningsSent,
     updatedAt: $updatedAt,
-    formattedUpdatedAt: $formattedUpdatedAt
   }''';
 }

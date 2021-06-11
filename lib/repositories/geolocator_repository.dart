@@ -1,8 +1,13 @@
+import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:heist/providers/geolocator_provider.dart';
 
+@immutable
 class GeolocatorRepository {
-  final GeolocatorProvider _geolocatorProvider = GeolocatorProvider();
+  final GeolocatorProvider _geolocatorProvider;
+
+  const GeolocatorRepository({required GeolocatorProvider geolocatorProvider})
+    : _geolocatorProvider = geolocatorProvider;
 
   Future<Position> fetchLow() async {
     return await _geolocatorProvider.fetch(accuracy: LocationAccuracy.low);
@@ -20,7 +25,7 @@ class GeolocatorRepository {
     return await _geolocatorProvider.fetch(accuracy: LocationAccuracy.best);
   }
 
-  Future<GeolocationStatus> checkPermission() async {
+  Future<LocationPermission> checkPermission() async {
     return await _geolocatorProvider.checkPermission();
   }
 

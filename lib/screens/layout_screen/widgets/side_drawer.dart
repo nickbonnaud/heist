@@ -4,6 +4,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
+import 'package:heist/blocs/customer/customer_bloc.dart';
+import 'package:heist/repositories/account_repository.dart';
+import 'package:heist/repositories/authentication_repository.dart';
+import 'package:heist/repositories/business_repository.dart';
+import 'package:heist/repositories/customer_repository.dart';
+import 'package:heist/repositories/help_repository.dart';
+import 'package:heist/repositories/photo_picker_repository.dart';
+import 'package:heist/repositories/photo_repository.dart';
+import 'package:heist/repositories/profile_repository.dart';
+import 'package:heist/repositories/refund_repository.dart';
+import 'package:heist/repositories/transaction_repository.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
 import 'package:heist/screens/help_tickets_screen/help_tickets_screen.dart';
@@ -16,10 +27,44 @@ import 'package:heist/themes/global_colors.dart';
 
 class SideDrawer extends StatefulWidget {
   final Widget _homeScreen;
+  final TransactionRepository _transactionRepository;
+  final BusinessRepository _businessRepository;
+  final HelpRepository _helpRepository;
+  final RefundRepository _refundRepository;
+  final CustomerBloc _customerBloc;
+  final ProfileRepository _profileRepository;
+  final PhotoRepository _photoRepository;
+  final PhotoPickerRepository _photoPickerRepository;
+  final CustomerRepository _customerRepository;
+  final AccountRepository _accountRepository;
+  final AuthenticationRepository _authenticationRepository;
 
-  SideDrawer({@required homeScreen})
-    : assert(homeScreen != null),
-      _homeScreen = homeScreen;
+  SideDrawer({
+    required Widget homeScreen,
+    required TransactionRepository transactionRepository,
+    required BusinessRepository businessRepository,
+    required HelpRepository helpRepository,
+    required RefundRepository refundRepository,
+    required CustomerBloc customerBloc,
+    required ProfileRepository profileRepository,
+    required PhotoRepository photoRepository,
+    required PhotoPickerRepository photoPickerRepository,
+    required CustomerRepository customerRepository,
+    required AccountRepository accountRepository,
+    required AuthenticationRepository authenticationRepository
+  })
+    : _homeScreen = homeScreen,
+      _transactionRepository = transactionRepository,
+      _businessRepository = businessRepository,
+      _helpRepository = helpRepository,
+      _refundRepository = refundRepository,
+      _customerBloc = customerBloc,
+      _profileRepository = profileRepository,
+      _photoRepository = photoRepository,
+      _photoPickerRepository = photoPickerRepository,
+      _customerRepository = customerRepository,
+      _accountRepository = accountRepository,
+      _authenticationRepository = authenticationRepository;
 
   @override
   State<SideDrawer> createState() => _SideDrawerState();
@@ -32,9 +77,9 @@ class _SideDrawerState extends State<SideDrawer> with SingleTickerProviderStateM
   static const double _shadowOffset = 16.0;
   static const double _borderRadius = 32.0;
   
-  Animation<double> _animation, _scaleAnimation;
-  Animation<BorderRadius> _radiusAnimation;
-  AnimationController _animationController;
+  late Animation<double> _animation, _scaleAnimation;
+  late Animation<BorderRadius> _radiusAnimation;
+  late AnimationController _animationController;
 
   _open(BuildContext context) {
     _animationController.forward();
@@ -101,7 +146,9 @@ class _SideDrawerState extends State<SideDrawer> with SingleTickerProviderStateM
   }
 
   void _handleDragUpdate(DragUpdateDetails details) {
-    _animationController.value += details.primaryDelta / MediaQuery.of(context).size.width;
+    if (details.primaryDelta != null) {
+      _animationController.value += details.primaryDelta! / MediaQuery.of(context).size.width;
+    }
   }
 
   void _handleDragEnd(DragEndDetails details) {
@@ -119,10 +166,22 @@ class _SideDrawerState extends State<SideDrawer> with SingleTickerProviderStateM
         velocity: _animationController.value < 0.5 ? -2.0 : 2.0);
   }
 
-  Widget _buildBody({@required SideMenuState state}) {
+  Widget _buildBody({required SideMenuState state}) {
     return Stack(
       children: <Widget>[
-        Drawer(),
+        Drawer(
+          transactionRepository: widget._transactionRepository,
+          businessRepository: widget._businessRepository,
+          helpRepository: widget._helpRepository,
+          refundRepository: widget._refundRepository,
+          customerBloc: widget._customerBloc,
+          profileRepository: widget._profileRepository,
+          photoRepository: widget._photoRepository,
+          photoPickerRepository: widget._photoPickerRepository,
+          customerRepository: widget._customerRepository,
+          accountRepository: widget._accountRepository,
+          authenticationRepository: widget._authenticationRepository,
+        ),
         Transform.scale(
           scale: _scaleAnimation.value,
           child: Transform.translate(
@@ -158,6 +217,43 @@ class _SideDrawerState extends State<SideDrawer> with SingleTickerProviderStateM
 }
 
 class Drawer extends StatelessWidget {
+  final TransactionRepository _transactionRepository;
+  final BusinessRepository _businessRepository;
+  final HelpRepository _helpRepository;
+  final RefundRepository _refundRepository;
+  final CustomerBloc _customerBloc;
+  final ProfileRepository _profileRepository;
+  final PhotoRepository _photoRepository;
+  final PhotoPickerRepository _photoPickerRepository;
+  final CustomerRepository _customerRepository;
+  final AccountRepository _accountRepository;
+  final AuthenticationRepository _authenticationRepository;
+
+  Drawer({
+    required TransactionRepository transactionRepository,
+    required BusinessRepository businessRepository,
+    required HelpRepository helpRepository,
+    required RefundRepository refundRepository,
+    required CustomerBloc customerBloc,
+    required ProfileRepository profileRepository,
+    required PhotoRepository photoRepository,
+    required PhotoPickerRepository photoPickerRepository,
+    required CustomerRepository customerRepository,
+    required AccountRepository accountRepository,
+    required AuthenticationRepository authenticationRepository
+  })
+    : _transactionRepository = transactionRepository,
+      _businessRepository = businessRepository,
+      _helpRepository = helpRepository,
+      _refundRepository = refundRepository,
+      _customerBloc = customerBloc,
+      _profileRepository = profileRepository,
+      _photoRepository = photoRepository,
+      _photoPickerRepository = photoPickerRepository,
+      _customerRepository = customerRepository,
+      _accountRepository = accountRepository,
+      _authenticationRepository = authenticationRepository;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -189,7 +285,10 @@ class Drawer extends StatelessWidget {
                     context, 
                     platformPageRoute(
                       context: context, 
-                      builder: (_) => HistoricTransactionsScreen()
+                      builder: (_) => HistoricTransactionsScreen(
+                        businessRepository: _businessRepository,
+                        transactionRepository: _transactionRepository,
+                      )
                     )
                   ), 
                   text: 'Transactions',
@@ -203,7 +302,10 @@ class Drawer extends StatelessWidget {
                     context, 
                     platformPageRoute(
                       context: context, 
-                      builder: (_) => RefundsScreen()
+                      builder: (_) => RefundsScreen(
+                        refundRepository: _refundRepository,
+                        businessRepository: _businessRepository,
+                      )
                     )
                   ), 
                   text: 'Refunds',
@@ -217,7 +319,15 @@ class Drawer extends StatelessWidget {
                     context,
                     platformPageRoute(
                       context: context,
-                      builder: (_) => SettingsScreen()
+                      builder: (_) => SettingsScreen(
+                        customerBloc: _customerBloc,
+                        profileRepository: _profileRepository,
+                        photoRepository: _photoRepository,
+                        photoPickerRepository: _photoPickerRepository,
+                        customerRepository: _customerRepository,
+                        accountRepository: _accountRepository,
+                        authenticationRepository: _authenticationRepository,
+                      )
                     )
                   ),
                   text: 'Settings',
@@ -242,7 +352,9 @@ class Drawer extends StatelessWidget {
                     context, 
                     platformPageRoute(
                       context: context, 
-                      builder: (_) => HelpTicketsScreen()
+                      builder: (_) => HelpTicketsScreen(
+                        helpRepository: _helpRepository,
+                      )
                     )
                   ),
                   text: 'Help',
@@ -261,7 +373,7 @@ class Drawer extends StatelessWidget {
 }
 
 class DrawerItem extends StatelessWidget {
-  final Function _onPressed;
+  final VoidCallback _onPressed;
   final String _text;
   final Widget _icon;
 

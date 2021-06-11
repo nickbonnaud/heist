@@ -18,9 +18,8 @@ class OpenTransactionsList extends StatelessWidget {
   double get _size => lerp(min: sharedSizes.startSize, max: sharedSizes.endSize);
   double get _borderRadius => lerp(min: sharedSizes.startSize, max: sharedSizes.endSize);
 
-  OpenTransactionsList({@required AnimationController controller, @required double topMargin})
-    : assert(controller != null && topMargin != null),
-      _controller = controller,
+  OpenTransactionsList({required AnimationController controller, required double topMargin})
+    : _controller = controller,
       _topMargin = topMargin;
 
   @override
@@ -41,7 +40,7 @@ class OpenTransactionsList extends StatelessWidget {
     );
   }
 
-  Widget _buildLogoButton({@required TransactionResource transactionResource, @required OpenTransactionsLoaded state}) {
+  Widget _buildLogoButton({required TransactionResource transactionResource, required OpenTransactionsLoaded state}) {
     int index = state.openTransactions.indexOf(transactionResource);
     return LogoButton(
       controller: _controller, 
@@ -54,7 +53,7 @@ class OpenTransactionsList extends StatelessWidget {
     );
   }
 
-  Widget _buildDetails({@required TransactionResource transactionResource, @required OpenTransactionsLoaded state}) {
+  Widget _buildDetails({required TransactionResource transactionResource, required OpenTransactionsLoaded state}) {
     int index = state.openTransactions.indexOf(transactionResource);
     return TransactionLogoDetails(
       topMargin: _logoMarginTop(index: index), 
@@ -67,21 +66,21 @@ class OpenTransactionsList extends StatelessWidget {
     );
   }
 
-  double _logoMarginTop({@required int index}) {
+  double _logoMarginTop({required int index}) {
     return lerp(
       min: sharedSizes.startMarginTop,
       max: sharedSizes.endMarginTop + (index * (sharedSizes.verticalSpacing + sharedSizes.endSize))
     ) + _topMargin;
   }
 
-  double _logoLeftMargin({@required int index}) {
+  double _logoLeftMargin({required int index}) {
     return lerp(
       min: index == 0 ? 3 : index * ((sharedSizes.horizontalSpacing + sharedSizes.startSize)),
       max: 8
     );
   }
   
-  double lerp({@required double min, @required double max}) {
-    return lerpDouble(min, max, _controller.value);
+  double lerp({required double min, required double max}) {
+    return lerpDouble(min, max, _controller.value)!;
   }
 }

@@ -11,31 +11,30 @@ part 'notification_boot_event.dart';
 part 'notification_boot_state.dart';
 
 class NotificationBootBloc extends Bloc<NotificationBootEvent, NotificationBootState> {
-  StreamSubscription _permissionsBlocSubscription;
-  StreamSubscription _nearbyBusinessesBlocSubscription;
-  StreamSubscription _openTransactionsBlocSubscription;
+  late StreamSubscription _permissionsBlocSubscription;
+  late StreamSubscription _nearbyBusinessesBlocSubscription;
+  late StreamSubscription _openTransactionsBlocSubscription;
 
   NotificationBootBloc({
-    @required PermissionsBloc permissionsBloc,
-    @required NearbyBusinessesBloc nearbyBusinessesBloc,
-    @required OpenTransactionsBloc openTransactionsBloc
+    required PermissionsBloc permissionsBloc,
+    required NearbyBusinessesBloc nearbyBusinessesBloc,
+    required OpenTransactionsBloc openTransactionsBloc
   })
-    : assert(permissionsBloc != null && nearbyBusinessesBloc != null && openTransactionsBloc != null),
-      super(NotificationBootState.initial()) {
+    : super(NotificationBootState.initial()) {
 
-        _permissionsBlocSubscription = permissionsBloc.listen((PermissionsState state) {
+        _permissionsBlocSubscription = permissionsBloc.stream.listen((PermissionsState state) {
           if (!this.isPermissionReady && state.notificationEnabled) {
             add(PermissionReady());
           }
         });
 
-        _nearbyBusinessesBlocSubscription = nearbyBusinessesBloc.listen((NearbyBusinessesState state) {
+        _nearbyBusinessesBlocSubscription = nearbyBusinessesBloc.stream.listen((NearbyBusinessesState state) {
           if (state is NearbyBusinessLoaded) {
             add(NearbyBusinessesReady());
           }
         });
 
-        _openTransactionsBlocSubscription = openTransactionsBloc.listen((OpenTransactionsState state) {
+        _openTransactionsBlocSubscription = openTransactionsBloc.stream.listen((OpenTransactionsState state) {
           if (state is OpenTransactionsLoaded) {
             add(OpenTransactionsReady());
           }

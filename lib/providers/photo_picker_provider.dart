@@ -1,14 +1,15 @@
-import 'dart:io';
-
+import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
+@immutable
 class PhotoPickerProvder {
+  final ImagePicker _imagePicker = ImagePicker();
 
-  Future<File> pickPhoto() async {
-    return await ImagePicker.pickImage(source: ImageSource.gallery);
+  Future<PickedFile?> pickPhoto() async {
+    return await _imagePicker.getImage(source: ImageSource.gallery);
   }
 
-  Future<File> takePhoto() async {
-    return await ImagePicker.pickImage(source: ImageSource.camera);
+  Future<PickedFile?> takePhoto() async {
+    return await _imagePicker.getImage(source: ImageSource.camera);
   }
 }

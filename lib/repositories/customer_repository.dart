@@ -1,84 +1,47 @@
-import 'package:heist/models/api_response.dart';
 import 'package:heist/models/customer/customer.dart';
+import 'package:heist/models/paginate_data_holder.dart';
 import 'package:heist/models/token.dart';
 import 'package:heist/providers/customer_provider.dart';
+import 'package:heist/repositories/base_repository.dart';
 import 'package:heist/repositories/token_repository.dart';
 import 'package:meta/meta.dart';
 
-class CustomerRepository {
-  final CustomerProvider _customerProvider = CustomerProvider();
-  final TokenRepository _tokenRepository = TokenRepository();
-  
-  Future<Customer> register({@required String email, @required String password, @required String passwordConfirmation}) async {
-    final ApiResponse registerResponse =  await _customerProvider.register(email: email, password: password, passwordConfirmation: passwordConfirmation);
-    if (registerResponse.isOK) {
-      return _handleSuccess(registerResponse);
-    }
-    return Customer.withError(registerResponse.error);
-  }
+@immutable
+class CustomerRepository extends BaseRepository {
+  final CustomerProvider _customerProvider;
+  final TokenRepository _tokenRepository;
 
-  Future<Customer> login({@required String email, @required String password}) async {
-    final ApiResponse loginResponse = await _customerProvider.login(email: email, password: password);
-    if (loginResponse.isOK) {
-      return _handleSuccess(loginResponse);
-    }
-    return Customer.withError(loginResponse.error);
-  }
-
-  Future<bool> logout() async {
-    final ApiResponse logoutResponse = await _customerProvider.logout();
-    if (logoutResponse.isOK) {
-      _tokenRepository.deleteToken();
-    }
-    return logoutResponse.isOK;
-  }
-
-  Future<bool> requestPassword({@required String email}) async {
-    final ApiResponse requestPasswordResponse = await _customerProvider.requestPassword(email: email);
-    if (requestPasswordResponse.isOK) {
-      return requestPasswordResponse.body;
-    }
-    return requestPasswordResponse.isOK;
-  }
-
-  Future<bool> checkPassword({@required String password}) async {
-    final ApiResponse checkPasswordResponse = await _customerProvider.checkPassword(password: password);
-    if (checkPasswordResponse.isOK) {
-      return checkPasswordResponse.body['password_verified'].toString() == 'true';
-    }
-    return checkPasswordResponse.body;
-  }
-
-  Future<bool> isSignedIn() async {
-    return await _tokenRepository.hasValidToken();
-  }
+  CustomerRepository({required CustomerProvider customerProvider, required TokenRepository tokenRepository})
+    : _customerProvider = customerProvider,
+      _tokenRepository = tokenRepository;
   
   Future<Customer> fetchCustomer() async {
-    final ApiResponse response = await _customerProvider.getCustomer();
-    if (response.isOK) {
-      return _handleSuccess(response);
-    }
-    return Customer.withError(response.error);
+    final Map<String, dynamic> json = await this.send(request: _customerProvider.fetchCustomer());
+    
+    return deserialize(json: json);
   }
 
-  Future<Customer> updateEmail(String email, String customerId) async {
-    final ApiResponse updateResponse = await _customerProvider.updateEmail(email, customerId);
-    if (updateResponse.isOK) {
-      return Customer.fromJson(updateResponse.body);
-    }
-    return Customer.withError(updateResponse.error);
+  Future<Customer> updateEmail({required String email, required String customerId}) async {
+    final Map<String, dynamic> body = {'email': email};
+    
+    final Map<String, dynamic> json = await this.send(request: _customerProvider.updateEmail(body: body, customerId: customerId));
+    return Customer.fromJson(json: json);
   }
 
-  Future<Customer> updatePassword(String oldPassword, String password, String passwordConfirmation, String customerId) async {
-    final ApiResponse response = await _customerProvider.updatePassword(oldPassword, password, passwordConfirmation, customerId);
-    if (response.isOK) {
-      return Customer.fromJson(response.body);
-    }
-    return Customer.withError(response.error);
+  Future<Customer> updatePassword({required String oldPassword, required String password, required String passwordConfirmation, required String customerId}) async {
+    final Map<String, dynamic> body = {
+      'old_password': oldPassword,
+      'password': password,
+      'password_confirmation': passwordConfirmation
+    };
+
+    final Map<String, dynamic> json = await this.send(request: _customerProvider.updatePassword(body: body, customerId: customerId));
+    return Customer.fromJson(json: json);
   }
 
-  Customer _handleSuccess(ApiResponse response) {
-    _tokenRepository.saveToken(Token.fromJson(response.body));
-    return Customer.fromJson(response.body);
+  @override
+  deserialize({PaginateDataHolder? holder, Map<String, dynamic>? json}) {
+    _tokenRepository.saveToken(token: Token.fromJson(json: json!));
+    return Customer.fromJson(json: json);
   }
 }

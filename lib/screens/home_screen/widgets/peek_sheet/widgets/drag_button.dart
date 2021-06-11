@@ -10,7 +10,7 @@ class DragButton extends StatelessWidget {
   final AnimationController _controller;
   final Function _toggle;
 
-  DragButton({@required double size, @required double topMargin, @required AnimationController controller, @required Function toggle})
+  DragButton({required double size, required double topMargin, required AnimationController controller, required Function toggle})
     : assert(size != null && topMargin != null && controller != null && toggle != null),
       _size = size,
       _topMargin = topMargin,

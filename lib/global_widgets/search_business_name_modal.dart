@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:heist/global_widgets/cached_avatar.dart';
 import 'package:heist/models/business/business.dart';
+import 'package:heist/models/paginate_data_holder.dart';
 import 'package:heist/repositories/business_repository.dart';
-import 'package:heist/resources/helpers/loading_widget.dart';
+import 'package:heist/global_widgets/loading_widget.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
 import 'package:heist/themes/global_colors.dart';
@@ -12,13 +13,16 @@ import 'bottom_modal_app_bar.dart';
 
 class SearchBusinessNameModal extends StatelessWidget {
   final FocusNode _businessNameNode = FocusNode();
-  final BusinessRepository _businessRepository = BusinessRepository();
+  final BusinessRepository _businessRepository;
+
+  SearchBusinessNameModal({required BusinessRepository businessRepository})
+    : _businessRepository = businessRepository;
   
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomPadding: false,
-      appBar: BottomModalAppBar(backgroundColor: Theme.of(context).colorScheme.scrollBackground),
+      resizeToAvoidBottomInset: false,
+      appBar: BottomModalAppBar(context: context, backgroundColor: Theme.of(context).colorScheme.scrollBackground),
       backgroundColor: Theme.of(context).colorScheme.scrollBackground,
       body: Padding(
         padding: EdgeInsets.only(left: 16, right: 16),
@@ -71,10 +75,11 @@ class SearchBusinessNameModal extends StatelessWidget {
   }
 
   Future<List<Business>> _suggestionCallback(String pattern) async {
-    return await _businessRepository.fetchByName(name: pattern);
+    final PaginateDataHolder holder = await _businessRepository.fetchByName(name: pattern);
+    return holder.data as List<Business>;
   }
 
-  Widget _buildSuggestion({@required BuildContext context, @required Business business}) {
+  Widget _buildSuggestion({required BuildContext context, required Business business}) {
     return Card(
       child: Padding(
         padding: EdgeInsets.all(8),

@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 class FadeInRoute extends PageRouteBuilder {
   
-  FadeInRoute({@required Widget screen, Duration transitionDuration})
-    : assert(screen != null),
-      super(
+  FadeInRoute({required Widget screen, required String name, Duration? transitionDuration})
+    : super(
+        settings: RouteSettings(name: name),
         pageBuilder: (
           context, 
           animation, 

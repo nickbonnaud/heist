@@ -14,9 +14,8 @@ class CancelIssueFormBloc extends Bloc<CancelIssueFormEvent, CancelIssueFormStat
   final TransactionIssueRepository _issueRepository;
   final OpenTransactionsBloc _openTransactionsBloc;
 
-  CancelIssueFormBloc({@required TransactionIssueRepository issueRepository, @required OpenTransactionsBloc openTransactionsBloc, @required TransactionResource transactionResource})
-    : assert(issueRepository != null && openTransactionsBloc != null && transactionResource != null),
-      _issueRepository = issueRepository,
+  CancelIssueFormBloc({required TransactionIssueRepository issueRepository, required OpenTransactionsBloc openTransactionsBloc, required TransactionResource transactionResource})
+    : _issueRepository = issueRepository,
       _openTransactionsBloc = openTransactionsBloc,
       super(CancelIssueFormState.initial(transactionResource: transactionResource));
 

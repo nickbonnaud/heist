@@ -14,9 +14,8 @@ class DeleteTicketButton extends StatelessWidget {
   final HelpRepository _helpRepository;
   final HelpTicketsScreenBloc _helpTicketsScreenBloc;
 
-  DeleteTicketButton({@required HelpTicket helpTicket, @required HelpRepository helpRepository, @required HelpTicketsScreenBloc helpTicketsScreenBloc})
-    : assert(helpTicket != null && helpRepository != null && helpTicketsScreenBloc != null),
-      _helpTicket = helpTicket,
+  DeleteTicketButton({required HelpTicket helpTicket, required HelpRepository helpRepository, required HelpTicketsScreenBloc helpTicketsScreenBloc})
+    : _helpTicket = helpTicket,
       _helpRepository = helpRepository,
       _helpTicketsScreenBloc = helpTicketsScreenBloc;
    
@@ -30,7 +29,7 @@ class DeleteTicketButton extends StatelessWidget {
     );
   }
 
-  void _deleteButtonPressed({@required BuildContext context}) {
+  void _deleteButtonPressed({required BuildContext context}) {
     showPlatformDialog(
       context: context, 
       builder: (_) => BlocProvider<DeleteTicketButtonBloc>(
@@ -44,7 +43,7 @@ class DeleteTicketButton extends StatelessWidget {
 class DialogBody extends StatelessWidget {
   final HelpTicket _helpTicket;
 
-  DialogBody({@required HelpTicket helpTicket})
+  DialogBody({required HelpTicket helpTicket})
     : assert(helpTicket != null),
       _helpTicket = helpTicket;
 

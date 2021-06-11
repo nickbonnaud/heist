@@ -6,6 +6,7 @@ import 'package:heist/blocs/receipt_modal_sheet/receipt_modal_sheet_bloc.dart';
 import 'package:heist/models/transaction/transaction_resource.dart';
 import 'package:heist/resources/helpers/currency.dart';
 import 'package:heist/resources/helpers/size_config.dart';
+import 'package:heist/routing/routes.dart';
 import 'package:heist/screens/receipt_screen/receipt_screen.dart';
 import 'package:heist/themes/global_colors.dart';
 
@@ -19,24 +20,15 @@ class TransactionLogoDetails extends StatelessWidget {
   final int _index;
 
   TransactionLogoDetails({
-    @required double topMargin,
-    @required double leftMargin,
-    @required double height,
-    @required double borderRadius,
-    @required TransactionResource transactionResource,
-    @required AnimationController controller,
-    @required int index
+    required double topMargin,
+    required double leftMargin,
+    required double height,
+    required double borderRadius,
+    required TransactionResource transactionResource,
+    required AnimationController controller,
+    required int index
   })
-    : assert(
-      topMargin != null &&
-      leftMargin != null &&
-      height != null &&
-      borderRadius != null &&
-      transactionResource != null &&
-      controller != null &&
-      index != null
-    ),
-      _topMargin = topMargin,
+    : _topMargin = topMargin,
       _leftMargin = leftMargin,
       _height = height,
       _borderRadius = borderRadius,
@@ -72,20 +64,13 @@ class Details extends StatefulWidget {
   final int _index;
 
   Details({
-    @required double height,
-    @required double borderRadius,
-    @required TransactionResource transactionResource,
-    @required AnimationController controller,
-    @required int index
+    required double height,
+    required double borderRadius,
+    required TransactionResource transactionResource,
+    required AnimationController controller,
+    required int index
   })
-    : assert(
-      height != null &&
-      borderRadius != null &&
-      transactionResource != null &&
-      controller != null && 
-      index != null
-    ),
-      _height = height,
+    : _height = height,
       _borderRadius = borderRadius,
       _transactionResource = transactionResource,
       _controller = controller,
@@ -96,7 +81,7 @@ class Details extends StatefulWidget {
 }
 
 class _DetailsState extends State<Details> with SingleTickerProviderStateMixin {
-  AnimationController _detailsController;
+  late AnimationController _detailsController;
   bool _isPressed = false;
   static const _curve = Curves.easeIn;
   
@@ -144,7 +129,7 @@ class _DetailsState extends State<Details> with SingleTickerProviderStateMixin {
     );
   }
 
-  Widget _buildContent({@required BuildContext context}) {
+  Widget _buildContent({required BuildContext context}) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
@@ -181,11 +166,7 @@ class _DetailsState extends State<Details> with SingleTickerProviderStateMixin {
     );
   }
 
-  void _viewReceiptModal({@required BuildContext context}) {
-    Navigator.of(context).push(PageRouteBuilder(
-      opaque: false,
-      fullscreenDialog: true,
-      pageBuilder: (BuildContext context, _, __) => ReceiptScreen(transactionResource: widget._transactionResource, receiptModalSheetBloc: BlocProvider.of<ReceiptModalSheetBloc>(context))
-    ));
+  void _viewReceiptModal({required BuildContext context}) {
+    Navigator.of(context).pushNamed(Routes.receipt, arguments: widget._transactionResource);
   }
 }

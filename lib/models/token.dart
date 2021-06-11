@@ -1,26 +1,31 @@
-import 'package:equatable/equatable.dart';
-import 'package:heist/repositories/token_repository.dart';
 
+import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
+
+@immutable
 class Token extends Equatable {
   final String value;
-  final int expiry;
 
-  Token({this.value, this.expiry});
+  Token({required this.value});
 
-  Token.fromJson(Map<String, dynamic> json)
-    : value = json['token'],
-      expiry = TokenRepository.getExpiry(json['token']);
-
-  Map<String, dynamic> toJson() {
-    return {
-      'value': value,
-      'expiry': expiry
-    };
+  bool get expired => JwtDecoder.isExpired(this.value);
+  
+  bool get valid {
+    try {
+      JwtDecoder.decode(this.value);
+      return !this.expired;
+    } on FormatException catch (_) {
+      return false;
+    }
   }
 
-  @override
-  List<Object> get props => [value, expiry];
+  Token.fromJson({required Map<String, dynamic> json})
+    : value = json['token'];
 
   @override
-  String toString() => 'Token { value: $value, expiry: $expiry }';
+  List<Object> get props => [value];
+
+  @override
+  String toString() => 'Token { value: $value }';
 }

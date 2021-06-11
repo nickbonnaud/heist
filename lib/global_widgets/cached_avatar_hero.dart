@@ -9,9 +9,8 @@ class CachedAvatarHero extends StatelessWidget {
   final String _tag;
   final bool _showLoading;
 
-  CachedAvatarHero({@required String url, @required int radius, @required String tag, bool showLoading = false})
-    : assert(url != null && radius != null),
-      _url = url,
+  CachedAvatarHero({required String url, required int radius, required String tag, bool showLoading = false})
+    : _url = url,
       _radius = radius,
       _tag = tag,
       _showLoading = showLoading;

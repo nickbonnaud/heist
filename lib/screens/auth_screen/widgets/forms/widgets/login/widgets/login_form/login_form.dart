@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:heist/blocs/boot/boot_bloc.dart';
 import 'package:heist/global_widgets/route_builders/slide_up_route.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
+import 'package:heist/resources/helpers/vibrate.dart';
+import 'package:heist/routing/routes.dart';
 import 'package:heist/screens/auth_screen/widgets/cubit/keyboard_visible_cubit.dart';
 import 'package:heist/screens/auth_screen/widgets/page_offset_notifier.dart';
 import 'package:heist/screens/layout_screen/layout_screen.dart';
@@ -11,17 +12,18 @@ import 'package:heist/screens/onboard_screen/onboard_screen.dart';
 import 'package:heist/themes/global_colors.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
 import 'package:provider/provider.dart';
-import 'package:vibrate/vibrate.dart';
 
 import 'bloc/login_bloc.dart';
 
 class LoginForm extends StatefulWidget {
   final PageController _pageController;
+  final bool _permissionsReady;
+  final bool _customerOnboarded;
 
-
-  LoginForm({@required PageController pageController})
-    : assert(pageController != null),
-      _pageController = pageController;
+  LoginForm({required PageController pageController, required bool permissionsReady, required bool customerOnboarded})
+    : _pageController = pageController,
+      _permissionsReady = permissionsReady,
+      _customerOnboarded = customerOnboarded;
 
   @override
   State<LoginForm> createState() => _LoginFormState();
@@ -35,7 +37,7 @@ class _LoginFormState extends State<LoginForm> {
 
   bool get isPopulated => _emailController.text.isNotEmpty && _passwordController.text.isNotEmpty;
 
-  LoginBloc _loginBloc;
+  late LoginBloc _loginBloc;
 
   @override
   void initState() {
@@ -253,12 +255,12 @@ class _LoginFormState extends State<LoginForm> {
     _loginBloc.add(Submitted(email: _emailController.text, password: _passwordController.text));
   }
 
-  KeyboardActionsConfig _buildKeyboard({@required BuildContext context}) {
+  KeyboardActionsConfig _buildKeyboard({required BuildContext context}) {
     return KeyboardActionsConfig(
       keyboardBarColor: Theme.of(context).colorScheme.keyboardHelpBarLight,
       keyboardActionsPlatform: KeyboardActionsPlatform.ALL,
       actions: [
-        KeyboardAction(
+        KeyboardActionsItem(
           focusNode: _emailFocus,
           toolbarButtons: [
             (node) {
@@ -272,7 +274,7 @@ class _LoginFormState extends State<LoginForm> {
             }
           ]
         ),
-        KeyboardAction(
+        KeyboardActionsItem(
           focusNode: _passwordFocus,
           toolbarButtons: [
             (node) {
@@ -291,40 +293,32 @@ class _LoginFormState extends State<LoginForm> {
   }
 
   void _errorLogin(BuildContext context) async {
-    bool canVibrate = await Vibrate.canVibrate;
-    if (canVibrate) {
-      Vibrate.feedback(FeedbackType.error);
-    }
-
-    Scaffold.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(
-        SnackBar(
-          content: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Expanded(
-                child: Text3(
-                  text: 'Cannot login. Please check your email or password.',
-                  context: context,
-                  color: Theme.of(context).colorScheme.onError)
-              ),
-            ],
+    Vibrate.error();
+    final SnackBar snackBar = SnackBar(
+      content: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Expanded(
+            child: Text3(
+              text: 'Cannot login. Please check your email or password.',
+              context: context,
+              color: Theme.of(context).colorScheme.onError)
           ),
-          backgroundColor: Theme.of(context).colorScheme.error,
-        )
-      );
+        ],
+      ),
+      backgroundColor: Theme.of(context).colorScheme.error,
+    );
+
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(snackBar);
   }
 
   void _navigateToNextPage() {
-    if (!BlocProvider.of<BootBloc>(context).arePermissionsReady || !BlocProvider.of<BootBloc>(context).isCustomerOnboarded) {
-      Navigator.of(context).pushReplacement(
-        SlideUpRoute(screen: OnboardScreen())
-      );
+    if (!widget._permissionsReady || !widget._customerOnboarded) {
+      Navigator.of(context).pushReplacementNamed(Routes.onboard);
     } else {
-      Navigator.of(context).pushReplacement(
-        SlideUpRoute(screen: LayoutScreen())
-      );
+      Navigator.of(context).pushReplacementNamed(Routes.layout);
     }
   }
 }

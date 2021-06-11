@@ -4,7 +4,9 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:heist/blocs/authentication/authentication_bloc.dart';
+import 'package:heist/blocs/customer/customer_bloc.dart';
 import 'package:heist/models/customer/customer.dart';
+import 'package:heist/repositories/authentication_repository.dart';
 import 'package:heist/repositories/customer_repository.dart';
 import 'package:heist/resources/helpers/validators.dart';
 import 'package:meta/meta.dart';
@@ -15,12 +17,13 @@ part 'password_form_state.dart';
 
 class PasswordFormBloc extends Bloc<PasswordFormEvent, PasswordFormState> {
   final CustomerRepository _customerRepository;
-  final AuthenticationBloc _authenticationBloc;
+  final AuthenticationRepository _authenticationRepository;
+  final CustomerBloc _customerBloc;
   
-  PasswordFormBloc({@required CustomerRepository customerRepository, @required AuthenticationBloc authenticationBloc})
-    : assert(customerRepository != null),
-      _customerRepository = customerRepository,
-      _authenticationBloc = authenticationBloc,
+  PasswordFormBloc({required CustomerRepository customerRepository, required AuthenticationRepository authenticationRepository, required CustomerBloc customerBloc})
+    : _customerRepository = customerRepository,
+      _authenticationRepository = authenticationRepository,
+      _customerBloc = customerBloc,
       super(PasswordFormState.initial());
 
   @override
@@ -49,24 +52,24 @@ class PasswordFormBloc extends Bloc<PasswordFormEvent, PasswordFormState> {
   }
 
   Stream<PasswordFormState> _mapOldPasswordChanged(OldPasswordChanged event) async* {
-    yield state.update(isOldPasswordValid: Validators.isValidPassword(event.oldPassword));
+    yield state.update(isOldPasswordValid: Validators.isValidPassword(password: event.oldPassword));
   }
 
   Stream<PasswordFormState> _mapPasswordChanged(PasswordChanged event) async* {
     final bool isPasswordConfirmationValid = event.passwordConfirmation.isNotEmpty
-      ? Validators.isPasswordConfirmationValid(event.password, event.passwordConfirmation)
+      ? Validators.isPasswordConfirmationValid(password: event.password, passwordConfirmation: event.passwordConfirmation)
       : true;
-    yield state.update(isPasswordValid: Validators.isValidPassword(event.password), isPasswordConfirmationValid: isPasswordConfirmationValid);
+    yield state.update(isPasswordValid: Validators.isValidPassword(password:  event.password), isPasswordConfirmationValid: isPasswordConfirmationValid);
   }
 
   Stream<PasswordFormState> _mapPasswordConfirmationChangedToState(PasswordConfirmationChanged event) async* {
-    yield state.update(isPasswordConfirmationValid: Validators.isPasswordConfirmationValid(event.password, event.passwordConfirmation));
+    yield state.update(isPasswordConfirmationValid: Validators.isPasswordConfirmationValid(password: event.password, passwordConfirmation: event.passwordConfirmation));
   }
 
   Stream<PasswordFormState> _mapOldPasswordSubmitted(OldPasswordSubmitted event) async* {
     yield state.update(isSubmitting: true);
     try {
-      bool isPasswordVerified = await _customerRepository.checkPassword(password: event.oldPassword);
+      bool isPasswordVerified = await _authenticationRepository.checkPassword(password: event.oldPassword);
       yield state.update(isSubmitting: false, isOldPasswordVerified: isPasswordVerified, isSuccessOldPassword: isPasswordVerified, isFailureOldPassword: !isPasswordVerified);
     } catch (_) {
       yield state.update(isFailureOldPassword: true, isSubmitting: false);
@@ -76,9 +79,14 @@ class PasswordFormBloc extends Bloc<PasswordFormEvent, PasswordFormState> {
   Stream<PasswordFormState> _mapNewPasswordSubmittedToState(NewPasswordSubmitted event) async* {
     yield state.update(isSubmitting: true);
     try {
-      Customer customer = await _customerRepository.updatePassword(event.oldPassword, event.password, event.passwordConfirmation, event.customer.identifier);
+      Customer customer = await _customerRepository.updatePassword(
+        oldPassword: event.oldPassword,
+        password: event.password, 
+        passwordConfirmation: event.passwordConfirmation, 
+        customerId: event.customer.identifier
+      );
       yield state.update(isSubmitting: false, isSuccess: true);
-      _authenticationBloc.add(CustomerUpdated(customer: customer));
+      _customerBloc.add(CustomerUpdated(customer: customer));
     } catch (_) {
       yield state.update(isSubmitting: false, isFailure: true);
     }

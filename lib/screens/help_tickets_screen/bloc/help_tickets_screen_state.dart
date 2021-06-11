@@ -4,7 +4,7 @@ abstract class HelpTicketsScreenState extends Equatable {
   const HelpTicketsScreenState();
   
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class Uninitialized extends HelpTicketsScreenState {}
@@ -13,29 +13,33 @@ class Loading extends HelpTicketsScreenState {}
 
 class Loaded extends HelpTicketsScreenState {
   final List<HelpTicket> helpTickets;
-  final int nextPage;
+  final String? nextUrl;
+  final bool paginating;
   final bool hasReachedEnd;
   final Option currentQuery;
   final dynamic queryParams;
 
   const Loaded({
-    @required this.helpTickets,
-    @required this.nextPage,
-    @required this.hasReachedEnd,
-    @required this.currentQuery,
-    @required this.queryParams
+    required this.helpTickets,
+    this.nextUrl,
+    required this.paginating,
+    required this.hasReachedEnd,
+    required this.currentQuery,
+    required this.queryParams
   });
 
   Loaded copyWith({
-    List<HelpTicket> helpTickets,
-    int nextPage,
-    bool hasReachedEnd,
-    Option currentQuery,
+    List<HelpTicket>? helpTickets,
+    String? nextUrl,
+    bool? paginating,
+    bool? hasReachedEnd,
+    Option? currentQuery,
     dynamic queryParams
   }) {
     return Loaded(
       helpTickets: helpTickets ?? this.helpTickets,
-      nextPage: nextPage ?? this.nextPage,
+      nextUrl: hasReachedEnd != null && hasReachedEnd ? null : nextUrl ?? this.nextUrl,
+      paginating: paginating ?? this.paginating,
       hasReachedEnd: hasReachedEnd ?? this.hasReachedEnd,
       currentQuery: currentQuery ?? this.currentQuery,
       queryParams: queryParams ?? this.queryParams
@@ -43,10 +47,10 @@ class Loaded extends HelpTicketsScreenState {
   }
 
   @override
-  List<Object> get props => [helpTickets, nextPage, hasReachedEnd, currentQuery, queryParams];
+  List<Object?> get props => [helpTickets, nextUrl, paginating, hasReachedEnd, currentQuery, queryParams];
 
   @override
-  String toString() => 'Loaded { helpTickets: $helpTickets, nextPage: $nextPage, hasReachedEnd: $hasReachedEnd, currentQuery: $currentQuery, queryParams: $queryParams }';
+  String toString() => 'Loaded { helpTickets: $helpTickets, nextUrl: $nextUrl, paginating: $paginating, hasReachedEnd: $hasReachedEnd, currentQuery: $currentQuery, queryParams: $queryParams }';
 }
 
 class FetchFailure extends HelpTicketsScreenState {}

@@ -12,7 +12,7 @@ class GeoLocationReady extends GeoLocationEvent {}
 class FetchLocation extends GeoLocationEvent {
   final Accuracy accuracy;
 
-  const FetchLocation({@required this.accuracy});
+  const FetchLocation({required this.accuracy});
 
   @override
   List<Object> get props => [accuracy];

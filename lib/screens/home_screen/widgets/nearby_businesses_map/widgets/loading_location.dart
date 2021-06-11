@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:heist/resources/helpers/loading_widget.dart';
+import 'package:heist/global_widgets/loading_widget.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
 
 class LoadingLocation extends StatelessWidget {

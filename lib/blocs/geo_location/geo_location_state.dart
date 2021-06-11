@@ -17,7 +17,7 @@ class LocationLoaded extends GeoLocationState {
   final double latitude;
   final double longitude;
 
-  LocationLoaded({@required this.latitude, @required this.longitude});
+  LocationLoaded({required this.latitude, required this.longitude});
 
   @override
   List<Object> get props => [latitude, longitude];

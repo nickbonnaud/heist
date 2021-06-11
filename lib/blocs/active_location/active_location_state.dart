@@ -1,36 +1,43 @@
 part of 'active_location_bloc.dart';
 
 @immutable
-class ActiveLocationState {
+class ActiveLocationState extends Equatable {
   final List<ActiveLocation> activeLocations;
-  final bool locationFailedToAdd;
+  final List<String> addingLocations;
+  final List<String> removingLocations;
+  final String errorMessage;
 
-  ActiveLocationState({@required this.activeLocations, @required this.locationFailedToAdd});
+  ActiveLocationState({
+    required this.activeLocations,
+    required this.addingLocations,
+    required this.removingLocations,
+    required this.errorMessage
+  });
 
   factory ActiveLocationState.initial() {
-    return ActiveLocationState(activeLocations: <ActiveLocation>[].toList(), locationFailedToAdd: false);
+    return ActiveLocationState(
+      activeLocations: [], 
+      addingLocations: [],
+      removingLocations: [],
+      errorMessage: ""
+    );
   }
 
   ActiveLocationState update({
-    List<ActiveLocation> activeLocations,
-    bool locationFailedToAdd
-  }) {
-    return _copyWith(
-      activeLocations: activeLocations,
-      locationFailedToAdd: locationFailedToAdd
-    );
-  }
-  
-  ActiveLocationState _copyWith({
-    List<ActiveLocation> activeLocations,
-    bool locationFailedToAdd
-  }) {
-    return ActiveLocationState(
-      activeLocations:  activeLocations ?? this.activeLocations,
-      locationFailedToAdd: locationFailedToAdd ?? this.locationFailedToAdd
-    );
-  }
+    List<ActiveLocation>? activeLocations,
+    List<String>? addingLocations,
+    List<String>? removingLocations,
+    String? errorMessage
+  }) => ActiveLocationState(
+    activeLocations: activeLocations ?? this.activeLocations,
+    addingLocations: addingLocations ?? this.addingLocations,
+    removingLocations: removingLocations ?? this.removingLocations,
+    errorMessage: errorMessage ?? this.errorMessage
+  );
 
   @override
-  String toString() => 'ActiveLocationState { activeLocations: $activeLocations, locationFailedToAdd: $locationFailedToAdd }';
+  List<Object?> get props => [activeLocations, addingLocations, removingLocations, errorMessage];
+
+  @override
+  String toString() => 'ActiveLocationState { activeLocations: $activeLocations, addingLocations: $addingLocations, removingLocations: $removingLocations, errorMessage: $errorMessage }';
 }

@@ -20,10 +20,10 @@ class FetchAllRefunds extends RefundsScreenEvent {
 }
 
 class FetchRefundsByDateRange extends RefundsScreenEvent {
-  final DateRange dateRange;
+  final DateTimeRange dateRange;
   final bool reset;
 
-  const FetchRefundsByDateRange({@required this.dateRange, @required this.reset});
+  const FetchRefundsByDateRange({required this.dateRange, required this.reset});
 
   @override
   List<Object> get props => [dateRange, reset];
@@ -36,7 +36,7 @@ class FetchRefundByIdentifier extends RefundsScreenEvent {
   final String identifier;
   final bool reset;
 
-  const FetchRefundByIdentifier({@required this.identifier, @required this.reset});
+  const FetchRefundByIdentifier({required this.identifier, required this.reset});
 
   @override
   List<Object> get props => [identifier, reset];
@@ -49,7 +49,7 @@ class FetchRefundByBusiness extends RefundsScreenEvent {
   final String identifier;
   final bool reset;
 
-  const FetchRefundByBusiness({@required this.identifier, @required this.reset});
+  const FetchRefundByBusiness({required this.identifier, required this.reset});
 
   @override
   List<Object> get props => [identifier, reset];
@@ -62,7 +62,7 @@ class FetchRefundByTransaction extends RefundsScreenEvent {
   final String identifier;
   final bool reset;
 
-  const FetchRefundByTransaction({@required this.identifier, @required this.reset});
+  const FetchRefundByTransaction({required this.identifier, required this.reset});
 
   @override
   List<Object> get props => [identifier, reset];

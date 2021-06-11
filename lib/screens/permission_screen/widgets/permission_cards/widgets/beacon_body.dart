@@ -12,9 +12,8 @@ import '../../permission_buttons/permission_buttons.dart';
 class BeaconBody extends StatelessWidget {
   final PermissionButtons _permissionButtons;
   
-  BeaconBody({@required PermissionButtons permissionButtons})
-    : assert(permissionButtons != null),
-      _permissionButtons = permissionButtons;
+  BeaconBody({required PermissionButtons permissionButtons})
+    : _permissionButtons = permissionButtons;
 
   final String beaconText = 
   'Beacons ensure that you are in the correct Business.\n\n'

@@ -20,9 +20,8 @@ enum Option {
 class HelpTicketsScreenBloc extends Bloc<HelpTicketsScreenEvent, HelpTicketsScreenState> {
   final HelpRepository _helpRepository;
 
-  HelpTicketsScreenBloc({@required HelpRepository helpRepository})
-    : assert(helpRepository != null),
-      _helpRepository = helpRepository,
+  HelpTicketsScreenBloc({required HelpRepository helpRepository})
+    : _helpRepository = helpRepository,
       super(Uninitialized());
 
   bool get paginateEnd {
@@ -49,10 +48,10 @@ class HelpTicketsScreenBloc extends Bloc<HelpTicketsScreenEvent, HelpTicketsScre
     }
   }
 
-  Stream<HelpTicketsScreenState> _mapFetchAllToState({@required FetchAll event}) async* {
+  Stream<HelpTicketsScreenState> _mapFetchAllToState({required FetchAll event}) async* {
     if (event.reset) {
       yield* _fetchUnitialized(
-        fetchFunction: () => _helpRepository.fetchAll(nextPage: 1), 
+        fetchFunction: () => _helpRepository.fetchAll(), 
         currentQuery: Option.all, 
         queryParams: null
       );
@@ -60,13 +59,13 @@ class HelpTicketsScreenBloc extends Bloc<HelpTicketsScreenEvent, HelpTicketsScre
       final currentState = state;
       if (currentState is Uninitialized) {
         yield* _fetchUnitialized(
-          fetchFunction: () => _helpRepository.fetchAll(nextPage: 1), 
+          fetchFunction: () => _helpRepository.fetchAll(), 
           currentQuery: Option.all, 
           queryParams: null
         );
       } else if (currentState is Loaded) {
         yield* _fetchMore(
-          fetchFunction: () => _helpRepository.fetchAll(nextPage: currentState.nextPage),
+          fetchFunction: () => _helpRepository.paginate(url: currentState.nextUrl!),
           state: currentState,
           currentQuery: Option.all,
           queryParams: null
@@ -75,10 +74,10 @@ class HelpTicketsScreenBloc extends Bloc<HelpTicketsScreenEvent, HelpTicketsScre
     }
   }
 
-  Stream<HelpTicketsScreenState> _mapFetchResolvedToState({@required FetchResolved event}) async* {
+  Stream<HelpTicketsScreenState> _mapFetchResolvedToState({required FetchResolved event}) async* {
     if (event.reset) {
       yield* _fetchUnitialized(
-        fetchFunction: () => _helpRepository.fetchResolved(nextPage: 1), 
+        fetchFunction: () => _helpRepository.fetchResolved(), 
         currentQuery: Option.resolved,
         queryParams: null
       );
@@ -86,7 +85,7 @@ class HelpTicketsScreenBloc extends Bloc<HelpTicketsScreenEvent, HelpTicketsScre
       final currentState = state;
       if (currentState is Loaded) {
         yield* _fetchMore(
-          fetchFunction: () => _helpRepository.fetchResolved(nextPage: currentState.nextPage), 
+          fetchFunction: () => _helpRepository.paginate(url: currentState.nextUrl!), 
           state: currentState,
           currentQuery: Option.resolved, 
           queryParams: null
@@ -95,10 +94,10 @@ class HelpTicketsScreenBloc extends Bloc<HelpTicketsScreenEvent, HelpTicketsScre
     }
   }
 
-  Stream<HelpTicketsScreenState> _mapFetchOpenToState({@required FetchOpen event}) async* {
+  Stream<HelpTicketsScreenState> _mapFetchOpenToState({required FetchOpen event}) async* {
     if (event.reset) {
       yield* _fetchUnitialized(
-        fetchFunction: () => _helpRepository.fetchOpen(nextPage: 1),
+        fetchFunction: () => _helpRepository.fetchOpen(),
         currentQuery: Option.open, 
         queryParams: null
       );
@@ -106,7 +105,7 @@ class HelpTicketsScreenBloc extends Bloc<HelpTicketsScreenEvent, HelpTicketsScre
       final currentState = state;
       if (currentState is Loaded) {
         yield* _fetchMore(
-          fetchFunction: () => _helpRepository.fetchOpen(nextPage: currentState.nextPage),
+          fetchFunction: () => _helpRepository.paginate(url: currentState.nextUrl!),
           state: currentState,
           currentQuery: Option.open, 
           queryParams: null
@@ -115,7 +114,7 @@ class HelpTicketsScreenBloc extends Bloc<HelpTicketsScreenEvent, HelpTicketsScre
     }
   }
 
-  Stream<HelpTicketsScreenState> _mapHelpTicketUpdatedToState({@required HelpTicketUpdated event}) async* {
+  Stream<HelpTicketsScreenState> _mapHelpTicketUpdatedToState({required HelpTicketUpdated event}) async* {
     if (state is Loaded) {
       final List<HelpTicket> updatedtHelpTickets = (state as Loaded).helpTickets.map((helpTicket) {
         return helpTicket.identifier == event.helpTicket.identifier ? event.helpTicket : helpTicket;
@@ -124,7 +123,7 @@ class HelpTicketsScreenBloc extends Bloc<HelpTicketsScreenEvent, HelpTicketsScre
     }
   }
 
-  Stream<HelpTicketsScreenState> _mapHelpTicketAddedToState({@required HelpTicketAdded event}) async* {
+  Stream<HelpTicketsScreenState> _mapHelpTicketAddedToState({required HelpTicketAdded event}) async* {
     if (state is Loaded) {
       final List<HelpTicket> updatedHelpTickets = List.from((state as Loaded).helpTickets)
         ..insert(0, event.helpTicket);
@@ -132,7 +131,7 @@ class HelpTicketsScreenBloc extends Bloc<HelpTicketsScreenEvent, HelpTicketsScre
     }
   }
 
-  Stream<HelpTicketsScreenState> _mapHelpTicketDeletedToState({@required HelpTicketDeleted event}) async* {
+  Stream<HelpTicketsScreenState> _mapHelpTicketDeletedToState({required HelpTicketDeleted event}) async* {
     if (state is Loaded) {
       final List<HelpTicket> updatedHelpTickets = List.from((state as Loaded).helpTickets.where((helpTicket) => helpTicket.identifier != event.helpTicketIdentifier));
       yield (state as Loaded).copyWith(helpTickets: updatedHelpTickets);
@@ -140,17 +139,18 @@ class HelpTicketsScreenBloc extends Bloc<HelpTicketsScreenEvent, HelpTicketsScre
   }
 
   Stream<HelpTicketsScreenState> _fetchUnitialized({
-    @required Future<PaginateDataHolder>Function() fetchFunction,
-    @required Option currentQuery,
-    @required dynamic queryParams
+    required Future<PaginateDataHolder>Function() fetchFunction,
+    required Option currentQuery,
+    required dynamic queryParams
   }) async* {
     try {
       yield Loading();
-      final PaginateDataHolder paginateData = await fetchFunction();
+      final PaginateDataHolder paginateHolder = await fetchFunction();
       yield Loaded(
-        helpTickets: paginateData.data,
-        nextPage: paginateData.nextPage,
-        hasReachedEnd: paginateData.nextPage == null,
+        helpTickets: (paginateHolder.data as List<HelpTicket>),
+        paginating: false,
+        nextUrl: paginateHolder.next,
+        hasReachedEnd: paginateHolder.next == null,
         currentQuery: currentQuery,
         queryParams: queryParams
       );
@@ -160,18 +160,20 @@ class HelpTicketsScreenBloc extends Bloc<HelpTicketsScreenEvent, HelpTicketsScre
   }
 
   Stream<HelpTicketsScreenState> _fetchMore({
-    @required Future<PaginateDataHolder>Function() fetchFunction,
-    @required Loaded state,
-    @required Option currentQuery,
-    @required dynamic queryParams
+    required Future<PaginateDataHolder>Function() fetchFunction,
+    required Loaded state,
+    required Option currentQuery,
+    required dynamic queryParams
   }) async* {
     if (!paginateEnd) {
+      yield state.copyWith(paginating: true);
       try {
-        final PaginateDataHolder paginateData = await fetchFunction();
+        final PaginateDataHolder paginateHolder = await fetchFunction();
         yield Loaded(
-          helpTickets: state.helpTickets + paginateData.data,
-          nextPage: paginateData.nextPage, 
-          hasReachedEnd: paginateData.nextPage == null, 
+          helpTickets: state.helpTickets + (paginateHolder.data as List<HelpTicket>),
+          nextUrl: paginateHolder.next,
+          paginating: false,
+          hasReachedEnd: paginateHolder.next == null, 
           currentQuery: currentQuery,
           queryParams: queryParams
         );

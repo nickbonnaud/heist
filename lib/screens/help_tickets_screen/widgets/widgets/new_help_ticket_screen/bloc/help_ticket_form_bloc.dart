@@ -15,9 +15,8 @@ class HelpTicketFormBloc extends Bloc<HelpTicketFormEvent, HelpTicketFormState> 
   final HelpRepository _helpRepository;
   final HelpTicketsScreenBloc _helpTicketsScreenBloc;
   
-  HelpTicketFormBloc({@required HelpRepository helpRepository, @required HelpTicketsScreenBloc helpTicketsScreenBloc}) 
-  : assert(helpRepository != null && helpTicketsScreenBloc != null),
-    _helpRepository = helpRepository,
+  HelpTicketFormBloc({required HelpRepository helpRepository, required HelpTicketsScreenBloc helpTicketsScreenBloc}) 
+  : _helpRepository = helpRepository,
     _helpTicketsScreenBloc = helpTicketsScreenBloc,
     super(HelpTicketFormState.initial());
 
@@ -42,15 +41,15 @@ class HelpTicketFormBloc extends Bloc<HelpTicketFormEvent, HelpTicketFormState> 
     }
   }
 
-  Stream<HelpTicketFormState> _mapSubjectChangedToState({@required SubjectChanged event}) async* {
+  Stream<HelpTicketFormState> _mapSubjectChangedToState({required SubjectChanged event}) async* {
     yield state.update(isSubjectValid: event.subject.isNotEmpty);
   }
 
-  Stream<HelpTicketFormState> _mapMessageChangedToState({@required MessageChanged event}) async* {
+  Stream<HelpTicketFormState> _mapMessageChangedToState({required MessageChanged event}) async* {
     yield state.update(isMessageValid: event.message.isNotEmpty);
   }
 
-  Stream<HelpTicketFormState> _mapSubmittedToState({@required Submitted event}) async* {
+  Stream<HelpTicketFormState> _mapSubmittedToState({required Submitted event}) async* {
     yield state.update(isSubmitting: true);
 
     try {

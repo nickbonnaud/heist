@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:heist/global_widgets/cached_avatar_hero.dart';
 import 'package:heist/models/business/business.dart';
@@ -15,9 +14,8 @@ class BusinessScreen extends StatefulWidget {
   final Business _business;
   final bool _fromMapScreen;
 
-  BusinessScreen({@required Business business, bool fromMapScreen = false})
-    : assert(business != null),
-      _business = business,
+  BusinessScreen({required Business business, bool fromMapScreen = false})
+    : _business = business,
       _fromMapScreen = fromMapScreen;
 
   State<BusinessScreen> createState() => _BusinessScreenState();
@@ -204,7 +202,7 @@ class _BusinessScreenState extends State<BusinessScreen> with SingleTickerProvid
       case 6:
         currentOperatingHours = hours.saturday;
         break;
-      case 7:
+      default:
         currentOperatingHours = hours.sunday;
         break;
     }

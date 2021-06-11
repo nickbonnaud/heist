@@ -18,9 +18,8 @@ class GoogleMapScreen extends StatefulWidget{
   final double _longitude;
   final List<PreMarker> _preMarkers;
 
-  GoogleMapScreen({@required double latitude, @required double longitude, @required List<PreMarker> preMarkers})
-    : assert(latitude != null && longitude != null && preMarkers != null),
-      _latitude = latitude,
+  GoogleMapScreen({required double latitude, required double longitude, required List<PreMarker> preMarkers})
+    : _latitude = latitude,
       _longitude = longitude,
       _preMarkers = preMarkers;
 
@@ -30,14 +29,14 @@ class GoogleMapScreen extends StatefulWidget{
   
 class _GoogleMapScreenState extends State<GoogleMapScreen> {
   static const MAP_KEY = 'MAP_KEY';
-  GoogleMapController _controller;
+  late GoogleMapController _controller;
 
   @override
   Widget build(BuildContext context) {
     return BlocListener<GoogleMapScreenBloc, GoogleMapScreenState>(
       listener: (context, state) {
-        if (state.screenCoordinate != null) {
-          _showBusinessSheet(context: context, business:  state.business);
+        if (state.business != null) {
+          _showBusinessSheet(context: context, business:  state.business!);
         }
       },
       child: Scaffold(
@@ -61,12 +60,12 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
               builder: (context, state) {
                 if (state.screenCoordinate != null) {
                   return Positioned(
-                    top: state.screenCoordinate.y.toDouble() - SizeConfig.getHeight(6),
-                    left: state.screenCoordinate.x.toDouble() - SizeConfig.getWidth(7),
+                    top: state.screenCoordinate!.y.toDouble() - SizeConfig.getHeight(6),
+                    left: state.screenCoordinate!.x.toDouble() - SizeConfig.getWidth(7),
                     child: CachedAvatarHero(
-                      url: state.business.photos.logo.smallUrl, 
+                      url: state.business!.photos.logo.smallUrl, 
                       radius: 7, 
-                      tag: state.business.identifier + "-map"
+                      tag: state.business!.identifier + "-map"
                     )
                   );
                 }
@@ -101,7 +100,7 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
     BlocProvider.of<GeoLocationBloc>(context).add(FetchLocation(accuracy: Accuracy.MEDIUM));
   }
 
-  void _showBusinessSheet({@required BuildContext context, @required Business business}) {
+  void _showBusinessSheet({required BuildContext context, required Business business}) {
     Navigator.of(context).push(PageRouteBuilder(
       opaque: false,
       fullscreenDialog: true,

@@ -1,7 +1,7 @@
 part of 'password_form_bloc.dart';
 
 @immutable
-class PasswordFormState {
+class PasswordFormState extends Equatable {
   final bool isOldPasswordValid;
   final bool isOldPasswordVerified;
   final bool isPasswordValid;
@@ -13,15 +13,15 @@ class PasswordFormState {
   final bool isFailureOldPassword;
 
   PasswordFormState({
-    @required this.isOldPasswordValid,
-    @required this.isOldPasswordVerified,
-    @required this.isPasswordValid,
-    @required this.isPasswordConfirmationValid,
-    @required this.isSubmitting,
-    @required this.isFailure,
-    @required this.isSuccess,
-    @required this.isSuccessOldPassword,
-    @required this.isFailureOldPassword
+    required this.isOldPasswordValid,
+    required this.isOldPasswordVerified,
+    required this.isPasswordValid,
+    required this.isPasswordConfirmationValid,
+    required this.isSubmitting,
+    required this.isFailure,
+    required this.isSuccess,
+    required this.isSuccessOldPassword,
+    required this.isFailureOldPassword
   });
 
   factory PasswordFormState.initial() {
@@ -39,50 +39,50 @@ class PasswordFormState {
   }
 
   PasswordFormState update({
-    bool isOldPasswordValid,
-    bool isOldPasswordVerified,
-    bool isPasswordValid,
-    bool isPasswordConfirmationValid,
-    bool isSubmitting,
-    bool isFailure,
-    bool isSuccess,
-    bool isSuccessOldPassword,
-    bool isFailureOldPassword
-  }) {
-    return copyWith(
-      isOldPasswordValid: isOldPasswordValid,
-      isOldPasswordVerified: isOldPasswordVerified,
-      isPasswordValid: isPasswordValid,
-      isPasswordConfirmationValid: isPasswordConfirmationValid,
-      isSubmitting: isSubmitting,
-      isFailure: isFailure,
-      isSuccess: isSuccess,
-      isSuccessOldPassword: isSuccessOldPassword,
-      isFailureOldPassword: isFailureOldPassword
-    );
-  }
-  
-  PasswordFormState copyWith({
-    bool isOldPasswordValid,
-    bool isOldPasswordVerified,
-    bool isPasswordValid,
-    bool isPasswordConfirmationValid,
-    bool isSubmitting,
-    bool isFailure,
-    bool isSuccess,
-    bool isSuccessOldPassword,
-    bool isFailureOldPassword
-  }) {
-    return PasswordFormState(
-      isOldPasswordValid: isOldPasswordValid ?? this.isOldPasswordValid, 
-      isOldPasswordVerified: isOldPasswordVerified ?? this.isOldPasswordVerified, 
-      isPasswordValid: isPasswordValid ?? this.isPasswordValid, 
-      isPasswordConfirmationValid: isPasswordConfirmationValid ?? this.isPasswordConfirmationValid, 
-      isSubmitting: isSubmitting ?? this.isSubmitting, 
-      isFailure: isFailure ?? this.isFailure, 
-      isSuccess: isSuccess ?? this.isSuccess,
-      isSuccessOldPassword: isSuccessOldPassword ?? this.isSuccessOldPassword,
-      isFailureOldPassword: isFailureOldPassword ?? this.isFailureOldPassword
-    );
-  }
+    bool? isOldPasswordValid,
+    bool? isOldPasswordVerified,
+    bool? isPasswordValid,
+    bool? isPasswordConfirmationValid,
+    bool? isSubmitting,
+    bool? isFailure,
+    bool? isSuccess,
+    bool? isSuccessOldPassword,
+    bool? isFailureOldPassword
+  }) => PasswordFormState(
+    isOldPasswordValid: isOldPasswordValid ?? this.isOldPasswordValid, 
+    isOldPasswordVerified: isOldPasswordVerified ?? this.isOldPasswordVerified, 
+    isPasswordValid: isPasswordValid ?? this.isPasswordValid, 
+    isPasswordConfirmationValid: isPasswordConfirmationValid ?? this.isPasswordConfirmationValid, 
+    isSubmitting: isSubmitting ?? this.isSubmitting, 
+    isFailure: isFailure ?? this.isFailure, 
+    isSuccess: isSuccess ?? this.isSuccess,
+    isSuccessOldPassword: isSuccessOldPassword ?? this.isSuccessOldPassword,
+    isFailureOldPassword: isFailureOldPassword ?? this.isFailureOldPassword
+  );
+
+  @override
+  List<Object> get props => [
+    isOldPasswordValid,
+    isOldPasswordVerified,
+    isPasswordValid,
+    isPasswordConfirmationValid,
+    isSubmitting,
+    isFailure,
+    isSuccess,
+    isSuccessOldPassword,
+    isFailureOldPassword
+  ];
+
+  @override
+  String toString() => '''PasswordFormState {
+    isOldPasswordValid: $isOldPasswordValid
+    isOldPasswordVerified: $isOldPasswordVerified,
+    isPasswordValid: $isPasswordValid
+    isPasswordConfirmationValid: $isPasswordConfirmationValid,
+    isSubmitting: $isSubmitting,
+    isFailure: $isFailure,
+    isSuccess: $isSuccess
+    isSuccessOldPassword: $isSuccessOldPassword
+    isFailureOldPassword: $isFailureOldPassword
+  }''';
 }

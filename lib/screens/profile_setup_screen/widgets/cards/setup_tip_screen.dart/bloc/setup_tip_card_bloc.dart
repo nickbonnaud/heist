@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:heist/blocs/authentication/authentication_bloc.dart';
+import 'package:heist/blocs/customer/customer_bloc.dart';
 import 'package:heist/models/customer/customer.dart';
 import 'package:heist/repositories/account_repository.dart';
 import 'package:heist/resources/helpers/validators.dart';
@@ -14,12 +14,11 @@ part 'setup_tip_card_state.dart';
 
 class SetupTipCardBloc extends Bloc<SetupTipCardEvent, SetupTipScreenState> {
   final AccountRepository _accountRepository;
-  final AuthenticationBloc _authenticationBloc;
+  final CustomerBloc _customerBloc;
 
-  SetupTipCardBloc({@required AccountRepository accountRepository, @required AuthenticationBloc authenticationBloc})
-    : assert(accountRepository != null && authenticationBloc != null),
-      _accountRepository = accountRepository,
-      _authenticationBloc = authenticationBloc,
+  SetupTipCardBloc({required AccountRepository accountRepository, required CustomerBloc customerBloc})
+    : _accountRepository = accountRepository,
+      _customerBloc = customerBloc,
       super(SetupTipScreenState.initial());
 
   @override
@@ -44,18 +43,18 @@ class SetupTipCardBloc extends Bloc<SetupTipCardEvent, SetupTipScreenState> {
   }
 
   Stream<SetupTipScreenState> _mapTipRateChangedToState(TipRateChanged event) async* {
-    yield state.update(isTipRateValid: Validators.isValidTip(event.tipRate));
+    yield state.update(isTipRateValid: Validators.isValidTip(tip: event.tipRate));
   }
 
   Stream<SetupTipScreenState> _mapQuickTipRateChangedToState(QuickTipRateChanged event) async* {
-    yield state.update(isQuickTipRateValid: Validators.isValidTip(event.quickTipRate));
+    yield state.update(isQuickTipRateValid: Validators.isValidTip(tip: event.quickTipRate));
   }
 
   Stream<SetupTipScreenState> _mapSubmittedToState(Submitted event) async* {
     yield state.update(isSubmitting: true);
     try {
-      Customer customer = await _accountRepository.update(accountIdentifier: event.customer.account.identifier, tipRate: event.tipRate, quickTipRate: event.quickTipRate);
-      _authenticationBloc.add(CustomerUpdated(customer: customer));
+      Customer customer = await _accountRepository.update(accountIdentifier: _customerBloc.state.customer!.account.identifier, tipRate: event.tipRate, quickTipRate: event.quickTipRate);
+      _customerBloc.add(CustomerUpdated(customer: customer));
       yield state.update(isSubmitting: false, isSuccess: true);
     } catch (_) {
       yield state.update(isSubmitting: false, isFailure: true);

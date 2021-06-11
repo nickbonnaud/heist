@@ -6,22 +6,22 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:heist/global_widgets/route_builders/slide_up_route.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
+import 'package:heist/resources/helpers/vibrate.dart';
+import 'package:heist/routing/routes.dart';
 import 'package:heist/screens/auth_screen/widgets/cubit/keyboard_visible_cubit.dart';
 import 'package:heist/screens/auth_screen/widgets/page_offset_notifier.dart';
 import 'package:heist/screens/onboard_screen/onboard_screen.dart';
 import 'package:heist/themes/global_colors.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
 import 'package:provider/provider.dart';
-import 'package:vibrate/vibrate.dart';
 
 import 'bloc/register_bloc.dart';
 
 class RegisterForm extends StatefulWidget {
   final PageController _pageController;
 
-  RegisterForm({@required PageController pageController})
-    : assert(pageController != null),
-      _pageController = pageController;
+  RegisterForm({required PageController pageController})
+    : _pageController = pageController;
   
   @override
   State<RegisterForm> createState() => _RegisterFormState();
@@ -39,7 +39,7 @@ class _RegisterFormState extends State<RegisterForm> {
     && _passwordController.text.isNotEmpty
     && _passwordConfirmationController.text.isNotEmpty;
 
-  RegisterBloc _registerBloc;
+  late RegisterBloc _registerBloc;
   
   @override
   void initState() {
@@ -297,12 +297,12 @@ class _RegisterFormState extends State<RegisterForm> {
     _registerBloc.add(Submitted(email: _emailController.text, password: _passwordController.text, passwordConfirmation: _passwordConfirmationController.text));
   }
 
-  KeyboardActionsConfig _buildKeyboard({@required BuildContext context}) {
+  KeyboardActionsConfig _buildKeyboard({required BuildContext context}) {
     return KeyboardActionsConfig(
       keyboardBarColor: Theme.of(context).colorScheme.keyboardHelpBarLight,
       keyboardActionsPlatform: KeyboardActionsPlatform.ALL,
       actions: [
-        KeyboardAction(
+        KeyboardActionsItem(
           focusNode: _emailFocus,
           toolbarButtons: [
             (node) {
@@ -316,7 +316,7 @@ class _RegisterFormState extends State<RegisterForm> {
             }
           ]
         ),
-        KeyboardAction(
+        KeyboardActionsItem(
           focusNode: _passwordFocus,
           toolbarButtons: [
             (node) {
@@ -330,7 +330,7 @@ class _RegisterFormState extends State<RegisterForm> {
             }
           ]
         ),
-        KeyboardAction(
+        KeyboardActionsItem(
           focusNode: _passwordConfirmationFocus,
           toolbarButtons: [
             (node) {
@@ -349,34 +349,28 @@ class _RegisterFormState extends State<RegisterForm> {
   }
   
   void _errorRegister(BuildContext context) async {
-    bool canVibrate = await Vibrate.canVibrate;
-    if (canVibrate) {
-      Vibrate.feedback(FeedbackType.error);
-    }
+    Vibrate.error();
+    final SnackBar snackBar = SnackBar(
+      content: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Expanded(
+            child: Text(
+              'Failed to Register. Please try again.',
+              style: GoogleFonts.roboto(fontSize: 16),
+            )
+          )
+        ],
+      ),
+      backgroundColor: Colors.red,
+    );
 
-    Scaffold.of(context)
+    ScaffoldMessenger.of(context)
       ..hideCurrentSnackBar()
-      ..showSnackBar(
-        SnackBar(
-          content: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Expanded(
-                child: Text(
-                  'Failed to Register. Please try again.',
-                  style: GoogleFonts.roboto(fontSize: 16),
-                )
-              )
-            ],
-          ),
-          backgroundColor: Colors.red,
-        )
-      );
+      ..showSnackBar(snackBar);
   }
 
   void _navigateToNextPage() {
-    Navigator.of(context).pushReplacement(
-      SlideUpRoute(screen: OnboardScreen())
-    );
+    Navigator.of(context).pushReplacementNamed(Routes.onboard);
   }
 }

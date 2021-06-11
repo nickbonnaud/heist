@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heist/blocs/authentication/authentication_bloc.dart';
 import 'package:heist/models/customer/customer.dart';
-import 'package:heist/repositories/customer_repository.dart';
+import 'package:heist/repositories/authentication_repository.dart';
 import 'package:heist/resources/helpers/validators.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -14,12 +14,11 @@ part 'login_event.dart';
 part 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
-  final CustomerRepository _customerRepository;
+  final AuthenticationRepository _authenticationRepository;
   final AuthenticationBloc _authenticationBloc;
 
-  LoginBloc({@required CustomerRepository customerRepository, @required AuthenticationBloc authenticationBloc})
-    : assert(customerRepository != null && authenticationBloc != null),
-      _customerRepository = customerRepository,
+  LoginBloc({required AuthenticationRepository authenticationRepository, required AuthenticationBloc authenticationBloc})
+    : _authenticationRepository = authenticationRepository,
       _authenticationBloc = authenticationBloc,
       super(LoginState.empty());
 
@@ -43,17 +42,17 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   }
 
   Stream<LoginState> _mapEmailChangedToState(String email) async* {
-    yield state.update(isEmailValid: Validators.isValidEmail(email));
+    yield state.update(isEmailValid: Validators.isValidEmail(email: email));
   }
 
   Stream<LoginState> _mapPasswordChangedToState(String password) async* {
-    yield state.update(isPasswordValid: Validators.isValidPassword(password));
+    yield state.update(isPasswordValid: Validators.isValidPassword(password: password));
   }
 
-  Stream<LoginState> _mapSubmittedToState({String email, String password}) async* {
+  Stream<LoginState> _mapSubmittedToState({required String email, required String password}) async* {
     yield LoginState.loading();
     try {
-     Customer customer = await _customerRepository.login(email: email, password: password);
+     Customer customer = await _authenticationRepository.login(email: email, password: password);
      _authenticationBloc.add(LoggedIn(customer: customer));
       yield LoginState.success();
     } catch (_) {

@@ -17,13 +17,12 @@ class LogoDivider extends StatelessWidget {
   final bool _isActiveLocationDivider;
 
   LogoDivider({
-    @required int numberPreviousWidgets, 
-    @required AnimationController controller,
-    @required double topMargin,
-    @required bool isActiveLocationDivider
+    required int numberPreviousWidgets, 
+    required AnimationController controller,
+    required double topMargin,
+    required bool isActiveLocationDivider
   })
-    : assert(numberPreviousWidgets != null && controller != null && topMargin != null && isActiveLocationDivider != null),
-      _numberPreviousWidgets = numberPreviousWidgets,
+    : _numberPreviousWidgets = numberPreviousWidgets,
       _controller = controller,
       _topMargin = topMargin,
       _isActiveLocationDivider = isActiveLocationDivider;
@@ -70,21 +69,21 @@ class LogoDivider extends StatelessWidget {
     );
   }
   
-  double _marginTop({@required int index}) {
+  double _marginTop({required int index}) {
     return lerp(
       min: sharedSizes.startMarginTop,
       max: sharedSizes.endMarginTop + (index * (sharedSizes.verticalSpacing + sharedSizes.endSize))
     ) + (1.5 *_topMargin); 
   }
 
-  double _marginLeft({@required int index}) {
+  double _marginLeft({required int index}) {
     return lerp(
       min: (index) * ((sharedSizes.horizontalSpacing + sharedSizes.startSize)),
       max: 8
     );
   }
   
-  double lerp({@required double min, @required double max}) {
-    return lerpDouble(min, max, _controller.value);
+  double lerp({required double min, required double max}) {
+    return lerpDouble(min, max, _controller.value)!;
   }
 }

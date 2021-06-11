@@ -16,11 +16,11 @@ class UpdateAllPermissions extends PermissionsEvent {
   final bool checksComplete;
 
   const UpdateAllPermissions({
-    @required this.bleGranted,
-    @required this.locationGranted,
-    @required this.notificationGranted,
-    @required this.beaconGranted,
-    @required this.checksComplete,
+    required this.bleGranted,
+    required this.locationGranted,
+    required this.notificationGranted,
+    required this.beaconGranted,
+    required this.checksComplete,
   });
 
   @override
@@ -33,7 +33,7 @@ class UpdateAllPermissions extends PermissionsEvent {
 class BleStatusChanged extends PermissionsEvent {
   final bool granted;
 
-  const BleStatusChanged({@required this.granted});
+  const BleStatusChanged({required this.granted});
 
   @override
   List<Object> get props => [granted];
@@ -45,7 +45,7 @@ class BleStatusChanged extends PermissionsEvent {
 class LocationStatusChanged extends PermissionsEvent {
   final bool granted;
 
-  const LocationStatusChanged({@required this.granted});
+  const LocationStatusChanged({required this.granted});
 
   @override
   List<Object> get props => [granted];
@@ -57,7 +57,7 @@ class LocationStatusChanged extends PermissionsEvent {
 class NotificationStatusChanged extends PermissionsEvent {
   final bool granted;
 
-  const NotificationStatusChanged({@required this.granted});
+  const NotificationStatusChanged({required this.granted});
 
   @override
   List<Object> get props => [granted];
@@ -69,7 +69,7 @@ class NotificationStatusChanged extends PermissionsEvent {
 class BeaconStatusChanged extends PermissionsEvent {
   final bool granted;
 
-  const BeaconStatusChanged({@required this.granted});
+  const BeaconStatusChanged({required this.granted});
 
   @override
   List<Object> get props => [granted];

@@ -4,10 +4,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heist/blocs/authentication/authentication_bloc.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
+import 'package:heist/resources/helpers/vibrate.dart';
 import 'package:heist/screens/profile_setup_screen/bloc/profile_setup_screen_bloc.dart';
 import 'package:heist/themes/global_colors.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
-import 'package:vibrate/vibrate.dart';
 
 import 'bloc/profile_name_form_bloc.dart';
 
@@ -18,15 +18,15 @@ class ProfileNameBody extends StatefulWidget {
 }
 
 class _ProfileNameBodyState extends State<ProfileNameBody> {
-  TextEditingController _firstNameController;
+  late TextEditingController _firstNameController;
   final FocusNode _firstNameFocus = FocusNode();
-  TextEditingController _lastNameController;
+  late TextEditingController _lastNameController;
   final FocusNode _lastNameFocus = FocusNode();
 
 
   bool get isPopulated => _firstNameController.text.isNotEmpty && _lastNameController.text.isNotEmpty;
 
-  ProfileNameFormBloc _profileNameFormBloc;
+  late ProfileNameFormBloc _profileNameFormBloc;
   
   @override
   void initState() {
@@ -165,8 +165,8 @@ class _ProfileNameBodyState extends State<ProfileNameBody> {
     if (_isSaveButtonEnabled(state)) {
       _profileNameFormBloc.add(Submitted(
         firstName: _firstNameController.text,
-        lastName: _lastNameController.text,
-        customer: BlocProvider.of<AuthenticationBloc>(context).customer));
+        lastName: _lastNameController.text)
+      );
     }
   }
   
@@ -183,42 +183,40 @@ class _ProfileNameBodyState extends State<ProfileNameBody> {
   }
 
   void _showSnackbar(BuildContext context, String message, ProfileNameFormState state) async {
-    bool canVibrate = await Vibrate.canVibrate;
-    if (canVibrate) {
-      Vibrate.feedback(state.isSuccess ? FeedbackType.success : FeedbackType.error);
-    }
-
-    Scaffold.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(
-        SnackBar(
-          duration: Duration(seconds: 1),
-          content: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Expanded(
-                child: BoldText3(text: message, context: context, color: Theme.of(context).colorScheme.onSecondary)
-              ),
-            ],
+    state.isSuccess ? Vibrate.success() : Vibrate.error();
+    final SnackBar snackBar = SnackBar(
+      duration: Duration(seconds: 1),
+      content: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Expanded(
+            child: BoldText3(text: message, context: context, color: Theme.of(context).colorScheme.onSecondary)
           ),
-          backgroundColor: state.isSuccess
-            ? Theme.of(context).colorScheme.success
-            : Theme.of(context).colorScheme.error,
-        )
-      ).closed.then((_) {
+        ],
+      ),
+      backgroundColor: state.isSuccess
+        ? Theme.of(context).colorScheme.success
+        : Theme.of(context).colorScheme.error,
+    );
+
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(snackBar)
+      .closed.then((_) {
         if (state.isSuccess) {
           BlocProvider.of<ProfileSetupScreenBloc>(context).add(SectionCompleted(section: Section.name));
         } else {
           BlocProvider.of<ProfileNameFormBloc>(context).add(Reset());
         }
-      });
+      }
+    );
   }
 
   KeyboardActionsConfig _buildKeyboard(BuildContext context) {
     return KeyboardActionsConfig(
       keyboardActionsPlatform: KeyboardActionsPlatform.ALL,
       actions: [
-        KeyboardAction(
+        KeyboardActionsItem(
           focusNode: _firstNameFocus,
           toolbarButtons: [
             (node) {
@@ -232,7 +230,7 @@ class _ProfileNameBodyState extends State<ProfileNameBody> {
             }
           ]
         ),
-        KeyboardAction(
+        KeyboardActionsItem(
           focusNode: _lastNameFocus,
           toolbarButtons: [
             (node) {

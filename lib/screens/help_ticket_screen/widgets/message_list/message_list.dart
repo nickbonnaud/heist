@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:heist/resources/helpers/date_formatter.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
 import 'package:heist/screens/help_ticket_screen/widgets/message_list/bloc/message_list_bloc.dart';
 import 'package:heist/themes/global_colors.dart';
@@ -9,7 +10,7 @@ import '../message_bubble.dart';
 class MessageList extends StatelessWidget {
   final ScrollController _scrollController;
 
-  MessageList({@required ScrollController scrollController})
+  MessageList({required ScrollController scrollController})
     : assert(scrollController != null),
       _scrollController = scrollController;
   
@@ -35,7 +36,7 @@ class MessageList extends StatelessWidget {
     );
   }
 
-  Widget _initialHelpMessage({@required BuildContext context, @required MessageListState state}) {
+  Widget _initialHelpMessage({required BuildContext context, required MessageListState state}) {
     return Container(
       child: Column(
         children: [
@@ -72,7 +73,7 @@ class MessageList extends StatelessWidget {
             children: [
               Container(
                 child: Text4(
-                  text: state.helpTicket.updatedAt, 
+                  text: "${DateFormatter.toStringDateTime(date: state.helpTicket.updatedAt)}", 
                   context: context,
                   color: Theme.of(context).colorScheme.onPrimarySubdued,
                 ),

@@ -1,102 +1,91 @@
-import 'package:heist/models/api_response.dart';
-import 'package:heist/models/date_range.dart';
+import 'package:flutter/material.dart';
 import 'package:heist/models/paginate_data_holder.dart';
-import 'package:heist/models/paginated_api_response.dart';
 import 'package:heist/models/transaction/transaction_resource.dart';
 import 'package:heist/models/unassigned_transaction/unassigned_transaction_resource.dart';
 import 'package:heist/providers/transaction_provider.dart';
+import 'package:heist/repositories/base_repository.dart';
 import 'package:meta/meta.dart';
 
-class TransactionRepository {
-  final TransactionProvider _transactionProvider = TransactionProvider();
+@immutable
+class TransactionRepository extends BaseRepository {
+  final TransactionProvider _transactionProvider;
 
-  Future<PaginateDataHolder> fetchHistoric({@required int nextPage}) async {
-    final PaginatedApiResponse response = await _transactionProvider.fetch(query: 'status=200&page=$nextPage');
-    if (response.isOK) {
-      return _handleSuccess(response);
-    }
-    return PaginateDataHolder(data:[TransactionResource.withError(response.error)].toList(), nextPage: null);
+  TransactionRepository({required TransactionProvider transactionProvider})
+    : _transactionProvider = transactionProvider;
+
+  Future<PaginateDataHolder> fetchHistoric() async {
+    final String query = this.formatQuery(baseQuery: 'status=200');
+
+    final PaginateDataHolder holder = await this.sendPaginated(request: _transactionProvider.fetch(query: query));
+    return deserialize(holder: holder);
   }
 
-  Future<PaginateDataHolder> fetchDateRange({@required int nextPage, @required DateRange dateRange}) async {
-    final String startDate = Uri.encodeQueryComponent(dateRange.startDate.toIso8601String());
-    final String endDate = Uri.encodeQueryComponent(dateRange.endDate.toIso8601String());
-    final String query = "date[]=$startDate&date[]=$endDate";
-    final PaginatedApiResponse response = await _transactionProvider.fetch(query: '$query&page=$nextPage');
-    if (response.isOK) {
-      return _handleSuccess(response);
-    }
-    return PaginateDataHolder(data:[TransactionResource.withError(response.error)].toList(), nextPage: null);
+  Future<PaginateDataHolder> fetchDateRange({required DateTimeRange dateRange}) async {
+    final String query = this.formatDateQuery(dateRange: dateRange);
+
+    final PaginateDataHolder holder = await this.sendPaginated(request: _transactionProvider.fetch(query: query));
+    return deserialize(holder: holder);
   }
 
-  Future<PaginateDataHolder> fetchByBusiness({@required int nextPage, @required String identifier}) async {
-    final String query = 'business=$identifier';
-    final PaginatedApiResponse response = await _transactionProvider.fetch(query: '$query&page=$nextPage');
-    if (response.isOK) {
-      return _handleSuccess(response);
-    }
-    return PaginateDataHolder(data:[TransactionResource.withError(response.error)].toList(), nextPage: null);
+  Future<PaginateDataHolder> fetchByBusiness({required String identifier}) async {
+    final String query = this.formatQuery(baseQuery: 'business=$identifier');
+
+    final PaginateDataHolder holder = await this.sendPaginated(request: _transactionProvider.fetch(query: query));
+    return deserialize(holder: holder);
   }
 
-  Future<PaginateDataHolder> fetchByIdentifier({@required int nextPage, @required String identifier}) async {
-    final String query = 'id=$identifier';
-    final PaginatedApiResponse response = await _transactionProvider.fetch(query: '$query&page=$nextPage');
-    if (response.isOK) {
-      return _handleSuccess(response);
-    }
-    return PaginateDataHolder(data:[TransactionResource.withError(response.error)].toList(), nextPage: null);
-  }
+  Future<PaginateDataHolder> fetchByIdentifier({required String identifier}) async {
+    final String query = this.formatQuery(baseQuery: 'id=$identifier');
 
-  Future<List<UnassignedTransactionResource>> fetchUnassigned({@required String buinessIdentifier}) async {
-    final ApiResponse response = await _transactionProvider.fetchUnassigned(buinessIdentifier: buinessIdentifier);
-    if (response.isOK) {
-      final rawData = response.body as List;
-      return rawData.map((rawUnassignedTransaction) {
-        return UnassignedTransactionResource.fromJson(rawUnassignedTransaction);
-      }).toList();
-    }
-    return [UnassignedTransactionResource.withError(response.error)].toList();
-  }
-
-  Future<TransactionResource> claimUnassigned({@required String transactionId}) async {
-    final ApiResponse response = await _transactionProvider.patchUnassigned(transactionId: transactionId);
-    if (response.isOK) {
-      return TransactionResource.fromJson(response.body);
-    }
-    return TransactionResource.withError(response.error);
-  }
-
-  Future<TransactionResource> approveTransaction({@required String transactionId}) async {
-    final ApiResponse response = await _transactionProvider.patchStatus(transactionId: transactionId, statusCode: 104);
-    if (response.isOK) {
-      return TransactionResource.fromJson(response.body);
-    }
-    return TransactionResource.withError(response.error);
-  }
-
-  Future<TransactionResource> keepBillOpen({@required String transactionId}) async {
-    final ApiResponse response = await _transactionProvider.patchStatus(transactionId: transactionId, statusCode: 106);
-    if (response.isOK) {
-      return TransactionResource.fromJson(response.body);
-    }
-    return TransactionResource.withError(response.error);
+    final PaginateDataHolder holder = await this.sendPaginated(request: _transactionProvider.fetch(query: query));
+    return deserialize(holder: holder);
   }
 
   Future<List<TransactionResource>> fetchOpen() async {
-    final String query = 'open=true';
-    final PaginatedApiResponse response = await _transactionProvider.fetch(query: query);
-    if (response.isOK) {
-      PaginateDataHolder holder = _handleSuccess(response);
-      return holder.data;
-    }
-    return [TransactionResource.withError(response.error)].toList();
+    final String query = this.formatQuery(baseQuery: 'open=true');
+
+    PaginateDataHolder holder = await this.sendPaginated(request: _transactionProvider.fetch(query: query));
+    holder = deserialize(holder: holder);
+    return holder.data as List<TransactionResource>;
   }
 
-  PaginateDataHolder _handleSuccess(PaginatedApiResponse response) {
-    final rawData = response.body as List;
-    List<TransactionResource> data = rawData.map((rawTransaction) {
-      return TransactionResource.fromJson(rawTransaction);
-    }).toList();
-    return PaginateDataHolder(data: data, nextPage: response.nextPage);
+  Future<PaginateDataHolder> paginate({required String url}) async {
+    final PaginateDataHolder holder = await this.sendPaginated(request: _transactionProvider.fetch(paginateUrl: url));
+    return deserialize(holder: holder);
+  }
+
+  Future<List<UnassignedTransactionResource>> fetchUnassigned({required String businessIdentifier}) async {
+    final PaginateDataHolder holder = await this.sendPaginated(request: _transactionProvider.fetchUnassigned(businessIdentifier: businessIdentifier));
+    return holder.data.map((transaction) => UnassignedTransactionResource.fromJson(json: transaction)).toList();
+  }
+
+  Future<TransactionResource> claimUnassigned({required String transactionId}) async {
+    final Map<String, dynamic> json = await this.send(request: _transactionProvider.patchUnassigned(transactionId: transactionId));
+    return deserialize(json: json);
+  }
+
+  Future<TransactionResource> approveTransaction({required String transactionId}) async {
+    final Map<String, dynamic> body = {'status_code': 104};
+    
+    final Map<String, dynamic> json = await this.send(request: _transactionProvider.patchStatus(body: body, transactionId: transactionId));
+    return deserialize(json: json);
+  }
+
+  Future<TransactionResource> keepBillOpen({required String transactionId}) async {
+    final Map<String, dynamic> body = {'status_code': 106};
+
+    final Map<String, dynamic> json = await this.send(request: _transactionProvider.patchStatus(body: body, transactionId: transactionId));
+    return deserialize(json: json);
+  }
+
+  @override
+  deserialize({PaginateDataHolder? holder, Map<String, dynamic>? json}) {
+    if (holder != null) {
+      return holder.update(
+        data: holder.data.map((transaction) => TransactionResource.fromJson(json: transaction)).toList()
+      );
+    }
+
+    return TransactionResource.fromJson(json: json!);
   }
 }

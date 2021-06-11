@@ -1,9 +1,11 @@
 import 'package:meta/meta.dart';
 import 'dart:math' as math;
 
+
+@immutable
 class DistanceCalculator {
 
-  static String getDistance({@required double lat1, @required double lng1, @required double lat2, @required double lng2}) {
+  static double getDistance({required double lat1, required double lng1, required double lat2, required double lng2}) {
     const r = 3958.756;
     final double dLat = _deg2Rad(deg: lat2 - lat1);
     final double dLng = _deg2Rad(deg: lng2 - lng1);
@@ -12,10 +14,10 @@ class DistanceCalculator {
 
     final double c = 2 * math.atan2(math.sqrt(a), math.sqrt(1-a));
     final double d = r * c;
-    return d.toStringAsFixed(2);
+    return double.parse(d.toStringAsFixed(2));
   }
 
-  static double _deg2Rad({@required double deg}) {
+  static double _deg2Rad({required double deg}) {
     return deg * (math.pi / 180);
   }
 } 

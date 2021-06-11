@@ -17,7 +17,7 @@ class DragArrow extends StatefulWidget {
 }
 
 class _DragArrowState extends State<DragArrow> with SingleTickerProviderStateMixin {
-  AnimationController _controller;
+  late AnimationController _controller;
   
   @override
   void initState() {

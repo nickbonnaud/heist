@@ -10,7 +10,7 @@ abstract class DeleteTicketButtonEvent extends Equatable {
 class Submitted extends DeleteTicketButtonEvent {
   final String ticketIdentifier;
 
-  const Submitted({@required this.ticketIdentifier});
+  const Submitted({required this.ticketIdentifier});
 
   @override
   List<Object> get props => [ticketIdentifier];

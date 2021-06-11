@@ -1,21 +1,25 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 
+@immutable
 class Geo extends Equatable {
   final String identifier;
   final double lat;
   final double lng;
   final int radius;
 
-  Geo({this.identifier, this.lat, this.lng, this.radius});
+  Geo({
+    required this.identifier,
+    required this.lat,
+    required this.lng,
+    required this.radius
+  });
 
-  static Geo fromJson(Map<String, dynamic> json) {
-    return Geo(
-      identifier: json['identifier'],
-      lat: double.parse(json['lat']),
-      lng: double.parse(json['lng']),
-      radius: int.parse(json['radius'])
-    );
-  }
+  Geo.fromJson({required Map<String, dynamic> json})
+    : identifier = json['identifier'],
+      lat = json['lat'],
+      lng = json['lng'],
+      radius = json['radius'];
   
   @override
   List<Object> get props => [identifier, lat, lng, radius];

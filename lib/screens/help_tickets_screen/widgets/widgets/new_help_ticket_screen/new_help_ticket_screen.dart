@@ -11,17 +11,16 @@ class NewHelpTicketScreen extends StatelessWidget {
   final HelpRepository _helpRepository;
   final HelpTicketsScreenBloc _helpTicketsScreenBloc; 
 
-  NewHelpTicketScreen({@required HelpRepository helpRepository, @required HelpTicketsScreenBloc helpTicketsScreenBloc})
-    : assert(helpRepository != null && helpTicketsScreenBloc != null),
-      _helpRepository = helpRepository,
+  NewHelpTicketScreen({required HelpRepository helpRepository, required HelpTicketsScreenBloc helpTicketsScreenBloc})
+    : _helpRepository = helpRepository,
       _helpTicketsScreenBloc = helpTicketsScreenBloc;
   
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomPadding: false,
+      resizeToAvoidBottomInset: false,
       backgroundColor: Theme.of(context).colorScheme.background,
-      appBar: BottomModalAppBar(),
+      appBar: BottomModalAppBar(context: context),
       body: BlocProvider<HelpTicketFormBloc>(
         create: (_) => HelpTicketFormBloc(helpRepository: _helpRepository, helpTicketsScreenBloc: _helpTicketsScreenBloc),
         child: HelpTicketForm(),

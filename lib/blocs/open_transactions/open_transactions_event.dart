@@ -12,7 +12,7 @@ class FetchOpenTransactions extends OpenTransactionsEvent {}
 class AddOpenTransaction extends OpenTransactionsEvent {
   final TransactionResource transaction;
 
-  const AddOpenTransaction({@required this.transaction});
+  const AddOpenTransaction({required this.transaction});
 
   @override
   List<Object> get props => [transaction];
@@ -24,7 +24,7 @@ class AddOpenTransaction extends OpenTransactionsEvent {
 class RemoveOpenTransaction extends OpenTransactionsEvent {
   final TransactionResource transaction;
 
-  const RemoveOpenTransaction({@required this.transaction});
+  const RemoveOpenTransaction({required this.transaction});
 
   @override
   List<Object> get props => [transaction];
@@ -36,7 +36,7 @@ class RemoveOpenTransaction extends OpenTransactionsEvent {
 class UpdateOpenTransaction extends OpenTransactionsEvent {
   final TransactionResource transaction;
 
-  const UpdateOpenTransaction({@required this.transaction});
+  const UpdateOpenTransaction({required this.transaction});
 
   @override
   List<Object> get props => [transaction];

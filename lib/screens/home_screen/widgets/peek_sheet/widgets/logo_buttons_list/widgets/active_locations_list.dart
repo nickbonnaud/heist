@@ -22,9 +22,8 @@ class ActiveLocationsList extends StatelessWidget {
   double get _size => lerp(min: sharedSizes.startSize, max: sharedSizes.endSize);
   double get _borderRadius => lerp(min: sharedSizes.startSize, max: sharedSizes.endSize);
 
-  ActiveLocationsList({@required int numberOpenTransactions, @required AnimationController controller, @required double topMargin})
-    : assert(numberOpenTransactions != null && controller != null && topMargin != null),
-      _numberOpenTransactions = numberOpenTransactions,
+  ActiveLocationsList({required int numberOpenTransactions, required AnimationController controller, required double topMargin})
+    : _numberOpenTransactions = numberOpenTransactions,
       _controller = controller,
       _topMargin = topMargin;
   
@@ -52,7 +51,7 @@ class ActiveLocationsList extends StatelessWidget {
     );
   }
 
-  int _setIndex({@required ActiveLocationState state, @required ActiveLocation activeLocation}) {
+  int _setIndex({required ActiveLocationState state, required ActiveLocation activeLocation}) {
     return _setPreviousIndex() + state.activeLocations.indexOf(activeLocation);
   }
 
@@ -65,11 +64,9 @@ class ActiveLocationsList extends StatelessWidget {
       ? 1 : 0;
   }
   
-  Widget _buildLogoButton({@required BuildContext context, @required ActiveLocation activeLocation, @required ActiveLocationState state}) {
+  Widget _buildLogoButton({required BuildContext context, required ActiveLocation activeLocation, required ActiveLocationState state}) {
     int index = _setIndex(state: state, activeLocation: activeLocation);
     Business business = _getBusiness(context: context, activeLocation: activeLocation, state: state);
-
-    if (business == null) return Container();
 
     return LogoButton(
       controller: _controller, 
@@ -82,7 +79,7 @@ class ActiveLocationsList extends StatelessWidget {
     );
   }
 
-  Widget _buildDetails({@required BuildContext context, @required ActiveLocation activeLocation, @required ActiveLocationState state}) {
+  Widget _buildDetails({required BuildContext context, required ActiveLocation activeLocation, required ActiveLocationState state}) {
     int index = _setIndex(state: state, activeLocation: activeLocation);
     Business business = _getBusiness(context: context, activeLocation: activeLocation, state: state);
     
@@ -99,8 +96,8 @@ class ActiveLocationsList extends StatelessWidget {
     );
   }
   
-  Business _getBusiness({@required BuildContext context, @required ActiveLocation activeLocation, @required ActiveLocationState state}) {
-    return BlocProvider.of<NearbyBusinessesBloc>(context).businesses
+  Business _getBusiness({required BuildContext context, required ActiveLocation activeLocation, required ActiveLocationState state}) {
+    return BlocProvider.of<NearbyBusinessesBloc>(context).state.businesses
       .firstWhere((Business business) => activeLocation.beaconIdentifier == business.location.beacon.identifier,
       orElse: null
     );
@@ -110,21 +107,21 @@ class ActiveLocationsList extends StatelessWidget {
     return _numberOpenTransactions > 0;
   }
 
-  double _logoMarginTop({@required int index}) {
+  double _logoMarginTop({required int index}) {
     return lerp(
       min: sharedSizes.startMarginTop,
       max: sharedSizes.endMarginTop + (index * (sharedSizes.verticalSpacing + sharedSizes.endSize))
     ) + _topMargin;
   }
 
-  double _logoLeftMargin({@required int index}) {
+  double _logoLeftMargin({required int index}) {
     return lerp(
       min: index == 0 ? 3 : index * ((sharedSizes.horizontalSpacing + sharedSizes.startSize)),
       max: 8
     );
   }
   
-  double lerp({@required double min, @required double max}) {
-    return lerpDouble(min, max, _controller.value);
+  double lerp({required double min, required double max}) {
+    return lerpDouble(min, max, _controller.value)!;
   }
 }

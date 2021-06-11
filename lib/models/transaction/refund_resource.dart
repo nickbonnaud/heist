@@ -7,44 +7,31 @@ import 'issue.dart';
 import 'refund.dart';
 import 'transaction.dart';
 
+@immutable
 class RefundResource extends Equatable {
   final Refund refund;
   final Business business;
   final Transaction transaction;
-  final Issue issue;
-  final String error;
+  final Issue? issue;
 
   RefundResource({
-    @required this.refund,
-    @required this.business,
-    @required this.transaction,
-    @required this.issue,
-    @required this.error
+    required this.refund,
+    required this.business,
+    required this.transaction,
+    required this.issue
   });
 
-  static RefundResource fromJson(Map<String, dynamic> json) {
-    return RefundResource(
-      refund: Refund.fromJson(json['refund']),
-      business: Business.fromJson(json['business']),
-      transaction: Transaction.fromJson(json['transaction']),
-      issue: Issue.fromJson(json['issue']),
-      error: ''
-    );
-  }
-
-  static RefundResource withError(String error) {
-    return RefundResource(
-      refund: null,
-      business: null,
-      transaction: null,
-      issue: null,
-      error: error
-    );
-  }
+  RefundResource.fromJson({required Map<String, dynamic> json})
+    : refund = Refund.fromJson(json: json['refund']),
+      business = Business.fromJson(json: json['business']),
+      transaction = Transaction.fromJson(json: json['transaction']),
+      issue = json['issue'] != null
+        ? Issue.fromJson(json: json['issue'])
+        : null;
 
   @override
-  List<Object> get props => [refund, business, transaction, issue, error];
+  List<Object?> get props => [refund, business, transaction, issue];
 
   @override
-  String toString() => 'RefundResource { refund: $refund, business: $business, transaction: $transaction, issue: $issue, error: $error }';
+  String toString() => 'RefundResource { refund: $refund, business: $business, transaction: $transaction, issue: $issue }';
 }

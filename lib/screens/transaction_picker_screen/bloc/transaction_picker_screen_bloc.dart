@@ -5,7 +5,6 @@ import 'package:equatable/equatable.dart';
 import 'package:heist/models/transaction/transaction_resource.dart';
 import 'package:heist/models/unassigned_transaction/unassigned_transaction_resource.dart';
 import 'package:heist/repositories/transaction_repository.dart';
-import 'package:meta/meta.dart';
 
 part 'transaction_picker_screen_event.dart';
 part 'transaction_picker_screen_state.dart';
@@ -13,9 +12,8 @@ part 'transaction_picker_screen_state.dart';
 class TransactionPickerScreenBloc extends Bloc<TransactionPickerScreenEvent, TransactionPickerScreenState> {
   final TransactionRepository _transactionRepository;
 
-  TransactionPickerScreenBloc({@required TransactionRepository transactionRepository})
-    : assert(transactionRepository != null),
-      _transactionRepository = transactionRepository,
+  TransactionPickerScreenBloc({required TransactionRepository transactionRepository})
+    : _transactionRepository = transactionRepository,
       super(Uninitialized());
 
   @override
@@ -32,7 +30,7 @@ class TransactionPickerScreenBloc extends Bloc<TransactionPickerScreenEvent, Tra
   Stream<TransactionPickerScreenState> _mapFetchToState(Fetch event) async* {
     yield Loading();
     try {
-      final List<UnassignedTransactionResource> transactions = await _transactionRepository.fetchUnassigned(buinessIdentifier: event.businessIdentifier);
+      final List<UnassignedTransactionResource> transactions = await _transactionRepository.fetchUnassigned(businessIdentifier: event.businessIdentifier);
       yield TransactionsLoaded(transactions: transactions);
     } catch (_) {
       yield FetchFailure();

@@ -7,7 +7,7 @@ abstract class TransactionEvent extends Equatable {
 class PickerChanged extends TransactionEvent {
   final UnassignedTransactionResource transactionResource;
 
-  const PickerChanged({@required this.transactionResource});
+  const PickerChanged({required this.transactionResource});
 
   @override
   List<Object> get props => [transactionResource];

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:heist/models/date_range.dart';
 import 'package:heist/models/paginate_data_holder.dart';
 import 'package:heist/models/transaction/refund_resource.dart';
@@ -15,9 +16,8 @@ part 'refunds_screen_state.dart';
 class RefundsScreenBloc extends Bloc<RefundsScreenEvent, RefundsScreenState> {
   final RefundRepository _refundRepository;
 
-  RefundsScreenBloc({@required RefundRepository refundRepository})
-    : assert(refundRepository != null),
-      _refundRepository = refundRepository,
+  RefundsScreenBloc({required RefundRepository refundRepository})
+    : _refundRepository = refundRepository,
       super(Uninitialized());
 
   @override
@@ -41,57 +41,57 @@ class RefundsScreenBloc extends Bloc<RefundsScreenEvent, RefundsScreenState> {
 
   Stream<RefundsScreenState> _mapFetchAllRefundsToState(FetchAllRefunds event) async* {
     if (event.reset) {
-      yield* _fetchUnitialized(fetchFunction: () => _refundRepository.fetchAll(nextPage: 1), state: state, currentQuery: Option.all, queryParams: null);
+      yield* _fetchUnitialized(fetchFunction: () => _refundRepository.fetchAll(), state: state, currentQuery: Option.all, queryParams: null);
     } else {
       final currentState = state;
       if (currentState is Uninitialized) {
-        yield* _fetchUnitialized(fetchFunction: () => _refundRepository.fetchAll(nextPage: 1), state: currentState, currentQuery: Option.all, queryParams: null);
+        yield* _fetchUnitialized(fetchFunction: () => _refundRepository.fetchAll(), state: currentState, currentQuery: Option.all, queryParams: null);
       } else if (currentState is RefundsLoaded) {
-        yield* _fetchMore(fetchFunction: () => _refundRepository.fetchAll(nextPage: currentState.nextPage), state: currentState, currentQuery: Option.all, queryParams: null);
+        yield* _fetchMore(fetchFunction: () => _refundRepository.paginate(url: currentState.nextUrl!), state: currentState, currentQuery: Option.all, queryParams: null);
       }
     }
   }
 
   Stream<RefundsScreenState> _mapFetchRefundsByDateRangeToState(FetchRefundsByDateRange event) async* {
     if (event.reset) {
-      yield* _fetchUnitialized(fetchFunction: () => _refundRepository.fetchDateRange(nextPage: 1, dateRange: event.dateRange), state: state, currentQuery: Option.date, queryParams: event.dateRange);
+      yield* _fetchUnitialized(fetchFunction: () => _refundRepository.fetchAll(dateRange: event.dateRange), state: state, currentQuery: Option.date, queryParams: event.dateRange);
     } else {
       final currentState = state;
       if (currentState is RefundsLoaded) {
-        yield* _fetchMore(fetchFunction: () => _refundRepository.fetchDateRange(nextPage: currentState.nextPage, dateRange: event.dateRange), state: currentState, currentQuery: Option.date, queryParams: event.dateRange);
+        yield* _fetchMore(fetchFunction: () => _refundRepository.paginate(url: currentState.nextUrl!), state: currentState, currentQuery: Option.date, queryParams: event.dateRange);
       }
     }
   }
 
   Stream<RefundsScreenState> _mapFetchRefundByIdentifierToState(FetchRefundByIdentifier event) async* {
     if (event.reset) {
-      yield* _fetchUnitialized(fetchFunction: () => _refundRepository.fetchByIdentifier(nextPage: 1, identifier: event.identifier), state: state, currentQuery: Option.refundId, queryParams: event.identifier);
+      yield* _fetchUnitialized(fetchFunction: () => _refundRepository.fetchByIdentifier(identifier: event.identifier), state: state, currentQuery: Option.refundId, queryParams: event.identifier);
     } else {
       final currentState = state;
       if (currentState is RefundsLoaded) {
-        yield* _fetchMore(fetchFunction: () => _refundRepository.fetchByIdentifier(nextPage: currentState.nextPage, identifier: event.identifier), state: state, currentQuery: Option.refundId, queryParams: event.identifier);
+        yield* _fetchMore(fetchFunction: () => _refundRepository.paginate(url: currentState.nextUrl!), state: currentState, currentQuery: Option.refundId, queryParams: event.identifier);
       }
     }
   }
 
   Stream<RefundsScreenState> _mapFetchRefundByBusinessToState(FetchRefundByBusiness event) async* {
     if (event.reset) {
-      yield* _fetchUnitialized(fetchFunction: () => _refundRepository.fetchByBusiness(nextPage: 1, identifier: event.identifier), state: state, currentQuery: Option.businessName, queryParams: event.identifier);
+      yield* _fetchUnitialized(fetchFunction: () => _refundRepository.fetchByBusiness(identifier: event.identifier), state: state, currentQuery: Option.businessName, queryParams: event.identifier);
     } else {
       final currentState = state;
       if (currentState is RefundsLoaded) {
-        yield* _fetchMore(fetchFunction: () => _refundRepository.fetchByBusiness(nextPage: currentState.nextPage, identifier: event.identifier), state: state, currentQuery: Option.businessName, queryParams: event.identifier);
+        yield* _fetchMore(fetchFunction: () => _refundRepository.paginate(url: currentState.nextUrl!), state: currentState, currentQuery: Option.businessName, queryParams: event.identifier);
       }
     }
   }
 
   Stream<RefundsScreenState> _mapFetchRefundByTransactionToState(FetchRefundByTransaction event) async* {
     if (event.reset) {
-      yield* _fetchUnitialized(fetchFunction: () => _refundRepository.fetchByTransactionIdentifier(nextPage: 1, identifier: event.identifier), state: state, currentQuery: Option.transactionId, queryParams: event.identifier);
+      yield* _fetchUnitialized(fetchFunction: () => _refundRepository.fetchByTransactionIdentifier(identifier: event.identifier), state: state, currentQuery: Option.transactionId, queryParams: event.identifier);
     } else {
       final currentState = state;
       if (currentState is RefundsLoaded) {
-        yield* _fetchMore(fetchFunction: () => _refundRepository.fetchByTransactionIdentifier(nextPage: currentState.nextPage, identifier: event.identifier), state: currentState, currentQuery: Option.transactionId, queryParams: event.identifier);
+        yield* _fetchMore(fetchFunction: () => _refundRepository.paginate(url: currentState.nextUrl!), state: currentState, currentQuery: Option.transactionId, queryParams: event.identifier);
       }
     }
   }
@@ -119,14 +119,15 @@ class RefundsScreenBloc extends Bloc<RefundsScreenEvent, RefundsScreenState> {
     }
   }
   
-  Stream<RefundsScreenState> _fetchUnitialized({@required Future<PaginateDataHolder>Function() fetchFunction, @required RefundsScreenState state, @required Option currentQuery, @required dynamic queryParams}) async* {
+  Stream<RefundsScreenState> _fetchUnitialized({required Future<PaginateDataHolder>Function() fetchFunction, required RefundsScreenState state, required Option currentQuery, required dynamic queryParams}) async* {
     try {
       yield Loading();
-      final PaginateDataHolder paginateData = await fetchFunction();
+      final PaginateDataHolder paginateHolder = await fetchFunction();
       yield RefundsLoaded(
-        refunds: paginateData.data,
-        nextPage: paginateData.nextPage,
-        hasReachedEnd: paginateData.nextPage == null,
+        refunds: (paginateHolder.data as List<RefundResource>),
+        paginating: false,
+        nextUrl: paginateHolder.next,
+        hasReachedEnd: paginateHolder.next == null,
         currentQuery: currentQuery,
         queryParams: queryParams
       );
@@ -135,15 +136,17 @@ class RefundsScreenBloc extends Bloc<RefundsScreenEvent, RefundsScreenState> {
     }
   }
 
-  Stream<RefundsScreenState> _fetchMore({@required Future<PaginateDataHolder>Function() fetchFunction, @required RefundsLoaded state, @required Option currentQuery, @required dynamic queryParams}) async* {
+  Stream<RefundsScreenState> _fetchMore({required Future<PaginateDataHolder>Function() fetchFunction, required RefundsLoaded state, required Option currentQuery, required dynamic queryParams}) async* {
     final currentState = state;
     if (!_hasReachedMax(currentState)) {
+      yield state.update(paginating: true);
       try {
-        final PaginateDataHolder paginateData = await fetchFunction();
+        final PaginateDataHolder paginateHolder = await fetchFunction();
         yield RefundsLoaded(
-          refunds: currentState.refunds + paginateData.data, 
-          nextPage: paginateData.nextPage, 
-          hasReachedEnd: paginateData.nextPage == null, 
+          refunds: currentState.refunds + (paginateHolder.data as List<RefundResource>),
+          paginating: false,
+          nextUrl: paginateHolder.next, 
+          hasReachedEnd: paginateHolder.next == null, 
           currentQuery: currentQuery,
           queryParams: queryParams
         );

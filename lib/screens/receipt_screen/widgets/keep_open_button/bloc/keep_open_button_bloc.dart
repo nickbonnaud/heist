@@ -2,8 +2,10 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:heist/blocs/open_transactions/open_transactions_bloc.dart';
 import 'package:heist/models/transaction/transaction_resource.dart';
 import 'package:heist/repositories/transaction_repository.dart';
+import 'package:heist/screens/receipt_screen/bloc/receipt_screen_bloc.dart';
 import 'package:meta/meta.dart';
 
 part 'keep_open_button_event.dart';
@@ -11,10 +13,17 @@ part 'keep_open_button_state.dart';
 
 class KeepOpenButtonBloc extends Bloc<KeepOpenButtonEvent, KeepOpenButtonState> {
   final TransactionRepository _transactionRepository;
+  final ReceiptScreenBloc _receiptScreenBloc;
+  final OpenTransactionsBloc _openTransactionsBloc;
 
-  KeepOpenButtonBloc({@required TransactionRepository transactionRepository})
-    : assert(transactionRepository != null),
-      _transactionRepository = transactionRepository,
+  KeepOpenButtonBloc({
+    required TransactionRepository transactionRepository,
+    required ReceiptScreenBloc receiptScreenBloc,
+    required OpenTransactionsBloc openTransactionsBloc
+  })
+    : _transactionRepository = transactionRepository,
+      _receiptScreenBloc = receiptScreenBloc,
+      _openTransactionsBloc = openTransactionsBloc,
       super(KeepOpenButtonState.initial());
 
   @override
@@ -35,8 +44,9 @@ class KeepOpenButtonBloc extends Bloc<KeepOpenButtonEvent, KeepOpenButtonState> 
           isSubmitting: false,
           isSubmitSuccess: true,
           isSubmitFailure: false,
-          transactionResource: transactionResource
         );
+        _receiptScreenBloc.add(TransactionChanged(transactionResource: transactionResource));
+        _openTransactionsBloc.add(UpdateOpenTransaction(transaction: transactionResource));
       } catch (e) {
         yield state.update(
           isSubmitting: false,

@@ -10,7 +10,7 @@ abstract class FaqBodyEvent extends Equatable {
 class ToggleAnswerVisibility extends FaqBodyEvent {
   final Faq faq;
 
-  const ToggleAnswerVisibility({@required this.faq});
+  const ToggleAnswerVisibility({required this.faq});
 
   @override
   List<Object> get props => [faq];

@@ -8,7 +8,7 @@ class FetchNearby extends NearbyBusinessesEvent {
   final double lat;
   final double lng;
 
-  const FetchNearby({@required this.lat, @required this.lng});
+  const FetchNearby({required this.lat, required this.lng});
 
   @override
   List<Object> get props => [lat, lng];

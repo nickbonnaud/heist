@@ -10,7 +10,7 @@ abstract class ActiveLocationEvent extends Equatable {
 class NewActiveLocation extends ActiveLocationEvent {
   final String beaconIdentifier;
 
-  NewActiveLocation({@required this.beaconIdentifier});
+  NewActiveLocation({required this.beaconIdentifier});
 
   @override
   List<Object> get props => [beaconIdentifier];
@@ -22,7 +22,7 @@ class NewActiveLocation extends ActiveLocationEvent {
 class RemoveActiveLocation extends ActiveLocationEvent {
   final String beaconIdentifier;
 
-  RemoveActiveLocation({@required this.beaconIdentifier});
+  RemoveActiveLocation({required this.beaconIdentifier});
 
   @override
   List<Object> get props => [beaconIdentifier];

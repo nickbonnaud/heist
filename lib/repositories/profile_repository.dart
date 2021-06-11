@@ -1,35 +1,38 @@
-import 'dart:io';
-
-import 'package:heist/models/api_response.dart';
 import 'package:heist/models/customer/customer.dart';
-import 'package:heist/models/customer/profile.dart';
+import 'package:heist/models/paginate_data_holder.dart';
 import 'package:heist/providers/profile_provider.dart';
+import 'package:heist/repositories/base_repository.dart';
 import 'package:meta/meta.dart';
 
-class ProfileRepository {
-  final ProfileProvider _profileProvider = ProfileProvider();
+@immutable
+class ProfileRepository extends BaseRepository {
+  final ProfileProvider _profileProvider;
 
-  Future<Customer> store({@required String firstName, @required String lastName}) async {
-    final ApiResponse response = await _profileProvider.store(firstName: firstName, lastName: lastName);
-    if (response.isOK) {
-      return Customer.fromJson(response.body);
-    }
-    return Customer.withError(response.error);
+  ProfileRepository({required ProfileProvider profileProvider})
+    : _profileProvider = profileProvider;
+
+  Future<Customer> store({required String firstName, required String lastName}) async {
+    final Map<String, dynamic> body = {
+      'first_name': firstName,
+      'last_name': lastName
+    };
+
+    final Map<String, dynamic> json = await this.send(request: _profileProvider.store(body: body));
+    return deserialize(json: json);
   }
 
-  Future<Profile> update({@required String firstName, @required String lastName, @required String profileIdentifier}) async {
-    final ApiResponse response = await _profileProvider.update(firstName: firstName, lastName: lastName, profileIdentifier: profileIdentifier);
-    if (response.isOK) {
-      return Profile.fromJson(response.body);
-    }
-    return Profile.withError(response.error);
+  Future<Customer> update({required String firstName, required String lastName, required String profileIdentifier}) async {
+    final Map<String, dynamic> body = {
+      'first_name': firstName,
+      'last_name': lastName
+    };
+
+    final Map<String, dynamic> json = await this.send(request: _profileProvider.update(body: body, profileIdentifier: profileIdentifier));
+    return deserialize(json: json);
   }
 
-  Future<Customer> uploadPhoto({@required File photo, @required String profileIdentifier}) async {
-    final ApiResponse response = await _profileProvider.uploadPhoto(photo: photo, profileIdentifier: profileIdentifier);
-    if (response.isOK) {
-      return Customer.fromJson(response.body);
-    }
-    return Customer.withError(response.error);
+  @override
+  deserialize({PaginateDataHolder? holder, Map<String, dynamic>? json}) {
+    return Customer.fromJson(json: json!);
   }
 }

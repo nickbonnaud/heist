@@ -1,34 +1,31 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 
+@immutable
 class Photos extends Equatable {
   final String name;
   final String smallUrl;
   final String largeUrl;
-  final String error;
 
-  Photos({this.name, this.smallUrl, this.largeUrl, this.error});
+  Photos({
+    required this.name,
+    required this.smallUrl,
+    required this.largeUrl, 
+  });
 
-  static Photos fromJson(Map<String, dynamic> json) {
-    return Photos(
-      name: json['name'],
-      smallUrl: json['small_url'],
-      largeUrl: json['large_url'],
-      error: ""
-    );
-  }
-
-  static Photos withError(String error) {
-    return Photos(
-      name: null,
-      smallUrl: null,
-      largeUrl: null,
-      error: error
-    );
-  }
+  Photos.fromJson({required Map<String, dynamic> json})
+    : name = json['name'],
+      smallUrl = json['small_url'],
+      largeUrl = json['large_url'];
+  
+  Photos.empty()
+    : name = "",
+      smallUrl = "",
+      largeUrl = "";
   
   @override
-  List<Object> get props => [name, smallUrl, largeUrl, error];
+  List<Object> get props => [name, smallUrl, largeUrl];
 
   @override
-  String toString() => 'Photos { name: $name, smallUrl: $smallUrl, largeUrl: $largeUrl, error: $error }';
+  String toString() => 'Photos { name: $name, smallUrl: $smallUrl, largeUrl: $largeUrl }';
 }

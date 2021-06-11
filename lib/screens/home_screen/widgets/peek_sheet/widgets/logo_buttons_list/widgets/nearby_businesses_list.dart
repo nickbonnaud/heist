@@ -22,10 +22,10 @@ class NearbyBusinessesList extends StatelessWidget {
   double get _borderRadius => lerp(min: sharedSizes.startSize, max: sharedSizes.endSize);
 
   NearbyBusinessesList({
-    @required int numberOpenTransactions,
-    @required int numberActiveLocations,
-    @required AnimationController controller,
-    @required double topMargin
+    required int numberOpenTransactions,
+    required int numberActiveLocations,
+    required AnimationController controller,
+    required double topMargin
   })
     : assert(numberOpenTransactions != null && numberActiveLocations != null && controller != null && topMargin != null),
       _numberOpenTransactions = numberOpenTransactions,
@@ -60,7 +60,7 @@ class NearbyBusinessesList extends StatelessWidget {
   }
   
   
-  int _setIndex({@required NearbyBusinessLoaded state, @required Business business}) {
+  int _setIndex({required NearbyBusinessLoaded state, required Business business}) {
     return _setPreviousIndex() + state.businesses.indexOf(business);
   }
 
@@ -83,7 +83,7 @@ class NearbyBusinessesList extends StatelessWidget {
     return numberSlotsLeft <= 0 ? 3 : numberSlotsLeft;
   }
   
-  Widget _buildLogoButton({@required Business business, @required NearbyBusinessLoaded state}) {
+  Widget _buildLogoButton({required Business business, required NearbyBusinessLoaded state}) {
     int index = _setIndex(state: state, business: business);
     return LogoButton(
       controller: _controller, 
@@ -96,7 +96,7 @@ class NearbyBusinessesList extends StatelessWidget {
     );
   }
 
-  Widget _buildDetails({@required Business business, @required NearbyBusinessLoaded state}) {
+  Widget _buildDetails({required Business business, required NearbyBusinessLoaded state}) {
     int index = _setIndex(state: state, business: business);
     return BusinessLogoDetails(
       topMargin: _logoMarginTop(index: index), 
@@ -113,21 +113,21 @@ class NearbyBusinessesList extends StatelessWidget {
     return _numberOpenTransactions > 0 || _numberActiveLocations > 0;
   }
 
-  double _logoMarginTop({@required int index}) {
+  double _logoMarginTop({required int index}) {
     return lerp(
       min: sharedSizes.startMarginTop,
       max: sharedSizes.endMarginTop + (index * (sharedSizes.verticalSpacing + sharedSizes.endSize))
     ) + _topMargin;
   }
 
-  double _logoLeftMargin({@required int index}) {
+  double _logoLeftMargin({required int index}) {
     return lerp(
       min: index == 0 ? 3 : index * ((sharedSizes.horizontalSpacing + sharedSizes.startSize)),
       max: 8
     );
   }
   
-  double lerp({@required double min, @required double max}) {
-    return lerpDouble(min, max, _controller.value);
+  double lerp({required double min, required double max}) {
+    return lerpDouble(min, max, _controller.value)!;
   }
 }

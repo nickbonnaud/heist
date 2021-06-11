@@ -9,9 +9,8 @@ class MessageInput extends StatefulWidget {
   final String _ticketIdentifier;
   final ScrollController _scrollController;
 
-  MessageInput({@required String ticketIdentifier, @required ScrollController scrollController})
-    : assert(ticketIdentifier != null && scrollController != null),
-      _ticketIdentifier = ticketIdentifier,
+  MessageInput({required String ticketIdentifier, required ScrollController scrollController})
+    : _ticketIdentifier = ticketIdentifier,
       _scrollController = scrollController;
 
   @override
@@ -19,9 +18,10 @@ class MessageInput extends StatefulWidget {
 }
 
 class _MessageInputState extends State<MessageInput> {
-  TextEditingController _controller;
-  MessageInputBloc _messageInputBloc;
   final FocusNode _inputFocusNode = FocusNode();
+  
+  late TextEditingController _controller;
+  late MessageInputBloc _messageInputBloc;
 
   bool get isPopulated => _controller.text.isNotEmpty;
 

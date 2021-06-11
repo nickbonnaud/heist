@@ -7,36 +7,12 @@ abstract class AuthenticationEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class AppStarted extends AuthenticationEvent {}
-
-class Registered extends AuthenticationEvent {
-  final Customer customer;
-
-  const Registered({@required this.customer});
-
-  @override
-  List<Object> get props => [customer];
-
-  @override
-  String toString() => 'Registered { customer: $customer }';
-}
-
-class CustomerUpdated extends AuthenticationEvent {
-  final Customer customer;
-
-  const CustomerUpdated({@required this.customer});
-
-  @override
-  List<Object> get props => [customer];
-
-  @override
-  String toString() => 'CustomerUpdated { customer: $customer }';
-}
+class Init extends AuthenticationEvent {}
 
 class LoggedIn extends AuthenticationEvent {
   final Customer customer;
 
-  const LoggedIn({@required this.customer});
+  const LoggedIn({required this.customer});
 
   @override
   List<Object> get props => [customer];

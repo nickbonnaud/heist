@@ -1,21 +1,22 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
+import 'package:heist/models/customer/account.dart';
 import 'package:heist/models/customer/customer.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
+import 'package:heist/resources/helpers/vibrate.dart';
 import 'package:heist/screens/tip_screen/bloc/tip_form_bloc.dart';
 import 'package:heist/themes/global_colors.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
-import 'package:vibrate/vibrate.dart';
 
 class TipForm extends StatefulWidget {
-  final Customer _customer;
+  final Account _account;
 
-  TipForm({@required Customer customer})
-    : assert(customer != null),
-      _customer = customer;
+  TipForm({required Account account})
+    : _account = account;
 
   @override
   State<TipForm> createState() => _TipFormState();
@@ -29,14 +30,14 @@ class _TipFormState extends State<TipForm> {
 
   bool get isPopulated => _tipRateController.text.isNotEmpty && _quickTipRateController.text.isNotEmpty;
 
-  TipFormBloc _tipFormBloc;
+  late TipFormBloc _tipFormBloc;
 
   @override
   void initState() {
     super.initState();
     _tipFormBloc = BlocProvider.of<TipFormBloc>(context);
-    _tipRateController = TextEditingController(text: widget._customer.account.tipRate.toString());
-    _quickTipRateController = TextEditingController(text: widget._customer.account.quickTipRate.toString());
+    _tipRateController = TextEditingController(text: widget._account.tipRate.toString());
+    _quickTipRateController = TextEditingController(text: widget._account.quickTipRate.toString());
 
     _tipRateController.addListener(_onTipRateChanged);
     _quickTipRateController.addListener(_onQuickTipRateChanged);
@@ -220,56 +221,54 @@ class _TipFormState extends State<TipForm> {
   }
 
   bool _formFieldsChanged() {
-    return (widget._customer.account.tipRate != int.parse(_tipRateController.text))
-      || (widget._customer.account.quickTipRate != int.parse(_quickTipRateController.text));
+    return (widget._account.tipRate != int.parse(_tipRateController.text))
+      || (widget._account.quickTipRate != int.parse(_quickTipRateController.text));
   }
 
   void _saveButtonPressed(TipFormState state) {
     if (_isSaveButtonEnabled(state)) {
       _tipFormBloc.add(Submitted(
-        customer: widget._customer,
-        tipRate: int.parse(_tipRateController.text) != widget._customer.account.tipRate ? int.parse(_tipRateController.text) : null,
-        quickTipRate: int.parse(_quickTipRateController.text) != widget._customer.account.quickTipRate ? int.parse(_quickTipRateController.text) : null
+        account: widget._account,
+        tipRate: int.parse(_tipRateController.text) != widget._account.tipRate ? int.parse(_tipRateController.text) : null,
+        quickTipRate: int.parse(_quickTipRateController.text) != widget._account.quickTipRate ? int.parse(_quickTipRateController.text) : null
       ));
     }
   }
 
   void _showSnackbar(BuildContext context, String message, TipFormState state) async {
-    bool canVibrate = await Vibrate.canVibrate;
-    if (canVibrate) {
-      Vibrate.feedback(state.isSuccess ? FeedbackType.success : FeedbackType.error);
-    }
-
-    Scaffold.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(
-        SnackBar(
-          content: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Expanded(
-                child: BoldText3(text: message, context: context, color: Theme.of(context).colorScheme.onSecondary)
-              ),
-            ],
+    state.isSuccess ? Vibrate.success() : Vibrate.error();
+    final SnackBar snackBar = SnackBar(
+      content: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Expanded(
+            child: BoldText3(text: message, context: context, color: Theme.of(context).colorScheme.onSecondary)
           ),
-          backgroundColor: state.isSuccess
-            ? Theme.of(context).colorScheme.success
-            : Theme.of(context).colorScheme.error,
-        )
-      ).closed.then((_) => {
+        ],
+      ),
+      backgroundColor: state.isSuccess
+        ? Theme.of(context).colorScheme.success
+        : Theme.of(context).colorScheme.error,
+    );
+
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(snackBar)
+      .closed.then((_) => {
         if (state.isSuccess) {
           Navigator.of(context).pop()
         } else {
           BlocProvider.of<TipFormBloc>(context).add(Reset())
         }
-      });
+      }
+    );
   }
 
   KeyboardActionsConfig _buildKeyboard(BuildContext context) {
     return KeyboardActionsConfig(
       keyboardActionsPlatform: KeyboardActionsPlatform.ALL,
       actions: [
-        KeyboardAction(
+        KeyboardActionsItem(
           focusNode: _tipRateNode,
           toolbarButtons: [
             (node) {
@@ -283,7 +282,7 @@ class _TipFormState extends State<TipForm> {
             }
           ]
         ),
-        KeyboardAction(
+        KeyboardActionsItem(
           focusNode: _quickTipRateNode,
           toolbarButtons: [
             (node) {

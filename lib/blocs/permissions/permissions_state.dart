@@ -1,7 +1,7 @@
 part of 'permissions_bloc.dart';
 
 @immutable
-class PermissionsState {
+class PermissionsState extends Equatable {
   final bool bleEnabled;
   final bool locationEnabled;
   final bool notificationEnabled;
@@ -12,11 +12,11 @@ class PermissionsState {
   bool get onStartPermissionsValid => bleEnabled && locationEnabled && beaconEnabled;
 
   PermissionsState({
-    @required this.bleEnabled,
-    @required this.locationEnabled,
-    @required this.notificationEnabled,
-    @required this.beaconEnabled,
-    @required this.checksComplete,
+    required this.bleEnabled,
+    required this.locationEnabled,
+    required this.notificationEnabled,
+    required this.beaconEnabled,
+    required this.checksComplete,
   });
 
   factory PermissionsState.unknown() {
@@ -40,37 +40,22 @@ class PermissionsState {
   }
 
   PermissionsState update({
-    bool bleEnabled,
-    bool locationEnabled,
-    bool notificationEnabled,
-    bool beaconEnabled,
-    bool checksComplete,
-  }) {
-    return copyWith(
-      bleEnabled: bleEnabled,
-      locationEnabled: locationEnabled,
-      notificationEnabled: notificationEnabled,
-      beaconEnabled: beaconEnabled,
-      checksComplete: checksComplete,
-    );
-  }
+    bool? bleEnabled,
+    bool? locationEnabled,
+    bool? notificationEnabled,
+    bool? beaconEnabled,
+    bool? checksComplete,
+  }) => PermissionsState(
+    bleEnabled: bleEnabled ?? this.bleEnabled,
+    locationEnabled: locationEnabled ?? this.locationEnabled,
+    notificationEnabled: notificationEnabled ?? this.notificationEnabled,
+    beaconEnabled: beaconEnabled ?? this.beaconEnabled,
+    checksComplete: checksComplete ?? this.checksComplete,
+  );
 
-  PermissionsState copyWith({
-    bool bleEnabled,
-    bool locationEnabled,
-    bool notificationEnabled,
-    bool beaconEnabled,
-    bool checksComplete,
-  }) {
-    return PermissionsState(
-      bleEnabled: bleEnabled ?? this.bleEnabled,
-      locationEnabled: locationEnabled ?? this.locationEnabled,
-      notificationEnabled: notificationEnabled ?? this.notificationEnabled,
-      beaconEnabled: beaconEnabled ?? this.beaconEnabled,
-      checksComplete: checksComplete ?? this.checksComplete,
-    );
-  }
-
+  @override
+  List<Object?> get props => [bleEnabled, locationEnabled, notificationEnabled, beaconEnabled, checksComplete];
+  
   @override
   String toString() => 'PermissionsState { bleEnabled: $bleEnabled, locationEnabled: $locationEnabled, notificationEnabled: $notificationEnabled, beaconEnabled: $beaconEnabled, checksComplete: $checksComplete }';
 }
