@@ -4,7 +4,6 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:heist/models/customer/customer.dart';
-import 'package:heist/models/customer/profile.dart';
 import 'package:heist/repositories/customer_repository.dart';
 import 'package:heist/resources/helpers/api_exception.dart';
 
@@ -30,8 +29,6 @@ class CustomerBloc extends Bloc<CustomerEvent, CustomerState> {
       yield* _mapCustomerLoggedOutToState();
     } else if (event is CustomerUpdated) {
       yield* _mapCustomerUpdatedToState(event: event);
-    } else if (event is ProfileUpdated) {
-      yield* _mapProfileUpdatedToState(event: event);
     }
   }
 
@@ -42,7 +39,7 @@ class CustomerBloc extends Bloc<CustomerEvent, CustomerState> {
       final Customer customer = await _customerRepository.fetchCustomer();
       yield state.update(loading: false, customer: customer);
     } on ApiException catch (exception) {
-      yield state.update(errorMessage: exception.error);
+      yield state.update(loading: false, errorMessage: exception.error);
     }
   }
 
@@ -56,13 +53,5 @@ class CustomerBloc extends Bloc<CustomerEvent, CustomerState> {
   
   Stream<CustomerState> _mapCustomerUpdatedToState({required CustomerUpdated event}) async* {
     yield state.update(customer: event.customer);
-  }
-  
-  Stream<CustomerState> _mapProfileUpdatedToState({required ProfileUpdated event}) async* {
-    if (state.customer != null) {
-      Customer customer = state.customer!;
-      customer = customer.update(profile: event.profile);
-      yield state.update(customer: customer);
-    }
   }
 }

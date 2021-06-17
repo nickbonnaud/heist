@@ -17,7 +17,7 @@ class BeaconBloc extends Bloc<BeaconEvent, BeaconState> {
   final ActiveLocationBloc _activeLocationBloc;
 
   late StreamSubscription _nearbyBusinessSubscription;
-  late StreamSubscription<MonitoringResult> _beaconSubscription;
+  StreamSubscription<MonitoringResult>? _beaconSubscription;
 
   BeaconBloc({
     required BeaconRepository beaconRepository,
@@ -51,12 +51,13 @@ class BeaconBloc extends Bloc<BeaconEvent, BeaconState> {
   @override
   Future<void> close() {
     _nearbyBusinessSubscription.cancel();
+    _beaconSubscription?.cancel();
     return super.close();
   }
 
   Stream<BeaconState> _mapStartBeaconMonitoringToState({required StartBeaconMonitoring event}) async* {
     yield LoadingBeacons();
-    _beaconSubscription.cancel();
+    _beaconSubscription?.cancel();
     _beaconSubscription = _beaconRepository.startMonitoring(businesses: event.businesses).listen((MonitoringResult beaconEvent) {
       if (beaconEvent.monitoringEventType == MonitoringEventType.didEnterRegion) {
         add(Enter(region: beaconEvent.region));
@@ -68,7 +69,7 @@ class BeaconBloc extends Bloc<BeaconEvent, BeaconState> {
   }
 
   Stream<BeaconState> _mapBeaconCancelledToState() async* {
-    _beaconSubscription.cancel();
+    _beaconSubscription?.cancel();
     yield BeaconsCancelled();
   }
 

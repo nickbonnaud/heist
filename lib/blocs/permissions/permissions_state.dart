@@ -54,7 +54,7 @@ class PermissionsState extends Equatable {
   );
 
   @override
-  List<Object?> get props => [bleEnabled, locationEnabled, notificationEnabled, beaconEnabled, checksComplete];
+  List<Object> get props => [bleEnabled, locationEnabled, notificationEnabled, beaconEnabled, checksComplete];
   
   @override
   String toString() => 'PermissionsState { bleEnabled: $bleEnabled, locationEnabled: $locationEnabled, notificationEnabled: $notificationEnabled, beaconEnabled: $beaconEnabled, checksComplete: $checksComplete }';

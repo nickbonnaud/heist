@@ -10,6 +10,7 @@ import 'package:heist/blocs/permissions/permissions_bloc.dart';
 import 'package:heist/blocs/receipt_modal_sheet/receipt_modal_sheet_bloc.dart';
 import 'package:heist/global_widgets/route_builders/fade_in_route.dart';
 import 'package:heist/global_widgets/route_builders/slide_up_route.dart';
+import 'package:heist/models/business/business.dart';
 import 'package:heist/models/transaction/transaction_resource.dart';
 import 'package:heist/providers/account_provider.dart';
 import 'package:heist/providers/authentication_provider.dart';
@@ -30,6 +31,7 @@ import 'package:heist/repositories/transaction_issue_repository.dart';
 import 'package:heist/repositories/transaction_repository.dart';
 import 'package:heist/screens/app/app.dart';
 import 'package:heist/screens/auth_screen/auth_screen.dart';
+import 'package:heist/screens/business_screen/business_screen.dart';
 import 'package:heist/screens/layout_screen/layout_screen.dart';
 import 'package:heist/screens/onboard_screen/onboard_screen.dart';
 import 'package:heist/screens/receipt_screen/receipt_screen.dart';
@@ -99,6 +101,12 @@ class AppRouter {
             transactionIssueRepository: TransactionIssueRepository(issueProvider: TransactionIssueProvider()),
             openTransactionsBloc: OpenTransactionsBloc(transactionRepository: TransactionRepository(transactionProvider: TransactionProvider()), authenticationBloc: BlocProvider.of<AuthenticationBloc>(context))
           ),
+          name: routeData.route
+        );
+        break;
+      case Routes.business:
+        route = _createFullScreenDialogRoute(
+          screen: BusinessScreen(business: routeData.args as Business),
           name: routeData.route
         );
         break;

@@ -75,7 +75,7 @@ class OpenTransactionsBloc extends Bloc<OpenTransactionsEvent, OpenTransactionsS
     if (currentState is OpenTransactionsLoaded) {
       final updatedTransactions = currentState
         .transactions
-        .where((transaction) => transaction.transaction.identifier != event.transaction.transaction.identifier)
+        .where((transaction) => transaction != event.transaction)
         .toList();
       yield OpenTransactionsLoaded(transactions: updatedTransactions);
     }
@@ -86,7 +86,7 @@ class OpenTransactionsBloc extends Bloc<OpenTransactionsEvent, OpenTransactionsS
     if (currentState is OpenTransactionsLoaded) {
       final List<TransactionResource> updatedTransactions = currentState
         .transactions
-        .where((transaction) => transaction.transaction.identifier != event.transaction.transaction.identifier)
+        .where((transaction) => transaction != event.transaction)
         .toList()
         ..add(event.transaction);
       

@@ -294,7 +294,7 @@ class MockResponses {
     return {
       "transaction": generateTransaction(),
       "business": generateBusiness(),
-      "refund": [],
+      "refunds": [],
       'issue': null
     };
   }
@@ -385,7 +385,7 @@ class MockResponses {
           }
         }
       },
-      "refund": [
+      "refunds": [
         // {
         //   "identifier": "125d10b0-895a-11ea-95db-b1ba0de9dfd1",
         //   "total": "952",

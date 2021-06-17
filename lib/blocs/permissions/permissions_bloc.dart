@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_beacon/flutter_beacon.dart';
 import 'package:heist/repositories/initial_login_repository.dart';
+import 'package:heist/resources/helpers/permissions_checker.dart';
 import 'package:meta/meta.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -19,9 +20,11 @@ enum PermissionType {
 
 class PermissionsBloc extends Bloc<PermissionsEvent, PermissionsState> {
   final InitialLoginRepository _initialLoginRepository;
+  final PermissionsChecker _permissionsChecker;
 
-  PermissionsBloc({required InitialLoginRepository initialLoginRepository})
+  PermissionsBloc({required InitialLoginRepository initialLoginRepository, required PermissionsChecker permissionsChecker})
     : _initialLoginRepository = initialLoginRepository,
+      _permissionsChecker = permissionsChecker,
       super(PermissionsState.unknown());
 
   // bool get isBleEnabled => state.bleEnabled;
@@ -104,16 +107,13 @@ class PermissionsBloc extends Bloc<PermissionsEvent, PermissionsState> {
     bool isInitial =  await _initialLoginRepository.isInitialLogin();
     if (!isInitial) {
       List results = await Future.wait([
-        // * CHECK * //
-        // Permission.bluetooth.status.isGranted,
-        flutterBeacon.bluetoothState,
-        Permission.location.status.isGranted,
-        Permission.notification.status.isGranted,
-        Permission.locationAlways.status.isGranted
+        _permissionsChecker.bleEnabled(),
+        _permissionsChecker.locationEnabled(),
+        _permissionsChecker.notificationEnabled(),
+        _permissionsChecker.beaconEnabled(),
       ]);
       yield state.update(
-        // bleEnabled: results[0],
-        bleEnabled: results[0] == BluetoothState.stateOn,
+        bleEnabled: results[0],
         locationEnabled: results[1],
         notificationEnabled: results[2],
         beaconEnabled: results[3],

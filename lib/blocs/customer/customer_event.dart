@@ -35,15 +35,3 @@ class CustomerUpdated extends CustomerEvent {
   String toString() => 'CustomerUpdated { customer: $customer }';
 
 }
-
-class ProfileUpdated extends CustomerEvent {
-  final Profile profile;
-
-  const ProfileUpdated({required this.profile});
-
-  @override
-  List<Object> get props => [profile];
-
-  @override
-  String toString() => 'ProfileUpdated { profile: $profile }';
-}

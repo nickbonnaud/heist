@@ -28,7 +28,7 @@ class AppReadyBloc extends Bloc<AppReadyEvent, AppReadyState> {
   late StreamSubscription _permissionsBlocSubscription;
   late StreamSubscription _customerBlocSubscription;
 
-  late AuthenticationState previousAuthenticationState;
+  AuthenticationState? previousAuthenticationState;
 
   AppReadyBloc({
     required AuthenticationBloc authenticationBloc,
@@ -81,7 +81,6 @@ class AppReadyBloc extends Bloc<AppReadyEvent, AppReadyState> {
           add(PermissionChecksComplete(permissionsReady: state.allPermissionsValid));
           _permissionsBlocSubscription.cancel();
         }
-
       });
   }
       

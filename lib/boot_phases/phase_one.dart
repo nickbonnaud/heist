@@ -11,12 +11,14 @@ import 'package:heist/repositories/active_location_repository.dart';
 import 'package:heist/repositories/customer_repository.dart';
 import 'package:heist/repositories/initial_login_repository.dart';
 import 'package:heist/repositories/token_repository.dart';
+import 'package:heist/resources/helpers/permissions_checker.dart';
 
 class PhaseOne extends StatelessWidget {
   final MaterialApp? _testApp;
   final CustomerRepository _customerRepository = CustomerRepository(customerProvider: CustomerProvider(), tokenRepository: TokenRepository(tokenProvider: StorageProvider()));
   final ActiveLocationRepository _activeLocationRepository = ActiveLocationRepository(activeLocationProvider: ActiveLocationProvider());
   final InitialLoginRepository _initialLoginRepository = InitialLoginRepository(tutorialProvider: StorageProvider());
+  final PermissionsChecker _permissionsChecker = PermissionsChecker();
   
   PhaseOne({MaterialApp? testApp})
     : _testApp = testApp;
@@ -34,7 +36,7 @@ class PhaseOne extends StatelessWidget {
         ),
         
         BlocProvider<PermissionsBloc>(
-          create: (_) => PermissionsBloc(initialLoginRepository: _initialLoginRepository)
+          create: (_) => PermissionsBloc(initialLoginRepository: _initialLoginRepository, permissionsChecker: _permissionsChecker)
             ..add(CheckPermissions())
         ),
       ],

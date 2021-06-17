@@ -30,18 +30,6 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
     } else if (event is LoggedOut) {
       yield* _mapLoggedOutToState();
     }
-    
-    // if (event is AppStarted) {
-    //   yield* _mapAppStartedToState();
-    // } else if (event is Registered) {
-    //   yield* _mapRegisteredToState(event: event);
-    // } else if (event is LoggedIn) {
-    //   yield* _mapLoggedInToState(event: event);
-    // } else if (event is LoggedOut) {
-    //   yield* _mapLoggedOutToState();
-    // } else if (event is CustomerUpdated) {
-    //   yield* _mapCustomerUpdatedToState(event: event);
-    // }
   }
 
   Stream<AuthenticationState> _mapInitToState() async* {
@@ -66,6 +54,8 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
       if (loggedOut) {
         _customerBloc.add(CustomerLoggedOut());
         yield Unauthenticated();
+      } else {
+        yield Authenticated(errorMessage: "An error occurred. Unable to Logout.");
       }
     } on ApiException catch (exception) {
       yield Authenticated(errorMessage: exception.error);

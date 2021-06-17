@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:ui';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -19,6 +18,8 @@ class NearbyBusinessesBloc extends Bloc<NearbyBusinessesEvent, NearbyBusinessesS
 
   late StreamSubscription _geoLocationBlocSubscription;
 
+  List<Business> get businesses => state.businesses;
+  
   NearbyBusinessesBloc({
     required LocationRepository locationRepository,
     required IconCreatorRepository iconCreatorRepository,

@@ -10,4 +10,6 @@ class Routes {
   static const String permissions = '/permissions';
 
   static const String receipt = '/receipt';
+
+  static const String business = '/business';
 }

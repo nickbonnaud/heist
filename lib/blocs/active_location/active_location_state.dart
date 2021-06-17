@@ -36,7 +36,7 @@ class ActiveLocationState extends Equatable {
   );
 
   @override
-  List<Object?> get props => [activeLocations, addingLocations, removingLocations, errorMessage];
+  List<Object> get props => [activeLocations, addingLocations, removingLocations, errorMessage];
 
   @override
   String toString() => 'ActiveLocationState { activeLocations: $activeLocations, addingLocations: $addingLocations, removingLocations: $removingLocations, errorMessage: $errorMessage }';

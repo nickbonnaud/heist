@@ -31,13 +31,18 @@ class ActiveLocationBloc extends Bloc<ActiveLocationEvent, ActiveLocationState> 
 
   Stream<ActiveLocationState> _mapNewActiveLocationToState({required NewActiveLocation event}) async* {
     if (!state.activeLocations.any((activeLocation) => activeLocation.beaconIdentifier == event.beaconIdentifier) && !state.addingLocations.contains(event.beaconIdentifier)) {
-      
-      yield state.update(addingLocations: state.addingLocations..add(event.beaconIdentifier));
+      yield state.update(addingLocations: state.addingLocations + [event.beaconIdentifier]);
       try {
         ActiveLocation activeLocation = await _activeLocationRepository.enterBusiness(beaconIdentifier: event.beaconIdentifier);
-        yield state.update(activeLocations: state.activeLocations..add(activeLocation), addingLocations: state.addingLocations..remove(event.beaconIdentifier));
+        yield state.update(
+          activeLocations: state.activeLocations + [activeLocation],
+          addingLocations: state.addingLocations.where((beaconIdentifier) => beaconIdentifier != event.beaconIdentifier).toList()
+        );
       } on ApiException catch (exception) {
-        yield state.update(errorMessage: exception.error, addingLocations: state.addingLocations..remove(event.beaconIdentifier));
+        yield state.update(
+          errorMessage: exception.error,
+          addingLocations: state.addingLocations.where((beaconIdentifier) => beaconIdentifier != event.beaconIdentifier).toList()
+        );
       }
     }
   }
@@ -45,10 +50,8 @@ class ActiveLocationBloc extends Bloc<ActiveLocationEvent, ActiveLocationState> 
   Stream<ActiveLocationState> _mapRemoveActiveLocationToState({required RemoveActiveLocation event}) async* {
     final ActiveLocation? locationToRemove = state.activeLocations
       .firstWhereOrNull((ActiveLocation location) => location.beaconIdentifier == event.beaconIdentifier);
-    
     if (locationToRemove != null && !state.removingLocations.contains(event.beaconIdentifier)) {
-      
-      yield state.update(removingLocations: state.removingLocations..add(event.beaconIdentifier));
+      yield state.update(removingLocations: state.removingLocations + [event.beaconIdentifier]);
       try {
         bool didRemove = await _activeLocationRepository.exitBusiness(activeLocationId: locationToRemove.identifier);
         if (didRemove) {
@@ -57,43 +60,23 @@ class ActiveLocationBloc extends Bloc<ActiveLocationEvent, ActiveLocationState> 
             .where((activeLocation) => activeLocation.beaconIdentifier != event.beaconIdentifier)
             .toList();
           
-          yield state.update(activeLocations: updatedActiveLocations, removingLocations: state.removingLocations..remove(event.beaconIdentifier));
+          yield state.update(
+            activeLocations: updatedActiveLocations, 
+            removingLocations: state.removingLocations.where((beaconIdentifier) => beaconIdentifier != event.beaconIdentifier).toList());
         } else {
-          state.update(errorMessage: "Unable to remove active location.", removingLocations: state.removingLocations..remove(event.beaconIdentifier));
+          yield state.update(
+            errorMessage: "Unable to remove active location.",
+            removingLocations: state.removingLocations.where((beaconIdentifier) => beaconIdentifier != event.beaconIdentifier).toList());
         }
       } on ApiException catch (exception) {
-        yield state.update(errorMessage: exception.error, removingLocations: state.removingLocations..remove(event.beaconIdentifier));
+        yield state.update(
+          errorMessage: exception.error,
+          removingLocations: state.removingLocations.where((beaconIdentifier) => beaconIdentifier != event.beaconIdentifier).toList());
       }
     }
-    
-    // final currentState = state;
-    // if (currentState is CurrentActiveLocations) {
-    //   try {
-    //     final locationToRemove = currentState.activeLocations
-    //       .firstWhere((ActiveLocation location) => location.beaconIdentifier == event.beaconIdentifier, 
-    //       orElse: null);
-    //     if (locationToRemove != null) {
-    //       bool didRemove = await _activeLocationRepository.exitBusiness(activeLocationId: locationToRemove.identifier);
-    //       if (didRemove) {
-    //         final updatedActiveLocations = currentState
-    //           .activeLocations
-    //           .where((activeLocation) => activeLocation.beaconIdentifier != event.beaconIdentifier)
-    //           .toList();
-            
-    //         yield updatedActiveLocations.length == 0
-    //           ? NoActiveLocations()
-    //           : currentState.update(activeLocations: updatedActiveLocations);
-    //       } else {
-    //         yield currentState.update(removeActiveLocationFail: true);
-    //       }
-    //     }
-    //   } catch (e) {
-    //     yield currentState.update(removeActiveLocationFail: true);
-    //   }
-    // }
   }
 
   Stream<ActiveLocationState> _mapResetToState() async* {
-    state.update(errorMessage: "");
+    yield state.update(errorMessage: "");
   }
 }

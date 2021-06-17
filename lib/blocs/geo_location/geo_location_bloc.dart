@@ -5,7 +5,6 @@ import 'package:equatable/equatable.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:heist/blocs/permissions/permissions_bloc.dart';
 import 'package:heist/repositories/geolocator_repository.dart';
-import 'package:meta/meta.dart';
 
 part 'geo_location_event.dart';
 part 'geo_location_state.dart';

@@ -2,6 +2,9 @@ part of 'push_notification_bloc.dart';
 
 abstract class PushNotificationEvent extends Equatable {
   const PushNotificationEvent();
+
+  @override
+  List<Object?> get props => [];
 }
 
 class StartPushNotificationMonitoring extends PushNotificationEvent {

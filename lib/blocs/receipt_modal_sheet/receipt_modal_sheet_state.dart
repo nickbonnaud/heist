@@ -1,7 +1,7 @@
 part of 'receipt_modal_sheet_bloc.dart';
 
 @immutable
-class ReceiptModalSheetState {
+class ReceiptModalSheetState extends Equatable {
   final bool visible;
 
   ReceiptModalSheetState({required this.visible});
@@ -13,6 +13,9 @@ class ReceiptModalSheetState {
   ReceiptModalSheetState update({required bool visible}) {
     return ReceiptModalSheetState(visible: visible);
   }
+
+  @override
+  List<Object> get props => [visible];
 
   @override
   String toString() => 'ReceiptModalSheetState { visible: $visible }';

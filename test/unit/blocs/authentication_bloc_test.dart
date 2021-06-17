@@ -1,0 +1,164 @@
+import 'package:bloc_test/bloc_test.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:heist/blocs/authentication/authentication_bloc.dart';
+import 'package:heist/blocs/customer/customer_bloc.dart';
+import 'package:heist/models/customer/customer.dart';
+import 'package:heist/repositories/authentication_repository.dart';
+import 'package:heist/resources/helpers/api_exception.dart';
+
+class MockAuthenticationRepository extends Mock implements AuthenticationRepository {}
+class MockCustomerBloc extends Mock implements CustomerBloc {}
+class MockCustomer extends Mock implements Customer {}
+
+void main() {
+  group("Authentication Bloc Tests", () {
+    late AuthenticationRepository authenticationRepository;
+    late CustomerBloc customerBloc;
+    late AuthenticationBloc authenticationBloc;
+
+    setUp(() {
+      registerFallbackValue(CustomerAuthenticated());
+      authenticationRepository = MockAuthenticationRepository();
+      customerBloc = MockCustomerBloc();
+      when(() => customerBloc.add(any(that: isA<CustomerEvent>())))
+        .thenReturn(null);
+      authenticationBloc = AuthenticationBloc(authenticationRepository: authenticationRepository, customerBloc: customerBloc);
+    });
+
+    tearDown(() {
+      authenticationBloc.close();
+    });
+
+    test("Initial state of Authentication Bloc is Unknown", () {
+      expect(authenticationBloc.state, isA<Unknown>());
+    });
+
+    test("Authentication Bloc has isAuthenticated getter", () {
+      expect(authenticationBloc.isAuthenticated, false);
+    });
+
+    blocTest<AuthenticationBloc, AuthenticationState>(
+      "Authentication Bloc Init event checks if customer logged in.", 
+      build: () => authenticationBloc,
+      act: (bloc) {
+        when(() => authenticationRepository.isSignedIn()).thenAnswer((_) async => true);
+        bloc.add(Init());
+      },
+      verify: (_) {
+        verify(() => authenticationRepository.isSignedIn()).called(1);
+      }
+    );
+
+    blocTest<AuthenticationBloc, AuthenticationState>(
+      "Authentication Bloc Init event yields Authenticated if customer logged in.", 
+      build: () => authenticationBloc,
+      act: (bloc) {
+        when(() => authenticationRepository.isSignedIn()).thenAnswer((_) async => true);
+        bloc.add(Init());
+      },
+      expect: () => [isA<Authenticated>()]
+    );
+
+    blocTest<AuthenticationBloc, AuthenticationState>(
+      "Authentication Bloc Init event yields calls customerBloc.add if customer logged in.", 
+      build: () => authenticationBloc,
+      act: (bloc) {
+        when(() => authenticationRepository.isSignedIn()).thenAnswer((_) async => true);
+        bloc.add(Init());
+      },
+      verify: (_) {
+        verify(() => customerBloc.add(any(that: isA<CustomerEvent>()))).called(1);
+      }
+    );
+
+    blocTest<AuthenticationBloc, AuthenticationState>(
+      "Authentication Bloc Init event yields Unauthenticated if customer not logged in.", 
+      build: () => authenticationBloc,
+      act: (bloc) {
+        when(() => authenticationRepository.isSignedIn()).thenAnswer((_) async => false);
+        bloc.add(Init());
+      },
+      expect: () => [isA<Unauthenticated>()]
+    );
+
+    blocTest<AuthenticationBloc, AuthenticationState>(
+      "Authentication Bloc LoggedIn event yields Authenticated", 
+      build: () => authenticationBloc,
+      act: (bloc) {
+        bloc.add(LoggedIn(customer: MockCustomer()));
+      },
+      expect: () => [isA<Authenticated>()]
+    );
+
+    blocTest<AuthenticationBloc, AuthenticationState>(
+      "Authentication Bloc LoggedIn event calls customerBloc.add", 
+      build: () => authenticationBloc,
+      act: (bloc) {
+        bloc.add(LoggedIn(customer: MockCustomer()));
+      },
+      verify: (_) {
+        verify(() => customerBloc.add(any(that: isA<CustomerEvent>()))).called(1);
+      }
+    );
+
+    blocTest<AuthenticationBloc, AuthenticationState>(
+      "Authentication Bloc LoggedOut event yields Unauthenticated", 
+      build: () => authenticationBloc,
+      act: (bloc) {
+        when(() => authenticationRepository.logout()).thenAnswer((_) async => true);
+        bloc.add(LoggedOut());
+      },
+      expect: () => [isA<Unauthenticated>()]
+    );
+
+    blocTest<AuthenticationBloc, AuthenticationState>(
+      "Authentication Bloc LoggedOut event on authenticationRepository.logout() return false yields Authenticated(errorMessage: )", 
+      build: () => authenticationBloc,
+      act: (bloc) {
+        when(() => authenticationRepository.logout()).thenAnswer((_) async => false);
+        bloc.add(LoggedOut());
+      },
+      expect: () => [isA<Authenticated>()],
+      verify: (_) {
+        expect((authenticationBloc.state as Authenticated).errorMessage, "An error occurred. Unable to Logout.");
+      }
+    );
+
+    blocTest<AuthenticationBloc, AuthenticationState>(
+      "Authentication Bloc LoggedOut event calls authenticationRepository.logout()", 
+      build: () => authenticationBloc,
+      act: (bloc) {
+        when(() => authenticationRepository.logout()).thenAnswer((_) async => true);
+        bloc.add(LoggedOut());
+      },
+      verify: (_) {
+        verify(() => authenticationRepository.logout()).called(1);
+      }
+    );
+
+    blocTest<AuthenticationBloc, AuthenticationState>(
+      "Authentication Bloc LoggedOut event on error yields Authenticated(errorMessage: )", 
+      build: () => authenticationBloc,
+      act: (bloc) {
+        when(() => authenticationRepository.logout()).thenThrow(ApiException(error: "Error Happened!"));
+        bloc.add(LoggedOut());
+      },
+      expect: () => [isA<Authenticated>()],
+      verify: (_) {
+        expect((authenticationBloc.state as Authenticated).errorMessage, "Error Happened!");
+      }
+    );
+
+    blocTest<AuthenticationBloc, AuthenticationState>(
+      "Authentication Bloc LoggedOut event customerBloc.add", 
+      build: () => authenticationBloc,
+      act: (bloc) {
+        when(() => authenticationRepository.logout()).thenAnswer((_) async => true);
+        bloc.add(LoggedOut());
+      },
+      verify: (_) {
+        verify(() => customerBloc.add(any(that: isA<CustomerEvent>()))).called(1);
+      }
+    );
+  });
+}
