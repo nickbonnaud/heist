@@ -27,12 +27,6 @@ class PermissionsBloc extends Bloc<PermissionsEvent, PermissionsState> {
       _permissionsChecker = permissionsChecker,
       super(PermissionsState.unknown());
 
-  // bool get isBleEnabled => state.bleEnabled;
-  // bool get isLocationEnabled => state.locationEnabled;
-  // bool get isNotificationEnabled => state.notificationEnabled;
-  // bool get isBeaconEnabled => state.beaconEnabled;
-  // bool get areChecksComplete => state.checksComplete;
-
   bool get allPermissionsValid => state.bleEnabled && state.locationEnabled && state.notificationEnabled && state.beaconEnabled;
   
   int get numberValidPermissions {

@@ -14,10 +14,11 @@ void main() {
   group("Geo Location Bloc Tests", () {
     late GeolocatorRepository geolocatorRepository;
     late GeoLocationBloc geoLocationBloc;
+    late PermissionsBloc permissionsBloc;
 
     setUp(() {
       geolocatorRepository = MockGeolocatorRepository();
-      final PermissionsBloc permissionsBloc = MockPermissionsBloc();
+      permissionsBloc = MockPermissionsBloc();
       whenListen(permissionsBloc, Stream<PermissionsState>.fromIterable([]));
       geoLocationBloc = GeoLocationBloc(geolocatorRepository: geolocatorRepository, permissionsBloc: permissionsBloc);
     });
@@ -126,6 +127,30 @@ void main() {
         bloc.add(FetchLocation(accuracy: Accuracy.HIGH));
       },
       expect: () => [isA<Loading>(), isA<FetchFailure>()],
+    );
+
+    blocTest<GeoLocationBloc, GeoLocationState>(
+      "Geo Location Bloc _permissionsBlocSubscription => [!this.isGeoLocationReady && state.onStartPermissionsValid] changes state [isA<Loading>(), isA<LocationLoaded>()]",
+      build: () {
+        when(() => geolocatorRepository.fetchMed())
+          .thenAnswer((_) async => Position(longitude: 3.0, latitude: 4.0, timestamp: null, accuracy: 1.0, altitude: 1.0, heading: 1.0, speed: 1.0, speedAccuracy: 1.0));
+
+        whenListen(permissionsBloc, Stream<PermissionsState>.fromIterable([PermissionsState(bleEnabled: true, locationEnabled: true, notificationEnabled: true, beaconEnabled: true, checksComplete: true)]));
+        return GeoLocationBloc(geolocatorRepository: geolocatorRepository, permissionsBloc: permissionsBloc);
+      },
+      expect: () => [isA<Loading>(), isA<LocationLoaded>()],
+    );
+
+    blocTest<GeoLocationBloc, GeoLocationState>(
+      "Geo Location Bloc _permissionsBlocSubscription => [!this.isGeoLocationReady && !state.onStartPermissionsValid] does not change state",
+      build: () {
+        when(() => geolocatorRepository.fetchMed())
+          .thenAnswer((_) async => Position(longitude: 3.0, latitude: 4.0, timestamp: null, accuracy: 1.0, altitude: 1.0, heading: 1.0, speed: 1.0, speedAccuracy: 1.0));
+
+        whenListen(permissionsBloc, Stream<PermissionsState>.fromIterable([PermissionsState(bleEnabled: false, locationEnabled: true, notificationEnabled: true, beaconEnabled: true, checksComplete: true)]));
+        return GeoLocationBloc(geolocatorRepository: geolocatorRepository, permissionsBloc: permissionsBloc);
+      },
+      expect: () => [],
     );
   });
 }

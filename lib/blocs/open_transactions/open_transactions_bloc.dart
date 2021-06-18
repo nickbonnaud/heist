@@ -14,7 +14,7 @@ class OpenTransactionsBloc extends Bloc<OpenTransactionsEvent, OpenTransactionsS
   final TransactionRepository _transactionRepository;
 
   late StreamSubscription _authenticationBlocSubscription;
-  late AuthenticationState _previousAuthenticationState;
+  AuthenticationState? _previousAuthenticationState;
 
   OpenTransactionsBloc({required TransactionRepository transactionRepository, required AuthenticationBloc authenticationBloc})
     : _transactionRepository = transactionRepository,

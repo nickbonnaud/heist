@@ -6,7 +6,7 @@ class LoginState extends Equatable {
   final bool isPasswordValid;
   final bool isSubmitting;
   final bool isSuccess;
-  final bool isFailure;
+  final String errorMessage;
 
   bool get isFormValid => isEmailValid && isPasswordValid;
 
@@ -15,7 +15,7 @@ class LoginState extends Equatable {
     required this.isPasswordValid,
     required this.isSubmitting,
     required this.isSuccess,
-    required this.isFailure
+    required this.errorMessage
   });
 
   factory LoginState.empty() {
@@ -24,7 +24,7 @@ class LoginState extends Equatable {
       isPasswordValid: true,
       isSubmitting: false,
       isSuccess: false,
-      isFailure: false
+      errorMessage: ""
     );
   }
 
@@ -34,17 +34,17 @@ class LoginState extends Equatable {
       isPasswordValid: true,
       isSubmitting: true,
       isSuccess: false,
-      isFailure: false
+      errorMessage: ""
     );
   }
 
-  factory LoginState.failure() {
+  factory LoginState.failure({required String errorMessage}) {
     return LoginState(
       isEmailValid: true,
       isPasswordValid: true,
       isSubmitting: false,
       isSuccess: false,
-      isFailure: true
+      errorMessage: errorMessage
     );
   }
 
@@ -54,7 +54,7 @@ class LoginState extends Equatable {
       isPasswordValid: true,
       isSubmitting: false,
       isSuccess: true,
-      isFailure: false
+      errorMessage: ""
     );
   }
 
@@ -62,31 +62,24 @@ class LoginState extends Equatable {
     return copyWith(
       isEmailValid: isEmailValid,
       isPasswordValid: isPasswordValid,
-      isSubmitting: false,
-      isSuccess: false,
-      isFailure: false
     );
   }
 
   LoginState copyWith({
     bool? isEmailValid,
     bool? isPasswordValid,
-    bool? isSubmitEnabled,
-    bool? isSubmitting,
-    bool? isSuccess,
-    bool? isFailure
   }) {
     return LoginState(
       isEmailValid: isEmailValid ?? this.isEmailValid,
       isPasswordValid: isPasswordValid ?? this.isPasswordValid, 
-      isSubmitting: isSubmitting ?? this.isSubmitting, 
-      isSuccess: isSuccess ?? this.isSuccess,
-      isFailure: isFailure ?? this.isFailure
+      isSubmitting: this.isSubmitting, 
+      isSuccess: this.isSuccess,
+      errorMessage: this.errorMessage
     );
   }
 
   @override
-  List<Object?> get props => [isEmailValid, isPasswordValid, isSubmitting, isSuccess, isFailure];
+  List<Object?> get props => [isEmailValid, isPasswordValid, isSubmitting, isSuccess, errorMessage];
   
   @override
   String toString() {
@@ -95,7 +88,7 @@ class LoginState extends Equatable {
       isPasswordValid: $isPasswordValid,
       isSubmitting: $isSubmitting,
       isSuccess: $isSuccess,
-      isFailure: $isFailure
+      errorMessage: $errorMessage
     } ''';
   }
 }

@@ -87,5 +87,49 @@ void main() {
         verify(() => pushNotificationRepository.startMonitoring(onMessageReceived: any(named: "onMessageReceived"), onMessageInteraction: any(named: "onMessageInteraction"))).called(1);
       }
     );
+
+    blocTest<PushNotificationBloc, PushNotificationState>(
+      "PushNotificationBloc notificationBootBlocSubscription => [state.isReady] changes state [isA<MonitoringPushNotifications>()]",
+      build: () {
+        when(() => pushNotificationRepository.startMonitoring(onMessageReceived: any(named: "onMessageReceived"), onMessageInteraction: any(named: "onMessageInteraction")))
+          .thenReturn(null);
+
+        whenListen(notificationBootBloc, Stream<NotificationBootState>.fromIterable([NotificationBootState(nearbyBusinessesReady: true, openTransactionsReady: true, permissionReady: true)]));
+
+        return PushNotificationBloc(
+          pushNotificationRepository: pushNotificationRepository,
+          transactionRepository: MockTransactionRepository(),
+          businessRepository: MockBusinessRepository(),
+          notificationBootBloc: notificationBootBloc,
+          nearbyBusinessesBloc: MockNearbyBusinessesBloc(),
+          openTransactionsBloc: MockOpenTransactionsBloc(),
+          notificationNavigationBloc: MockNotificationNavigationBloc(),
+          externalUrlHandler: MockExternalUrlHandler()
+        );
+      },
+      expect: () => [isA<MonitoringPushNotifications>()],
+    );
+
+    blocTest<PushNotificationBloc, PushNotificationState>(
+      "PushNotificationBloc notificationBootBlocSubscription => [!state.isReady] does not change state",
+      build: () {
+        when(() => pushNotificationRepository.startMonitoring(onMessageReceived: any(named: "onMessageReceived"), onMessageInteraction: any(named: "onMessageInteraction")))
+          .thenReturn(null);
+
+        whenListen(notificationBootBloc, Stream<NotificationBootState>.fromIterable([NotificationBootState(nearbyBusinessesReady: true, openTransactionsReady: false, permissionReady: true)]));
+
+        return PushNotificationBloc(
+          pushNotificationRepository: pushNotificationRepository,
+          transactionRepository: MockTransactionRepository(),
+          businessRepository: MockBusinessRepository(),
+          notificationBootBloc: notificationBootBloc,
+          nearbyBusinessesBloc: MockNearbyBusinessesBloc(),
+          openTransactionsBloc: MockOpenTransactionsBloc(),
+          notificationNavigationBloc: MockNotificationNavigationBloc(),
+          externalUrlHandler: MockExternalUrlHandler()
+        );
+      },
+      expect: () => [],
+    );
   });
 }

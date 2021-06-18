@@ -63,7 +63,7 @@ class AppReadyBloc extends Bloc<AppReadyEvent, AppReadyState> {
       });
 
       _beaconBlocSubscription = beaconBloc.stream.listen((BeaconState state) { 
-        if (state is Monitoring && !this.areBeaconsLoaded) {
+        if (!this.areBeaconsLoaded && state is Monitoring) {
           add(DataLoaded(type: DataType.beacons));
           _beaconBlocSubscription.cancel();
         }

@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heist/blocs/authentication/authentication_bloc.dart';
 import 'package:heist/models/customer/customer.dart';
 import 'package:heist/repositories/authentication_repository.dart';
+import 'package:heist/resources/helpers/api_exception.dart';
 import 'package:heist/resources/helpers/validators.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -55,8 +56,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
      Customer customer = await _authenticationRepository.login(email: email, password: password);
      _authenticationBloc.add(LoggedIn(customer: customer));
       yield LoginState.success();
-    } catch (_) {
-      yield LoginState.failure();
+    } on ApiException catch (exception) {
+      yield LoginState.failure(errorMessage: exception.error);
     }
   }
 }

@@ -19,12 +19,13 @@ void main() {
     late LocationRepository locationRepository;
     late IconCreatorRepository iconCreatorRepository;
     late NearbyBusinessesBloc nearbyBusinessesBloc;
+    late GeoLocationBloc geoLocationBloc;
 
     setUp(() {
       locationRepository = MockLocationRepository();
       iconCreatorRepository = MockIconCreatorRepository();
 
-      final GeoLocationBloc geoLocationBloc = MockGeoLocationBloc();
+      geoLocationBloc = MockGeoLocationBloc();
       whenListen(geoLocationBloc, Stream<GeoLocationState>.fromIterable([]));
 
       nearbyBusinessesBloc = NearbyBusinessesBloc(locationRepository: locationRepository, iconCreatorRepository: iconCreatorRepository, geoLocationBloc: geoLocationBloc);
@@ -88,6 +89,38 @@ void main() {
       verify: (_) {
         expect((nearbyBusinessesBloc.state as FailedToLoadNearby).error, "Error!");
       }
+    );
+
+    blocTest<NearbyBusinessesBloc, NearbyBusinessesState>(
+      "Nearby Businesses Bloc geoLocationBlocSubscription => [state is LocationLoaded] changes state [sA<NearbyBusinessLoaded>()]",
+      build: () {
+        when(() => locationRepository.sendLocation(lat: any(named: "lat"), lng: any(named: "lng"), startLocation: any(named: "startLocation")))
+          .thenAnswer((_) async => [MockBusiness(), MockBusiness(), MockBusiness()]);
+        
+        when(() => iconCreatorRepository.createPreMarkers(businesses: any(named: 'businesses')))
+          .thenAnswer((_) async => [MockPreMarker(), MockPreMarker(), MockPreMarker()]);
+
+        whenListen(geoLocationBloc, Stream<GeoLocationState>.fromIterable([LocationLoaded(latitude: 1.0, longitude: 1.0)]));
+
+        return NearbyBusinessesBloc(locationRepository: locationRepository, iconCreatorRepository: iconCreatorRepository, geoLocationBloc: geoLocationBloc);
+      },
+      expect: () => [isA<NearbyBusinessLoaded>()],
+    );
+
+    blocTest<NearbyBusinessesBloc, NearbyBusinessesState>(
+      "Nearby Businesses Bloc geoLocationBlocSubscription => [state is !LocationLoaded] does not change state",
+      build: () {
+        when(() => locationRepository.sendLocation(lat: any(named: "lat"), lng: any(named: "lng"), startLocation: any(named: "startLocation")))
+          .thenAnswer((_) async => [MockBusiness(), MockBusiness(), MockBusiness()]);
+        
+        when(() => iconCreatorRepository.createPreMarkers(businesses: any(named: 'businesses')))
+          .thenAnswer((_) async => [MockPreMarker(), MockPreMarker(), MockPreMarker()]);
+
+        whenListen(geoLocationBloc, Stream<GeoLocationState>.fromIterable([Uninitialized()]));
+
+        return NearbyBusinessesBloc(locationRepository: locationRepository, iconCreatorRepository: iconCreatorRepository, geoLocationBloc: geoLocationBloc);
+      },
+      expect: () => [],
     );
   });
 }

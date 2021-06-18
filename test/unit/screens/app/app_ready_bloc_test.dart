@@ -170,5 +170,59 @@ void main() {
         return [firstState, secondState, thirdState];
       }
     );
+
+    blocTest<AppReadyBloc, AppReadyState>(
+      "AppReadyBloc openTransactionsBlocSubscription => [!openTransactionsLoaded && OpenTransactionsLoaded || FailedToFetchOpenTransactions] changes state [openTransactionsLoaded: true]",
+      build: () {
+        whenListen(openTransactionsBloc, Stream<OpenTransactionsState>.fromIterable([OpenTransactionsLoaded(transactions: [])]));
+        return AppReadyBloc(authenticationBloc: authenticationBloc, openTransactionsBloc: openTransactionsBloc, beaconBloc: beaconBloc, nearbyBusinessesBloc: nearbyBusinessesBloc, permissionsBloc: permissionsBloc, customerBloc: customerBloc);
+      },
+      expect: () => [_baseState.update(openTransactionsLoaded: true)]
+    );
+
+    blocTest<AppReadyBloc, AppReadyState>(
+      "AppReadyBloc openTransactionsBlocSubscription => [Uninitialized] does not change state",
+      build: () {
+        whenListen(openTransactionsBloc, Stream<OpenTransactionsState>.fromIterable([Uninitialized()]));
+        return AppReadyBloc(authenticationBloc: authenticationBloc, openTransactionsBloc: openTransactionsBloc, beaconBloc: beaconBloc, nearbyBusinessesBloc: nearbyBusinessesBloc, permissionsBloc: permissionsBloc, customerBloc: customerBloc);
+      },
+      expect: () => []
+    );
+
+    blocTest<AppReadyBloc, AppReadyState>(
+      "AppReadyBloc beaconBlocSubscription => [!this.areBeaconsLoaded && state is Monitoring] changes state [beaconsLoaded: true]",
+      build: () {
+        whenListen(beaconBloc, Stream<BeaconState>.fromIterable([Monitoring()]));
+        return AppReadyBloc(authenticationBloc: authenticationBloc, openTransactionsBloc: openTransactionsBloc, beaconBloc: beaconBloc, nearbyBusinessesBloc: nearbyBusinessesBloc, permissionsBloc: permissionsBloc, customerBloc: customerBloc);
+      },
+      expect: () => [_baseState.update(beaconsLoaded: true)]
+    );
+
+    blocTest<AppReadyBloc, AppReadyState>(
+      "AppReadyBloc beaconBlocSubscription => [!this.areBeaconsLoaded && state is BeaconUninitialized] does not change state",
+      build: () {
+        whenListen(beaconBloc, Stream<BeaconState>.fromIterable([BeaconUninitialized()]));
+        return AppReadyBloc(authenticationBloc: authenticationBloc, openTransactionsBloc: openTransactionsBloc, beaconBloc: beaconBloc, nearbyBusinessesBloc: nearbyBusinessesBloc, permissionsBloc: permissionsBloc, customerBloc: customerBloc);
+      },
+      expect: () => []
+    );
+
+    blocTest<AppReadyBloc, AppReadyState>(
+      "AppReadyBloc nearbyBusinessesBlocSubscription => [!this.areBusinessesLoaded && (state is NearbyBusinessLoaded || state is FailedToLoadNearby)] changes state [nearbyBusinessesLoaded: true]",
+      build: () {
+        whenListen(nearbyBusinessesBloc, Stream<NearbyBusinessesState>.fromIterable([NearbyBusinessLoaded(businesses: [], preMarkers: [])]));
+        return AppReadyBloc(authenticationBloc: authenticationBloc, openTransactionsBloc: openTransactionsBloc, beaconBloc: beaconBloc, nearbyBusinessesBloc: nearbyBusinessesBloc, permissionsBloc: permissionsBloc, customerBloc: customerBloc);
+      },
+      expect: () => [_baseState.update(nearbyBusinessesLoaded: true)]
+    );
+
+    blocTest<AppReadyBloc, AppReadyState>(
+      "AppReadyBloc nearbyBusinessesBlocSubscription => [!this.areBusinessesLoaded && NearbyUninitialized] does not change state",
+      build: () {
+        whenListen(nearbyBusinessesBloc, Stream<NearbyBusinessesState>.fromIterable([NearbyUninitialized()]));
+        return AppReadyBloc(authenticationBloc: authenticationBloc, openTransactionsBloc: openTransactionsBloc, beaconBloc: beaconBloc, nearbyBusinessesBloc: nearbyBusinessesBloc, permissionsBloc: permissionsBloc, customerBloc: customerBloc);
+      },
+      expect: () => []
+    );
   });
 }

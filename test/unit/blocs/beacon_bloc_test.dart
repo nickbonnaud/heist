@@ -18,6 +18,7 @@ void main() {
     late BeaconRepository beaconRepository;
     late ActiveLocationBloc activeLocationBloc;
     late BeaconBloc beaconBloc;
+    late NearbyBusinessesBloc nearbyBusinessesBloc;
 
     setUp(() {
       registerFallbackValue(NewActiveLocation(beaconIdentifier: faker.guid.guid()));
@@ -28,7 +29,7 @@ void main() {
 
       activeLocationBloc = MockActiveLocationBloc();
       
-      final NearbyBusinessesBloc nearbyBusinessesBloc = MockNearbyBusinessesBloc();
+      nearbyBusinessesBloc = MockNearbyBusinessesBloc();
       whenListen(nearbyBusinessesBloc, Stream.fromIterable([NearbyUninitialized()]));
       beaconBloc = BeaconBloc(beaconRepository: beaconRepository, activeLocationBloc: activeLocationBloc, nearbyBusinessesBloc: nearbyBusinessesBloc);
     });
@@ -86,6 +87,21 @@ void main() {
       verify: (_) {
         verify(() => activeLocationBloc.add(any(that: isA<RemoveActiveLocation>()))).called(1);
       }
+    );
+
+    blocTest<BeaconBloc, BeaconState>(
+      "Beacon Bloc nearbyBusinessSubscription => [state is NearbyBusinessLoaded] changes state [LoadingBeacons()], [Monitoring()]",
+      build: () {
+        whenListen(nearbyBusinessesBloc, Stream.fromIterable([NearbyBusinessLoaded(businesses: [], preMarkers: [])]));
+        return BeaconBloc(beaconRepository: beaconRepository, activeLocationBloc: activeLocationBloc, nearbyBusinessesBloc: nearbyBusinessesBloc);
+      },
+      expect: () => [isA<LoadingBeacons>(), isA<Monitoring>()]
+    );
+
+    blocTest<BeaconBloc, BeaconState>(
+      "Beacon Bloc nearbyBusinessSubscription => [state is NearbyUninitialized] does not change state",
+      build: () => beaconBloc,
+      expect: () => []
     );
   });
 }

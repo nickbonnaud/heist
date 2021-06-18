@@ -12,17 +12,20 @@ class MockOpenTransactionsBloc extends Mock implements OpenTransactionsBloc {}
 void main() {
   group("Notification Boot Bloc Tests", () {
     late NotificationBootBloc notificationBootBloc;
+    late PermissionsBloc permissionsBloc;
+    late NearbyBusinessesBloc nearbyBusinessesBloc;
+    late OpenTransactionsBloc openTransactionsBloc;
 
     late NotificationBootState _baseState;
 
     setUp(() {
-      final PermissionsBloc permissionsBloc = MockPermissionsBloc();
+      permissionsBloc = MockPermissionsBloc();
       whenListen(permissionsBloc, Stream<PermissionsState>.fromIterable([]));
       
-      final NearbyBusinessesBloc nearbyBusinessesBloc = MockNearbyBusinessesBloc();
+      nearbyBusinessesBloc = MockNearbyBusinessesBloc();
       whenListen(nearbyBusinessesBloc, Stream<NearbyBusinessesState>.fromIterable([]));
 
-      final OpenTransactionsBloc openTransactionsBloc = MockOpenTransactionsBloc();
+      openTransactionsBloc = MockOpenTransactionsBloc();
       whenListen(openTransactionsBloc, Stream<OpenTransactionsState>.fromIterable([]));
 
       notificationBootBloc = NotificationBootBloc(permissionsBloc: permissionsBloc, nearbyBusinessesBloc: nearbyBusinessesBloc, openTransactionsBloc: openTransactionsBloc);
@@ -56,6 +59,60 @@ void main() {
       build: () => notificationBootBloc,
       act: (bloc) => bloc.add(PermissionReady()),
       expect: () => [_baseState.update(permissionReady: true)]
+    );
+
+    blocTest<NotificationBootBloc, NotificationBootState>(
+      "NotificationBootBloc permissionsBlocSubscription => [notificationEnabled] changes state [permissionReady: true]",
+      build: () {
+        whenListen(permissionsBloc, Stream<PermissionsState>.fromIterable([PermissionsState.isInitial().update(notificationEnabled: true)]));
+        return NotificationBootBloc(permissionsBloc: permissionsBloc, nearbyBusinessesBloc: nearbyBusinessesBloc, openTransactionsBloc: openTransactionsBloc);
+      },
+      expect: () => [_baseState.update(permissionReady: true)]
+    );
+
+    blocTest<NotificationBootBloc, NotificationBootState>(
+      "NotificationBootBloc permissionsBlocSubscription => [!notificationEnabled] does not change state",
+      build: () {
+        whenListen(permissionsBloc, Stream<PermissionsState>.fromIterable([PermissionsState.isInitial()]));
+        return NotificationBootBloc(permissionsBloc: permissionsBloc, nearbyBusinessesBloc: nearbyBusinessesBloc, openTransactionsBloc: openTransactionsBloc);
+      },
+      expect: () => []
+    );
+
+    blocTest<NotificationBootBloc, NotificationBootState>(
+      "NotificationBootBloc nearbyBusinessesBlocSubscription => [NearbyBusinessLoaded] changes state [nearbyBusinessesReady: true]",
+      build: () {
+        whenListen(nearbyBusinessesBloc, Stream<NearbyBusinessesState>.fromIterable([NearbyBusinessLoaded(businesses: [], preMarkers: [])]));
+        return NotificationBootBloc(permissionsBloc: permissionsBloc, nearbyBusinessesBloc: nearbyBusinessesBloc, openTransactionsBloc: openTransactionsBloc);
+      },
+      expect: () => [_baseState.update(nearbyBusinessesReady: true)]
+    );
+
+    blocTest<NotificationBootBloc, NotificationBootState>(
+      "NotificationBootBloc nearbyBusinessesBlocSubscription => [!NearbyBusinessLoaded] does not change state",
+      build: () {
+        whenListen(nearbyBusinessesBloc, Stream<NearbyBusinessesState>.fromIterable([NearbyUninitialized()]));
+        return NotificationBootBloc(permissionsBloc: permissionsBloc, nearbyBusinessesBloc: nearbyBusinessesBloc, openTransactionsBloc: openTransactionsBloc);
+      },
+      expect: () => []
+    );
+
+    blocTest<NotificationBootBloc, NotificationBootState>(
+      "NotificationBootBloc openTransactionsBlocSubscription => [OpenTransactionsLoaded] changes state [openTransactionsReady: true]",
+      build: () {
+        whenListen(openTransactionsBloc, Stream<OpenTransactionsState>.fromIterable([OpenTransactionsLoaded(transactions: [])]));
+        return NotificationBootBloc(permissionsBloc: permissionsBloc, nearbyBusinessesBloc: nearbyBusinessesBloc, openTransactionsBloc: openTransactionsBloc);
+      },
+      expect: () => [_baseState.update(openTransactionsReady: true)]
+    );
+
+    blocTest<NotificationBootBloc, NotificationBootState>(
+      "NotificationBootBloc openTransactionsBlocSubscription => [!OpenTransactionsLoaded] does not change state",
+      build: () {
+        whenListen(openTransactionsBloc, Stream<OpenTransactionsState>.fromIterable([Uninitialized()]));
+        return NotificationBootBloc(permissionsBloc: permissionsBloc, nearbyBusinessesBloc: nearbyBusinessesBloc, openTransactionsBloc: openTransactionsBloc);
+      },
+      expect: () => []
     );
   });
 }

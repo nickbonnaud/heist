@@ -54,7 +54,7 @@ class _LoginFormState extends State<LoginForm> {
   Widget build(BuildContext context) {
     return BlocListener<LoginBloc, LoginState>(
       listener: (context, state) {
-        if (state.isFailure) {
+        if (state.errorMessage.isNotEmpty) {
           _errorLogin(context);
         } else if (state.isSuccess) {
           _navigateToNextPage();
