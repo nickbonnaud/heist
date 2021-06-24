@@ -18,20 +18,13 @@ class Tutorial extends Equatable {
     required this.dismissed
   });
 
-  Tutorial update({
-    TutorialCardType? type,
-    String? header,
-    String? body,
-    String? artboard,
-    bool? hasInitialAnimation,
-    bool? dismissed
-  }) => Tutorial(
-    type: type ?? this.type,
-    header: header ?? this.header,
-    body: body ?? this.body,
-    artboard: artboard ?? this.artboard,
-    hasInitialAnimation: hasInitialAnimation ?? this.hasInitialAnimation,
-    dismissed: dismissed ?? this.dismissed
+  Tutorial update({required bool dismissed}) => Tutorial(
+    type: this.type,
+    header: this.header,
+    body: this.body,
+    artboard: this.artboard,
+    hasInitialAnimation: this.hasInitialAnimation,
+    dismissed: dismissed
   );
   
   @override

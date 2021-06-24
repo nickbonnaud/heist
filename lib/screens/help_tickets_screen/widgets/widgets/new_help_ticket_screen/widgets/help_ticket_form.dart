@@ -37,8 +37,8 @@ class _HelpTicketFormState extends State<HelpTicketForm> {
   Widget build(BuildContext context) {
     return BlocListener<HelpTicketFormBloc, HelpTicketFormState>(
       listener: (context, state) {
-        if (state.isFailure) {
-          _showSnackbar(text: "An error occurred. Please try again.", state: state);
+        if (state.errorMessage.isNotEmpty) {
+          _showSnackbar(text: state.errorMessage, state: state);
         } else if (state.isSuccess) {
           _showSnackbar(text: "Help Ticket created!", state: state);
         }

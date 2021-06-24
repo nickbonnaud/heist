@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:heist/models/customer/customer.dart';
+import 'package:heist/models/status.dart';
 import 'package:meta/meta.dart';
 
 part 'profile_setup_screen_event.dart';
@@ -48,26 +49,26 @@ class ProfileSetupScreenBloc extends Bloc<ProfileSetupScreenEvent, ProfileSetupS
   }
 
   Stream<ProfileSetupScreenState> _mapInitToState(Init event) async* {
-    int status = event.customer.status.code;
+    int statusCode = event.status.code;
     bool isIntroComplete = false;
     bool isNameComplete = false;
     bool isPhotoComplete = false;
     bool isTipSettingsComplete = false;
     bool isPaymentAccountComplete = false;
 
-    if (status == 101) {
+    if (statusCode == 101) {
       isIntroComplete = true;
       isNameComplete = true;
-    } else if (status == 102) {
+    } else if (statusCode == 102) {
       isIntroComplete = true;
       isNameComplete = true;
       isPhotoComplete = true;
-    } else if (status == 103) {
+    } else if (statusCode == 103) {
       isIntroComplete = true;
       isNameComplete = true;
       isPhotoComplete = true;
       isTipSettingsComplete = true;
-    } else if (status >= 120) {
+    } else if (statusCode >= 120) {
       isIntroComplete = true;
       isNameComplete = true;
       isPhotoComplete = true;

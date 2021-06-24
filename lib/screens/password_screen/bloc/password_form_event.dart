@@ -61,15 +61,15 @@ class NewPasswordSubmitted extends PasswordFormEvent {
   final String oldPassword;
   final String password;
   final String passwordConfirmation;
-  final Customer customer;
+  final String customerIdentifier;
 
-  const NewPasswordSubmitted({required this.oldPassword, required this.password, required this.passwordConfirmation, required this.customer});
-
-  @override
-  List<Object> get props => [oldPassword, password, passwordConfirmation, customer];
+  const NewPasswordSubmitted({required this.oldPassword, required this.password, required this.passwordConfirmation, required this.customerIdentifier});
 
   @override
-  String toString() => 'NewPasswordSubmitted { oldPassword: $oldPassword, password: $password, passwordConfirmation: $passwordConfirmation, customer: $customer }';
+  List<Object> get props => [oldPassword, password, passwordConfirmation, customerIdentifier];
+
+  @override
+  String toString() => 'NewPasswordSubmitted { oldPassword: $oldPassword, password: $password, passwordConfirmation: $passwordConfirmation, customerIdentifier: $customerIdentifier }';
 }
 
 class Reset extends PasswordFormEvent {}

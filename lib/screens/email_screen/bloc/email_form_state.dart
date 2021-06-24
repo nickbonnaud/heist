@@ -4,40 +4,40 @@ part of 'email_form_bloc.dart';
 class EmailFormState extends Equatable {
   final bool isEmailValid;
   final bool isSubmitting;
-  final bool isFailure;
   final bool isSuccess;
+  final String errorMessage;
 
   EmailFormState({
     required this.isEmailValid,
     required this.isSubmitting,
-    required this.isFailure,
-    required this.isSuccess
+    required this.isSuccess,
+    required this.errorMessage
   });
 
   factory EmailFormState.initial() {
     return EmailFormState(
       isEmailValid: true,
       isSubmitting: false,
-      isFailure: false,
-      isSuccess: false
+      isSuccess: false,
+      errorMessage: ""
     );
   }
 
   EmailFormState update({
     bool? isEmailValid,
     bool? isSubmitting,
-    bool? isFailure,
-    bool? isSuccess
+    bool? isSuccess,
+    String? errorMessage
   }) => EmailFormState(
     isEmailValid: isEmailValid ?? this.isEmailValid, 
     isSubmitting: isSubmitting ?? this.isSubmitting, 
-    isFailure: isFailure ?? this.isFailure,
-    isSuccess: isSuccess ?? this.isSuccess
+    isSuccess: isSuccess ?? this.isSuccess,
+    errorMessage: errorMessage ?? this.errorMessage
   );
 
   @override
-  List<Object?> get props => [isEmailValid, isSubmitting, isFailure, isSuccess];
+  List<Object> get props => [isEmailValid, isSubmitting, isSuccess, errorMessage];
 
   @override
-  String toString() => 'EmailFormState { isEmailValid: $isEmailValid, isSubmitting: $isSubmitting, isFailure: $isFailure, isSuccess: $isSuccess }';
+  String toString() => 'EmailFormState { isEmailValid: $isEmailValid, isSubmitting: $isSubmitting, isSuccess: $isSuccess, errorMessage: $errorMessage }';
 }

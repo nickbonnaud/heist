@@ -25,7 +25,7 @@ class SetupTipCard extends StatelessWidget {
           accountRepository: _accountRepository, 
           customerBloc: _customerBloc
         ),
-        child: SetupTipBody(),
+        child: SetupTipBody(accountIdentifier: _customerBloc.customer!.account.identifier,),
       ),
     );
   }

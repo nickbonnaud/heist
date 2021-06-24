@@ -1,10 +1,8 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:heist/blocs/authentication/authentication_bloc.dart';
 import 'package:heist/blocs/permissions/permissions_bloc.dart';
 import 'package:heist/models/status.dart';
-import 'package:meta/meta.dart';
 
 
 enum OnboardEvent {next, prev}

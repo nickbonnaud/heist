@@ -38,7 +38,7 @@ class RefundsLoaded extends RefundsScreenState {
   }) {
     return RefundsLoaded(
       refunds: refunds ?? this.refunds,
-      nextUrl: nextUrl ?? this.nextUrl,
+      nextUrl: hasReachedEnd != null && hasReachedEnd ? null : nextUrl ?? this.nextUrl,
       paginating: paginating ?? this.paginating,
       hasReachedEnd: hasReachedEnd ?? this.hasReachedEnd,
       currentQuery: currentQuery ?? this.currentQuery,
@@ -53,5 +53,15 @@ class RefundsLoaded extends RefundsScreenState {
   String toString() => 'RefundsLoaded { refunds: $refunds, nextUrl: $nextUrl, paginating: $paginating, hasReachedEnd: $hasReachedEnd, currentQuery: $currentQuery, queryParams: $queryParams }';
 }
 
-class FetchFailure extends RefundsScreenState {}
+class FetchFailure extends RefundsScreenState {
+  final String errorMessage;
+
+  const FetchFailure({required this.errorMessage});
+
+  @override
+  List<Object> get props => [errorMessage];
+
+  @override
+  String toString() => 'FetchFailure { errorMessage: $errorMessage }';
+}
 

@@ -1,13 +1,13 @@
 part of 'register_bloc.dart';
 
 @immutable
-class RegisterState {
+class RegisterState extends Equatable {
   final bool isEmailValid;
   final bool isPasswordValid;
   final bool isPasswordConfirmationValid;
   final bool isSubmitting;
   final bool isSuccess;
-  final bool isFailure;
+  final String errorMessage;
 
   bool get isFormValid => isEmailValid && isPasswordValid && isPasswordConfirmationValid;
 
@@ -17,7 +17,7 @@ class RegisterState {
     required this.isPasswordConfirmationValid,
     required this.isSubmitting,
     required this.isSuccess,
-    required this.isFailure,
+    required this.errorMessage,
   });
 
   factory RegisterState.empty() {
@@ -27,7 +27,7 @@ class RegisterState {
       isPasswordConfirmationValid: true,
       isSubmitting: false,
       isSuccess: false,
-      isFailure: false,
+      errorMessage: "",
     );
   }
 
@@ -38,18 +38,18 @@ class RegisterState {
       isPasswordConfirmationValid: true,
       isSubmitting: true,
       isSuccess: false,
-      isFailure: false,
+      errorMessage: "",
     );
   }
 
-  factory RegisterState.failure() {
+  factory RegisterState.failure({required String errorMessage}) {
     return RegisterState(
       isEmailValid: true,
       isPasswordValid: true,
       isPasswordConfirmationValid: true,
       isSubmitting: false,
       isSuccess: false,
-      isFailure: true,
+      errorMessage: errorMessage,
     );
   }
 
@@ -60,7 +60,7 @@ class RegisterState {
       isPasswordConfirmationValid: true,
       isSubmitting: false,
       isSuccess: true,
-      isFailure: false,
+      errorMessage: "",
     );
   }
 
@@ -72,10 +72,7 @@ class RegisterState {
     return copyWith(
       isEmailValid: isEmailValid,
       isPasswordValid: isPasswordValid,
-      isPasswordConfirmationValid: isPasswordConfirmationValid,
-      isSubmitting: false,
-      isSuccess: false,
-      isFailure: false
+      isPasswordConfirmationValid: isPasswordConfirmationValid
     );
   }
 
@@ -83,21 +80,27 @@ class RegisterState {
     bool? isEmailValid,
     bool? isPasswordValid,
     bool? isPasswordConfirmationValid,
-    bool? isSubmitEnabled,
-    bool? isSubmitting,
-    bool? isSuccess,
-    bool? isFailure
   }) {
     return RegisterState(
       isEmailValid: isEmailValid ?? this.isEmailValid,
       isPasswordValid: isPasswordValid ?? this.isPasswordValid,
       isPasswordConfirmationValid: isPasswordConfirmationValid ?? this.isPasswordConfirmationValid,
-      isSubmitting: isSubmitting ?? this.isSubmitting,
-      isSuccess: isSuccess ?? this.isSuccess,
-      isFailure: isFailure ?? this.isFailure,
+      isSubmitting: this.isSubmitting,
+      isSuccess: this.isSuccess,
+      errorMessage: this.errorMessage,
     );
   }
 
+  @override
+  List<Object> get props => [
+    isEmailValid,
+    isPasswordValid,
+    isPasswordConfirmationValid,
+    isSubmitting,
+    isSuccess,
+    errorMessage
+  ];
+  
   @override
   String toString() {
     return '''RegisterState {
@@ -106,7 +109,7 @@ class RegisterState {
       isPasswordConfirmationValid: $isPasswordConfirmationValid,
       isSubmitting: $isSubmitting,
       isSuccess: $isSuccess,
-      isFailure: $isFailure,
+      errorMessage: $errorMessage,
     }''';
   }
 }

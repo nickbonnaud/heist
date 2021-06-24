@@ -42,8 +42,8 @@ class _IssueFormState extends State<IssueForm> {
   Widget build(BuildContext context) {
     return BlocListener<IssueFormBloc, IssueFormState>(
       listener: (context, state) {
-        if (state.isFailure) {
-          _showSnackbar(context, 'Failed to submit issue!', state);
+        if (state.errorMessage.isNotEmpty) {
+          _showSnackbar(context, state.errorMessage, state);
         } else if (state.isSuccess) {
           _showSnackbar(context, 'Issue created.', state);
         }
@@ -155,7 +155,7 @@ class _IssueFormState extends State<IssueForm> {
       _issueFormBloc.add(Submitted(
         message: _messageController.text, 
         type: widget._type, 
-        transaction: widget._transaction
+        transactionIdentifier: widget._transaction.transaction.identifier
       ));
     }
   }

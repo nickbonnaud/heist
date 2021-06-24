@@ -32,17 +32,17 @@ class QuickTipRateChanged extends TipFormEvent {
 }
 
 class Submitted extends TipFormEvent {
-  final Account account;
+  final String accountIdentifier;
   final int? tipRate;
   final int? quickTipRate;
 
-  Submitted({required this.account, required this.tipRate, required this.quickTipRate});
+  Submitted({required this.accountIdentifier, required this.tipRate, required this.quickTipRate});
 
   @override
-  List<Object?> get props => [account, tipRate, quickTipRate];
+  List<Object?> get props => [accountIdentifier, tipRate, quickTipRate];
 
   @override
-  String toString() => 'Submitted { account: $account, tipRate: $tipRate, quickTipRate: $quickTipRate }';
+  String toString() => 'Submitted { accountIdentifier: $accountIdentifier, tipRate: $tipRate, quickTipRate: $quickTipRate }';
 }
 
 class Reset extends TipFormEvent {}

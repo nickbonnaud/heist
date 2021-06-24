@@ -5,6 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:heist/blocs/customer/customer_bloc.dart';
 import 'package:heist/models/customer/customer.dart';
 import 'package:heist/repositories/account_repository.dart';
+import 'package:heist/resources/helpers/api_exception.dart';
 import 'package:heist/resources/helpers/validators.dart';
 import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
@@ -12,17 +13,17 @@ import 'package:rxdart/rxdart.dart';
 part 'setup_tip_card_event.dart';
 part 'setup_tip_card_state.dart';
 
-class SetupTipCardBloc extends Bloc<SetupTipCardEvent, SetupTipScreenState> {
+class SetupTipCardBloc extends Bloc<SetupTipCardEvent, SetupTipCardState> {
   final AccountRepository _accountRepository;
   final CustomerBloc _customerBloc;
 
   SetupTipCardBloc({required AccountRepository accountRepository, required CustomerBloc customerBloc})
     : _accountRepository = accountRepository,
       _customerBloc = customerBloc,
-      super(SetupTipScreenState.initial());
+      super(SetupTipCardState.initial());
 
   @override
-  Stream<Transition<SetupTipCardEvent, SetupTipScreenState>> transformEvents(Stream<SetupTipCardEvent> events, transitionFn) {
+  Stream<Transition<SetupTipCardEvent, SetupTipCardState>> transformEvents(Stream<SetupTipCardEvent> events, transitionFn) {
     final nonDebounceStream = events.where((event) => event is !TipRateChanged && event is !QuickTipRateChanged);
     final debounceStream = events.where((event) => event is TipRateChanged || event is QuickTipRateChanged)
       .debounceTime(Duration(milliseconds: 300));
@@ -30,7 +31,7 @@ class SetupTipCardBloc extends Bloc<SetupTipCardEvent, SetupTipScreenState> {
   }
   
   @override
-  Stream<SetupTipScreenState> mapEventToState(SetupTipCardEvent event) async* {
+  Stream<SetupTipCardState> mapEventToState(SetupTipCardEvent event) async* {
     if (event is TipRateChanged) {
       yield* _mapTipRateChangedToState(event);
     } else if (event is QuickTipRateChanged) {
@@ -42,26 +43,26 @@ class SetupTipCardBloc extends Bloc<SetupTipCardEvent, SetupTipScreenState> {
     }
   }
 
-  Stream<SetupTipScreenState> _mapTipRateChangedToState(TipRateChanged event) async* {
+  Stream<SetupTipCardState> _mapTipRateChangedToState(TipRateChanged event) async* {
     yield state.update(isTipRateValid: Validators.isValidTip(tip: event.tipRate));
   }
 
-  Stream<SetupTipScreenState> _mapQuickTipRateChangedToState(QuickTipRateChanged event) async* {
+  Stream<SetupTipCardState> _mapQuickTipRateChangedToState(QuickTipRateChanged event) async* {
     yield state.update(isQuickTipRateValid: Validators.isValidTip(tip: event.quickTipRate));
   }
 
-  Stream<SetupTipScreenState> _mapSubmittedToState(Submitted event) async* {
+  Stream<SetupTipCardState> _mapSubmittedToState(Submitted event) async* {
     yield state.update(isSubmitting: true);
     try {
-      Customer customer = await _accountRepository.update(accountIdentifier: _customerBloc.state.customer!.account.identifier, tipRate: event.tipRate, quickTipRate: event.quickTipRate);
+      Customer customer = await _accountRepository.update(accountIdentifier: event.accountIdentifier, tipRate: event.tipRate, quickTipRate: event.quickTipRate);
       _customerBloc.add(CustomerUpdated(customer: customer));
       yield state.update(isSubmitting: false, isSuccess: true);
-    } catch (_) {
-      yield state.update(isSubmitting: false, isFailure: true);
+    } on ApiException catch (exception) {
+      yield state.update(isSubmitting: false, errorMessage: exception.error);
     }
   }
 
-  Stream<SetupTipScreenState> _mapResetToState() async* {
-    yield state.update(isSuccess: false, isFailure: false);
+  Stream<SetupTipCardState> _mapResetToState() async* {
+    yield state.update(isSuccess: false, errorMessage: "");
   }
 }

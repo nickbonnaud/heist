@@ -2,10 +2,10 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:heist/blocs/authentication/authentication_bloc.dart';
 import 'package:heist/blocs/customer/customer_bloc.dart';
 import 'package:heist/models/customer/customer.dart';
 import 'package:heist/repositories/customer_repository.dart';
+import 'package:heist/resources/helpers/api_exception.dart';
 import 'package:heist/resources/helpers/validators.dart';
 import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
@@ -34,30 +34,30 @@ class EmailFormBloc extends Bloc<EmailFormEvent, EmailFormState> {
   @override
   Stream<EmailFormState> mapEventToState(EmailFormEvent event) async* {
     if (event is EmailChanged) {
-      yield* _mapEmailChangedToState(event);
+      yield* _mapEmailChangedToState(event: event);
     } else if (event is Submitted) {
-      yield* _mapSubmittedToState(event);
+      yield* _mapSubmittedToState(event: event);
     } else if (event is Reset) {
       yield* _mapResetToState();
     }
   }
 
-  Stream<EmailFormState> _mapEmailChangedToState(EmailChanged event) async* {
+  Stream<EmailFormState> _mapEmailChangedToState({required EmailChanged event}) async* {
     yield state.update(isEmailValid: Validators.isValidEmail(email: event.email));
   }
 
-  Stream<EmailFormState> _mapSubmittedToState(Submitted event) async* {
+  Stream<EmailFormState> _mapSubmittedToState({required Submitted event}) async* {
     yield state.update(isSubmitting: true);
     try {
-      Customer customer = await _customerRepository.updateEmail(email: event.email, customerId: event.customer.identifier);
+      Customer customer = await _customerRepository.updateEmail(email: event.email, customerId: event.identifier);
       yield state.update(isSubmitting: false, isSuccess: true);
       _customerBloc.add(CustomerUpdated(customer: customer));
-    } catch (_) {
-      yield state.update(isSubmitting: false, isFailure: true);
+    } on ApiException catch (exception) {
+      yield state.update(isSubmitting: false, errorMessage: exception.error);
     }
   }
 
   Stream<EmailFormState> _mapResetToState() async* {
-    yield state.update(isFailure: false, isSuccess: false);
+    yield state.update(errorMessage: "", isSuccess: false);
   }
 }

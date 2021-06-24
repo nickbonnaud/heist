@@ -3,10 +3,10 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:heist/models/date_range.dart';
 import 'package:heist/models/paginate_data_holder.dart';
 import 'package:heist/models/transaction/transaction_resource.dart';
 import 'package:heist/repositories/transaction_repository.dart';
+import 'package:heist/resources/helpers/api_exception.dart';
 import 'package:heist/screens/historic_transactions_screen/widgets/filter_button/filter_button.dart';
 
 part 'historic_transactions_event.dart';
@@ -22,16 +22,18 @@ class HistoricTransactionsBloc extends Bloc<HistoricTransactionsEvent, HistoricT
 
   @override
   Stream<HistoricTransactionsState> mapEventToState(HistoricTransactionsEvent event) async* {
-    if (event is FetchHistoricTransactions) {
-      yield* _mapFetchHistoricTransactionsToState(event);
-    } else if (event is FetchTransactionsByDateRange) {
-      yield* _mapFetchTransactionsByDateRangeToState(event);
-    } else if (event is FetchTransactionsByBusiness) {
-      yield* _mapFetchTransactionsByBusinessToState(event);
-    } else if (event is FetchTransactionByIdentifier) {
-      yield* _mapFetchTransactionByIdentifierToState(event);
-    } else if (event is FetchMoreTransactions) {
-      yield* _mapFetchMoreTransactionsToState();
+    if (state is !Loading) {
+      if (event is FetchHistoricTransactions) {
+        yield* _mapFetchHistoricTransactionsToState(event);
+      } else if (event is FetchTransactionsByDateRange) {
+        yield* _mapFetchTransactionsByDateRangeToState(event);
+      } else if (event is FetchTransactionsByBusiness) {
+        yield* _mapFetchTransactionsByBusinessToState(event);
+      } else if (event is FetchTransactionByIdentifier) {
+        yield* _mapFetchTransactionByIdentifierToState(event);
+      } else if (event is FetchMoreTransactions) {
+        yield* _mapFetchMoreTransactionsToState();
+      }
     }
   }
 
@@ -83,7 +85,7 @@ class HistoricTransactionsBloc extends Bloc<HistoricTransactionsEvent, HistoricT
 
   Stream<HistoricTransactionsState> _mapFetchMoreTransactionsToState() async* {
     final currentState = state;
-    if (currentState is TransactionsLoaded) {
+    if (currentState is TransactionsLoaded && !currentState.paginating) {
       switch (currentState.currentQuery) {
         case Option.all:
           yield* _mapFetchHistoricTransactionsToState(FetchHistoricTransactions(reset: false));
@@ -103,8 +105,8 @@ class HistoricTransactionsBloc extends Bloc<HistoricTransactionsEvent, HistoricT
   }
 
   Stream<HistoricTransactionsState> _fetchUnitialized({required Future<PaginateDataHolder>Function() fetchFunction, required Option currentQuery, required dynamic queryParams}) async* {
+    yield Loading();
     try {
-      yield Loading();
       final PaginateDataHolder paginateHolder = await fetchFunction();
       yield TransactionsLoaded(
         transactions: (paginateHolder.data as List<TransactionResource>),
@@ -114,8 +116,8 @@ class HistoricTransactionsBloc extends Bloc<HistoricTransactionsEvent, HistoricT
         currentQuery: currentQuery,
         queryParams: queryParams
       );
-    } catch(_) {
-      yield FetchFailure();
+    } on ApiException catch(exception) {
+      yield FetchFailure(errorMessage: exception.error);
     }
   }
 
@@ -133,8 +135,8 @@ class HistoricTransactionsBloc extends Bloc<HistoricTransactionsEvent, HistoricT
           currentQuery: currentQuery,
           queryParams: queryParams
         );
-      } catch (_) {
-        yield FetchFailure();
+      } on ApiException catch (exception) {
+        yield FetchFailure(errorMessage: exception.error);
       }
     }
   }

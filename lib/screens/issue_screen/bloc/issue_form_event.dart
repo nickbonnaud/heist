@@ -22,15 +22,15 @@ class MessageChanged extends IssueFormEvent {
 class Submitted extends IssueFormEvent {
   final String message;
   final IssueType type;
-  final TransactionResource transaction;
+  final String transactionIdentifier;
 
-  const Submitted({required this.message, required this.type, required this.transaction});
-
-  @override
-  List<Object> get props => [message, type, transaction];
+  const Submitted({required this.message, required this.type, required this.transactionIdentifier});
 
   @override
-  String toString() => 'Submitted { message: $message, type: $type, transaction: $transaction }';
+  List<Object> get props => [message, type, transactionIdentifier];
+
+  @override
+  String toString() => 'Submitted { message: $message, type: $type, transactionIdentifier: $transactionIdentifier }';
 }
 
 class Reset extends IssueFormEvent {}

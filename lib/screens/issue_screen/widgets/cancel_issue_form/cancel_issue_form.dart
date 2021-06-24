@@ -18,8 +18,8 @@ class CancelIssueForm extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocListener<CancelIssueFormBloc, CancelIssueFormState>(
       listener: (context, state) {
-        if (state.isFailure) {
-          _showSnackbar(context, 'Failed to cancel issue!', state);
+        if (state.errorMessage.isNotEmpty) {
+          _showSnackbar(context, state.errorMessage, state);
         } else if (state.isSuccess) {
           _showSnackbar(context, 'Issue canceled!', state);
         }

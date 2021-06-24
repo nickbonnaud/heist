@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:heist/repositories/help_repository.dart';
+import 'package:heist/resources/helpers/api_exception.dart';
 import 'package:heist/screens/help_tickets_screen/bloc/help_tickets_screen_bloc.dart';
 import 'package:meta/meta.dart';
 
@@ -23,7 +24,7 @@ class DeleteTicketButtonBloc extends Bloc<DeleteTicketButtonEvent, DeleteTicketB
     if (event is Submitted) {
       yield* _mapSubmittedToState(event: event);
     } else if (event is Reset) {
-      yield state.update(isSuccess: false, isFailure: false);
+      yield state.update(isSuccess: false, errorMessage: "");
     }
   }
 
@@ -36,10 +37,10 @@ class DeleteTicketButtonBloc extends Bloc<DeleteTicketButtonEvent, DeleteTicketB
         _helpTicketsScreenBloc.add(HelpTicketDeleted(helpTicketIdentifier: event.ticketIdentifier));
         yield state.update(isSubmitting: false, isSuccess: true);
       } else {
-        yield state.update(isSubmitting: false, isFailure: true);
+        yield state.update(isSubmitting: false, errorMessage: "Unable to remove Help Ticket. Please try again.");
       }
-    } catch (_) {
-      yield state.update(isSubmitting: false, isFailure: true);
+    } on ApiException catch (exception) {
+      yield state.update(isSubmitting: false, errorMessage: exception.error);
     }
   }
 }

@@ -1,21 +1,26 @@
 part of 'message_list_bloc.dart';
 
 @immutable
-class MessageListState {
+class MessageListState extends Equatable {
   final HelpTicket helpTicket;
-
-  HelpTicket get getHelpTicket => helpTicket;
+  final String errorMessage;
   
-  MessageListState({required this.helpTicket});
+  MessageListState({required this.helpTicket, required this.errorMessage});
 
   factory MessageListState.initial({required HelpTicket helpTicket}) {
-    return MessageListState(helpTicket: helpTicket);
+    return MessageListState(helpTicket: helpTicket, errorMessage: "");
   }
 
-  MessageListState update({required HelpTicket helpTicket}) {
-    return MessageListState(helpTicket: helpTicket);
+  MessageListState update({HelpTicket? helpTicket, String? errorMessage}) {
+    return MessageListState(
+      helpTicket: helpTicket ?? this.helpTicket,
+      errorMessage: errorMessage ?? this.errorMessage
+    );
   }
   
   @override
-  String toString() => 'MessageListState { helpTicket: $helpTicket }';
+  List<Object> get props => [helpTicket, errorMessage];
+  
+  @override
+  String toString() => 'MessageListState { helpTicket: $helpTicket, errorMessage: $errorMessage }';
 }

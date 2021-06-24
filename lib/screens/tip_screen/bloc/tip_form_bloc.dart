@@ -6,6 +6,7 @@ import 'package:heist/blocs/customer/customer_bloc.dart';
 import 'package:heist/models/customer/account.dart';
 import 'package:heist/models/customer/customer.dart';
 import 'package:heist/repositories/account_repository.dart';
+import 'package:heist/resources/helpers/api_exception.dart';
 import 'package:heist/resources/helpers/validators.dart';
 import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
@@ -54,15 +55,15 @@ class TipFormBloc extends Bloc<TipFormEvent, TipFormState> {
   Stream<TipFormState> _mapSubmittedToState(Submitted event) async* {
     yield state.update(isSubmitting: true);
     try {
-      Customer customer = await _accountRepository.update(accountIdentifier: event.account.identifier, tipRate: event.tipRate, quickTipRate: event.quickTipRate);
+      Customer customer = await _accountRepository.update(accountIdentifier: event.accountIdentifier, tipRate: event.tipRate, quickTipRate: event.quickTipRate);
       _customerBloc.add(CustomerUpdated(customer: customer));
       yield state.update(isSubmitting: false, isSuccess: true);
-    } catch (_) {
-      yield state.update(isSubmitting: false, isFailure: true);
+    } on ApiException catch (exception) {
+      yield state.update(isSubmitting: false, errorMessage: exception.error);
     }
   }
 
   Stream<TipFormState> _mapResetToState() async* {
-    yield state.update(isSuccess: false, isFailure: false);
+    yield state.update(isSuccess: false, errorMessage: "");
   }
 }

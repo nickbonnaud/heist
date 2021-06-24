@@ -7,10 +7,9 @@ class PasswordFormState extends Equatable {
   final bool isPasswordValid;
   final bool isPasswordConfirmationValid;
   final bool isSubmitting;
-  final bool isFailure;
   final bool isSuccess;
   final bool isSuccessOldPassword;
-  final bool isFailureOldPassword;
+  final String errorMessage;
 
   PasswordFormState({
     required this.isOldPasswordValid,
@@ -18,10 +17,9 @@ class PasswordFormState extends Equatable {
     required this.isPasswordValid,
     required this.isPasswordConfirmationValid,
     required this.isSubmitting,
-    required this.isFailure,
     required this.isSuccess,
     required this.isSuccessOldPassword,
-    required this.isFailureOldPassword
+    required this.errorMessage
   });
 
   factory PasswordFormState.initial() {
@@ -31,10 +29,9 @@ class PasswordFormState extends Equatable {
       isPasswordValid: true, 
       isPasswordConfirmationValid: true, 
       isSubmitting: false, 
-      isFailure: false, 
       isSuccess: false,
       isSuccessOldPassword: false,
-      isFailureOldPassword: false
+      errorMessage: ""
     );
   }
 
@@ -44,20 +41,18 @@ class PasswordFormState extends Equatable {
     bool? isPasswordValid,
     bool? isPasswordConfirmationValid,
     bool? isSubmitting,
-    bool? isFailure,
     bool? isSuccess,
     bool? isSuccessOldPassword,
-    bool? isFailureOldPassword
+    String? errorMessage
   }) => PasswordFormState(
     isOldPasswordValid: isOldPasswordValid ?? this.isOldPasswordValid, 
     isOldPasswordVerified: isOldPasswordVerified ?? this.isOldPasswordVerified, 
     isPasswordValid: isPasswordValid ?? this.isPasswordValid, 
     isPasswordConfirmationValid: isPasswordConfirmationValid ?? this.isPasswordConfirmationValid, 
-    isSubmitting: isSubmitting ?? this.isSubmitting, 
-    isFailure: isFailure ?? this.isFailure, 
+    isSubmitting: isSubmitting ?? this.isSubmitting,  
     isSuccess: isSuccess ?? this.isSuccess,
     isSuccessOldPassword: isSuccessOldPassword ?? this.isSuccessOldPassword,
-    isFailureOldPassword: isFailureOldPassword ?? this.isFailureOldPassword
+    errorMessage: errorMessage ?? this.errorMessage
   );
 
   @override
@@ -67,10 +62,9 @@ class PasswordFormState extends Equatable {
     isPasswordValid,
     isPasswordConfirmationValid,
     isSubmitting,
-    isFailure,
     isSuccess,
     isSuccessOldPassword,
-    isFailureOldPassword
+    errorMessage
   ];
 
   @override
@@ -80,9 +74,8 @@ class PasswordFormState extends Equatable {
     isPasswordValid: $isPasswordValid
     isPasswordConfirmationValid: $isPasswordConfirmationValid,
     isSubmitting: $isSubmitting,
-    isFailure: $isFailure,
     isSuccess: $isSuccess
     isSuccessOldPassword: $isSuccessOldPassword
-    isFailureOldPassword: $isFailureOldPassword
+    errorMessage: $errorMessage
   }''';
 }

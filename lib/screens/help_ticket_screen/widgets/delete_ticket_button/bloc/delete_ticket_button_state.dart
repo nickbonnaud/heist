@@ -3,36 +3,36 @@ part of 'delete_ticket_button_bloc.dart';
 @immutable
 class DeleteTicketButtonState extends Equatable {
   final bool isSubmitting;
-  final bool isFailure;
   final bool isSuccess;
+  final String errorMessage;
 
   DeleteTicketButtonState({
     required this.isSubmitting,
-    required this.isFailure,
-    required this.isSuccess
+    required this.isSuccess,
+    required this.errorMessage
   });
 
   factory DeleteTicketButtonState.initial() {
     return DeleteTicketButtonState(
       isSubmitting: false,
-      isFailure: false,
-      isSuccess: false
+      isSuccess: false,
+      errorMessage: ""
     );
   }
 
   DeleteTicketButtonState update({
     bool? isSubmitting,
-    bool? isFailure,
-    bool? isSuccess
+    bool? isSuccess,
+    String? errorMessage
   }) => DeleteTicketButtonState(
     isSubmitting: isSubmitting ?? this.isSubmitting,
-    isFailure: isFailure ?? this.isFailure,
-    isSuccess: isSuccess ?? this.isSuccess
+    isSuccess: isSuccess ?? this.isSuccess,
+    errorMessage: errorMessage ?? this.errorMessage
   );
 
   @override
-  List<Object?> get props => [isSubmitting, isFailure, isSuccess];
+  List<Object?> get props => [isSubmitting, isSuccess, errorMessage];
   
   @override
-  String toString() => 'DeleteTicketButtonState { isSubmitting: $isSubmitting, isFailure: $isFailure, isSuccess: $isSuccess }';
+  String toString() => 'DeleteTicketButtonState { isSubmitting: $isSubmitting, isSuccess: $isSuccess, errorMessage: $errorMessage }';
 }

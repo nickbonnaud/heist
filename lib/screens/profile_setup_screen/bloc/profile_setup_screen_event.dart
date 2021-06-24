@@ -5,15 +5,15 @@ abstract class ProfileSetupScreenEvent extends Equatable {
 }
 
 class Init extends ProfileSetupScreenEvent {
-  final Customer customer;
+  final Status status;
 
-  const Init({required this.customer});
-
-  @override
-  List<Object> get props => [customer];
+  const Init({required this.status});
 
   @override
-  String toString() =>  'Init { customer: $customer }';
+  List<Object> get props => [status];
+
+  @override
+  String toString() =>  'Init { status: $status }';
 }
 
 class SectionCompleted extends ProfileSetupScreenEvent {

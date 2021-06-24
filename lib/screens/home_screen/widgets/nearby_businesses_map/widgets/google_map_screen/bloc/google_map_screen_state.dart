@@ -1,7 +1,7 @@
 part of 'google_map_screen_bloc.dart';
 
 @immutable
-class GoogleMapScreenState {
+class GoogleMapScreenState extends Equatable {
   final ScreenCoordinate? screenCoordinate;
   final Business? business;
 
@@ -11,6 +11,9 @@ class GoogleMapScreenState {
     return GoogleMapScreenState(screenCoordinate: null, business: null);
   }
 
+  @override
+  List<Object?> get props => [screenCoordinate, business];
+  
   @override
   String toString() => 'GoogleMapScreenState { screenCoordinate: $screenCoordinate, business: $business }';
 }

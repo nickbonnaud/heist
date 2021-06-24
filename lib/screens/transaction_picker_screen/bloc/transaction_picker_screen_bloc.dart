@@ -5,6 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:heist/models/transaction/transaction_resource.dart';
 import 'package:heist/models/unassigned_transaction/unassigned_transaction_resource.dart';
 import 'package:heist/repositories/transaction_repository.dart';
+import 'package:heist/resources/helpers/api_exception.dart';
 
 part 'transaction_picker_screen_event.dart';
 part 'transaction_picker_screen_state.dart';
@@ -32,8 +33,8 @@ class TransactionPickerScreenBloc extends Bloc<TransactionPickerScreenEvent, Tra
     try {
       final List<UnassignedTransactionResource> transactions = await _transactionRepository.fetchUnassigned(businessIdentifier: event.businessIdentifier);
       yield TransactionsLoaded(transactions: transactions);
-    } catch (_) {
-      yield FetchFailure();
+    } on ApiException catch (exception) {
+      yield FetchFailure(errorMessage: exception.error);
     }
   }
 
@@ -42,10 +43,10 @@ class TransactionPickerScreenBloc extends Bloc<TransactionPickerScreenEvent, Tra
     if (currentState is TransactionsLoaded) {
       yield currentState.update(claiming: true);
       try {
-        final TransactionResource transaction = await _transactionRepository.claimUnassigned(transactionId: event.transactionResource.transaction.identifier);
+        final TransactionResource transaction = await _transactionRepository.claimUnassigned(transactionId: event.transactionIdentifier);
         yield currentState.update(claiming: false, claimSuccess: true, transaction: transaction);
-      } catch (_) {
-        yield currentState.update(claimFailure: true, claiming: false);
+      } on ApiException catch (exception) {
+        yield currentState.update(claiming: false, errorMessage: exception.error);
       }
     }
   }
@@ -53,7 +54,7 @@ class TransactionPickerScreenBloc extends Bloc<TransactionPickerScreenEvent, Tra
   Stream<TransactionPickerScreenState> _mapResetToState() async* {
     final currentState = state;
     if (currentState is TransactionsLoaded) {
-      yield currentState.update(claiming: false, claimFailure: false, claimSuccess: false);
+      yield currentState.update(claiming: false, errorMessage: "", claimSuccess: false);
     }
   }
 }

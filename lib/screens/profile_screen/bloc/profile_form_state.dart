@@ -5,17 +5,17 @@ class ProfileFormState extends Equatable {
   final bool isFirstNameValid;
   final bool isLastNameValid;
   final bool isSubmitting;
-  final bool isFailure;
   final bool isSuccess;
+  final String errorMessage;
 
   bool get isFormValid => isFirstNameValid && isLastNameValid;
 
   ProfileFormState({
-   required this.isFirstNameValid,
-   required this.isLastNameValid,
-   required this.isSubmitting,
-   required this.isFailure,
-   required this.isSuccess
+    required this.isFirstNameValid,
+    required this.isLastNameValid,
+    required this.isSubmitting,
+    required this.isSuccess,
+    required this.errorMessage
   });
 
   factory ProfileFormState.initial() {
@@ -23,8 +23,8 @@ class ProfileFormState extends Equatable {
       isFirstNameValid: true,
       isLastNameValid: true,
       isSubmitting: false,
-      isFailure: false,
-      isSuccess: false
+      isSuccess: false,
+      errorMessage: ""
     );
   }
 
@@ -32,18 +32,18 @@ class ProfileFormState extends Equatable {
     bool? isFirstNameValid,
     bool? isLastNameValid,
     bool? isSubmitting,
-    bool? isFailure,
-    bool? isSuccess
+    bool? isSuccess,
+    String? errorMessage
   }) => ProfileFormState(
     isFirstNameValid: isFirstNameValid ?? this.isFirstNameValid,
     isLastNameValid: isLastNameValid ?? this.isLastNameValid,
     isSubmitting: isSubmitting ?? this.isSubmitting,
-    isFailure: isFailure ?? this.isFailure,
-    isSuccess: isSuccess ?? this.isSuccess
+    isSuccess: isSuccess ?? this.isSuccess,
+    errorMessage: errorMessage ?? this.errorMessage
   );
 
   @override
-  List<Object?> get props => [isFirstNameValid, isLastNameValid, isSubmitting, isFailure, isSuccess];
+  List<Object?> get props => [isFirstNameValid, isLastNameValid, isSubmitting, isSuccess, errorMessage];
 
   @override
   String toString() {
@@ -51,8 +51,8 @@ class ProfileFormState extends Equatable {
       isFirstNameValid: $isFirstNameValid,
       isLastNameValid: $isLastNameValid,
       isSubmitting: $isSubmitting,
-      isFailure: $isFailure,
-      isSuccess: $isSuccess
+      isSuccess: $isSuccess,
+      errorMessage: errorMessage
     }''';
   }
 }

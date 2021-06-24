@@ -35,7 +35,7 @@ class ProfileSetupScreen extends StatelessWidget {
       resizeToAvoidBottomInset: false,
       body: BlocProvider<ProfileSetupScreenBloc>(
         create: (context) => ProfileSetupScreenBloc()
-          ..add(Init(customer: _customerBloc.state.customer!)),
+          ..add(Init(status: _customerBloc.customer!.status)),
         child: ProfileSetupCards(
           customerBloc: _customerBloc,
           profileRepository: _profileRepository,

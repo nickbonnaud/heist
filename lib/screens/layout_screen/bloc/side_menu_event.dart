@@ -21,14 +21,14 @@ class MenuStatusChanged extends SideMenuEvent {
 }
 
 
-class ToggleButtonVisibility extends SideMenuEvent {
+class ButtonVisibilityChanged extends SideMenuEvent {
   final bool isVisible;
 
-  ToggleButtonVisibility({required this.isVisible});
+  ButtonVisibilityChanged({required this.isVisible});
 
   @override
   List<Object> get props => [isVisible];
 
   @override
-  String toString() => 'ToggleButtonVisibility { isVisible: $isVisible }';
+  String toString() => 'ButtonVisibilityChanged { isVisible: $isVisible }';
 }

@@ -4,45 +4,45 @@ part of 'issue_form_bloc.dart';
 class IssueFormState extends Equatable {
   final bool isMessageValid;
   final bool isSubmitting;
-  final bool isFailure;
   final bool isSuccess;
   final TransactionResource transactionResource;
+  final String errorMessage;
 
   IssueFormState({
     required this.isMessageValid,
     required this.isSubmitting,
-    required this.isFailure,
     required this.isSuccess,
-    required this.transactionResource
+    required this.transactionResource,
+    required this.errorMessage
   });
 
   factory IssueFormState.initial({required TransactionResource transactionResource}) {
     return IssueFormState(
       isMessageValid: true,
       isSubmitting: false,
-      isFailure: false,
       isSuccess: false,
-      transactionResource: transactionResource
+      transactionResource: transactionResource,
+      errorMessage: ""
     );
   }
 
   IssueFormState update({
     bool? isMessageValid,
     bool? isSubmitting,
-    bool? isFailure,
     bool? isSuccess,
-    TransactionResource? transactionResource
+    TransactionResource? transactionResource,
+    String? errorMessage
   }) => IssueFormState(
     isMessageValid: isMessageValid ?? this.isMessageValid,
     isSubmitting: isSubmitting ?? this.isSubmitting,
-    isFailure: isFailure ?? this.isFailure,
     isSuccess: isSuccess ?? this.isSuccess,
-    transactionResource: transactionResource ?? this.transactionResource
+    transactionResource: transactionResource ?? this.transactionResource,
+    errorMessage: errorMessage ?? this.errorMessage
   );
 
   @override
-  List<Object?> get props => [isMessageValid, isSubmitting, isFailure, isSuccess, transactionResource];
+  List<Object?> get props => [isMessageValid, isSubmitting, isSuccess, transactionResource, errorMessage];
 
   @override
-  String toString() => 'IssueFormState { isMessageValid: $isMessageValid, isSubmitting: $isSubmitting, isFailure: $isFailure, isSuccess: $isSuccess, transactionResource: $transactionResource }';
+  String toString() => 'IssueFormState { isMessageValid: $isMessageValid, isSubmitting: $isSubmitting, isSuccess: $isSuccess, transactionResource: $transactionResource, errorMessage: $errorMessage }';
 }

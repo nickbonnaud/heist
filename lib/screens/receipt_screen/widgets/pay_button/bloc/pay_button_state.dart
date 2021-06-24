@@ -5,13 +5,13 @@ class PayButtonState extends Equatable {
   final bool isEnabled;
   final bool isSubmitting;
   final bool isSubmitSuccess;
-  final bool isSubmitFailure;
+  final String errorMessage;
 
   PayButtonState({
     required this.isEnabled,
     required this.isSubmitting,
     required this.isSubmitSuccess,
-    required this.isSubmitFailure,
+    required this.errorMessage,
   });
 
   factory PayButtonState.initial({required bool isEnabled}) {
@@ -19,7 +19,7 @@ class PayButtonState extends Equatable {
       isEnabled: isEnabled, 
       isSubmitting: false, 
       isSubmitSuccess: false, 
-      isSubmitFailure: false,
+      errorMessage: "",
     );
   }
 
@@ -27,16 +27,16 @@ class PayButtonState extends Equatable {
     bool? isEnabled,
     bool? isSubmitting,
     bool? isSubmitSuccess,
-    bool? isSubmitFailure,
+    String? errorMessage,
   }) => PayButtonState(
     isEnabled: isEnabled ?? this.isEnabled,
     isSubmitting: isSubmitting ?? this.isSubmitting,
     isSubmitSuccess: isSubmitSuccess ?? this.isSubmitSuccess,
-    isSubmitFailure: isSubmitFailure ?? this.isSubmitFailure,
+    errorMessage: errorMessage ?? this.errorMessage,
   );
 
   @override
-  List<Object> get props => [isEnabled, isSubmitting, isSubmitSuccess, isSubmitFailure];
+  List<Object> get props => [isEnabled, isSubmitting, isSubmitSuccess, errorMessage];
   
   @override
   String toString() {
@@ -44,7 +44,7 @@ class PayButtonState extends Equatable {
       isEnabled: $isEnabled,
       isSubmitting: $isSubmitting,
       isSubmitSuccess: $isSubmitSuccess,
-      isSubmitFailure: $isSubmitFailure,
+      errorMessage: $errorMessage,
     }''';
   }
 }

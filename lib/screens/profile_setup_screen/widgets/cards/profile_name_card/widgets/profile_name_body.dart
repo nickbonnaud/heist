@@ -42,8 +42,8 @@ class _ProfileNameBodyState extends State<ProfileNameBody> {
   Widget build(BuildContext context) {
     return BlocListener<ProfileNameFormBloc, ProfileNameFormState>(
       listener: (context, state) {
-        if (state.isFailure) {
-          _showSnackbar(context, 'Failed to save. Please try again.', state);
+        if (state.errorMessage.isNotEmpty) {
+          _showSnackbar(context, state.errorMessage, state);
         } else if (state.isSuccess) {
           _showSnackbar(context, 'Great! Your name was saved successfully!', state);
         }

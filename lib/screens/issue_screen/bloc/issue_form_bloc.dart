@@ -6,6 +6,7 @@ import 'package:heist/blocs/open_transactions/open_transactions_bloc.dart';
 import 'package:heist/models/transaction/transaction_resource.dart';
 import 'package:heist/repositories/transaction_issue_repository.dart';
 import 'package:heist/resources/enums/issue_type.dart';
+import 'package:heist/resources/helpers/api_exception.dart';
 import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -48,15 +49,15 @@ class IssueFormBloc extends Bloc<IssueFormEvent, IssueFormState> {
   Stream<IssueFormState> _mapSubmittedToState(Submitted event) async* {
     yield state.update(isSubmitting: true);
     try {
-      TransactionResource transaction = await _issueRepository.reportIssue(type: event.type, transactionId: event.transaction.transaction.identifier, message: event.message);
+      TransactionResource transaction = await _issueRepository.reportIssue(type: event.type, transactionId: event.transactionIdentifier, message: event.message);
       _openTransactionsBloc.add(UpdateOpenTransaction(transaction: transaction));
       yield state.update(isSubmitting: false, isSuccess: true, transactionResource: transaction);
-    } catch (_) {
-      yield state.update(isSubmitting: false, isFailure: true);
+    } on ApiException catch (exception) {
+      yield state.update(isSubmitting: false, errorMessage: exception.error);
     }
   }
 
   Stream<IssueFormState> _mapResetToState() async* {
-    yield state.update(isSuccess: false, isFailure: false);
+    yield state.update(isSuccess: false, errorMessage: "");
   }
 }

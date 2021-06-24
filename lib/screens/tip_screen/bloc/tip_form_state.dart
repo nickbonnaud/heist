@@ -5,8 +5,8 @@ class TipFormState extends Equatable {
   final bool isTipRateValid;
   final bool isQuickTipRateValid;
   final bool isSubmitting;
-  final bool isFailure;
   final bool isSuccess;
+  final String errorMessage;
 
   bool get isFormValid => isTipRateValid && isQuickTipRateValid;
 
@@ -14,8 +14,8 @@ class TipFormState extends Equatable {
     required this.isTipRateValid,
     required this.isQuickTipRateValid,
     required this.isSubmitting,
-    required this.isFailure,
-    required this.isSuccess
+    required this.isSuccess,
+    required this.errorMessage
   });
 
   factory TipFormState.initial() {
@@ -23,8 +23,8 @@ class TipFormState extends Equatable {
       isTipRateValid: true,
       isQuickTipRateValid: true,
       isSubmitting: false,
-      isFailure: false,
-      isSuccess: false
+      isSuccess: false,
+      errorMessage: ""
     );
   }
 
@@ -32,19 +32,19 @@ class TipFormState extends Equatable {
     bool? isTipRateValid,
     bool? isQuickTipRateValid,
     bool? isSubmitting,
-    bool? isFailure,
-    bool? isSuccess
+    bool? isSuccess,
+    String? errorMessage
   }) => TipFormState(
     isTipRateValid: isTipRateValid ?? this.isTipRateValid,
     isQuickTipRateValid: isQuickTipRateValid ?? this.isQuickTipRateValid,
     isSubmitting: isSubmitting ?? this.isSubmitting,
-    isFailure: isFailure ?? this.isFailure,
-    isSuccess: isSuccess ?? this.isSuccess
+    isSuccess: isSuccess ?? this.isSuccess,
+    errorMessage: errorMessage ?? this.errorMessage
   );
 
   @override
-  List<Object> get props => [isTipRateValid, isQuickTipRateValid, isSubmitting, isFailure, isSuccess];
+  List<Object> get props => [isTipRateValid, isQuickTipRateValid, isSubmitting, isSuccess, errorMessage];
 
   @override
-  String toString() => 'TipFormState { isTipRateValid: $isTipRateValid, isQuickTipRateValid: $isQuickTipRateValid, isSubmitting: $isSubmitting, isFailure: $isFailure, isSuccess: $isSuccess }';
+  String toString() => 'TipFormState { isTipRateValid: $isTipRateValid, isQuickTipRateValid: $isQuickTipRateValid, isSubmitting: $isSubmitting, isSuccess: $isSuccess, errorMessage: $errorMessage }';
 }

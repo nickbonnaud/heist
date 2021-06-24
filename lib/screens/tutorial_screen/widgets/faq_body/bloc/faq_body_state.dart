@@ -1,7 +1,7 @@
 part of 'faq_body_bloc.dart';
 
 @immutable
-class FaqBodyState {
+class FaqBodyState extends Equatable {
   final List<Faq> faqs;
 
   FaqBodyState({required this.faqs});
@@ -11,4 +11,10 @@ class FaqBodyState {
       faqs: questions.asMap().map((index, question) => MapEntry(index, Faq(question: question, answer: answers[index], answerVisible: false)) ).values.toList()
     ); 
   }
+
+  @override
+  List<Object> get props => [faqs];
+
+  @override
+  String toString() => "FaqBodyState { faqs: $faqs }";
 }

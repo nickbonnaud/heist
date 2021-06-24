@@ -35,17 +35,11 @@ class _PasswordFormState extends State<PasswordForm> {
     return BlocListener<PasswordFormBloc, PasswordFormState>(
       listener: (context, state) {
         if (state.isSuccess) {
-          String message = 'Password updated!';
-          _showSnackbar(context, message, state);
-        } else if (state.isFailure) {
-          String message = 'Failed to change password. Please try again.';
-          _showSnackbar(context, message, state);
-        } else if (state.isFailureOldPassword) {
-          String message = 'Failed to verify password. Please try again.';
-          _showSnackbar(context, message, state);
+          _showSnackbar(context, 'Password updated!', state);
         } else if (state.isSuccessOldPassword) {
-          String message = 'Password verified.';
-          _showSnackbar(context, message, state);
+          _showSnackbar(context, 'Password verified.', state);
+        } else if (state.errorMessage.isNotEmpty) {
+          _showSnackbar(context, state.errorMessage, state);
         }
       },
       child: Form(
@@ -216,7 +210,7 @@ class _PasswordFormState extends State<PasswordForm> {
             oldPassword: _oldPasswordController.text,
             password: _passwordController.text,
             passwordConfirmation: _passwordConfirmationController.text,
-            customer: widget._customer
+            customerIdentifier: widget._customer.identifier
           ))
         : _passwordFormBloc.add(OldPasswordSubmitted(oldPassword: _oldPasswordController.text));
     }

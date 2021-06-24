@@ -5,13 +5,13 @@ abstract class TransactionEvent extends Equatable {
 }
 
 class PickerChanged extends TransactionEvent {
-  final UnassignedTransactionResource transactionResource;
+  final DateTime transactionUpdatedAt;
 
-  const PickerChanged({required this.transactionResource});
-
-  @override
-  List<Object> get props => [transactionResource];
+  const PickerChanged({required this.transactionUpdatedAt});
 
   @override
-  String toString() => 'PickerChanged { transactionResource: $transactionResource }';
+  List<Object> get props => [transactionUpdatedAt];
+
+  @override
+  String toString() => 'PickerChanged { transactionUpdatedAt: $transactionUpdatedAt }';
 }

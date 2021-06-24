@@ -5,6 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:heist/blocs/open_transactions/open_transactions_bloc.dart';
 import 'package:heist/models/transaction/transaction_resource.dart';
 import 'package:heist/repositories/transaction_repository.dart';
+import 'package:heist/resources/helpers/api_exception.dart';
 import 'package:heist/screens/receipt_screen/bloc/receipt_screen_bloc.dart';
 import 'package:meta/meta.dart';
 
@@ -58,26 +59,22 @@ class PayButtonBloc extends Bloc<PayButtonEvent, PayButtonState> {
           _receiptScreenBloc.add(TransactionChanged(transactionResource: transactionResource));
           _openTransactionsBloc.add(RemoveOpenTransaction(transaction: transactionResource));
         } else {
+          _receiptScreenBloc.add(TransactionChanged(transactionResource: transactionResource));
           yield state.update(
             isSubmitting: false, 
-            isSubmitFailure: true,
+            errorMessage: "Oops! Something went wrong submitting payment.",
             isEnabled: _isButtonEnabled(transactionResource: transactionResource)
           );
         }
-      } catch (_) {
-        yield state.update(
-          isSubmitting: false,
-          isSubmitFailure: true,
-          isSubmitSuccess: false,
-          isEnabled: false
-        );
+      } on ApiException catch (exception) {
+        yield state.update(isSubmitting: false, errorMessage: exception.error );
       }
     }
   }
 
   Stream<PayButtonState> _mapResetToState({required Reset event}) async* {
     yield state.update(
-      isSubmitFailure: false,
+      errorMessage: "",
       isSubmitSuccess: false,
       isEnabled: _isButtonEnabled(transactionResource: event.transactionResource),
     );

@@ -33,8 +33,6 @@ class SplashScreenBloc extends Bloc<SplashScreenEvent, SplashScreenState> {
       yield state.update(endAnimationComplete: true);
     } else if (event is AppReadyBlocUpdated) {
       yield* _mapBootBlocUpdatedToState(appReadyState: event.appReadyState);
-    } else if (event is NextScreenResolved) {
-      yield state.update(nextScreen: event.nextScreen);
     }
   }
 

@@ -39,9 +39,9 @@ class _PeekSheetState extends State<PeekSheet> with SingleTickerProviderStateMix
     );
     _controller.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
-        BlocProvider.of<SideMenuBloc>(context).add(ToggleButtonVisibility(isVisible: false));
+        BlocProvider.of<SideMenuBloc>(context).add(ButtonVisibilityChanged(isVisible: false));
       } else if (status == AnimationStatus.dismissed) {
-        BlocProvider.of<SideMenuBloc>(context).add(ToggleButtonVisibility(isVisible: true));
+        BlocProvider.of<SideMenuBloc>(context).add(ButtonVisibilityChanged(isVisible: true));
       }
     });
   }

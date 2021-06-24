@@ -5,8 +5,8 @@ class HelpTicketFormState extends Equatable {
   final bool isSubjectValid;
   final bool isMessageValid;
   final bool isSubmitting;
-  final bool isFailure;
   final bool isSuccess;
+  final String errorMessage;
 
   bool get isFormValid => isSubjectValid && isMessageValid;
 
@@ -14,8 +14,8 @@ class HelpTicketFormState extends Equatable {
     required this.isSubjectValid,
     required this.isMessageValid,
     required this.isSubmitting,
-    required this.isFailure,
-    required this.isSuccess
+    required this.isSuccess,
+    required this.errorMessage
   });
 
   factory HelpTicketFormState.initial() {
@@ -23,8 +23,8 @@ class HelpTicketFormState extends Equatable {
       isSubjectValid: false,
       isMessageValid: false,
       isSubmitting: false,
-      isFailure: false,
-      isSuccess: false
+      isSuccess: false,
+      errorMessage: ""
     );
   }
 
@@ -32,18 +32,18 @@ class HelpTicketFormState extends Equatable {
     bool? isSubjectValid,
     bool? isMessageValid,
     bool? isSubmitting,
-    bool? isFailure,
-    bool? isSuccess
+    bool? isSuccess,
+    String? errorMessage
   }) => HelpTicketFormState(
     isSubjectValid:  isSubjectValid ?? this.isSubjectValid,
     isMessageValid: isMessageValid ?? this.isMessageValid,
     isSubmitting: isSubmitting ?? this.isSubmitting,
-    isFailure: isFailure ?? this.isFailure,
-    isSuccess: isSuccess ?? this.isSuccess
+    isSuccess: isSuccess ?? this.isSuccess,
+    errorMessage: errorMessage ?? this.errorMessage
   );
   
   @override
-  List<Object> get props => [isSubjectValid, isMessageValid, isSubmitting, isSuccess, isFailure];
+  List<Object> get props => [isSubjectValid, isMessageValid, isSubmitting, isSuccess, errorMessage];
 
   @override
   String toString() {
@@ -51,8 +51,8 @@ class HelpTicketFormState extends Equatable {
       isSubjectValid: $isSubjectValid,
       isMessageValid: $isMessageValid,
       isSubmitting: $isSubmitting,
-      isFailure: $isFailure,
-      isSuccess: isSuccess
+      isSuccess: $isSuccess,
+      errorMessage: $errorMessage
     }''';
   }
 }

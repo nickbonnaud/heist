@@ -12,6 +12,10 @@ import 'package:heist/themes/global_colors.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
 
 class SetupTipBody extends StatefulWidget {
+  final String _accountIdentifier;
+
+  const SetupTipBody({required String accountIdentifier})
+    : _accountIdentifier = accountIdentifier;
   
   @override
   State<SetupTipBody> createState() => _SetupTipBodyState();
@@ -37,10 +41,10 @@ class _SetupTipBodyState extends State<SetupTipBody> {
   
   @override
   Widget build(BuildContext context) {
-    return BlocListener<SetupTipCardBloc, SetupTipScreenState>(
+    return BlocListener<SetupTipCardBloc, SetupTipCardState>(
       listener: (context, state) {
-        if (state.isFailure) {
-          _showSnackbar(context, 'Failed to save. Please try again.', state);
+        if (state.errorMessage.isNotEmpty) {
+          _showSnackbar(context, state.errorMessage, state);
         } else if (state.isSuccess) {
           _showSnackbar(context, 'Tip Settings Saved!', state);
         }
@@ -65,7 +69,7 @@ class _SetupTipBodyState extends State<SetupTipBody> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: <Widget>[
                           Expanded(
-                            child: BlocBuilder<SetupTipCardBloc, SetupTipScreenState>(
+                            child: BlocBuilder<SetupTipCardBloc, SetupTipCardState>(
                               builder: (context, state) {
                                 return TextFormField(
                                   decoration: InputDecoration(
@@ -100,7 +104,7 @@ class _SetupTipBodyState extends State<SetupTipBody> {
                           ),
                           SizedBox(width: SizeConfig.getWidth(10)),
                           Expanded(
-                            child: BlocBuilder<SetupTipCardBloc, SetupTipScreenState>(
+                            child: BlocBuilder<SetupTipCardBloc, SetupTipCardState>(
                               builder: (context, state) {
                                 return TextFormField(
                                   decoration: InputDecoration(
@@ -143,7 +147,7 @@ class _SetupTipBodyState extends State<SetupTipBody> {
               Row(
                 children: <Widget>[
                   Expanded(
-                    child: BlocBuilder<SetupTipCardBloc, SetupTipScreenState>(
+                    child: BlocBuilder<SetupTipCardBloc, SetupTipCardState>(
                       builder: (context, state) {
                         return ElevatedButton(
                           onPressed: _isSaveButtonEnabled(state) ? () => _saveButtonPressed(context, state) : null,
@@ -178,20 +182,21 @@ class _SetupTipBodyState extends State<SetupTipBody> {
     _setupTipCardBloc.add(QuickTipRateChanged(quickTipRate: int.parse(rate)));
   }
 
-  bool _isSaveButtonEnabled(SetupTipScreenState state) {
+  bool _isSaveButtonEnabled(SetupTipCardState state) {
     return state.isFormValid && isPopulated && !state.isSubmitting;
   }
 
-  void _saveButtonPressed(BuildContext context, SetupTipScreenState state) {
+  void _saveButtonPressed(BuildContext context, SetupTipCardState state) {
     if (_isSaveButtonEnabled(state)) {
       _setupTipCardBloc.add(Submitted(
+        accountIdentifier: widget._accountIdentifier,
         tipRate: int.parse(_tipRateController.text),
         quickTipRate: int.parse(_quickTipRateController.text)
       ));
     }
   }
 
-  void _showSnackbar(BuildContext context, String message, SetupTipScreenState state) async {
+  void _showSnackbar(BuildContext context, String message, SetupTipCardState state) async {
     state.isSuccess ? Vibrate.success() : Vibrate.error();
     final SnackBar snackBar = SnackBar(
       duration: Duration(seconds: 1),
@@ -221,7 +226,7 @@ class _SetupTipBodyState extends State<SetupTipBody> {
     );
   }
 
-  Widget _buttonChild(SetupTipScreenState state) {
+  Widget _buttonChild(SetupTipCardState state) {
     if (state.isSubmitting) {
       return SizedBox(height: SizeConfig.getWidth(5), width: SizeConfig.getWidth(5), child: CircularProgressIndicator());
     } else {

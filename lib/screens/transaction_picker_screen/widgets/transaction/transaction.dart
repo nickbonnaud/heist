@@ -39,8 +39,8 @@ class _TransactionState extends State<Transaction> {
       listener: (context, state) {
         final currentState = state;
         if (currentState is TransactionsLoaded) {
-          if (currentState.claimFailure) {
-            _showSnackbar(context, 'Failed to claim. Please try again.', currentState);
+          if (currentState.errorMessage.isNotEmpty) {
+            _showSnackbar(context, currentState.errorMessage, currentState);
           }
         }
       },
@@ -129,7 +129,7 @@ class _TransactionState extends State<Transaction> {
       onPageChanged: (index) {
         if (index != null) {
           _underlayController.animateToPage(index, duration: Duration(milliseconds: 300), curve: Curves.ease);
-          BlocProvider.of<TransactionBloc>(context).add(PickerChanged(transactionResource: widget._transactions[index]));
+          BlocProvider.of<TransactionBloc>(context).add(PickerChanged(transactionUpdatedAt: widget._transactions[index].transaction.updatedDate));
         }
       },
       itemBuilder: (BuildContext context, int index) {
@@ -290,7 +290,7 @@ class _TransactionState extends State<Transaction> {
       ..hideCurrentSnackBar()
       ..showSnackBar(snackBar)
       .closed.then((_) => {
-        if (state.claimFailure) {
+        if (state.errorMessage.isNotEmpty) {
           BlocProvider.of<TransactionPickerScreenBloc>(context).add(Reset())
         }
       }
@@ -315,7 +315,7 @@ class _TransactionState extends State<Transaction> {
         ],
       )
     ).then((confirmed) => confirmed 
-      ?  BlocProvider.of<TransactionPickerScreenBloc>(context).add(Claim(transactionResource: widget._transactions[index]))
+      ?  BlocProvider.of<TransactionPickerScreenBloc>(context).add(Claim(transactionIdentifier: widget._transactions[index].transaction.identifier))
       : null);
   }
 }

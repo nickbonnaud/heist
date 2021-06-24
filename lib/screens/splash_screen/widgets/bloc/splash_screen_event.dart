@@ -22,15 +22,3 @@ class AppReadyBlocUpdated extends SplashScreenEvent {
   @override
   String toString() => 'AppReadyBlocUpdated { appReadyState: $appReadyState }';
 }
-
-class NextScreenResolved extends SplashScreenEvent {
-  final NextScreen nextScreen;
-
-  const NextScreenResolved({required this.nextScreen});
-
-  @override
-  List<Object> get props => [nextScreen];
-
-  @override
-  String toString() => 'NextScreenResolved { nextScreen: $nextScreen }';
-}

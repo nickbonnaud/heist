@@ -61,8 +61,8 @@ class _ProfileFormState extends State<ProfileForm> {
   Widget build(BuildContext context) {
     return BlocListener<ProfileFormBloc, ProfileFormState>(
       listener: (context, state) {
-        if (state.isFailure) {
-          _showSnackbar(context, 'Failed to save. Please try again.', state);
+        if (state.errorMessage.isNotEmpty) {
+          _showSnackbar(context, state.errorMessage, state);
         } else if (state.isSuccess) {
           _showSnackbar(context, 'Profile Updated!', state);
         }
@@ -216,7 +216,7 @@ class _ProfileFormState extends State<ProfileForm> {
       _profileFormBloc.add(Submitted(
         firstName: _firstNameController.text,
         lastName: _lastNameController.text,
-        profile: widget._profile));
+        profileIdentifier: widget._profile.identifier));
     }
   }
 

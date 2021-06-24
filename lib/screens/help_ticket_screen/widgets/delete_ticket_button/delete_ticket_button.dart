@@ -52,7 +52,7 @@ class DialogBody extends StatelessWidget {
     return BlocListener<DeleteTicketButtonBloc, DeleteTicketButtonState>(
       listener: (context, state) {
         
-        if (state.isFailure) {
+        if (state.errorMessage.isNotEmpty) {
           BlocProvider.of<DeleteTicketButtonBloc>(context).add(Reset());
         } else if (state.isSuccess) {
           int count = 0;

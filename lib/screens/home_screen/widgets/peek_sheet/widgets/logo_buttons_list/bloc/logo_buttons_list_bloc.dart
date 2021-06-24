@@ -12,18 +12,15 @@ part 'logo_buttons_list_event.dart';
 part 'logo_buttons_list_state.dart';
 
 class LogoButtonsListBloc extends Bloc<LogoButtonsListEvent, LogoButtonsListState> {
-  final OpenTransactionsBloc openTransactionsBloc;
-  final ActiveLocationBloc activeLocationBloc;
-  final NearbyBusinessesBloc nearbyBusinessesBloc;
   late StreamSubscription openTransactionsSubscription;
   late StreamSubscription activeLocationSubscription;
   late StreamSubscription nearbyBusinessesSubscription;
 
   
   LogoButtonsListBloc({
-    required this.openTransactionsBloc, 
-    required this.activeLocationBloc, 
-    required this.nearbyBusinessesBloc,
+    required OpenTransactionsBloc openTransactionsBloc, 
+    required ActiveLocationBloc activeLocationBloc, 
+    required NearbyBusinessesBloc nearbyBusinessesBloc,
     required int numberOpenTransactions,
     required int numberActiveLocations,
     required int numberNearbyLocations

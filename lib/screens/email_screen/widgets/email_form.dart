@@ -39,8 +39,8 @@ class _EmailFormState extends State<EmailForm> {
       listener: (context, state) {
         if (state.isSuccess) {
           _showSnackbar(context: context, isSuccess: true);
-        } else if (state.isFailure) {
-          _showSnackbar(context: context, isSuccess: false);
+        } else if (state.errorMessage.isNotEmpty) {
+          _showSnackbar(context: context, isSuccess: false, error: state.errorMessage);
         }
       },
       child: Form(
@@ -129,12 +129,12 @@ class _EmailFormState extends State<EmailForm> {
     super.dispose();
   }
 
-  void _showSnackbar({required BuildContext context, required bool isSuccess}) async {
+  void _showSnackbar({required BuildContext context, required bool isSuccess, String? error}) async {
     isSuccess ? Vibrate.success() : Vibrate.error();
 
     final String text = isSuccess
       ? 'Email Updated!'
-      : 'Failed to save new email. Please try again.';
+      : error!;
 
     final SnackBar snackBar = SnackBar(
       content: Row(
@@ -181,7 +181,7 @@ class _EmailFormState extends State<EmailForm> {
   
   void _saveButtonPressed(EmailFormState state) {
     if (_isSaveButtonEnabled(state)) {
-      _emailFormBloc.add(Submitted(customer: widget._customer, email: _emailController.text));
+      _emailFormBloc.add(Submitted(identifier: widget._customer.identifier, email: _emailController.text));
     }
   }
 

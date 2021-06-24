@@ -4,40 +4,40 @@ part of 'message_input_bloc.dart';
 class MessageInputState extends Equatable {
   final bool isInputValid;
   final bool isSubmitting;
-  final bool isFailure;
   final bool isSuccess;
+  final String errorMessage;
 
   MessageInputState({
     required this.isInputValid,
     required this.isSubmitting,
-    required this.isFailure,
-    required this.isSuccess
+    required this.isSuccess,
+    required this.errorMessage
   });
 
   factory MessageInputState.initial() {
     return MessageInputState(
       isInputValid: true,
       isSubmitting: false,
-      isFailure: false,
-      isSuccess: false
+      isSuccess: false,
+      errorMessage: ""
     );
   }
 
   MessageInputState update({
     bool? isInputValid,
     bool? isSubmitting,
-    bool? isFailure,
-    bool? isSuccess
+    bool? isSuccess,
+    String? errorMessage
   }) => MessageInputState(
     isInputValid: isInputValid ?? this.isInputValid,
     isSubmitting: isSubmitting ?? this.isSubmitting,
-    isFailure: isFailure ?? this.isFailure,
-    isSuccess: isSuccess ?? this.isSuccess
+    isSuccess: isSuccess ?? this.isSuccess,
+    errorMessage: errorMessage ?? this.errorMessage
   );
   
   @override
-  List<Object?> get props => [isInputValid, isSubmitting, isFailure, isSuccess];
+  List<Object?> get props => [isInputValid, isSubmitting, isSuccess, errorMessage];
 
   @override
-  String toString() => 'MessageInputState { isInputValid: $isInputValid, isSubmitting: $isSubmitting, isFailure: $isFailure, isSuccess: $isSuccess }';
+  String toString() => 'MessageInputState { isInputValid: $isInputValid, isSubmitting: $isSubmitting, isSuccess: $isSuccess, errorMessage: $errorMessage }';
 }

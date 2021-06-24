@@ -1,7 +1,7 @@
 part of 'logo_transaction_button_bloc.dart';
 
 @immutable
-class LogoTransactionButtonState {
+class LogoTransactionButtonState extends Equatable {
   final bool pressed;
 
   LogoTransactionButtonState({required this.pressed});
@@ -14,6 +14,9 @@ class LogoTransactionButtonState {
     return LogoTransactionButtonState(pressed: isPressed);
   }
 
+  @override
+  List<Object> get props => [pressed];
+  
   @override
   String toString() => 'LogoTransactionButtonState { pressed: $pressed }';
 }

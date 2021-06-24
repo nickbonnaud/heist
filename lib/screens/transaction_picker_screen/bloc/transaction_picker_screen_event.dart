@@ -20,15 +20,15 @@ class Fetch extends TransactionPickerScreenEvent {
 }
 
 class Claim extends TransactionPickerScreenEvent {
-  final UnassignedTransactionResource transactionResource;
+  final String transactionIdentifier;
 
-  const Claim({required this.transactionResource});
-
-  @override
-  List<Object> get props => [transactionResource];
+  const Claim({required this.transactionIdentifier});
 
   @override
-  String toString() => 'Claim { transactionResource: $transactionResource }';
+  List<Object> get props => [transactionIdentifier];
+
+  @override
+  String toString() => 'Claim { transactionIdentifier: $transactionIdentifier }';
 }
 
 class Reset extends TransactionPickerScreenEvent {}

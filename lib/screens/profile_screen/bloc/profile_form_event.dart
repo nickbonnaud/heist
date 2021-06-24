@@ -34,15 +34,15 @@ class LastNameChanged extends ProfileFormEvent {
 class Submitted extends ProfileFormEvent {
   final String firstName;
   final String lastName;
-  final Profile profile;
+  final String profileIdentifier;
 
-  const Submitted({required this.firstName, required this.lastName, required this.profile});
-
-  @override
-  List<Object> get props => [firstName, lastName, profile];
+  const Submitted({required this.firstName, required this.lastName, required this.profileIdentifier});
 
   @override
-  String toString() => 'Submitted { firstName: $firstName, lastName: $lastName, profile: $profile }';
+  List<Object> get props => [firstName, lastName, profileIdentifier];
+
+  @override
+  String toString() => 'Submitted { firstName: $firstName, lastName: $lastName, profileIdentifier: $profileIdentifier }';
 }
 
 class Reset extends ProfileFormEvent {}

@@ -21,8 +21,8 @@ class KeepOpenButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocListener<KeepOpenButtonBloc, KeepOpenButtonState>(
       listener: (context, state) {
-        if (state.isSubmitFailure) {
-          _showSnackbar(context: context, message: "Failed to send request. Please try again.", state: state);
+        if (state.errorMessage.isNotEmpty) {
+          _showSnackbar(context: context, message: state.errorMessage, state: state);
         } else if (state.isSubmitSuccess) {
           _showSnackbar(context: context, message: "Success! Bill will be kept open for 10 minutes. Please return to ${_transactionResource.business.profile.name} before then.", state: state);
         }

@@ -2,11 +2,10 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 import 'package:heist/models/help_ticket/help_ticket.dart';
 import 'package:heist/models/paginate_data_holder.dart';
 import 'package:heist/repositories/help_repository.dart';
-import 'package:meta/meta.dart';
+import 'package:heist/resources/helpers/api_exception.dart';
 
 part 'help_tickets_screen_event.dart';
 part 'help_tickets_screen_state.dart';
@@ -64,12 +63,14 @@ class HelpTicketsScreenBloc extends Bloc<HelpTicketsScreenEvent, HelpTicketsScre
           queryParams: null
         );
       } else if (currentState is Loaded) {
-        yield* _fetchMore(
-          fetchFunction: () => _helpRepository.paginate(url: currentState.nextUrl!),
-          state: currentState,
-          currentQuery: Option.all,
-          queryParams: null
-        );
+        if (!currentState.paginating) {
+          yield* _fetchMore(
+            fetchFunction: () => _helpRepository.paginate(url: currentState.nextUrl!),
+            state: currentState,
+            currentQuery: Option.all,
+            queryParams: null
+          );
+        }
       }
     }
   }
@@ -154,8 +155,8 @@ class HelpTicketsScreenBloc extends Bloc<HelpTicketsScreenEvent, HelpTicketsScre
         currentQuery: currentQuery,
         queryParams: queryParams
       );
-    } catch(_) {
-      yield FetchFailure();
+    } on ApiException catch(exception) {
+      yield FetchFailure(errorMessage: exception.error);
     }
   }
 
@@ -177,8 +178,8 @@ class HelpTicketsScreenBloc extends Bloc<HelpTicketsScreenEvent, HelpTicketsScre
           currentQuery: currentQuery,
           queryParams: queryParams
         );
-      } catch(_) {
-        yield FetchFailure();
+      } on ApiException catch(exception) {
+        yield FetchFailure(errorMessage: exception.error);
       }
     }
   }

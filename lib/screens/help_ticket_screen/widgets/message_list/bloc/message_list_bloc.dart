@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:heist/models/help_ticket/help_ticket.dart';
 import 'package:heist/repositories/help_repository.dart';
+import 'package:heist/resources/helpers/api_exception.dart';
 import 'package:heist/screens/help_tickets_screen/bloc/help_tickets_screen_bloc.dart';
 import 'package:meta/meta.dart';
 
@@ -26,7 +27,7 @@ class MessageListBloc extends Bloc<MessageListEvent, MessageListState> {
       helpTicketsScreenBlocSubscription = helpTicketsScreenBloc.stream.listen((HelpTicketsScreenState helpTicketsScreenstate) {
         add(ReplyAdded(
           helpTicket: (helpTicketsScreenstate as Loaded).helpTickets.firstWhere((helpTicket) 
-            => helpTicket.identifier == state.getHelpTicket.identifier)
+            => helpTicket.identifier == state.helpTicket.identifier)
         ));
       });
   }
@@ -47,8 +48,8 @@ class MessageListBloc extends Bloc<MessageListEvent, MessageListState> {
         final HelpTicket helpTicket = await _helpRepository.updateRepliesAsRead(ticketIdentifier: _helpTicket.identifier);
         _helpTicketsScreenBloc.add(HelpTicketUpdated(helpTicket: helpTicket));
         yield state.update(helpTicket: helpTicket);
-      } catch(_) {
-        print('failed');
+      } on ApiException catch(exception) {
+        yield state.update(errorMessage: exception.error);
       }
     }
   }

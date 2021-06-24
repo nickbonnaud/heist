@@ -3,14 +3,12 @@ import "dart:math" as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:heist/global_widgets/route_builders/slide_up_route.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
 import 'package:heist/resources/helpers/vibrate.dart';
 import 'package:heist/routing/routes.dart';
 import 'package:heist/screens/auth_screen/widgets/cubit/keyboard_visible_cubit.dart';
 import 'package:heist/screens/auth_screen/widgets/page_offset_notifier.dart';
-import 'package:heist/screens/onboard_screen/onboard_screen.dart';
 import 'package:heist/themes/global_colors.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
 import 'package:provider/provider.dart';
@@ -58,8 +56,8 @@ class _RegisterFormState extends State<RegisterForm> {
   Widget build(BuildContext context) {
     return BlocListener<RegisterBloc, RegisterState>(
       listener: (context, state) {
-        if (state.isFailure) {
-          _errorRegister(context);
+        if (state.errorMessage.isNotEmpty) {
+          _errorRegister(error: state.errorMessage);
         } else if (state.isSuccess) {
           _navigateToNextPage();
         }
@@ -348,16 +346,17 @@ class _RegisterFormState extends State<RegisterForm> {
     );
   }
   
-  void _errorRegister(BuildContext context) async {
+  void _errorRegister({required String error}) async {
     Vibrate.error();
     final SnackBar snackBar = SnackBar(
       content: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Expanded(
-            child: Text(
-              'Failed to Register. Please try again.',
-              style: GoogleFonts.roboto(fontSize: 16),
+            child: Text3(
+              text: error,
+              context: context,
+              color: Theme.of(context).colorScheme.onError
             )
           )
         ],

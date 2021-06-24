@@ -47,8 +47,8 @@ class _TipFormState extends State<TipForm> {
   Widget build(BuildContext context) {
     return BlocListener<TipFormBloc, TipFormState>(
       listener: (context, state) {
-        if (state.isFailure) {
-          _showSnackbar(context, 'Failed to save. Please try again.', state);
+        if (state.errorMessage.isNotEmpty) {
+          _showSnackbar(context, state.errorMessage, state);
         } else if (state.isSuccess) {
           _showSnackbar(context, 'Account Updated!', state);
         }
@@ -228,7 +228,7 @@ class _TipFormState extends State<TipForm> {
   void _saveButtonPressed(TipFormState state) {
     if (_isSaveButtonEnabled(state)) {
       _tipFormBloc.add(Submitted(
-        account: widget._account,
+        accountIdentifier: widget._account.identifier,
         tipRate: int.parse(_tipRateController.text) != widget._account.tipRate ? int.parse(_tipRateController.text) : null,
         quickTipRate: int.parse(_quickTipRateController.text) != widget._account.quickTipRate ? int.parse(_quickTipRateController.text) : null
       ));

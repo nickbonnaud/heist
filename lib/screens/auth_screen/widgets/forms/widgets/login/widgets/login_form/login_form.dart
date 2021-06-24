@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:heist/global_widgets/route_builders/slide_up_route.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
 import 'package:heist/resources/helpers/vibrate.dart';
 import 'package:heist/routing/routes.dart';
 import 'package:heist/screens/auth_screen/widgets/cubit/keyboard_visible_cubit.dart';
 import 'package:heist/screens/auth_screen/widgets/page_offset_notifier.dart';
-import 'package:heist/screens/layout_screen/layout_screen.dart';
-import 'package:heist/screens/onboard_screen/onboard_screen.dart';
 import 'package:heist/themes/global_colors.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
 import 'package:provider/provider.dart';
@@ -55,7 +52,7 @@ class _LoginFormState extends State<LoginForm> {
     return BlocListener<LoginBloc, LoginState>(
       listener: (context, state) {
         if (state.errorMessage.isNotEmpty) {
-          _errorLogin(context);
+          _errorLogin(error: state.errorMessage);
         } else if (state.isSuccess) {
           _navigateToNextPage();
         }
@@ -292,7 +289,7 @@ class _LoginFormState extends State<LoginForm> {
     );
   }
 
-  void _errorLogin(BuildContext context) async {
+  void _errorLogin({required String error}) async {
     Vibrate.error();
     final SnackBar snackBar = SnackBar(
       content: Row(
@@ -300,9 +297,10 @@ class _LoginFormState extends State<LoginForm> {
         children: <Widget>[
           Expanded(
             child: Text3(
-              text: 'Cannot login. Please check your email or password.',
+              text: error,
               context: context,
-              color: Theme.of(context).colorScheme.onError)
+              color: Theme.of(context).colorScheme.onError
+            )
           ),
         ],
       ),

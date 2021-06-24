@@ -1,7 +1,7 @@
 part of 'tutorial_screen_bloc.dart';
 
 @immutable
-class TutorialScreenState {
+class TutorialScreenState extends Equatable {
   final List<Tutorial> tutorialCards;
   final int currentIndex;
 
@@ -32,4 +32,10 @@ class TutorialScreenState {
       currentIndex: this.currentIndex + 1
     );
   }
+
+  @override
+  List<Object> get props => [tutorialCards, currentIndex];
+
+  @override
+  String toString() => 'TutorialScreenState { tutorialCards: $tutorialCards, currentIndex: $currentIndex }';
 }

@@ -53,4 +53,14 @@ class Loaded extends HelpTicketsScreenState {
   String toString() => 'Loaded { helpTickets: $helpTickets, nextUrl: $nextUrl, paginating: $paginating, hasReachedEnd: $hasReachedEnd, currentQuery: $currentQuery, queryParams: $queryParams }';
 }
 
-class FetchFailure extends HelpTicketsScreenState {}
+class FetchFailure extends HelpTicketsScreenState {
+  final String errorMessage;
+
+  const FetchFailure({required this.errorMessage});
+
+  @override
+  List<Object> get props => [errorMessage];
+
+  @override
+  String toString() => 'FetchFailure { errorMessage: $errorMessage }';
+}

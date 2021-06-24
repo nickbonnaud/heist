@@ -3,12 +3,11 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:heist/models/date_range.dart';
 import 'package:heist/models/paginate_data_holder.dart';
 import 'package:heist/models/transaction/refund_resource.dart';
 import 'package:heist/repositories/refund_repository.dart';
+import 'package:heist/resources/helpers/api_exception.dart';
 import 'package:heist/screens/refunds_screen/widgets/filter_button/filter_button.dart';
-import 'package:meta/meta.dart';
 
 part 'refunds_screen_event.dart';
 part 'refunds_screen_state.dart';
@@ -24,22 +23,22 @@ class RefundsScreenBloc extends Bloc<RefundsScreenEvent, RefundsScreenState> {
   Stream<RefundsScreenState> mapEventToState(RefundsScreenEvent event) async* {
     if (state is !Loading) {
       if (event is FetchAllRefunds) {
-        yield* _mapFetchAllRefundsToState(event);
+        yield* _mapFetchAllRefundsToState(event: event);
       } else if (event is FetchRefundsByDateRange) {
-        yield* _mapFetchRefundsByDateRangeToState(event);
+        yield* _mapFetchRefundsByDateRangeToState(event: event);
       } else if (event is FetchRefundByIdentifier) {
-        yield* _mapFetchRefundByIdentifierToState(event);
+        yield* _mapFetchRefundByIdentifierToState(event: event);
       } else if (event is FetchRefundByBusiness) {
-        yield* _mapFetchRefundByBusinessToState(event);
+        yield* _mapFetchRefundByBusinessToState(event: event);
       } else if (event is FetchRefundByTransaction) {
-        yield* _mapFetchRefundByTransactionToState(event);
+        yield* _mapFetchRefundByTransactionToState(event: event);
       } else if (event is FetchMoreRefunds) {
         yield* _mapFetchMoreRefundsToState();
       }
     }
   }
 
-  Stream<RefundsScreenState> _mapFetchAllRefundsToState(FetchAllRefunds event) async* {
+  Stream<RefundsScreenState> _mapFetchAllRefundsToState({required FetchAllRefunds event}) async* {
     if (event.reset) {
       yield* _fetchUnitialized(fetchFunction: () => _refundRepository.fetchAll(), state: state, currentQuery: Option.all, queryParams: null);
     } else {
@@ -52,7 +51,7 @@ class RefundsScreenBloc extends Bloc<RefundsScreenEvent, RefundsScreenState> {
     }
   }
 
-  Stream<RefundsScreenState> _mapFetchRefundsByDateRangeToState(FetchRefundsByDateRange event) async* {
+  Stream<RefundsScreenState> _mapFetchRefundsByDateRangeToState({required FetchRefundsByDateRange event}) async* {
     if (event.reset) {
       yield* _fetchUnitialized(fetchFunction: () => _refundRepository.fetchAll(dateRange: event.dateRange), state: state, currentQuery: Option.date, queryParams: event.dateRange);
     } else {
@@ -63,7 +62,7 @@ class RefundsScreenBloc extends Bloc<RefundsScreenEvent, RefundsScreenState> {
     }
   }
 
-  Stream<RefundsScreenState> _mapFetchRefundByIdentifierToState(FetchRefundByIdentifier event) async* {
+  Stream<RefundsScreenState> _mapFetchRefundByIdentifierToState({required FetchRefundByIdentifier event}) async* {
     if (event.reset) {
       yield* _fetchUnitialized(fetchFunction: () => _refundRepository.fetchByIdentifier(identifier: event.identifier), state: state, currentQuery: Option.refundId, queryParams: event.identifier);
     } else {
@@ -74,7 +73,7 @@ class RefundsScreenBloc extends Bloc<RefundsScreenEvent, RefundsScreenState> {
     }
   }
 
-  Stream<RefundsScreenState> _mapFetchRefundByBusinessToState(FetchRefundByBusiness event) async* {
+  Stream<RefundsScreenState> _mapFetchRefundByBusinessToState({required FetchRefundByBusiness event}) async* {
     if (event.reset) {
       yield* _fetchUnitialized(fetchFunction: () => _refundRepository.fetchByBusiness(identifier: event.identifier), state: state, currentQuery: Option.businessName, queryParams: event.identifier);
     } else {
@@ -85,7 +84,7 @@ class RefundsScreenBloc extends Bloc<RefundsScreenEvent, RefundsScreenState> {
     }
   }
 
-  Stream<RefundsScreenState> _mapFetchRefundByTransactionToState(FetchRefundByTransaction event) async* {
+  Stream<RefundsScreenState> _mapFetchRefundByTransactionToState({required FetchRefundByTransaction event}) async* {
     if (event.reset) {
       yield* _fetchUnitialized(fetchFunction: () => _refundRepository.fetchByTransactionIdentifier(identifier: event.identifier), state: state, currentQuery: Option.transactionId, queryParams: event.identifier);
     } else {
@@ -98,30 +97,30 @@ class RefundsScreenBloc extends Bloc<RefundsScreenEvent, RefundsScreenState> {
 
   Stream<RefundsScreenState> _mapFetchMoreRefundsToState() async* {
     final currentState = state;
-    if (currentState is RefundsLoaded) {
+    if (currentState is RefundsLoaded && !currentState.paginating) {
       switch (currentState.currentQuery) {
         case Option.all:
-          yield* _mapFetchAllRefundsToState(FetchAllRefunds(reset: false));
+          yield* _mapFetchAllRefundsToState(event: FetchAllRefunds(reset: false));
           break;
         case Option.date:
-          yield* _mapFetchRefundsByDateRangeToState(FetchRefundsByDateRange(dateRange: currentState.queryParams, reset: false));
+          yield* _mapFetchRefundsByDateRangeToState(event: FetchRefundsByDateRange(dateRange: currentState.queryParams, reset: false));
           break;
         case Option.refundId:
-          yield* _mapFetchRefundByIdentifierToState(FetchRefundByIdentifier(identifier: currentState.queryParams, reset: false));
+          yield* _mapFetchRefundByIdentifierToState(event: FetchRefundByIdentifier(identifier: currentState.queryParams, reset: false));
           break;
         case Option.businessName:
-          yield* _mapFetchRefundByBusinessToState(FetchRefundByBusiness(identifier: currentState.queryParams, reset: false));
+          yield* _mapFetchRefundByBusinessToState(event: FetchRefundByBusiness(identifier: currentState.queryParams, reset: false));
           break;
         case Option.transactionId:
-          yield* _mapFetchRefundByTransactionToState(FetchRefundByTransaction(identifier: currentState.queryParams, reset: false));
+          yield* _mapFetchRefundByTransactionToState(event: FetchRefundByTransaction(identifier: currentState.queryParams, reset: false));
           break;
       }
     }
   }
   
   Stream<RefundsScreenState> _fetchUnitialized({required Future<PaginateDataHolder>Function() fetchFunction, required RefundsScreenState state, required Option currentQuery, required dynamic queryParams}) async* {
+    yield Loading();
     try {
-      yield Loading();
       final PaginateDataHolder paginateHolder = await fetchFunction();
       yield RefundsLoaded(
         refunds: (paginateHolder.data as List<RefundResource>),
@@ -131,14 +130,14 @@ class RefundsScreenBloc extends Bloc<RefundsScreenEvent, RefundsScreenState> {
         currentQuery: currentQuery,
         queryParams: queryParams
       );
-    } catch (_) {
-      yield FetchFailure();
+    } on ApiException catch (exception) {
+      yield FetchFailure(errorMessage: exception.error);
     }
   }
 
   Stream<RefundsScreenState> _fetchMore({required Future<PaginateDataHolder>Function() fetchFunction, required RefundsLoaded state, required Option currentQuery, required dynamic queryParams}) async* {
     final currentState = state;
-    if (!_hasReachedMax(currentState)) {
+    if (!_hasReachedMax(state: currentState)) {
       yield state.update(paginating: true);
       try {
         final PaginateDataHolder paginateHolder = await fetchFunction();
@@ -150,11 +149,11 @@ class RefundsScreenBloc extends Bloc<RefundsScreenEvent, RefundsScreenState> {
           currentQuery: currentQuery,
           queryParams: queryParams
         );
-      } catch (_) {
-        yield FetchFailure();
+      } on ApiException catch (exception) {
+        yield FetchFailure(errorMessage: exception.error);
       }
     }
   }
 
-  bool _hasReachedMax(RefundsScreenState state) => state is RefundsLoaded && state.hasReachedEnd;
+  bool _hasReachedMax({required RefundsScreenState state}) => state is RefundsLoaded && state.hasReachedEnd;
 }

@@ -8,6 +8,7 @@ import 'package:heist/blocs/customer/customer_bloc.dart';
 import 'package:heist/models/customer/customer.dart';
 import 'package:heist/repositories/authentication_repository.dart';
 import 'package:heist/repositories/customer_repository.dart';
+import 'package:heist/resources/helpers/api_exception.dart';
 import 'package:heist/resources/helpers/validators.dart';
 import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
@@ -70,9 +71,13 @@ class PasswordFormBloc extends Bloc<PasswordFormEvent, PasswordFormState> {
     yield state.update(isSubmitting: true);
     try {
       bool isPasswordVerified = await _authenticationRepository.checkPassword(password: event.oldPassword);
-      yield state.update(isSubmitting: false, isOldPasswordVerified: isPasswordVerified, isSuccessOldPassword: isPasswordVerified, isFailureOldPassword: !isPasswordVerified);
-    } catch (_) {
-      yield state.update(isFailureOldPassword: true, isSubmitting: false);
+      if (isPasswordVerified) {
+        yield state.update(isSubmitting: false, isOldPasswordVerified: true, isSuccessOldPassword: true);
+      } else {
+        yield state.update(isSubmitting: false, isOldPasswordVerified: false, isSuccessOldPassword: false, errorMessage: "Looks like that's the wrong password!");
+      }
+    } on ApiException catch (exception) {
+      yield state.update(errorMessage: exception.error, isSubmitting: false, isOldPasswordVerified: false, isSuccessOldPassword: false);
     }
   }
 
@@ -83,16 +88,16 @@ class PasswordFormBloc extends Bloc<PasswordFormEvent, PasswordFormState> {
         oldPassword: event.oldPassword,
         password: event.password, 
         passwordConfirmation: event.passwordConfirmation, 
-        customerId: event.customer.identifier
+        customerId: event.customerIdentifier
       );
       yield state.update(isSubmitting: false, isSuccess: true);
       _customerBloc.add(CustomerUpdated(customer: customer));
-    } catch (_) {
-      yield state.update(isSubmitting: false, isFailure: true);
+    } on ApiException catch (exception) {
+      yield state.update(errorMessage: exception.error, isSubmitting: false);
     }
   }
 
   Stream<PasswordFormState> _mapResetToState() async* {
-    yield state.update(isSuccess: false, isFailure: false, isSuccessOldPassword: false, isFailureOldPassword: false);
+    yield state.update(isSuccess: false, isSuccessOldPassword: false, errorMessage: "");
   }
 }

@@ -53,5 +53,15 @@ class TransactionsLoaded extends HistoricTransactionsState {
   String toString() => 'TransactionsLoaded { transactions: $transactions, nextUrl: $nextUrl, paginating: $paginating, hasReachedEnd: $hasReachedEnd, currentQuery: $currentQuery, queryParams: $queryParams }';
 }
 
-class FetchFailure extends HistoricTransactionsState {}
+class FetchFailure extends HistoricTransactionsState {
+  final String errorMessage;
+
+  const FetchFailure({required this.errorMessage});
+
+  @override
+  List<Object> get props => [errorMessage];
+
+  @override
+  String toString() => 'FetchFailure { errorMessage: $errorMessage }';
+}
 

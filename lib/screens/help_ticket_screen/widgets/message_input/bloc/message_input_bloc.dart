@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:heist/models/help_ticket/help_ticket.dart';
 import 'package:heist/repositories/help_repository.dart';
+import 'package:heist/resources/helpers/api_exception.dart';
 import 'package:heist/screens/help_tickets_screen/bloc/help_tickets_screen_bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
@@ -49,13 +50,13 @@ class MessageInputBloc extends Bloc<MessageInputEvent, MessageInputState> {
       HelpTicket helpTicket = await _helpRepository.storeReply(identifier: event.helpTicketIdentifier, message: event.message);
       _updateHelpTicket(helpTicket: helpTicket);
       yield state.update(isSubmitting: false, isSuccess: true);
-    } catch (_) {
-      yield state.update(isSubmitting: false, isFailure: true);
+    } on ApiException catch (exception) {
+      yield state.update(isSubmitting: false, errorMessage: exception.error);
     }
   }
 
   Stream<MessageInputState> _mapResetToState() async* {
-    yield state.update(isSuccess: false, isFailure: false);
+    yield state.update(isSuccess: false, errorMessage: "");
   }
 
   void _updateHelpTicket({required HelpTicket helpTicket}) {

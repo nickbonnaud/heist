@@ -4,35 +4,35 @@ part of 'keep_open_button_bloc.dart';
 class KeepOpenButtonState extends Equatable {
   final bool isSubmitting;
   final bool isSubmitSuccess;
-  final bool isSubmitFailure;
+  final String errorMessage;
 
   KeepOpenButtonState({
     required this.isSubmitting,
     required this.isSubmitSuccess,
-    required this.isSubmitFailure,
+    required this.errorMessage,
   });
 
   factory KeepOpenButtonState.initial() {
     return KeepOpenButtonState(
       isSubmitting: false,
       isSubmitSuccess: false,
-      isSubmitFailure: false
+      errorMessage: ""
     );
   }
 
   KeepOpenButtonState update({
     bool? isSubmitting,
     bool? isSubmitSuccess,
-    bool? isSubmitFailure,
+    String? errorMessage,
   }) => KeepOpenButtonState(
     isSubmitting: isSubmitting ?? this.isSubmitting,
     isSubmitSuccess: isSubmitSuccess ?? this.isSubmitSuccess,
-    isSubmitFailure: isSubmitFailure ?? this.isSubmitFailure,
+    errorMessage: errorMessage ?? this.errorMessage,
   );
 
   @override
-  List<Object?> get props => [isSubmitting, isSubmitSuccess, isSubmitFailure];
+  List<Object?> get props => [isSubmitting, isSubmitSuccess, errorMessage];
 
   @override
-  String toString() => 'KeepOpenButtonState { isSubmitting: $isSubmitting, isSubmitSuccess: $isSubmitSuccess, isSubmitFailure: $isSubmitFailure }';
+  String toString() => 'KeepOpenButtonState { isSubmitting: $isSubmitting, isSubmitSuccess: $isSubmitSuccess, errorMessage: $errorMessage }';
 }

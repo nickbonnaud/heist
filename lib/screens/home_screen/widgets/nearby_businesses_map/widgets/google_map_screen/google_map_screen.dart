@@ -10,7 +10,7 @@ import 'package:heist/models/business/business.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/screens/business_screen/business_screen.dart';
 
-import '../../helpers/pre_marker.dart';
+import '../../models/pre_marker.dart';
 import 'bloc/google_map_screen_bloc.dart';
 
 class GoogleMapScreen extends StatefulWidget{

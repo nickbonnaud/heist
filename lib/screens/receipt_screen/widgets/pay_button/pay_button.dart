@@ -20,8 +20,8 @@ class PayButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocListener<PayButtonBloc, PayButtonState>(
       listener: (context, state) {
-        if (state.isSubmitFailure) {
-          _showSnackbar(context, "Failed to pay for transaction. Please try again.", state);
+        if (state.errorMessage.isNotEmpty) {
+          _showSnackbar(context, state.errorMessage, state);
         } else if (state.isSubmitSuccess) {
           _showSnackbar(context, "Success! Payment pending.", state);
         }

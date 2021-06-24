@@ -5,6 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:heist/blocs/customer/customer_bloc.dart';
 import 'package:heist/models/customer/customer.dart';
 import 'package:heist/repositories/profile_repository.dart';
+import 'package:heist/resources/helpers/api_exception.dart';
 import 'package:heist/resources/helpers/validators.dart';
 import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
@@ -53,23 +54,15 @@ class ProfileNameFormBloc extends Bloc<ProfileNameFormEvent, ProfileNameFormStat
   Stream<ProfileNameFormState> _mapSubmittedToState(Submitted event) async* {
     yield state.update(isSubmitting: true);
     try {
-      Customer customer = await _sendProfileData(firstName: event.firstName, lastName: event.lastName);
-      _updatAuthenticationBloc(customer: customer);
+      Customer customer = await _profileRepository.store(firstName: event.firstName, lastName: event.lastName);
+      _customerBloc.add(CustomerUpdated(customer: customer));
       yield state.update(isSubmitting: false, isSuccess: true);
-    } catch (_) {
-      yield state.update(isSubmitting: false, isFailure: true);
+    } on ApiException catch (exception) {
+      yield state.update(isSubmitting: false, errorMessage: exception.error);
     }
   }
   
   Stream<ProfileNameFormState> _mapResetToState() async* {
-    yield state.update(isSuccess: false, isFailure: false);
-  }
-
-  Future<Customer> _sendProfileData({required String firstName, required String lastName}) {
-    return _profileRepository.store(firstName: firstName, lastName: lastName);
-  }
-
-  void _updatAuthenticationBloc({required Customer customer}) {
-    _customerBloc.add(CustomerUpdated(customer: customer));
+    yield state.update(isSuccess: false, errorMessage: "");
   }
 }
