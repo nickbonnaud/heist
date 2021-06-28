@@ -7,7 +7,8 @@ import 'package:heist/blocs/nearby_businesses/nearby_businesses_bloc.dart';
 import 'package:heist/blocs/open_transactions/open_transactions_bloc.dart';
 import 'package:heist/blocs/permissions/permissions_bloc.dart';
 import 'package:heist/models/status.dart';
-import 'package:heist/screens/app/bloc/app_ready_bloc.dart';
+import 'package:heist/app/bloc/app_ready_bloc.dart';
+import 'package:mocktail/mocktail.dart';
 
 import '../../../helpers/mock_data_generator.dart';
 
@@ -146,12 +147,12 @@ void main() {
     );
 
     blocTest<AppReadyBloc, AppReadyState>(
-      "AppReadyBloc authenticationBlocSubscription => [Authenticated, (Unauthenticated || Authenticated)] does not change state",
+      "AppReadyBloc authenticationBlocSubscription => [Authenticated, Authenticated)] changes state once",
       build: () {
         whenListen(authenticationBloc, Stream<AuthenticationState>.fromIterable([Authenticated(), Authenticated()]));
         return AppReadyBloc(authenticationBloc: authenticationBloc, openTransactionsBloc: openTransactionsBloc, beaconBloc: beaconBloc, nearbyBusinessesBloc: nearbyBusinessesBloc, permissionsBloc: permissionsBloc, customerBloc: customerBloc);
       },
-      expect: () => []
+      expect: () => [_baseState.update(authCheckComplete: true, isAuthenticated: true)]
     );
 
     blocTest<AppReadyBloc, AppReadyState>(

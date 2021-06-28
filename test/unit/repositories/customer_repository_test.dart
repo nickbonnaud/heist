@@ -7,6 +7,7 @@ import 'package:heist/providers/customer_provider.dart';
 import 'package:heist/repositories/customer_repository.dart';
 import 'package:heist/repositories/token_repository.dart';
 import 'package:heist/resources/helpers/api_exception.dart';
+import 'package:mocktail/mocktail.dart';
 
 class MockCustomerProvider extends Mock implements CustomerProvider {}
 class MockTokenRepository extends Mock implements TokenRepository {}

@@ -6,6 +6,7 @@ import 'package:heist/models/customer/customer.dart';
 import 'package:heist/repositories/customer_repository.dart';
 import 'package:heist/resources/helpers/api_exception.dart';
 import 'package:heist/screens/email_screen/bloc/email_form_bloc.dart';
+import 'package:mocktail/mocktail.dart';
 
 class MockCustomerRepository extends Mock implements CustomerRepository {}
 class MockCustomerBloc extends Mock implements CustomerBloc {}

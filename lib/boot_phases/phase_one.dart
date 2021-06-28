@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:heist/blocs/active_location/active_location_bloc.dart';
 import 'package:heist/blocs/customer/customer_bloc.dart';
 import 'package:heist/blocs/permissions/permissions_bloc.dart';
@@ -14,13 +15,13 @@ import 'package:heist/repositories/token_repository.dart';
 import 'package:heist/resources/helpers/permissions_checker.dart';
 
 class PhaseOne extends StatelessWidget {
-  final MaterialApp? _testApp;
+  final PlatformProvider? _testApp;
   final CustomerRepository _customerRepository = CustomerRepository(customerProvider: CustomerProvider(), tokenRepository: TokenRepository(tokenProvider: StorageProvider()));
   final ActiveLocationRepository _activeLocationRepository = ActiveLocationRepository(activeLocationProvider: ActiveLocationProvider());
   final InitialLoginRepository _initialLoginRepository = InitialLoginRepository(tutorialProvider: StorageProvider());
   final PermissionsChecker _permissionsChecker = PermissionsChecker();
   
-  PhaseOne({MaterialApp? testApp})
+  PhaseOne({PlatformProvider? testApp})
     : _testApp = testApp;
   
   @override

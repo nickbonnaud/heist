@@ -73,7 +73,6 @@ class _HelpTicketsScreenBodyState extends State<HelpTicketsScreenBody> {
       controller: _scrollController,
       slivers: [
         DefaultAppBar(
-          context: context,
           backgroundColor: Theme.of(context).colorScheme.scrollBackground,
           isSliver: true,
           title: "Help",

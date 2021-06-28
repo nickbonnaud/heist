@@ -6,6 +6,7 @@ import 'package:heist/providers/transaction_issue_provider.dart';
 import 'package:heist/repositories/transaction_issue_repository.dart';
 import 'package:heist/resources/enums/issue_type.dart';
 import 'package:heist/resources/helpers/api_exception.dart';
+import 'package:mocktail/mocktail.dart';
 
 class MockTransactionIssueProvider extends Mock implements TransactionIssueProvider {}
 

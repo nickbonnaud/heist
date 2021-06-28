@@ -69,7 +69,6 @@ class _HistoricTransactionsBodyState extends State<HistoricTransactionsBody> {
       controller: _scrollController,
       slivers: <Widget>[
         DefaultAppBar(
-          context: context,
           backgroundColor: Theme.of(context).colorScheme.scrollBackground,
           isSliver: true,
           title: "Transactions",

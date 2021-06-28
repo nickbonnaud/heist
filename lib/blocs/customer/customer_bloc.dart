@@ -18,6 +18,7 @@ class CustomerBloc extends Bloc<CustomerEvent, CustomerState> {
       super(CustomerState.initial());
 
   Customer? get customer => state.customer;
+  bool get onboarded => state.customer!.status.code > 103;
 
   @override
   Stream<CustomerState> mapEventToState(CustomerEvent event) async* {

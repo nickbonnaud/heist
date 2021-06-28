@@ -45,6 +45,7 @@ class _DragArrowState extends State<DragArrow> with SingleTickerProviderStateMix
           child: Transform.rotate(
             angle: math.pi * animation.value,
             child: GestureDetector(
+              key: Key("dragArrowKey"),
               onTap: () {
                 animation.status == AnimationStatus.completed
                   ? animation.reverse()

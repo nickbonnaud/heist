@@ -6,6 +6,7 @@ import 'package:heist/models/customer/customer.dart';
 import 'package:heist/providers/profile_provider.dart';
 import 'package:heist/repositories/profile_repository.dart';
 import 'package:heist/resources/helpers/api_exception.dart';
+import 'package:mocktail/mocktail.dart';
 
 class MockProfileProvider extends Mock implements ProfileProvider {}
 

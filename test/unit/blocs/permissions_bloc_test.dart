@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:heist/blocs/permissions/permissions_bloc.dart';
 import 'package:heist/repositories/initial_login_repository.dart';
 import 'package:heist/resources/helpers/permissions_checker.dart';
+import 'package:mocktail/mocktail.dart';
 
 class MockInitialLoginRepository extends Mock implements InitialLoginRepository {}
 class MockPermissionsChecker extends Mock implements PermissionsChecker {}

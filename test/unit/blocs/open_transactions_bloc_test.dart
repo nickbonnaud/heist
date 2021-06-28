@@ -6,6 +6,7 @@ import 'package:heist/models/transaction/transaction.dart';
 import 'package:heist/models/transaction/transaction_resource.dart';
 import 'package:heist/repositories/transaction_repository.dart';
 import 'package:heist/resources/helpers/api_exception.dart';
+import 'package:mocktail/mocktail.dart';
 
 class MockTransactionRepository extends Mock implements TransactionRepository {}
 class MockAuthenticationBloc extends Mock implements AuthenticationBloc {}

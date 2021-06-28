@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:heist/blocs/customer/customer_bloc.dart';
+import 'package:heist/blocs/permissions/permissions_bloc.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
 import 'package:heist/resources/helpers/vibrate.dart';
@@ -14,13 +16,17 @@ import 'bloc/login_bloc.dart';
 
 class LoginForm extends StatefulWidget {
   final PageController _pageController;
-  final bool _permissionsReady;
-  final bool _customerOnboarded;
+  final PermissionsBloc _permissionsBloc;
+  final CustomerBloc _customerBloc;
 
-  LoginForm({required PageController pageController, required bool permissionsReady, required bool customerOnboarded})
+  LoginForm({
+    required PageController pageController,
+    required PermissionsBloc permissionsBloc,
+    required CustomerBloc customerBloc
+  })
     : _pageController = pageController,
-      _permissionsReady = permissionsReady,
-      _customerOnboarded = customerOnboarded;
+      _permissionsBloc = permissionsBloc,
+      _customerBloc = customerBloc;
 
   @override
   State<LoginForm> createState() => _LoginFormState();
@@ -59,7 +65,10 @@ class _LoginFormState extends State<LoginForm> {
       },
       child: Consumer2<PageOffsetNotifier, AnimationController>(
         builder: (context, notifier, animation, child) {
-          return Stack(
+          return animation.value == 0
+          ? Container()
+          : Stack(
+            key: Key("loginFormKey"),
             alignment: Alignment.center,
             children: [
               Positioned(
@@ -262,6 +271,7 @@ class _LoginFormState extends State<LoginForm> {
           toolbarButtons: [
             (node) {
               return GestureDetector(
+                key: Key("teatKey"),
                 onTap: () => node.unfocus(),
                 child: Padding(
                   padding: EdgeInsets.only(right: 16.0),
@@ -313,10 +323,10 @@ class _LoginFormState extends State<LoginForm> {
   }
 
   void _navigateToNextPage() {
-    if (!widget._permissionsReady || !widget._customerOnboarded) {
-      Navigator.of(context).pushReplacementNamed(Routes.onboard);
-    } else {
+    if (widget._permissionsBloc.allPermissionsValid || widget._customerBloc.onboarded) {
       Navigator.of(context).pushReplacementNamed(Routes.layout);
+    } else {
+      Navigator.of(context).pushReplacementNamed(Routes.onboard);
     }
   }
 }

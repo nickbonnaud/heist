@@ -6,6 +6,7 @@ import 'package:heist/models/paginated_api_response.dart';
 import 'package:heist/providers/business_provider.dart';
 import 'package:heist/repositories/business_repository.dart';
 import 'package:heist/resources/helpers/api_exception.dart';
+import 'package:mocktail/mocktail.dart';
 
 class MockBusinessProvider extends Mock implements BusinessProvider {}
 

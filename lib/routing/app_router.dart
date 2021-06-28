@@ -29,7 +29,7 @@ import 'package:heist/repositories/profile_repository.dart';
 import 'package:heist/repositories/token_repository.dart';
 import 'package:heist/repositories/transaction_issue_repository.dart';
 import 'package:heist/repositories/transaction_repository.dart';
-import 'package:heist/screens/app/app.dart';
+import 'package:heist/app/app.dart';
 import 'package:heist/screens/auth_screen/auth_screen.dart';
 import 'package:heist/screens/business_screen/business_screen.dart';
 import 'package:heist/screens/layout_screen/layout_screen.dart';
@@ -64,8 +64,9 @@ class AppRouter {
               tokenRepository: TokenRepository(tokenProvider: StorageProvider()),
               authenticationProvider: AuthenticationProvider(),
             ),
-            permissionsReady: BlocProvider.of<PermissionsBloc>(context).allPermissionsValid,
-            customerOnboarded: BlocProvider.of<CustomerBloc>(context).customer!.status.code > 103,
+            authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+            permissionsBloc: BlocProvider.of<PermissionsBloc>(context),
+            customerBloc: BlocProvider.of<CustomerBloc>(context),
           ),
           name: routeData.route,
           transitionDuration: Duration(seconds: 1)

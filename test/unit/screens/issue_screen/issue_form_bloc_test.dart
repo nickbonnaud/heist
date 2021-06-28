@@ -7,6 +7,7 @@ import 'package:heist/repositories/transaction_issue_repository.dart';
 import 'package:heist/resources/enums/issue_type.dart';
 import 'package:heist/resources/helpers/api_exception.dart';
 import 'package:heist/screens/issue_screen/bloc/issue_form_bloc.dart';
+import 'package:mocktail/mocktail.dart';
 
 class MockTransactionIssueRepository extends Mock implements TransactionIssueRepository {}
 class MockOpenTransactionsBloc extends Mock implements OpenTransactionsBloc {}

@@ -22,20 +22,6 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-	<key>NSBluetoothAlwaysUsageDescription</key>
-	<string>Reason why app needs bluetooth</string>
-	<key>NSCameraUsageDescription</key>
-	<string>Allow access to camera.</string>
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Location Services are always required.</string>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Location Services are always required.</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Location Services are always required.</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Allow access to photos.</string>
-	<key>PermissionGroupNotification</key>
-	<string>Notifications are required.</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>remote-notification</string>

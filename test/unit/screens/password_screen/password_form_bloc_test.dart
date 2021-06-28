@@ -7,6 +7,7 @@ import 'package:heist/repositories/authentication_repository.dart';
 import 'package:heist/repositories/customer_repository.dart';
 import 'package:heist/resources/helpers/api_exception.dart';
 import 'package:heist/screens/password_screen/bloc/password_form_bloc.dart';
+import 'package:mocktail/mocktail.dart';
 
 class MockCustomerRepository extends Mock implements CustomerRepository {}
 class MockAuthenticationRepository extends Mock implements AuthenticationRepository {}

@@ -2,6 +2,7 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:heist/blocs/notification_navigation/notification_navigation_bloc.dart';
 import 'package:heist/models/transaction/transaction_resource.dart';
+import 'package:mocktail/mocktail.dart';
 
 class MockTransactionResource extends Mock implements TransactionResource {}
 

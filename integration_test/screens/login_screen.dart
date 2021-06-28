@@ -1,0 +1,6 @@
+class LoginScreen {
+
+  void initTests() {
+    
+  }
+}

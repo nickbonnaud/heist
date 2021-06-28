@@ -6,6 +6,7 @@ import 'package:heist/models/unassigned_transaction/unassigned_transaction_resou
 import 'package:heist/repositories/transaction_repository.dart';
 import 'package:heist/resources/helpers/api_exception.dart';
 import 'package:heist/screens/transaction_picker_screen/bloc/transaction_picker_screen_bloc.dart';
+import 'package:mocktail/mocktail.dart';
 
 class MockTransactionRepository extends Mock implements TransactionRepository {}
 class MockUnassignedTransactionResource extends Mock implements UnassignedTransactionResource {}

@@ -20,6 +20,7 @@ class PageIndicator extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Container(
+                  key: Key("loginIndicatorKey"),
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: notifier.page.round() == 0 
@@ -31,6 +32,7 @@ class PageIndicator extends StatelessWidget {
                 ),
                 SizedBox(width: 8),
                 Container(
+                  key: Key("registerIndicatorKey"),
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: notifier.page.round() != 0 

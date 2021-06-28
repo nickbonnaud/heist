@@ -7,6 +7,7 @@ import 'package:heist/models/business/business.dart';
 import 'package:heist/models/customer/active_location.dart';
 import 'package:heist/models/transaction/transaction_resource.dart';
 import 'package:heist/screens/home_screen/widgets/peek_sheet/widgets/logo_buttons_list/bloc/logo_buttons_list_bloc.dart';
+import 'package:mocktail/mocktail.dart';
 
 class MockOpenTransactionsBloc extends Mock implements OpenTransactionsBloc {}
 class MockActiveLocationBloc extends Mock implements ActiveLocationBloc {}

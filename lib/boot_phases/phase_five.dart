@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:heist/blocs/nearby_businesses/nearby_businesses_bloc.dart';
 import 'package:heist/blocs/notification_boot/notification_boot_bloc.dart';
 import 'package:heist/blocs/notification_navigation/notification_navigation_bloc.dart';
@@ -16,12 +17,12 @@ import 'package:heist/resources/helpers/external_url_handler.dart';
 
 class PhaseFive extends StatelessWidget {
   final TransactionRepository _transactionRepository;
-  final MaterialApp? _testApp;
+  final PlatformProvider? _testApp;
   
   final PushNotificationRepository _pushNotificationRepository = PushNotificationRepository(pushNotificationProvider: PushNotificationProvider());
   final BusinessRepository _businessRepository = BusinessRepository(businessProvider: BusinessProvider());
 
-  PhaseFive({required TransactionRepository transactionRepository, MaterialApp? testApp})
+  PhaseFive({required TransactionRepository transactionRepository, PlatformProvider? testApp})
     : _transactionRepository = transactionRepository,
       _testApp = testApp;
 

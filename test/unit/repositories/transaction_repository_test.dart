@@ -8,6 +8,7 @@ import 'package:heist/models/transaction/transaction_resource.dart';
 import 'package:heist/providers/transaction_provider.dart';
 import 'package:heist/repositories/transaction_repository.dart';
 import 'package:heist/resources/helpers/api_exception.dart';
+import 'package:mocktail/mocktail.dart';
 
 class MockTransactionProvider extends Mock implements TransactionProvider {}
 

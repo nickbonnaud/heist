@@ -9,6 +9,7 @@ import 'package:heist/repositories/business_repository.dart';
 import 'package:heist/repositories/push_notification_repository.dart';
 import 'package:heist/repositories/transaction_repository.dart';
 import 'package:heist/resources/helpers/external_url_handler.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 class MockPushNotificationRepository extends Mock implements PushNotificationRepository {}

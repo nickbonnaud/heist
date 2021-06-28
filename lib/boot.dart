@@ -8,10 +8,10 @@ import 'package:heist/routing/routes.dart';
 import 'package:heist/themes/main_theme.dart';
 
 class Boot extends StatelessWidget {
-  final MaterialApp? _testApp;
+  final PlatformProvider? _testApp;
   final AppRouter _router = AppRouter();
 
-  Boot({MaterialApp? testApp})
+  Boot({PlatformProvider? testApp})
     : _testApp = testApp;
 
   @override
@@ -21,20 +21,23 @@ class Boot extends StatelessWidget {
       : _testApp!;
   }
 
-  PlatformProvider _app({required BuildContext context}) {
-    return PlatformProvider(builder: (context) {
-      SizeConfig().init(context);
-      return MaterialApp(
-        initialRoute: Routes.app,
-        theme: MainTheme.themeData(context: context),
-        title: Constants.appName,
-        onGenerateRoute: (settings) => _router.goTo(context: context, settings: settings),
-        localizationsDelegates: [
-            DefaultWidgetsLocalizations.delegate,
-            DefaultCupertinoLocalizations.delegate,
-            DefaultMaterialLocalizations.delegate,
-          ],
-      );
-    });
+  Theme _app({required BuildContext context}) {
+    return Theme(
+      data: MainTheme.themeData(context: context),
+      child: PlatformProvider(
+        builder: (context) {
+          return PlatformApp(
+            initialRoute: Routes.app,
+            title: Constants.appName,
+            onGenerateRoute: (settings) => _router.goTo(context: context, settings: settings),
+            localizationsDelegates: [
+              DefaultWidgetsLocalizations.delegate,
+              DefaultCupertinoLocalizations.delegate,
+              DefaultMaterialLocalizations.delegate,
+            ],
+          );
+        }
+      )
+    );
   }
 }

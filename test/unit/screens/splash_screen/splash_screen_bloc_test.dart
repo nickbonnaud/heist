@@ -1,7 +1,8 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:heist/screens/app/bloc/app_ready_bloc.dart';
+import 'package:heist/app/bloc/app_ready_bloc.dart';
 import 'package:heist/screens/splash_screen/widgets/bloc/splash_screen_bloc.dart';
+import 'package:mocktail/mocktail.dart';
 
 class MockAppReadyBloc extends Mock implements AppReadyBloc {}
 

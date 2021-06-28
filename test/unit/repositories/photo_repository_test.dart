@@ -6,6 +6,7 @@ import 'package:heist/providers/photo_provider.dart';
 import 'package:heist/repositories/photo_repository.dart';
 import 'package:heist/resources/helpers/api_exception.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:mocktail/mocktail.dart';
 
 class MockPhotoProvider extends Mock implements PhotoProvider {}
 

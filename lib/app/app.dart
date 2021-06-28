@@ -8,6 +8,7 @@ import 'package:heist/blocs/notification_navigation/notification_navigation_bloc
 import 'package:heist/blocs/open_transactions/open_transactions_bloc.dart';
 import 'package:heist/blocs/permissions/permissions_bloc.dart';
 import 'package:heist/blocs/receipt_modal_sheet/receipt_modal_sheet_bloc.dart';
+import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/routing/routes.dart';
 import 'package:heist/screens/splash_screen/splash_screen.dart';
 
@@ -38,6 +39,7 @@ class App extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     return MultiBlocListener(
       listeners: [
         BlocListener<AuthenticationBloc, AuthenticationState>(

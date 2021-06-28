@@ -44,7 +44,7 @@ class SettingsScreen extends StatelessWidget {
       create: (BuildContext context) => DefaultAppBarBloc(),
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        appBar: DefaultAppBar(context: context, title: 'Settings'),
+        appBar: DefaultAppBar(title: 'Settings'),
         body: Padding(
           padding: EdgeInsets.only(left: 16, right: 16),
           child: SettingsList(

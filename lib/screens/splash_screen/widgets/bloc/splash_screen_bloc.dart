@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:heist/screens/app/bloc/app_ready_bloc.dart';
+import 'package:heist/app/bloc/app_ready_bloc.dart';
 import 'package:meta/meta.dart';
 
 part 'splash_screen_event.dart';

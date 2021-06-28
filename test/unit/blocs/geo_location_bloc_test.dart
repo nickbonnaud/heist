@@ -6,6 +6,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:heist/blocs/geo_location/geo_location_bloc.dart';
 import 'package:heist/blocs/permissions/permissions_bloc.dart';
 import 'package:heist/repositories/geolocator_repository.dart';
+import 'package:mocktail/mocktail.dart';
 
 class MockGeolocatorRepository extends Mock implements GeolocatorRepository {}
 class MockPermissionsBloc extends Mock implements PermissionsBloc {}

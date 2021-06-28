@@ -7,6 +7,7 @@ import 'package:heist/providers/authentication_provider.dart';
 import 'package:heist/repositories/authentication_repository.dart';
 import 'package:heist/repositories/token_repository.dart';
 import 'package:heist/resources/helpers/api_exception.dart';
+import 'package:mocktail/mocktail.dart';
 
 class MockAuthenticationProvider extends Mock implements AuthenticationProvider {}
 class MockTokenRepository extends Mock implements TokenRepository {}

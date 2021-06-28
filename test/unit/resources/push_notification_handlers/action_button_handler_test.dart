@@ -9,6 +9,7 @@ import 'package:heist/repositories/transaction_repository.dart';
 import 'package:heist/resources/enums/notification_type.dart';
 import 'package:heist/resources/helpers/external_url_handler.dart';
 import 'package:heist/resources/helpers/push_notification_handlers/action_button_handler.dart';
+import 'package:mocktail/mocktail.dart';
 
 import '../../../helpers/mock_data_generator.dart';
 

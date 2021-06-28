@@ -7,6 +7,7 @@ import 'package:heist/blocs/beacon/beacon_bloc.dart';
 import 'package:heist/blocs/nearby_businesses/nearby_businesses_bloc.dart';
 import 'package:heist/models/business/business.dart';
 import 'package:heist/repositories/beacon_repository.dart';
+import 'package:mocktail/mocktail.dart';
 
 class MockBeaconRepository extends Mock implements BeaconRepository {}
 class MockActiveLocationBloc extends Mock implements ActiveLocationBloc {}

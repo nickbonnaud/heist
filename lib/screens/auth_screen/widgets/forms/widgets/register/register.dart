@@ -10,10 +10,16 @@ import 'widgets/welcome_label.dart';
 
 class Register extends StatelessWidget {
   final AuthenticationRepository _authenticationRepository;
+  final AuthenticationBloc _authenticationBloc;
   final PageController _pageController;
 
-  Register({required AuthenticationRepository authenticationRepository, required PageController pageController})
+  Register({
+    required AuthenticationRepository authenticationRepository,
+    required AuthenticationBloc authenticationBloc,
+    required PageController pageController
+  })
     : _authenticationRepository = authenticationRepository,
+      _authenticationBloc = authenticationBloc,
       _pageController = pageController;
   
   @override
@@ -23,7 +29,7 @@ class Register extends StatelessWidget {
       children: <Widget>[
         WelcomeLabel(),
         BlocProvider<RegisterBloc>(
-          create: (_) => RegisterBloc(authenticationRepository: _authenticationRepository, authenticationBloc: BlocProvider.of<AuthenticationBloc>(context)),
+          create: (_) => RegisterBloc(authenticationRepository: _authenticationRepository, authenticationBloc: _authenticationBloc),
           child: RegisterForm(pageController: _pageController),
         ),
       ],

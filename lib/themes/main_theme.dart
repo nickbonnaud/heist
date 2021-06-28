@@ -3,6 +3,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:heist/themes/global_colors.dart';
 
 class MainTheme {
+  static Color topAppBar = Colors.white10;
+
+
   static Color _primary = Colors.white;
   static Color _primaryVariant = Colors.grey[300]!;
   static Color _constrastPrimary = Colors.black;

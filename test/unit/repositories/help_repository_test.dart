@@ -7,6 +7,7 @@ import 'package:heist/models/paginated_api_response.dart';
 import 'package:heist/providers/help_provider.dart';
 import 'package:heist/repositories/help_repository.dart';
 import 'package:heist/resources/helpers/api_exception.dart';
+import 'package:mocktail/mocktail.dart';
 
 class MockHelpProvider extends Mock implements HelpProvider {}
 

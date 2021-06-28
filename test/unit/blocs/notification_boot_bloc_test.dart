@@ -4,6 +4,7 @@ import 'package:heist/blocs/nearby_businesses/nearby_businesses_bloc.dart';
 import 'package:heist/blocs/notification_boot/notification_boot_bloc.dart';
 import 'package:heist/blocs/open_transactions/open_transactions_bloc.dart';
 import 'package:heist/blocs/permissions/permissions_bloc.dart';
+import 'package:mocktail/mocktail.dart';
 
 class MockPermissionsBloc extends Mock implements PermissionsBloc {}
 class MockNearbyBusinessesBloc extends Mock implements NearbyBusinessesBloc {}

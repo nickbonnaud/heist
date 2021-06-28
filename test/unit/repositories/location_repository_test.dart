@@ -5,6 +5,7 @@ import 'package:heist/models/paginated_api_response.dart';
 import 'package:heist/providers/location_provider.dart';
 import 'package:heist/repositories/location_repository.dart';
 import 'package:heist/resources/helpers/api_exception.dart';
+import 'package:mocktail/mocktail.dart';
 
 class MockLocationProvider extends Mock implements LocationProvider {}
 

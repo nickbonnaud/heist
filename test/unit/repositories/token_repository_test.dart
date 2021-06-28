@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:heist/models/token.dart';
 import 'package:heist/providers/storage_provider.dart';
 import 'package:heist/repositories/token_repository.dart';
+import 'package:mocktail/mocktail.dart';
 
 class MockStorageProvider extends Mock implements StorageProvider {}
 

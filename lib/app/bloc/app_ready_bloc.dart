@@ -28,8 +28,6 @@ class AppReadyBloc extends Bloc<AppReadyEvent, AppReadyState> {
   late StreamSubscription _permissionsBlocSubscription;
   late StreamSubscription _customerBlocSubscription;
 
-  AuthenticationState? previousAuthenticationState;
-
   AppReadyBloc({
     required AuthenticationBloc authenticationBloc,
     required OpenTransactionsBloc openTransactionsBloc,
@@ -41,11 +39,10 @@ class AppReadyBloc extends Bloc<AppReadyEvent, AppReadyState> {
     : super(AppReadyState.initial()) {
         
       _authenticationBlocSubscription = authenticationBloc.stream.listen((AuthenticationState authenticationState) {
-        if (previousAuthenticationState is Unknown && (authenticationState is Unauthenticated || authenticationState is Authenticated)) {
+        if (authenticationState is !Unknown && !state.authCheckComplete) {
           add(AuthCheckComplete(isAuthenticated: authenticationState is Authenticated));
           _authenticationBlocSubscription.cancel();
         }
-        previousAuthenticationState = authenticationState;
       });
 
       _customerBlocSubscription = customerBloc.stream.listen((CustomerState customerState) {

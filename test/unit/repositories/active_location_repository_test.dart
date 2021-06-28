@@ -5,6 +5,7 @@ import 'package:heist/models/customer/active_location.dart';
 import 'package:heist/providers/active_location_provider.dart';
 import 'package:heist/repositories/active_location_repository.dart';
 import 'package:heist/resources/helpers/api_exception.dart';
+import 'package:mocktail/mocktail.dart';
 
 class MockActiveLocationProvider extends Mock implements ActiveLocationProvider {}
 

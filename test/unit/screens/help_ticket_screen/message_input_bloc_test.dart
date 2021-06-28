@@ -6,6 +6,7 @@ import 'package:heist/repositories/help_repository.dart';
 import 'package:heist/resources/helpers/api_exception.dart';
 import 'package:heist/screens/help_ticket_screen/widgets/message_input/bloc/message_input_bloc.dart';
 import 'package:heist/screens/help_tickets_screen/bloc/help_tickets_screen_bloc.dart';
+import 'package:mocktail/mocktail.dart';
 
 class MockHelpRepository extends Mock implements HelpRepository {}
 class MockHelpTicketsScreenBloc extends Mock implements HelpTicketsScreenBloc {}

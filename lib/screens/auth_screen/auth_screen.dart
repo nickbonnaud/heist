@@ -2,8 +2,10 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:heist/blocs/authentication/authentication_bloc.dart';
+import 'package:heist/blocs/customer/customer_bloc.dart';
+import 'package:heist/blocs/permissions/permissions_bloc.dart';
 import 'package:heist/repositories/authentication_repository.dart';
-import 'package:heist/repositories/customer_repository.dart';
 import 'package:heist/screens/auth_screen/widgets/background.dart';
 import 'package:provider/provider.dart';
 
@@ -20,17 +22,20 @@ double mainSquareSize({required BuildContext context}) => MediaQuery.of(context)
 
 class AuthScreen extends StatefulWidget {
   final AuthenticationRepository _authenticationRepository;
-  final bool _permissionsReady;
-  final bool _customerOnboarded; 
+  final AuthenticationBloc _authenticationBloc;
+  final PermissionsBloc _permissionsBloc;
+  final CustomerBloc _customerBloc;
 
   AuthScreen({
     required AuthenticationRepository authenticationRepository,
-    required bool permissionsReady,
-    required bool customerOnboarded
+    required AuthenticationBloc authenticationBloc,
+    required PermissionsBloc permissionsBloc,
+    required CustomerBloc customerBloc
   })
     : _authenticationRepository = authenticationRepository,
-      _permissionsReady = permissionsReady,
-      _customerOnboarded = customerOnboarded;
+      _authenticationBloc = authenticationBloc,
+      _permissionsBloc = permissionsBloc,
+      _customerBloc = customerBloc;
 
   State<AuthScreen> createState() => _AuthScreenState();
 }
@@ -80,6 +85,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
             child: Stack(
               children: <Widget>[
                 GestureDetector(
+                  key: Key("verticalDragDetectorKey"),
                   onVerticalDragUpdate: _handleDragUpdate,
                   onVerticalDragEnd: _handleDragEnd,
                   child: Stack(
@@ -101,9 +107,10 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
                           children: [
                             Forms(
                               authenticationRepository: widget._authenticationRepository,
+                              authenticationBloc: widget._authenticationBloc,
                               pageController: _pageController,
-                              permissionsReady: widget._permissionsReady,
-                              customerOnboarded: widget._customerOnboarded,
+                              permissionsBloc: widget._permissionsBloc,
+                              customerBloc: widget._customerBloc,
                             ),
                             DragArrow(),
                           ],
@@ -127,18 +134,17 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
   }
 
   void _handleDragEnd(DragEndDetails details) {
-    if (_animationController.isAnimating ||
-        _animationController.status == AnimationStatus.completed) return;
+    if (_animationController.isAnimating || _animationController.status == AnimationStatus.completed) return;
 
-    final double flingVelocity =
-        details.velocity.pixelsPerSecond.dy / maxHeight;
-    if (flingVelocity < 0.0)
+    final double flingVelocity = details.velocity.pixelsPerSecond.dy / maxHeight;
+    
+    if (flingVelocity < 0.0) {
       _animationController.fling(velocity: math.max(2.0, -flingVelocity));
-    else if (flingVelocity > 0.0)
+    } else if (flingVelocity > 0.0) {
       _animationController.fling(velocity: math.min(-2.0, -flingVelocity));
-    else
-      _animationController.fling(
-          velocity: _animationController.value < 0.5 ? -2.0 : 2.0);
+    } else {
+      _animationController.fling(velocity: _animationController.value < 0.5 ? -2.0 : 2.0);
+    }
   }
 
   @override

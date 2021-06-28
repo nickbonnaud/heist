@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:heist/blocs/active_location/active_location_bloc.dart';
 import 'package:heist/blocs/beacon/beacon_bloc.dart';
 import 'package:heist/blocs/nearby_businesses/nearby_businesses_bloc.dart';
@@ -15,10 +16,10 @@ import 'package:heist/repositories/transaction_repository.dart';
 
 class PhaseFour extends StatelessWidget {
   final TransactionRepository _transactionRepository;
-  final MaterialApp? _testApp;
+  final PlatformProvider? _testApp;
   final BeaconRepository _beaconRepository = BeaconRepository(beaconProvider: BeaconProvider());
 
-  PhaseFour({required TransactionRepository transactionRepository, MaterialApp? testApp,})
+  PhaseFour({required TransactionRepository transactionRepository, PlatformProvider? testApp,})
     : _transactionRepository = transactionRepository,
       _testApp = testApp;
   
