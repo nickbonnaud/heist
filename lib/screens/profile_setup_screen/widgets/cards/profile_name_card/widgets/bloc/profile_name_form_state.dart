@@ -19,8 +19,8 @@ class ProfileNameFormState extends Equatable {
 
   factory ProfileNameFormState.initial() {
     return ProfileNameFormState(
-      isFirstNameValid: true,
-      isLastNameValid: true,
+      isFirstNameValid: false,
+      isLastNameValid: false,
       isSubmitting: false,
       isSuccess: false,
       errorMessage: ""

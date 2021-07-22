@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:heist/blocs/active_location/active_location_bloc.dart';
 import 'package:heist/blocs/customer/customer_bloc.dart';
 import 'package:heist/blocs/permissions/permissions_bloc.dart';
@@ -13,35 +12,38 @@ import 'package:heist/repositories/customer_repository.dart';
 import 'package:heist/repositories/initial_login_repository.dart';
 import 'package:heist/repositories/token_repository.dart';
 import 'package:heist/resources/helpers/permissions_checker.dart';
+import 'package:heist/test_blocs/is_testing_cubit.dart';
 
 class PhaseOne extends StatelessWidget {
-  final PlatformProvider? _testApp;
-  final CustomerRepository _customerRepository = CustomerRepository(customerProvider: CustomerProvider(), tokenRepository: TokenRepository(tokenProvider: StorageProvider()));
-  final ActiveLocationRepository _activeLocationRepository = ActiveLocationRepository(activeLocationProvider: ActiveLocationProvider());
-  final InitialLoginRepository _initialLoginRepository = InitialLoginRepository(tutorialProvider: StorageProvider());
-  final PermissionsChecker _permissionsChecker = PermissionsChecker();
+
+  final bool _testing;
   
-  PhaseOne({PlatformProvider? testApp})
-    : _testApp = testApp;
+  PhaseOne({bool testing: false})
+    : _testing = testing;
   
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
         BlocProvider<CustomerBloc>(
-          create: (_) => CustomerBloc(customerRepository: _customerRepository)
+          create: (_) => CustomerBloc(customerRepository: CustomerRepository(customerProvider: CustomerProvider(), tokenRepository: TokenRepository(tokenProvider: StorageProvider())))
         ),
 
         BlocProvider<ActiveLocationBloc>(
-          create: (_) => ActiveLocationBloc(activeLocationRepository: _activeLocationRepository),
+          create: (_) => ActiveLocationBloc(activeLocationRepository: ActiveLocationRepository(activeLocationProvider: ActiveLocationProvider())),
         ),
         
         BlocProvider<PermissionsBloc>(
-          create: (_) => PermissionsBloc(initialLoginRepository: _initialLoginRepository, permissionsChecker: _permissionsChecker)
+          create: (_) => PermissionsBloc(
+            initialLoginRepository: InitialLoginRepository(tutorialProvider: StorageProvider()),
+            permissionsChecker: PermissionsChecker()
+          )
             ..add(CheckPermissions())
         ),
+
+        BlocProvider<IsTestingCubit>(create: (_) => IsTestingCubit(testing: _testing))
       ],
-      child: PhaseTwo(testApp: _testApp)
+      child: PhaseTwo()
     );
   }
 }

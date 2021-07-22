@@ -29,4 +29,9 @@ class AuthenticationProvider extends BaseProvider {
     final String url = "auth/request-reset";
     return await this.post(url: url, body: body);
   }
+
+  Future<ApiResponse> resetPassword({required Map<String, dynamic> body}) async {
+    final String url = "auth/reset-password";
+    return await this.post(url: url, body: body);
+  }
 }

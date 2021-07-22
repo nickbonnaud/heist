@@ -11,7 +11,7 @@ class EmailScreen extends StatelessWidget {
   final CustomerRepository _customerRepository;
   final CustomerBloc _customerBloc;
 
-  EmailScreen({required CustomerRepository customerRepository, required CustomerBloc customerBloc})
+  const EmailScreen({required CustomerRepository customerRepository, required CustomerBloc customerBloc})
     : _customerRepository = customerRepository,
       _customerBloc = customerBloc;
   
@@ -22,7 +22,7 @@ class EmailScreen extends StatelessWidget {
       backgroundColor: Colors.white,
       appBar: BottomModalAppBar(context: context),
       body: BlocProvider<EmailFormBloc>(
-        create: (BuildContext context) => EmailFormBloc(customerRepository: _customerRepository, customerBloc: _customerBloc),
+        create: (_) => EmailFormBloc(customerRepository: _customerRepository, customerBloc: _customerBloc),
         child: EmailForm(customer: _customerBloc.customer!),
       )
     );

@@ -43,6 +43,20 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>A Profile Photo is required</string>
+	<key>NSCameraUsageDescription</key>
+	<string>A Profile Photo is required</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+  <string>Location required for Security and Beacons</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+  <string>Location required for Security and Beacons</string>
+	<key>NSLocationUsageDescription</key>
+  <string>Location required for Security and Beacons</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+  <string>Beacons require Always Permission</string>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+  <string>Bluetooth required to use Beacons</string>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
 </dict>

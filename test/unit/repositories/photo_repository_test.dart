@@ -23,7 +23,7 @@ void main() {
     });
 
     test("Photo Repository can upload photo", () async {
-      var customer = await photoRepository.upload(photo: PickedFile("path"), profileIdentifier: "profileIdentifier");
+      var customer = await photoRepository.upload(photo: XFile("path"), profileIdentifier: "profileIdentifier");
       expect(customer, isA<Customer>());
     });
 
@@ -32,7 +32,7 @@ void main() {
         .thenAnswer((_) async => ApiResponse(body: {}, error: "error", isOK: false));
 
       expect(
-        photoRepositoryWithMock.upload(photo: PickedFile("path"), profileIdentifier: "profileIdentifier"),
+        photoRepositoryWithMock.upload(photo: XFile("path"), profileIdentifier: "profileIdentifier"),
         throwsA(isA<ApiException>())
       );
     });

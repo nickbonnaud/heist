@@ -9,7 +9,7 @@ abstract class EditPhotoEvent extends Equatable {
 
 class ChangePhoto extends EditPhotoEvent {
   final Profile profile;
-  final PickedFile photo;
+  final XFile photo;
 
   ChangePhoto({required this.profile, required this.photo});
 

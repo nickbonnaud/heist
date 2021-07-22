@@ -7,7 +7,7 @@ import 'package:jwt_decoder/jwt_decoder.dart';
 class Token extends Equatable {
   final String value;
 
-  Token({required this.value});
+  const Token({required this.value});
 
   bool get expired => JwtDecoder.isExpired(this.value);
   

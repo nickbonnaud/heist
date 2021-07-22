@@ -33,6 +33,7 @@ class SetupPaymentAccountCard extends StatelessWidget {
                     context: context,
                   ),
                   ElevatedButton(
+                    key: Key("addPaymentButtonKey"),
                     onPressed: () => _connectButtonPressed(context: context),
                     child: BoldText3(text: 'Connect', context: context, color: Theme.of(context).colorScheme.onSecondary)
                   ),
@@ -50,6 +51,7 @@ class SetupPaymentAccountCard extends StatelessWidget {
                   child: BlocBuilder<CustomerBloc, CustomerState>(
                     builder: (context, state) {
                       return ElevatedButton(
+                        key: Key("submitPaymentMethdKey"),
                         onPressed: _isNextButtonEnabled(state: state) ? () => _nextButtonPressed(context) : null,
                         child: BoldText3(text: 'Next', context: context, color: Theme.of(context).colorScheme.onSecondary)
                       );

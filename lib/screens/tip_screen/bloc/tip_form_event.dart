@@ -8,7 +8,7 @@ abstract class TipFormEvent extends Equatable {
 }
 
 class TipRateChanged extends TipFormEvent {
-  final int tipRate;
+  final String tipRate;
   
   const TipRateChanged({required this.tipRate});
 
@@ -20,7 +20,7 @@ class TipRateChanged extends TipFormEvent {
 }
 
 class QuickTipRateChanged extends TipFormEvent {
-  final int quickTipRate;
+  final String quickTipRate;
   
   const QuickTipRateChanged({required this.quickTipRate});
 

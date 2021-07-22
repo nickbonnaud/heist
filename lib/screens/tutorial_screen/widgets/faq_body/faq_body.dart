@@ -12,6 +12,7 @@ class FaqBody extends StatelessWidget {
     return BlocBuilder<FaqBodyBloc, FaqBodyState>(
       builder: (context, state) {
         return ListView.separated(
+          key: Key("faqBodyKey"),
           physics: NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           itemCount: state.faqs.length,
@@ -22,6 +23,7 @@ class FaqBody extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   GestureDetector(
+                    key: Key("faqQuestionKey-$index"),
                     child: PlatformText(
                       "Q: ${state.faqs[index].question}" ,
                       textAlign: TextAlign.left,
@@ -37,6 +39,7 @@ class FaqBody extends StatelessWidget {
                   Visibility(
                     visible: state.faqs[index].answerVisible,
                     child: GestureDetector(
+                      key: Key("faqAnswerKey-$index"),
                       child: PlatformText(
                         "A: ${state.faqs[index].answer}",
                         textAlign: TextAlign.left,

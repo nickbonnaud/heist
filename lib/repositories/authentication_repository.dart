@@ -59,6 +59,17 @@ class AuthenticationRepository extends BaseRepository {
       .then((_) => true);
   }
 
+  Future<bool> resetPassword({required String email, required String resetCode, required String password, required String passwordConfirmation}) async {
+    final Map<String, dynamic> body = {
+      "email": email,
+      "reset_code": resetCode,
+      "password": password,
+      "password_confirmation": passwordConfirmation
+    };
+    return this.send(request: _authenticationProvider.resetPassword(body: body))
+      .then((_) => true);
+  }
+
   Future<bool> isSignedIn() async {
     return await _tokenRepository.hasValidToken();
   }

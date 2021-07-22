@@ -41,7 +41,7 @@ void main() {
       "SetupTipCardBloc TipRateChanged event yields state: [isTipRateValid: true]",
       build: () => setupTipCardBloc,
       wait: Duration(milliseconds: 300),
-      act: (bloc) => bloc.add(TipRateChanged(tipRate: 20)),
+      act: (bloc) => bloc.add(TipRateChanged(tipRate: '20')),
       expect: () => [_baseState.update(isTipRateValid: true)]
     );
 
@@ -49,7 +49,7 @@ void main() {
       "SetupTipCardBloc QuickTipRateChanged event yields state: [isQuickTipRateValid: true]",
       build: () => setupTipCardBloc,
       wait: Duration(milliseconds: 300),
-      act: (bloc) => bloc.add(QuickTipRateChanged(quickTipRate: 10)),
+      act: (bloc) => bloc.add(QuickTipRateChanged(quickTipRate: '10')),
       expect: () => [_baseState.update(isQuickTipRateValid: true)]
     );
 

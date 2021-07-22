@@ -24,18 +24,15 @@ class AuthScreen extends StatefulWidget {
   final AuthenticationRepository _authenticationRepository;
   final AuthenticationBloc _authenticationBloc;
   final PermissionsBloc _permissionsBloc;
-  final CustomerBloc _customerBloc;
 
   AuthScreen({
     required AuthenticationRepository authenticationRepository,
     required AuthenticationBloc authenticationBloc,
-    required PermissionsBloc permissionsBloc,
-    required CustomerBloc customerBloc
+    required PermissionsBloc permissionsBloc
   })
     : _authenticationRepository = authenticationRepository,
       _authenticationBloc = authenticationBloc,
-      _permissionsBloc = permissionsBloc,
-      _customerBloc = customerBloc;
+      _permissionsBloc = permissionsBloc;
 
   State<AuthScreen> createState() => _AuthScreenState();
 }
@@ -75,7 +72,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: Colors.grey.shade900,
+      backgroundColor: Color.fromRGBO(11, 13, 35, 1),
       body: ChangeNotifierProvider(
         create: (_) => PageOffsetNotifier(pageController: _pageController),
         child: ListenableProvider.value(
@@ -89,6 +86,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
                   onVerticalDragUpdate: _handleDragUpdate,
                   onVerticalDragEnd: _handleDragEnd,
                   child: Stack(
+                    key: Key("stackKey"),
                     alignment: Alignment.center,
                     children: <Widget>[
                       Background(),
@@ -109,8 +107,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
                               authenticationRepository: widget._authenticationRepository,
                               authenticationBloc: widget._authenticationBloc,
                               pageController: _pageController,
-                              permissionsBloc: widget._permissionsBloc,
-                              customerBloc: widget._customerBloc,
+                              permissionsBloc: widget._permissionsBloc
                             ),
                             DragArrow(),
                           ],

@@ -5,7 +5,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:heist/models/business/business.dart';
 import 'package:heist/providers/icon_creator_provider.dart';
 import 'package:heist/repositories/icon_creator_repository.dart';
-import 'package:heist/screens/home_screen/widgets/nearby_businesses_map/models/pre_marker.dart';
+import 'package:heist/screens/home_screen/widgets/home_screen_body/widgets/nearby_businesses_map/models/pre_marker.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../helpers/mock_data_generator.dart';

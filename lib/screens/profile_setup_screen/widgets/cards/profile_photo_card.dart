@@ -104,6 +104,7 @@ class ProfilePhotoCard extends StatelessWidget {
                   child: BlocBuilder<CustomerBloc, CustomerState>(
                     builder: (context, state) {
                       return ElevatedButton(
+                        key: Key("submitPhotoButtonKey"),
                         onPressed: _isNextButtonEnabled(customer: state.customer!) ? () => _nextButtonPressed(context: context) : null,
                         child: BoldText3(text: 'Next', context: context, color: Theme.of(context).colorScheme.onSecondary)
                       );

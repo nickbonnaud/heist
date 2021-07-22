@@ -3,6 +3,7 @@ import 'package:heist/screens/tutorial_screen/bloc/tutorial_screen_bloc.dart';
 
 class Tutorial extends Equatable {
   final TutorialCardType type;
+  final String key;
   final String header;
   final String body;
   final String? artboard;
@@ -11,6 +12,7 @@ class Tutorial extends Equatable {
 
   Tutorial({
     required this.type,
+    required this.key,
     required this.header,
     required this.body,
     this.artboard,
@@ -20,6 +22,7 @@ class Tutorial extends Equatable {
 
   Tutorial update({required bool dismissed}) => Tutorial(
     type: this.type,
+    key: this.key,
     header: this.header,
     body: this.body,
     artboard: this.artboard,
@@ -28,8 +31,8 @@ class Tutorial extends Equatable {
   );
   
   @override
-  List<Object?> get props => [type, header, body, artboard, hasInitialAnimation, dismissed];
+  List<Object?> get props => [type, key, header, body, artboard, hasInitialAnimation, dismissed];
 
   @override
-  String toString() => 'Tutorial { type: $type, header: $header, body: $body, artboard: $artboard, hasInitialAnimation: $hasInitialAnimation, dismissed: $dismissed }';
+  String toString() => 'Tutorial { type: $type, key: $key header: $header, body: $body, artboard: $artboard, hasInitialAnimation: $hasInitialAnimation, dismissed: $dismissed }';
 }

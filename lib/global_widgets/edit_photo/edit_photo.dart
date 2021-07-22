@@ -1,14 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:heist/global_widgets/cached_avatar.dart';
 import 'package:heist/models/customer/profile.dart';
 import 'package:heist/repositories/photo_picker_repository.dart';
+import 'package:heist/resources/constants.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
 import 'package:heist/resources/helpers/vibrate.dart';
 import 'package:heist/themes/global_colors.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import 'bloc/edit_photo_bloc.dart';
 import 'widgets/fade_in_file.dart';
@@ -42,6 +45,7 @@ class EditPhoto extends StatelessWidget {
                 bottom: 0.0,
                 right: 0.0,
                 child: RawMaterialButton(
+                  key: Key("addPhotoButtonKey"),
                   onPressed: () => _editPhoto(context, state),
                   child: state is Submitting 
                     ? CircularProgressIndicator(
@@ -66,7 +70,7 @@ class EditPhoto extends StatelessWidget {
 
   Widget _createAvatar(EditPhotoState state) {
     if (state is Submitting || state is SubmitSuccess) {
-      PickedFile? photo = state is Submitting 
+      XFile? photo = state is Submitting 
         ? state.photo 
         : state is SubmitSuccess 
           ? state.photo 
@@ -90,18 +94,61 @@ class EditPhoto extends StatelessWidget {
 
   void _editPhoto(BuildContext context, EditPhotoState state) async {
     if (state is !Submitting) {
-      PickedFile? photo = await _photoPicker.pickPhoto();
-      if (photo != null) {
-        BlocProvider.of<EditPhotoBloc>(context).add(ChangePhoto(profile: _profile, photo: photo));
+      final bool permissionGranted = await _requestPermission();
+      if (permissionGranted) {
+        XFile? photo = await _photoPicker.pickPhoto();
+        if (photo != null) {
+          BlocProvider.of<EditPhotoBloc>(context).add(ChangePhoto(profile: _profile, photo: photo));
+        }
+      } else {
+        _openAppSettings(context: context);
       }
     }
   }
 
+  Future<bool> _requestPermission() async {
+    final PermissionStatus status = await Permission.photos.request();
+    return ([PermissionStatus.granted, PermissionStatus.limited].contains(status));
+  }
+
+  void _openAppSettings({required BuildContext context}) {
+    showPlatformDialog(
+      context: context,
+      builder: (_) => PlatformAlertDialog(
+        title: PlatformText("Please grant access to Camera"),
+        content: Column(
+          children: [
+            SizedBox(height: SizeConfig.getHeight(1)),
+            PlatformText("${Constants.appName} requires a Profile Photo to protect your security."),
+            SizedBox(height: SizeConfig.getHeight(2)),
+            PlatformText("* May restart app")
+          ],
+        ),
+        actions: [
+          PlatformDialogAction(
+            child: PlatformText('Cancel'),
+            onPressed: () => Navigator.pop(context)
+          ),
+
+          PlatformDialogAction(
+            key: Key("enablePermissionButtonKey"),
+            child: PlatformText('Enable'),
+            onPressed: () {
+              openAppSettings();
+              return Navigator.pop(context);
+            }
+          )
+        ],
+      )
+    );
+  }
+  
   void _showSnackbar(BuildContext context, String message, EditPhotoState state) async {
     final bool isSuccess = state is SubmitSuccess;
     isSuccess ? Vibrate.success() : Vibrate.error();
 
     final SnackBar snackBar = SnackBar(
+      key: Key("editPhotoSnackbarKey"),
       duration: Duration(seconds: 1),
       content: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

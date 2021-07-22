@@ -29,5 +29,39 @@ class Validators {
     return hasNoDigits && hasNoSpecialCharacters && hasMinLength;
   }
 
-  static bool isValidTip({required int tip}) => tip is int;
+  static bool isValidDefaultTip({required String tip}) {
+    final bool isDigits = tip.contains(RegExp(r'[0-9]'));
+    if (!isDigits) return false;
+
+    final int? intTip = int.tryParse(tip);
+    if (intTip == null) return false;
+    
+    final bool meetsMinValue = intTip >= 0;
+    final bool meetsMaxValue = intTip <= 30;
+
+    return meetsMaxValue && meetsMinValue;
+  }
+
+  static bool isValidQuickTip({required String tip}) {
+    final bool isDigits = tip.contains(RegExp(r'[0-9]'));
+    if (!isDigits) return false;
+
+    final int? intTip = int.tryParse(tip);
+    if (intTip == null) return false;
+    
+    final bool meetsMinValue = intTip >= 0;
+    final bool meetsMaxValue = intTip <= 20;
+
+    return meetsMaxValue && meetsMinValue;
+  }
+
+  static bool isValidResetCode({required String resetCode}) {
+    if (resetCode.isEmpty) return false;
+    final validCharacters = RegExp(r'^[a-zA-Z0-9]+$');
+
+    final bool isCorrectLength = resetCode.trim().length == 6;
+    final bool isAlphaNumeric = validCharacters.hasMatch(resetCode);
+
+    return isCorrectLength && isAlphaNumeric;
+  } 
 }

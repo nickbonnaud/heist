@@ -5,6 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:heist/resources/constants.dart';
 import 'package:heist/screens/tutorial_screen/models/tutorial.dart';
 import 'package:meta/meta.dart';
+import 'package:heist/extensions/string_extensions.dart';
 
 part 'tutorial_screen_event.dart';
 part 'tutorial_screen_state.dart';
@@ -42,6 +43,7 @@ class TutorialScreenBloc extends Bloc<TutorialScreenEvent, TutorialScreenState> 
   static List<Tutorial> _createCards() {
     return TutorialCardType.values.map((type) => Tutorial(
       type: type,
+      key: "${type.toString().replaceAll("TutorialCardType.", "")}Key".capitalizeFirst,
       header: _setHeader(type: type),
       body: _setBody(type: type),
       artboard: _setArtboard(type: type),

@@ -1,6 +1,6 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:heist/screens/home_screen/widgets/peek_sheet/widgets/logo_buttons_list/widgets/shared_list_items/logo_button/widgets/logo_business_button/bloc/logo_business_button_bloc.dart';
+import 'package:heist/screens/home_screen/widgets/home_screen_body/widgets/peek_sheet/widgets/logo_buttons_list/widgets/shared_list_items/logo_button/widgets/logo_business_button/bloc/logo_business_button_bloc.dart';
 
 void main() {
   group("Logo Business Button Bloc Tests", () {

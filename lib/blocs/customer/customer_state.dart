@@ -6,6 +6,8 @@ class CustomerState extends Equatable {
   final bool loading;
   final String errorMessage;
 
+  bool get onboarded => customer!.status.code > 103;
+
   const CustomerState({
     this.customer,
     required this.loading,

@@ -1,14 +1,14 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:heist/screens/layout_screen/bloc/side_menu_bloc.dart';
+import 'package:heist/screens/home_screen/bloc/side_drawer_bloc.dart';
 
 void main() {
   group("Side Menu Bloc Tests", () {
-    late SideMenuBloc sideMenuBloc;
-    late SideMenuState _baseState;
+    late SideDrawerBloc sideMenuBloc;
+    late SideDrawerState _baseState;
 
     setUp(() {
-      sideMenuBloc = SideMenuBloc();
+      sideMenuBloc = SideDrawerBloc();
       _baseState = sideMenuBloc.state;
     });
 
@@ -16,19 +16,19 @@ void main() {
       sideMenuBloc.close();
     });
 
-    test("Initial state of SideMenuBloc is SideMenuState.initial()", () {
-      expect(sideMenuBloc.state, SideMenuState.initial());
+    test("Initial state of SideDrawerBloc is SideDrawerState.initial()", () {
+      expect(sideMenuBloc.state, SideDrawerState.initial());
     });
 
-    blocTest<SideMenuBloc, SideMenuState>(
-      "SideMenuBloc MenuStatusChanged event yields state: [menuOpen: true, buttonVisible: !buttonVisible]",
+    blocTest<SideDrawerBloc, SideDrawerState>(
+      "SideDrawerBloc DrawerStatusChanged event yields state: [menuOpen: true, buttonVisible: !buttonVisible]",
       build: () => sideMenuBloc,
-      act: (bloc) => bloc.add(MenuStatusChanged(menuOpen: true)),
+      act: (bloc) => bloc.add(DrawerStatusChanged(menuOpen: true)),
       expect: () => [_baseState.update(menuOpened: true, buttonVisible: false)]
     );
 
-    blocTest<SideMenuBloc, SideMenuState>(
-      "SideMenuBloc ButtonVisibilityChanged event yields state: [buttonVisible: true]",
+    blocTest<SideDrawerBloc, SideDrawerState>(
+      "SideDrawerBloc ButtonVisibilityChanged event yields state: [buttonVisible: true]",
       build: () => sideMenuBloc,
       act: (bloc) => bloc.add(ButtonVisibilityChanged(isVisible: true)),
       expect: () => [_baseState.update( buttonVisible: true)]

@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
-import 'package:heist/blocs/authentication/authentication_bloc.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
 import 'package:heist/resources/helpers/vibrate.dart';
@@ -69,73 +68,11 @@ class _SetupTipBodyState extends State<SetupTipBody> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: <Widget>[
                           Expanded(
-                            child: BlocBuilder<SetupTipCardBloc, SetupTipCardState>(
-                              builder: (context, state) {
-                                return TextFormField(
-                                  decoration: InputDecoration(
-                                    labelText: 'Default Tip Rate',
-                                    suffix: PlatformText(
-                                      '%',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.w700,
-                                        fontSize: SizeConfig.getWidth(7)
-                                      ),
-                                    ),
-                                    labelStyle: TextStyle(
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: SizeConfig.getWidth(5)
-                                    )
-                                  ),
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: SizeConfig.getWidth(7)
-                                  ),
-                                  controller: _tipRateController,
-                                  keyboardType: TextInputType.number,
-                                  textInputAction: TextInputAction.done,
-                                  autocorrect: false,
-                                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                                  textAlign: TextAlign.center,
-                                  focusNode: _tipRateNode,
-                                  validator: (_) => !state.isTipRateValid ? 'Must be between 0 and 30' : null,
-                                );
-                              }
-                            )
+                            child: _defaultTipRateField()
                           ),
                           SizedBox(width: SizeConfig.getWidth(10)),
                           Expanded(
-                            child: BlocBuilder<SetupTipCardBloc, SetupTipCardState>(
-                              builder: (context, state) {
-                                return TextFormField(
-                                  decoration: InputDecoration(
-                                    labelText: 'Quick Tip Rate',
-                                    suffix: PlatformText(
-                                      '%',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.w700,
-                                        fontSize: SizeConfig.getWidth(7)
-                                      ),
-                                    ),
-                                    labelStyle: TextStyle(
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: SizeConfig.getWidth(5)
-                                    )
-                                  ),
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: SizeConfig.getWidth(7)
-                                  ),
-                                  controller: _quickTipRateController,
-                                  keyboardType: TextInputType.number,
-                                  textInputAction: TextInputAction.done,
-                                  autocorrect: false,
-                                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                                  textAlign: TextAlign.center,
-                                  focusNode: _quickTipRateNode,
-                                  validator: (_) => !state.isQuickTipRateValid ? 'Must be between 0 and 30' : null,
-                                );
-                              },
-                            )
+                            child: _quickTipRateField()
                           )
                         ],
                       ),
@@ -147,14 +84,7 @@ class _SetupTipBodyState extends State<SetupTipBody> {
               Row(
                 children: <Widget>[
                   Expanded(
-                    child: BlocBuilder<SetupTipCardBloc, SetupTipCardState>(
-                      builder: (context, state) {
-                        return ElevatedButton(
-                          onPressed: _isSaveButtonEnabled(state) ? () => _saveButtonPressed(context, state) : null,
-                          child: _buttonChild(state),
-                        );
-                      }
-                    )
+                    child: _submitButton()
                   )
                 ],
               ),
@@ -169,17 +99,102 @@ class _SetupTipBodyState extends State<SetupTipBody> {
   void dispose() {
     _tipRateController.dispose();
     _quickTipRateController.dispose();
+
+    _tipRateNode.dispose();
+    _quickTipRateNode.dispose();
     super.dispose();
   }
 
+  Widget _defaultTipRateField() {
+    return BlocBuilder<SetupTipCardBloc, SetupTipCardState>(
+      builder: (context, state) {
+        return TextFormField(
+          key: Key("defaultTipRateFieldKey"),
+          decoration: InputDecoration(
+            labelText: 'Default Tip Rate',
+            suffix: PlatformText(
+              '%',
+              style: TextStyle(
+                fontWeight: FontWeight.w700,
+                fontSize: SizeConfig.getWidth(7)
+              ),
+            ),
+            labelStyle: TextStyle(
+              fontWeight: FontWeight.w400,
+              fontSize: SizeConfig.getWidth(5)
+            )
+          ),
+          style: TextStyle(
+            fontWeight: FontWeight.w700,
+            fontSize: SizeConfig.getWidth(7)
+          ),
+          controller: _tipRateController,
+          keyboardType: TextInputType.number,
+          textInputAction: TextInputAction.done,
+          autocorrect: false,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          textAlign: TextAlign.center,
+          focusNode: _tipRateNode,
+          validator: (_) => !state.isTipRateValid ? 'Must be between 0 and 30' : null,
+        );
+      }
+    );
+  }
+
+  Widget _quickTipRateField() {
+    return BlocBuilder<SetupTipCardBloc, SetupTipCardState>(
+      builder: (context, state) {
+        return TextFormField(
+          key: Key("quickTipRateFieldKey"),
+          decoration: InputDecoration(
+            labelText: 'Quick Tip Rate',
+            suffix: PlatformText(
+              '%',
+              style: TextStyle(
+                fontWeight: FontWeight.w700,
+                fontSize: SizeConfig.getWidth(7)
+              ),
+            ),
+            labelStyle: TextStyle(
+              fontWeight: FontWeight.w400,
+              fontSize: SizeConfig.getWidth(5)
+            )
+          ),
+          style: TextStyle(
+            fontWeight: FontWeight.w700,
+            fontSize: SizeConfig.getWidth(7)
+          ),
+          controller: _quickTipRateController,
+          keyboardType: TextInputType.number,
+          textInputAction: TextInputAction.done,
+          autocorrect: false,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          textAlign: TextAlign.center,
+          focusNode: _quickTipRateNode,
+          validator: (_) => !state.isQuickTipRateValid ? 'Must be between 0 and 20' : null,
+        );
+      },
+    );
+  }
+
+  Widget _submitButton() {
+    return BlocBuilder<SetupTipCardBloc, SetupTipCardState>(
+      builder: (context, state) {
+        return ElevatedButton(
+          key: Key("submitTipRatesButtonKey"),
+          onPressed: _isSaveButtonEnabled(state) ? () => _saveButtonPressed(context, state) : null,
+          child: _buttonChild(state),
+        );
+      }
+    );
+  }
+
   void _onTipRateChanged() {
-    String rate = _tipRateController.text != "" ? _tipRateController.text : "0";
-    _setupTipCardBloc.add(TipRateChanged(tipRate: int.parse(rate)));
+    _setupTipCardBloc.add(TipRateChanged(tipRate: _tipRateController.text));
   }
 
   void _onQuickTipRateChanged() {
-    String rate = _tipRateController.text != "" ? _tipRateController.text : "0";
-    _setupTipCardBloc.add(QuickTipRateChanged(quickTipRate: int.parse(rate)));
+    _setupTipCardBloc.add(QuickTipRateChanged(quickTipRate: _quickTipRateController.text));
   }
 
   bool _isSaveButtonEnabled(SetupTipCardState state) {
@@ -199,6 +214,7 @@ class _SetupTipBodyState extends State<SetupTipBody> {
   void _showSnackbar(BuildContext context, String message, SetupTipCardState state) async {
     state.isSuccess ? Vibrate.success() : Vibrate.error();
     final SnackBar snackBar = SnackBar(
+      key: Key("tipsSnackBarKey"),
       duration: Duration(seconds: 1),
       content: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

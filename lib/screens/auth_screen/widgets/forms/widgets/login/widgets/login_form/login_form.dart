@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:heist/blocs/customer/customer_bloc.dart';
 import 'package:heist/blocs/permissions/permissions_bloc.dart';
 import 'package:heist/resources/helpers/size_config.dart';
@@ -17,16 +18,13 @@ import 'bloc/login_bloc.dart';
 class LoginForm extends StatefulWidget {
   final PageController _pageController;
   final PermissionsBloc _permissionsBloc;
-  final CustomerBloc _customerBloc;
 
   LoginForm({
     required PageController pageController,
     required PermissionsBloc permissionsBloc,
-    required CustomerBloc customerBloc
   })
     : _pageController = pageController,
-      _permissionsBloc = permissionsBloc,
-      _customerBloc = customerBloc;
+      _permissionsBloc = permissionsBloc;
 
   @override
   State<LoginForm> createState() => _LoginFormState();
@@ -55,20 +53,29 @@ class _LoginFormState extends State<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<LoginBloc, LoginState>(
-      listener: (context, state) {
-        if (state.errorMessage.isNotEmpty) {
-          _errorLogin(error: state.errorMessage);
-        } else if (state.isSuccess) {
-          _navigateToNextPage();
-        }
-      },
-      child: Consumer2<PageOffsetNotifier, AnimationController>(
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<LoginBloc, LoginState>(
+          listener: (context, state) {
+            if (state.errorMessage.isNotEmpty) {
+              _errorLogin(error: state.errorMessage);
+            }
+          }
+        ),
+
+        BlocListener<CustomerBloc, CustomerState>(
+          listener: (context, state) {
+            if (BlocProvider.of<LoginBloc>(context).state.isSuccess) {
+              _navigateToNextPage(onboarded: state.onboarded);
+            }
+          }
+        )
+      ],
+      child:  Consumer2<PageOffsetNotifier, AnimationController>(
         builder: (context, notifier, animation, child) {
           return animation.value == 0
           ? Container()
           : Stack(
-            key: Key("loginFormKey"),
             alignment: Alignment.center,
             children: [
               Positioned(
@@ -84,25 +91,7 @@ class _LoginFormState extends State<LoginForm> {
                 bottom: animation.value * SizeConfig.getHeight(10) - SizeConfig.getHeight(4),
                 child: Consumer2<PageOffsetNotifier, AnimationController>(
                   builder: (context, notifier, animation, child) {
-                    return GestureDetector(
-                      onTap: () {
-                        if (animation.status != AnimationStatus.dismissed) {
-                          animation.reverse().then((_) {
-                            widget._pageController.nextPage(duration: Duration(seconds: 1), curve: Curves.decelerate);
-                          });
-                        } else {
-                          widget._pageController.nextPage(duration: Duration(seconds: 1), curve: Curves.decelerate);
-                        }
-                      },
-                      child: Text("Don't have an account?",
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.callToAction,
-                          fontSize: SizeConfig.getWidth(5),
-                          decoration: TextDecoration.underline,
-                          letterSpacing: 0.5
-                        )
-                      ),
-                    );
+                    return _goToRegisterForm(animation: animation);
                   }
                 )
               )
@@ -110,6 +99,7 @@ class _LoginFormState extends State<LoginForm> {
           );
         },
         child: Form(
+          key: Key("loginFormKey"),
           child: Padding(
             padding: EdgeInsets.only(left: 16.0, right: 16.0),
             child: Container(
@@ -122,96 +112,19 @@ class _LoginFormState extends State<LoginForm> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    BlocBuilder<LoginBloc, LoginState>(
-                      builder: (context, state) {
-                        return TextFormField(
-                          controller: _emailController,
-                          focusNode: _emailFocus,
-                          keyboardType: TextInputType.emailAddress,
-                          keyboardAppearance: Brightness.light,
-                          textInputAction: TextInputAction.next,
-                          onFieldSubmitted: (_) {
-                            _changeFocus(context, _emailFocus, _passwordFocus);
-                          },
-                          validator: (_) => !state.isEmailValid && _emailController.text.isNotEmpty ? 'Invalid email' : null,
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
-                          autocorrect: false,
-                          decoration: InputDecoration(
-                            enabledBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Theme.of(context).colorScheme.onSecondary)
-                            ),
-                            hintText: 'Email',
-                            hintStyle: TextStyle(
-                              color: Theme.of(context).colorScheme.onSecondarySubdued,
-                              fontSize: SizeConfig.getWidth(6)
-                            ),
-                          ),
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.onSecondary,
-                            fontSize: SizeConfig.getWidth(6)
-                          ),
-                        );
-                      }
+                    _emailTextField(),
+                    SizedBox(height: SizeConfig.getHeight(5)),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        _passwordTextField(),
+                        SizedBox(height: SizeConfig.getHeight(3)),
+                        _requestResetPasswordButton()
+                      ],
                     ),
                     SizedBox(height: SizeConfig.getHeight(5)),
-                    BlocBuilder<LoginBloc, LoginState>(
-                      builder: (context, state) {
-                        return TextFormField(
-                          controller: _passwordController,
-                          focusNode: _passwordFocus,
-                          keyboardType: TextInputType.text,
-                          keyboardAppearance: Brightness.light,
-                          textInputAction: TextInputAction.done,
-                          onFieldSubmitted: (_) {
-                            _passwordFocus.unfocus();
-                          },
-                          validator: (_) => !state.isPasswordValid && _passwordController.text.isNotEmpty ? 'Invalid Password' : null,
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
-                          autocorrect: false,
-                          decoration: InputDecoration(
-                            enabledBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Theme.of(context).colorScheme.onSecondary),
-                            ),
-                            hintText: 'Password',
-                            hintStyle: TextStyle(
-                              color: Theme.of(context).colorScheme.onSecondarySubdued,
-                              fontSize: SizeConfig.getWidth(6)
-                            )
-                          ),
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.onSecondary,
-                            fontSize: SizeConfig.getWidth(6)
-                          ),
-                          obscureText: true,
-                        );
-                      }
-                    ),
-                    SizedBox(height: SizeConfig.getHeight(5)),
-                    BlocBuilder<LoginBloc, LoginState>(
-                      builder: (context, state) {
-                        return GestureDetector(
-                          onTap: () => _submit(state),
-                          child: Container(
-                            alignment: Alignment.center,
-                            width: double.infinity,
-                            height: SizeConfig.getHeight(7),
-                            padding: EdgeInsets.symmetric(vertical: 10,horizontal: 0),
-                            decoration: BoxDecoration(
-                              border: (_isLoginButtonEnabled(state) || state.isSubmitting)
-                                ? Border.all(color: Theme.of(context).colorScheme.onSecondary)
-                                : null,
-                              borderRadius: BorderRadius.circular(50),
-                            ),
-                            child: state.isSubmitting
-                              ? SizedBox(height: SizeConfig.getWidth(5), width: SizeConfig.getWidth(5), child: CircularProgressIndicator())
-                              : (_isLoginButtonEnabled(state)
-                                  ? Text1(text: 'Login', context: context, color: Theme.of(context).colorScheme.onSecondary)
-                                  : null
-                                ),
-                          ),
-                        );
-                      }
-                    ),
+                    _submitButton(),
                   ],
                 )
               ),
@@ -226,7 +139,157 @@ class _LoginFormState extends State<LoginForm> {
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
+
+    _emailFocus.dispose();
+    _passwordFocus.dispose();
     super.dispose();
+  }
+
+  Widget _emailTextField() {
+    return BlocBuilder<LoginBloc, LoginState>(
+      builder: (context, state) {
+        return TextFormField(
+          key: Key("emailFormFieldKey"),
+          controller: _emailController,
+          focusNode: _emailFocus,
+          keyboardType: TextInputType.emailAddress,
+          keyboardAppearance: Brightness.light,
+          textInputAction: TextInputAction.next,
+          onFieldSubmitted: (_) {
+            _changeFocus(context, _emailFocus, _passwordFocus);
+          },
+          validator: (_) => !state.isEmailValid && _emailController.text.isNotEmpty
+            ? 'Invalid Email'
+            : null,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          autocorrect: false,
+          decoration: InputDecoration(
+            enabledBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: Theme.of(context).colorScheme.onSecondary)
+            ),
+            hintText: 'Email',
+            hintStyle: TextStyle(
+              color: Theme.of(context).colorScheme.onSecondarySubdued,
+              fontSize: SizeConfig.getWidth(6)
+            ),
+          ),
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.onSecondary,
+            fontSize: SizeConfig.getWidth(6)
+          ),
+        );
+      }
+    );
+  }
+
+  Widget _passwordTextField() {
+    return BlocBuilder<LoginBloc, LoginState>(
+      builder: (context, state) {
+        return TextFormField(
+          key: Key("passwordFormFieldKey"),
+          controller: _passwordController,
+          focusNode: _passwordFocus,
+          keyboardType: TextInputType.text,
+          keyboardAppearance: Brightness.light,
+          textInputAction: TextInputAction.done,
+          onFieldSubmitted: (_) {
+            _passwordFocus.unfocus();
+          },
+          validator: (_) => !state.isPasswordValid && _passwordController.text.isNotEmpty
+            ? 'Invalid Password'
+            : null,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          autocorrect: false,
+          decoration: InputDecoration(
+            enabledBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: Theme.of(context).colorScheme.onSecondary),
+            ),
+            hintText: 'Password',
+            hintStyle: TextStyle(
+              color: Theme.of(context).colorScheme.onSecondarySubdued,
+              fontSize: SizeConfig.getWidth(6)
+            )
+          ),
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.onSecondary,
+            fontSize: SizeConfig.getWidth(6)
+          ),
+          obscureText: true,
+        );
+      }
+    );
+  }
+
+  Widget _goToRegisterForm({required AnimationController animation}) {
+    return GestureDetector(
+      onTap: () {
+        if (animation.status != AnimationStatus.dismissed) {
+          animation.reverse().then((_) {
+            widget._pageController.nextPage(duration: Duration(seconds: 1), curve: Curves.decelerate);
+          });
+        } else {
+          widget._pageController.nextPage(duration: Duration(seconds: 1), curve: Curves.decelerate);
+        }
+      },
+      child: Text("Don't have an account?",
+        style: TextStyle(
+          color: Theme.of(context).colorScheme.callToAction,
+          fontSize: SizeConfig.getWidth(5),
+          decoration: TextDecoration.underline,
+          letterSpacing: 0.5
+        )
+      ),
+    );
+  }
+  
+  Widget _requestResetPasswordButton() {
+    return GestureDetector(
+      onTap: () => Navigator.of(context).pushNamed(Routes.requestReset),
+      child: Text("Forgot your password?",
+        style: TextStyle(
+          color: Theme.of(context).colorScheme.callToAction,
+          fontSize: SizeConfig.getWidth(4),
+          decoration: TextDecoration.underline,
+          letterSpacing: 0.5
+        )
+      ),
+    );
+  }
+
+  Widget _submitButton() {
+    return BlocBuilder<LoginBloc, LoginState>(
+      builder: (context, state) {
+        return GestureDetector(
+          onTap: () => _submit(state),
+          child: Container(
+            alignment: Alignment.center,
+            width: double.infinity,
+            height: SizeConfig.getHeight(7),
+            padding: EdgeInsets.symmetric(vertical: 10,horizontal: 0),
+            decoration: BoxDecoration(
+              border: (_isLoginButtonEnabled(state) || state.isSubmitting)
+                ? Border.all(color: Theme.of(context).colorScheme.onSecondary)
+                : null,
+              borderRadius: BorderRadius.circular(50),
+            ),
+            child: state.isSubmitting
+              ? SizedBox(height: SizeConfig.getWidth(5), width: SizeConfig.getWidth(5), child: CircularProgressIndicator())
+              : (_isLoginButtonEnabled(state)
+                  ? PlatformText(
+                      'Login',
+                      key: Key("loginButtonTextKey"),
+                      style: TextStyle(
+                        fontWeight: FontWeight.normal,
+                        color: Theme.of(context).colorScheme.onSecondary,
+                        fontSize: SizeConfig.getWidth(6)
+                      ),
+                    )
+                  : null
+                ),
+          ),
+        );
+      }
+    );
   }
 
   void keyboardVisibilityChanged() {
@@ -271,7 +334,6 @@ class _LoginFormState extends State<LoginForm> {
           toolbarButtons: [
             (node) {
               return GestureDetector(
-                key: Key("teatKey"),
                 onTap: () => node.unfocus(),
                 child: Padding(
                   padding: EdgeInsets.only(right: 16.0),
@@ -322,9 +384,9 @@ class _LoginFormState extends State<LoginForm> {
       ..showSnackBar(snackBar);
   }
 
-  void _navigateToNextPage() {
-    if (widget._permissionsBloc.allPermissionsValid || widget._customerBloc.onboarded) {
-      Navigator.of(context).pushReplacementNamed(Routes.layout);
+  void _navigateToNextPage({required bool onboarded}) {
+    if (widget._permissionsBloc.allPermissionsValid && onboarded) {
+      Navigator.of(context).pushReplacementNamed(Routes.home);
     } else {
       Navigator.of(context).pushReplacementNamed(Routes.onboard);
     }

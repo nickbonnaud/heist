@@ -5,11 +5,11 @@ import 'package:image_picker/image_picker.dart';
 class PhotoPickerProvder {
   final ImagePicker _imagePicker = ImagePicker();
 
-  Future<PickedFile?> pickPhoto() async {
-    return await _imagePicker.getImage(source: ImageSource.gallery);
+  Future<XFile?> pickPhoto() async {
+    return await _imagePicker.pickImage(source: ImageSource.gallery);
   }
 
-  Future<PickedFile?> takePhoto() async {
-    return await _imagePicker.getImage(source: ImageSource.camera);
+  Future<XFile?> takePhoto() async {
+    return await _imagePicker.pickImage(source: ImageSource.camera);
   }
 }

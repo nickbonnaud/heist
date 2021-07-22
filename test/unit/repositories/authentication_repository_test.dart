@@ -116,6 +116,21 @@ void main() {
       );
     });
 
+    test("Authentication Repository can reset password", () async {
+      var passwordReset = await authenticationRepository.resetPassword(email: "email", resetCode: "resetCode", password: "password", passwordConfirmation: "passwordConfirmation");
+      expect(passwordReset, isA<bool>());
+    });
+
+    test("Authentication Repository throws error on reset password fail", () async {
+      when(() => mockAuthenticationProvider.resetPassword(body: any(named: "body")))
+        .thenAnswer((_) async => ApiResponse(body: {}, error: "error", isOK: false));
+
+      expect(
+        authenticationRepositoryWithMock.resetPassword(email: "email", resetCode: "resetCode", password: "password", passwordConfirmation: "passwordConfirmation"),
+        throwsA(isA<ApiException>())
+      );
+    });
+
     test("Authentication Repository can check if token is valid", () async {
       var signedIn = await authenticationRepository.isSignedIn();
       expect(signedIn, isA<bool>());

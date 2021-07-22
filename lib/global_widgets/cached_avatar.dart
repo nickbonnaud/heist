@@ -22,9 +22,9 @@ class CachedAvatar extends StatelessWidget {
         radius: SizeConfig.getWidth(_radius.toDouble()),
       ),
       placeholder: (_,__) => Image.memory(kTransparentImage),
-      progressIndicatorBuilder: (_, __, ___) => _showLoading
-        ? CircularProgressIndicator()
-        : Container(),
+      // progressIndicatorBuilder: (_, __, ___) => _showLoading
+      //   ? CircularProgressIndicator()
+      //   : Container(),
     );
   }
 }

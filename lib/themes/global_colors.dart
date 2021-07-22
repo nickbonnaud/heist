@@ -28,6 +28,7 @@ extension GlobalColors on ColorScheme {
   Color get scrollBackground => Colors.grey.shade100;
 
   Color get keyboardHelpBarLight => Colors.grey[100]!;
+  Color get keyboardHelpBarDark => Colors.grey[500]!;
 
   Color get iconPrimary => Colors.white;
   Color get iconSecondary => Colors.grey[800]!;

@@ -9,11 +9,11 @@ class PhotoPickerRepository {
   const PhotoPickerRepository({required PhotoPickerProvder photoPickerProvder})
     : _photoPickerProvder = photoPickerProvder;
 
-  Future<PickedFile?> pickPhoto() async {
+  Future<XFile?> pickPhoto() async {
     return await _photoPickerProvder.pickPhoto();
   }
 
-  Future<PickedFile?> takePhoto() async {
+  Future<XFile?> takePhoto() async {
     return await _photoPickerProvder.takePhoto();
   }
 }

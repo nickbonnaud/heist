@@ -2,7 +2,7 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:heist/models/business/business.dart';
-import 'package:heist/screens/home_screen/widgets/nearby_businesses_map/widgets/google_map_screen/bloc/google_map_screen_bloc.dart';
+import 'package:heist/screens/home_screen/widgets/home_screen_body/widgets/nearby_businesses_map/widgets/google_map_screen/bloc/google_map_screen_bloc.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockBusiness extends Mock implements Business {}

@@ -12,7 +12,7 @@ class PhotoRepository extends BaseRepository {
   PhotoRepository({required PhotoProvider photoProvider})
     : _photoProvider = photoProvider;
 
-  Future<Customer> upload({required PickedFile photo, required String profileIdentifier}) async {
+  Future<Customer> upload({required XFile photo, required String profileIdentifier}) async {
     final Map<String, dynamic> body = {'avatar': photo};
 
     final Map<String, dynamic> json = await this.send(request: _photoProvider.upload(body: body, profileIdentifier: profileIdentifier));

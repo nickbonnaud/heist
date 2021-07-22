@@ -3,43 +3,34 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heist/blocs/geo_location/geo_location_bloc.dart';
 import 'package:heist/blocs/nearby_businesses/nearby_businesses_bloc.dart';
 
-import 'widgets/fetch_businesses_fail_screen/fetch_businesses_fail_screen.dart';
-import 'widgets/nearby_businesses_map/nearby_businesses_map.dart';
-import 'widgets/no_nearby_locations/no_nearby_locations.dart';
-import 'widgets/peek_sheet/peek_sheet.dart';
+import 'bloc/side_drawer_bloc.dart';
+import 'widgets/home_screen_body/home_screen_body.dart';
+import 'widgets/side_drawer/side_drawer.dart';
 
 class HomeScreen extends StatelessWidget {
-  final NearbyBusinessesBloc _nearbyBusinessesBloc;
   final GeoLocationBloc _geoLocationBloc;
+  final NearbyBusinessesBloc _nearbyBusinessesBloc;
 
-  HomeScreen({required NearbyBusinessesBloc nearbyBusinessesBloc, required GeoLocationBloc geoLocationBloc})
-    : _nearbyBusinessesBloc = nearbyBusinessesBloc,
-      _geoLocationBloc = geoLocationBloc;
+  HomeScreen({
+    required GeoLocationBloc geoLocationBloc,
+    required NearbyBusinessesBloc nearbyBusinessesBloc,
+  })
+    : _geoLocationBloc = geoLocationBloc,
+      _nearbyBusinessesBloc = nearbyBusinessesBloc;
   
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocBuilder<NearbyBusinessesBloc, NearbyBusinessesState>(
-        builder: (context, state) {
-          if (state is NearbyBusinessLoaded) {
-            
-            if (state.businesses.length == 0) {
-              return NoNearbyLocations();
-            }
-
-            return Stack(
-              children: <Widget>[
-                NearbyBusinessesMap(preMarkers: state.preMarkers),
-                PeekSheet()
-              ],
-            );
-          }
-          return FetchBusinessesFailScreen(
+      backgroundColor: Theme.of(context).colorScheme.background,
+      body: BlocProvider<SideDrawerBloc>(
+        create: (_) => SideDrawerBloc(),
+        child: SideDrawer(
+          homeScreen: HomeScreenBody(
             nearbyBusinessesBloc: _nearbyBusinessesBloc,
-            geoLocationBloc: _geoLocationBloc,
-          );
-        },
-      ),
+            geoLocationBloc: _geoLocationBloc
+          ),
+        ),
+      )
     );
   }
 }

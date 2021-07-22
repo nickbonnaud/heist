@@ -205,11 +205,11 @@ class _TipFormState extends State<TipForm> {
   }
 
   void _onTipRateChanged() {
-    _tipFormBloc.add(TipRateChanged(tipRate: int.parse(_tipRateController.text)));
+    _tipFormBloc.add(TipRateChanged(tipRate: _tipRateController.text));
   }
 
   void _onQuickTipRateChanged() {
-    _tipFormBloc.add(QuickTipRateChanged(quickTipRate: int.parse(_quickTipRateController.text)));
+    _tipFormBloc.add(QuickTipRateChanged(quickTipRate: _quickTipRateController.text));
   }
 
   void _cancelButtonPressed(BuildContext context) {

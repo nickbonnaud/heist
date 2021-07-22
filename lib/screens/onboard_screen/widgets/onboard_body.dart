@@ -2,55 +2,24 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
-import 'package:heist/blocs/customer/customer_bloc.dart';
-import 'package:heist/blocs/geo_location/geo_location_bloc.dart';
 import 'package:heist/blocs/permissions/permissions_bloc.dart';
 import 'package:heist/models/status.dart';
-import 'package:heist/repositories/account_repository.dart';
-import 'package:heist/repositories/initial_login_repository.dart';
-import 'package:heist/repositories/photo_picker_repository.dart';
-import 'package:heist/repositories/photo_repository.dart';
-import 'package:heist/repositories/profile_repository.dart';
 import 'package:heist/resources/constants.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
 import 'package:heist/routing/routes.dart';
 import 'package:heist/screens/onboard_screen/bloc/onboard_bloc.dart';
-import 'package:heist/screens/permission_screen/permission_screen.dart';
-import 'package:heist/screens/profile_setup_screen/profile_setup_screen.dart';
-import 'package:heist/screens/tutorial_screen/tutorial_screen.dart';
 import 'package:heist/themes/global_colors.dart';
 
 class OnboardBody extends StatefulWidget {
   final PermissionsBloc _permissionsBloc;
-  final InitialLoginRepository _initialLoginRepository;
-  final GeoLocationBloc _geoLocationBloc;
-  final CustomerBloc _customerBloc;
-  final ProfileRepository _profileRepository;
-  final PhotoRepository _photoRepository;
-  final AccountRepository _accountRepository;
-  final PhotoPickerRepository _photoPickerRepository;
   final Status _customerStatus;
 
   OnboardBody({
     required PermissionsBloc permissionsBloc,
-    required InitialLoginRepository initialLoginRepository,
-    required GeoLocationBloc geoLocationBloc,
-    required CustomerBloc customerBloc,
-    required ProfileRepository profileRepository,
-    required PhotoRepository photoRepository,
-    required AccountRepository accountRepository,
-    required PhotoPickerRepository photoPickerRepository,
     required Status customerStatus
   })
     : _permissionsBloc = permissionsBloc,
-      _initialLoginRepository = initialLoginRepository,
-      _geoLocationBloc = geoLocationBloc,
-      _customerBloc = customerBloc,
-      _profileRepository = profileRepository,
-      _photoRepository = photoRepository,
-      _accountRepository = accountRepository,
-      _photoPickerRepository = photoPickerRepository,
       _customerStatus = customerStatus;
 
   @override
@@ -157,6 +126,7 @@ class _OnboardBodyState extends State<OnboardBody> with SingleTickerProviderStat
                 ),
                 SizedBox(height: SizeConfig.getHeight(5)),
                 Stepper(
+                  key: Key("onboardStepperKey"),
                   currentStep: currentStep,
                   steps: [
                     Step(
@@ -225,8 +195,9 @@ class _OnboardBodyState extends State<OnboardBody> with SingleTickerProviderStat
                           return SlideTransition(
                             position: _buttonAnimation,
                             child: TextButton(
+                              key: Key("stepperButtonKey"),
                               onPressed: () => _buttonPressed(context, currentStep),
-                              child: BoldText3(text: _buttonText(currentStep), context: context, color: Theme.of(context).colorScheme.callToAction),
+                              child: BoldText3(text: _buttonText(currentStep: currentStep), context: context, color: Theme.of(context).colorScheme.callToAction),
                             ),
                           );
                         }
@@ -289,32 +260,23 @@ class _OnboardBodyState extends State<OnboardBody> with SingleTickerProviderStat
       case 1:
         _customerOnboarded
           ? BlocProvider.of<OnboardBloc>(context).add(OnboardEvent.next)
-          : _showModal(context: context, screen: ProfileSetupScreen(
-            customerBloc: widget._customerBloc,
-            profileRepository: widget._profileRepository,
-            photoRepository: widget._photoRepository,
-            accountRepository: widget._accountRepository,
-            photoPickerRepository: widget._photoPickerRepository,
-          ));
+          : _goToScreen(route: Routes.onboardProfile);
         break;
       case 2:
-        _showModal(context: context, screen: TutorialScreen());
+        _goToScreen(route: Routes.tutorial);
         break;
       case 3:
-        if (!_permissionsReady) _showModal(context: context, screen: PermissionsScreen(
-          permissionsBloc: widget._permissionsBloc,
-          initialLoginRepository: widget._initialLoginRepository,
-          geoLocationBloc: widget._geoLocationBloc,
-          customerIdentifier: widget._customerBloc.customer!.identifier,
-        ));
+        !_permissionsReady
+          ? _goToScreen(route: Routes.onboardPermissions)
+          : BlocProvider.of<OnboardBloc>(context).add(OnboardEvent.next);
         break;
       case 4:
         _navigateToNextScreen();
         break;
     }
   }
-
-  String _buttonText(int currentStep) {
+  
+  String _buttonText({required int currentStep}) {
     String buttonText;
     switch (currentStep) {
       case 0:
@@ -347,7 +309,12 @@ class _OnboardBodyState extends State<OnboardBody> with SingleTickerProviderStat
     });
   }
 
+  void _goToScreen({required String route}) {
+    Navigator.of(context).pushNamed(route)
+      .then((_) => BlocProvider.of<OnboardBloc>(context).add(OnboardEvent.next));
+  }
+
   void _navigateToNextScreen() {
-    Navigator.of(context).pushReplacementNamed(Routes.layout);
+    Navigator.of(context).pushReplacementNamed(Routes.home);
   }
 }

@@ -32,6 +32,7 @@ class ProfileSetupScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: Key("profileSetupScreenKey"),
       resizeToAvoidBottomInset: false,
       body: BlocProvider<ProfileSetupScreenBloc>(
         create: (context) => ProfileSetupScreenBloc()

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:heist/blocs/authentication/authentication_bloc.dart';
-import 'package:heist/blocs/customer/customer_bloc.dart';
 import 'package:heist/blocs/permissions/permissions_bloc.dart';
 import 'package:heist/repositories/authentication_repository.dart';
 import 'package:provider/provider.dart';
@@ -14,7 +13,6 @@ class Forms extends StatelessWidget {
   final AuthenticationBloc _authenticationBloc;
   final PageController _pageController;
   final PermissionsBloc _permissionsBloc;
-  final CustomerBloc _customerBloc;
 
 
   Forms({
@@ -22,13 +20,11 @@ class Forms extends StatelessWidget {
     required AuthenticationBloc authenticationBloc,
     required PageController pageController,
     required PermissionsBloc permissionsBloc,
-    required CustomerBloc customerBloc
   })
     : _authenticationRepository = authenticationRepository,
       _authenticationBloc = authenticationBloc,
       _pageController = pageController,
-      _permissionsBloc = permissionsBloc,
-      _customerBloc = customerBloc;
+      _permissionsBloc = permissionsBloc;
 
   @override
   Widget build(BuildContext context) {
@@ -39,8 +35,7 @@ class Forms extends StatelessWidget {
             authenticationRepository: _authenticationRepository,
             authenticationBloc: _authenticationBloc,
             pageController: _pageController,
-            permissionsBloc: _permissionsBloc,
-            customerBloc: _customerBloc
+            permissionsBloc: _permissionsBloc
           );
         } else {
           return Register(

@@ -39,6 +39,7 @@ class _TutorialCardState extends State<TutorialCard> {
             ? - MediaQuery.of(context).size.height
             : 0,
           child: Container(
+            key: Key("card${widget._tutorialCard.key}"),
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height,
             decoration: BoxDecoration(
@@ -110,6 +111,7 @@ class _TutorialCardState extends State<TutorialCard> {
                   Padding(
                     padding: EdgeInsets.only(top: SizeConfig.getHeight(1)),
                     child: PlatformIconButton(
+                      key: Key("exitButton${widget._tutorialCard.key}"),
                       icon: Icon(
                         Icons.clear, 
                         color: Theme.of(context).colorScheme.callToAction,
@@ -141,6 +143,7 @@ class _TutorialCardState extends State<TutorialCard> {
             children: [
               Expanded(
                 child: OutlinedButton(
+                  key: Key("previousButton${widget._tutorialCard.key}"),
                   onPressed: state.currentIndex != state.tutorialCards.length - 1
                     ? () => BlocProvider.of<TutorialScreenBloc>(context).add(Previous())
                     : null,
@@ -154,11 +157,14 @@ class _TutorialCardState extends State<TutorialCard> {
               SizedBox(width: SizeConfig.getWidth(4)),
               Expanded(
                 child: ElevatedButton(
+                  key: Key("nextButton${widget._tutorialCard.key}"),
                   onPressed: state.currentIndex != 0
                     ? () => BlocProvider.of<TutorialScreenBloc>(context).add(Next())
-                    : null,
+                    : () => Navigator.of(context).pop(),
                   child: BoldText3(
-                    text: 'Next', 
+                    text: state.currentIndex != 0
+                      ? 'Next'
+                      : 'Close', 
                     context: context, 
                     color: Theme.of(context).colorScheme.onSecondary
                   ),

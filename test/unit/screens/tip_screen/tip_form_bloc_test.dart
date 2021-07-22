@@ -41,7 +41,7 @@ void main() {
       "TipFormBloc TipRateChanged event yields state: [isTipRateValid: true]",
       build: () => tipFormBloc,
       wait: Duration(milliseconds: 300),
-      act: (bloc) => bloc.add(TipRateChanged(tipRate: 18)),
+      act: (bloc) => bloc.add(TipRateChanged(tipRate: '18')),
       expect: () => [_baseState.update(isTipRateValid: true)]
     );
 
@@ -49,7 +49,7 @@ void main() {
       "TipFormBloc QuickTipRateChanged event yields state: [isQuickTipRateValid: true]",
       build: () => tipFormBloc,
       wait: Duration(milliseconds: 300),
-      act: (bloc) => bloc.add(QuickTipRateChanged(quickTipRate: 5)),
+      act: (bloc) => bloc.add(QuickTipRateChanged(quickTipRate: '5')),
       expect: () => [_baseState.update(isQuickTipRateValid: true)]
     );
 

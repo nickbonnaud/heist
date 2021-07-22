@@ -43,9 +43,9 @@ class _ProfileNameBodyState extends State<ProfileNameBody> {
     return BlocListener<ProfileNameFormBloc, ProfileNameFormState>(
       listener: (context, state) {
         if (state.errorMessage.isNotEmpty) {
-          _showSnackbar(context, state.errorMessage, state);
+          _showSnackbar(message: state.errorMessage, state: state);
         } else if (state.isSuccess) {
-          _showSnackbar(context, 'Great! Your name was saved successfully!', state);
+          _showSnackbar(message: 'Great! Your name was saved successfully!', state: state);
         }
       },
       child: Form(
@@ -56,7 +56,7 @@ class _ProfileNameBodyState extends State<ProfileNameBody> {
             children: <Widget>[
               Expanded(
                 child: KeyboardActions(
-                  config: _buildKeyboard(context),
+                  config: _buildKeyboard(),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: <Widget>[
@@ -65,61 +65,8 @@ class _ProfileNameBodyState extends State<ProfileNameBody> {
                         text: "Let's start with your name!",
                         context: context,
                       ),
-                      BlocBuilder<ProfileNameFormBloc, ProfileNameFormState>(
-                        builder: (context, state) {
-                          return TextFormField(
-                            decoration: InputDecoration(
-                              labelText: 'First Name',
-                              labelStyle: TextStyle(
-                                fontWeight: FontWeight.w400,
-                                fontSize: SizeConfig.getWidth(6)
-                              )
-                            ),
-                            style: TextStyle(
-                              fontWeight: FontWeight.w700,
-                              fontSize: SizeConfig.getWidth(7)
-                            ),
-                            controller: _firstNameController,
-                            focusNode: _firstNameFocus,
-                            keyboardType: TextInputType.text,
-                            textInputAction: TextInputAction.next,
-                            onFieldSubmitted: (_) {
-                              _firstNameFocus.unfocus();
-                              FocusScope.of(context).requestFocus(_lastNameFocus);
-                            },
-                            autocorrect: false,
-                            autovalidateMode: AutovalidateMode.onUserInteraction,
-                            validator: (_) => !state.isFirstNameValid ? 'Invalid first name' : null,
-                          );
-                        }
-                      ),
-                      BlocBuilder<ProfileNameFormBloc, ProfileNameFormState>(
-                        builder: (context, state) {
-                          return TextFormField(
-                            decoration: InputDecoration(
-                              labelText: 'Last Name',
-                              labelStyle: TextStyle(
-                                fontWeight: FontWeight.w400,
-                                fontSize: SizeConfig.getWidth(6)
-                              )
-                            ),
-                            style: TextStyle(
-                              fontWeight: FontWeight.w700,
-                              fontSize: SizeConfig.getWidth(7)
-                            ),
-                            controller: _lastNameController,
-                            focusNode: _lastNameFocus,
-                            keyboardType: TextInputType.text,
-                            textInputAction: TextInputAction.done,
-                            onFieldSubmitted: (_) {
-                              _lastNameFocus.unfocus();
-                            },
-                            autocorrect: false,
-                            autovalidateMode: AutovalidateMode.onUserInteraction,
-                            validator: (_) => !state.isLastNameValid ? 'Invalid last name' : null,
-                          );
-                        },
-                      ),
+                      _firstNameField(),
+                      _lastNameTextField(),
                       SizedBox(height: SizeConfig.getHeight(10)),
                     ],
                   ),
@@ -128,14 +75,7 @@ class _ProfileNameBodyState extends State<ProfileNameBody> {
               Row(
                 children: <Widget>[
                   Expanded(
-                    child: BlocBuilder<ProfileNameFormBloc, ProfileNameFormState>(
-                      builder: (context, state) {                        
-                        return ElevatedButton(
-                          onPressed: _isSaveButtonEnabled(state) ? () => _saveButtonPressed(state, context) : null,
-                          child: _buttonChild(state),
-                        );
-                      },
-                    )
+                    child: _submitButton()
                   )
                 ],
               )
@@ -150,7 +90,87 @@ class _ProfileNameBodyState extends State<ProfileNameBody> {
   void dispose() {
     _firstNameController.dispose();
     _lastNameController.dispose();
+
+    _firstNameFocus.dispose();
+    _lastNameFocus.dispose();
     super.dispose();
+  }
+
+  Widget _firstNameField() {
+    return BlocBuilder<ProfileNameFormBloc, ProfileNameFormState>(
+      builder: (context, state) {
+        return TextFormField(
+          key: Key("firstNameFieldKey"),
+          decoration: InputDecoration(
+            labelText: 'First Name',
+            labelStyle: TextStyle(
+              fontWeight: FontWeight.w400,
+              fontSize: SizeConfig.getWidth(6)
+            )
+          ),
+          style: TextStyle(
+            fontWeight: FontWeight.w700,
+            fontSize: SizeConfig.getWidth(7)
+          ),
+          controller: _firstNameController,
+          focusNode: _firstNameFocus,
+          keyboardType: TextInputType.text,
+          textCapitalization: TextCapitalization.words,
+          textInputAction: TextInputAction.next,
+          onFieldSubmitted: (_) {
+            _firstNameFocus.unfocus();
+            FocusScope.of(context).requestFocus(_lastNameFocus);
+          },
+          autocorrect: false,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          validator: (_) => !state.isFirstNameValid ? 'Invalid first name' : null,
+        );
+      }
+    );
+  }
+
+  Widget _lastNameTextField() {
+    return BlocBuilder<ProfileNameFormBloc, ProfileNameFormState>(
+      builder: (context, state) {
+        return TextFormField(
+          key: Key("lastNameFieldKey"),
+          decoration: InputDecoration(
+            labelText: 'Last Name',
+            labelStyle: TextStyle(
+              fontWeight: FontWeight.w400,
+              fontSize: SizeConfig.getWidth(6)
+            )
+          ),
+          style: TextStyle(
+            fontWeight: FontWeight.w700,
+            fontSize: SizeConfig.getWidth(7)
+          ),
+          controller: _lastNameController,
+          focusNode: _lastNameFocus,
+          keyboardType: TextInputType.text,
+          textCapitalization: TextCapitalization.words,
+          textInputAction: TextInputAction.done,
+          onFieldSubmitted: (_) {
+            _lastNameFocus.unfocus();
+          },
+          autocorrect: false,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          validator: (_) => !state.isLastNameValid ? 'Invalid last name' : null,
+        );
+      },
+    );
+  }
+
+  Widget _submitButton() {
+    return BlocBuilder<ProfileNameFormBloc, ProfileNameFormState>(
+      builder: (context, state) {                        
+        return ElevatedButton(
+          key: Key("submitNameButtonKey"),
+          onPressed: _isSaveButtonEnabled(state: state) ? () => _saveButtonPressed(state: state) : null,
+          child: _buttonChild(state: state),
+        );
+      },
+    );
   }
   
   void _onFirstNameChanged() {
@@ -161,8 +181,8 @@ class _ProfileNameBodyState extends State<ProfileNameBody> {
     _profileNameFormBloc.add(LastNameChanged(lastName: _lastNameController.text));
   }
 
-  void _saveButtonPressed(ProfileNameFormState state, BuildContext context) {
-    if (_isSaveButtonEnabled(state)) {
+  void _saveButtonPressed({required ProfileNameFormState state}) {
+    if (_isSaveButtonEnabled(state: state)) {
       _profileNameFormBloc.add(Submitted(
         firstName: _firstNameController.text,
         lastName: _lastNameController.text)
@@ -170,7 +190,7 @@ class _ProfileNameBodyState extends State<ProfileNameBody> {
     }
   }
   
-  Widget _buttonChild(ProfileNameFormState state) {
+  Widget _buttonChild({required ProfileNameFormState state}) {
     if (state.isSubmitting) {
       return SizedBox(height: SizeConfig.getWidth(5), width: SizeConfig.getWidth(5), child: CircularProgressIndicator());
     } else {
@@ -178,19 +198,20 @@ class _ProfileNameBodyState extends State<ProfileNameBody> {
     }
   }
 
-  bool _isSaveButtonEnabled(ProfileNameFormState state) {
+  bool _isSaveButtonEnabled({required ProfileNameFormState state}) {
     return state.isFormValid && isPopulated && !state.isSubmitting;
   }
 
-  void _showSnackbar(BuildContext context, String message, ProfileNameFormState state) async {
+  void _showSnackbar({required String message, required ProfileNameFormState state}) async {
     state.isSuccess ? Vibrate.success() : Vibrate.error();
     final SnackBar snackBar = SnackBar(
+      key: Key("nameSnackbarKey"),
       duration: Duration(seconds: 1),
       content: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Expanded(
-            child: BoldText3(text: message, context: context, color: Theme.of(context).colorScheme.onSecondary)
+            child: BoldText4(text: message, context: context, color: Theme.of(context).colorScheme.onSecondary)
           ),
         ],
       ),
@@ -212,7 +233,7 @@ class _ProfileNameBodyState extends State<ProfileNameBody> {
     );
   }
 
-  KeyboardActionsConfig _buildKeyboard(BuildContext context) {
+  KeyboardActionsConfig _buildKeyboard() {
     return KeyboardActionsConfig(
       keyboardActionsPlatform: KeyboardActionsPlatform.ALL,
       actions: [

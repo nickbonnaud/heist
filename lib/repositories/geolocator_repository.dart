@@ -24,12 +24,4 @@ class GeolocatorRepository {
   Future<Position> fetchBest() async {
     return await _geolocatorProvider.fetch(accuracy: LocationAccuracy.best);
   }
-
-  Future<LocationPermission> checkPermission() async {
-    return await _geolocatorProvider.checkPermission();
-  }
-
-  Future<Position> fetchRecent() async {
-    return await _geolocatorProvider.fetchRecent();
-  }
 }

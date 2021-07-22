@@ -49,10 +49,27 @@ void main() {
       });
     });
 
-    test("Tip Validator checks tip validity", () {
-      int validTip = 10;
+    test("Defautl Tip Validator checks tip validity", () {
+      String validTip = '10';
 
-      expect(Validators.isValidTip(tip: validTip), true);
+      expect(Validators.isValidDefaultTip(tip: validTip), true);
+    });
+
+    test("Reset Code Validator checks for valid reset code", () {
+      String invalidResetCode = "12dD";
+      expect(Validators.isValidResetCode(resetCode: invalidResetCode), false);
+
+      invalidResetCode = "12dD2Uv";
+      expect(Validators.isValidResetCode(resetCode: invalidResetCode), false);
+
+      invalidResetCode = " 13gF ";
+      expect(Validators.isValidResetCode(resetCode: invalidResetCode), false);
+
+      invalidResetCode = "!12Fgk";
+      expect(Validators.isValidResetCode(resetCode: invalidResetCode), false);
+
+      final validResetCode = "hFg53M";
+      expect(Validators.isValidResetCode(resetCode: validResetCode), true);
     });
   });
 }

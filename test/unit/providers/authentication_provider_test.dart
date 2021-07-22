@@ -34,5 +34,10 @@ void main() {
       var response = await authenticationProvider.requestPasswordReset(body: {});
       expect(response, isA<ApiResponse>());
     });
+
+    test("Reseting password returns ApiResponsee",() async {
+      var response = await authenticationProvider.resetPassword(body: {});
+      expect(response, isA<ApiResponse>());
+    });
   });
 }

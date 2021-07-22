@@ -15,21 +15,14 @@ import 'package:heist/repositories/beacon_repository.dart';
 import 'package:heist/repositories/transaction_repository.dart';
 
 class PhaseFour extends StatelessWidget {
-  final TransactionRepository _transactionRepository;
-  final PlatformProvider? _testApp;
-  final BeaconRepository _beaconRepository = BeaconRepository(beaconProvider: BeaconProvider());
 
-  PhaseFour({required TransactionRepository transactionRepository, PlatformProvider? testApp,})
-    : _transactionRepository = transactionRepository,
-      _testApp = testApp;
-  
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
         BlocProvider<BeaconBloc>(
           create: (BuildContext context) => BeaconBloc(
-            beaconRepository: _beaconRepository,
+            beaconRepository: BeaconRepository(beaconProvider: BeaconProvider()),
             activeLocationBloc: BlocProvider.of<ActiveLocationBloc>(context),
             nearbyBusinessesBloc: BlocProvider.of<NearbyBusinessesBloc>(context)
           )
@@ -51,7 +44,7 @@ class PhaseFour extends StatelessWidget {
           create: (_) => NotificationNavigationBloc()
         )
       ], 
-      child: PhaseFive(transactionRepository: _transactionRepository, testApp: _testApp)
+      child: PhaseFive()
     );
   }
 }

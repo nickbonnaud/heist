@@ -45,11 +45,11 @@ class TipFormBloc extends Bloc<TipFormEvent, TipFormState> {
   }
 
   Stream<TipFormState> _mapTipRateChangedToState(TipRateChanged event) async* {
-    yield state.update(isTipRateValid: Validators.isValidTip(tip: event.tipRate));
+    yield state.update(isTipRateValid: Validators.isValidDefaultTip(tip: event.tipRate));
   }
 
   Stream<TipFormState> _mapQuickTipRateChangedToState(QuickTipRateChanged event) async* {
-    yield state.update(isQuickTipRateValid: Validators.isValidTip(tip: event.quickTipRate));
+    yield state.update(isQuickTipRateValid: Validators.isValidQuickTip(tip: event.quickTipRate));
   }
 
   Stream<TipFormState> _mapSubmittedToState(Submitted event) async* {

@@ -10,7 +10,7 @@ abstract class EditPhotoState extends Equatable {
 class PhotoUnchanged extends EditPhotoState {}
 
 class Submitting extends EditPhotoState {
-  final PickedFile photo;
+  final XFile photo;
 
   Submitting({required this.photo});
 
@@ -22,7 +22,7 @@ class Submitting extends EditPhotoState {
 }
 
 class SubmitSuccess extends EditPhotoState {
-  final PickedFile photo;
+  final XFile photo;
 
   SubmitSuccess({required this.photo});
 

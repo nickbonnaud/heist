@@ -2,7 +2,7 @@ import "dart:math" as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
 import 'package:heist/resources/helpers/vibrate.dart';
@@ -106,6 +106,7 @@ class _RegisterFormState extends State<RegisterForm> {
           );
         },
         child: Form(
+          key: Key("registerFormKey"),
           child: Padding(
             padding: EdgeInsets.only(left: 16.0, right: 16.0),
             child: Container(
@@ -121,6 +122,7 @@ class _RegisterFormState extends State<RegisterForm> {
                     BlocBuilder<RegisterBloc, RegisterState>(
                       builder: (context, state) {
                         return TextFormField(
+                          key: Key("emailFormFieldKey"),
                           controller: _emailController,
                           focusNode: _emailFocus,
                           keyboardType: TextInputType.emailAddress,
@@ -129,7 +131,9 @@ class _RegisterFormState extends State<RegisterForm> {
                           onFieldSubmitted: (_) {
                             _changeFocus(context, _emailFocus, _passwordFocus);
                           },
-                          validator: (_) => !state.isEmailValid && _emailController.text.isNotEmpty ? 'Invalid email' : null,
+                          validator: (_) => !state.isEmailValid && _emailController.text.isNotEmpty 
+                            ? 'Invalid Email'
+                            : null,
                           autovalidateMode: AutovalidateMode.onUserInteraction,
                           autocorrect: false,
                           decoration: InputDecoration(
@@ -153,6 +157,7 @@ class _RegisterFormState extends State<RegisterForm> {
                     BlocBuilder<RegisterBloc, RegisterState>(
                       builder: (context, state) {
                         return TextFormField(
+                          key: Key("passwordFormFieldKey"),
                           controller: _passwordController,
                           focusNode: _passwordFocus,
                           keyboardType: TextInputType.text,
@@ -161,13 +166,16 @@ class _RegisterFormState extends State<RegisterForm> {
                           onFieldSubmitted: (_) {
                             _changeFocus(context, _passwordFocus, _passwordConfirmationFocus);
                           },
-                          validator: (_) => !state.isPasswordValid && _passwordController.text.isNotEmpty ? 'Min 6 characters, at least 1 letter, 1 number, 1 character.' : null,
+                          validator: (_) => !state.isPasswordValid && _passwordController.text.isNotEmpty
+                            ? 'Min 8 characters, at least 1 uppercase, 1 number, 1 special character'
+                            : null,
                           autovalidateMode: AutovalidateMode.onUserInteraction,
                           autocorrect: false,
                           decoration: InputDecoration(
                             enabledBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Theme.of(context).colorScheme.onSecondary)
+                              borderSide: BorderSide(color: Theme.of(context).colorScheme.onSecondary),
                             ),
+                            errorMaxLines: 3,
                             hintText: 'Password',
                             hintStyle: TextStyle(
                               color: Theme.of(context).colorScheme.onSecondarySubdued,
@@ -186,6 +194,7 @@ class _RegisterFormState extends State<RegisterForm> {
                     BlocBuilder<RegisterBloc, RegisterState>(
                       builder: (context, state) {
                         return TextFormField(
+                          key: Key("passwordConfirmationFormFieldKey"),
                           controller: _passwordConfirmationController,
                           focusNode: _passwordConfirmationFocus,
                           keyboardType: TextInputType.text,
@@ -194,7 +203,9 @@ class _RegisterFormState extends State<RegisterForm> {
                           onFieldSubmitted: (_) {
                             _passwordConfirmationFocus.unfocus();
                           },
-                          validator: (_) => !state.isPasswordConfirmationValid && _passwordConfirmationController.text.isNotEmpty ? "Passwords are not matching" : null,
+                          validator: (_) => !state.isPasswordConfirmationValid && _passwordConfirmationController.text.isNotEmpty 
+                            ? "Passwords do not match"
+                            : null,
                           autovalidateMode: AutovalidateMode.onUserInteraction,
                           autocorrect: false,
                           decoration: InputDecoration(
@@ -234,7 +245,15 @@ class _RegisterFormState extends State<RegisterForm> {
                             child: state.isSubmitting
                               ? SizedBox(height: SizeConfig.getWidth(5), width: SizeConfig.getWidth(5), child: CircularProgressIndicator())
                               : (_isRegisterButtonEnabled(state)
-                                  ? Text1(text: 'Register', context: context, color: Theme.of(context).colorScheme.onSecondary)
+                                  ? PlatformText(
+                                      "Register",
+                                      key: Key("registerButtonTextKey"),
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.normal,
+                                        color: Theme.of(context).colorScheme.onSecondary,
+                                        fontSize: SizeConfig.getWidth(6)
+                                      ),
+                                    )
                                   : null
                                 ),
                           ),
@@ -256,6 +275,10 @@ class _RegisterFormState extends State<RegisterForm> {
     _emailController.dispose();
     _passwordController.dispose();
     _passwordConfirmationController.dispose();
+
+    _emailFocus.dispose();
+    _passwordFocus.dispose();
+    _passwordConfirmationFocus.dispose();
     super.dispose();
   }
 

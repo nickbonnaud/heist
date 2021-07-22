@@ -6,7 +6,7 @@ import 'package:heist/models/business/business.dart';
 import 'package:heist/repositories/icon_creator_repository.dart';
 import 'package:heist/repositories/location_repository.dart';
 import 'package:heist/resources/helpers/api_exception.dart';
-import 'package:heist/screens/home_screen/widgets/nearby_businesses_map/models/pre_marker.dart';
+import 'package:heist/screens/home_screen/widgets/home_screen_body/widgets/nearby_businesses_map/models/pre_marker.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockLocationRepository extends Mock implements LocationRepository {}

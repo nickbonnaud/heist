@@ -17,6 +17,8 @@ class MockResponses {
       return _mockCheckValidPassword();
     } else if (options.path.endsWith("request-reset")) {
       return _mockRequestPasswordReset();
+    } else if (options.path.endsWith("reset-password")) {
+      return _mockResetPassword();
     } else if (options.path.endsWith("geo-location")) {
       return _mockOnStart(options);
     } else if (options.path.endsWith('profile')) {
@@ -116,7 +118,16 @@ class MockResponses {
         'identifier': faker.guid.guid(),
         'email': faker.internet.email(),
         'token': 'not_a_real_token',
-        'profile': generateCustomerProfile(),
+        'profile': {
+          'identifier': faker.guid.guid(),
+          'first_name': options.data['first_name'],
+          'last_name': options.data['last_name'],
+          'photos':{
+            'name': "",
+            'small_url': "",
+            'large_url': ""
+          }
+        },
         'account': generateAccount(),
         'status': {
           'name': 'Ready',
@@ -224,7 +235,14 @@ class MockResponses {
     return {
       'data': {
         'email_sent': true,
-        'res': 'passwords.sent'
+      }
+    };
+  }
+
+  static Map<String, dynamic> _mockResetPassword() {
+    return {
+      'data': {
+        'password_reset': true,
       }
     };
   }
@@ -240,7 +258,7 @@ class MockResponses {
           'identifier': faker.guid.guid(),
           'tip_rate': options.data['tip_rate'],
           'quick_tip_rate': options.data['quick_tip_rate'],
-          'primary': options.data['primary']
+          'primary': options.data['primary'] ?? 'ach'
         },
         'status': {
           'name': 'Ready',

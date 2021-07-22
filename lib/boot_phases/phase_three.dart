@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:heist/blocs/authentication/authentication_bloc.dart';
 import 'package:heist/blocs/geo_location/geo_location_bloc.dart';
 import 'package:heist/blocs/nearby_businesses/nearby_businesses_bloc.dart';
@@ -14,13 +13,6 @@ import 'package:heist/repositories/location_repository.dart';
 import 'package:heist/repositories/transaction_repository.dart';
 
 class PhaseThree extends StatelessWidget {
-  final PlatformProvider? _testApp;
-  final TransactionRepository _transactionRepository = TransactionRepository(transactionProvider: TransactionProvider());
-  final LocationRepository _locationRepository = LocationRepository(locationProvider: LocationProvider());
-  final IconCreatorRepository _iconCreatorRepository = IconCreatorRepository(iconCreatorProvider: IconCreatorProvider());
-
-  PhaseThree({PlatformProvider? testApp})
-    : _testApp = testApp;
   
   @override
   Widget build(BuildContext context) {
@@ -29,20 +21,20 @@ class PhaseThree extends StatelessWidget {
         BlocProvider<OpenTransactionsBloc>(
           create: (_) => OpenTransactionsBloc(
             authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
-            transactionRepository: _transactionRepository
+            transactionRepository: TransactionRepository(transactionProvider: TransactionProvider())
           )
         ),
 
 
         BlocProvider<NearbyBusinessesBloc>(
           create: (_) => NearbyBusinessesBloc(
-            locationRepository: _locationRepository,
-            iconCreatorRepository: _iconCreatorRepository,
+            locationRepository: LocationRepository(locationProvider: LocationProvider()),
+            iconCreatorRepository: IconCreatorRepository(iconCreatorProvider: IconCreatorProvider()),
             geoLocationBloc: BlocProvider.of<GeoLocationBloc>(context)
           )
         ),
       ], 
-      child: PhaseFour(transactionRepository: _transactionRepository, testApp: _testApp)
+      child: PhaseFour()
     );
   }
 }

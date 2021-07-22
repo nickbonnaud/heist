@@ -74,7 +74,7 @@ class _SplashScreenBodyState extends State<SplashScreenBody> {
     } else if (nextScreen == NextScreen.onboard) {
       Navigator.of(context).pushReplacementNamed(Routes.onboard);
     } else {
-      Navigator.of(context).pushReplacementNamed(Routes.layout);
+      Navigator.of(context).pushReplacementNamed(Routes.home);
     }
   }
 

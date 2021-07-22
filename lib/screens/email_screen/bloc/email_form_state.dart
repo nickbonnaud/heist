@@ -7,7 +7,7 @@ class EmailFormState extends Equatable {
   final bool isSuccess;
   final String errorMessage;
 
-  EmailFormState({
+  const EmailFormState({
     required this.isEmailValid,
     required this.isSubmitting,
     required this.isSuccess,

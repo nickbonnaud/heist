@@ -55,9 +55,19 @@ class MainTheme {
       appBarTheme: AppBarTheme(
         textTheme: _getTextTheme(context: context)
       ),
+    
+      inputDecorationTheme: InputDecorationTheme(
+        focusColor: Theme.of(context).colorScheme.callToAction,
+        focusedBorder: UnderlineInputBorder(
+          borderSide: BorderSide(
+            style: BorderStyle.solid,
+            color: Theme.of(context).colorScheme.callToAction
+          )
+        )
+      ),
 
       colorScheme: ColorScheme(
-        primary: _primary, 
+        primary: Theme.of(context).colorScheme.callToAction, 
         primaryVariant: _primaryVariant,
         onPrimary: _constrastPrimary,
 
