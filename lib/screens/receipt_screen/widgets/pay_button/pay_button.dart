@@ -1,12 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:heist/blocs/open_transactions/open_transactions_bloc.dart';
 import 'package:heist/models/transaction/transaction_resource.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
 import 'package:heist/resources/helpers/vibrate.dart';
-import 'package:heist/screens/receipt_screen/bloc/receipt_screen_bloc.dart';
 import 'package:heist/screens/receipt_screen/widgets/pay_button/bloc/pay_button_bloc.dart';
 import 'package:heist/themes/global_colors.dart';
 

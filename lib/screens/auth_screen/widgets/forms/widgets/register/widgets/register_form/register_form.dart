@@ -376,7 +376,7 @@ class _RegisterFormState extends State<RegisterForm> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Expanded(
-            child: Text3(
+            child: BoldText4(
               text: error,
               context: context,
               color: Theme.of(context).colorScheme.onError
@@ -389,7 +389,8 @@ class _RegisterFormState extends State<RegisterForm> {
 
     ScaffoldMessenger.of(context)
       ..hideCurrentSnackBar()
-      ..showSnackBar(snackBar);
+      ..showSnackBar(snackBar)
+      .closed.then((_) => _registerBloc.add(Reset()));
   }
 
   void _navigateToNextPage() {

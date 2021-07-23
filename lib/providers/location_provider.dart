@@ -1,4 +1,3 @@
-import 'package:heist/models/api_response.dart';
 import 'package:heist/models/paginated_api_response.dart';
 import 'package:heist/providers/base_provider.dart';
 import 'package:meta/meta.dart';

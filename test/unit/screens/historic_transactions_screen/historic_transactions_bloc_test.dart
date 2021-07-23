@@ -19,7 +19,6 @@ void main() {
     late TransactionRepository transactionRepository;
 
     late HistoricTransactionsBloc historicTransactionsBloc;
-    late HistoricTransactionsState _baseState;
 
     late MockDataGenerator _mockDataGenerator;
 
@@ -27,7 +26,6 @@ void main() {
       registerFallbackValue(DateTimeRange(start: DateTime.now(), end: DateTime.now()));
       transactionRepository = MockTransactionRepository();
       historicTransactionsBloc = HistoricTransactionsBloc(transactionRepository: transactionRepository);
-      _baseState = historicTransactionsBloc.state;
 
       _mockDataGenerator = MockDataGenerator();
     });

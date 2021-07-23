@@ -18,12 +18,10 @@ void main() {
     late RefundRepository refundRepository;
 
     late RefundsScreenBloc refundsScreenBloc;
-    late RefundsScreenState _baseState;
 
     setUp(() {
       refundRepository = MockRefundRepository();
       refundsScreenBloc = RefundsScreenBloc(refundRepository: refundRepository);
-      _baseState = refundsScreenBloc.state;
     });
 
     tearDown(() {

@@ -62,3 +62,5 @@ class Submitted extends RegisterEvent {
     passwordConfirmation: $passwordConfirmation 
   }''';
 }
+
+class Reset extends RegisterEvent {}

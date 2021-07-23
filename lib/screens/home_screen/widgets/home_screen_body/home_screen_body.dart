@@ -18,8 +18,8 @@ class HomeScreenBody extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: BlocBuilder<NearbyBusinessesBloc, NearbyBusinessesState>(
+    return Container(
+      child: BlocBuilder<NearbyBusinessesBloc, NearbyBusinessesState>(
         builder: (context, state) {
           if (state is NearbyBusinessLoaded) {
             

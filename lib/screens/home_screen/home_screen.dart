@@ -21,6 +21,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: Key("homeScreenKey"),
       backgroundColor: Theme.of(context).colorScheme.background,
       body: BlocProvider<SideDrawerBloc>(
         create: (_) => SideDrawerBloc(),

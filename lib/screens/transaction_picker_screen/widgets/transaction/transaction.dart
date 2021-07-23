@@ -19,7 +19,7 @@ import 'package:heist/screens/transaction_picker_screen/bloc/transaction_picker_
 import 'package:heist/screens/transaction_picker_screen/helpers/picker_transformer.dart';
 import 'package:heist/screens/transaction_picker_screen/widgets/transaction/bloc/transaction_bloc.dart';
 import 'package:heist/themes/global_colors.dart';
-import 'package:intl/intl.dart';
+import 'package:collection/collection.dart';
 
 class Transaction extends StatefulWidget {
   final List<UnassignedTransactionResource> _transactions;
@@ -222,10 +222,6 @@ class _TransactionState extends State<Transaction> {
     _showConfirmDialog(context, index);
   }
   
-  String _formatTime(String date) {
-    return DateFormat('jm').format(DateTime.parse(date));
-  }
-  
   Widget _uniquePurchase(UnassignedTransactionResource transaction) {
     List<PurchasedItem> purchasedItems  = transaction.transaction.purchasedItems;
     
@@ -236,7 +232,7 @@ class _TransactionState extends State<Transaction> {
         return transactionResource.transaction.purchasedItems;
       }).toList().expand((i) => i).toList().contains(item);
     }, orElse: () {
-      PurchasedItem item = purchasedItems.firstWhere((PurchasedItem item) {
+      PurchasedItem? item = purchasedItems.firstWhereOrNull((PurchasedItem item) {
         return item.subName == null;
       });
 

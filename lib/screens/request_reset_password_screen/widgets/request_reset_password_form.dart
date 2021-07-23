@@ -170,7 +170,8 @@ class _RequestResetPasswordFormState extends State<RequestResetPasswordForm> {
 
     ScaffoldMessenger.of(context)
       ..hideCurrentSnackBar()
-      ..showSnackBar(snackBar);
+      ..showSnackBar(snackBar)
+      .closed.then((_) => _formBloc.add(Reset()));
   }
 
   void _onEmailChanged() {

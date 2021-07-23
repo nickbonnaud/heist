@@ -67,12 +67,16 @@ class RegisterState extends Equatable {
   RegisterState update({
     bool? isEmailValid,
     bool? isPasswordValid,
-    bool? isPasswordConfirmationValid
+    bool? isPasswordConfirmationValid,
+    bool? isSubmitting,
+    String? errorMessage
   }) {
     return copyWith(
       isEmailValid: isEmailValid,
       isPasswordValid: isPasswordValid,
-      isPasswordConfirmationValid: isPasswordConfirmationValid
+      isPasswordConfirmationValid: isPasswordConfirmationValid,
+      isSubmitting: isSubmitting,
+      errorMessage: errorMessage
     );
   }
 
@@ -80,14 +84,16 @@ class RegisterState extends Equatable {
     bool? isEmailValid,
     bool? isPasswordValid,
     bool? isPasswordConfirmationValid,
+    bool? isSubmitting,
+    String? errorMessage
   }) {
     return RegisterState(
       isEmailValid: isEmailValid ?? this.isEmailValid,
       isPasswordValid: isPasswordValid ?? this.isPasswordValid,
       isPasswordConfirmationValid: isPasswordConfirmationValid ?? this.isPasswordConfirmationValid,
-      isSubmitting: this.isSubmitting,
+      isSubmitting: isSubmitting ?? this.isSubmitting,
       isSuccess: this.isSuccess,
-      errorMessage: this.errorMessage,
+      errorMessage: errorMessage ?? this.errorMessage,
     );
   }
 

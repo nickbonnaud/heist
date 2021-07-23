@@ -53,6 +53,6 @@ class RequestResetFormBloc extends Bloc<RequestResetFormEvent, RequestResetFormS
   }
 
   Stream<RequestResetFormState> _mapResetToState() async* {
-    yield state.update(errorMessage: "", isSuccess: false);
+    yield state.update(errorMessage: "", isSubmitting: false, isSuccess: false);
   }
 }

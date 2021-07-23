@@ -7,7 +7,6 @@ import 'package:heist/global_widgets/edit_photo/edit_photo.dart';
 import 'package:heist/models/customer/profile.dart';
 import 'package:heist/repositories/photo_picker_repository.dart';
 import 'package:heist/repositories/photo_repository.dart';
-import 'package:heist/repositories/profile_repository.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
 import 'package:heist/resources/helpers/vibrate.dart';

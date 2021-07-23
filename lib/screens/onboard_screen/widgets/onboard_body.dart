@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:heist/blocs/permissions/permissions_bloc.dart';
 import 'package:heist/models/status.dart';
 import 'package:heist/resources/constants.dart';
@@ -298,15 +297,6 @@ class _OnboardBodyState extends State<OnboardBody> with SingleTickerProviderStat
         buttonText = "";
     }
     return buttonText;
-  }
-
-  void _showModal({required BuildContext context, required Widget screen}) {
-    showPlatformModalSheet(
-      context: context, 
-      builder: (_) => screen
-    ).then((_) {
-      BlocProvider.of<OnboardBloc>(context).add(OnboardEvent.next);
-    });
   }
 
   void _goToScreen({required String route}) {

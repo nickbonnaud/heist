@@ -71,7 +71,7 @@ class _LoginFormState extends State<LoginForm> {
           }
         )
       ],
-      child:  Consumer2<PageOffsetNotifier, AnimationController>(
+      child: Consumer2<PageOffsetNotifier, AnimationController>(
         builder: (context, notifier, animation, child) {
           return animation.value == 0
           ? Container()
@@ -368,7 +368,7 @@ class _LoginFormState extends State<LoginForm> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Expanded(
-            child: Text3(
+            child: BoldText4(
               text: error,
               context: context,
               color: Theme.of(context).colorScheme.onError
@@ -381,7 +381,8 @@ class _LoginFormState extends State<LoginForm> {
 
     ScaffoldMessenger.of(context)
       ..hideCurrentSnackBar()
-      ..showSnackBar(snackBar);
+      ..showSnackBar(snackBar)
+      .closed.then((_) => _loginBloc.add(Reset()));
   }
 
   void _navigateToNextPage({required bool onboarded}) {

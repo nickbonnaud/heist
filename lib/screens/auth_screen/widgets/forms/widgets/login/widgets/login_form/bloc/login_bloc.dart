@@ -39,6 +39,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       yield* _mapPasswordChangedToState(event.password);
     } else if (event is Submitted) {
       yield* _mapSubmittedToState(email: event.email, password: event.password);
+    } else if (event is Reset) {
+      yield* _mapResetToState();
     }
   }
 
@@ -59,5 +61,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     } on ApiException catch (exception) {
       yield LoginState.failure(errorMessage: exception.error);
     }
+  }
+
+  Stream<LoginState> _mapResetToState() async* {
+    yield state.update(isSubmitting: false, errorMessage: "");
   }
 }

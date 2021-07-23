@@ -11,8 +11,7 @@ class MessageList extends StatelessWidget {
   final ScrollController _scrollController;
 
   MessageList({required ScrollController scrollController})
-    : assert(scrollController != null),
-      _scrollController = scrollController;
+    : _scrollController = scrollController;
   
   @override
   Widget build(BuildContext context) {

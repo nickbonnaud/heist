@@ -66,6 +66,10 @@ class MainTheme {
         )
       ),
 
+      snackBarTheme: SnackBarThemeData(
+        contentTextStyle: getDefaultFont()
+      ),
+
       colorScheme: ColorScheme(
         primary: Theme.of(context).colorScheme.callToAction, 
         primaryVariant: _primaryVariant,

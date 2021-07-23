@@ -1,3 +1,4 @@
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,6 +10,8 @@ import 'package:heist/resources/constants.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
 import 'package:heist/resources/helpers/vibrate.dart';
+import 'package:heist/resources/test_helpers/mock_image_picker.dart';
+import 'package:heist/test_blocs/is_testing_cubit.dart';
 import 'package:heist/themes/global_colors.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -94,6 +97,12 @@ class EditPhoto extends StatelessWidget {
 
   void _editPhoto(BuildContext context, EditPhotoState state) async {
     if (state is !Submitting) {
+      if (context.read<IsTestingCubit>().state) {
+        XFile file = await MockImagePicker().init();
+        BlocProvider.of<EditPhotoBloc>(context).add(ChangePhoto(profile: _profile, photo: file));
+        return;
+      }
+
       final bool permissionGranted = await _requestPermission();
       if (permissionGranted) {
         XFile? photo = await _photoPicker.pickPhoto();
@@ -154,7 +163,7 @@ class EditPhoto extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Expanded(
-            child: BoldText3(text: message, context: context, color: Theme.of(context).colorScheme.onSecondary)
+            child: BoldText4(text: message, context: context, color: Theme.of(context).colorScheme.onSecondary)
           ),
         ],
       ),

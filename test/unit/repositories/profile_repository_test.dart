@@ -1,7 +1,5 @@
-import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:heist/models/api_response.dart';
-import 'package:heist/models/business/profile.dart';
 import 'package:heist/models/customer/customer.dart';
 import 'package:heist/providers/profile_provider.dart';
 import 'package:heist/repositories/profile_repository.dart';

@@ -213,7 +213,7 @@ class _FilterButtonState extends State<FilterButton> with SingleTickerProviderSt
   }
 
   void _searchByTransactionId(BuildContext context) async {
-    String identifier = await showPlatformModalSheet(
+    String? identifier = await showPlatformModalSheet(
       context: context,
       builder: (_) => SearchIdentifierModal(hintText: "Transaction ID")
     );

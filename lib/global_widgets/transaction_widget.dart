@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:heist/blocs/receipt_modal_sheet/receipt_modal_sheet_bloc.dart';
 import 'package:heist/global_widgets/cached_avatar_hero.dart';
 import 'package:heist/models/transaction/transaction_resource.dart';
 import 'package:heist/resources/helpers/currency.dart';
 import 'package:heist/resources/helpers/date_formatter.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
 import 'package:heist/routing/routes.dart';
-import 'package:heist/screens/receipt_screen/receipt_screen.dart';
 import 'package:heist/themes/global_colors.dart';
 
 import 'default_app_bar/bloc/default_app_bar_bloc.dart';

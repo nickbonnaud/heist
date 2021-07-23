@@ -16,9 +16,9 @@ class MockResponses {
     } else if (options.path.endsWith('password-check')) {
       return _mockCheckValidPassword();
     } else if (options.path.endsWith("request-reset")) {
-      return _mockRequestPasswordReset();
+      return _mockRequestPasswordReset(options);
     } else if (options.path.endsWith("reset-password")) {
-      return _mockResetPassword();
+      return _mockResetPassword(options);
     } else if (options.path.endsWith("geo-location")) {
       return _mockOnStart(options);
     } else if (options.path.endsWith('profile')) {
@@ -93,6 +93,12 @@ class MockResponses {
   }
   
   static Map<String, dynamic> _mockRegister(RequestOptions options) {
+    if ((options.data['email'] as String).contains("error")) {
+      return {
+        "error": true
+      };
+    }
+    
     return {
       'data': {
         'identifier': faker.guid.guid(),
@@ -113,6 +119,14 @@ class MockResponses {
   }
 
   static Map<String, dynamic> _mockStoreProfile(RequestOptions options) {
+    print('here');
+    print(options.data);
+    if ((options.data['first_name'] as String).toLowerCase().contains("error")) {
+      return {
+        "error": true
+      };
+    }
+    
     return {
       'data': {
         'identifier': faker.guid.guid(),
@@ -200,6 +214,12 @@ class MockResponses {
   }
 
   static Map<String, dynamic> _mockLogin(RequestOptions options) {
+    if ((options.data['email'] as String).contains("error")) {
+      return {
+        "error": true
+      };
+    }
+
     return {
       'data': {
         'identifier': faker.guid.guid(),
@@ -231,7 +251,13 @@ class MockResponses {
     };
   }
 
-  static Map<String, dynamic> _mockRequestPasswordReset() {
+  static Map<String, dynamic> _mockRequestPasswordReset(RequestOptions options) {
+    if ((options.data['email'] as String).contains("error")) {
+      return {
+        "error": true
+      };
+    }
+    
     return {
       'data': {
         'email_sent': true,
@@ -239,7 +265,12 @@ class MockResponses {
     };
   }
 
-  static Map<String, dynamic> _mockResetPassword() {
+  static Map<String, dynamic> _mockResetPassword(RequestOptions options) {
+    if ((options.data['reset_code'] as String).contains("error")) {
+      return {
+        "error": true
+      };
+    }
     return {
       'data': {
         'password_reset': true,
@@ -248,6 +279,12 @@ class MockResponses {
   }
 
   static Map<String, dynamic> _mockUpdateAccount(RequestOptions options) {
+    if ((options.data['tip_rate'] as int) == 17 && (options.data['quick_tip_rate'] as int) == 17) {
+      return {
+        "error": true
+      };
+    }
+    
     return {
       'data': {
         'identifier': faker.guid.guid(),

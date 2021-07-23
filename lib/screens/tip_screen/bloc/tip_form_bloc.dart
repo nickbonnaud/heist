@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:heist/blocs/customer/customer_bloc.dart';
-import 'package:heist/models/customer/account.dart';
 import 'package:heist/models/customer/customer.dart';
 import 'package:heist/repositories/account_repository.dart';
 import 'package:heist/resources/helpers/api_exception.dart';

@@ -43,3 +43,5 @@ class Submitted extends LoginEvent {
   @override
   String toString() => 'Submitted { email: $email, password: $password }';
 }
+
+class Reset extends LoginEvent {}

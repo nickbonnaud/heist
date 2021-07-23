@@ -13,7 +13,6 @@ import 'package:heist/global_widgets/material_date_picker/material_date_picker.d
 import 'package:heist/global_widgets/search_business_name_modal.dart';
 import 'package:heist/global_widgets/search_identifier_modal.dart';
 import 'package:heist/models/business/business.dart';
-import 'package:heist/models/date_range.dart';
 import 'package:heist/repositories/business_repository.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/screens/refunds_screen/bloc/refunds_screen_bloc.dart';

@@ -58,23 +58,32 @@ class LoginState extends Equatable {
     );
   }
 
-  LoginState update({bool? isEmailValid, bool? isPasswordValid}) {
+  LoginState update({
+    bool? isEmailValid,
+    bool? isPasswordValid,
+    bool? isSubmitting,
+    String? errorMessage
+  }) {
     return copyWith(
       isEmailValid: isEmailValid,
       isPasswordValid: isPasswordValid,
+      isSubmitting: isSubmitting,
+      errorMessage: errorMessage
     );
   }
 
   LoginState copyWith({
     bool? isEmailValid,
     bool? isPasswordValid,
+    bool? isSubmitting,
+    String? errorMessage
   }) {
     return LoginState(
       isEmailValid: isEmailValid ?? this.isEmailValid,
       isPasswordValid: isPasswordValid ?? this.isPasswordValid, 
-      isSubmitting: this.isSubmitting, 
+      isSubmitting: isSubmitting ?? this.isSubmitting, 
       isSuccess: this.isSuccess,
-      errorMessage: this.errorMessage
+      errorMessage: errorMessage ?? this.errorMessage
     );
   }
 

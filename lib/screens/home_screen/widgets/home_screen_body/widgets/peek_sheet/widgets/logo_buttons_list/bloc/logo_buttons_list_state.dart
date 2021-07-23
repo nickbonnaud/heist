@@ -35,7 +35,6 @@ class LogoButtonsListState extends Equatable {
   );
 
   @override
-  // TODO: implement props
   List<Object?> get props => [numberOpenTransactions, numberActiveLocations, numberNearbyLocations];
 
   @override

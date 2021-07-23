@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:heist/blocs/authentication/authentication_bloc.dart';
 import 'package:heist/blocs/customer/customer_bloc.dart';
 import 'package:heist/global_widgets/bottom_modal_app_bar.dart';
 import 'package:heist/models/customer/profile.dart';

@@ -3,7 +3,6 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heist/blocs/authentication/authentication_bloc.dart';
-import 'package:heist/blocs/customer/customer_bloc.dart';
 import 'package:heist/blocs/permissions/permissions_bloc.dart';
 import 'package:heist/repositories/authentication_repository.dart';
 import 'package:heist/screens/auth_screen/widgets/background.dart';

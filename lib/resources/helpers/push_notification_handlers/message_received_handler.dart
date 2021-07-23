@@ -6,7 +6,6 @@ import 'package:heist/models/status.dart';
 import 'package:heist/models/transaction/transaction_resource.dart';
 import 'package:heist/repositories/transaction_repository.dart';
 import 'package:heist/resources/enums/notification_type.dart';
-import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 class MessageReceivedHandler {
   final TransactionRepository _transactionRepository;

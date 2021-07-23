@@ -6,6 +6,7 @@ import 'package:heist/blocs/active_location/active_location_bloc.dart';
 import 'package:heist/blocs/nearby_businesses/nearby_businesses_bloc.dart';
 import 'package:heist/models/business/business.dart';
 import 'package:heist/models/customer/active_location.dart';
+import 'package:collection/collection.dart';
 
 import 'shared_list_items/logo_button/logo_button.dart';
 import 'shared_list_items/logo_details/business_logo_details.dart';
@@ -66,7 +67,7 @@ class ActiveLocationsList extends StatelessWidget {
   
   Widget _buildLogoButton({required BuildContext context, required ActiveLocation activeLocation, required ActiveLocationState state}) {
     int index = _setIndex(state: state, activeLocation: activeLocation);
-    Business business = _getBusiness(context: context, activeLocation: activeLocation, state: state);
+    Business? business = _getBusiness(context: context, activeLocation: activeLocation, state: state);
 
     return LogoButton(
       controller: _controller, 
@@ -81,7 +82,7 @@ class ActiveLocationsList extends StatelessWidget {
 
   Widget _buildDetails({required BuildContext context, required ActiveLocation activeLocation, required ActiveLocationState state}) {
     int index = _setIndex(state: state, activeLocation: activeLocation);
-    Business business = _getBusiness(context: context, activeLocation: activeLocation, state: state);
+    Business? business = _getBusiness(context: context, activeLocation: activeLocation, state: state);
     
     if (business == null) return Container();
     
@@ -96,11 +97,9 @@ class ActiveLocationsList extends StatelessWidget {
     );
   }
   
-  Business _getBusiness({required BuildContext context, required ActiveLocation activeLocation, required ActiveLocationState state}) {
+  Business? _getBusiness({required BuildContext context, required ActiveLocation activeLocation, required ActiveLocationState state}) {
     return BlocProvider.of<NearbyBusinessesBloc>(context).state.businesses
-      .firstWhere((Business business) => activeLocation.beaconIdentifier == business.location.beacon.identifier,
-      orElse: null
-    );
+      .firstWhereOrNull((Business business) => activeLocation.beaconIdentifier == business.location.beacon.identifier);
   }
 
   bool _showDivider() {

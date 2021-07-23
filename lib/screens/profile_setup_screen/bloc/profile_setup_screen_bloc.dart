@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:heist/models/customer/customer.dart';
 import 'package:heist/models/status.dart';
 import 'package:meta/meta.dart';
 

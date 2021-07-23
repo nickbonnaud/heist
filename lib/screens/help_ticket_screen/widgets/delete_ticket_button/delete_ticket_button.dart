@@ -44,8 +44,7 @@ class DialogBody extends StatelessWidget {
   final HelpTicket _helpTicket;
 
   DialogBody({required HelpTicket helpTicket})
-    : assert(helpTicket != null),
-      _helpTicket = helpTicket;
+    : _helpTicket = helpTicket;
 
   @override
   Widget build(BuildContext context) {

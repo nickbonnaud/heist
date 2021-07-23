@@ -40,6 +40,8 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
       yield* _mapPasswordConfirmationChangedToState(event.passwordConfirmation, event.password);
     } else if (event is Submitted) {
       yield* _mapSubmittedToState(event.email, event.password, event.passwordConfirmation);
+    } else if (event is Reset) {
+      yield* _mapResetToState();
     }
   }
 
@@ -67,5 +69,9 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     } on ApiException catch (exception) {
       yield RegisterState.failure(errorMessage: exception.error);
     }
+  }
+
+  Stream<RegisterState> _mapResetToState() async* {
+    yield state.update(isSubmitting: false, errorMessage: "");
   }
 }
