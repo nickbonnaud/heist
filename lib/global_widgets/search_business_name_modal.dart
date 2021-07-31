@@ -11,12 +11,18 @@ import 'package:heist/themes/global_colors.dart';
 
 import 'bottom_modal_app_bar.dart';
 
-class SearchBusinessNameModal extends StatelessWidget {
-  final FocusNode _businessNameNode = FocusNode();
+class SearchBusinessNameModal extends StatefulWidget {
   final BusinessRepository _businessRepository;
 
   SearchBusinessNameModal({required BusinessRepository businessRepository})
     : _businessRepository = businessRepository;
+  
+  @override
+  State<SearchBusinessNameModal> createState() => _SearchBusinessNameModalState();
+}
+
+class _SearchBusinessNameModalState extends State<SearchBusinessNameModal> {
+  final FocusNode _businessNameNode = FocusNode();
   
   @override
   Widget build(BuildContext context) {
@@ -29,53 +35,63 @@ class SearchBusinessNameModal extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            TypeAheadFormField(
-                loadingBuilder: (BuildContext context) => Center(
-                  child: LoadingWidget(),
-                ),
-                suggestionsBoxDecoration: SuggestionsBoxDecoration(
-                  color: Theme.of(context).colorScheme.scrollBackground,
-                  elevation: 0
-                ),
-                debounceDuration: Duration(milliseconds: 500),
-                textFieldConfiguration: TextFieldConfiguration(
-                  focusNode: _businessNameNode,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w700,
-                    fontSize: SizeConfig.getWidth(7),
-                  ),
-                  decoration: InputDecoration(
-                    hintText: "Business Name",
-                    hintStyle: TextStyle(
-                      fontWeight: FontWeight.w700,
-                      fontSize: SizeConfig.getWidth(7),
-                      color: Theme.of(context).colorScheme.onPrimaryDisabled
-                    ),
-                  ),
-                  cursorColor: Theme.of(context).colorScheme.callToAction,
-                  autocorrect: false,
-                  autofocus: true,
-                  keyboardType: TextInputType.text,
-                  textInputAction: TextInputAction.done,
-                  onSubmitted: (_) => Navigator.of(context).pop()
-                ),
-                suggestionsCallback: _suggestionCallback, 
-                itemBuilder: (context, Business business) {
-                  return _buildSuggestion(context: context, business: business);
-                }, 
-                onSuggestionSelected: (Business business) {
-                  Navigator.of(context).pop(business);
-                },
-                hideSuggestionsOnKeyboardHide: false,
-              )
+            _textField()
           ],
         ),
       ) 
     );
   }
 
+  @override
+  void dispose() {
+    _businessNameNode.dispose();
+    super.dispose();
+  }
+
+  Widget _textField() {
+    return TypeAheadFormField(
+      loadingBuilder: (BuildContext context) => Center(
+        child: LoadingWidget(),
+      ),
+      suggestionsBoxDecoration: SuggestionsBoxDecoration(
+        color: Theme.of(context).colorScheme.scrollBackground,
+        elevation: 0
+      ),
+      debounceDuration: Duration(milliseconds: 500),
+      textFieldConfiguration: TextFieldConfiguration(
+        focusNode: _businessNameNode,
+        style: TextStyle(
+          fontWeight: FontWeight.w700,
+          fontSize: SizeConfig.getWidth(7),
+        ),
+        decoration: InputDecoration(
+          hintText: "Business Name",
+          hintStyle: TextStyle(
+            fontWeight: FontWeight.w700,
+            fontSize: SizeConfig.getWidth(7),
+            color: Theme.of(context).colorScheme.onPrimaryDisabled
+          ),
+        ),
+        cursorColor: Theme.of(context).colorScheme.callToAction,
+        autocorrect: false,
+        autofocus: true,
+        keyboardType: TextInputType.text,
+        textInputAction: TextInputAction.done,
+        onSubmitted: (_) => Navigator.of(context).pop()
+      ),
+      suggestionsCallback: _suggestionCallback, 
+      itemBuilder: (context, Business business) {
+        return _buildSuggestion(context: context, business: business);
+      }, 
+      onSuggestionSelected: (Business business) {
+        Navigator.of(context).pop(business);
+      },
+      hideSuggestionsOnKeyboardHide: false,
+    );
+  }
+  
   Future<List<Business>> _suggestionCallback(String pattern) async {
-    final PaginateDataHolder holder = await _businessRepository.fetchByName(name: pattern);
+    final PaginateDataHolder holder = await widget._businessRepository.fetchByName(name: pattern);
     return holder.data as List<Business>;
   }
 

@@ -5,12 +5,18 @@ import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/themes/global_colors.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
-class SearchIdentifierModal extends StatelessWidget {
-  final FocusNode _identifierNode = FocusNode();
+class SearchIdentifierModal extends StatefulWidget {
   final String _hintText;
 
   SearchIdentifierModal({required String hintText})
     : _hintText = hintText;
+
+  @override
+  State<SearchIdentifierModal> createState() => _SearchIdentifierModalState();
+}
+
+class _SearchIdentifierModalState extends State<SearchIdentifierModal> {
+  final FocusNode _identifierNode = FocusNode();
   
   @override
   Widget build(BuildContext context) {
@@ -34,7 +40,7 @@ class SearchIdentifierModal extends StatelessWidget {
                 fontSize: SizeConfig.getWidth(7),
               ),
               decoration: InputDecoration(
-                hintText: _hintText,
+                hintText: widget._hintText,
                 hintStyle: TextStyle(
                   fontWeight: FontWeight.w700,
                   fontSize: SizeConfig.getWidth(7),
@@ -51,6 +57,12 @@ class SearchIdentifierModal extends StatelessWidget {
     );
   }
 
+  @override
+  void dispose() {
+    _identifierNode.dispose();
+    super.dispose();
+  }
+  
   MaskTextInputFormatter _createInputFormatter() {
     return MaskTextInputFormatter(
       mask: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',

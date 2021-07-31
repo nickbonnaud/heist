@@ -56,30 +56,7 @@ class _EmailFormState extends State<EmailForm> {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: <Widget>[
                       VeryBoldText1(text: 'Edit Email', context: context),
-                      BlocBuilder<EmailFormBloc, EmailFormState>(
-                        builder: (context, state) {
-                          return TextFormField(
-                            decoration: InputDecoration(
-                              labelText: 'Email',
-                              labelStyle: TextStyle(
-                                fontWeight: FontWeight.w400,
-                                fontSize: SizeConfig.getWidth(6)
-                              )
-                            ),
-                            style: TextStyle(
-                              fontWeight: FontWeight.w700,
-                              fontSize: SizeConfig.getWidth(7)
-                            ),
-                            controller: _emailController,
-                            keyboardType: TextInputType.emailAddress,
-                            textInputAction: TextInputAction.done,
-                            autocorrect: false,
-                            autovalidateMode: AutovalidateMode.onUserInteraction,
-                            focusNode: _emailFocusNode,
-                            validator: (_) => !state.isEmailValid ? 'Invalid email' : null,
-                          );
-                        }
-                      ),
+                      _email(),
                       SizedBox(height: SizeConfig.getHeight(10)),
                     ],
                   ),
@@ -90,28 +67,11 @@ class _EmailFormState extends State<EmailForm> {
                 child: Row(
                   children: <Widget>[
                     Expanded(
-                      child: BlocBuilder<EmailFormBloc, EmailFormState>(
-                        builder: (context, state) {
-                          return OutlinedButton(
-                            onPressed: state.isSubmitting ? null : () => _cancelButtonPressed(context),
-                            child: BoldText3(text: 'Cancel', context: context, color: state.isSubmitting
-                              ? Theme.of(context).colorScheme.callToActionDisabled
-                              : Theme.of(context).colorScheme.callToAction
-                            ),
-                          );
-                        }
-                      ),
+                      child: _cancelButton()
                     ),
                     SizedBox(width: 20.0),
                     Expanded(
-                      child: BlocBuilder<EmailFormBloc, EmailFormState>(
-                        builder: (context, state) {
-                          return ElevatedButton(
-                            onPressed: _isSaveButtonEnabled(state) ? () => _saveButtonPressed(state) : null,
-                            child: _buttonChild(state),
-                          );
-                        }
-                      ) 
+                      child: _submitButton()
                     ),
                   ],
                 ),
@@ -126,7 +86,60 @@ class _EmailFormState extends State<EmailForm> {
   @override
   void dispose() {
     _emailController.dispose();
+    _emailFocusNode.dispose();
     super.dispose();
+  }
+
+  Widget _email() {
+    return BlocBuilder<EmailFormBloc, EmailFormState>(
+      builder: (context, state) {
+        return TextFormField(
+          decoration: InputDecoration(
+            labelText: 'Email',
+            labelStyle: TextStyle(
+              fontWeight: FontWeight.w400,
+              fontSize: SizeConfig.getWidth(6)
+            )
+          ),
+          style: TextStyle(
+            fontWeight: FontWeight.w700,
+            fontSize: SizeConfig.getWidth(7)
+          ),
+          controller: _emailController,
+          keyboardType: TextInputType.emailAddress,
+          textInputAction: TextInputAction.done,
+          autocorrect: false,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          focusNode: _emailFocusNode,
+          validator: (_) => !state.isEmailValid ? 'Invalid email' : null,
+        );
+      }
+    );
+  }
+
+  Widget _cancelButton() {
+    return BlocBuilder<EmailFormBloc, EmailFormState>(
+      builder: (context, state) {
+        return OutlinedButton(
+          onPressed: state.isSubmitting ? null : () => _cancelButtonPressed(context),
+          child: BoldText3(text: 'Cancel', context: context, color: state.isSubmitting
+            ? Theme.of(context).colorScheme.callToActionDisabled
+            : Theme.of(context).colorScheme.callToAction
+          ),
+        );
+      }
+    );
+  }
+
+  Widget _submitButton() {
+    return BlocBuilder<EmailFormBloc, EmailFormState>(
+      builder: (context, state) {
+        return ElevatedButton(
+          onPressed: _isSaveButtonEnabled(state) ? () => _saveButtonPressed(state) : null,
+          child: _buttonChild(state),
+        );
+      }
+    );
   }
 
   void _showSnackbar({required BuildContext context, required bool isSuccess, String? error}) async {

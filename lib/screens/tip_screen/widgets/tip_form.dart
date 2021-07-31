@@ -192,6 +192,9 @@ class _TipFormState extends State<TipForm> {
   void dispose() {
     _tipRateController.dispose();
     _quickTipRateController.dispose();
+
+    _tipRateNode.dispose();
+    _quickTipRateNode.dispose();
     super.dispose();
   }
 

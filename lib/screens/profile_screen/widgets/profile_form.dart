@@ -182,6 +182,9 @@ class _ProfileFormState extends State<ProfileForm> {
   void dispose() {
     _firstNameController.dispose();
     _lastNameController.dispose();
+
+    _firstNameFocus.dispose();
+    _lastNameFocus.dispose();
     super.dispose();
   }
 

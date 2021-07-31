@@ -56,59 +56,8 @@ class _HelpTicketFormState extends State<HelpTicketForm> {
                     mainAxisAlignment:  MainAxisAlignment.spaceEvenly,
                     children: [
                       VeryBoldText2(text: 'Create Help Ticket', context: context),
-                      BlocBuilder<HelpTicketFormBloc, HelpTicketFormState>(
-                        builder: (context, state) {
-                          return TextFormField(
-                            cursorColor: Colors.black,
-                            decoration: InputDecoration(
-                              labelText: 'Subject',
-                              labelStyle: TextStyle(
-                                fontWeight: FontWeight.w400,
-                                fontSize: SizeConfig.getWidth(5)
-                              )
-                            ),
-                            style: TextStyle(
-                              fontWeight: FontWeight.w700,
-                              fontSize: SizeConfig.getWidth(5)
-                            ),
-                            controller: _subjectController,
-                            focusNode: _subjectFocus,
-                            keyboardType: TextInputType.text,
-                            textInputAction: TextInputAction.done,
-                            textCapitalization: TextCapitalization.sentences,
-                            autocorrect: true,
-                            autovalidateMode: AutovalidateMode.onUserInteraction,
-                            validator: (_) => !state.isSubjectValid ? 'A Subject is required!' : null 
-                          );
-                        }
-                      ),
-                      BlocBuilder<HelpTicketFormBloc, HelpTicketFormState>(
-                        builder: (context, state) {
-                          return TextFormField(
-                            cursorColor: Colors.black,
-                            decoration: InputDecoration(
-                              labelText: "Message",
-                              labelStyle: TextStyle(
-                                fontWeight: FontWeight.w400,
-                                fontSize: SizeConfig.getWidth(5)
-                              ),
-                            ),
-                            style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: SizeConfig.getWidth(5)
-                            ),
-                            controller: _messageController,
-                            focusNode: _messageFocus,
-                            keyboardType: TextInputType.multiline,
-                            maxLines: 3,
-                            textInputAction: TextInputAction.done,
-                            textCapitalization: TextCapitalization.sentences,
-                            autocorrect: true,
-                            autovalidateMode: AutovalidateMode.onUserInteraction,
-                            validator: (_) => !state.isMessageValid ? 'Please include details about the issue.' : null,
-                          );
-                        }
-                      )
+                      _subjectField(),
+                      _messageField()
                     ],
                   ),
                 )
@@ -118,30 +67,11 @@ class _HelpTicketFormState extends State<HelpTicketForm> {
                 child: Row(
                   children: [
                     Expanded(
-                      child: BlocBuilder<HelpTicketFormBloc, HelpTicketFormState>(
-                        builder: (context, state) {
-                          return OutlinedButton(
-                            onPressed: state.isSubmitting ? null : () => _cancelButtonPressed(),
-                            child: BoldText3(text: 'Cancel', context: context, color: state.isSubmitting 
-                              ? Theme.of(context).colorScheme.callToActionDisabled
-                              : Theme.of(context).colorScheme.callToAction
-                            ),
-                          );
-                        },
-                      )
+                      child: _cancelButton()
                     ),
                     SizedBox(width: 20.0),
                     Expanded(
-                      child: BlocBuilder<HelpTicketFormBloc, HelpTicketFormState>(
-                        builder: (context, state) {
-                          return ElevatedButton(
-                            onPressed: _isSubmitButtonEnabled(state: state)
-                              ? () => _submitButtonPressed(state: state)
-                              : null, 
-                            child: _buttonChild(state: state)
-                          );
-                        },
-                      )
+                      child: _submitButton()
                     )
                   ],
                 ),
@@ -157,7 +87,96 @@ class _HelpTicketFormState extends State<HelpTicketForm> {
   void dispose() {
     _subjectController.dispose();
     _messageController.dispose();
+
+    _subjectFocus.dispose();
+    _messageFocus.dispose();
     super.dispose();
+  }
+
+  Widget _subjectField() {
+    return BlocBuilder<HelpTicketFormBloc, HelpTicketFormState>(
+      builder: (context, state) {
+        return TextFormField(
+          cursorColor: Colors.black,
+          decoration: InputDecoration(
+            labelText: 'Subject',
+            labelStyle: TextStyle(
+              fontWeight: FontWeight.w400,
+              fontSize: SizeConfig.getWidth(5)
+            )
+          ),
+          style: TextStyle(
+            fontWeight: FontWeight.w700,
+            fontSize: SizeConfig.getWidth(5)
+          ),
+          controller: _subjectController,
+          focusNode: _subjectFocus,
+          keyboardType: TextInputType.text,
+          textInputAction: TextInputAction.done,
+          textCapitalization: TextCapitalization.sentences,
+          autocorrect: true,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          validator: (_) => !state.isSubjectValid ? 'A Subject is required!' : null 
+        );
+      }
+    );
+  }
+
+  Widget _messageField() {
+    return BlocBuilder<HelpTicketFormBloc, HelpTicketFormState>(
+      builder: (context, state) {
+        return TextFormField(
+          cursorColor: Colors.black,
+          decoration: InputDecoration(
+            labelText: "Message",
+            labelStyle: TextStyle(
+              fontWeight: FontWeight.w400,
+              fontSize: SizeConfig.getWidth(5)
+            ),
+          ),
+          style: TextStyle(
+            fontWeight: FontWeight.w500,
+            fontSize: SizeConfig.getWidth(5)
+          ),
+          controller: _messageController,
+          focusNode: _messageFocus,
+          keyboardType: TextInputType.multiline,
+          maxLines: 3,
+          textInputAction: TextInputAction.done,
+          textCapitalization: TextCapitalization.sentences,
+          autocorrect: true,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          validator: (_) => !state.isMessageValid ? 'Please include details about the issue.' : null,
+        );
+      }
+    );
+  }
+
+  Widget _cancelButton() {
+    return BlocBuilder<HelpTicketFormBloc, HelpTicketFormState>(
+      builder: (context, state) {
+        return OutlinedButton(
+          onPressed: state.isSubmitting ? null : () => _cancelButtonPressed(),
+          child: BoldText3(text: 'Cancel', context: context, color: state.isSubmitting 
+            ? Theme.of(context).colorScheme.callToActionDisabled
+            : Theme.of(context).colorScheme.callToAction
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _submitButton() {
+    return BlocBuilder<HelpTicketFormBloc, HelpTicketFormState>(
+      builder: (context, state) {
+        return ElevatedButton(
+          onPressed: _isSubmitButtonEnabled(state: state)
+            ? () => _submitButtonPressed(state: state)
+            : null, 
+          child: _buttonChild(state: state)
+        );
+      },
+    );
   }
 
   void _onSubjectChanged() {

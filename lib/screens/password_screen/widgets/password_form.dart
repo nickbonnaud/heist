@@ -31,6 +31,15 @@ class _PasswordFormState extends State<PasswordForm> {
   late PasswordFormBloc _passwordFormBloc;
 
   @override
+  void initState() {
+    super.initState();
+    _passwordFormBloc = BlocProvider.of<PasswordFormBloc>(context);
+    _oldPasswordController.addListener(_onOldPasswordChanged);
+    _passwordController.addListener(_onPasswordChanged);
+    _passwordConfirmationController.addListener(_onPasswordConfirmationChanged);
+  }
+  
+  @override
   Widget build(BuildContext context) {
     return BlocListener<PasswordFormBloc, PasswordFormState>(
       listener: (context, state) {
@@ -177,21 +186,16 @@ class _PasswordFormState extends State<PasswordForm> {
       ),
     );
   }
-  
-  @override
-  void initState() {
-    super.initState();
-    _passwordFormBloc = BlocProvider.of<PasswordFormBloc>(context);
-    _oldPasswordController.addListener(_onOldPasswordChanged);
-    _passwordController.addListener(_onPasswordChanged);
-    _passwordConfirmationController.addListener(_onPasswordConfirmationChanged);
-  }
 
   @override
   void dispose() {
     _oldPasswordController.dispose();
     _passwordController.dispose();
     _passwordConfirmationController.dispose();
+
+    _oldPasswordFocus.dispose();
+    _passwordFocus.dispose();
+    _passwordConfirmationFocus.dispose();
     super.dispose();
   }
 

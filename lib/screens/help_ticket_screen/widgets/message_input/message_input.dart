@@ -43,24 +43,7 @@ class _MessageInputState extends State<MessageInput> {
           Flexible(
             child: Container(
               margin: EdgeInsets.only(left: 8.0, top: 8.0),
-              child: TextField(
-                cursorColor: Colors.black,
-                keyboardType: TextInputType.multiline,
-                maxLines: 3,
-                controller: _controller,
-                focusNode: _inputFocusNode,
-                style: TextStyle(
-                  fontWeight: FontWeight.w700,
-                  fontSize: SizeConfig.getWidth(5)
-                ),
-                decoration: InputDecoration.collapsed(
-                  hintText: 'Type message',
-                  hintStyle: TextStyle(
-                    fontWeight: FontWeight.w700,
-                    fontSize: SizeConfig.getWidth(5)
-                  )
-                ),
-              )
+              child: _textField()
             )
           ),
           Material(
@@ -70,20 +53,7 @@ class _MessageInputState extends State<MessageInput> {
                 Container(
                   padding: EdgeInsets.only(right: 8.0),
                   color: Theme.of(context).colorScheme.scrollBackground,
-                  child: BlocBuilder<MessageInputBloc, MessageInputState>(
-                    builder: (context, state) {
-                      return !state.isSubmitting
-                      ? IconButton(
-                          icon: Icon(Icons.send), 
-                          iconSize: SizeConfig.getWidth(8),
-                          onPressed: state.isInputValid 
-                            ? () => _submitButtonPressed()
-                            : null,
-                          color: Theme.of(context).colorScheme.callToAction,
-                        )
-                      : CircularProgressIndicator();
-                    }
-                  )
+                  child: _submitButton()
                 )
               ],
             )
@@ -102,7 +72,46 @@ class _MessageInputState extends State<MessageInput> {
   @override
   void dispose() {
     _controller.dispose();
+    _inputFocusNode.dispose();
     super.dispose();
+  }
+
+  Widget _textField() {
+    return TextField(
+      cursorColor: Colors.black,
+      keyboardType: TextInputType.multiline,
+      maxLines: 3,
+      controller: _controller,
+      focusNode: _inputFocusNode,
+      style: TextStyle(
+        fontWeight: FontWeight.w700,
+        fontSize: SizeConfig.getWidth(5)
+      ),
+      decoration: InputDecoration.collapsed(
+        hintText: 'Type message',
+        hintStyle: TextStyle(
+          fontWeight: FontWeight.w700,
+          fontSize: SizeConfig.getWidth(5)
+        )
+      ),
+    );
+  }
+
+  Widget _submitButton() {
+    return BlocBuilder<MessageInputBloc, MessageInputState>(
+      builder: (context, state) {
+        return !state.isSubmitting
+        ? IconButton(
+            icon: Icon(Icons.send), 
+            iconSize: SizeConfig.getWidth(8),
+            onPressed: state.isInputValid 
+              ? () => _submitButtonPressed()
+              : null,
+            color: Theme.of(context).colorScheme.callToAction,
+          )
+        : CircularProgressIndicator();
+      }
+    );
   }
 
   void _onInputChanged() {
