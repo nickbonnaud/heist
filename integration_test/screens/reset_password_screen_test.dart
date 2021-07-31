@@ -14,6 +14,9 @@ class ResetPasswordScreenTest {
 
     expect(find.byType(ResetPasswordScreen), findsOneWidget);
 
+    await _enterErrorCredentials();
+    await _tapSubmitButtonFail();
+    
     await _enterInvalidResetCode();
     await _enterValidResetCode();
 
@@ -23,9 +26,38 @@ class ResetPasswordScreenTest {
     await _enterInvalidPasswordConfirmation();
     await _enterValidPasswordConfirmation();
 
-    await _tapSubmitButton();
+    await _tapSubmitButtonSuccess();
 
     await _dismissSnackBar();
+  }
+
+  Future<void> _enterErrorCredentials() async {
+    await tester.enterText(find.byKey(Key("resetCodeFormKey")), "error1");
+    await tester.pump(Duration(milliseconds: 300));
+
+    await tester.enterText(find.byKey(Key("passwordFormKey")), "jdhFS34#*fcm785!Sg");
+    await tester.pump(Duration(milliseconds: 300));
+
+    await tester.enterText(find.byKey(Key("passwordConfirmationKey")), "a");
+    await tester.pump(Duration(milliseconds: 300));
+
+    await tester.enterText(find.byKey(Key("passwordConfirmationKey")), "jdhFS34#*fcm785!Sg");
+    await tester.pump(Duration(milliseconds: 300));
+
+    await tester.tap(find.text("Done"));
+    await tester.pumpAndSettle();
+  }
+
+  Future<void> _tapSubmitButtonFail() async {
+    expect(find.byKey(Key("resetSnackBarKey")), findsNothing);
+    
+    await tester.tap(find.byKey(Key("submitButtonKey")));
+    await tester.pumpAndSettle();
+
+    expect(find.byKey(Key("resetSnackBarKey")), findsOneWidget);
+    
+    await tester.fling(find.byKey(Key("resetSnackBarKey")), Offset(0, 500), 500);
+    await tester.pump();
   }
 
   Future<void> _enterInvalidResetCode() async {
@@ -88,7 +120,7 @@ class ResetPasswordScreenTest {
     await tester.pumpAndSettle();
   }
 
-  Future<void> _tapSubmitButton() async {
+  Future<void> _tapSubmitButtonSuccess() async {
     expect(find.byKey(Key("submitButtonKey")), findsOneWidget);
     expect(find.byType(CircularProgressIndicator), findsNothing);
 

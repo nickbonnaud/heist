@@ -7,7 +7,7 @@ import 'package:heist/blocs/active_location/active_location_bloc.dart';
 import 'package:heist/blocs/nearby_businesses/nearby_businesses_bloc.dart';
 import 'package:heist/blocs/open_transactions/open_transactions_bloc.dart';
 import 'package:heist/resources/helpers/size_config.dart';
-import 'package:heist/screens/home_screen/bloc/side_drawer_bloc.dart';
+import 'package:heist/screens/home_screen/blocs/side_drawer_bloc/side_drawer_bloc.dart';
 import 'package:heist/themes/global_colors.dart';
 
 import 'widgets/drag_button.dart';
@@ -23,7 +23,7 @@ class PeekSheet extends StatefulWidget {
 
 class _PeekSheetState extends State<PeekSheet> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
-
+  
   double get _maxHeight => MediaQuery.of(context).size.height;
   double get _topMargin => lerp(min: 20, max: 20 + MediaQuery.of(context).padding.top);
   double get _headerFontSize => lerp(min: SizeConfig.getWidth(5), max: SizeConfig.getWidth(8));
@@ -33,10 +33,12 @@ class _PeekSheetState extends State<PeekSheet> with SingleTickerProviderStateMix
   @override
   void initState() {
     super.initState();
+
     _controller = AnimationController(
       vsync: this,
       duration: Duration(milliseconds: 500)
     );
+
     _controller.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
         BlocProvider.of<SideDrawerBloc>(context).add(ButtonVisibilityChanged(isVisible: false));
@@ -45,7 +47,7 @@ class _PeekSheetState extends State<PeekSheet> with SingleTickerProviderStateMix
       }
     });
   }
-
+  
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
@@ -108,6 +110,7 @@ class _PeekSheetState extends State<PeekSheet> with SingleTickerProviderStateMix
                     left: 0,
                     right: 0,
                     child: GestureDetector(
+                      key: Key("dragAreaKey"),
                       onTap: _toggle,
                       onVerticalDragUpdate: _handleDragUpdate,
                       onVerticalDragEnd: _handleDragEnd,
@@ -124,6 +127,12 @@ class _PeekSheetState extends State<PeekSheet> with SingleTickerProviderStateMix
         );
       }
     );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   void _handleDragUpdate(DragUpdateDetails details) {
@@ -152,11 +161,5 @@ class _PeekSheetState extends State<PeekSheet> with SingleTickerProviderStateMix
   void _toggle() {
     final bool isOpen = _controller.status == AnimationStatus.completed;
     isOpen ? _controller.reverse() : _controller.forward();
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
   }
 }

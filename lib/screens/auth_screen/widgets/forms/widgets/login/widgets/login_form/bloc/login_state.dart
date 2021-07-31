@@ -20,8 +20,8 @@ class LoginState extends Equatable {
 
   factory LoginState.empty() {
     return LoginState(
-      isEmailValid: true,
-      isPasswordValid: true,
+      isEmailValid: false,
+      isPasswordValid: false,
       isSubmitting: false,
       isSuccess: false,
       errorMessage: ""

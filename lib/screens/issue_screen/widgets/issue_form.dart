@@ -65,30 +65,7 @@ class _IssueFormState extends State<IssueForm> {
                       SizedBox(height: SizeConfig.getHeight(3)),
                       BoldTextCustom(text: _formatIssueType(), context: context, size: SizeConfig.getWidth(9)),
                       SizedBox(height: SizeConfig.getHeight(15)),
-                      BlocBuilder<IssueFormBloc, IssueFormState>(
-                        builder: (context, state) {
-                          return TextFormField(
-                            decoration: InputDecoration(
-                              labelText: "Issue",
-                              labelStyle: GoogleFonts.roboto(
-                                fontWeight: FontWeight.w400,
-                                fontSize: SizeConfig.getWidth(6)
-                              )
-                            ),
-                            style: GoogleFonts.roboto(
-                              fontWeight: FontWeight.w700,
-                              fontSize: SizeConfig.getWidth(7)
-                            ),
-                            controller: _messageController,
-                            focusNode: _messageFocusNode,
-                            keyboardType: TextInputType.multiline,
-                            autocorrect: true,
-                            autovalidateMode: AutovalidateMode.onUserInteraction,
-                            validator: (_) => !state.isMessageValid && _messageController.text.length != 0 ? 'Issue must be at least 5 characters long' : null,
-                            maxLines: null,
-                          );
-                        },
-                      )
+                      _inputField()
                     ],
                   ),
                   Padding(
@@ -96,28 +73,11 @@ class _IssueFormState extends State<IssueForm> {
                     child: Row(
                       children: <Widget>[
                         Expanded(
-                          child: BlocBuilder<IssueFormBloc, IssueFormState>(
-                            builder: (context, state) {
-                              return OutlinedButton(
-                                onPressed: state.isSubmitting ? null : () => _cancelButtonPressed(context),
-                                child: BoldText3(text: 'Cancel', context: context, color: state.isSubmitting 
-                                  ? Theme.of(context).colorScheme.callToActionDisabled
-                                  : Theme.of(context).colorScheme.callToAction
-                                ),
-                              );
-                            },
-                          )
+                          child: _cancelButton()
                         ),
                         SizedBox(width: 20.0),
                         Expanded(
-                          child: BlocBuilder<IssueFormBloc, IssueFormState>(
-                            builder: (context, state) {
-                              return ElevatedButton(
-                                onPressed: _isSaveButtonEnabled(state) ? () => _saveButtonPressed(state) : null,
-                                child: _buttonChild(context: context, state: state),
-                              );
-                            }
-                          ) 
+                          child: _submitButton()
                         ),
                       ],
                     ),
@@ -134,9 +94,66 @@ class _IssueFormState extends State<IssueForm> {
   @override
   void dispose() {
     _messageController.dispose();
+    _messageFocusNode.dispose();
     super.dispose();
   }
 
+  Widget _inputField() {
+    return BlocBuilder<IssueFormBloc, IssueFormState>(
+      builder: (context, state) {
+        return TextFormField(
+          key: Key("issueFieldKey"),
+          decoration: InputDecoration(
+            labelText: "Issue",
+            labelStyle: TextStyle(
+              fontWeight: FontWeight.w400,
+              fontSize: SizeConfig.getWidth(6)
+            )
+          ),
+          style: TextStyle(
+            fontWeight: FontWeight.w700,
+            fontSize: SizeConfig.getWidth(7)
+          ),
+          controller: _messageController,
+          focusNode: _messageFocusNode,
+          keyboardType: TextInputType.multiline,
+          autocorrect: true,
+          textCapitalization: TextCapitalization.sentences,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          validator: (_) => !state.isMessageValid && _messageController.text.length != 0 ? 'Issue must be at least 5 characters long' : null,
+          maxLines: null,
+        );
+      },
+    );
+  }
+
+  Widget _cancelButton() {
+    return BlocBuilder<IssueFormBloc, IssueFormState>(
+      builder: (context, state) {
+        return OutlinedButton(
+          key: Key("cancelButtonKey"),
+          onPressed: state.isSubmitting ? null : () => _cancelButtonPressed(context),
+          child: BoldText3(text: 'Cancel', context: context, color: state.isSubmitting 
+            ? Theme.of(context).colorScheme.callToActionDisabled
+            : Theme.of(context).colorScheme.callToAction
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _submitButton() {
+    return BlocBuilder<IssueFormBloc, IssueFormState>(
+      builder: (context, state) {
+        return ElevatedButton(
+          key: Key("submitButtonKey"),
+          onPressed: _isSaveButtonEnabled(state) ? () => _saveButtonPressed(state) : null,
+          child: _buttonChild(context: context, state: state),
+        );
+      }
+    );
+  }
+  
   void _onMessageChanged() {
     _issueFormBloc.add(MessageChanged(message: _messageController.text));
   }
@@ -171,6 +188,7 @@ class _IssueFormState extends State<IssueForm> {
   void _showSnackbar(BuildContext context, String message, IssueFormState state) async {
     state.isSuccess ? Vibrate.success() : Vibrate.error();
     final SnackBar snackBar = SnackBar(
+      key: Key("snackBarKey"),
       content: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
@@ -187,11 +205,11 @@ class _IssueFormState extends State<IssueForm> {
     ScaffoldMessenger.of(context)
       ..hideCurrentSnackBar()
       ..showSnackBar(snackBar)
-      .closed.then((_) => {
+      .closed.then((_) {
         if (state.isSuccess) {
-          Navigator.of(context).pop(state.transactionResource)
+          Navigator.of(context).pop(state.transactionResource);
         } else {
-          BlocProvider.of<IssueFormBloc>(context).add(Reset())
+          BlocProvider.of<IssueFormBloc>(context).add(Reset());
         }
       }
     );

@@ -41,34 +41,44 @@ class CancelIssueForm extends StatelessWidget {
             Row(
               children: <Widget>[
                 Expanded(
-                  child: BlocBuilder<CancelIssueFormBloc, CancelIssueFormState>(
-                    builder: (context, state) {
-                      return OutlinedButton(
-                        onPressed: state.isSubmitting ? null : () => _cancelButtonPressed(context),
-                        child: BoldText3(text: 'Cancel', context: context, color: state.isSubmitting
-                          ? Theme.of(context).colorScheme.callToActionDisabled
-                          : Theme.of(context).colorScheme.callToAction
-                        ),
-                      );
-                    }
-                  )
+                  child: _cancelButton()
                 ),
                 SizedBox(width: 20.0),
                 Expanded(
-                  child: BlocBuilder<CancelIssueFormBloc, CancelIssueFormState>(
-                    builder: (context, state) {
-                      return ElevatedButton(
-                        onPressed: !state.isSubmitting ? () => _submitButtonPressed(context, state) : null,
-                        child: _buttonChild(context: context, state: state),
-                      );
-                    }
-                  ) 
+                  child: _submitButton()
                 ),
               ],
             )
           ],
         ),
       ),
+    );
+  }
+
+  Widget _cancelButton() {
+    return BlocBuilder<CancelIssueFormBloc, CancelIssueFormState>(
+      builder: (context, state) {
+        return OutlinedButton(
+          key: Key("cancelButtonKey"),
+          onPressed: state.isSubmitting ? null : () => _cancelButtonPressed(context),
+          child: BoldText3(text: 'Cancel', context: context, color: state.isSubmitting
+            ? Theme.of(context).colorScheme.callToActionDisabled
+            : Theme.of(context).colorScheme.callToAction
+          ),
+        );
+      }
+    );
+  }
+
+  Widget _submitButton() {
+    return BlocBuilder<CancelIssueFormBloc, CancelIssueFormState>(
+      builder: (context, state) {
+        return ElevatedButton(
+          key: Key("submitButtonKey"),
+          onPressed: !state.isSubmitting ? () => _submitButtonPressed(context, state) : null,
+          child: _buttonChild(context: context, state: state),
+        );
+      }
     );
   }
 
@@ -88,13 +98,14 @@ class CancelIssueForm extends StatelessWidget {
     if (state.isSubmitting) {
       return SizedBox(height: SizeConfig.getWidth(5), width: SizeConfig.getWidth(5), child: CircularProgressIndicator());
     } else {
-      return BoldText3(text: 'Cancel', context: context, color: Theme.of(context).colorScheme.onSecondary);
+      return BoldText3(text: 'Submit', context: context, color: Theme.of(context).colorScheme.onSecondary);
     }
   }
 
   void _showSnackbar(BuildContext context, String message, CancelIssueFormState state) async {
     state.isSuccess ? Vibrate.success() : Vibrate.error();
     final SnackBar snackBar = SnackBar(
+      key: Key("cancelIssueSnackbarKey"),
       content: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[

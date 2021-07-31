@@ -25,7 +25,7 @@ class GeoLocationBloc extends Bloc<GeoLocationEvent, GeoLocationState> {
     : _geolocatorRepository = geolocatorRepository,
       super(Uninitialized()) {
 
-        _permissionsBlocSubscription = permissionsBloc.stream.listen((PermissionsState state) { 
+        _permissionsBlocSubscription = permissionsBloc.stream.listen((PermissionsState state) {
           if (!this.isGeoLocationReady && state.onStartPermissionsValid) {
             add(GeoLocationReady());
           }

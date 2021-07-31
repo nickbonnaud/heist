@@ -16,10 +16,13 @@ class RequestResetPasswordScreenTest {
 
     await _tapGoToRequestResetPasswordButton();
 
+    await _enterErrorEmail();
+    await _tapSubmitButtonFail();
+    
     await _enterInvalidEmail();
     await _enterValidEmail();
 
-    await _tapSubmitButton();
+    await _tapSubmitButtonSuccess();
     await tester.pumpAndSettle();
 
     await _dismissSnackBar();
@@ -33,6 +36,26 @@ class RequestResetPasswordScreenTest {
     await tester.pumpAndSettle();
 
     expect(find.byType(RequestResetPasswordScreen), findsOneWidget);
+  }
+
+  Future<void> _enterErrorEmail() async {
+    await tester.enterText(find.byKey(Key("emailFormFieldKey")), "error@gmail.com");
+    await tester.pump(Duration(milliseconds: 300));
+
+    await tester.tap(find.text("Done"));
+    await tester.pumpAndSettle();
+  }
+
+  Future<void> _tapSubmitButtonFail() async {
+    expect(find.byKey(Key("requestResetSnackBarKey")), findsNothing);
+
+    await tester.tap(find.byKey(Key("submitButtonKey")));
+    await tester.pumpAndSettle();
+
+    expect(find.byKey(Key("requestResetSnackBarKey")), findsOneWidget);
+
+    await tester.fling(find.byKey(Key("requestResetSnackBarKey")), Offset(0, 500), 500);
+    await tester.pump();
   }
 
   Future<void> _enterInvalidEmail() async {
@@ -58,7 +81,7 @@ class RequestResetPasswordScreenTest {
     await tester.pumpAndSettle();
   }
 
-  Future<void> _tapSubmitButton() async {
+  Future<void> _tapSubmitButtonSuccess() async {
     expect(find.byKey(Key("submitButtonKey")), findsOneWidget);
     expect(find.byType(CircularProgressIndicator), findsNothing);
 

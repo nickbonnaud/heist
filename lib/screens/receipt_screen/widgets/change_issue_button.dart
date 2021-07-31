@@ -30,6 +30,7 @@ class ChangeIssueButton extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.only(right: 8),
       child: PopupMenuButton(
+        key: Key("changeIssueButtonKey"),
         onSelected: (Options selection) => _filterSelection(selection: selection, context: context),
         icon: Icon(
           Icons.more_vert,

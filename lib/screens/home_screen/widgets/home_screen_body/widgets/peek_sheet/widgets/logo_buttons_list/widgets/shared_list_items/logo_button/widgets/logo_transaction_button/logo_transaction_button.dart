@@ -10,15 +10,18 @@ import 'bloc/logo_transaction_button_bloc.dart';
 
 class LogoTransactionButton extends StatefulWidget {
   final TransactionResource _transactionResource;
+  final String _keyValue;
   final double _logoBorderRadius;
   final double _warningIconSize;
 
   LogoTransactionButton({
     required TransactionResource transactionResource,
+    required String keyValue,
     required double logoBorderRadius,
     required double warningIconSize
   })
     : _transactionResource = transactionResource,
+      _keyValue = keyValue,
       _logoBorderRadius = logoBorderRadius,
       _warningIconSize = warningIconSize;
 
@@ -49,9 +52,10 @@ class _LogoTransactionButtonState extends State<LogoTransactionButton> with Sing
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTapDown: (_) => _toggleButtonPress(context: context),
-      onTapUp: (_) => _toggleButtonPress(context: context),
-      onTap: () => _showCurrentTransaction(context: context),
+      key: Key(widget._keyValue),
+      onTapDown: (_) => _toggleButtonPress(),
+      onTapUp: (_) => _toggleButtonPress(),
+      onTap: () => _showCurrentTransaction(),
       child: Stack(
         children: <Widget>[
           BlocBuilder<LogoTransactionButtonBloc, LogoTransactionButtonState>(
@@ -91,7 +95,7 @@ class _LogoTransactionButtonState extends State<LogoTransactionButton> with Sing
       child: BlocBuilder<LogoTransactionButtonBloc, LogoTransactionButtonState>(
         builder: (context, state) {
           return RawMaterialButton(
-            onPressed: () => _showCurrentTransaction(context: context),
+            onPressed: () => _showCurrentTransaction(),
             child: Icon(
               Icons.priority_high,
               color: Theme.of(context).colorScheme.background,
@@ -110,11 +114,11 @@ class _LogoTransactionButtonState extends State<LogoTransactionButton> with Sing
     );
   }
 
-  void _toggleButtonPress({required BuildContext context}) {
+  void _toggleButtonPress() {
     BlocProvider.of<LogoTransactionButtonBloc>(context).add(TogglePressed());
   }
 
-  void _showCurrentTransaction({required BuildContext context}) {
+  void _showCurrentTransaction() {
     Navigator.of(context).pushNamed(Routes.receipt, arguments: widget._transactionResource);
   }
   

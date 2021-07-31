@@ -2,11 +2,13 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:heist/blocs/active_location/active_location_bloc.dart';
 import 'package:heist/blocs/nearby_businesses/nearby_businesses_bloc.dart';
 import 'package:heist/models/business/business.dart';
+import 'package:heist/screens/home_screen/widgets/home_screen_body/widgets/peek_sheet/widgets/logo_buttons_list/bloc/logo_buttons_list_bloc.dart';
 
 import 'shared_list_items/logo_button/logo_button.dart';
-import 'shared_list_items/logo_details/business_logo_details.dart';
+import 'shared_list_items/logo_details/business_logo_details/business_logo_details.dart';
 import 'shared_list_items/logo_divider.dart';
 import 'shared_list_items/shared_sizes.dart';
 
@@ -40,27 +42,62 @@ class NearbyBusinessesList extends StatelessWidget {
         final currentState = state;
         if (currentState is NearbyBusinessLoaded) {
           return Stack(
-            children: <Widget>[
-              if (_showDivider())
-                LogoDivider(
-                  numberPreviousWidgets: _numberOpenTransactions + _numberActiveLocations + (_numberOpenTransactions > 0 && _numberActiveLocations > 0 ? 1 : 0), 
-                  controller: _controller, 
-                  topMargin: _topMargin, 
-                  isActiveLocationDivider: false
-                ),
-              for (Business business in currentState.businesses.take(_numberNearbyToShow())) _buildDetails(business: business, state: currentState),
-              for (Business business in currentState.businesses.take(_numberNearbyToShow())) _buildLogoButton(business: business, state: currentState),
-            ],
+            children: [_divider()]
+              ..addAll(_detailsList(context: context, state: currentState))
+              ..addAll(_buttonsList(context: context, state: currentState))
           );
         }
         return Container();
       },
     );
   }
+
+  Widget _divider() {
+    if (_numberOpenTransactions > 0 || _numberActiveLocations > 0) {
+      return LogoDivider(
+        numberPreviousWidgets: _numberOpenTransactions + _numberActiveLocations + (_numberOpenTransactions > 0 && _numberActiveLocations > 0 ? 1 : 0), 
+        controller: _controller, 
+        topMargin: _topMargin, 
+        isActiveLocationDivider: false
+      );
+    }
+    return Container();
+  }
   
+  List<Widget> _detailsList({required BuildContext context, required NearbyBusinessLoaded state}) {
+    List<Business> nonActiveLocations = BlocProvider.of<LogoButtonsListBloc>(context).nonActiveNearby;
+    int numberNearbyToShow = BlocProvider.of<LogoButtonsListBloc>(context).numberNearbySlots;
+
+    return List<Widget>.generate(numberNearbyToShow, (index) => _buildDetails(
+      context: context,
+      business: nonActiveLocations[index],
+      state: state,
+      subListIndex: index
+    ));
+  }
+
+  List<Widget> _buttonsList({required BuildContext context, required NearbyBusinessLoaded state}) {
+    List<Business> nonActiveLocations = BlocProvider.of<LogoButtonsListBloc>(context).nonActiveNearby;
+    int numberNearbyToShow = BlocProvider.of<LogoButtonsListBloc>(context).numberNearbySlots;
+    
+    return List<Widget>.generate(numberNearbyToShow, (index) => _buildLogoButton(
+      context: context,
+      business: nonActiveLocations[index],
+      state: state,
+      subListIndex: index
+    ));
+  }
+
+  // List<Business> _getNonActiveLocations({required BuildContext context, required List<Business> businesses}) {
+  //   return businesses.where((business) {
+  //     return !BlocProvider.of<ActiveLocationBloc>(context).state.activeLocations
+  //       .any((activeLocation) => activeLocation.beaconIdentifier == business.location.beacon.identifier);
+  //   }).toList();
+  // }
   
-  int _setIndex({required NearbyBusinessLoaded state, required Business business}) {
-    return _setPreviousIndex() + state.businesses.indexOf(business);
+  int _setIndex({required BuildContext context, required NearbyBusinessLoaded state, required Business business}) {
+    List<Business> nonActiveLocations = BlocProvider.of<LogoButtonsListBloc>(context).nonActiveNearby;
+    return _setPreviousIndex() + nonActiveLocations.indexOf(business);
   }
 
   int _setPreviousIndex() {
@@ -77,17 +114,20 @@ class NearbyBusinessesList extends StatelessWidget {
     }
   }
   
-  int _numberNearbyToShow() {
-    final int numberSlotsLeft = 6 - (_numberOpenTransactions + _numberActiveLocations);
-    return numberSlotsLeft <= 0 ? 3 : numberSlotsLeft;
-  }
+  // int _numberNearbyToShow({required int numberNonActiveLocations}) {
+  //   final int numberSlotsLeft = 6 - (_numberOpenTransactions + _numberActiveLocations);
+  //   final int slotsToShow = numberSlotsLeft <= 0 ? 3 : numberSlotsLeft;
+  //   return slotsToShow > numberNonActiveLocations ? numberNonActiveLocations : slotsToShow;
+  // }
   
-  Widget _buildLogoButton({required Business business, required NearbyBusinessLoaded state}) {
-    int index = _setIndex(state: state, business: business);
+  Widget _buildLogoButton({required BuildContext context, required Business business, required NearbyBusinessLoaded state, required int subListIndex}) {
+    final int fullIndex = _setIndex(context: context, state: state, business: business);
+    
     return LogoButton(
+      keyValue: "nearbyLogoButtonKey-$subListIndex",
       controller: _controller, 
-      topMargin: _logoMarginTop(index: index),
-      leftMargin: _logoLeftMargin(index: index),
+      topMargin: _logoMarginTop(index: fullIndex),
+      leftMargin: _logoLeftMargin(index: fullIndex),
       isTransaction: false,
       logoSize: _size,
       borderRadius: _borderRadius,
@@ -95,22 +135,21 @@ class NearbyBusinessesList extends StatelessWidget {
     );
   }
 
-  Widget _buildDetails({required Business business, required NearbyBusinessLoaded state}) {
-    int index = _setIndex(state: state, business: business);
+  Widget _buildDetails({required BuildContext context, required Business business, required NearbyBusinessLoaded state, required int subListIndex}) {
+    final int fullIndex = _setIndex(context: context, state: state, business: business);
+    
     return BusinessLogoDetails(
-      topMargin: _logoMarginTop(index: index), 
-      leftMargin: _logoLeftMargin(index: index), 
+      keyValue: "nearbyDetailsKey-$subListIndex",
+      topMargin: _logoMarginTop(index: fullIndex), 
+      leftMargin: _logoLeftMargin(index: fullIndex), 
       height: _size, 
       controller: _controller,
       borderRadius: _borderRadius, 
       business: business,
-      index: index
+      subListIndex: subListIndex
     );
   }
 
-  bool _showDivider() {
-    return _numberOpenTransactions > 0 || _numberActiveLocations > 0;
-  }
 
   double _logoMarginTop({required int index}) {
     return lerp(

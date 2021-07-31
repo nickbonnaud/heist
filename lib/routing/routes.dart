@@ -27,4 +27,6 @@ class Routes {
   static const String tips = '/settings/tips';
 
   static const String helpTickets = '/help-tickets';
+
+  static const String reportIssue = '/report-issue';
 }

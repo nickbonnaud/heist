@@ -3,7 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:heist/screens/home_screen/bloc/side_drawer_bloc.dart';
+import 'package:heist/screens/home_screen/blocs/side_drawer_bloc/side_drawer_bloc.dart';
 import 'package:heist/themes/global_colors.dart';
 
 import 'widgets/drawer_body.dart';
@@ -48,7 +48,11 @@ class _SideDrawerState extends State<SideDrawer> with SingleTickerProviderStateM
     super.initState();
     _animationController = AnimationController(duration: const Duration(milliseconds: 300), vsync: this)
       ..addStatusListener((status) {
-        BlocProvider.of<SideDrawerBloc>(context).add(DrawerStatusChanged(menuOpen: status == AnimationStatus.completed));
+        if (status == AnimationStatus.completed && !BlocProvider.of<SideDrawerBloc>(context).state.menuOpened) {
+          BlocProvider.of<SideDrawerBloc>(context).add(DrawerStatusChanged(menuOpen: true));
+        } else if (status == AnimationStatus.dismissed && BlocProvider.of<SideDrawerBloc>(context).state.menuOpened) {
+          BlocProvider.of<SideDrawerBloc>(context).add(DrawerStatusChanged(menuOpen: false));
+        }
       });
 
     _animation = Tween<double>(begin: 0.0, end: 1.0).animate(_animationController)
@@ -68,8 +72,12 @@ class _SideDrawerState extends State<SideDrawer> with SingleTickerProviderStateM
       builder: (context, state) {
         return Scaffold(
           body: GestureDetector(
-            onHorizontalDragUpdate: _handleDragUpdate,
-            onHorizontalDragEnd: _handleDragEnd,
+            onHorizontalDragUpdate: BlocProvider.of<SideDrawerBloc>(context).state.menuOpened
+              ? _handleDragUpdate
+              : null,
+            onHorizontalDragEnd: BlocProvider.of<SideDrawerBloc>(context).state.menuOpened
+              ? _handleDragEnd
+              : null,
             child: _buildBody(state: state)
           ),
           floatingActionButton: state.buttonVisible ? Padding(

@@ -119,8 +119,6 @@ class MockResponses {
   }
 
   static Map<String, dynamic> _mockStoreProfile(RequestOptions options) {
-    print('here');
-    print(options.data);
     if ((options.data['first_name'] as String).toLowerCase().contains("error")) {
       return {
         "error": true
@@ -317,12 +315,34 @@ class MockResponses {
   }
 
   static Map<String, dynamic> _mockFetchTransactions(RequestOptions options) {
+    if (options.path.contains("open=true")) {
+      final List<Map<String, dynamic>> data = List.generate(1, (index) => mockOpenTransaction(index: index));
+      return _formatPaginatedResponse(options: options, data: data, doPaginate: false);
+    }
     return _createTransactions(options: options);
   }
   
   static Map<String, dynamic> _mockReportTransactionIssue(RequestOptions options) {
+    if ((options.data['issue'] as String).toLowerCase().contains("error")) {
+      return {
+        "error": true
+      };
+    }
+    
+    final Map<String, dynamic> transaction = generateTransaction();
+    transaction['status'] = {
+      "name": options.data['type'],
+      "code": options.data['type'] == "wrong_bill"
+        ? 500
+        : options.data['type'] == "error_in_bill"
+          ? 501
+          : 503
+    };
+
+    transaction["identifier"] = options.data['transaction_identifier'];
+    
     return {
-      "transaction": generateTransaction(),
+      "transaction": transaction,
       "business": generateBusiness(),
       "refunds": [],
       'issue': {
@@ -354,106 +374,30 @@ class MockResponses {
     };
   }
   
-  static Map<String, dynamic> mockOpenTransaction() {
+  static Map<String, dynamic> mockOpenTransaction({required int index}) {
+    DateTime date = DateTime.now();
+    final int netSales = faker.randomGenerator.integer(10000);
+    final int tax = (netSales * .10).round();
     return {
       "transaction": {
-        "identifier": "3ff9ad40-79c9-11ea-8b92-a9b4a4c53696",
-        "employee_id": null,
-        "tax": "457",
-        "tip": "1636",
-        "net_sales": "6088",
-        "total": "8181",
-        "partial_payment": "0",
+        "identifier": faker.guid.guid(),
+        "employee_id": faker.guid.guid(),
+        "tax": tax,
+        "tip": 0,
+        "net_sales": netSales,
+        "total": tax + netSales,
+        "partial_payment": 0,
         "locked": false,
-        "bill_created_at": "2020-05-26T22:04:56.000000Z",
-        "updated_at": "2020-05-26T22:04:56.000000Z",
+        "bill_created_at": DateTime(date.year, date.month, date.day - index).toIso8601String(),
+        "updated_at": DateTime(date.year, date.month, date.day - index).toIso8601String(),
         "status": {
           "name": "open",
-          "code": "100"
+          "code": 100
         },
-        "purchased_items": [
-          {
-            "name": "numquam",
-            "sub_name": 'fbjdss',
-            "price": "2000",
-            "quantity": "3",
-            "total": "6000"
-          },
-          {
-            "name": "vel",
-            "sub_name": null,
-            "price": "500",
-            "quantity": "2",
-            "total": "1000"
-          }
-        ]
+        "purchased_items": List.generate(faker.randomGenerator.integer(10, min: 8), (_) => generatePurchasedItem())
       },
-      "business": {
-        "identifier": "3ff30c10-79c9-11ea-a2da-ebb755a8f3fd",
-        "profile": {
-          "name": "Spencer PLC",
-          "website": "wisozk.com",
-          "description": "Dignissimos cum quidem neque magnam qui et dolor. Voluptatem error maiores quia repellat veritatis possimus. Molestias id rem hic ipsam.",
-          "google_place_id": null,
-          "phone": "7912752600",
-          "hours": {
-            "monday": "Monday: 11:00 AM – 10:00 PM",
-            "tuesday": "Tuesday: 11:00 AM – 10:00 PM",
-            "wednesday": "Wednesday: 11:00 AM – 10:00 PM",
-            "thursday": "Thursday: 11:00 AM – 10:00 PM",
-            "friday": "Friday: 11:00 AM – 10:30 PM",
-            "saturday": "Saturday: 11:00 AM – 10:30 PM",
-            "sunday": "Sunday: 10:30 AM – 9:00 PM",
-          }
-        },
-        'photos': {
-        'logo': {
-          'name': "logo_2.png",
-          'small_url': "https://cdna.artstation.com/p/assets/images/images/021/760/294/micro_square/jip-scheepers-2018-04-25.jpg?1572865897",
-          'large_url': "https://cdna.artstation.com/p/assets/images/images/021/760/294/micro_square/jip-scheepers-2018-04-25.jpg?1572865897"
-        },
-        'banner': {
-          'name': "banner_1.png",
-          'small_url': "https://www.gerardhuerta.com/wp-content/uploads/2016/08/ACDC-1000x650.jpg",
-          'large_url': "https://www.gerardhuerta.com/wp-content/uploads/2016/08/ACDC-1000x650.jpg"
-        },
-      },
-        "location": {
-          "geo": {
-            "identifier": "3ff884f0-79c9-11ea-9cdf-4d873094dff7",
-            "lat": "40.748440",
-            "lng":"-73.985664",
-            "radius": "50",
-          },
-          "beacon": {
-            "identifier": "3ff884f0-79c9-11ea-9cdf-4d873094dff7",
-            "region_identifier": "3ff871d0-79c9-11ea-8a10-a7f913a9d44b",
-            "major": "0",
-            "minor": "1"
-          },
-          "region": {
-            "identifier": "3ff871d0-79c9-11ea-8a10-a7f913a9d44b",
-            "city": "prosaccoshire",
-            "state": "ne",
-            "zip": "41232",
-            "neighborhood": null
-          }
-        }
-      },
-      "refunds": [
-        // {
-        //   "identifier": "125d10b0-895a-11ea-95db-b1ba0de9dfd1",
-        //   "total": "952",
-        //   "created_at": "2020-04-28 14:10:53",
-        //   "status": "refund paid",
-        // },
-        // {
-        //   "identifier": "125d10b0-895a-11ea-95db-b1ba0de9vcd1",
-        //   "total": "500",
-        //   "created_at": "2020-04-28 14:10:53",
-        //   "status": "refund paid",
-        // },
-      ],
+      "business": generateBusiness(),
+      "refunds": [],
       'issue': null
     };
   }
@@ -488,7 +432,7 @@ class MockResponses {
     //   'data': []
     // };
     return {
-      'data': List.generate(faker.randomGenerator.integer(25, min: 2), (index) => generateBusiness())
+      'data': List.generate(10, (index) => generateBusiness())
     };
   }
 
@@ -691,8 +635,8 @@ class MockResponses {
   static Map<String, dynamic> generateGeo() {
     return {
       "identifier": faker.guid.guid(),
-      "lat": double.parse("${faker.randomGenerator.integer(90, min: -90)}.825491"),
-      "lng": double.parse("${faker.randomGenerator.integer(180, min: -180)}.732108"),
+      "lat": double.parse("-79.0554${faker.randomGenerator.integer(780, min: 680)}"),
+      "lng": double.parse("35.9102${faker.randomGenerator.integer(640, min: 540)}"),
       "radius": 50
     };
   }
@@ -756,7 +700,7 @@ class MockResponses {
     return {
       'name': name == null ? faker.company.name() : name,
       'website': faker.internet.httpUrl(),
-      'description': faker.lorem.sentences(faker.randomGenerator.integer(6, min: 2)).join(". "),
+      'description': faker.lorem.sentences(faker.randomGenerator.integer(10, min: 6)).join(". "),
       'phone': faker.randomGenerator.fromPattern(["##########"]),
       'hours': generateHours()
     };

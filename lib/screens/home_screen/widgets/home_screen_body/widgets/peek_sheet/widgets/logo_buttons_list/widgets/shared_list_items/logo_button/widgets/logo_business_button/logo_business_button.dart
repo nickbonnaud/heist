@@ -2,26 +2,35 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heist/models/business/business.dart';
-import 'package:heist/screens/business_screen/business_screen.dart';
+import 'package:heist/routing/routes.dart';
+import 'package:heist/screens/home_screen/blocs/business_screen_visible_cubit.dart';
+import 'package:heist/screens/home_screen/blocs/side_drawer_bloc/side_drawer_bloc.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 import 'bloc/logo_business_button_bloc.dart';
 
 class LogoBusinessButton extends StatelessWidget {
   final Business _business;
+  final String _keyValue;
   final double _logoBorderRadius;
+  final AnimationController _controller;
 
   LogoBusinessButton({
     required Business business,
+    required String keyValue,
     required double logoBorderRadius,
+    required AnimationController controller
   })
     : _business = business,
-      _logoBorderRadius = logoBorderRadius;
+      _keyValue = keyValue,
+      _logoBorderRadius = logoBorderRadius,
+      _controller = controller;
 
   
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      key: Key(_keyValue),
       onTapDown: (_) => _toggleButtonPress(context: context),
       onTapUp: (_) => _toggleButtonPress(context: context),
       onTap: () => _showBusinessSheet(context: context),
@@ -54,11 +63,15 @@ class LogoBusinessButton extends StatelessWidget {
   }
 
   void _showBusinessSheet({required BuildContext context}) {
-    Navigator.of(context).push(PageRouteBuilder(
-      opaque: false,
-      fullscreenDialog: true,
-      pageBuilder: (BuildContext context, _, __) => BusinessScreen(business: _business)
-    ));
+    context.read<BusinessScreenVisibleCubit>().toggle();
+    BlocProvider.of<SideDrawerBloc>(context).add(ButtonVisibilityChanged(isVisible: false));
+    Navigator.of(context).pushNamed(Routes.business, arguments: _business)
+      .then((_) {
+        context.read<BusinessScreenVisibleCubit>().toggle();
+        if (_controller.status != AnimationStatus.completed) {
+          BlocProvider.of<SideDrawerBloc>(context).add(ButtonVisibilityChanged(isVisible: true));
+        }
+      });
   }
 }
 

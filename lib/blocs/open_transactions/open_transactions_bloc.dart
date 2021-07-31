@@ -19,8 +19,9 @@ class OpenTransactionsBloc extends Bloc<OpenTransactionsEvent, OpenTransactionsS
   OpenTransactionsBloc({required TransactionRepository transactionRepository, required AuthenticationBloc authenticationBloc})
     : _transactionRepository = transactionRepository,
       super(Uninitialized()) {
+
         _authenticationBlocSubscription = authenticationBloc.stream.listen((AuthenticationState state) {
-          if (state is Authenticated && (_previousAuthenticationState is Unknown || _previousAuthenticationState is Unauthenticated)) {
+          if (state is Authenticated && (_previousAuthenticationState is Unknown || _previousAuthenticationState is Unauthenticated || _previousAuthenticationState == null)) {
             add(FetchOpenTransactions());
           }
           _previousAuthenticationState = state;
@@ -86,7 +87,7 @@ class OpenTransactionsBloc extends Bloc<OpenTransactionsEvent, OpenTransactionsS
     if (currentState is OpenTransactionsLoaded) {
       final List<TransactionResource> updatedTransactions = currentState
         .transactions
-        .where((transaction) => transaction != event.transaction)
+        .where((transaction) => transaction.transaction.identifier != event.transaction.transaction.identifier)
         .toList()
         ..add(event.transaction);
       

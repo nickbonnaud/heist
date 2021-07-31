@@ -364,6 +364,7 @@ class _LoginFormState extends State<LoginForm> {
   void _errorLogin({required String error}) async {
     Vibrate.error();
     final SnackBar snackBar = SnackBar(
+      key: Key("errorLoginSnackbarKey"),
       content: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[

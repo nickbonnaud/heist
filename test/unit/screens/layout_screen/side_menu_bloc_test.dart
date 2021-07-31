@@ -1,6 +1,6 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:heist/screens/home_screen/bloc/side_drawer_bloc.dart';
+import 'package:heist/screens/home_screen/blocs/side_drawer_bloc/side_drawer_bloc.dart';
 
 void main() {
   group("Side Menu Bloc Tests", () {

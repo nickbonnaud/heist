@@ -6,13 +6,16 @@ import 'package:heist/themes/global_colors.dart';
 
 class PurchasedItemWidget extends StatelessWidget {
   final PurchasedItem _purchasedItem;
+  final int _index;
 
-  const PurchasedItemWidget({required PurchasedItem purchasedItem})
-    : _purchasedItem = purchasedItem;
+  const PurchasedItemWidget({required PurchasedItem purchasedItem, required int index})
+    : _purchasedItem = purchasedItem,
+      _index = index;
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      key: Key('purchasedItemKey-$_index'),
       leading: BoldText4(
         text: _purchasedItem.quantity.toString(), 
         context: context,

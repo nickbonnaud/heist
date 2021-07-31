@@ -5,57 +5,12 @@ import 'package:heist/blocs/geo_location/geo_location_bloc.dart';
 import 'package:heist/models/business/business.dart';
 import 'package:heist/resources/helpers/distance_calculator.dart';
 import 'package:heist/resources/helpers/size_config.dart';
-import 'package:heist/screens/business_screen/business_screen.dart';
+import 'package:heist/routing/routes.dart';
+import 'package:heist/screens/home_screen/blocs/business_screen_visible_cubit.dart';
 import 'package:heist/themes/global_colors.dart';
 
-class BusinessLogoDetails extends StatelessWidget {
-  final double _topMargin;
-  final double _leftMargin;
-  final double _height;
-  final double _borderRadius;
-  final Business _business;
-  final AnimationController _controller;
-  final int _index;
-
-  BusinessLogoDetails({
-    required double topMargin,
-    required double leftMargin,
-    required double height,
-    required double borderRadius,
-    required Business business,
-    required AnimationController controller,
-    required int index
-  })
-    : _topMargin = topMargin,
-      _leftMargin = leftMargin,
-      _height = height,
-      _borderRadius = borderRadius,
-      _business = business,
-      _controller = controller,
-      _index = index;
-
-
-  @override
-  Widget build(BuildContext context) {
-    return Positioned(
-      top: _topMargin,
-      left: _leftMargin,
-      height: _height,
-      right: 16,
-      child: _controller.status == AnimationStatus.completed
-        ? Details(
-          height: _height, 
-          borderRadius: _borderRadius, 
-          business: _business, 
-          controller: _controller,
-          index: _index
-        )
-        : Container(),
-    );
-  }
-}
-
 class Details extends StatefulWidget {
+  final String _keyValue;
   final double _height;
   final double _borderRadius;
   final Business _business;
@@ -63,13 +18,15 @@ class Details extends StatefulWidget {
   final int _index;
 
   Details({
+    required String keyValue,
     required double height,
     required double borderRadius,
     required Business business,
     required AnimationController controller,
     required int index
   })
-    : _height = height,
+    : _keyValue = keyValue,
+      _height = height,
       _borderRadius = borderRadius,
       _business = business,
       _controller = controller,
@@ -105,7 +62,8 @@ class _DetailsState extends State<Details> with SingleTickerProviderStateMixin {
           child: Padding(
             padding: EdgeInsets.only(right: 4),
             child: GestureDetector(
-              onTap: () => _viewBusinessModal(context: context),
+              key: Key(widget._keyValue),
+              onTap: () => _viewBusinessModal(),
               onTapDown: (_) => setState(() => _isPressed = !_isPressed),
               onTapUp: (_) => setState(() => _isPressed = !_isPressed),
               onTapCancel: () => setState(() => _isPressed = !_isPressed),
@@ -118,7 +76,7 @@ class _DetailsState extends State<Details> with SingleTickerProviderStateMixin {
                     color: Theme.of(context).colorScheme.scrollBackground
                   ),
                   padding: EdgeInsets.only(left: widget._height).add(EdgeInsets.all(8)),
-                  child: _buildContent(context: context),
+                  child: _buildContent(),
                 ),
               ),
             ),
@@ -134,7 +92,7 @@ class _DetailsState extends State<Details> with SingleTickerProviderStateMixin {
     super.dispose();
   }
 
-  Widget _buildContent({required BuildContext context}) {
+  Widget _buildContent() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
@@ -171,12 +129,10 @@ class _DetailsState extends State<Details> with SingleTickerProviderStateMixin {
     );
   }
 
-  void _viewBusinessModal({required BuildContext context}) {
-    Navigator.of(context).push(PageRouteBuilder(
-      opaque: false,
-      fullscreenDialog: true,
-      pageBuilder: (BuildContext context, _, __) => BusinessScreen(business: widget._business)
-    ));
+  void _viewBusinessModal() {
+    context.read<BusinessScreenVisibleCubit>().toggle();
+    Navigator.of(context).pushNamed(Routes.business, arguments: widget._business)
+      .then((_) => context.read<BusinessScreenVisibleCubit>().toggle());
   }
 
   double _getDistance({required LocationLoaded state}) {

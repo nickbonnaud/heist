@@ -6,7 +6,7 @@ import 'package:heist/blocs/open_transactions/open_transactions_bloc.dart';
 import 'package:heist/models/transaction/transaction_resource.dart';
 
 import 'shared_list_items/logo_button/logo_button.dart';
-import 'shared_list_items/logo_details/transaction_logo_details.dart';
+import 'shared_list_items/logo_details/transaction_logo_details/transaction_logo_details.dart';
 import 'shared_list_items/shared_sizes.dart';
 
 class OpenTransactionsList extends StatelessWidget {
@@ -29,20 +29,36 @@ class OpenTransactionsList extends StatelessWidget {
         final currentState = state;
         if (currentState is OpenTransactionsLoaded && currentState.transactions.length > 0) {
           return Stack(
-            children: <Widget>[
-              for (TransactionResource transactionResource in currentState.openTransactions) _buildDetails(state: currentState, transactionResource: transactionResource),
-              for (TransactionResource transactionResource in currentState.openTransactions) _buildLogoButton(state: currentState, transactionResource: transactionResource),
-            ],
+            children: []
+              ..addAll(_detailsList(context: context, state: currentState))
+              ..addAll(_buttonsList(context: context, state: currentState))
           );
         }
         return Container();
       }
     );
   }
+  
+  List<Widget> _detailsList({required BuildContext context, required OpenTransactionsLoaded state}) {
+    return List<Widget>.generate(state.openTransactions.length, (index) => _buildDetails(
+      transactionResource: state.openTransactions[index],
+      state: state,
+      subListIndex: index
+    ));
+  }
 
-  Widget _buildLogoButton({required TransactionResource transactionResource, required OpenTransactionsLoaded state}) {
+  List<Widget> _buttonsList({required BuildContext context, required OpenTransactionsLoaded state}) {
+    return List<Widget>.generate(state.openTransactions.length, (index) => _buildLogoButton(
+      transactionResource: state.openTransactions[index],
+      state: state,
+      subListIndex: index
+    ));
+  }
+  
+  Widget _buildLogoButton({required TransactionResource transactionResource, required OpenTransactionsLoaded state, required int subListIndex}) {
     int index = state.openTransactions.indexOf(transactionResource);
     return LogoButton(
+      keyValue: "openLogoButtonKey-$subListIndex",
       controller: _controller, 
       topMargin: _logoMarginTop(index: index),
       leftMargin: _logoLeftMargin(index: index),
@@ -53,16 +69,17 @@ class OpenTransactionsList extends StatelessWidget {
     );
   }
 
-  Widget _buildDetails({required TransactionResource transactionResource, required OpenTransactionsLoaded state}) {
-    int index = state.openTransactions.indexOf(transactionResource);
+  Widget _buildDetails({required TransactionResource transactionResource, required OpenTransactionsLoaded state, required int subListIndex}) {
+    int fullIndex = state.openTransactions.indexOf(transactionResource);
     return TransactionLogoDetails(
-      topMargin: _logoMarginTop(index: index), 
-      leftMargin: _logoLeftMargin(index: index), 
+      keyValue: "openDetailsKey-$subListIndex",
+      topMargin: _logoMarginTop(index: fullIndex), 
+      leftMargin: _logoLeftMargin(index: fullIndex), 
       height: _size, 
       borderRadius: _borderRadius, 
       transactionResource: transactionResource,
       controller: _controller,
-      index: index
+      subListIndex: subListIndex 
     );
   }
 

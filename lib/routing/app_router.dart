@@ -9,6 +9,7 @@ import 'package:heist/blocs/open_transactions/open_transactions_bloc.dart';
 import 'package:heist/blocs/permissions/permissions_bloc.dart';
 import 'package:heist/blocs/receipt_modal_sheet/receipt_modal_sheet_bloc.dart';
 import 'package:heist/global_widgets/route_builders/fade_in_route.dart';
+import 'package:heist/global_widgets/route_builders/overlay_route.dart';
 import 'package:heist/global_widgets/route_builders/slide_up_route.dart';
 import 'package:heist/models/business/business.dart';
 import 'package:heist/models/reset_password_args.dart';
@@ -47,6 +48,8 @@ import 'package:heist/screens/email_screen/email_screen.dart';
 import 'package:heist/screens/help_tickets_screen/help_tickets_screen.dart';
 import 'package:heist/screens/historic_transactions_screen/historic_transactions_screen.dart';
 import 'package:heist/screens/home_screen/home_screen.dart';
+import 'package:heist/screens/issue_screen/issue_screen.dart';
+import 'package:heist/screens/issue_screen/models/issue_args.dart';
 import 'package:heist/screens/onboard_screen/onboard_screen.dart';
 import 'package:heist/screens/password_screen/password_screen.dart';
 import 'package:heist/screens/permissions_screen/permissions_screen.dart';
@@ -131,10 +134,7 @@ class AppRouter {
         );
         break;
       case Routes.business:
-        route = _createFullScreenDialogRoute(
-          screen: BusinessScreen(business: routeData.args as Business),
-          name: routeData.route
-        );
+        route = OverlayRouteTest(screen: BusinessScreen(business: routeData.args as Business), name: routeData.route);
         break;
       case Routes.requestReset:
         route = _createFullScreenDialogRoute(
@@ -257,6 +257,17 @@ class AppRouter {
         route = _createRouteDefault(
           screen: HelpTicketsScreen(
             helpRepository: HelpRepository(helpProvider: HelpProvider())
+          ),
+          name: routeData.route
+        );
+        break;
+      case Routes.reportIssue:
+        IssueArgs issueArgs = routeData.args as IssueArgs;
+        route = _createFullScreenDialogRoute(
+          screen: IssueScreen(
+            issueRepository: TransactionIssueRepository(issueProvider: TransactionIssueProvider()),
+            type: issueArgs.type,
+            transaction: issueArgs.transactionResource
           ),
           name: routeData.route
         );

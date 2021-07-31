@@ -24,9 +24,9 @@ class ResetPasswordFormState extends Equatable {
 
   factory ResetPasswordFormState.initial({required String email}) {
     return ResetPasswordFormState(
-      isResetCodeValid: true,
-      isPasswordValid: true,
-      isPasswordConfirmationValid: true,
+      isResetCodeValid: false,
+      isPasswordValid: false,
+      isPasswordConfirmationValid: false,
       email: email,
       isSubmitting: false,
       isSuccess: false,

@@ -49,18 +49,20 @@ class ReceiptScreenBody extends StatelessWidget {
         TransactionResource _transactionResource = state.transactionResource;
         return Scaffold(
           body: _createScrollableContent(context: context, transactionResource: _transactionResource),
-          bottomNavigationBar: state.isButtonVisible ? BlocProvider<PayButtonBloc>(
-            create: (_) => PayButtonBloc(
-              transactionRepository: _transactionRepository,
-              transactionResource: _transactionResource,
-              openTransactionsBloc: _openTransactionsBloc,
-              receiptScreenBloc: BlocProvider.of<ReceiptScreenBloc>(context)
-            ),
-            child: Padding(
-              padding: EdgeInsets.only(left: 16, right: 16, bottom: 16),
-              child: _createFooterButtons(receiptState: state, transactionResource: _transactionResource) 
-            ),
-          ) : null
+          bottomNavigationBar: state.isButtonVisible 
+            ? BlocProvider<PayButtonBloc>(
+                create: (_) => PayButtonBloc(
+                  transactionRepository: _transactionRepository,
+                  transactionResource: _transactionResource,
+                  openTransactionsBloc: _openTransactionsBloc,
+                  receiptScreenBloc: BlocProvider.of<ReceiptScreenBloc>(context)
+                ),
+                child: Padding(
+                  padding: EdgeInsets.only(left: 16, right: 16, bottom: 16),
+                  child: _createFooterButtons(receiptState: state, transactionResource: _transactionResource) 
+                ),
+              )
+            : null
         );
       }
     ); 
@@ -81,6 +83,7 @@ class ReceiptScreenBody extends StatelessWidget {
             padding: EdgeInsets.only(left: 16, right: 16),
             sliver: SliverToBoxAdapter(
               child: Column(
+                key: Key("receiptBodyWithAppBarKey"),
                 children: _buildBody(context: context, transactionResource: transactionResource)
               ),
             ),
@@ -99,77 +102,15 @@ class ReceiptScreenBody extends StatelessWidget {
     return <Widget>[
       Padding(
         padding: EdgeInsets.only(left: 16, right: 16),
-        child: Row(
-          children: <Widget>[
-            CachedAvatarHero(
-              url: transactionResource.business.photos.logo.smallUrl,
-              radius: 7,
-              tag: transactionResource.transaction.identifier
-            ),
-            SizedBox(width: SizeConfig.getWidth(2)),
-            Expanded(
-              child: BoldText2(
-                text: transactionResource.business.profile.name,
-                context: context,
-              ),
-            ),
-            Text2(
-              text: DateFormatter.toStandardDate(date: transactionResource.transaction.billUpdatedAt),
-              context: context,
-              color: Theme.of(context).colorScheme.onPrimarySubdued,
-            )
-          ],
-        ),
+        child: _receiptTop(context: context, transactionResource: transactionResource),
       ),
-      if (transactionResource.issue != null && !transactionResource.issue!.resolved)
-        Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              BoldText3(text: "Issue reported", context: context, color: Theme.of(context).colorScheme.info),
-              _numberWarningsLeft(context: context, transactionResource: transactionResource)
-            ],
-          )
-        ),
+      _warning(context: context, transactionResource: transactionResource),
       SizedBox(height: SizeConfig.getHeight(3)),
-      ListView.separated(
-        physics: NeverScrollableScrollPhysics(),
-        shrinkWrap: true,
-        itemBuilder: (BuildContext context, int index) {
-          return PurchasedItemWidget(purchasedItem: transactionResource.transaction.purchasedItems[index]);
-        },
-        itemCount: transactionResource.transaction.purchasedItems.length,
-        separatorBuilder: (BuildContext context, int index) => Divider(thickness: 1),
-      ),
+      _purchasedItems(transactionResource: transactionResource),
       Divider(thickness: 1),
       Padding(
         padding: EdgeInsets.only(left: 16, right: 16),
-        child: ListView(
-          physics: NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-          children: <Widget>[
-            SizedBox(height:SizeConfig.getHeight(3)),
-            _createFooterRow(context: context, title: "Subtotal", value: transactionResource.transaction.netSales),
-            SizedBox(height:SizeConfig.getHeight(1)),
-            _createFooterRow(context: context, title: "Tax", value: transactionResource.transaction.tax),
-            if (transactionResource.transaction.tip != 0)
-              SizedBox(height:SizeConfig.getHeight(1)),
-            if (transactionResource.transaction.tip != 0)
-              _createFooterRow(context: context, title: "Tip", value: transactionResource.transaction.tip),
-            if (transactionResource.refunds.length > 0)
-              SizedBox(height: SizeConfig.getHeight(1)),
-            if (transactionResource.refunds.length > 0)
-              _createRefundRow(context: context, transactionResource: transactionResource),
-            SizedBox(height:SizeConfig.getHeight(3)),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                BoldText2(text: "Total", context: context),
-                BoldText2(text: Currency.create(cents: _setTotal(transactionResource: transactionResource)), context: context),
-              ],
-            ),
-          ],
-        ),
+        child: _receiptBottom(context: context, transactionResource: transactionResource),
       ),
       Divider(thickness: 2),
       Padding(
@@ -186,33 +127,118 @@ class ReceiptScreenBody extends StatelessWidget {
       SizedBox(height: SizeConfig.getHeight(1)),
       Padding(
         padding: EdgeInsets.only(left: 16, right: 16),
-        child: Container(
-          height: SizeConfig.getWidth(50),
-          child: GoogleMap(
-            initialCameraPosition: CameraPosition(
-              target: LatLng(transactionResource.business.location.geo.lat, transactionResource.business.location.geo.lng),
-              zoom: 16.0
-            ),
-            myLocationButtonEnabled: false,
-            markers: [Marker(
-              markerId: MarkerId(transactionResource.business.identifier),
-              position: LatLng(transactionResource.business.location.geo.lat, transactionResource.business.location.geo.lng),
-            )].toSet(),
-          ),
-        ),
+        child: _purchasedLocationMap(transactionResource: transactionResource),
       ),
       SizedBox(height: SizeConfig.getHeight(2)),
       Divider(thickness: 2),
       SizedBox(height: SizeConfig.getHeight(2)),
       Center(
         child: Text3(
-          text: "Transaction ID: ${transactionResource.transaction.identifier}",
+          text: "find me",
           context: context, 
           color: Theme.of(context).colorScheme.onPrimarySubdued
         ),
       ),
       SizedBox(height: SizeConfig.getHeight(2)),
     ];
+  }
+  
+  Widget _receiptTop({required BuildContext context, required TransactionResource transactionResource}) {
+    return Row(
+      children: <Widget>[
+        CachedAvatarHero(
+          url: transactionResource.business.photos.logo.smallUrl,
+          radius: 7,
+          tag: transactionResource.transaction.identifier
+        ),
+        SizedBox(width: SizeConfig.getWidth(2)),
+        Expanded(
+          child: BoldText2(
+            text: transactionResource.business.profile.name,
+            context: context,
+          ),
+        ),
+        Text2(
+          text: DateFormatter.toStandardDate(date: transactionResource.transaction.billUpdatedAt),
+          context: context,
+          color: Theme.of(context).colorScheme.onPrimarySubdued,
+        )
+      ],
+    );
+  }
+
+  Widget _warning({required BuildContext context, required TransactionResource transactionResource}) {
+    if (transactionResource.issue != null && !transactionResource.issue!.resolved) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            BoldText3(text: "Issue reported", context: context, color: Theme.of(context).colorScheme.info),
+            _numberWarningsLeft(context: context, transactionResource: transactionResource)
+          ],
+        )
+      );
+    } else {
+      return Container();
+    }
+  }
+
+  Widget _purchasedItems({required TransactionResource transactionResource}) {
+    return ListView.separated(
+      physics: NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
+      itemBuilder: (BuildContext context, int index) {
+        return PurchasedItemWidget(purchasedItem: transactionResource.transaction.purchasedItems[index], index: index);
+      },
+      itemCount: transactionResource.transaction.purchasedItems.length,
+      separatorBuilder: (BuildContext context, int index) => Divider(thickness: 1),
+    );
+  }
+
+  Widget _receiptBottom({required BuildContext context, required TransactionResource transactionResource}) {
+    return ListView(
+      physics: NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
+      children: <Widget>[
+        SizedBox(height:SizeConfig.getHeight(3)),
+        _createFooterRow(context: context, title: "Subtotal", value: transactionResource.transaction.netSales),
+        SizedBox(height:SizeConfig.getHeight(1)),
+        _createFooterRow(context: context, title: "Tax", value: transactionResource.transaction.tax),
+        if (transactionResource.transaction.tip != 0)
+          SizedBox(height:SizeConfig.getHeight(1)),
+        if (transactionResource.transaction.tip != 0)
+          _createFooterRow(context: context, title: "Tip", value: transactionResource.transaction.tip),
+        if (transactionResource.refunds.length > 0)
+          SizedBox(height: SizeConfig.getHeight(1)),
+        if (transactionResource.refunds.length > 0)
+          _createRefundRow(context: context, transactionResource: transactionResource),
+        SizedBox(height:SizeConfig.getHeight(3)),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            BoldText2(text: "Total", context: context),
+            BoldText2(text: Currency.create(cents: _setTotal(transactionResource: transactionResource)), context: context),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _purchasedLocationMap({required TransactionResource transactionResource}) {
+    return Container(
+      height: SizeConfig.getWidth(50),
+      child: GoogleMap(
+        initialCameraPosition: CameraPosition(
+          target: LatLng(transactionResource.business.location.geo.lat, transactionResource.business.location.geo.lng),
+          zoom: 16.0
+        ),
+        myLocationButtonEnabled: false,
+        markers: [Marker(
+          markerId: MarkerId(transactionResource.business.identifier),
+          position: LatLng(transactionResource.business.location.geo.lat, transactionResource.business.location.geo.lng),
+        )].toSet(),
+      ),
+    );
   }
   
   Widget _numberWarningsLeft({required BuildContext context, required TransactionResource transactionResource}) {
@@ -327,7 +353,7 @@ class ReceiptScreenBody extends StatelessWidget {
       case 1021:
       case 1022:
       case 502:
-        trailing = ReportIssueButton(transaction: transactionResource, transactionIssueRepository: _transactionIssueRepository);
+        trailing = ReportIssueButton(transaction: transactionResource);
         break;
       case 500:
       case 501:

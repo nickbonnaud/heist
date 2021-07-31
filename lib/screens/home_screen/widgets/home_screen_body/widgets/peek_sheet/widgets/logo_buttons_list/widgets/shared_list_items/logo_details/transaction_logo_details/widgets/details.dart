@@ -1,59 +1,13 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:heist/models/transaction/transaction_resource.dart';
 import 'package:heist/resources/helpers/currency.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/routing/routes.dart';
 import 'package:heist/themes/global_colors.dart';
-
-class TransactionLogoDetails extends StatelessWidget {
-  final double _topMargin;
-  final double _leftMargin;
-  final double _height;
-  final double _borderRadius;
-  final TransactionResource _transactionResource;
-  final AnimationController _controller;
-  final int _index;
-
-  TransactionLogoDetails({
-    required double topMargin,
-    required double leftMargin,
-    required double height,
-    required double borderRadius,
-    required TransactionResource transactionResource,
-    required AnimationController controller,
-    required int index
-  })
-    : _topMargin = topMargin,
-      _leftMargin = leftMargin,
-      _height = height,
-      _borderRadius = borderRadius,
-      _transactionResource = transactionResource,
-      _controller = controller,
-      _index = index;
-
-  @override
-  Widget build(BuildContext context) {
-    return Positioned(
-      top: _topMargin,
-      left: _leftMargin,
-      height: _height,
-      right: 16,
-      child: _controller.status == AnimationStatus.completed
-        ? Details(
-          height: _height, 
-          borderRadius: _borderRadius, 
-          transactionResource: _transactionResource, 
-          controller: _controller, 
-          index: _index
-        )
-        : Container()
-    );
-  }
-}
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
+import 'package:flutter/material.dart';
 
 class Details extends StatefulWidget {
+  final String _keyValue;
   final double _height;
   final double _borderRadius;
   final TransactionResource _transactionResource;
@@ -61,13 +15,15 @@ class Details extends StatefulWidget {
   final int _index;
 
   Details({
+    required String keyValue,
     required double height,
     required double borderRadius,
     required TransactionResource transactionResource,
     required AnimationController controller,
     required int index
   })
-    : _height = height,
+    : _keyValue = keyValue,
+      _height = height,
       _borderRadius = borderRadius,
       _transactionResource = transactionResource,
       _controller = controller,
@@ -103,7 +59,8 @@ class _DetailsState extends State<Details> with SingleTickerProviderStateMixin {
           child: Padding(
             padding: EdgeInsets.only(right: 4),
             child: GestureDetector(
-              onTap: () => _viewReceiptModal(context: context),
+              key: Key(widget._keyValue),
+              onTap: () => _viewReceiptModal(),
               onTapDown: (_) => setState(() => _isPressed = !_isPressed),
               onTapUp: (_) => setState(() => _isPressed = !_isPressed),
               onTapCancel: () => setState(() => _isPressed = !_isPressed),
@@ -116,7 +73,7 @@ class _DetailsState extends State<Details> with SingleTickerProviderStateMixin {
                     color: Theme.of(context).colorScheme.scrollBackground
                   ),
                   padding: EdgeInsets.only(left: widget._height).add(EdgeInsets.all(8)),
-                  child: _buildContent(context: context),
+                  child: _buildContent(),
                 ),
               ),
             ),
@@ -126,7 +83,7 @@ class _DetailsState extends State<Details> with SingleTickerProviderStateMixin {
     );
   }
 
-  Widget _buildContent({required BuildContext context}) {
+  Widget _buildContent() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
@@ -163,7 +120,7 @@ class _DetailsState extends State<Details> with SingleTickerProviderStateMixin {
     );
   }
 
-  void _viewReceiptModal({required BuildContext context}) {
+  void _viewReceiptModal() {
     Navigator.of(context).pushNamed(Routes.receipt, arguments: widget._transactionResource);
   }
 }

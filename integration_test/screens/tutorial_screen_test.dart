@@ -44,6 +44,7 @@ class TutorialScreenTest {
 
   Future<void> _goToFaqCard() async {
     expect(find.byKey(Key("cardDenyPaymentKey")), findsOneWidget);
+    await tester.pump();
     await tester.tap(find.byKey(Key("nextButtonDenyPaymentKey")));
     await tester.pump(Duration(milliseconds: 500));
   }

@@ -372,6 +372,7 @@ class _RegisterFormState extends State<RegisterForm> {
   void _errorRegister({required String error}) async {
     Vibrate.error();
     final SnackBar snackBar = SnackBar(
+      key: Key("errorRegisterSnackbarKey"),
       content: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[

@@ -17,6 +17,9 @@ class RegisterScreenTest {
 
     expect(find.byKey(Key("registerButtonTextKey")), findsNothing);
 
+    await _enterErrorCredentials();
+    await _tapSubmitButtonFail();
+    
     await _enterInvalidEmail();
     await _enterValidEmail();
 
@@ -26,7 +29,7 @@ class RegisterScreenTest {
     await _enterInvalidPasswordConfirmation();
     await _enterValidPasswordConfirmation();
 
-    await _tapSubmitButton();
+    await _tapSubmitButtonSuccess();
     await tester.pumpAndSettle();
   }
 
@@ -41,6 +44,34 @@ class RegisterScreenTest {
     expect(find.byKey(Key("registerFormKey")), findsOneWidget);
   }
 
+  Future<void> _enterErrorCredentials() async {
+    await tester.enterText(find.byKey(Key("emailFormFieldKey")), "error@gmail.com");
+    await tester.pump(Duration(milliseconds: 300));
+
+    await tester.enterText(find.byKey(Key("passwordFormFieldKey")), "s^!hHd34Gjs76@");
+    await tester.pump(Duration(milliseconds: 300));
+
+    await tester.enterText(find.byKey(Key("passwordConfirmationFormFieldKey")), "f");
+    await tester.pump(Duration(milliseconds: 300));
+
+    await tester.enterText(find.byKey(Key("passwordConfirmationFormFieldKey")), "s^!hHd34Gjs76@");
+    await tester.pump(Duration(milliseconds: 300));
+
+    await tester.tap(find.text("Done"));
+    await tester.pump();
+  }
+
+  Future<void> _tapSubmitButtonFail() async {
+    expect(find.byKey(Key("errorRegisterSnackbarKey")), findsNothing);
+    await tester.tap(find.byKey(Key("registerButtonTextKey")).first);
+    await tester.pump(Duration(seconds: 3));
+    await tester.pump();
+    expect(find.byKey(Key("errorRegisterSnackbarKey")), findsOneWidget);
+    
+    await tester.fling(find.byKey(Key("errorRegisterSnackbarKey")), Offset(0, 500), 500);
+    await tester.pump();
+  }
+  
   Future<void> _enterInvalidEmail() async {
     expect(find.byKey(Key("emailFormFieldKey")), findsOneWidget);
 
@@ -104,7 +135,7 @@ class RegisterScreenTest {
     await tester.pump();
   }
 
-  Future<void> _tapSubmitButton() async {
+  Future<void> _tapSubmitButtonSuccess() async {
     expect(find.byKey(Key("registerButtonTextKey")), findsNWidgets(2));
     expect(find.byType(CircularProgressIndicator), findsNothing);
 

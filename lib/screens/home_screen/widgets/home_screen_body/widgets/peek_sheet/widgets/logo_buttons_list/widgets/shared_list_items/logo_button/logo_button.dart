@@ -19,6 +19,7 @@ class LogoButton extends StatelessWidget {
   final bool _isTransaction;
   final double _logoSize;
   final double _borderRadius;
+  final String _keyValue;
   final TransactionResource? _transactionResource;
   final Business? _business;
 
@@ -31,6 +32,7 @@ class LogoButton extends StatelessWidget {
     required bool isTransaction,
     required double logoSize,
     required double borderRadius,
+    required String keyValue,
     TransactionResource? transactionResource,
     Business? business
   })
@@ -40,6 +42,7 @@ class LogoButton extends StatelessWidget {
       _isTransaction = isTransaction,
       _logoSize = logoSize,
       _borderRadius = borderRadius,
+      _keyValue = keyValue,
       _transactionResource = transactionResource,
       _business = business;
 
@@ -55,6 +58,7 @@ class LogoButton extends StatelessWidget {
             create: (_) => LogoTransactionButtonBloc(), 
             child: LogoTransactionButton(
               transactionResource: _transactionResource!,
+              keyValue: _keyValue,
               logoBorderRadius: _borderRadius,
               warningIconSize: _logoSize / 2,
             )
@@ -62,8 +66,10 @@ class LogoButton extends StatelessWidget {
         : BlocProvider<LogoBusinessButtonBloc>(
             create: (_) => LogoBusinessButtonBloc(),
             child: LogoBusinessButton(
+              keyValue: _keyValue,
               business: _business!,
               logoBorderRadius: _borderRadius,
+              controller: _controller,
             )
           )
     );

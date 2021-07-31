@@ -15,13 +15,16 @@ class LoginScreenTest {
 
     expect(find.byKey(Key("loginButtonTextKey")), findsNothing);
 
+    await _enterErrorCredentials();
+    await _tapSubmitButtonFail();
+    
     await _enterInvalidEmail();
     await _enterValidEmail();
 
     await _enterInvalidPassword();
     await _enterValidPassword();
 
-    await _tapSubmitButton();
+    await _tapSubmitButtonSuccess();
     await tester.pumpAndSettle();
   }
   
@@ -34,15 +37,6 @@ class LoginScreenTest {
     expect(find.text("Invalid Email"), findsOneWidget);
   }
 
-  Future<void> _enterValidEmail() async {
-    expect(find.text("Invalid Email"), findsOneWidget);
-
-    await tester.enterText(find.byKey(Key("emailFormFieldKey")), "joe@gmail.com");
-    await tester.pump(Duration(milliseconds: 300));
-
-    expect(find.text("Invalid Email"), findsNothing);
-  }
-
   Future<void> _enterInvalidPassword() async {
     expect(find.byKey(Key("passwordFormFieldKey")), findsOneWidget);
     
@@ -50,6 +44,38 @@ class LoginScreenTest {
     await tester.enterText(find.byKey(Key("passwordFormFieldKey")), "bad pas");
     await tester.pump(Duration(milliseconds: 300));
     expect(find.text("Invalid Password"), findsOneWidget);
+  }
+
+  Future<void> _enterErrorCredentials() async {
+    await tester.enterText(find.byKey(Key("emailFormFieldKey")), "error@gmail.com");
+    await tester.pump(Duration(milliseconds: 300));
+
+    await tester.enterText(find.byKey(Key("passwordFormFieldKey")), "jdgDKXV2!^***4652vbFbd42@");
+    await tester.pump(Duration(milliseconds: 300));
+
+    await tester.tap(find.text("Done"));
+    await tester.pump();
+  }
+
+  Future<void> _tapSubmitButtonFail() async {
+    expect(find.byKey(Key("errorLoginSnackbarKey")), findsNothing);
+    await tester.tap(find.byKey(Key("loginButtonTextKey")).first);
+    await tester.pump(Duration(seconds: 3));
+    await tester.pump();
+    expect(find.byKey(Key("errorLoginSnackbarKey")), findsOneWidget);
+    
+    await tester.fling(find.byKey(Key("errorLoginSnackbarKey")), Offset(0, 500), 500);
+    await tester.pump();
+    
+  }
+
+  Future<void> _enterValidEmail() async {
+    expect(find.text("Invalid Email"), findsOneWidget);
+
+    await tester.enterText(find.byKey(Key("emailFormFieldKey")), "joe@gmail.com");
+    await tester.pump(Duration(milliseconds: 300));
+
+    expect(find.text("Invalid Email"), findsNothing);
   }
 
   Future<void> _enterValidPassword() async {
@@ -63,7 +89,7 @@ class LoginScreenTest {
     await tester.pump();
   }
 
-  Future<void> _tapSubmitButton() async {
+  Future<void> _tapSubmitButtonSuccess() async {
     expect(find.byKey(Key("loginButtonTextKey")), findsNWidgets(2));
     expect(find.byType(CircularProgressIndicator), findsNothing);
 

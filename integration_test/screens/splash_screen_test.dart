@@ -22,10 +22,12 @@ class SplashScreenTest {
   }
 
   Future<void> _finishAnimation() async {
-    while(!tester.any(find.byKey(Key("loginFormKey")))) {
-      await tester.pump();
-    }
-    await tester.pump();
+    await tester.pumpAndSettle();
+    
+    // while(!tester.any(find.byKey(Key("loginFormKey")))) {
+    //   await tester.pump();
+    // }
+    // await tester.pump();
   }
 
   Future<void> _dragBetweenForms() async {

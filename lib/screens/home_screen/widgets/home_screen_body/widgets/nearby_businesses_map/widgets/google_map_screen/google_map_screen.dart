@@ -36,7 +36,7 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
     return BlocListener<GoogleMapScreenBloc, GoogleMapScreenState>(
       listener: (context, state) {
         if (state.business != null) {
-          _showBusinessSheet(context: context, business:  state.business!);
+          _showBusinessSheet(business:  state.business!);
         }
       },
       child: Scaffold(
@@ -53,7 +53,7 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
                   () => EagerGestureRecognizer()
                 )
               ].toSet(),
-              markers: _createMarkers(widget._preMarkers, context),
+              markers: _createMarkers(preMarkers: widget._preMarkers),
               myLocationButtonEnabled: false,
             ),
             BlocBuilder<GoogleMapScreenBloc, GoogleMapScreenState>(
@@ -77,7 +77,7 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
         floatingActionButton: FloatingActionButton(
           heroTag: MAP_KEY,
           child: Icon(Icons.my_location),
-          onPressed: () => _changeLocation(context),
+          onPressed: () => _changeLocation(),
         ),
       )
     );
@@ -96,11 +96,11 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
     );
   }
 
-  void _changeLocation(BuildContext context) {
+  void _changeLocation() {
     BlocProvider.of<GeoLocationBloc>(context).add(FetchLocation(accuracy: Accuracy.MEDIUM));
   }
 
-  void _showBusinessSheet({required BuildContext context, required Business business}) {
+  void _showBusinessSheet({required Business business}) {
     Navigator.of(context).push(PageRouteBuilder(
       opaque: false,
       fullscreenDialog: true,
@@ -112,7 +112,7 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
     });
   }
 
-  Set<Marker> _createMarkers(List<PreMarker> preMarkers, BuildContext context) {
+  Set<Marker> _createMarkers({required List<PreMarker> preMarkers}) {
     return preMarkers.map((PreMarker preMarker) {
       LatLng position = LatLng(preMarker.lat, preMarker.lng);
       return Marker(

@@ -88,15 +88,18 @@ class _TransactionState extends State<Transaction> {
           children: <Widget>[
             SizedBox(height: SizeConfig.getHeight(7)),
             PurchasedItemWidget(
-              purchasedItem: PurchasedItem(name: "Purchased", subName: null, price: 199, quantity: 1, total: 199)
+              purchasedItem: PurchasedItem(name: "Purchased", subName: null, price: 199, quantity: 1, total: 199),
+              index: 0,
             ),
             Divider(),
             PurchasedItemWidget(
-              purchasedItem: PurchasedItem(name: "Item", subName: null, price: 500, quantity: 2, total: 1000)
+              purchasedItem: PurchasedItem(name: "Item", subName: null, price: 500, quantity: 2, total: 1000),
+              index: 1,
             ),
             Divider(),
             PurchasedItemWidget(
-              purchasedItem: PurchasedItem(name: "Another Item", subName: null, price: 1000, quantity: 3, total: 3000)
+              purchasedItem: PurchasedItem(name: "Another Item", subName: null, price: 1000, quantity: 3, total: 3000),
+              index: 2,
             ),
             Divider(),
             // where unique item is overlayed
@@ -244,7 +247,8 @@ class _TransactionState extends State<Transaction> {
     });
 
     return PurchasedItemWidget(
-      purchasedItem: PurchasedItem(name: uniqueItem.name, subName: uniqueItem.subName, price: uniqueItem.price, quantity: uniqueItem.quantity, total: uniqueItem.total)
+      purchasedItem: PurchasedItem(name: uniqueItem.name, subName: uniqueItem.subName, price: uniqueItem.price, quantity: uniqueItem.quantity, total: uniqueItem.total),
+      index: 3,
     );
   }
 

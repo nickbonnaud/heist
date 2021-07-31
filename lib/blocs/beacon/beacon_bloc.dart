@@ -31,6 +31,32 @@ class BeaconBloc extends Bloc<BeaconEvent, BeaconState> {
         _nearbyBusinessSubscription = nearbyBusinessesBloc.stream.listen((NearbyBusinessesState state) {
           if (state is NearbyBusinessLoaded) {
             add(StartBeaconMonitoring(businesses: state.businesses));
+
+            // TEST CHANGE //
+
+            // Business business = state.businesses.first;
+            // add(Enter(region: Region(
+            //   identifier: business.location.beacon.identifier,
+            //   proximityUUID: business.location.beacon.identifier,
+            //   major: business.location.beacon.major,
+            //   minor: business.location.beacon.minor
+            // )));
+
+            Business business = state.businesses[1];
+            add(Enter(region: Region(
+              identifier: business.location.beacon.identifier,
+              proximityUUID: business.location.beacon.identifier,
+              major: business.location.beacon.major,
+              minor: business.location.beacon.minor
+            )));
+
+            // Business business = state.businesses[2];
+            // add(Enter(region: Region(
+            //   identifier: business.location.beacon.identifier,
+            //   proximityUUID: business.location.beacon.identifier,
+            //   major: business.location.beacon.major,
+            //   minor: business.location.beacon.minor
+            // )));
           }
         });
       }

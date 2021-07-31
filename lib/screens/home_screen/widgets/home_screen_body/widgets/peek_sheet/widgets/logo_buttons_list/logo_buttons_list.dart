@@ -28,8 +28,9 @@ class LogoButtonsList extends StatelessWidget {
             ? Axis.vertical
             : Axis.horizontal,
           child: Container(
-            height: _getContainerHeight(state: state),
-            width: _getContainerWidth(state: state),
+            key: Key('logosListKey'),
+            height: _getContainerHeight(context: context, state: state),
+            width: _getContainerWidth(context: context, state: state),
             child: Stack(
               children: <Widget>[
                 if (state.numberOpenTransactions > 0)
@@ -46,14 +47,25 @@ class LogoButtonsList extends StatelessWidget {
     );
   }
 
-  double _getContainerHeight({required LogoButtonsListState state}) {
-    int logosLength = state.numberOpenTransactions + state.numberActiveLocations + state.numberNearbyLocations;
-    return sharedSizes.endMarginTop + (logosLength  * (sharedSizes.verticalSpacing + sharedSizes.endSize)) + (_topMargin * 2.5);
+  double _getContainerHeight({required BuildContext context, required LogoButtonsListState state}) {
+    int logosLength = state.numberOpenTransactions + state.numberActiveLocations + BlocProvider.of<LogoButtonsListBloc>(context).numberNearbySlots;
+    double padding = _setPadding(logosLength: logosLength, state: state, isHeight: true);
+
+    return sharedSizes.endMarginTop + ((logosLength + padding) * (sharedSizes.verticalSpacing + sharedSizes.endSize)) + (_topMargin * 2.5);
   }
 
-  double _getContainerWidth({required LogoButtonsListState state}) {
-    int logosLength = state.numberOpenTransactions + state.numberActiveLocations + state.numberNearbyLocations;
-    return logosLength  * ((sharedSizes.horizontalSpacing + sharedSizes.startSize));
+  double _getContainerWidth({required BuildContext context, required LogoButtonsListState state}) {
+    int logosLength = state.numberOpenTransactions + state.numberActiveLocations + BlocProvider.of<LogoButtonsListBloc>(context).numberNearbySlots;
+    double padding = _setPadding(logosLength: logosLength, state: state, isHeight: false);
+
+    return (logosLength + padding) * ((sharedSizes.horizontalSpacing + sharedSizes.startSize));
+  }
+
+  double _setPadding({required int logosLength, required LogoButtonsListState state, required bool isHeight}) {
+    if (logosLength < 6) return isHeight ? 2 : 2.25;
+    if (state.numberOpenTransactions == 0 && state.numberActiveLocations == 0) return 0;
+    if (state.numberOpenTransactions > 0 && state.numberActiveLocations > 0) return isHeight ? 2 : 2.25;
+    return isHeight ? 1 : 1.25;
   }
 
   double lerp({required double min, required double max}) {
