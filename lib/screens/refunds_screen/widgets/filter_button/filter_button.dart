@@ -11,10 +11,11 @@ import 'package:heist/global_widgets/ios_date_picker/ios_date_picker.dart';
 import 'package:heist/global_widgets/material_date_picker/bloc/material_date_picker_bloc.dart';
 import 'package:heist/global_widgets/material_date_picker/material_date_picker.dart';
 import 'package:heist/global_widgets/search_business_name_modal.dart';
-import 'package:heist/global_widgets/search_identifier_modal.dart';
+import 'package:heist/global_widgets/search_identifier_modal/search_identifier_modal.dart';
 import 'package:heist/models/business/business.dart';
 import 'package:heist/repositories/business_repository.dart';
 import 'package:heist/resources/helpers/size_config.dart';
+import 'package:heist/routing/routes.dart';
 import 'package:heist/screens/refunds_screen/bloc/refunds_screen_bloc.dart';
 
 import 'bloc/filter_button_bloc.dart';
@@ -28,13 +29,11 @@ enum Option {
 }
 
 class FilterButton extends StatefulWidget {
-  final BusinessRepository _businessRepository;
   final Color _startColor;
   final Color _endColor;
 
-  FilterButton({required BusinessRepository businessRepository, required Color startColor, required Color endColor})
-    : _businessRepository = businessRepository,
-      _startColor = startColor,
+  FilterButton({required Color startColor, required Color endColor})
+    : _startColor = startColor,
       _endColor = endColor;
 
   @override
@@ -181,6 +180,7 @@ class _FilterButtonState extends State<FilterButton> with SingleTickerProviderSt
     return BlocBuilder<FilterButtonBloc, FilterButtonState>(
       builder: (context, state) {
         return FloatingActionButton(
+          key: Key("refundsFilterButtonKey"),
           onPressed: () => BlocProvider.of<FilterButtonBloc>(context).add(Toggle()),
           child: Transform(
             alignment: Alignment.center,
@@ -223,59 +223,49 @@ class _FilterButtonState extends State<FilterButton> with SingleTickerProviderSt
   }
 
   void _searchByDate() async {
-    DateTimeRange? range;
-    if (Platform.isIOS) {
-      range = await showPlatformModalSheet(
-        context: context,
-        builder: (_) => BlocProvider<IosDatePickerBloc>(
-          create: (BuildContext context) => IosDatePickerBloc(),
-          child: IosDatePicker(),
-        )
-      );
-    } else {
-      range = await showPlatformModalSheet(
-        context: context,
-        builder: (_) => BlocProvider<MaterialDatePickerBloc>(
-          create: (BuildContext context) => MaterialDatePickerBloc(),
-          child: MaterialDatePicker(),
-        )
-      );
-    }
+    DateTimeRange? range = await showDateRangePicker(
+      context: context,
+      firstDate: DateTime(2015),
+      lastDate: DateTime.now(),
+      helpText: "Please select date range",
+      confirmText: "SET",
+      saveText: "SUBMIT",
+      currentDate: DateTime.now()
+    );
+
     if (range != null) {
       BlocProvider.of<RefundsScreenBloc>(context).add(FetchRefundsByDateRange(dateRange: range, reset: true));
     }
   }
 
   void _searchByRefundId() async {
-    String? identifier = await showPlatformModalSheet(
-      context: context, 
-      builder: (_) => SearchIdentifierModal(hintText: "Refund ID")
-    );
-    if (identifier != null) {
-      BlocProvider.of<RefundsScreenBloc>(context).add(FetchRefundByIdentifier(identifier: identifier, reset: true));
-    }
+    Navigator.of(context).pushNamed(Routes.refundsIdentifier)
+      .then((identifier) {
+        if (identifier != null) {
+          identifier = identifier as String;
+          BlocProvider.of<RefundsScreenBloc>(context).add(FetchRefundByIdentifier(identifier: identifier, reset: true));
+        }
+      });
   }
 
   void _searchByName() async {
-    Business? business = await showPlatformModalSheet(
-      context: context, 
-      builder: (_) => SearchBusinessNameModal(
-        businessRepository: widget._businessRepository,
-      )
-    );
-    if (business != null) {
-      BlocProvider.of<RefundsScreenBloc>(context).add(FetchRefundByBusiness(identifier: business.identifier, reset: true));
-    }
+    Navigator.of(context).pushNamed(Routes.refundsBusinessName)
+      .then((business) {
+        if (business !=  null) {
+          business = business as Business;
+          BlocProvider.of<RefundsScreenBloc>(context).add(FetchRefundByBusiness(identifier: business.identifier, reset: true));
+        }
+      });
   }
 
   void _searchByTransactionId() async {
-    String? identifier = await showPlatformModalSheet(
-      context: context, 
-      builder: (_) => SearchIdentifierModal(hintText: "Transaction ID")
-    );
-    if (identifier != null) {
-      BlocProvider.of<RefundsScreenBloc>(context).add(FetchRefundByTransaction(identifier: identifier, reset: true));
-    }
+    Navigator.of(context).pushNamed(Routes.refundsTransactionIdentifier)
+      .then((identifier) {
+        if (identifier != null) {
+          identifier = identifier as String;
+          BlocProvider.of<RefundsScreenBloc>(context).add(FetchRefundByTransaction(identifier: identifier, reset: true));
+        }
+      });
   }
 
   void _open() {

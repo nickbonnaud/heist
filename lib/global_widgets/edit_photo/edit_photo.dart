@@ -99,7 +99,7 @@ class EditPhoto extends StatelessWidget {
     if (state is !Submitting) {
       if (context.read<IsTestingCubit>().state) {
         XFile file = await MockImagePicker().init();
-        BlocProvider.of<EditPhotoBloc>(context).add(ChangePhoto(profile: _profile, photo: file));
+        BlocProvider.of<EditPhotoBloc>(context).add(ChangePhoto(profileIdentifier: _profile.identifier, photo: file));
         return;
       }
 
@@ -107,7 +107,7 @@ class EditPhoto extends StatelessWidget {
       if (permissionGranted) {
         XFile? photo = await _photoPicker.pickPhoto();
         if (photo != null) {
-          BlocProvider.of<EditPhotoBloc>(context).add(ChangePhoto(profile: _profile, photo: photo));
+          BlocProvider.of<EditPhotoBloc>(context).add(ChangePhoto(profileIdentifier: _profile.identifier, photo: photo));
         }
       } else {
         _openAppSettings(context: context);

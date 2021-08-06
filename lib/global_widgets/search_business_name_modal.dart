@@ -23,6 +23,13 @@ class SearchBusinessNameModal extends StatefulWidget {
 
 class _SearchBusinessNameModalState extends State<SearchBusinessNameModal> {
   final FocusNode _businessNameNode = FocusNode();
+  late TextEditingController _businessNameController;
+
+  @override
+  void initState() {
+    super.initState();
+    _businessNameController = TextEditingController();
+  }
   
   @override
   Widget build(BuildContext context) {
@@ -44,6 +51,7 @@ class _SearchBusinessNameModalState extends State<SearchBusinessNameModal> {
 
   @override
   void dispose() {
+    _businessNameController.dispose();
     _businessNameNode.dispose();
     super.dispose();
   }
@@ -51,7 +59,7 @@ class _SearchBusinessNameModalState extends State<SearchBusinessNameModal> {
   Widget _textField() {
     return TypeAheadFormField(
       loadingBuilder: (BuildContext context) => Center(
-        child: LoadingWidget(),
+        child: CircularProgressIndicator(color: Colors.red),
       ),
       suggestionsBoxDecoration: SuggestionsBoxDecoration(
         color: Theme.of(context).colorScheme.scrollBackground,
@@ -59,6 +67,7 @@ class _SearchBusinessNameModalState extends State<SearchBusinessNameModal> {
       ),
       debounceDuration: Duration(milliseconds: 500),
       textFieldConfiguration: TextFieldConfiguration(
+        controller: _businessNameController,
         focusNode: _businessNameNode,
         style: TextStyle(
           fontWeight: FontWeight.w700,
@@ -82,7 +91,18 @@ class _SearchBusinessNameModalState extends State<SearchBusinessNameModal> {
       suggestionsCallback: _suggestionCallback, 
       itemBuilder: (context, Business business) {
         return _buildSuggestion(context: context, business: business);
-      }, 
+      },
+      // noItemsFoundBuilder: (BuildContext context) {
+      //   if (_businessNameController.text.isNotEmpty) {
+      //     return Row(
+      //       mainAxisAlignment: MainAxisAlignment.center,
+      //       children: [
+      //         Text2(text: "No Businesses Found!", context: context)
+      //       ],
+      //     );
+      //   }
+      //   return Container();
+      // },
       onSuggestionSelected: (Business business) {
         Navigator.of(context).pop(business);
       },

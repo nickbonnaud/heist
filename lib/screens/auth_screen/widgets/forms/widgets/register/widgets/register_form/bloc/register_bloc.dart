@@ -52,7 +52,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   Stream<RegisterState> _mapPasswordChangedToState(String password, String passwordConfirmation) async* {
     final bool isPasswordConfirmationValid = passwordConfirmation.isNotEmpty
       ? Validators.isPasswordConfirmationValid(password: password, passwordConfirmation: passwordConfirmation)
-      : true;
+      : false;
     yield state.update(isPasswordValid: Validators.isValidPassword(password: password), isPasswordConfirmationValid: isPasswordConfirmationValid);
   }
 

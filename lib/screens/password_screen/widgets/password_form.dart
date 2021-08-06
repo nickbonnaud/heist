@@ -44,11 +44,11 @@ class _PasswordFormState extends State<PasswordForm> {
     return BlocListener<PasswordFormBloc, PasswordFormState>(
       listener: (context, state) {
         if (state.isSuccess) {
-          _showSnackbar(context, 'Password updated!', state);
+          _showSnackbar(message: 'Password updated!', state: state);
         } else if (state.isSuccessOldPassword) {
-          _showSnackbar(context, 'Password verified.', state);
+          _showSnackbar(message: 'Password verified.', state: state);
         } else if (state.errorMessage.isNotEmpty) {
-          _showSnackbar(context, state.errorMessage, state);
+          _showSnackbar(message: state.errorMessage, state: state);
         }
       },
       child: Form(
@@ -61,87 +61,14 @@ class _PasswordFormState extends State<PasswordForm> {
                 child: BlocBuilder<PasswordFormBloc, PasswordFormState>(
                   builder: (context, state) {
                     return KeyboardActions(
-                      config: _buildKeyboard(context, state),
+                      config: _buildKeyboard(state: state),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: <Widget>[
                           VeryBoldText1(text: 'Change Password', context: context),
-                          TextFormField(
-                            decoration: InputDecoration(
-                              labelText: 'Current Password',
-                              labelStyle: TextStyle(
-                                fontWeight: FontWeight.w400,
-                                fontSize: SizeConfig.getWidth(6)
-                              )
-                            ),
-                            style: TextStyle(
-                              fontWeight: FontWeight.w700,
-                              fontSize: SizeConfig.getWidth(7)
-                            ),
-                            controller: _oldPasswordController,
-                            keyboardType: TextInputType.text,
-                            textInputAction: TextInputAction.send,
-                            autocorrect: false,
-                            autovalidateMode: AutovalidateMode.onUserInteraction,
-                            validator: (_) => !state.isOldPasswordValid && _oldPasswordController.text.isNotEmpty ? 'Invalid password' : null,
-                            obscureText: true,
-                            focusNode: _oldPasswordFocus,
-                            onFieldSubmitted: (_) {
-                              _submit(state);
-                            },
-                            enabled: !state.isOldPasswordVerified,
-                          ),
-                          TextFormField(
-                            decoration: InputDecoration(
-                              labelText: 'New Password',
-                              labelStyle: TextStyle(
-                                fontWeight: FontWeight.w400,
-                                fontSize: SizeConfig.getWidth(6)
-                              )
-                            ),
-                            style: TextStyle(
-                              fontWeight: FontWeight.w700,
-                              fontSize: SizeConfig.getWidth(7)
-                            ),
-                            controller: _passwordController,
-                            keyboardType: TextInputType.text,
-                            textInputAction: TextInputAction.next,
-                            autocorrect: false,
-                            autovalidateMode: AutovalidateMode.onUserInteraction,
-                            validator: (_) => !state.isPasswordValid && _passwordController.text.isNotEmpty ? 'Invalid password' : null,
-                            obscureText: true,
-                            focusNode: _passwordFocus,
-                            onFieldSubmitted: (_) {
-                              _passwordFocus.unfocus();
-                              FocusScope.of(context).requestFocus(_passwordConfirmationFocus);
-                            },
-                            enabled: state.isOldPasswordVerified,
-                          ),
-                          TextFormField(
-                            decoration: InputDecoration(
-                              labelText: 'Password Confirmation',
-                              labelStyle: TextStyle(
-                                fontWeight: FontWeight.w400,
-                                fontSize: SizeConfig.getWidth(6)
-                              )
-                            ),
-                            style: TextStyle(
-                              fontWeight: FontWeight.w700,
-                              fontSize: SizeConfig.getWidth(7)
-                            ),
-                            controller: _passwordConfirmationController,
-                            keyboardType: TextInputType.text,
-                            textInputAction: TextInputAction.done,
-                            autocorrect: false,
-                            autovalidateMode: AutovalidateMode.onUserInteraction,
-                            validator: (_) => !state.isPasswordConfirmationValid && _passwordConfirmationController.text.isNotEmpty ? 'Confirmation does not match' : null,
-                            obscureText: true,
-                            focusNode: _passwordConfirmationFocus,
-                            onFieldSubmitted: (_) {
-                              _passwordFocus.unfocus();
-                            },
-                            enabled: state.isOldPasswordVerified,
-                          ),
+                          _currentPassword(state: state),
+                          _newPassword(state: state),
+                          _newPasswordConfirmation(state: state),
                           SizedBox(height: SizeConfig.getHeight(10)),
                         ],
                       ),
@@ -154,28 +81,11 @@ class _PasswordFormState extends State<PasswordForm> {
                 child: Row(
                   children: <Widget>[
                     Expanded(
-                      child: BlocBuilder<PasswordFormBloc, PasswordFormState>(
-                        builder: (context, state) {
-                          return OutlinedButton(
-                            onPressed: state.isSubmitting ? null : () => _cancelButtonPressed(context),
-                            child: BoldText3(text: 'Cancel', context: context, color: state.isSubmitting 
-                              ? Theme.of(context).colorScheme.callToActionDisabled
-                              : Theme.of(context).colorScheme.callToAction
-                            ),
-                          );
-                        },
-                      )
+                      child: _cancelButton()
                     ),
                     SizedBox(width: 20.0),
                     Expanded(
-                      child: BlocBuilder<PasswordFormBloc, PasswordFormState>(
-                        builder: (context, state) {
-                          return ElevatedButton(
-                            onPressed: _canSubmit(state) ? () => _submit(state) : null,
-                            child: _buttonChild(state),
-                          );
-                        },
-                      )
+                      child: _submitButton()
                     )
                   ],
                 ),
@@ -199,7 +109,128 @@ class _PasswordFormState extends State<PasswordForm> {
     super.dispose();
   }
 
-  bool _canSubmit(PasswordFormState state) {
+  Widget _currentPassword({required PasswordFormState state}) {
+    return TextFormField(
+      key: Key("currentPasswordFieldKey"),
+      decoration: InputDecoration(
+        labelText: 'Current Password',
+        labelStyle: TextStyle(
+          fontWeight: FontWeight.w400,
+          fontSize: SizeConfig.getWidth(6)
+        )
+      ),
+      style: TextStyle(
+        fontWeight: FontWeight.w700,
+        fontSize: SizeConfig.getWidth(7)
+      ),
+      controller: _oldPasswordController,
+      keyboardType: TextInputType.text,
+      textInputAction: TextInputAction.send,
+      autocorrect: false,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      validator: (_) => !state.isOldPasswordValid && _oldPasswordController.text.isNotEmpty
+        ? 'Invalid Password'
+        : null,
+      obscureText: true,
+      focusNode: _oldPasswordFocus,
+      onFieldSubmitted: (_) {
+        _submit(state: state);
+      },
+      enabled: !state.isOldPasswordVerified,
+    );
+  }
+
+  Widget _newPassword({required PasswordFormState state}) {
+    return TextFormField(
+      key: Key("newPasswordFieldKey"),
+      decoration: InputDecoration(
+        labelText: 'New Password',
+        labelStyle: TextStyle(
+          fontWeight: FontWeight.w400,
+          fontSize: SizeConfig.getWidth(6)
+        )
+      ),
+      style: TextStyle(
+        fontWeight: FontWeight.w700,
+        fontSize: SizeConfig.getWidth(7)
+      ),
+      controller: _passwordController,
+      keyboardType: TextInputType.text,
+      textInputAction: TextInputAction.next,
+      autocorrect: false,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      validator: (_) => !state.isPasswordValid && _passwordController.text.isNotEmpty
+        ? 'Invalid Password'
+        : null,
+      obscureText: true,
+      focusNode: _passwordFocus,
+      onFieldSubmitted: (_) {
+        _passwordFocus.unfocus();
+        FocusScope.of(context).requestFocus(_passwordConfirmationFocus);
+      },
+      enabled: state.isOldPasswordVerified,
+    );
+  }
+
+  Widget _newPasswordConfirmation({required PasswordFormState state}) {
+    return TextFormField(
+      key: Key("newPasswordConfirmationFieldKey"),
+      decoration: InputDecoration(
+        labelText: 'Password Confirmation',
+        labelStyle: TextStyle(
+          fontWeight: FontWeight.w400,
+          fontSize: SizeConfig.getWidth(6)
+        )
+      ),
+      style: TextStyle(
+        fontWeight: FontWeight.w700,
+        fontSize: SizeConfig.getWidth(7)
+      ),
+      controller: _passwordConfirmationController,
+      keyboardType: TextInputType.text,
+      textInputAction: TextInputAction.done,
+      autocorrect: false,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      validator: (_) => !state.isPasswordConfirmationValid && _passwordConfirmationController.text.isNotEmpty
+        ? 'Confirmation does not match'
+        : null,
+      obscureText: true,
+      focusNode: _passwordConfirmationFocus,
+      onFieldSubmitted: (_) {
+        _passwordFocus.unfocus();
+      },
+      enabled: state.isOldPasswordVerified,
+    );
+  }
+
+  Widget _cancelButton() {
+    return BlocBuilder<PasswordFormBloc, PasswordFormState>(
+      builder: (context, state) {
+        return OutlinedButton(
+          key: Key("cancelButtonKey"),
+          onPressed: state.isSubmitting ? null : () => _cancelButtonPressed(),
+          child: BoldText3(text: 'Cancel', context: context, color: state.isSubmitting 
+            ? Theme.of(context).colorScheme.callToActionDisabled
+            : Theme.of(context).colorScheme.callToAction
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _submitButton() {
+    return BlocBuilder<PasswordFormBloc, PasswordFormState>(
+      builder: (context, state) {
+        return ElevatedButton(
+          key: Key("submitButtonKey"),
+          onPressed: _canSubmit(state: state) ? () => _submit(state: state) : null,
+          child: _buttonChild(state: state),
+        );
+      },
+    );
+  }
+
+  bool _canSubmit({required PasswordFormState state}) {
     if (state.isOldPasswordVerified) {
       return state.isPasswordValid && _passwordController.text.isNotEmpty && state.isPasswordConfirmationValid && _passwordConfirmationController.text.isNotEmpty && !state.isSubmitting;
     } else {
@@ -207,8 +238,8 @@ class _PasswordFormState extends State<PasswordForm> {
     }
   }
 
-  void _submit(PasswordFormState state) {
-    if (_canSubmit(state)) {
+  void _submit({required PasswordFormState state}) {
+    if (_canSubmit(state: state)) {
       state.isOldPasswordVerified 
         ? _passwordFormBloc.add(NewPasswordSubmitted(
             oldPassword: _oldPasswordController.text,
@@ -232,15 +263,16 @@ class _PasswordFormState extends State<PasswordForm> {
     _passwordFormBloc.add(PasswordConfirmationChanged(passwordConfirmation: _passwordConfirmationController.text, password: _passwordController.text));
   }
 
-  void _cancelButtonPressed(BuildContext context) {
+  void _cancelButtonPressed() {
     Navigator.pop(context);
   }
 
-  void _showSnackbar(BuildContext context, String message, PasswordFormState state) async  {
+  void _showSnackbar({required String message, required PasswordFormState state}) async  {
     bool isSuccess = state.isSuccess || state.isSuccessOldPassword;
     isSuccess ? Vibrate.success() : Vibrate.error();
 
     final SnackBar snackBar = SnackBar(
+      key: Key("passwordFormSnackbarKey"),
       content: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
@@ -267,7 +299,7 @@ class _PasswordFormState extends State<PasswordForm> {
     );
   }
 
-  Widget _buttonChild(PasswordFormState state) {
+  Widget _buttonChild({required PasswordFormState state}) {
     if (state.isSubmitting) {
       return SizedBox(height: SizeConfig.getWidth(5), width: SizeConfig.getWidth(5), child: CircularProgressIndicator());
     } else {
@@ -276,7 +308,7 @@ class _PasswordFormState extends State<PasswordForm> {
     }
   }
 
-  KeyboardActionsConfig _buildKeyboard(BuildContext context, PasswordFormState state) {
+  KeyboardActionsConfig _buildKeyboard({required PasswordFormState state}) {
     return KeyboardActionsConfig(
       keyboardActionsPlatform: KeyboardActionsPlatform.ALL,
       actions: [

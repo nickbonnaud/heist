@@ -8,6 +8,8 @@ import 'package:heist/repositories/transaction_repository.dart';
 import 'package:heist/resources/helpers/api_exception.dart';
 import 'package:mocktail/mocktail.dart';
 
+import '../../helpers/mock_data_generator.dart';
+
 class MockTransactionRepository extends Mock implements TransactionRepository {}
 class MockAuthenticationBloc extends Mock implements AuthenticationBloc {}
 class MockTransactionResource extends Mock implements TransactionResource {}
@@ -204,8 +206,8 @@ void main() {
       "OpenTransactionsBloc UpdateOpenTransaction event yields state: [OpenTransactionsLoaded]",
       build: () => openTransactionsBloc,
       seed: () {
-        _transaction = MockTransactionResource(); 
-        var otherTransaction = MockTransactionResource();
+        _transaction = MockDataGenerator().createTransactionResource();
+        var otherTransaction = MockDataGenerator().createTransactionResource();
         
         return OpenTransactionsLoaded(transactions: [_transaction, otherTransaction]);
       },
@@ -228,23 +230,13 @@ void main() {
     );
 
     blocTest<OpenTransactionsBloc, OpenTransactionsState>(
-      "OpenTransactionsBloc authenticationBlocSubscription => [state is Authenticated && (_previousAuthenticationState is Unknown || _previousAuthenticationState is Unauthenticated)]",
+      "OpenTransactionsBloc authenticationBlocSubscription initial state is Unknown => [state is Authenticated && (_previousAuthenticationState is Unknown || _previousAuthenticationState is Unauthenticated)]",
       build: () {
         when(() => transactionRepository.fetchOpen()).thenAnswer((_) async => [MockTransactionResource()]);
         whenListen(authenticationBloc, Stream<AuthenticationState>.fromIterable([Unknown(), Authenticated()]));
         return OpenTransactionsBloc(transactionRepository: transactionRepository, authenticationBloc: authenticationBloc);
       },
       expect: () => [isA<OpenTransactionsLoaded>()],
-    );
-
-    blocTest<OpenTransactionsBloc, OpenTransactionsState>(
-      "OpenTransactionsBloc authenticationBlocSubscription => [!state is Authenticated && (_previousAuthenticationState is Unknown || _previousAuthenticationState is Unauthenticated)]",
-      build: () {
-        when(() => transactionRepository.fetchOpen()).thenAnswer((_) async => [MockTransactionResource()]);
-        whenListen(authenticationBloc, Stream<AuthenticationState>.fromIterable([Authenticated(), Authenticated()]));
-        return OpenTransactionsBloc(transactionRepository: transactionRepository, authenticationBloc: authenticationBloc);
-      },
-      expect: () => [],
     );
   });
 }

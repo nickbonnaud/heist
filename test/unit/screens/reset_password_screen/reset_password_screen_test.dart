@@ -40,11 +40,11 @@ void main() {
     );
 
     blocTest<ResetPasswordFormBloc, ResetPasswordFormState>(
-      "ResetPasswordFormBloc PasswordChanged event yields state: [isPasswordValid: false]",
+      "ResetPasswordFormBloc PasswordChanged event yields state: [isPasswordValid: true]",
       build: () => resetPasswordFormBloc,
       wait: Duration(milliseconds: 300),
-      act: (bloc) => bloc.add(PasswordChanged(password: "password", passwordConfirmation: "password")),
-      expect: () => [_baseState.update(isPasswordValid: false)]
+      act: (bloc) => bloc.add(PasswordChanged(password: "cdndjHCDhbs!!#3474", passwordConfirmation: "")),
+      expect: () => [_baseState.update(isPasswordValid: true)]
     );
 
     blocTest<ResetPasswordFormBloc, ResetPasswordFormState>(

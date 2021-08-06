@@ -99,6 +99,8 @@ class PermissionsBloc extends Bloc<PermissionsEvent, PermissionsState> {
     // TEST CHANGE //
     
     bool isInitial =  await _initialLoginRepository.isInitialLogin();
+    
+    
     if (!isInitial) {
       List results = await Future.wait([
         _permissionsChecker.bleEnabled(),

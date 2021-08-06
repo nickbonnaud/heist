@@ -61,9 +61,14 @@ class HomeScreenTest {
     BusinessScreenTest businessScreenTest = BusinessScreenTest(tester: tester);
     
     expect(find.byKey(Key("nearbyLogoButtonKey-0")), findsOneWidget);
+    expect(find.byKey(Key("menuFabKey")), findsOneWidget);
+
+    expect(tester.widget<AnimatedOpacity>(find.byKey(Key("dimmerKey"))).opacity, 0.0);
 
     await tester.tap(find.byKey(Key("nearbyLogoButtonKey-0")));
     await tester.pumpAndSettle();
+    expect(find.byKey(Key("menuFabKey")), findsNothing);
+    expect(tester.widget<AnimatedOpacity>(find.byKey(Key("dimmerKey"))).opacity, 0.9);
 
     await businessScreenTest.initLogoButtonDismiss();
 
@@ -98,11 +103,13 @@ class HomeScreenTest {
   }
 
   Future<void> _togglePeekSheet() async {
+    expect(find.byKey(Key("menuFabKey")), findsOneWidget);
     double inititalPosition = tester.getCenter(find.byIcon(Icons.arrow_upward)).dy;
 
     await tester.tap(find.byIcon(Icons.arrow_upward), warnIfMissed: false);
     await tester.pumpAndSettle();
 
+    expect(find.byKey(Key("menuFabKey")), findsNothing);
     double topPosition = tester.getCenter(find.byIcon(Icons.arrow_upward)).dy;
     expect(inititalPosition != topPosition, true);
 

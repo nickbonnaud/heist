@@ -17,8 +17,13 @@ class Routes {
   static const String tutorial = '/tutorial';
 
   static const String transactions = '/transactions';
+  static const String transactionsBusinessName = '/transactions/find-business-name';
+  static const String transactionsIdentifier = '/transactions/find-identifier';
 
   static const String refunds = '/refunds';
+  static const String refundsBusinessName = '/refunds/find-business-name';
+  static const String refundsTransactionIdentifier = '/refunds/find-transaction-identifier';
+  static const String refundsIdentifier = '/refunds/find-identifier';
 
   static const String settings = '/settings';
   static const String profile = '/settings/profile';

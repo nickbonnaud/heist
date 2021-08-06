@@ -8,6 +8,7 @@ import 'screens/onboard_screen_test.dart';
 import 'screens/register_screen_test.dart';
 import 'screens/request_reset_password_screen_test.dart';
 import 'screens/reset_password_screen_test.dart';
+import 'screens/side_drawer_test.dart';
 import 'screens/splash_screen_test.dart';
 
 void main() {
@@ -17,8 +18,9 @@ void main() {
     await tester.pumpWidget(PhaseOne(testing: true));
 
     await SplashScreenTest(tester: tester).init();
-    await HomeScreenTest(tester: tester).init();
+    await SideDrawerTest(tester: tester).init();
     
+    // await HomeScreenTest(tester: tester).init();
     // await RegisterScreenTest(tester: tester).init();
     // await OnboardScreenTest(tester: tester).init();
     // await RequestResetPasswordScreenTest(tester: tester).init();

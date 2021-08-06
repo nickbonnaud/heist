@@ -32,7 +32,7 @@ class EditPhotoBloc extends Bloc<EditPhotoEvent, EditPhotoState> {
   Stream<EditPhotoState> _mapChangePhotoToState(ChangePhoto event) async* {
     yield Submitting(photo: event.photo);
     try {
-      Customer customer = await _photoRepository.upload(photo: event.photo, profileIdentifier: event.profile.identifier);
+      Customer customer = await _photoRepository.upload(photo: event.photo, profileIdentifier: event.profileIdentifier);
       yield SubmitSuccess(photo: event.photo);
       _customerBloc.add(CustomerUpdated(customer: customer));
     } catch (_) {

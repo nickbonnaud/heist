@@ -134,7 +134,7 @@ class ReceiptScreenBody extends StatelessWidget {
       SizedBox(height: SizeConfig.getHeight(2)),
       Center(
         child: Text3(
-          text: "find me",
+          text: "ID: ${transactionResource.transaction.identifier}",
           context: context, 
           color: Theme.of(context).colorScheme.onPrimarySubdued
         ),

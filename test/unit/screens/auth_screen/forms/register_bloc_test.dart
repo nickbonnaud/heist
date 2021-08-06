@@ -55,7 +55,7 @@ void main() {
     blocTest<RegisterBloc, RegisterState>(
       "RegisterBloc PasswordChanged event yields state: [isPasswordValid: true]",
       build: () => registerBloc,
-      act: (bloc) => bloc.add(PasswordChanged(password: "hdhFDSg3558154#@%&cfbcfgDG", passwordConfirmation: "hdhFDSg3558154#@%&cfbcfgDG")),
+      act: (bloc) => bloc.add(PasswordChanged(password: "hdhFDSg3558154#@%&cfbcfgDG", passwordConfirmation: "")),
       wait: Duration(milliseconds: 300),
       expect: () => [_baseState.update(isPasswordValid: true)]
     );

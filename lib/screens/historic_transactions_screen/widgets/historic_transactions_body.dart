@@ -1,11 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:heist/global_widgets/bottom_loader.dart';
 import 'package:heist/global_widgets/default_app_bar/default_app_bar.dart';
 import 'package:heist/global_widgets/error_screen/error_screen.dart';
 import 'package:heist/global_widgets/transaction_widget.dart';
-import 'package:heist/repositories/business_repository.dart';
-import 'package:heist/global_widgets/bottom_loader.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
 import 'package:heist/screens/historic_transactions_screen/bloc/historic_transactions_bloc.dart';
@@ -15,10 +14,6 @@ import 'filter_button/bloc/filter_button_bloc.dart';
 import 'filter_button/filter_button.dart';
 
 class HistoricTransactionsBody extends StatefulWidget {
-  final BusinessRepository _businessRepository;
-
-  HistoricTransactionsBody({required BusinessRepository businessRepository})
-    : _businessRepository = businessRepository;
 
   @override
   State<HistoricTransactionsBody> createState() => _HistoricTransactionsBodyState();
@@ -49,9 +44,10 @@ class _HistoricTransactionsBodyState extends State<HistoricTransactionsBody> {
         }
 
         return Stack(
+          key: Key("transactionsListKey"),
           children: <Widget>[
-            _buildTransactionsBody(state: state),
-            _buildFilterButton(context: context, state: state)
+            _transactionsBody(state: state),
+            _filterButton(context: context, state: state)
           ],
         );
       },
@@ -64,7 +60,7 @@ class _HistoricTransactionsBodyState extends State<HistoricTransactionsBody> {
     super.dispose();
   }
 
-  Widget _buildTransactionsBody({required HistoricTransactionsState state}) {
+  Widget _transactionsBody({required HistoricTransactionsState state}) {
     return CustomScrollView(
       controller: _scrollController,
       slivers: <Widget>[
@@ -100,7 +96,10 @@ class _HistoricTransactionsBodyState extends State<HistoricTransactionsBody> {
           delegate: SliverChildBuilderDelegate(
             (BuildContext context, int index) => index >= state.transactions.length
               ? BottomLoader()
-              : TransactionWidget(transactionResource: state.transactions[index]),
+              : TransactionWidget(
+                  transactionResource: state.transactions[index],
+                  key: Key("transactionKey-$index"),
+                ),
             childCount: state.hasReachedEnd
               ? state.transactions.length
               : state.transactions.length + 1
@@ -119,7 +118,7 @@ class _HistoricTransactionsBodyState extends State<HistoricTransactionsBody> {
     );
   }
 
-  Widget _buildFilterButton({required BuildContext context, required HistoricTransactionsState state}) {
+  Widget _filterButton({required BuildContext context, required HistoricTransactionsState state}) {
     if (state is TransactionsLoaded) {
       return Positioned(
         bottom: -SizeConfig.getHeight(5),
@@ -127,7 +126,6 @@ class _HistoricTransactionsBodyState extends State<HistoricTransactionsBody> {
         child: BlocProvider<FilterButtonBloc>(
           create: (_) => FilterButtonBloc(),
           child: FilterButton(
-            businessRepository: widget._businessRepository,
             startColor: Theme.of(context).colorScheme.callToAction,
             endColor: Theme.of(context).colorScheme.callToAction,
           ),

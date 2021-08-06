@@ -49,6 +49,7 @@ class HomeScreenBody extends StatelessWidget {
     return BlocBuilder<BusinessScreenVisibleCubit, bool>(
       builder: (context, isVisible) {
         return AnimatedOpacity(
+          key: Key("dimmerKey"),
           opacity: isVisible
             ? 0.9
             : 0.0,

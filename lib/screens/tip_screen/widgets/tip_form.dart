@@ -47,9 +47,9 @@ class _TipFormState extends State<TipForm> {
     return BlocListener<TipFormBloc, TipFormState>(
       listener: (context, state) {
         if (state.errorMessage.isNotEmpty) {
-          _showSnackbar(context, state.errorMessage, state);
+          _showSnackbar(message: state.errorMessage, state: state);
         } else if (state.isSuccess) {
-          _showSnackbar(context, 'Account Updated!', state);
+          _showSnackbar(message: 'Account Updated!', state: state);
         }
       },
       child: Form(
@@ -60,7 +60,7 @@ class _TipFormState extends State<TipForm> {
             children: <Widget>[
               Expanded(
                 child: KeyboardActions(
-                  config: _buildKeyboard(context),
+                  config: _buildKeyboard(),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: <Widget>[
@@ -72,73 +72,11 @@ class _TipFormState extends State<TipForm> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: <Widget>[
                           Expanded(
-                            child: BlocBuilder<TipFormBloc, TipFormState>(
-                              builder: (context, state) {
-                                return TextFormField(
-                                  decoration: InputDecoration(
-                                    labelText: 'Default Tip Rate',
-                                    suffix: PlatformText(
-                                      '%',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.w700,
-                                        fontSize: SizeConfig.getWidth(7)
-                                      ),
-                                    ),
-                                    labelStyle: TextStyle(
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: SizeConfig.getWidth(5)
-                                    )
-                                  ),
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: SizeConfig.getWidth(7)
-                                  ),
-                                  controller: _tipRateController,
-                                  keyboardType: TextInputType.number,
-                                  textInputAction: TextInputAction.done,
-                                  autocorrect: false,
-                                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                                  textAlign: TextAlign.center,
-                                  focusNode: _tipRateNode,
-                                  validator: (_) => !state.isTipRateValid ? 'Must be between 0 and 30' : null,
-                                );
-                              }
-                            )
+                            child: _defaultTip()
                           ),
                           SizedBox(width: SizeConfig.getWidth(10)),
                           Expanded(
-                            child: BlocBuilder<TipFormBloc, TipFormState>(
-                              builder: (context, state) {
-                                return TextFormField(
-                                  decoration: InputDecoration(
-                                    labelText: 'Quick Tip Rate',
-                                    suffix: PlatformText(
-                                      '%',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.w700,
-                                        fontSize: SizeConfig.getWidth(7)
-                                      ),
-                                    ),
-                                    labelStyle: TextStyle(
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: SizeConfig.getWidth(5)
-                                    )
-                                  ),
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: SizeConfig.getWidth(7)
-                                  ),
-                                  controller: _quickTipRateController,
-                                  keyboardType: TextInputType.number,
-                                  textInputAction: TextInputAction.done,
-                                  autocorrect: false,
-                                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                                  textAlign: TextAlign.center,
-                                  focusNode: _quickTipRateNode,
-                                  validator: (_) => !state.isQuickTipRateValid ? 'Must be between 0 and 30' : null,
-                                );
-                              }
-                            )
+                            child: _quickTip()
                           ),
                         ],
                       ),
@@ -152,31 +90,11 @@ class _TipFormState extends State<TipForm> {
                 child: Row(
                   children: <Widget>[
                     Expanded(
-                      child: BlocBuilder<TipFormBloc, TipFormState>(
-                        builder: (context, state) {
-                          return OutlinedButton(
-                            onPressed: state.isSubmitting ? null : () => _cancelButtonPressed(context),
-                            child: BoldText3(
-                              text: 'Cancel', 
-                              context: context, 
-                              color: state.isSubmitting 
-                                ? Theme.of(context).colorScheme.callToActionDisabled
-                                : Theme.of(context).colorScheme.callToAction
-                            ),
-                          );
-                        }
-                      )
+                      child: _cancelButton()
                     ),
                     SizedBox(width: 20),
                     Expanded(
-                      child: BlocBuilder<TipFormBloc, TipFormState>(
-                        builder: (context, state) {
-                          return ElevatedButton(
-                            onPressed: _isSaveButtonEnabled(state) ? () => _saveButtonPressed(state) : null,
-                            child: _buttonChild(state),
-                          );
-                        }
-                      ) 
+                      child: _submitButton() 
                     ),
                   ],
                 ),
@@ -198,7 +116,113 @@ class _TipFormState extends State<TipForm> {
     super.dispose();
   }
 
-  Widget _buttonChild(TipFormState state) {
+  Widget _defaultTip() {
+    return BlocBuilder<TipFormBloc, TipFormState>(
+      builder: (context, state) {
+        return TextFormField(
+          key: Key("defaultTipFieldKey"),
+          decoration: InputDecoration(
+            labelText: 'Default Tip Rate',
+            suffix: PlatformText(
+              '%',
+              style: TextStyle(
+                fontWeight: FontWeight.w700,
+                fontSize: SizeConfig.getWidth(7)
+              ),
+            ),
+            labelStyle: TextStyle(
+              fontWeight: FontWeight.w400,
+              fontSize: SizeConfig.getWidth(5)
+            )
+          ),
+          style: TextStyle(
+            fontWeight: FontWeight.w700,
+            fontSize: SizeConfig.getWidth(7)
+          ),
+          controller: _tipRateController,
+          keyboardType: TextInputType.number,
+          textInputAction: TextInputAction.done,
+          autocorrect: false,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          textAlign: TextAlign.center,
+          focusNode: _tipRateNode,
+          validator: (_) => !state.isTipRateValid 
+            ? 'Must be between 0 and 30' 
+            : null,
+        );
+      }
+    );
+  }
+
+  Widget _quickTip() {
+    return BlocBuilder<TipFormBloc, TipFormState>(
+      builder: (context, state) {
+        return TextFormField(
+          key: Key("quickTipFieldKey"),
+          decoration: InputDecoration(
+            labelText: 'Quick Tip Rate',
+            suffix: PlatformText(
+              '%',
+              style: TextStyle(
+                fontWeight: FontWeight.w700,
+                fontSize: SizeConfig.getWidth(7)
+              ),
+            ),
+            labelStyle: TextStyle(
+              fontWeight: FontWeight.w400,
+              fontSize: SizeConfig.getWidth(5)
+            )
+          ),
+          style: TextStyle(
+            fontWeight: FontWeight.w700,
+            fontSize: SizeConfig.getWidth(7)
+          ),
+          controller: _quickTipRateController,
+          keyboardType: TextInputType.number,
+          textInputAction: TextInputAction.done,
+          autocorrect: false,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          textAlign: TextAlign.center,
+          focusNode: _quickTipRateNode,
+          validator: (_) => !state.isQuickTipRateValid
+            ? 'Must be between 0 and 20'
+            : null,
+        );
+      }
+    );
+  }
+
+  Widget _cancelButton() {
+    return BlocBuilder<TipFormBloc, TipFormState>(
+      builder: (context, state) {
+        return OutlinedButton(
+          key: Key("cancelButtonKey"),
+          onPressed: state.isSubmitting ? null : () => _cancelButtonPressed(),
+          child: BoldText3(
+            text: 'Cancel', 
+            context: context, 
+            color: state.isSubmitting 
+              ? Theme.of(context).colorScheme.callToActionDisabled
+              : Theme.of(context).colorScheme.callToAction
+          ),
+        );
+      }
+    );
+  }
+
+  Widget _submitButton() {
+    return BlocBuilder<TipFormBloc, TipFormState>(
+      builder: (context, state) {
+        return ElevatedButton(
+          key: Key("submitButtonKey"),
+          onPressed: _isSaveButtonEnabled(state: state) ? () => _saveButtonPressed(state: state) : null,
+          child: _buttonChild(state: state),
+        );
+      }
+    );
+  }
+  
+  Widget _buttonChild({required TipFormState state}) {
     if (state.isSubmitting) {
       return SizedBox(height: SizeConfig.getWidth(5), width: SizeConfig.getWidth(5), child: CircularProgressIndicator()); 
     } else {
@@ -214,11 +238,11 @@ class _TipFormState extends State<TipForm> {
     _tipFormBloc.add(QuickTipRateChanged(quickTipRate: _quickTipRateController.text));
   }
 
-  void _cancelButtonPressed(BuildContext context) {
+  void _cancelButtonPressed() {
     Navigator.pop(context);
   }
 
-  bool _isSaveButtonEnabled(TipFormState state) {
+  bool _isSaveButtonEnabled({required TipFormState state}) {
     return state.isFormValid && _formFieldsChanged() && isPopulated && !state.isSubmitting;
   }
 
@@ -227,8 +251,8 @@ class _TipFormState extends State<TipForm> {
       || (widget._account.quickTipRate != int.parse(_quickTipRateController.text));
   }
 
-  void _saveButtonPressed(TipFormState state) {
-    if (_isSaveButtonEnabled(state)) {
+  void _saveButtonPressed({required TipFormState state}) {
+    if (_isSaveButtonEnabled(state: state)) {
       _tipFormBloc.add(Submitted(
         accountIdentifier: widget._account.identifier,
         tipRate: int.parse(_tipRateController.text) != widget._account.tipRate ? int.parse(_tipRateController.text) : null,
@@ -237,9 +261,10 @@ class _TipFormState extends State<TipForm> {
     }
   }
 
-  void _showSnackbar(BuildContext context, String message, TipFormState state) async {
+  void _showSnackbar({required String message, required TipFormState state}) async {
     state.isSuccess ? Vibrate.success() : Vibrate.error();
     final SnackBar snackBar = SnackBar(
+      key: Key("tipFormSnackbarKey"),
       content: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
@@ -266,7 +291,7 @@ class _TipFormState extends State<TipForm> {
     );
   }
 
-  KeyboardActionsConfig _buildKeyboard(BuildContext context) {
+  KeyboardActionsConfig _buildKeyboard() {
     return KeyboardActionsConfig(
       keyboardActionsPlatform: KeyboardActionsPlatform.ALL,
       actions: [

@@ -13,14 +13,16 @@ import 'default_app_bar/bloc/default_app_bar_bloc.dart';
 
 class RefundWidget extends StatelessWidget {
   final RefundResource _refundResource;
+  final Key _key;
 
-  const RefundWidget({required RefundResource refundResource, Key? key})
+  const RefundWidget({required RefundResource refundResource, required Key key})
     : _refundResource = refundResource,
-      super(key: key);
+      _key = key;
 
   @override
   Widget build(BuildContext context) {
     return Card(
+      key: _key,
       child: ListTile(
         leading: CachedAvatarHero(
           url: _refundResource.business.photos.logo.smallUrl, 
@@ -41,12 +43,12 @@ class RefundWidget extends StatelessWidget {
           context: context,
           color: Theme.of(context).colorScheme.onPrimarySubdued
         ),
-        onTap: () => showFullTransaction(context: context),
+        onTap: () => _showFullTransaction(context: context),
       ),
     );
   }
 
-  void showFullTransaction({required BuildContext context}) {
+  void _showFullTransaction({required BuildContext context}) {
     final TransactionResource transactionResource = TransactionResource(
       transaction: _refundResource.transaction,
       business: _refundResource.business,

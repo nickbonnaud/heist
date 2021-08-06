@@ -14,7 +14,7 @@ class TestApiInterceptors extends InterceptorsWrapper {
       Response response = _formatResponse(options: options, json: json);
       return handler.resolve(response);
     } else {
-      Future.delayed(Duration(milliseconds: faker.randomGenerator.integer(3000, min: 100)))
+      Future.delayed(Duration(milliseconds: 500))
         .then((_) {
           if (json['error'] != null) return handler.reject(DioError(requestOptions: options, error: "An Error Occurred"));
 

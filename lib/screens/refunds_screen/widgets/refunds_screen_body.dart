@@ -15,10 +15,6 @@ import 'filter_button/bloc/filter_button_bloc.dart';
 import 'filter_button/filter_button.dart';
 
 class RefundsScreenBody extends StatefulWidget {
-  final BusinessRepository _businessRepository;
-
-  RefundsScreenBody({required BusinessRepository businessRepository})
-    : _businessRepository = businessRepository;
 
   @override
   State<RefundsScreenBody> createState() => _RefundsScreenBodyState();
@@ -49,6 +45,7 @@ class _RefundsScreenBodyState extends State<RefundsScreenBody> {
         }
 
         return Stack(
+          key: Key("refundsListKey"),
           children: <Widget>[
             _buildRefundsBody(state: state),
             _buildFilterButton(context: context, state: state)
@@ -56,6 +53,12 @@ class _RefundsScreenBodyState extends State<RefundsScreenBody> {
         );
       }
     );
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 
   Widget _buildRefundsBody({required RefundsScreenState state}) {
@@ -94,7 +97,10 @@ class _RefundsScreenBodyState extends State<RefundsScreenBody> {
           delegate: SliverChildBuilderDelegate(
             (BuildContext context, int index) => index >= state.refunds.length
               ? BottomLoader()
-              :  RefundWidget(refundResource: state.refunds[index]),
+              :  RefundWidget(
+                  refundResource: state.refunds[index],
+                  key: Key("refundKey-$index"),
+                ),
             childCount: state.hasReachedEnd
               ? state.refunds.length
               : state.refunds.length +1,
@@ -122,7 +128,6 @@ class _RefundsScreenBodyState extends State<RefundsScreenBody> {
         child: BlocProvider<FilterButtonBloc>(
           create: (_) => FilterButtonBloc(),
           child: FilterButton(
-            businessRepository: widget._businessRepository,
             startColor: Theme.of(context).colorScheme.callToAction,
             endColor: Theme.of(context).colorScheme.callToAction,
           ),
@@ -139,11 +144,5 @@ class _RefundsScreenBodyState extends State<RefundsScreenBody> {
     if (maxScroll - currentScroll <= _scrollThreshold) {
       _refundsScreenBloc.add(FetchMoreRefunds());
     }
-  }
-  
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
   }
 }

@@ -14,7 +14,7 @@ class MockResponses {
     } else if (options.path.endsWith("auth/logout")) {
       return _mockLogout();
     } else if (options.path.endsWith('password-check')) {
-      return _mockCheckValidPassword();
+      return _mockCheckValidPassword(options);
     } else if (options.path.endsWith("request-reset")) {
       return _mockRequestPasswordReset(options);
     } else if (options.path.endsWith("reset-password")) {
@@ -52,7 +52,7 @@ class MockResponses {
     } else if (options.path.endsWith('transaction-issue')) {
       return _mockReportTransactionIssue(options);
     } else if (options.path.contains('transaction-issue/') && options.method.toLowerCase() == 'patch') {
-      return _mockReportTransactionIssue(options);
+      return _mockUpdateTransactionIssue(options);
     } else if (options.path.contains('transaction-issue/') && options.method.toLowerCase() == 'delete') {
       return _mockDeleteIssue();
     } else if ((options.path.endsWith("help") || options.path.contains("help?")) && options.method.toLowerCase() == 'get') {
@@ -76,7 +76,13 @@ class MockResponses {
     };
   }
 
-  static Map<String, dynamic> _mockCheckValidPassword() {
+  static Map<String, dynamic> _mockCheckValidPassword(RequestOptions options) {
+    if ((options.data['password'] as String).toLowerCase().contains("error")) {
+      return {
+        "error": true
+      };
+    }
+    
     return {
       'data': {
         'password_verified': true
@@ -150,6 +156,12 @@ class MockResponses {
   }
 
   static Map<String, dynamic> _mockUpdateProfile(RequestOptions options) {
+    if ((options.data['first_name'] as String).toLowerCase().contains("error") || (options.data['last_name'] as String).toLowerCase().contains("error")) {
+      return {
+        "error": true
+      };
+    }
+    
     return {
       'data': {
         'identifier': faker.guid.guid(),
@@ -182,6 +194,18 @@ class MockResponses {
   }
 
   static Map<String, dynamic> _mockUpdateCustomer(RequestOptions options) {
+    if (options.data['email'] != null && (options.data['email'] as String).toLowerCase().contains("error")) {
+      return {
+        "error": true
+      };
+    }
+    
+    if (options.data['password'] != null && (options.data['password'] as String).toLowerCase().contains("error")) {
+      return {
+        "error": true
+      };
+    }
+    
     return {
       'data': {
         'identifier': faker.guid.guid(),
@@ -356,6 +380,38 @@ class MockResponses {
     };
   }
 
+  static Map<String, dynamic> _mockUpdateTransactionIssue(RequestOptions options) {
+    if ((options.data['issue'] as String).toLowerCase().contains("error")) {
+      return {
+        "error": true
+      };
+    }
+    
+    final Map<String, dynamic> transaction = generateTransaction();
+    transaction['status'] = {
+      "name": options.data['type'],
+      "code": options.data['type'] == "wrong_bill"
+        ? 500
+        : options.data['type'] == "error_in_bill"
+          ? 501
+          : 503
+    };
+    
+    return {
+      "transaction": transaction,
+      "business": generateBusiness(),
+      "refunds": [],
+      'issue': {
+        'identifier': faker.guid.guid(),
+        'type': options.data['type'],
+        'issue': options.data['issue'],
+        'resolved': false,
+        'warnings_sent': 0,
+        'updated_at': DateTime.now().toIso8601String(),
+      }
+    };
+  }
+
   static Map<String, dynamic> _mockDeleteIssue() {
     return {
       "transaction": generateTransaction(),
@@ -404,6 +460,11 @@ class MockResponses {
   
   static Map<String, dynamic> _mockFetchBusinesses(RequestOptions options) {
     String? name = _parseStringFromUrl(url: options.path, needle: 'name=');
+    if (name != null && name == "error") {
+      return {
+        "error": true
+      };
+    }
     return _createBusinesses(options: options, name: name);
   }
 
@@ -553,7 +614,7 @@ class MockResponses {
     numberBusinesses = doPaginate
       ? 25
       : numberBusinesses == null
-        ? faker.randomGenerator.integer(25, min: 1)
+        ? faker.randomGenerator.integer(25, min: 20)
         : numberBusinesses;
 
     final List<Map<String, dynamic>> data = List.generate(
@@ -588,7 +649,7 @@ class MockResponses {
     numberRefunds = doPaginate
       ? 25
       : numberRefunds == null
-        ? faker.randomGenerator.integer(25, min: 1)
+        ? faker.randomGenerator.integer(25, min: 20)
         : numberRefunds;
 
     final List<Map<String, dynamic>> data = List.generate(
@@ -602,9 +663,13 @@ class MockResponses {
   static Map<String, dynamic> _createTransactions({
     required RequestOptions options,
     int? numberTransactions,
-    bool canPaginate = true,
+    bool canPaginate = true, 
   }) {
-    final bool doPaginate = canPaginate && faker.randomGenerator.boolean();
+    bool doPaginate = false;
+
+    if (canPaginate) {
+      doPaginate = !options.path.contains("page=") || faker.randomGenerator.boolean();
+    }
 
     numberTransactions = doPaginate
       ? 25

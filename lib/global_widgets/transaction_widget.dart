@@ -12,14 +12,16 @@ import 'default_app_bar/bloc/default_app_bar_bloc.dart';
 
 class TransactionWidget extends StatelessWidget {
   final TransactionResource _transactionResource;
+  final Key _key;
 
-  const TransactionWidget({required TransactionResource transactionResource, Key? key})
+  const TransactionWidget({required TransactionResource transactionResource, required Key key})
     : _transactionResource = transactionResource,
-      super(key: key);
+      _key = key;
 
   @override
   Widget build(BuildContext context) {
     return Card(
+      key: _key,
       child: ListTile(
         leading: CachedAvatarHero(
           url: _transactionResource.business.photos.logo.smallUrl,
@@ -40,12 +42,12 @@ class TransactionWidget extends StatelessWidget {
           context: context, 
           color: Theme.of(context).colorScheme.onPrimarySubdued
         ),
-        onTap: () => showFullTransaction(context),
+        onTap: () => _showFullTransaction(context: context),
       )
     );
   }
 
-  void showFullTransaction(BuildContext context) {
+  void _showFullTransaction({required BuildContext context}) {
     BlocProvider.of<DefaultAppBarBloc>(context).add(Rotate());
 
     Navigator.of(context).pushNamed(Routes.receipt, arguments: _transactionResource).then((_) {

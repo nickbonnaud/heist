@@ -34,22 +34,37 @@ class IssueFormBloc extends Bloc<IssueFormEvent, IssueFormState> {
   @override
   Stream<IssueFormState> mapEventToState(IssueFormEvent event) async* {
     if (event is MessageChanged) {
-      yield* _mapMessageChangedToState(event);
+      yield* _mapMessageChangedToState(event: event);
     } else if (event is Submitted) {
-      yield* _mapSubmittedToState(event);
+      yield* _mapSubmittedToState(event: event);
+    } else if (event is Updated) {
+      yield* _mapUpdatedToState(event: event);
     } else if (event is Reset) {
       yield* _mapResetToState();
     }
   }
 
-  Stream<IssueFormState> _mapMessageChangedToState(MessageChanged event) async* {
+  Stream<IssueFormState> _mapMessageChangedToState({required MessageChanged event}) async* {
     yield state.update(isMessageValid: event.message.length >=5);
   }
 
-  Stream<IssueFormState> _mapSubmittedToState(Submitted event) async* {
+  Stream<IssueFormState> _mapSubmittedToState({required Submitted event}) async* {
     yield state.update(isSubmitting: true);
+
     try {
       TransactionResource transaction = await _issueRepository.reportIssue(type: event.type, transactionId: event.transactionIdentifier, message: event.message);
+      _openTransactionsBloc.add(UpdateOpenTransaction(transaction: transaction));
+      yield state.update(isSubmitting: false, isSuccess: true, transactionResource: transaction);
+    } on ApiException catch (exception) {
+      yield state.update(isSubmitting: false, errorMessage: exception.error);
+    }
+  }
+
+  Stream<IssueFormState> _mapUpdatedToState({required Updated event}) async* {
+    yield state.update(isSubmitting: true);
+
+    try {
+      TransactionResource transaction= await _issueRepository.changeIssue(type: event.type, issueId: event.issueIdentifier, message: event.message);
       _openTransactionsBloc.add(UpdateOpenTransaction(transaction: transaction));
       yield state.update(isSubmitting: false, isSuccess: true, transactionResource: transaction);
     } on ApiException catch (exception) {

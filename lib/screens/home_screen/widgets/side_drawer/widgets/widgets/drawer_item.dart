@@ -3,12 +3,13 @@ import 'package:heist/resources/helpers/text_styles.dart';
 import 'package:heist/themes/global_colors.dart';
 
 class DrawerItem extends StatelessWidget {
+  final Key _key;
   final VoidCallback _onPressed;
   final String _text;
   final Widget _icon;
 
-  const DrawerItem({@required onPressed, @required text, @required icon})
-    : assert(onPressed != null && text != null && icon != null),
+  const DrawerItem({required Key key, required VoidCallback onPressed, required String text, required Widget icon})
+    : _key = key,
       _onPressed = onPressed,
       _text = text,
       _icon = icon;
@@ -20,6 +21,7 @@ class DrawerItem extends StatelessWidget {
       child: Material(
         color: Colors.transparent,
         child: InkWell(
+          key: _key,
           onTap: _onPressed,
           child: Padding(
             padding: EdgeInsets.symmetric(vertical: 8.0),

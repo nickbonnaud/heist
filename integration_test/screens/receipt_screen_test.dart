@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:heist/screens/receipt_screen/receipt_screen.dart';
 import 'package:heist/screens/receipt_screen/widgets/call_button.dart';
 import 'package:heist/screens/receipt_screen/widgets/receipt_screen_body.dart';
 
@@ -12,7 +13,7 @@ class ReceiptScreenTest {
   const ReceiptScreenTest({required this.tester});
 
   Future<void> initLogo() async {
-    TestTitle.write(testName: "Receipt Screen Tests");
+    TestTitle.write(testName: "Receipt Screen Logo Tests");
 
     expect(find.byType(ReceiptScreenBody), findsWidgets);
     await _scroll();
@@ -31,7 +32,27 @@ class ReceiptScreenTest {
   }
 
   Future<void> initDetails() async {
+    TestTitle.write(testName: "Receipt Screen Details Tests");
+
     expect(find.byType(ReceiptScreenBody), findsWidgets);
+    await _dismiss();
+    expect(find.byType(ReceiptScreenBody), findsNothing);
+  }
+
+  Future<void> initHistoricTransactions() async {
+    TestTitle.write(testName: "Receipt Screen Historic Transactions Tests");
+
+    expect(find.byType(ReceiptScreen), findsOneWidget);
+
+    await _dismiss();
+    expect(find.byType(ReceiptScreenBody), findsNothing);
+  }
+
+  Future<void> initRefunds() async {
+    TestTitle.write(testName: "Receipt Screen Refunds Tests");
+
+    expect(find.byType(ReceiptScreen), findsOneWidget);
+
     await _dismiss();
     expect(find.byType(ReceiptScreenBody), findsNothing);
   }

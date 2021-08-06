@@ -63,5 +63,14 @@ class Validators {
     final bool isAlphaNumeric = validCharacters.hasMatch(resetCode);
 
     return isCorrectLength && isAlphaNumeric;
-  } 
+  }
+
+  static bool isValidUUID({required String uuid}) {
+    final validCharacters = RegExp(r'^[a-zA-Z0-9\-]+$');
+
+    bool isCorrectLength = uuid.length == 36;
+    bool hasCorrectCharacters = validCharacters.hasMatch(uuid);
+    
+    return isCorrectLength && hasCorrectCharacters;
+  }
 }

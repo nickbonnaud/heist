@@ -14,14 +14,14 @@ class OpenTransactionsBloc extends Bloc<OpenTransactionsEvent, OpenTransactionsS
   final TransactionRepository _transactionRepository;
 
   late StreamSubscription _authenticationBlocSubscription;
-  AuthenticationState? _previousAuthenticationState;
+  AuthenticationState _previousAuthenticationState = Unknown();
 
   OpenTransactionsBloc({required TransactionRepository transactionRepository, required AuthenticationBloc authenticationBloc})
     : _transactionRepository = transactionRepository,
       super(Uninitialized()) {
 
         _authenticationBlocSubscription = authenticationBloc.stream.listen((AuthenticationState state) {
-          if (state is Authenticated && (_previousAuthenticationState is Unknown || _previousAuthenticationState is Unauthenticated || _previousAuthenticationState == null)) {
+          if (state is Authenticated && (_previousAuthenticationState is Unknown || _previousAuthenticationState is Unauthenticated)) {
             add(FetchOpenTransactions());
           }
           _previousAuthenticationState = state;

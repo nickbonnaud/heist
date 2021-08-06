@@ -38,9 +38,9 @@ class _EmailFormState extends State<EmailForm> {
     return BlocListener<EmailFormBloc, EmailFormState>(
       listener: (context, state) {
         if (state.isSuccess) {
-          _showSnackbar(context: context, isSuccess: true);
+          _showSnackbar(isSuccess: true);
         } else if (state.errorMessage.isNotEmpty) {
-          _showSnackbar(context: context, isSuccess: false, error: state.errorMessage);
+          _showSnackbar(isSuccess: false, error: state.errorMessage);
         }
       },
       child: Form(
@@ -51,7 +51,7 @@ class _EmailFormState extends State<EmailForm> {
             children: <Widget>[
               Expanded(
                 child: KeyboardActions(
-                  config: _buildKeyboard(context),
+                  config: _buildKeyboard(),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: <Widget>[
@@ -94,6 +94,7 @@ class _EmailFormState extends State<EmailForm> {
     return BlocBuilder<EmailFormBloc, EmailFormState>(
       builder: (context, state) {
         return TextFormField(
+          key: Key("emailFieldKey"),
           decoration: InputDecoration(
             labelText: 'Email',
             labelStyle: TextStyle(
@@ -111,7 +112,7 @@ class _EmailFormState extends State<EmailForm> {
           autocorrect: false,
           autovalidateMode: AutovalidateMode.onUserInteraction,
           focusNode: _emailFocusNode,
-          validator: (_) => !state.isEmailValid ? 'Invalid email' : null,
+          validator: (_) => !state.isEmailValid ? 'Invalid Email' : null,
         );
       }
     );
@@ -121,7 +122,8 @@ class _EmailFormState extends State<EmailForm> {
     return BlocBuilder<EmailFormBloc, EmailFormState>(
       builder: (context, state) {
         return OutlinedButton(
-          onPressed: state.isSubmitting ? null : () => _cancelButtonPressed(context),
+          key: Key("cancelButtonKey"),
+          onPressed: state.isSubmitting ? null : () => _cancelButtonPressed(),
           child: BoldText3(text: 'Cancel', context: context, color: state.isSubmitting
             ? Theme.of(context).colorScheme.callToActionDisabled
             : Theme.of(context).colorScheme.callToAction
@@ -135,14 +137,15 @@ class _EmailFormState extends State<EmailForm> {
     return BlocBuilder<EmailFormBloc, EmailFormState>(
       builder: (context, state) {
         return ElevatedButton(
-          onPressed: _isSaveButtonEnabled(state) ? () => _saveButtonPressed(state) : null,
-          child: _buttonChild(state),
+          key: Key("submitButtonKey"),
+          onPressed: _isSaveButtonEnabled(state: state) ? () => _saveButtonPressed(state: state) : null,
+          child: _buttonChild(state: state),
         );
       }
     );
   }
 
-  void _showSnackbar({required BuildContext context, required bool isSuccess, String? error}) async {
+  void _showSnackbar({required bool isSuccess, String? error}) async {
     isSuccess ? Vibrate.success() : Vibrate.error();
 
     final String text = isSuccess
@@ -150,11 +153,12 @@ class _EmailFormState extends State<EmailForm> {
       : error!;
 
     final SnackBar snackBar = SnackBar(
+      key: Key("emailFormSnackbarKey"),
       content: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Expanded(
-            child: BoldText3(text: text, context: context, color: Theme.of(context).colorScheme.onSecondary)
+            child: BoldText4(text: text, context: context, color: Theme.of(context).colorScheme.onSecondary)
           ),
         ],
       ),
@@ -176,11 +180,11 @@ class _EmailFormState extends State<EmailForm> {
     );
   }
 
-  void _cancelButtonPressed(BuildContext context) {
+  void _cancelButtonPressed() {
     Navigator.pop(context);
   }
 
-  bool _isSaveButtonEnabled(EmailFormState state) {
+  bool _isSaveButtonEnabled({required EmailFormState state}) {
     return state.isEmailValid && _emailChanged() && _emailController.text.isNotEmpty && !state.isSubmitting;
   }
 
@@ -192,13 +196,13 @@ class _EmailFormState extends State<EmailForm> {
     _emailFormBloc.add(EmailChanged(email: _emailController.text));
   }
   
-  void _saveButtonPressed(EmailFormState state) {
-    if (_isSaveButtonEnabled(state)) {
+  void _saveButtonPressed({required EmailFormState state}) {
+    if (_isSaveButtonEnabled(state: state)) {
       _emailFormBloc.add(Submitted(identifier: widget._customer.identifier, email: _emailController.text));
     }
   }
 
-  Widget _buttonChild(EmailFormState state) {
+  Widget _buttonChild({required EmailFormState state}) {
     if (state.isSubmitting) {
       return SizedBox(height: SizeConfig.getWidth(5), width: SizeConfig.getWidth(5), child: CircularProgressIndicator());
     } else {
@@ -206,7 +210,7 @@ class _EmailFormState extends State<EmailForm> {
     }
   }
 
-  KeyboardActionsConfig _buildKeyboard(BuildContext context) {
+  KeyboardActionsConfig _buildKeyboard() {
     return KeyboardActionsConfig(
       keyboardActionsPlatform: KeyboardActionsPlatform.ALL,
       actions: [

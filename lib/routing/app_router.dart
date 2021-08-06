@@ -11,6 +11,8 @@ import 'package:heist/blocs/receipt_modal_sheet/receipt_modal_sheet_bloc.dart';
 import 'package:heist/global_widgets/route_builders/fade_in_route.dart';
 import 'package:heist/global_widgets/route_builders/overlay_route.dart';
 import 'package:heist/global_widgets/route_builders/slide_up_route.dart';
+import 'package:heist/global_widgets/search_business_name_modal/search_business_name_modal.dart';
+import 'package:heist/global_widgets/search_identifier_modal/search_identifier_modal.dart';
 import 'package:heist/models/business/business.dart';
 import 'package:heist/models/reset_password_args.dart';
 import 'package:heist/models/transaction/transaction_resource.dart';
@@ -184,7 +186,22 @@ class AppRouter {
         route = _createRouteDefault(
           screen: HistoricTransactionsScreen(
             transactionRepository: TransactionRepository(transactionProvider: TransactionProvider()),
-            businessRepository: BusinessRepository(businessProvider: BusinessProvider())
+          ),
+          name: routeData.route
+        );
+        break;
+      case Routes.transactionsBusinessName:
+        route = _createFullScreenDialogRoute(
+          screen: SearchBusinessNameModal(
+            businessRepository: BusinessRepository(businessProvider: BusinessProvider()),
+          ),
+          name: routeData.route
+        );
+        break;
+      case Routes.transactionsIdentifier:
+        route = _createFullScreenDialogRoute(
+          screen: SearchIdentifierModal(
+            hintText: "Transaction ID"
           ),
           name: routeData.route
         );
@@ -192,8 +209,31 @@ class AppRouter {
       case Routes.refunds:
         route = _createRouteDefault(
           screen: RefundsScreen(
-            refundRepository: RefundRepository(refundProvider: RefundProvider()),
-            businessRepository: BusinessRepository(businessProvider: BusinessProvider())
+            refundRepository: RefundRepository(refundProvider: RefundProvider())
+          ),
+          name: routeData.route
+        );
+        break;
+      case Routes.refundsBusinessName:
+        route = _createFullScreenDialogRoute(
+          screen: SearchBusinessNameModal(
+            businessRepository: BusinessRepository(businessProvider: BusinessProvider()),
+          ),
+          name: routeData.route
+        );
+        break;
+      case Routes.refundsTransactionIdentifier:
+        route = _createFullScreenDialogRoute(
+          screen: SearchIdentifierModal(
+            hintText: "Transaction ID"
+          ),
+          name: routeData.route
+        );
+        break;
+      case Routes.refundsIdentifier:
+        route = _createFullScreenDialogRoute(
+          screen: SearchIdentifierModal(
+            hintText: "Refund ID"
           ),
           name: routeData.route
         );

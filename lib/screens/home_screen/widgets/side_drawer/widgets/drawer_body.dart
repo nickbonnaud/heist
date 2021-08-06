@@ -33,6 +33,7 @@ class DrawerBody extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 DrawerItem(
+                  key: Key("transactionsDrawerItemKey"),
                   onPressed: () => Navigator.of(context).pushNamed(Routes.transactions),
                   text: 'Transactions',
                   icon: Icon(
@@ -41,6 +42,7 @@ class DrawerBody extends StatelessWidget {
                   ),
                 ),
                 DrawerItem(
+                  key: Key("refundsDrawerItemKey"),
                   onPressed: () => Navigator.of(context).pushNamed(Routes.refunds), 
                   text: 'Refunds',
                   icon: Icon(
@@ -49,6 +51,7 @@ class DrawerBody extends StatelessWidget {
                   ),
                 ),
                 DrawerItem(
+                  key: Key("settingsDrawerItemKey"),
                   onPressed: () => Navigator.of(context).pushNamed(Routes.settings),
                   text: 'Settings',
                   icon: Icon(
@@ -57,6 +60,7 @@ class DrawerBody extends StatelessWidget {
                   )
                 ),
                 DrawerItem(
+                  key: Key("tutorialDrawerItemKey"),
                   onPressed: () => Navigator.of(context).pushNamed(Routes.tutorial),
                   text: 'Tutorial', 
                   icon: Icon(
@@ -65,6 +69,7 @@ class DrawerBody extends StatelessWidget {
                   ),
                 ),
                 DrawerItem(
+                  key: Key("helpDrawerItemKey"),
                   onPressed: () => Navigator.of(context).pushNamed(Routes.helpTickets),
                   text: 'Help',
                   icon: Icon(

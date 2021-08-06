@@ -169,11 +169,18 @@ class _IssueFormState extends State<IssueForm> {
   void _saveButtonPressed(IssueFormState state) {
     if (_isSaveButtonEnabled(state)) {
       _messageFocusNode.unfocus();
-      _issueFormBloc.add(Submitted(
-        message: _messageController.text, 
-        type: widget._type, 
-        transactionIdentifier: widget._transaction.transaction.identifier
-      ));
+      widget._transaction.issue == null 
+        ?
+          _issueFormBloc.add(Submitted(
+            message: _messageController.text, 
+            type: widget._type, 
+            transactionIdentifier: widget._transaction.transaction.identifier
+          ))
+        : _issueFormBloc.add(Updated(
+            message: _messageController.text,
+            type: widget._type,
+            issueIdentifier: widget._transaction.issue!.identifier
+          ));
     }
   }
 

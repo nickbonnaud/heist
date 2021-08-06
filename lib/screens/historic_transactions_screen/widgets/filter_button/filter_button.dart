@@ -1,19 +1,11 @@
-import 'dart:io';
 import 'dart:math' as math;
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
-import 'package:heist/global_widgets/ios_date_picker/bloc/ios_date_picker_bloc.dart';
-import 'package:heist/global_widgets/ios_date_picker/ios_date_picker.dart';
-import 'package:heist/global_widgets/material_date_picker/bloc/material_date_picker_bloc.dart';
-import 'package:heist/global_widgets/material_date_picker/material_date_picker.dart';
-import 'package:heist/global_widgets/search_business_name_modal.dart';
-import 'package:heist/global_widgets/search_identifier_modal.dart';
 import 'package:heist/models/business/business.dart';
-import 'package:heist/repositories/business_repository.dart';
 import 'package:heist/resources/helpers/size_config.dart';
+import 'package:heist/routing/routes.dart';
 import 'package:heist/screens/historic_transactions_screen/bloc/historic_transactions_bloc.dart';
 
 import 'bloc/filter_button_bloc.dart';
@@ -26,17 +18,14 @@ enum Option {
 }
 
 class FilterButton extends StatefulWidget {
-  final BusinessRepository _businessRepository;
   final Color _startColor;
   final Color _endColor;
 
   FilterButton({
     required Color startColor,
     required Color endColor,
-    required BusinessRepository businessRepository
   })
-    : _businessRepository = businessRepository,
-      _startColor = startColor,
+    : _startColor = startColor,
       _endColor = endColor;
 
   @override
@@ -162,67 +151,57 @@ class _FilterButtonState extends State<FilterButton> with SingleTickerProviderSt
     BlocProvider.of<FilterButtonBloc>(context).add(Toggle());
     switch (option) {
       case Option.date:
-        _searchByDate(context);
+        _searchByDate();
         break;
       case Option.businessName:
         _searchByName(context);
         break;
       case Option.transactionId:
-        _searchByTransactionId(context);
+        _searchByTransactionId();
         break;
       case Option.all:
-        _fetchAllTransactions(context);
+        _fetchAllTransactions();
         break;
     }
   }
 
-  void _searchByDate(BuildContext context) async {
-    DateTimeRange? range;
-    if (Platform.isIOS) {
-      range = await showPlatformModalSheet(
-        context: context,
-        builder: (_) => BlocProvider<IosDatePickerBloc>(
-          create: (BuildContext context) => IosDatePickerBloc(),
-          child: IosDatePicker(),
-        )
-      );
-    } else {
-      range = await showPlatformModalSheet(
-        context: context,
-        builder: (_) => BlocProvider<MaterialDatePickerBloc>(
-          create: (BuildContext context) => MaterialDatePickerBloc(),
-          child: MaterialDatePicker(),
-        )
-      );
-    }
+  void _searchByDate() async {
+    DateTimeRange? range = await showDateRangePicker(
+      context: context,
+      firstDate: DateTime(2015),
+      lastDate: DateTime.now(),
+      helpText: "Please select date range",
+      confirmText: "SET",
+      saveText: "SUBMIT",
+      currentDate: DateTime.now()
+    );
+    
     if (range != null) {
       BlocProvider.of<HistoricTransactionsBloc>(context).add(FetchTransactionsByDateRange(dateRange: range, reset: true));
     }
   }
 
   void _searchByName(BuildContext context) async {
-    Business? business = await showPlatformModalSheet(
-      context: context,
-      builder: (_) => SearchBusinessNameModal(
-        businessRepository: widget._businessRepository,
-      )
-    );
-    if (business != null) {
-      BlocProvider.of<HistoricTransactionsBloc>(context).add(FetchTransactionsByBusiness(identifier: business.identifier, reset: true));
-    }
+    Navigator.of(context).pushNamed(Routes.transactionsBusinessName)
+      .then((business) {
+        if (business != null) {
+          business = business as Business;
+          BlocProvider.of<HistoricTransactionsBloc>(context).add(FetchTransactionsByBusiness(identifier: business.identifier, reset: true));
+        }
+      });
   }
 
-  void _searchByTransactionId(BuildContext context) async {
-    String? identifier = await showPlatformModalSheet(
-      context: context,
-      builder: (_) => SearchIdentifierModal(hintText: "Transaction ID")
-    );
-    if (identifier != null) {
-      BlocProvider.of<HistoricTransactionsBloc>(context).add(FetchTransactionByIdentifier(identifier: identifier, reset: true));
-    }
+  void _searchByTransactionId() async {
+    Navigator.of(context).pushNamed(Routes.transactionsIdentifier)
+      .then((identifier) {
+        if (identifier != null) {
+          identifier = identifier as String;
+          BlocProvider.of<HistoricTransactionsBloc>(context).add(FetchTransactionByIdentifier(identifier: identifier, reset: true));
+        }
+      });
   }
 
-  void _fetchAllTransactions(BuildContext context) {
+  void _fetchAllTransactions() {
     BlocProvider.of<HistoricTransactionsBloc>(context).add(FetchHistoricTransactions(reset: true));
   }
   
@@ -243,6 +222,7 @@ class _FilterButtonState extends State<FilterButton> with SingleTickerProviderSt
     return BlocBuilder<FilterButtonBloc, FilterButtonState>(
       builder: (context, state) {
         return FloatingActionButton(
+          key: Key("transactionsFilterButtonKey"),
           onPressed: () => BlocProvider.of<FilterButtonBloc>(context).add(Toggle()),
           child: Transform(
             alignment: Alignment.center,

@@ -14,6 +14,7 @@ class SettingsList extends StatelessWidget {
       children: <Widget>[
         SizedBox(height: SizeConfig.getHeight(2)),
         ListTile(
+          key: Key("profileTileKey"),
           leading: Icon(
             Icons.person, 
             color: Theme.of(context).colorScheme.secondary,
@@ -23,6 +24,7 @@ class SettingsList extends StatelessWidget {
           onTap: () => Navigator.of(context).pushNamed(Routes.profile)
         ),
         ListTile(
+          key: Key("emailTileKey"),
           leading: Icon(
             Icons.email,
             color: Theme.of(context).colorScheme.secondary,
@@ -32,6 +34,7 @@ class SettingsList extends StatelessWidget {
           onTap: () => Navigator.of(context).pushNamed(Routes.email)
         ),
         ListTile(
+          key: Key("passwordTileKey"),
           leading: Icon(
             Icons.lock,
             color: Theme.of(context).colorScheme.secondary,
@@ -41,6 +44,7 @@ class SettingsList extends StatelessWidget {
           onTap: () => Navigator.of(context).pushNamed(Routes.password)
         ),
         ListTile(
+          key: Key("paymentTileKey"),
           leading: Icon(
             Icons.payment,
             color: Theme.of(context).colorScheme.secondary,
@@ -50,6 +54,7 @@ class SettingsList extends StatelessWidget {
           onTap: () => print('show payment screen'),
         ),
         ListTile(
+          key: Key("tipTileKey"),
           leading: Icon(
             Icons.thumb_up,
             color: Theme.of(context).colorScheme.secondary,

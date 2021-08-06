@@ -48,7 +48,7 @@ class ResetPasswordFormBloc extends Bloc<ResetPasswordFormEvent, ResetPasswordFo
   Stream<ResetPasswordFormState> _mapPasswordChangedToState({required PasswordChanged event}) async* {
     final bool isPasswordConfirmationValid = event.passwordConfirmation.isNotEmpty
       ? Validators.isPasswordConfirmationValid(password: event.password, passwordConfirmation: event.passwordConfirmation)
-      : true;
+      : false;
     yield state.update(isPasswordValid: Validators.isValidPassword(password: event.password), isPasswordConfirmationValid: isPasswordConfirmationValid);
   }
 

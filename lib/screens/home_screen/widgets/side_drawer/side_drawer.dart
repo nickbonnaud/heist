@@ -83,6 +83,7 @@ class _SideDrawerState extends State<SideDrawer> with SingleTickerProviderStateM
           floatingActionButton: state.buttonVisible ? Padding(
             padding: EdgeInsets.only(top: 25, left: 10),
             child: FloatingActionButton(
+              key: Key("menuFabKey"),
               backgroundColor: Theme.of(context).colorScheme.callToAction,
               heroTag: HERO_KEY,
               child: Icon(Icons.menu),
