@@ -1,19 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:heist/models/help_ticket/reply.dart';
+import 'package:heist/resources/helpers/date_formatter.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
 import 'package:heist/themes/global_colors.dart';
 
 class MessageBubble extends StatelessWidget {
   final Reply _reply;
+  final Key _key;
 
-  MessageBubble({required Reply reply})
-    : _reply = reply;
+  MessageBubble({required Reply reply, required Key key})
+    : _reply = reply,
+      _key = key;
 
   @override
   Widget build(BuildContext context) {
     if (_reply.fromCustomer) {
       return Container(
+        key: _key,
         margin: EdgeInsets.only(bottom: SizeConfig.getHeight(5)),
         child: Column(
           children: [
@@ -46,7 +50,7 @@ class MessageBubble extends StatelessWidget {
                     children: [
                       Container(
                         child: Text4(
-                          text: 'Sent on ${_reply.createdAt}', 
+                          text: 'Sent on ${DateFormatter.toStringDateTime(date: _reply.createdAt)}', 
                           context: context,
                           color: Theme.of(context).colorScheme.onPrimarySubdued,
                         ),
@@ -72,6 +76,7 @@ class MessageBubble extends StatelessWidget {
       );
     } else {
       return Container(
+        key: _key,
         margin: EdgeInsets.only(bottom: SizeConfig.getHeight(5)),
         child: Column(
           children: [
@@ -101,7 +106,7 @@ class MessageBubble extends StatelessWidget {
                     children: [
                       Container(
                       child: Text4(
-                        text: 'Sent on ${_reply.createdAt}',
+                        text: 'Sent on ${DateFormatter.toStringDateTime(date: _reply.createdAt)}',
                         context: context,
                         color: Theme.of(context).colorScheme.onPrimarySubdued,
                       ),

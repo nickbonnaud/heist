@@ -1,27 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
+import 'package:heist/global_widgets/bottom_loader.dart';
 import 'package:heist/global_widgets/default_app_bar/bloc/default_app_bar_bloc.dart';
 import 'package:heist/global_widgets/default_app_bar/default_app_bar.dart';
 import 'package:heist/global_widgets/error_screen/error_screen.dart';
-import 'package:heist/repositories/help_repository.dart';
-import 'package:heist/global_widgets/bottom_loader.dart';
 import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
+import 'package:heist/routing/routes.dart';
 import 'package:heist/screens/help_tickets_screen/bloc/help_tickets_screen_bloc.dart';
 import 'package:heist/themes/global_colors.dart';
 
 import 'widgets/filter_button/bloc/filter_button_bloc.dart';
 import 'widgets/filter_button/filter_button.dart';
 import 'widgets/help_ticket_widget.dart';
-import 'widgets/new_help_ticket_screen/new_help_ticket_screen.dart';
 
 
 class HelpTicketsScreenBody extends StatefulWidget {
-  final HelpRepository _helpRepository;
-
-  HelpTicketsScreenBody({required HelpRepository helpRepository})
-    : _helpRepository = helpRepository;
   
   @override
   State<HelpTicketsScreenBody> createState() => _HelpTicketsScreenBodyState();
@@ -48,14 +42,15 @@ class _HelpTicketsScreenBodyState extends State<HelpTicketsScreenBody> {
           return ErrorScreen(
             body: "Oh no! An error occurred fetching your help tickets.\n\n Please try again.",
             buttonText: "Retry",
-            onButtonPressed: () => BlocProvider.of<HelpTicketsScreenBloc>(context).add(FetchAll(reset: true)),
+            onButtonPressed: () => _helpTicketsScreenBloc.add(FetchAll(reset: true)),
           );
         }
 
         return Stack(
+          key: Key('helpTicketsListKey'),
           children: [
-            _buildHelpTicketsBody(state: state),
-            _buildFilterButton(context: context, state: state)
+            _helpTicketsBody(state: state),
+            _filterButton(state: state)
           ],
         );
       }
@@ -68,7 +63,7 @@ class _HelpTicketsScreenBodyState extends State<HelpTicketsScreenBody> {
     super.dispose();
   }
 
-  Widget _buildHelpTicketsBody({required HelpTicketsScreenState state}) {
+  Widget _helpTicketsBody({required HelpTicketsScreenState state}) {
     return CustomScrollView(
       controller: _scrollController,
       slivers: [
@@ -110,11 +105,10 @@ class _HelpTicketsScreenBodyState extends State<HelpTicketsScreenBody> {
         padding: EdgeInsets.only(left: 8, right: 8),
         sliver: SliverList(
           delegate: SliverChildBuilderDelegate((BuildContext context, int index) => index >= state.helpTickets.length
-            ? BottomLoader()
+            ? CircularProgressIndicator()
             : HelpTicketWidget(
               helpTicket: state.helpTickets[index],
-              helpRepository: widget._helpRepository,
-              helpTicketsScreenBloc: _helpTicketsScreenBloc,
+              key: Key('helpTicketKey-$index'),
             ),
             childCount: state.hasReachedEnd
               ? state.helpTickets.length
@@ -134,7 +128,7 @@ class _HelpTicketsScreenBodyState extends State<HelpTicketsScreenBody> {
     );
   }
 
-  Widget _buildFilterButton({required BuildContext context, required HelpTicketsScreenState state}) {
+  Widget _filterButton({required HelpTicketsScreenState state}) {
     if (state is Loaded) {
       return Positioned(
         bottom: -SizeConfig.getHeight(5),
@@ -153,15 +147,8 @@ class _HelpTicketsScreenBodyState extends State<HelpTicketsScreenBody> {
 
   void _showCreateHelpTicketForm() {
     BlocProvider.of<DefaultAppBarBloc>(context).add(Rotate());
-    showPlatformModalSheet(
-      context: context, 
-      builder: (_) => NewHelpTicketScreen(
-        helpRepository: widget._helpRepository,
-        helpTicketsScreenBloc: _helpTicketsScreenBloc,
-      )
-    ).then((_) {
-      BlocProvider.of<DefaultAppBarBloc>(context).add(Reset());
-    });
+    Navigator.of(context).pushNamed(Routes.helpTicketNew, arguments: _helpTicketsScreenBloc)
+      .then((_) => BlocProvider.of<DefaultAppBarBloc>(context).add(Reset()));
   }
 
   void _onScroll() {

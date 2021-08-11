@@ -9,6 +9,7 @@ extension GlobalColors on ColorScheme {
   Color get warningDisabled => Colors.orangeAccent[100]!;
   Color get danger => Colors.red;
   Color get dangerDisabled => Colors.red[300]!;
+  Color get onDanger => Colors.white;
 
 
   Color get draggableBar => Colors.grey;

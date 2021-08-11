@@ -42,12 +42,12 @@ class _HelpTicketBodyState extends State<HelpTicketBody> {
             MessageList(scrollController: _scrollController),
             if (!widget._helpTicket.resolved)
               BlocProvider<MessageInputBloc>(
-              create: (_) => MessageInputBloc(
-                helpRepository: widget._helpRepository,
-                helpTicketsScreenBloc: widget._helpTicketsScreenBloc
-              ),
-              child: MessageInput(ticketIdentifier: widget._helpTicket.identifier, scrollController: _scrollController),
-            )
+                create: (_) => MessageInputBloc(
+                  helpRepository: widget._helpRepository,
+                  helpTicketsScreenBloc: widget._helpTicketsScreenBloc
+                ),
+                child: MessageInput(ticketIdentifier: widget._helpTicket.identifier, scrollController: _scrollController),
+              )
           ],
         )
       ],

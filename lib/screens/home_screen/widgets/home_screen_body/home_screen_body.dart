@@ -27,7 +27,6 @@ class HomeScreenBody extends StatelessWidget {
             if (state.businesses.length == 0) {
               return NoNearbyLocations();
             }
-
             return Stack(
               children: <Widget>[
                 NearbyBusinessesMap(preMarkers: state.preMarkers),

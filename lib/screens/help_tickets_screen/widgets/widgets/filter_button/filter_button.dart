@@ -167,6 +167,7 @@ class _FilterButtonState extends State<FilterButton> with SingleTickerProviderSt
     return BlocBuilder<FilterButtonBloc, FilterButtonState>(
       builder: (context, state) {
         return FloatingActionButton(
+          key: Key("helpTicketsFilterButtonKey"),
           onPressed: () => BlocProvider.of<FilterButtonBloc>(context).add(Toggle()),
           child: Transform(
             alignment: Alignment.center,

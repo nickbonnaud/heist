@@ -3,31 +3,27 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:heist/global_widgets/default_app_bar/bloc/default_app_bar_bloc.dart';
 import 'package:heist/models/help_ticket/help_ticket.dart';
-import 'package:heist/repositories/help_repository.dart';
 import 'package:heist/resources/helpers/size_config.dart';
+import 'package:heist/routing/routes.dart';
 import 'package:heist/screens/help_tickets_screen/bloc/help_tickets_screen_bloc.dart';
+import 'package:heist/screens/help_tickets_screen/models/help_ticket_args.dart';
 import 'package:heist/themes/global_colors.dart';
-
-import '../../../help_ticket_screen/help_ticket_screen.dart';
 
 class HelpTicketWidget extends StatelessWidget {
   final HelpTicket _helpTicket;
-  final HelpRepository _helpRepository;
-  final HelpTicketsScreenBloc _helpTicketsScreenBloc;
+  final Key _key;
 
   HelpTicketWidget({
     required HelpTicket helpTicket,
-    required HelpRepository helpRepository,
-    required HelpTicketsScreenBloc helpTicketsScreenBloc
+    required Key key
   })
     : _helpTicket = helpTicket,
-      _helpRepository = helpRepository,
-      _helpTicketsScreenBloc = helpTicketsScreenBloc;
+      _key = key;
   
-
   @override
   Widget build(BuildContext context) {
     return Card(
+      key: _key,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -79,8 +75,8 @@ class HelpTicketWidget extends StatelessWidget {
   }
 
   bool _hasUnreadMessage() {
-    return _helpTicket.replies.where((ticket) {
-      return !ticket.fromCustomer && !ticket.read;
+    return _helpTicket.replies.where((reply) {
+      return !reply.fromCustomer && !reply.read;
     }).isNotEmpty;
   }
 
@@ -92,16 +88,9 @@ class HelpTicketWidget extends StatelessWidget {
 
   void _showFullHelpTicket({required BuildContext context}) {
     BlocProvider.of<DefaultAppBarBloc>(context).add(Rotate());
-    
-    Navigator.of(context).push(MaterialPageRoute<void>(
-      fullscreenDialog: true,
-      builder: (context) => HelpTicketScreen(
-        helpRepository: _helpRepository,
-        helpTicket: _helpTicket,
-        helpTicketsScreenBloc: _helpTicketsScreenBloc,
-      )
-    )).then((_) {
-      BlocProvider.of<DefaultAppBarBloc>(context).add(Reset());
-    });
+    Navigator.of(context).pushNamed(
+      Routes.helpTicketDetails,
+      arguments: HelpTicketArgs(helpTicket: _helpTicket, helpTicketsScreenBloc: BlocProvider.of<HelpTicketsScreenBloc>(context)))
+        .then((_) => BlocProvider.of<DefaultAppBarBloc>(context).add(Reset()));
   }
 }

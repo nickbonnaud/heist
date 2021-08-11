@@ -502,6 +502,12 @@ class MockResponses {
   }
 
   static Map<String, dynamic> _mockPostHelpTicketReply(RequestOptions options) {
+    if ((options.data['message'] as String).toLowerCase().contains("error")) {
+      return {
+        "error": true
+      };
+    }
+    
     final DateTime now = DateTime.now();
     return {
       'data': {
@@ -530,6 +536,12 @@ class MockResponses {
   }
 
   static Map<String, dynamic> _mockPostHelpTicket(dynamic body) {
+    if ((body['subject'] as String).toLowerCase().contains("error")) {
+      return {
+        "error": true
+      };
+    }
+    
     return {
       'data': {
         'identifier': faker.guid.guid(),
@@ -629,7 +641,7 @@ class MockResponses {
     final bool doPaginate = faker.randomGenerator.boolean();
     final int numberHelpTickets = doPaginate
       ? 25
-      : faker.randomGenerator.integer(25, min: 1);
+      : faker.randomGenerator.integer(25, min: 20);
 
     final List<Map<String, dynamic>> data = List.generate(
       numberHelpTickets, 
@@ -700,8 +712,8 @@ class MockResponses {
   static Map<String, dynamic> generateGeo() {
     return {
       "identifier": faker.guid.guid(),
-      "lat": double.parse("-79.0554${faker.randomGenerator.integer(780, min: 680)}"),
-      "lng": double.parse("35.9102${faker.randomGenerator.integer(640, min: 540)}"),
+      "lat": double.parse("35.92${faker.randomGenerator.integer(9, min: 0)}"),
+      "lng": double.parse("-79.03${faker.randomGenerator.integer(9, min: 0)}"),
       "radius": 50
     };
   }
@@ -855,7 +867,7 @@ class MockResponses {
       'read': faker.randomGenerator.boolean(),
       'resolved': resolved == null ? faker.randomGenerator.boolean() : resolved,
       'updated_at': DateTime(date.year, date.month, date.day - index).toIso8601String(),
-      'replies': List.generate(faker.randomGenerator.integer(5, min: 1), (index) => generateReply(index: index))
+      'replies': List.generate(faker.randomGenerator.integer(25, min: 20), (index) => generateReply(index: index))
     };
   }
 

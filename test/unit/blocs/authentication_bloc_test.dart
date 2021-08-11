@@ -4,7 +4,6 @@ import 'package:heist/blocs/authentication/authentication_bloc.dart';
 import 'package:heist/blocs/customer/customer_bloc.dart';
 import 'package:heist/models/customer/customer.dart';
 import 'package:heist/repositories/authentication_repository.dart';
-import 'package:heist/resources/helpers/api_exception.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockAuthenticationRepository extends Mock implements AuthenticationRepository {}
@@ -106,55 +105,15 @@ void main() {
       "Authentication Bloc LoggedOut event yields Unauthenticated", 
       build: () => authenticationBloc,
       act: (bloc) {
-        when(() => authenticationRepository.logout()).thenAnswer((_) async => true);
         bloc.add(LoggedOut());
       },
       expect: () => [isA<Unauthenticated>()]
     );
 
     blocTest<AuthenticationBloc, AuthenticationState>(
-      "Authentication Bloc LoggedOut event on authenticationRepository.logout() return false yields Authenticated(errorMessage: )", 
-      build: () => authenticationBloc,
-      act: (bloc) {
-        when(() => authenticationRepository.logout()).thenAnswer((_) async => false);
-        bloc.add(LoggedOut());
-      },
-      expect: () => [isA<Authenticated>()],
-      verify: (_) {
-        expect((authenticationBloc.state as Authenticated).errorMessage, "An error occurred. Unable to Logout.");
-      }
-    );
-
-    blocTest<AuthenticationBloc, AuthenticationState>(
-      "Authentication Bloc LoggedOut event calls authenticationRepository.logout()", 
-      build: () => authenticationBloc,
-      act: (bloc) {
-        when(() => authenticationRepository.logout()).thenAnswer((_) async => true);
-        bloc.add(LoggedOut());
-      },
-      verify: (_) {
-        verify(() => authenticationRepository.logout()).called(1);
-      }
-    );
-
-    blocTest<AuthenticationBloc, AuthenticationState>(
-      "Authentication Bloc LoggedOut event on error yields Authenticated(errorMessage: )", 
-      build: () => authenticationBloc,
-      act: (bloc) {
-        when(() => authenticationRepository.logout()).thenThrow(ApiException(error: "Error Happened!"));
-        bloc.add(LoggedOut());
-      },
-      expect: () => [isA<Authenticated>()],
-      verify: (_) {
-        expect((authenticationBloc.state as Authenticated).errorMessage, "Error Happened!");
-      }
-    );
-
-    blocTest<AuthenticationBloc, AuthenticationState>(
       "Authentication Bloc LoggedOut event customerBloc.add", 
       build: () => authenticationBloc,
       act: (bloc) {
-        when(() => authenticationRepository.logout()).thenAnswer((_) async => true);
         bloc.add(LoggedOut());
       },
       verify: (_) {

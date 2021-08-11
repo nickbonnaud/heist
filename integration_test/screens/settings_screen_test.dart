@@ -4,12 +4,14 @@ import 'package:heist/screens/email_screen/email_screen.dart';
 import 'package:heist/screens/password_screen/password_screen.dart';
 import 'package:heist/screens/profile_screen/profile_screen.dart';
 import 'package:heist/screens/settings_screen/settings_screen.dart';
+import 'package:heist/screens/sign_out_screen/sign_out_screen.dart';
 import 'package:heist/screens/tip_screen/tip_screen.dart';
 
 import '../helpers/test_title.dart';
-import '../profile_screen_test.dart';
+import 'profile_screen_test.dart';
 import 'email_screen_test.dart';
 import 'password_screen_test.dart';
+import 'sign_out_screen_test.dart';
 import 'tip_screen_test.dart';
 
 class SettingsScreenTest {
@@ -25,7 +27,7 @@ class SettingsScreenTest {
     await tester.pumpAndSettle();
 
     expect(find.byType(SettingsScreen), findsOneWidget);
-
+    
     await _goToProfile();
 
     await _goToEmail();
@@ -33,6 +35,8 @@ class SettingsScreenTest {
     await _goToPassword();
 
     await _goToTips();
+
+    await _signOut();
   }
 
   Future<void> _goToProfile() async {
@@ -69,5 +73,19 @@ class SettingsScreenTest {
     await tester.pumpAndSettle();
 
     await TipScreenTest(tester: tester).init();
+  }
+
+  // Future<void> _navigateBack() async {
+  //   await tester.tap(find.byIcon(Icons.arrow_back));
+  //   await tester.pumpAndSettle();
+  // }
+
+  Future<void> _signOut() async {
+    expect(find.byType(SignOutScreen), findsNothing);
+
+    await tester.tap(find.byKey(Key("signOutTileKey")));
+    await tester.pumpAndSettle();
+
+    await SignOutScreenTest(tester: tester).init();
   }
 }

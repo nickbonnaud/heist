@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:heist/screens/profile_screen/profile_screen.dart';
 
-import 'helpers/test_title.dart';
+import '../helpers/test_title.dart';
 
 class ProfileScreenTest {
   final WidgetTester tester;

@@ -50,6 +50,18 @@ class HelpTicket extends Equatable {
     replies: replies ?? this.replies
   );
 
+  HelpTicket markAsRead() {
+    List<Reply> updatedReplies = replies.map((reply) => reply.update(
+      read: !reply.fromCustomer && !reply.read
+        ? true
+        : reply.read
+    )).toList();
+
+    return this.update(
+      replies: updatedReplies
+    );
+  }
+
   @override
   List<Object> get props => [identifier, subject, message, read, resolved, updatedAt, replies];
 

@@ -22,7 +22,7 @@ class HelpTicketsScreen extends StatelessWidget {
           ..add(FetchAll()),
         child: Scaffold(
           backgroundColor: Theme.of(context).colorScheme.scrollBackground,
-          body: HelpTicketsScreenBody(helpRepository: _helpRepository),
+          body: HelpTicketsScreenBody(),
         )
       ),
     );

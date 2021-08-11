@@ -291,5 +291,24 @@ void main() {
         expect(helpTicketsScreenBloc.helpTickets.length, 3);
       }
     );
+
+    blocTest<HelpTicketsScreenBloc, HelpTicketsScreenState>(
+      "HelpTicketsScreenBloc FetchMore event yields state: [Loaded(), Loaded()] and calls paginate",
+      build: () => helpTicketsScreenBloc,
+      seed: () {
+        _helpTickets = List<HelpTicket>.generate(4, (_) => _mockDataGenerator.createHelpTicket());
+        return Loaded(helpTickets: _helpTickets, paginating: false, hasReachedEnd: false, currentQuery: Option.all, queryParams: "", nextUrl: "next");
+      },
+      act: (bloc) {
+        when(() => helpRepository.paginate(url: any(named: "url")))
+          .thenAnswer((_) async => PaginateDataHolder(data: List<HelpTicket>.generate(4, (_) => _mockDataGenerator.createHelpTicket())));
+
+        bloc.add(FetchMore());
+      },
+      expect: () => [isA<Loaded>(), isA<Loaded>()],
+      verify: (_) {
+        verify(() => helpRepository.paginate(url: any(named: "url"))).called(1);
+      }
+    );
   });
 }

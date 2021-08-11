@@ -25,23 +25,5 @@ class Boot extends StatelessWidget {
         DefaultMaterialLocalizations.delegate,
       ],
     );
-    
-    // return Theme(
-    //   data: MainTheme.themeData(context: context),
-    //   child: PlatformProvider(
-    //     builder: (context) {
-    //       return PlatformApp(
-    //         initialRoute: Routes.app,
-    //         title: Constants.appName,
-    //         onGenerateRoute: (settings) => _router.goTo(context: context, settings: settings),
-    //         localizationsDelegates: [
-    //           DefaultWidgetsLocalizations.delegate,
-    //           DefaultCupertinoLocalizations.delegate,
-    //           DefaultMaterialLocalizations.delegate,
-    //         ],
-    //       );
-    //     }
-    //   )
-    // );
   }
 }

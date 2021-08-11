@@ -14,9 +14,9 @@ class HelpTicketForm extends StatefulWidget {
 }
 
 class _HelpTicketFormState extends State<HelpTicketForm> {
-  late TextEditingController _subjectController;
+  final TextEditingController _subjectController = TextEditingController();
   final FocusNode _subjectFocus = FocusNode();
-  late TextEditingController _messageController;
+  final TextEditingController _messageController = TextEditingController();
   final FocusNode _messageFocus = FocusNode();
   late HelpTicketFormBloc _helpTicketFormBloc;
 
@@ -26,8 +26,6 @@ class _HelpTicketFormState extends State<HelpTicketForm> {
   void initState() {
     super.initState();
     _helpTicketFormBloc = BlocProvider.of<HelpTicketFormBloc>(context);
-    _subjectController = TextEditingController();
-    _messageController = TextEditingController();
 
     _subjectController.addListener(_onSubjectChanged);
     _messageController.addListener(_onMessageChanged);
@@ -97,6 +95,7 @@ class _HelpTicketFormState extends State<HelpTicketForm> {
     return BlocBuilder<HelpTicketFormBloc, HelpTicketFormState>(
       builder: (context, state) {
         return TextFormField(
+          key: Key("subjectFieldKey"),
           cursorColor: Colors.black,
           decoration: InputDecoration(
             labelText: 'Subject',
@@ -116,7 +115,9 @@ class _HelpTicketFormState extends State<HelpTicketForm> {
           textCapitalization: TextCapitalization.sentences,
           autocorrect: true,
           autovalidateMode: AutovalidateMode.onUserInteraction,
-          validator: (_) => !state.isSubjectValid ? 'A Subject is required!' : null 
+          validator: (_) => !state.isSubjectValid
+            ? 'A Subject is required!'
+            : null 
         );
       }
     );
@@ -126,6 +127,7 @@ class _HelpTicketFormState extends State<HelpTicketForm> {
     return BlocBuilder<HelpTicketFormBloc, HelpTicketFormState>(
       builder: (context, state) {
         return TextFormField(
+          key: Key("messageFieldKey"),
           cursorColor: Colors.black,
           decoration: InputDecoration(
             labelText: "Message",
@@ -146,7 +148,9 @@ class _HelpTicketFormState extends State<HelpTicketForm> {
           textCapitalization: TextCapitalization.sentences,
           autocorrect: true,
           autovalidateMode: AutovalidateMode.onUserInteraction,
-          validator: (_) => !state.isMessageValid ? 'Please include details about the issue.' : null,
+          validator: (_) => !state.isMessageValid
+            ? 'Please include details about the issue.'
+            : null,
         );
       }
     );
@@ -156,6 +160,7 @@ class _HelpTicketFormState extends State<HelpTicketForm> {
     return BlocBuilder<HelpTicketFormBloc, HelpTicketFormState>(
       builder: (context, state) {
         return OutlinedButton(
+          key: Key("cancelButtonKey"),
           onPressed: state.isSubmitting ? null : () => _cancelButtonPressed(),
           child: BoldText3(text: 'Cancel', context: context, color: state.isSubmitting 
             ? Theme.of(context).colorScheme.callToActionDisabled
@@ -170,6 +175,7 @@ class _HelpTicketFormState extends State<HelpTicketForm> {
     return BlocBuilder<HelpTicketFormBloc, HelpTicketFormState>(
       builder: (context, state) {
         return ElevatedButton(
+          key: Key("submitButtonKey"),
           onPressed: _isSubmitButtonEnabled(state: state)
             ? () => _submitButtonPressed(state: state)
             : null, 
@@ -207,6 +213,7 @@ class _HelpTicketFormState extends State<HelpTicketForm> {
   void _showSnackbar({required String text, required HelpTicketFormState state}) async {
     state.isSuccess ? Vibrate.success() : Vibrate.error();
     final SnackBar snackBar = SnackBar(
+      key: Key("newHelpTicketSnackbarKey"),
       content: Row(
         children: [
           Expanded(

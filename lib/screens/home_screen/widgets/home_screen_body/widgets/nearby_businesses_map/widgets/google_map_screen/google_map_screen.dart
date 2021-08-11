@@ -8,7 +8,10 @@ import 'package:heist/blocs/geo_location/geo_location_bloc.dart';
 import 'package:heist/global_widgets/cached_avatar_hero.dart';
 import 'package:heist/models/business/business.dart';
 import 'package:heist/resources/helpers/size_config.dart';
+import 'package:heist/routing/routes.dart';
 import 'package:heist/screens/business_screen/business_screen.dart';
+import 'package:heist/screens/home_screen/blocs/business_screen_visible_cubit.dart';
+import 'package:heist/screens/home_screen/blocs/side_drawer_bloc/side_drawer_bloc.dart';
 
 import '../../models/pre_marker.dart';
 import 'bloc/google_map_screen_bloc.dart';
@@ -60,6 +63,7 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
               builder: (context, state) {
                 if (state.screenCoordinate != null) {
                   return Positioned(
+                    key: Key("${state.business!.identifier}"),
                     top: state.screenCoordinate!.y.toDouble() - SizeConfig.getHeight(6),
                     left: state.screenCoordinate!.x.toDouble() - SizeConfig.getWidth(7),
                     child: CachedAvatarHero(
@@ -101,11 +105,17 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
   }
 
   void _showBusinessSheet({required Business business}) {
+    context.read<BusinessScreenVisibleCubit>().toggle();
+    BlocProvider.of<SideDrawerBloc>(context).add(ButtonVisibilityChanged(isVisible: false));
+
     Navigator.of(context).push(PageRouteBuilder(
       opaque: false,
       fullscreenDialog: true,
       pageBuilder: (BuildContext context, _, __) => BusinessScreen(business: business, fromMapScreen: true)
     )).then((_) {
+      context.read<BusinessScreenVisibleCubit>().toggle();
+        BlocProvider.of<SideDrawerBloc>(context).add(ButtonVisibilityChanged(isVisible: true));
+      
       Future.delayed(Duration(milliseconds: 300)).then((_) =>
         BlocProvider.of<GoogleMapScreenBloc>(context).add(Reset()) 
       );
@@ -113,7 +123,7 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
   }
 
   Set<Marker> _createMarkers({required List<PreMarker> preMarkers}) {
-    return preMarkers.map((PreMarker preMarker) {
+    Set<Marker> markers = preMarkers.map((PreMarker preMarker) {
       LatLng position = LatLng(preMarker.lat, preMarker.lng);
       return Marker(
         markerId: MarkerId(preMarker.markerId),
@@ -127,5 +137,7 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
         }
       );
     }).toSet()..add(_createCustomerLocationMarker());
+    // print(markers);
+    return markers;
   }
 }

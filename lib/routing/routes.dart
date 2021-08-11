@@ -30,8 +30,11 @@ class Routes {
   static const String email = '/settings/email';
   static const String password = '/settings/password';
   static const String tips = '/settings/tips';
+  static const String logout = 'settings/logout';
 
   static const String helpTickets = '/help-tickets';
+  static const String helpTicketDetails = '/help-tickets/details';
+  static const String helpTicketNew = '/help-tickets/new';
 
   static const String reportIssue = '/report-issue';
 }

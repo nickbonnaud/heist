@@ -43,11 +43,11 @@ class HelpTicketFormBloc extends Bloc<HelpTicketFormEvent, HelpTicketFormState> 
   }
 
   Stream<HelpTicketFormState> _mapSubjectChangedToState({required SubjectChanged event}) async* {
-    yield state.update(isSubjectValid: event.subject.isNotEmpty);
+    yield state.update(isSubjectValid: event.subject.trim().isNotEmpty);
   }
 
   Stream<HelpTicketFormState> _mapMessageChangedToState({required MessageChanged event}) async* {
-    yield state.update(isMessageValid: event.message.isNotEmpty);
+    yield state.update(isMessageValid: event.message.trim().isNotEmpty);
   }
 
   Stream<HelpTicketFormState> _mapSubmittedToState({required Submitted event}) async* {

@@ -18,13 +18,13 @@ void main() {
     await tester.pumpWidget(PhaseOne(testing: true));
 
     await SplashScreenTest(tester: tester).init();
+    await RequestResetPasswordScreenTest(tester: tester).init();
+    await ResetPasswordScreenTest(tester: tester).init();
+    await LoginScreenTest(tester: tester).init();
+    await HomeScreenTest(tester: tester).init();
     await SideDrawerTest(tester: tester).init();
     
-    // await HomeScreenTest(tester: tester).init();
-    // await RegisterScreenTest(tester: tester).init();
-    // await OnboardScreenTest(tester: tester).init();
-    // await RequestResetPasswordScreenTest(tester: tester).init();
-    // await ResetPasswordScreenTest(tester: tester).init();
-    // await LoginScreenTest(tester: tester).init();
+    await RegisterScreenTest(tester: tester).init();
+    await OnboardScreenTest(tester: tester).init();
   });
 }

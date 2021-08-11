@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:heist/screens/tutorial_screen/tutorial_screen.dart';
 import 'package:heist/screens/tutorial_screen/widgets/tutorial_cards.dart';
 
 import '../helpers/test_title.dart';
@@ -22,6 +23,21 @@ class TutorialScreenTest {
     await _tapOnFaqs();
 
     await _closeTutorial();
+  }
+
+  Future<void> initFromDrawer() async {
+    TestTitle.write(testName: "Tutorial Screen From Drawer Tests");
+
+    expect(find.byType(TutorialScreen), findsNothing);
+    await tester.tap(find.byKey(Key("tutorialDrawerItemKey")));
+    await tester.pump(Duration(milliseconds: 350));
+
+    expect(find.byType(TutorialScreen), findsOneWidget);
+
+    await tester.tap(find.byIcon(Icons.clear).last);
+    await tester.pumpAndSettle();
+
+    expect(find.byType(TutorialScreen), findsNothing);
   }
 
   Future<void> _goToWithBillCard() async {

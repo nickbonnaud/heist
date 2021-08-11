@@ -53,16 +53,7 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
   }
 
   Stream<AuthenticationState> _mapLoggedOutToState() async* {
-    try {
-      final bool loggedOut = await _authenticationRepository.logout();
-      if (loggedOut) {
-        _customerBloc.add(CustomerLoggedOut());
-        yield Unauthenticated();
-      } else {
-        yield Authenticated(errorMessage: "An error occurred. Unable to Logout.");
-      }
-    } on ApiException catch (exception) {
-      yield Authenticated(errorMessage: exception.error);
-    }
+    _customerBloc.add(CustomerLoggedOut());
+    yield Unauthenticated();
   }
 }

@@ -44,6 +44,8 @@ class HelpTicketsScreenBloc extends Bloc<HelpTicketsScreenEvent, HelpTicketsScre
       yield* _mapHelpTicketAddedToState(event: event);
     } else if (event is HelpTicketDeleted) {
       yield* _mapHelpTicketDeletedToState(event: event);
+    } else if (event is FetchMore) {
+      yield* _mapFetchMoreToState();
     }
   }
 
@@ -139,6 +141,24 @@ class HelpTicketsScreenBloc extends Bloc<HelpTicketsScreenEvent, HelpTicketsScre
     }
   }
 
+  Stream<HelpTicketsScreenState> _mapFetchMoreToState() async* {
+    final currentState = state;
+
+    if (currentState is Loaded && !currentState.paginating) {
+      switch (currentState.currentQuery) {
+        case Option.all:
+          yield* _mapFetchAllToState(event: FetchAll(reset: false));
+          break;
+        case Option.open:
+          yield* _mapFetchOpenToState(event: FetchOpen(reset: false));
+          break;
+        case Option.resolved:
+          yield* _mapFetchResolvedToState(event: FetchResolved(reset: false));
+          break;
+      }
+    }
+  }
+  
   Stream<HelpTicketsScreenState> _fetchUnitialized({
     required Future<PaginateDataHolder>Function() fetchFunction,
     required Option currentQuery,

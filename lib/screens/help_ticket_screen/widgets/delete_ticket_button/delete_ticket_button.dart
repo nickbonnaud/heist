@@ -8,6 +8,7 @@ import 'package:heist/screens/help_tickets_screen/bloc/help_tickets_screen_bloc.
 import 'package:heist/themes/global_colors.dart';
 
 import 'bloc/delete_ticket_button_bloc.dart';
+import 'widgets/dialog_body.dart';
 
 class DeleteTicketButton extends StatelessWidget {
   final HelpTicket _helpTicket;
@@ -35,71 +36,6 @@ class DeleteTicketButton extends StatelessWidget {
       builder: (_) => BlocProvider<DeleteTicketButtonBloc>(
         create: (_) => DeleteTicketButtonBloc(helpRepository: _helpRepository, helpTicketsScreenBloc: _helpTicketsScreenBloc),
         child: DialogBody(helpTicket: _helpTicket),
-      )
-    );
-  }
-}
-
-class DialogBody extends StatelessWidget {
-  final HelpTicket _helpTicket;
-
-  DialogBody({required HelpTicket helpTicket})
-    : _helpTicket = helpTicket;
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocListener<DeleteTicketButtonBloc, DeleteTicketButtonState>(
-      listener: (context, state) {
-        
-        if (state.errorMessage.isNotEmpty) {
-          BlocProvider.of<DeleteTicketButtonBloc>(context).add(Reset());
-        } else if (state.isSuccess) {
-          int count = 0;
-          Navigator.of(context).popUntil((_) => count++ == 2);
-        }
-      },
-      child: BlocBuilder<DeleteTicketButtonBloc, DeleteTicketButtonState>(
-        builder: (context, state) {
-          return PlatformAlertDialog(
-            title: state.isSubmitting
-              ? PlatformText('Deleting...')
-              : PlatformText('Delete Help Ticket'),
-            content: state.isSubmitting
-              ? Column(
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(top: 10),
-                    height: SizeConfig.getWidth(10),
-                    width: SizeConfig.getWidth(10),
-                    child: CircularProgressIndicator(),
-                  )
-                ],
-              )
-              : Container(
-                margin: EdgeInsets.only(top: 10),
-                child: PlatformText("Are you sure?"),
-              ),
-            actions: [
-              PlatformDialogAction(
-                child: PlatformText("Cancel"), 
-                onPressed: state.isSubmitting
-                  ? null
-                  : () => Navigator.of(context).pop(false)
-              ),
-              PlatformDialogAction(
-                child: PlatformText(
-                  'Delete',
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.danger
-                  ),
-                ), 
-                onPressed: state.isSubmitting
-                  ? null
-                  : () => BlocProvider.of<DeleteTicketButtonBloc>(context).add(Submitted(ticketIdentifier: _helpTicket.identifier))
-              )
-            ],
-          );
-        }
       )
     );
   }

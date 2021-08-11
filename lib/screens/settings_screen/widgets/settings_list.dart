@@ -63,6 +63,16 @@ class SettingsList extends StatelessWidget {
           title: Text1(text: 'Change Tip Settings', context: context, color: Theme.of(context).colorScheme.callToAction),
           onTap: () => Navigator.of(context).pushNamed(Routes.tips)
         ),
+        ListTile(
+          key: Key("signOutTileKey"),
+          leading: Icon(
+            Icons.logout,
+            color: Theme.of(context).colorScheme.secondary,
+            size: SizeConfig.getWidth(8)
+          ),
+          title: Text1(text: "Logout", context: context, color: Theme.of(context).colorScheme.callToAction),
+          onTap: () => Navigator.of(context).pushNamed(Routes.logout),
+        ),
         SizedBox(height: SizeConfig.getHeight(10))
       ],
     );

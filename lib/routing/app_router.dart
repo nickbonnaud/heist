@@ -47,7 +47,11 @@ import 'package:heist/app/app.dart';
 import 'package:heist/screens/auth_screen/auth_screen.dart';
 import 'package:heist/screens/business_screen/business_screen.dart';
 import 'package:heist/screens/email_screen/email_screen.dart';
+import 'package:heist/screens/help_ticket_screen/help_ticket_screen.dart';
+import 'package:heist/screens/help_tickets_screen/bloc/help_tickets_screen_bloc.dart';
 import 'package:heist/screens/help_tickets_screen/help_tickets_screen.dart';
+import 'package:heist/screens/help_tickets_screen/models/help_ticket_args.dart';
+import 'package:heist/screens/help_tickets_screen/widgets/widgets/new_help_ticket_screen/new_help_ticket_screen.dart';
 import 'package:heist/screens/historic_transactions_screen/historic_transactions_screen.dart';
 import 'package:heist/screens/home_screen/home_screen.dart';
 import 'package:heist/screens/issue_screen/issue_screen.dart';
@@ -62,6 +66,7 @@ import 'package:heist/screens/refunds_screen/refunds_screen.dart';
 import 'package:heist/screens/request_reset_password_screen/request_reset_password_screen.dart';
 import 'package:heist/screens/reset_password_screen/reset_password_screen.dart';
 import 'package:heist/screens/settings_screen/settings_screen.dart';
+import 'package:heist/screens/sign_out_screen/sign_out_screen.dart';
 import 'package:heist/screens/tip_screen/tip_screen.dart';
 import 'package:heist/screens/tutorial_screen/tutorial_screen.dart';
 
@@ -293,10 +298,41 @@ class AppRouter {
           name: routeData.route
         );
         break;
+      case Routes.logout:
+        route = _createFullScreenDialogRoute(
+          screen: SignOutScreen(
+            authenticationRepository: AuthenticationRepository(
+              authenticationProvider: AuthenticationProvider(),
+              tokenRepository: TokenRepository(tokenProvider: StorageProvider())
+            ),
+            authenticationBloc: BlocProvider.of<AuthenticationBloc>(context)
+          ),
+          name: routeData.route
+        );
+        break;
       case Routes.helpTickets:
         route = _createRouteDefault(
           screen: HelpTicketsScreen(
             helpRepository: HelpRepository(helpProvider: HelpProvider())
+          ),
+          name: routeData.route
+        );
+        break;
+      case Routes.helpTicketDetails:
+        route = _createFullScreenDialogRoute(
+          screen: HelpTicketScreen(
+            helpRepository: HelpRepository(helpProvider: HelpProvider()),
+            helpTicket: (routeData.args as HelpTicketArgs).helpTicket,
+            helpTicketsScreenBloc: (routeData.args as HelpTicketArgs).helpTicketsScreenBloc
+          ),
+          name: routeData.route
+        );
+        break;
+      case Routes.helpTicketNew:
+        route = _createFullScreenDialogRoute(
+          screen: NewHelpTicketScreen(
+            helpRepository: HelpRepository(helpProvider: HelpProvider()),
+            helpTicketsScreenBloc: routeData.args as HelpTicketsScreenBloc
           ),
           name: routeData.route
         );
