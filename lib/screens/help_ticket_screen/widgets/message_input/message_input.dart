@@ -147,7 +147,7 @@ class _MessageInputState extends State<MessageInput> {
       content: Row(
         children: [
           Expanded(
-            child: BoldText3(text: error, context: context, color: Theme.of(context).colorScheme.onSecondary)
+            child: BoldText4(text: error, context: context, color: Theme.of(context).colorScheme.onSecondary)
           )
         ],
       ),

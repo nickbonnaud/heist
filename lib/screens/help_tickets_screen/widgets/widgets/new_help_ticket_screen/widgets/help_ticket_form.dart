@@ -217,7 +217,7 @@ class _HelpTicketFormState extends State<HelpTicketForm> {
       content: Row(
         children: [
           Expanded(
-            child: BoldText3(text: text, context: context, color: Theme.of(context).colorScheme.onSecondary)
+            child: BoldText4(text: text, context: context, color: Theme.of(context).colorScheme.onSecondary)
           )
         ],
       ),

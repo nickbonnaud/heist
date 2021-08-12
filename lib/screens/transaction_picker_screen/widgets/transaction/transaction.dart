@@ -277,7 +277,7 @@ class _TransactionState extends State<Transaction> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Expanded(
-            child: BoldText3(text: message, context: context, color: Theme.of(context).colorScheme.onSecondary)
+            child: BoldText4(text: message, context: context, color: Theme.of(context).colorScheme.onSecondary)
           ),
         ],
       ),
