@@ -67,7 +67,7 @@ class SearchIdentifierModalTest {
     await tester.enterText(find.byKey(Key("identifierFieldKey")), "bcbv8y2bbcbxbccsfds4tgghsf3unxhw");
     await tester.pump();
     await tester.testTextInput.receiveAction(TextInputAction.search);
-    await tester.pump(Duration(milliseconds: 300));
+    await tester.pump();
 
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
     await tester.pumpAndSettle();

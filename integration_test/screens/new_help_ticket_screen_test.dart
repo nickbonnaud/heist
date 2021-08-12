@@ -34,6 +34,8 @@ class NewHelpTicketScreenTest {
     await _navigateBack();
 
     await _cancel();
+
+    await _navigateToSideDrawer();
   }
 
   Future<void> _enterInvalidSubject() async {
@@ -102,5 +104,10 @@ class NewHelpTicketScreenTest {
     await tester.pumpAndSettle();
 
     expect(find.byType(NewHelpTicketScreen), findsNothing);
+  }
+
+  Future<void> _navigateToSideDrawer() async {
+    await tester.tap(find.byIcon(Icons.arrow_back));
+    await tester.pumpAndSettle();
   }
 }

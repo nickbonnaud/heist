@@ -21,6 +21,7 @@ void main() {
     await RequestResetPasswordScreenTest(tester: tester).init();
     await ResetPasswordScreenTest(tester: tester).init();
     await LoginScreenTest(tester: tester).init();
+    await OnboardScreenTest(tester: tester).initLogin();
     await HomeScreenTest(tester: tester).init();
     await SideDrawerTest(tester: tester).init();
     

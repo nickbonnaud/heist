@@ -17,36 +17,42 @@ class HomeScreenTest {
 
     expect(find.byKey(Key("homeScreenKey")), findsOneWidget);
 
-    await _pressLogos();
-    
+    await _viewBusinessLogos();
+
+    await _viewBusinessDetails();
+
+    await _viewTransactionDetails();
+
     await _horizontalScrollPeekSheet();
 
     await _togglePeekSheet();
-
-    await _pressDetails();
+    
+     await _tapOpenTransactionsLogo();
   }
 
-  Future<void> _pressLogos() async {
+  Future<void> _viewBusinessLogos() async {
     await _tapNearbyBusinessLogo();
 
     await _tapActiveLocationLogo();
-    
-    await _tapOpenTransactionsLogo();
   }
-  
-  Future<void> _pressDetails() async {
+
+  Future<void> _viewBusinessDetails() async {
     await _flingPeekSheet();
-    
-    await _tapOpenTransactionDetails();
+
+    await _tapNearbyLocationDetails();
 
     await _tapActiveLocationDetails();
 
-    await _tapNearbyLocationDetails();
+  }
+
+  Future<void> _viewTransactionDetails() async {
+    await _tapOpenTransactionDetails();
 
     await _verticalScrollPeekSheet();
 
     await _flingPeekSheet(isExpanded: true);
   }
+  
   
   Future<void> _tapOpenTransactionsLogo() async {
     expect(find.byKey(Key("openLogoButtonKey-0")), findsOneWidget);
@@ -95,7 +101,7 @@ class HomeScreenTest {
   Future<void> _horizontalScrollPeekSheet() async {
     double inititalPosition = tester.getCenter(find.byKey(Key("openLogoButtonKey-0"))).dx;
     
-    await tester.drag(find.byKey(Key('nearbyLogoButtonKey-0')), Offset(500, 0));
+    await tester.drag(find.byKey(Key('activeLogoButtonKey-0')), Offset(500, 0));
     await tester.pump();
 
     double finalPosition = tester.getCenter(find.byKey(Key("openLogoButtonKey-0"))).dx;
@@ -149,8 +155,8 @@ class HomeScreenTest {
   }
 
   Future<void> _tapNearbyLocationDetails() async {
-     expect(find.byType(BusinessScreen), findsNothing);
-
+    expect(find.byType(BusinessScreen), findsNothing);
+    
     await tester.tap(find.byKey(Key("nearbyDetailsKey-0")));
     await tester.pumpAndSettle();
 

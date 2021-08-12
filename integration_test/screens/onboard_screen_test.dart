@@ -18,6 +18,19 @@ class OnboardScreenTest {
 
     await _goToProfileSetup();
     await _goToTutorialScreen();
+    
+    await tester.tap(find.byKey(Key("stepperButtonKey")).at(3));
+    await tester.pump(Duration(milliseconds: 500));
+
+    await _finishOnboarding();
+  }
+
+  Future<void> initLogin() async {
+    await tester.tap(find.byKey(Key("stepperButtonKey")).at(2));
+    await tester.pump(Duration(milliseconds: 250));
+
+    await TutorialScreenTest(tester: tester).initLogin();
+
     await _goToPermissionsScreen();
 
     await _finishOnboarding();

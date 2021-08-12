@@ -83,7 +83,6 @@ class ReceiptScreenBody extends StatelessWidget {
             padding: EdgeInsets.only(left: 16, right: 16),
             sliver: SliverToBoxAdapter(
               child: Column(
-                key: Key("receiptBodyWithAppBarKey"),
                 children: _buildBody(context: context, transactionResource: transactionResource)
               ),
             ),
@@ -185,6 +184,7 @@ class ReceiptScreenBody extends StatelessWidget {
 
   Widget _purchasedItems({required TransactionResource transactionResource}) {
     return ListView.separated(
+      key: Key("receiptBodyWithAppBarKey"),
       physics: NeverScrollableScrollPhysics(),
       shrinkWrap: true,
       itemBuilder: (BuildContext context, int index) {

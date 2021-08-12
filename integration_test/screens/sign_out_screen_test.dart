@@ -43,5 +43,6 @@ class SignOutScreenTest {
     await tester.pump(Duration(seconds: 1));
     await tester.pump(Duration(seconds: 1));
     expect(find.byType(AuthScreen), findsOneWidget);
+    await tester.pump(Duration(seconds: 3));
   }
 }

@@ -40,6 +40,11 @@ class TutorialScreenTest {
     expect(find.byType(TutorialScreen), findsNothing);
   }
 
+  Future<void> initLogin() async {
+    await tester.tap(find.byIcon(Icons.clear).last);
+    await tester.pumpAndSettle();
+  }
+
   Future<void> _goToWithBillCard() async {
     expect(find.byKey(Key("cardAtRegisterKey")), findsOneWidget);
     await tester.tap(find.byKey(Key("nextButtonAtRegisterKey")));

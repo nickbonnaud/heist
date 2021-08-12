@@ -23,6 +23,7 @@ class SettingsScreenTest {
     TestTitle.write(testName: "Settings Screen Tests");
 
     expect(find.byType(SettingsScreen), findsNothing);
+
     await tester.tap(find.byKey(Key("settingsDrawerItemKey")));
     await tester.pumpAndSettle();
 
@@ -74,11 +75,6 @@ class SettingsScreenTest {
 
     await TipScreenTest(tester: tester).init();
   }
-
-  // Future<void> _navigateBack() async {
-  //   await tester.tap(find.byIcon(Icons.arrow_back));
-  //   await tester.pumpAndSettle();
-  // }
 
   Future<void> _signOut() async {
     expect(find.byType(SignOutScreen), findsNothing);

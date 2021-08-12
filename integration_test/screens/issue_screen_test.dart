@@ -15,6 +15,9 @@ class IssueScreenTest {
     expect(find.byType(IssueScreen), findsOneWidget);
     expect(find.text('Wrong Bill'), findsOneWidget);
 
+    await tester.tap(find.text('Done'));
+    await tester.pump();
+    
     await tester.tap(find.byKey(Key("cancelButtonKey")));
     await tester.pumpAndSettle();
 

@@ -35,12 +35,7 @@ class HistoricTransactionsScreenTest {
 
   Future<void> _loadTransactions() async {
     await tester.tap(find.byKey(Key("transactionsDrawerItemKey")));
-    await tester.pump(Duration(milliseconds: 300));
-
-    expect(find.byType(CircularProgressIndicator), findsOneWidget);
     await tester.pumpAndSettle();
-
-    expect(find.byType(CircularProgressIndicator), findsNothing);
     expect(find.byType(HistoricTransactionsScreen), findsOneWidget);
   } 
 
