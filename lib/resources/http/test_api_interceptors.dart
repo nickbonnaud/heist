@@ -1,6 +1,6 @@
 import 'dart:io';
+
 import 'package:dio/dio.dart';
-import 'package:faker/faker.dart';
 
 import 'mock_responses.dart';
 

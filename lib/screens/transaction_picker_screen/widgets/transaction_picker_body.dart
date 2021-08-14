@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:heist/global_widgets/loading_widget.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
 import 'package:heist/routing/routes.dart';
 import 'package:heist/screens/transaction_picker_screen/bloc/transaction_picker_screen_bloc.dart';
@@ -26,7 +25,7 @@ class TransactionPickerBody extends StatelessWidget {
           );
         } else if (state is Loading || state is Uninitialized) {
           return Center(
-            child: LoadingWidget(),
+            child: CircularProgressIndicator(),
           );
         } else {
           return Center(

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heist/global_widgets/cached_avatar.dart';
-import 'package:heist/global_widgets/loading_widget.dart';
 import 'package:heist/global_widgets/search_business_name_modal/bloc/search_business_name_bloc.dart';
 import 'package:heist/models/business/business.dart';
 import 'package:heist/resources/helpers/size_config.dart';

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:heist/global_widgets/loading_widget.dart';
 import 'package:heist/resources/helpers/text_styles.dart';
 
 class LoadingLocation extends StatelessWidget {
@@ -15,7 +14,7 @@ class LoadingLocation extends StatelessWidget {
             child: BoldText3(text: 'Fetching Current Location', context: context),
           ),
           SizedBox(height: 15.0),
-          LoadingWidget(),
+          CircularProgressIndicator(),
           SizedBox(height: 15.0),
         ],
       ),

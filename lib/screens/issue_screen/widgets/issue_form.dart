@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:heist/models/transaction/transaction_resource.dart';
 import 'package:heist/resources/enums/issue_type.dart';
 import 'package:heist/resources/helpers/size_config.dart';

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heist/models/business/business.dart';
 import 'package:heist/routing/routes.dart';
-import 'package:heist/screens/business_screen/business_screen.dart';
 import 'package:heist/screens/home_screen/blocs/business_screen_visible_cubit.dart';
 import 'package:heist/screens/home_screen/blocs/side_drawer_bloc/side_drawer_bloc.dart';
 import 'package:transparent_image/transparent_image.dart';

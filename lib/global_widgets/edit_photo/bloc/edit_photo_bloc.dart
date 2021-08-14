@@ -4,7 +4,6 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:heist/blocs/customer/customer_bloc.dart';
 import 'package:heist/models/customer/customer.dart';
-import 'package:heist/models/customer/profile.dart';
 import 'package:heist/repositories/photo_repository.dart';
 import 'package:image_picker/image_picker.dart';
 

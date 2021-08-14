@@ -6,12 +6,10 @@ import 'package:transparent_image/transparent_image.dart';
 class CachedAvatar extends StatelessWidget {
   final String _url;
   final int _radius;
-  final bool _showLoading;
 
-  CachedAvatar({required String url, required int radius, bool showLoading = false})
+  CachedAvatar({required String url, required int radius})
     : _url = url,
-      _radius = radius,
-      _showLoading = showLoading;
+      _radius = radius;
 
   @override
   Widget build(BuildContext context) {

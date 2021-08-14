@@ -90,7 +90,6 @@ class EditPhoto extends StatelessWidget {
       return CachedAvatar(
         url: _profile.photos.largeUrl, 
         radius: 25,
-        showLoading: true,
       );
     }
   }
