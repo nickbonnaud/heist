@@ -2,11 +2,9 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:heist/blocs/active_location/active_location_bloc.dart';
-import 'package:heist/blocs/nearby_businesses/nearby_businesses_bloc.dart';
-import 'package:heist/models/business/business.dart';
 import 'package:heist/models/customer/active_location.dart';
-import 'package:collection/collection.dart';
 
 import 'shared_list_items/logo_button/logo_button.dart';
 import 'shared_list_items/logo_details/business_logo_details/business_logo_details.dart';
@@ -89,7 +87,6 @@ class ActiveLocationsList extends StatelessWidget {
   
   Widget _buildLogoButton({required BuildContext context, required ActiveLocation activeLocation, required ActiveLocationState state, required int subListIndex}) {
     int fullIndex = _setIndex(state: state, activeLocation: activeLocation);
-    Business? business = _getBusiness(context: context, activeLocation: activeLocation, state: state);
 
     return LogoButton(
       keyValue: "activeLogoButtonKey-$subListIndex",
@@ -99,15 +96,12 @@ class ActiveLocationsList extends StatelessWidget {
       isTransaction: false,
       logoSize: _size,
       borderRadius: _borderRadius,
-      business: business,
+      business: activeLocation.business,
     );
   }
 
   Widget _buildDetails({required BuildContext context, required ActiveLocation activeLocation, required ActiveLocationState state, required int subListIndex}) {
     int fullIndex = _setIndex(state: state, activeLocation: activeLocation);
-    Business? business = _getBusiness(context: context, activeLocation: activeLocation, state: state);
-    
-    if (business == null) return Container();
     
     return BusinessLogoDetails(
       keyValue: "activeDetailsKey-$subListIndex",
@@ -116,14 +110,9 @@ class ActiveLocationsList extends StatelessWidget {
       height: _size, 
       controller: _controller, 
       borderRadius: _borderRadius, 
-      business: business,
+      business: activeLocation.business,
       subListIndex: subListIndex,
     );
-  }
-  
-  Business? _getBusiness({required BuildContext context, required ActiveLocation activeLocation, required ActiveLocationState state}) {
-    return BlocProvider.of<NearbyBusinessesBloc>(context).state.businesses
-      .firstWhereOrNull((Business business) => activeLocation.beaconIdentifier == business.location.beacon.identifier);
   }
 
   double _logoMarginTop({required int index}) {
@@ -135,8 +124,8 @@ class ActiveLocationsList extends StatelessWidget {
 
   double _logoLeftMargin({required int index}) {
     return lerp(
-      min: index == 0 ? 3 : index * ((sharedSizes.horizontalSpacing + sharedSizes.startSize)),
-      max: 8
+      min: index == 0 ? 3.w : index * ((sharedSizes.horizontalSpacing + sharedSizes.startSize)),
+      max: 8.w
     );
   }
   

@@ -7,6 +7,7 @@ import 'package:heist/blocs/permissions/permissions_bloc.dart';
 import 'package:heist/repositories/authentication_repository.dart';
 import 'package:heist/screens/auth_screen/widgets/background.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'widgets/app_name.dart';
 import 'widgets/cubit/keyboard_visible_cubit.dart';
@@ -16,7 +17,7 @@ import 'widgets/forms/forms.dart';
 import 'widgets/page_indicator.dart';
 import 'widgets/page_offset_notifier.dart';
 
-double topMargin({required BuildContext context}) => MediaQuery.of(context).size.height > 700 ? 192 : 128;
+double topMargin({required BuildContext context}) => MediaQuery.of(context).size.height > 700.h ? 192.h : 128.h;
 double mainSquareSize({required BuildContext context}) => MediaQuery.of(context).size.height / 2;
 
 class AuthScreen extends StatefulWidget {
@@ -41,7 +42,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
   late AnimationController _animationController;
   late AnimationController _formAnimationController;
 
-  double get maxHeight => mainSquareSize(context: context) + 32 + 24;
+  double get maxHeight => mainSquareSize(context: context) + 32.h + 24.h;
 
   @override
   void initState() {
@@ -79,7 +80,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
           child: ChangeNotifierProvider(
             create: (_) => FormAnimationNotifier(_formAnimationController),
             child: Stack(
-              children: <Widget>[
+              children: [
                 GestureDetector(
                   key: Key("verticalDragDetectorKey"),
                   onVerticalDragUpdate: _handleDragUpdate,
@@ -87,12 +88,12 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
                   child: Stack(
                     key: Key("stackKey"),
                     alignment: Alignment.center,
-                    children: <Widget>[
+                    children: [
                       Background(),
                       PageView(
                         controller: _pageController,
                         physics: ClampingScrollPhysics(),
-                        children: <Widget>[
+                        children: [
                           AppName(),
                           Container()
                         ],

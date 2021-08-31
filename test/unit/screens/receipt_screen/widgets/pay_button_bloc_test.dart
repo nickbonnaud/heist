@@ -8,7 +8,7 @@ import 'package:heist/models/transaction/transaction_resource.dart';
 import 'package:heist/repositories/transaction_repository.dart';
 import 'package:heist/resources/helpers/api_exception.dart';
 import 'package:heist/screens/receipt_screen/bloc/receipt_screen_bloc.dart';
-import 'package:heist/screens/receipt_screen/widgets/pay_button/bloc/pay_button_bloc.dart';
+import 'package:heist/screens/receipt_screen/widgets/widgets/pay_button/bloc/pay_button_bloc.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../../../helpers/mock_data_generator.dart';

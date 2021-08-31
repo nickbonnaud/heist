@@ -6,6 +6,7 @@ import 'package:heist/repositories/photo_picker_repository.dart';
 import 'package:heist/repositories/photo_repository.dart';
 import 'package:heist/repositories/profile_repository.dart';
 import 'package:heist/screens/profile_setup_screen/bloc/profile_setup_screen_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'cards/profile_name_card/profile_name_card.dart';
 import 'cards/profile_photo_card.dart';
@@ -61,11 +62,11 @@ class ProfileSetupCards extends StatelessWidget {
     return AnimatedPositioned(
       duration: Duration(milliseconds: 500),
       top: currentIncompleteSections.contains(section) 
-        ? currentIncompleteSections.indexOf(section) * 15.0
+        ? currentIncompleteSections.indexOf(section) * 15.h
         : MediaQuery.of(context).size.height,
       bottom: currentIncompleteSections.contains(section)
         ? 0.0
-        : - MediaQuery.of(context).size.height,
+        : -MediaQuery.of(context).size.height,
       child: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
@@ -75,9 +76,9 @@ class ProfileSetupCards extends StatelessWidget {
           boxShadow: [
             BoxShadow(
               color: Colors.grey.withOpacity(0.3), 
-              spreadRadius: 5.0,
+              spreadRadius: 5,
               blurRadius: 5,
-              offset: Offset(0, -5)
+              offset: Offset(0, -5.h)
             )
           ]
         ),

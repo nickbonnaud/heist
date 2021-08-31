@@ -3,16 +3,24 @@ import 'dart:math' as math;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:heist/blocs/active_location/active_location_bloc.dart';
 import 'package:heist/screens/home_screen/blocs/side_drawer_bloc/side_drawer_bloc.dart';
+import 'package:heist/screens/transaction_business_picker_screen/bloc/transaction_business_picker_bloc.dart';
 import 'package:heist/themes/global_colors.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'widgets/drawer_body.dart';
 
 class SideDrawer extends StatefulWidget {
   final Widget _homeScreen;
+  final ActiveLocationBloc _activeLocationBloc;
 
-  SideDrawer({required Widget homeScreen})
-    : _homeScreen = homeScreen;
+  SideDrawer({
+    required Widget homeScreen,
+    required ActiveLocationBloc activeLocationBloc,
+  })
+    : _homeScreen = homeScreen,
+      _activeLocationBloc = activeLocationBloc;
 
   @override
   State<SideDrawer> createState() => _SideDrawerState();
@@ -81,7 +89,7 @@ class _SideDrawerState extends State<SideDrawer> with SingleTickerProviderStateM
             child: _buildBody(state: state)
           ),
           floatingActionButton: state.buttonVisible ? Padding(
-            padding: EdgeInsets.only(top: 25, left: 10),
+            padding: EdgeInsets.only(top: 25.h, left: 10.w),
             child: FloatingActionButton(
               key: Key("menuFabKey"),
               backgroundColor: Theme.of(context).colorScheme.callToAction,
@@ -125,8 +133,12 @@ class _SideDrawerState extends State<SideDrawer> with SingleTickerProviderStateM
 
   Widget _buildBody({required SideDrawerState state}) {
     return Stack(
-      children: <Widget>[
-        DrawerBody(),
+      children: [
+        BlocProvider<TransactionBusinessPickerBloc>(
+          create: (_) => TransactionBusinessPickerBloc(activeLocationBloc: widget._activeLocationBloc)
+            ..add(Init(activeLocations: widget._activeLocationBloc.state.activeLocations)),
+          child: DrawerBody(),
+        ),
         Transform.scale(
           scale: _scaleAnimation.value,
           child: Transform.translate(
@@ -134,9 +146,9 @@ class _SideDrawerState extends State<SideDrawer> with SingleTickerProviderStateM
             child: AbsorbPointer(
               absorbing: state.menuOpened,
               child: Stack(
-                children: <Widget>[
+                children: [
                   Padding(
-                    padding: EdgeInsets.only(left: _animation.value * _shadowOffset),
+                    padding: EdgeInsets.only(left: (_animation.value * _shadowOffset).w),
                     child: Material(
                       borderRadius: _radiusAnimation.value,
                       elevation: _animationController.value * 10,

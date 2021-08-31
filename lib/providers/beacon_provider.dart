@@ -15,8 +15,8 @@ class BeaconProvider {
   List<Region> _getRegions({required List<Business> businesses}) {
     return businesses.map((business) {
       return Region(
-        identifier: business.location.beacon.identifier,
-        proximityUUID: business.location.beacon.identifier,
+        identifier: business.location.beacon.regionIdentifier,
+        proximityUUID: business.location.beacon.proximityUUID,
         major: business.location.beacon.major,
         minor: business.location.beacon.minor
       );

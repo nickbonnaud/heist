@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:heist/models/business/business.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'widgets/details.dart';
 
@@ -40,13 +41,13 @@ class BusinessLogoDetails extends StatelessWidget {
       top: _topMargin,
       left: _leftMargin,
       height: _height,
-      right: 16,
+      right: 16.w,
       child: _controller.status == AnimationStatus.completed
         ? Details(
             keyValue: _keyValue,
             height: _height, 
             borderRadius: _borderRadius, 
-            business: _business, 
+            business: _business,
             controller: _controller,
             index: _subListIndex
           )

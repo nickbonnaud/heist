@@ -1,9 +1,8 @@
 import 'dart:math';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/themes/global_colors.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class OverlayAppBar extends StatefulWidget implements PreferredSizeWidget {
   final Color _backgroundColor;
@@ -39,7 +38,7 @@ class _OverlayAppBarState extends State<OverlayAppBar> with TickerProviderStateM
     return AppBar(
       elevation: 0,
       backgroundColor: widget._backgroundColor,
-      actions: <Widget>[
+      actions: [
         if (widget._trailingWidget != null)
           widget._trailingWidget!
       ],
@@ -51,7 +50,7 @@ class _OverlayAppBarState extends State<OverlayAppBar> with TickerProviderStateM
             icon: Icon(Icons.close),
             onPressed: () => Navigator.of(context).pop(),
             color: Theme.of(context).colorScheme.topAppBarIcon,
-            iconSize: SizeConfig.getWidth(10),
+            iconSize: 40.w,
           ),
         )
       ),

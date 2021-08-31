@@ -1,15 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:heist/resources/helpers/size_config.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class CachedAvatarHero extends StatelessWidget {
   final String _url;
-  final int _radius;
+  final double _radius;
   final String _tag;
   final bool _showLoading;
 
-  CachedAvatarHero({required String url, required int radius, required String tag, bool showLoading = false})
+  CachedAvatarHero({required String url, required double radius, required String tag, bool showLoading = false})
     : _url = url,
       _radius = radius,
       _tag = tag,
@@ -23,7 +22,7 @@ class CachedAvatarHero extends StatelessWidget {
         tag: _tag,
         child: CircleAvatar(
           backgroundImage: imageProvider,
-          radius: SizeConfig.getWidth(_radius.toDouble()),
+          radius: _radius,
         ),
       ),
       placeholder: (_,__) => Image.memory(kTransparentImage),

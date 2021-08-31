@@ -40,7 +40,7 @@ class MockResponses {
     } else if (options.path.contains('refund') && options.method.toLowerCase() == 'get') {
       return _mockFetchRefunds(options);
     } else if (options.path.contains("unassigned-transaction?business_id")) {
-      return _mockFetchUnassigned();
+      return _mockFetchUnassigned(options);
     } else if (options.path.contains("unassigned-transaction/")) {
       return _mockPatchUnassigned();
     } else if (options.path.endsWith("location")) {
@@ -330,8 +330,8 @@ class MockResponses {
   static Map<String, dynamic> _postActiveLocation(RequestOptions options) {
     return {
       "data": {
-        "active_location_id": options.data['beacon_identifier'],
-        "beacon_identifier": options.data['beacon_identifier'],
+        "identifier": faker.guid.guid(),
+        "business": generateBusiness(),
         "transaction_id": null,
         "last_notification":  null
       }
@@ -482,9 +482,10 @@ class MockResponses {
     return generateTransactionResource();
   }
 
-  static Map<String, dynamic> _mockFetchUnassigned() {
+  static Map<String, dynamic> _mockFetchUnassigned(RequestOptions options) {
+    Map<String, dynamic> business = generateBusiness(businessIdentifier: options.path.split('business_id=').last);
     return {
-      'data': List.generate(faker.randomGenerator.integer(25, min: 1), (index) => generateUnassignedTransactionResource())
+      'data': List.generate(faker.randomGenerator.integer(10, min: 3), (index) => generateUnassignedTransactionResource(business: business))
     };
   }
   
@@ -702,8 +703,8 @@ class MockResponses {
 
   static Map<String, dynamic> generateBeacon() {
     return {
-      "identifier": faker.guid.guid(),
       "region_identifier": faker.guid.guid(),
+      'proximity_uuid': faker.guid.guid(),
       "major": faker.randomGenerator.integer(10000),
       "minor": faker.randomGenerator.integer(10000),
     };
@@ -783,9 +784,9 @@ class MockResponses {
     };
   }
 
-  static Map<String, dynamic> generateBusiness({String? name}) {
+  static Map<String, dynamic> generateBusiness({String? name, String? businessIdentifier}) {
     return {
-      "identifier": faker.guid.guid(),
+      "identifier": businessIdentifier == null ? faker.guid.guid() : businessIdentifier,
       "profile": generateBusinessProfile(name: name),
       'photos': generateBusinessPhotos(),
       "location": generateLocation()
@@ -806,8 +807,8 @@ class MockResponses {
     final Random random = Random();
     
     return {
-      "active_location_id": faker.guid.guid(),
-      "beacon_identifier": faker.guid.guid(),
+      "identifier": faker.guid.guid(),
+      "business": generateBusiness(),
       "transaction_id": faker.randomGenerator.boolean() 
         ? faker.guid.guid()
         : null,
@@ -968,10 +969,10 @@ class MockResponses {
     };
   }
 
-  static Map<String, dynamic> generateUnassignedTransactionResource() {
+  static Map<String, dynamic> generateUnassignedTransactionResource({Map<String, dynamic>? business}) {
     return {
       'transaction': generateTransactionForUnassignedTransaction(),
-      'business': generateBusiness()
+      'business': business == null ? generateBusiness() : business
     };
   }
 

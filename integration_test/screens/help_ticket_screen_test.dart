@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:heist/screens/help_ticket_screen/help_ticket_screen.dart';
 import 'package:heist/screens/help_ticket_screen/widgets/delete_ticket_button/delete_ticket_button.dart';
-import 'package:heist/screens/help_ticket_screen/widgets/message_input/message_input.dart';
+import 'package:heist/screens/help_ticket_screen/widgets/help_ticket_body/widgets/message_input/message_input.dart';
 import 'package:heist/screens/help_tickets_screen/help_tickets_screen.dart';
 
 import '../helpers/test_title.dart';

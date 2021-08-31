@@ -8,8 +8,8 @@ import 'package:heist/themes/global_colors.dart';
 
 import 'widgets/delete_ticket_button/bloc/delete_ticket_button_bloc.dart';
 import 'widgets/delete_ticket_button/delete_ticket_button.dart';
-import 'widgets/help_ticket_body.dart';
-import 'widgets/message_list/bloc/message_list_bloc.dart';
+import 'widgets/help_ticket_body/help_ticket_body.dart';
+import 'widgets/help_ticket_body/widgets/message_list/bloc/message_list_bloc.dart';
 
 
 class HelpTicketScreen extends StatelessWidget {

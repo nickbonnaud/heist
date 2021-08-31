@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:heist/models/help_ticket/help_ticket.dart';
-import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/routing/routes.dart';
 import 'package:heist/screens/help_ticket_screen/widgets/delete_ticket_button/bloc/delete_ticket_button_bloc.dart';
 import 'package:heist/themes/global_colors.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class DialogBody extends StatelessWidget {
   final HelpTicket _helpTicket;
@@ -33,19 +33,19 @@ class DialogBody extends StatelessWidget {
               : PlatformText('Delete Help Ticket'),
             content: state.isSubmitting
               ? Column(
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(top: 10),
-                    height: SizeConfig.getWidth(10),
-                    width: SizeConfig.getWidth(10),
-                    child: CircularProgressIndicator(),
-                  )
-                ],
-              )
+                  children: [
+                    Container(
+                      margin: EdgeInsets.only(top: 10.h),
+                      height: 40.w,
+                      width: 40.w,
+                      child: CircularProgressIndicator(),
+                    )
+                  ],
+                )
               : Container(
-                margin: EdgeInsets.only(top: 10),
-                child: PlatformText("Are you sure?"),
-              ),
+                  margin: EdgeInsets.only(top: 10.h),
+                  child: PlatformText("Are you sure?"),
+                ),
             actions: [
               PlatformDialogAction(
                 key: Key("cancelDeleteTicketButtonKey"),

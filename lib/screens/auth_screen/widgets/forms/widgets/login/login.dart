@@ -28,7 +28,7 @@ class Login extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Stack(
-      children: <Widget>[
+      children: [
         WelcomeLabel(),
         BlocProvider<LoginBloc>(
           create: (_) => LoginBloc(authenticationRepository: _authenticationRepository, authenticationBloc: _authenticationBloc),

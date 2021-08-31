@@ -1,13 +1,12 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heist/models/customer/customer.dart';
-import 'package:heist/resources/helpers/size_config.dart';
-import 'package:heist/resources/helpers/text_styles.dart';
+import 'package:heist/resources/helpers/global_text.dart';
 import 'package:heist/resources/helpers/vibrate.dart';
 import 'package:heist/screens/password_screen/bloc/password_form_bloc.dart';
 import 'package:heist/themes/global_colors.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class PasswordForm extends StatefulWidget {
   final Customer _customer;
@@ -53,10 +52,10 @@ class _PasswordFormState extends State<PasswordForm> {
       },
       child: Form(
         child: Padding(
-          padding: EdgeInsets.only(left: 16.0, right: 16.0),
+          padding: EdgeInsets.symmetric(horizontal: 16.w),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
+            children: [
               Expanded(
                 child: BlocBuilder<PasswordFormBloc, PasswordFormState>(
                   builder: (context, state) {
@@ -64,12 +63,12 @@ class _PasswordFormState extends State<PasswordForm> {
                       config: _buildKeyboard(state: state),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: <Widget>[
-                          VeryBoldText1(text: 'Change Password', context: context),
+                        children: [
+                          ScreenTitle(title: 'Change Password'),
                           _currentPassword(state: state),
                           _newPassword(state: state),
                           _newPasswordConfirmation(state: state),
-                          SizedBox(height: SizeConfig.getHeight(10)),
+                          SizedBox(height: 20.h),
                         ],
                       ),
                     );
@@ -77,13 +76,13 @@ class _PasswordFormState extends State<PasswordForm> {
                 ) 
               ),
               Padding(
-                padding: EdgeInsets.only(bottom: 16),
+                padding: EdgeInsets.only(bottom: 16.h),
                 child: Row(
-                  children: <Widget>[
+                  children: [
                     Expanded(
                       child: _cancelButton()
                     ),
-                    SizedBox(width: 20.0),
+                    SizedBox(width: 20.w),
                     Expanded(
                       child: _submitButton()
                     )
@@ -116,12 +115,12 @@ class _PasswordFormState extends State<PasswordForm> {
         labelText: 'Current Password',
         labelStyle: TextStyle(
           fontWeight: FontWeight.w400,
-          fontSize: SizeConfig.getWidth(6)
+          fontSize: 25.sp
         )
       ),
       style: TextStyle(
         fontWeight: FontWeight.w700,
-        fontSize: SizeConfig.getWidth(7)
+        fontSize: 28.sp
       ),
       controller: _oldPasswordController,
       keyboardType: TextInputType.text,
@@ -147,12 +146,12 @@ class _PasswordFormState extends State<PasswordForm> {
         labelText: 'New Password',
         labelStyle: TextStyle(
           fontWeight: FontWeight.w400,
-          fontSize: SizeConfig.getWidth(6)
+          fontSize: 25.sp
         )
       ),
       style: TextStyle(
         fontWeight: FontWeight.w700,
-        fontSize: SizeConfig.getWidth(7)
+        fontSize: 28.sp
       ),
       controller: _passwordController,
       keyboardType: TextInputType.text,
@@ -179,12 +178,12 @@ class _PasswordFormState extends State<PasswordForm> {
         labelText: 'Password Confirmation',
         labelStyle: TextStyle(
           fontWeight: FontWeight.w400,
-          fontSize: SizeConfig.getWidth(6)
+          fontSize: 25.sp
         )
       ),
       style: TextStyle(
         fontWeight: FontWeight.w700,
-        fontSize: SizeConfig.getWidth(7)
+        fontSize: 28.sp
       ),
       controller: _passwordConfirmationController,
       keyboardType: TextInputType.text,
@@ -209,7 +208,7 @@ class _PasswordFormState extends State<PasswordForm> {
         return OutlinedButton(
           key: Key("cancelButtonKey"),
           onPressed: state.isSubmitting ? null : () => _cancelButtonPressed(),
-          child: BoldText3(text: 'Cancel', context: context, color: state.isSubmitting 
+          child: ButtonText(text: 'Cancel', color: state.isSubmitting 
             ? Theme.of(context).colorScheme.callToActionDisabled
             : Theme.of(context).colorScheme.callToAction
           ),
@@ -228,6 +227,15 @@ class _PasswordFormState extends State<PasswordForm> {
         );
       },
     );
+  }
+
+  Widget _buttonChild({required PasswordFormState state}) {
+    if (state.isSubmitting) {
+      return SizedBox(height: 25.w, width: 25.w, child: CircularProgressIndicator());
+    } else {
+      String text = state.isOldPasswordVerified ? 'Save' : 'Verify';
+      return ButtonText(text: text);
+    }
   }
 
   bool _canSubmit({required PasswordFormState state}) {
@@ -275,9 +283,9 @@ class _PasswordFormState extends State<PasswordForm> {
       key: Key("passwordFormSnackbarKey"),
       content: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
+        children: [
           Expanded(
-            child: BoldText4(text: message, context: context, color: Theme.of(context).colorScheme.onSecondary)
+            child: SnackbarText(text: message)
           ),
         ],
       ),
@@ -299,15 +307,6 @@ class _PasswordFormState extends State<PasswordForm> {
     );
   }
 
-  Widget _buttonChild({required PasswordFormState state}) {
-    if (state.isSubmitting) {
-      return SizedBox(height: SizeConfig.getWidth(5), width: SizeConfig.getWidth(5), child: CircularProgressIndicator());
-    } else {
-      String text = state.isOldPasswordVerified ? 'Save' : 'Verify';
-      return BoldText3(text: text, context: context, color: Theme.of(context).colorScheme.onSecondary);
-    }
-  }
-
   KeyboardActionsConfig _buildKeyboard({required PasswordFormState state}) {
     return KeyboardActionsConfig(
       keyboardActionsPlatform: KeyboardActionsPlatform.ALL,
@@ -318,12 +317,12 @@ class _PasswordFormState extends State<PasswordForm> {
             focusNode: _oldPasswordFocus,
             toolbarButtons: [
               (node) {
-                return GestureDetector(
-                  onTap: () => node.unfocus(),
+                return TextButton(
+                  onPressed: () => node.unfocus(), 
                   child: Padding(
-                    padding: EdgeInsets.only(right: 16.0),
-                    child: BoldText5(text: 'Done', context: context, color: Theme.of(context).colorScheme.primary),
-                  ),
+                    padding: EdgeInsets.only(right: 16.w),
+                    child: ActionText()
+                  )
                 );
               }
             ]
@@ -332,12 +331,12 @@ class _PasswordFormState extends State<PasswordForm> {
           focusNode: _passwordFocus,
           toolbarButtons: [
             (node) {
-              return GestureDetector(
-                onTap: () => node.unfocus(),
+              return TextButton(
+                onPressed: () => node.unfocus(), 
                 child: Padding(
-                  padding: EdgeInsets.only(right: 16.0),
-                  child: BoldText5(text: 'Done', context: context, color: Theme.of(context).colorScheme.primary),
-                ),
+                  padding: EdgeInsets.only(right: 16.w),
+                  child: ActionText()
+                )
               );
             }
           ]
@@ -346,12 +345,12 @@ class _PasswordFormState extends State<PasswordForm> {
           focusNode: _passwordConfirmationFocus,
           toolbarButtons: [
             (node) {
-              return GestureDetector(
-                onTap: () => node.unfocus(),
+              return TextButton(
+                onPressed: () => node.unfocus(), 
                 child: Padding(
-                  padding: EdgeInsets.only(right: 16.0),
-                  child: BoldText5(text: 'Done', context: context, color: Theme.of(context).colorScheme.primary),
-                ),
+                  padding: EdgeInsets.only(right: 16.w),
+                  child: ActionText()
+                )
               );
             }
           ]

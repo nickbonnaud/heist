@@ -1,7 +1,6 @@
 import 'dart:ui';
 
 import 'package:another_transformer_page_view/another_transformer_page_view.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
@@ -11,15 +10,14 @@ import 'package:heist/models/transaction/purchased_item.dart';
 import 'package:heist/models/unassigned_transaction/unassigned_transaction_resource.dart';
 import 'package:heist/resources/helpers/currency.dart';
 import 'package:heist/resources/helpers/date_formatter.dart';
-import 'package:heist/resources/helpers/size_config.dart';
-import 'package:heist/resources/helpers/text_styles.dart';
-import 'package:heist/resources/helpers/vibrate.dart';
-import 'package:heist/screens/receipt_screen/widgets/purchased_item_widget.dart';
+import 'package:heist/resources/helpers/global_text.dart';
+import 'package:heist/screens/receipt_screen/widgets/widgets/purchased_item_widget.dart';
 import 'package:heist/screens/transaction_picker_screen/bloc/transaction_picker_screen_bloc.dart';
 import 'package:heist/screens/transaction_picker_screen/helpers/picker_transformer.dart';
 import 'package:heist/screens/transaction_picker_screen/widgets/transaction/bloc/transaction_bloc.dart';
 import 'package:heist/themes/global_colors.dart';
 import 'package:collection/collection.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class Transaction extends StatefulWidget {
   final List<UnassignedTransactionResource> _transactions;
@@ -35,19 +33,9 @@ class _TransactionState extends State<Transaction> {
   
   @override
   Widget build(BuildContext context) {
-    return BlocListener<TransactionPickerScreenBloc, TransactionPickerScreenState>(
-      listener: (context, state) {
-        final currentState = state;
-        if (currentState is TransactionsLoaded) {
-          if (currentState.errorMessage.isNotEmpty) {
-            _showSnackbar(context, currentState.errorMessage, currentState);
-          }
-        }
-      },
-      child: Padding(
-        padding: EdgeInsets.only(left: 16, bottom: 16, right: 16),
-        child: _underlayWidget(),
-      )
+    return Padding(
+      padding: EdgeInsets.only(left: 16.w, bottom: 16.h, right: 16.w),
+      child: _underlayWidget(),
     );
   }
 
@@ -59,7 +47,7 @@ class _TransactionState extends State<Transaction> {
 
   Widget _underlayWidget() {
     return Stack(
-      children: <Widget>[
+      children: [
         TransformerPageView(
           pageController: _underlayController,
           transformer: PickerTransformer(),
@@ -73,7 +61,7 @@ class _TransactionState extends State<Transaction> {
             sigmaX: 8.0,
             sigmaY: 8.0
           ),
-          child: _overlayWidget(context)
+          child: _overlayWidget()
         ),
       ],
     );
@@ -82,11 +70,11 @@ class _TransactionState extends State<Transaction> {
   Widget _underlayBody() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: <Widget>[
+      children: [
         Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: <Widget>[
-            SizedBox(height: SizeConfig.getHeight(7)),
+          children: [
+            SizedBox(height: 140.h),
             PurchasedItemWidget(
               purchasedItem: PurchasedItem(name: "Purchased", subName: null, price: 199, quantity: 1, total: 199),
               index: 0,
@@ -106,16 +94,28 @@ class _TransactionState extends State<Transaction> {
             ListTile(),
             //
             Divider(),
-            SizedBox(height:SizeConfig.getHeight(3)),
-            _createFooterRow(context: context, title: "Subtotal", value: 4199),
-            SizedBox(height:SizeConfig.getHeight(1)),
-            _createFooterRow(context: context, title: "Tax", value: 525),
-            SizedBox(height:SizeConfig.getHeight(3)),
+            SizedBox(height: 30.h),
+            _createFooterRow(title: "Subtotal", value: 4199),
+            SizedBox(height: 10.h),
+            _createFooterRow(title: "Tax", value: 525),
+            SizedBox(height: 30.h),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                BoldText2(text: "Total", context: context),
-                BoldText2(text: Currency.create(cents: 4724), context: context),
+              children: [
+                Text(
+                  "Total",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 28.sp,
+                  ),
+                ),
+                Text(
+                  Currency.create(cents: 4724),
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 28.sp,
+                  ),
+                ),
               ],
             )
           ],
@@ -125,7 +125,7 @@ class _TransactionState extends State<Transaction> {
     );
   }
 
-  Widget _overlayWidget(BuildContext context) {
+  Widget _overlayWidget() {
     return TransformerPageView(
       transformer: PickerTransformer(),
       itemCount: widget._transactions.length,
@@ -137,70 +137,82 @@ class _TransactionState extends State<Transaction> {
       },
       itemBuilder: (BuildContext context, int index) {
         return Scaffold(
+          key: Key("overlayBodyKey-$index"),
           backgroundColor: Colors.transparent,
-          body: _overlayBody(index)
+          body: _overlayBody(index: index)
         );
       },
     );
   }
 
-  Widget _overlayBody(int index) {
+  Widget _overlayBody({required int index}) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: <Widget>[
+      children: [
         Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
+          children: [
             Row(
-              children: <Widget>[
+              children: [
                 CachedAvatar(
                   url: widget._transactions[0].business.photos.logo.smallUrl,
-                  radius: 7
+                  radius: 50.w
                 ),
-                SizedBox(width: SizeConfig.getWidth(2)),
+                SizedBox(width: 5.w),
                 Expanded(
-                  child: BoldText2(
-                    text: widget._transactions[0].business.profile.name,
-                    context: context,
+                  child: Column(
+                    children: [
+                      Text(
+                        widget._transactions[0].business.profile.name,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 25.sp
+                        ),
+                      ),
+                      BlocBuilder<TransactionBloc, DateTime?>(
+                        builder: (context, date) {
+                          if (date == null) return Container();
+
+                          return Text(
+                            "Billed: ${DateFormatter.toStringTime(date: date)}",
+                            style: TextStyle(
+                              fontSize: 18.sp,
+                              color: Theme.of(context).colorScheme.onPrimarySubdued,
+                            ),
+                          );
+                        }
+                      )
+                    ],
                   )
                 ),
-                BlocBuilder<TransactionBloc, DateTime?>(
-                  builder: (context, date) {
-                    if (date != null) {
-                      return Text3(
-                        text: "Billed at: ${DateFormatter.toStringDateTime(date: date)}",
-                        context: context, 
-                        color: Theme.of(context).colorScheme.onPrimarySubdued,
-                      );
-                    }
-                    return Container();
-                  }
-                )
               ],
             ),
-            SizedBox(height: SizeConfig.getHeight(27)),
+            SizedBox(height: 255.h),
             _uniquePurchase(widget._transactions[index])
           ],
         ),
         Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: <Widget>[
+          children: [
             Dots(slideIndex: index, numberOfDots: widget._transactions.length),
+            SizedBox(height: 10.h),
             Row(
-              children: <Widget>[
+              children: [
+                SizedBox(width: .1.sw),
                 Expanded(
                   child: BlocBuilder<TransactionPickerScreenBloc, TransactionPickerScreenState>(
                     builder: (context, state) {
-                      final TransactionPickerScreenState currentState = state;
                       return ElevatedButton(
-                        onPressed: currentState is TransactionsLoaded && currentState.claiming
+                        key: Key("claimSubmitButtonKey"),
+                        onPressed: state.claiming
                           ? null
-                          : () => _claimButtonPressed(context, index),
-                        child: _buttonChild(context: context, state: state)
+                          : () => _claimButtonPressed(state: state, index: index),
+                        child: _buttonChild(state: state)
                       );
                     }
                   ) 
-                )
+                ),
+                SizedBox(width: .1.sw)
               ],
             )
           ],
@@ -209,20 +221,16 @@ class _TransactionState extends State<Transaction> {
     );
   }
 
-  Widget _buttonChild({required BuildContext context, required TransactionPickerScreenState state}) {
-    final currentState = state;
-    if (currentState is TransactionsLoaded) {
-      if (currentState.claiming) {
-        SizedBox(height: SizeConfig.getWidth(5), width: SizeConfig.getWidth(5), child: CircularProgressIndicator());
-      } else {
-        return BoldText3(text: 'Claim', context: context, color: Theme.of(context).colorScheme.onSecondary);
-      }
+  Widget _buttonChild({required TransactionPickerScreenState state}) {
+    if (state.claiming) {
+      return SizedBox(height: 25.w, width: 25.w, child: CircularProgressIndicator());
     }
-    return BoldText3(text: 'Claim', context: context, color: Theme.of(context).colorScheme.onSecondary);
+    
+    return ButtonText(text: 'Claim');
   }
 
-  void _claimButtonPressed(BuildContext context, int index) {
-    _showConfirmDialog(context, index);
+  void _claimButtonPressed({required int index, required TransactionPickerScreenState state}) {
+    _showConfirmDialog(state: state, index: index);
   }
   
   Widget _uniquePurchase(UnassignedTransactionResource transaction) {
@@ -243,67 +251,43 @@ class _TransactionState extends State<Transaction> {
         item = purchasedItems[0];
       }
 
-      return PurchasedItem(name: item.name, subName: "Bill same as another.\nCheck 'Billed at' time.", price: item.price, quantity: item.quantity, total: item.total);
+      return PurchasedItem(name: item.name, subName: "Bill same as another.\nCheck 'Billed' time.", price: item.price, quantity: item.quantity, total: item.total);
     });
 
     return PurchasedItemWidget(
       purchasedItem: PurchasedItem(name: uniqueItem.name, subName: uniqueItem.subName, price: uniqueItem.price, quantity: uniqueItem.quantity, total: uniqueItem.total),
-      index: 3,
+      index: 0,
     );
   }
 
-  Widget _createFooterRow({required BuildContext context, required String title, required int value}) {
+  Widget _createFooterRow({required String title, required int value}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: <Widget>[
-        Text2(
-          text: title, 
-          context: context, 
-          color: Theme.of(context).colorScheme.onPrimary
+      children: [
+        Text(
+          title,
+          style: TextStyle(
+            fontSize: 18.sp,
+          ),
         ),
-        Text2(
-          text: Currency.create(cents: value), 
-          context: context, 
-          color: Theme.of(context).colorScheme.onPrimary
+        Text(
+          Currency.create(cents: value),
+          style: TextStyle(
+            fontSize: 18.sp,
+          ),
         )
       ],
     );
   }
 
-  void _showSnackbar(BuildContext context, String message, TransactionsLoaded state) async {
-    state.claimSuccess ? Vibrate.success() : Vibrate.error();
-    final SnackBar snackBar = SnackBar(
-      content: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          Expanded(
-            child: BoldText4(text: message, context: context, color: Theme.of(context).colorScheme.onSecondary)
-          ),
-        ],
-      ),
-      backgroundColor: state.claimSuccess 
-        ? Theme.of(context).colorScheme.iconPrimary
-        : Theme.of(context).colorScheme.error,
-    );
-
-    ScaffoldMessenger.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(snackBar)
-      .closed.then((_) => {
-        if (state.errorMessage.isNotEmpty) {
-          BlocProvider.of<TransactionPickerScreenBloc>(context).add(Reset())
-        }
-      }
-    );
-  }
-
-  void _showConfirmDialog(BuildContext context, int index) {
+  void _showConfirmDialog({required TransactionPickerScreenState state, required int index}) {
     showPlatformDialog(
       context: context, 
       builder: (_) => PlatformAlertDialog(
+        key: Key("confirmClaimDialogKey"),
         title: PlatformText("Are you Sure?"),
         content: PlatformText("Claiming a transaction is final. Please be sure this transaction is yours."),
-        actions: <Widget>[
+        actions: [
           PlatformDialogAction(
             child: PlatformText('Cancel'), 
             onPressed: () => Navigator.of(context).pop(false)
@@ -314,8 +298,9 @@ class _TransactionState extends State<Transaction> {
           ),
         ],
       )
-    ).then((confirmed) => confirmed 
-      ?  BlocProvider.of<TransactionPickerScreenBloc>(context).add(Claim(transactionIdentifier: widget._transactions[index].transaction.identifier))
-      : null);
+    ).then((confirmed) => confirmed
+      ? BlocProvider.of<TransactionPickerScreenBloc>(context).add(Claim(unassignedTransaction: widget._transactions[index]))
+      : null
+    );
   }
 }

@@ -81,7 +81,7 @@ class HomeScreenTest {
     await tester.tap(find.byKey(Key("nearbyLogoButtonKey-0")));
     await tester.pumpAndSettle();
 
-    await businessScreenTest.initLogoButton();
+    await businessScreenTest.initLogoButtonNearby();
   }
 
   Future<void> _tapActiveLocationLogo() async {
@@ -95,7 +95,7 @@ class HomeScreenTest {
     await tester.tap(find.byKey(Key("activeLogoButtonKey-0")));
     await tester.pumpAndSettle();
 
-    await businessScreenTest.initLogoButton();
+    await businessScreenTest.initLogoButtonActive();
   }
 
   Future<void> _horizontalScrollPeekSheet() async {

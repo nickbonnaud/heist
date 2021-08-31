@@ -90,10 +90,10 @@ class LoginScreenTest {
   }
 
   Future<void> _tapSubmitButtonSuccess() async {
-    expect(find.byKey(Key("loginButtonTextKey")), findsNWidgets(2));
+    expect(find.byKey(Key("loginButtonTextKey")), findsOneWidget);
     expect(find.byType(CircularProgressIndicator), findsNothing);
 
-    await tester.tap(find.byKey(Key("loginButtonTextKey")).first);
+    await tester.tap(find.byKey(Key("loginButtonTextKey")));
     await tester.pump();
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
   }

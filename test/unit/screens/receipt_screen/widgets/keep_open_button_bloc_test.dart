@@ -6,7 +6,7 @@ import 'package:heist/models/transaction/transaction_resource.dart';
 import 'package:heist/repositories/transaction_repository.dart';
 import 'package:heist/resources/helpers/api_exception.dart';
 import 'package:heist/screens/receipt_screen/bloc/receipt_screen_bloc.dart';
-import 'package:heist/screens/receipt_screen/widgets/keep_open_button/bloc/keep_open_button_bloc.dart';
+import 'package:heist/screens/receipt_screen/widgets/widgets/keep_open_button/bloc/keep_open_button_bloc.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockTransactionRepository extends Mock implements TransactionRepository {}

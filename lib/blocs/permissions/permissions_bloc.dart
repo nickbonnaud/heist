@@ -108,20 +108,20 @@ class PermissionsBloc extends Bloc<PermissionsEvent, PermissionsState> {
         _permissionsChecker.notificationEnabled(),
         _permissionsChecker.beaconEnabled(),
       ]);
-      yield state.update(
-        bleEnabled: true,
-        locationEnabled: true,
-        notificationEnabled: true,
-        beaconEnabled: true,
-        checksComplete: true,
-      );
       // yield state.update(
-      //   bleEnabled: results[0],
-      //   locationEnabled: results[1],
-      //   notificationEnabled: results[2],
-      //   beaconEnabled: results[3],
+      //   bleEnabled: true,
+      //   locationEnabled: true,
+      //   notificationEnabled: true,
+      //   beaconEnabled: true,
       //   checksComplete: true,
       // );
+      yield state.update(
+        bleEnabled: results[0],
+        locationEnabled: results[1],
+        notificationEnabled: results[2],
+        beaconEnabled: results[3],
+        checksComplete: true,
+      );
     } else {
       add(IsInitialLogin());
     }

@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:heist/blocs/geo_location/geo_location_bloc.dart';
 import 'package:heist/models/business/business.dart';
 import 'package:heist/resources/helpers/distance_calculator.dart';
-import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/routing/routes.dart';
 import 'package:heist/screens/home_screen/blocs/business_screen_visible_cubit.dart';
 import 'package:heist/themes/global_colors.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class Details extends StatefulWidget {
   final String _keyValue;
@@ -60,7 +59,7 @@ class _DetailsState extends State<Details> with SingleTickerProviderStateMixin {
         return Opacity(
           opacity: _detailsController.value,
           child: Padding(
-            padding: EdgeInsets.only(right: 4),
+            padding: EdgeInsets.only(right: 4.w),
             child: GestureDetector(
               key: Key(widget._keyValue),
               onTap: () => _viewBusinessModal(),
@@ -75,7 +74,7 @@ class _DetailsState extends State<Details> with SingleTickerProviderStateMixin {
                     borderRadius: BorderRadius.circular(widget._borderRadius),
                     color: Theme.of(context).colorScheme.scrollBackground
                   ),
-                  padding: EdgeInsets.only(left: widget._height).add(EdgeInsets.all(8)),
+                  padding: EdgeInsets.only(left: widget._height).add(EdgeInsets.symmetric(horizontal: 8.w, vertical: 8.h)),
                   child: _buildContent(),
                 ),
               ),
@@ -95,26 +94,26 @@ class _DetailsState extends State<Details> with SingleTickerProviderStateMixin {
   Widget _buildContent() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: <Widget>[
-        PlatformText(
+      children: [
+        Text(
           "${widget._business.profile.name}",
           style: TextStyle(
-            fontSize: SizeConfig.getWidth(4) * widget._controller.value,
+            fontSize: 16.sp * widget._controller.value,
             fontWeight: FontWeight.bold,
             color: Theme.of(context).colorScheme.onPrimary
           ),
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
+          children: [
             Icon(Icons.pin_drop),
             BlocBuilder<GeoLocationBloc, GeoLocationState>(
               builder: (context, state) {
                 if (state is LocationLoaded) {
-                  return PlatformText(
+                  return Text(
                     "${_getDistance(state: state)} miles away.",
                     style: TextStyle(
-                      fontSize: SizeConfig.getWidth(4) * widget._controller.value,
+                      fontSize: 16.sp * widget._controller.value,
                       fontWeight: FontWeight.normal,
                       color: Theme.of(context).colorScheme.onPrimarySubdued,
                     ),

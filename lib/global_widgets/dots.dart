@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class Dots extends StatelessWidget {
   final int _slideIndex;
@@ -30,13 +31,13 @@ class Dots extends StatelessWidget {
   Widget _activeSlide({required int index, required BuildContext context}) {
     return Container(
       child: Padding(
-        padding: EdgeInsets.only(left: 8.0, right: 8.0),
+        padding: EdgeInsets.symmetric(horizontal: 8.w),
         child: Container(
-          width: 20.0,
-          height: 20.0,
+          width: 20.w,
+          height: 20.w,
           decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.secondary.withOpacity(0.3),
-            borderRadius: BorderRadius.circular(50.0)
+            borderRadius: BorderRadius.circular(50.w)
           ),
         ),
       ),
@@ -46,13 +47,13 @@ class Dots extends StatelessWidget {
   Widget _inactiveSlide({required int index, required BuildContext context}) {
     return Container(
       child: Padding(
-        padding: EdgeInsets.only(left: 5.0, right: 5.0),
+        padding: EdgeInsets.only(left: 5.w, right: 5.w),
         child: Container(
-          width: 14.0,
-          height: 14.0,
+          width: 10.w,
+          height: 10.w,
           decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.surface.withOpacity(0.7),
-            borderRadius: BorderRadius.circular(50.0)
+            borderRadius: BorderRadius.circular(50.w)
           ),
         ),
       ),

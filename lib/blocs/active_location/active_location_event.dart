@@ -8,27 +8,40 @@ abstract class ActiveLocationEvent extends Equatable {
 }
 
 class NewActiveLocation extends ActiveLocationEvent {
-  final String beaconIdentifier;
+  final Beacon beacon;
 
-  NewActiveLocation({required this.beaconIdentifier});
-
-  @override
-  List<Object> get props => [beaconIdentifier];
+   const NewActiveLocation({required this.beacon});
 
   @override
-  String toString() => 'NewActiveLocation { beaconIdentifier: $beaconIdentifier }';
+  List<Object> get props => [beacon];
+
+  @override
+  String toString() => 'NewActiveLocation { beacon: $beacon }';
 }
 
 class RemoveActiveLocation extends ActiveLocationEvent {
-  final String beaconIdentifier;
+  final Beacon beacon;
 
-  RemoveActiveLocation({required this.beaconIdentifier});
-
-  @override
-  List<Object> get props => [beaconIdentifier];
+  const RemoveActiveLocation({required this.beacon});
 
   @override
-  String toString() => 'RemoveActiveLocation { beaconIdentifier: $beaconIdentifier }';
+  List<Object> get props => [beacon];
+
+  @override
+  String toString() => 'RemoveActiveLocation { beacon: $beacon }';
+}
+
+class TransactionAdded extends ActiveLocationEvent {
+  final Business business;
+  final String transactionIdentifier;
+
+  const TransactionAdded({required this.business, required this.transactionIdentifier});
+
+  @override
+  List<Object> get props => [business, transactionIdentifier];
+
+  @override
+  String toString() => 'TransactionAdded { business: $business, transactionIdentifier: $transactionIdentifier }';
 }
 
 class ResetActiveLocations extends ActiveLocationEvent {}

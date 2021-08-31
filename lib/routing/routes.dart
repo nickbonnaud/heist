@@ -14,6 +14,10 @@ class Routes {
 
   static const String business = '/business';
 
+  static const String transactionBusinessPicker = '/transaction-business-picker';
+
+  static const String transactionPicker = '/transaction-picker';
+
   static const String tutorial = '/tutorial';
 
   static const String transactions = '/transactions';
@@ -30,7 +34,7 @@ class Routes {
   static const String email = '/settings/email';
   static const String password = '/settings/password';
   static const String tips = '/settings/tips';
-  static const String logout = 'settings/logout';
+  static const String logout = '/settings/logout';
 
   static const String helpTickets = '/help-tickets';
   static const String helpTicketDetails = '/help-tickets/details';

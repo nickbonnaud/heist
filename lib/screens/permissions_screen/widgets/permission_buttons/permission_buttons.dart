@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_beacon/flutter_beacon.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,11 +6,11 @@ import 'package:heist/blocs/geo_location/geo_location_bloc.dart';
 import 'package:heist/blocs/permissions/permissions_bloc.dart';
 import 'package:heist/repositories/initial_login_repository.dart';
 import 'package:heist/resources/constants.dart';
-import 'package:heist/resources/helpers/size_config.dart';
-import 'package:heist/resources/helpers/text_styles.dart';
+import 'package:heist/resources/helpers/global_text.dart';
 import 'package:heist/test_blocs/is_testing_cubit.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'bloc/permission_buttons_bloc.dart';
 
@@ -42,15 +41,16 @@ class PermissionButtons extends StatelessWidget {
       builder: (context, enabled) {
         return Row(
           children: [
-            SizedBox(width: SizeConfig.getWidth(20)),
-            Expanded(child: ElevatedButton(
-              key: Key("${_permission.toString().replaceAll("PermissionType.", '')}ButtonKey"),
+            SizedBox(width: .1.sw),
+            Expanded(
+              child: ElevatedButton(
+                key: Key("${_permission.toString().replaceAll("PermissionType.", '')}ButtonKey"),
                 onPressed: enabled 
                   ? () => _requestPermission(context: context, permission: _permission)
                   : null,
-                child: BoldText3(text: 'Enable', context: context, color: Theme.of(context).colorScheme.onSecondary)
+                child: ButtonText(text: 'Enable')
               )),
-            SizedBox(width: SizeConfig.getWidth(20)),
+            SizedBox(width: .1.sw),
           ]
         );
       }
@@ -154,13 +154,13 @@ class PermissionButtons extends StatelessWidget {
         content: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            SizedBox(height: SizeConfig.getHeight(1)),
+            SizedBox(height: 10.h),
             PlatformText(body),
-            SizedBox(height: SizeConfig.getHeight(2)),
+            SizedBox(height: 15.h),
             PlatformText("* May restart app")
           ],
         ),
-        actions: <Widget>[
+        actions: [
           PlatformDialogAction(
             child: PlatformText('Cancel'),
             onPressed: () => Navigator.pop(context)

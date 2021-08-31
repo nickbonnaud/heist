@@ -6,6 +6,8 @@ import 'package:heist/repositories/active_location_repository.dart';
 import 'package:heist/resources/helpers/api_exception.dart';
 import 'package:mocktail/mocktail.dart';
 
+import '../../helpers/mock_data_generator.dart';
+
 class MockActiveLocationProvider extends Mock implements ActiveLocationProvider {}
 
 void main() {
@@ -21,7 +23,7 @@ void main() {
     });
 
     test("Active Location Repository can create ActiveLocation", () async {
-      var activeLocation = await activeLocationRepository.enterBusiness(beaconIdentifier: "beaconIdentifier");
+      var activeLocation = await activeLocationRepository.enterBusiness(beacon: MockDataGenerator().createBeacon());
       expect(activeLocation, isA<ActiveLocation>());
     });
 
@@ -30,7 +32,7 @@ void main() {
         .thenAnswer((_) async => ApiResponse(body: {}, error: "error", isOK: false));
 
       expect(
-        activeLocationRepositoryWithMock.enterBusiness(beaconIdentifier: "beaconIdentifier"),
+        activeLocationRepositoryWithMock.enterBusiness(beacon: MockDataGenerator().createBeacon()),
         throwsA(isA<ApiException>())
       );
     });

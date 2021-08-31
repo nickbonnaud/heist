@@ -2,6 +2,10 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
+import 'package:heist/blocs/active_location/active_location_bloc.dart';
+import 'package:heist/blocs/open_transactions/open_transactions_bloc.dart';
+import 'package:heist/models/business/business.dart';
 import 'package:heist/models/transaction/transaction_resource.dart';
 import 'package:heist/models/unassigned_transaction/unassigned_transaction_resource.dart';
 import 'package:heist/repositories/transaction_repository.dart';
@@ -12,10 +16,18 @@ part 'transaction_picker_screen_state.dart';
 
 class TransactionPickerScreenBloc extends Bloc<TransactionPickerScreenEvent, TransactionPickerScreenState> {
   final TransactionRepository _transactionRepository;
+  final ActiveLocationBloc _activeLocationBloc;
+  final OpenTransactionsBloc _openTransactionsBloc;
 
-  TransactionPickerScreenBloc({required TransactionRepository transactionRepository})
+  TransactionPickerScreenBloc({
+    required TransactionRepository transactionRepository,
+    required ActiveLocationBloc activeLocationBloc,
+    required OpenTransactionsBloc openTransactionsBloc
+  })
     : _transactionRepository = transactionRepository,
-      super(Uninitialized());
+      _activeLocationBloc = activeLocationBloc,
+      _openTransactionsBloc = openTransactionsBloc,
+      super(TransactionPickerScreenState.initial());
 
   @override
   Stream<TransactionPickerScreenState> mapEventToState(TransactionPickerScreenEvent event) async* {
@@ -29,32 +41,36 @@ class TransactionPickerScreenBloc extends Bloc<TransactionPickerScreenEvent, Tra
   }
 
   Stream<TransactionPickerScreenState> _mapFetchToState(Fetch event) async* {
-    yield Loading();
+    yield state.update(loading: true);
     try {
       final List<UnassignedTransactionResource> transactions = await _transactionRepository.fetchUnassigned(businessIdentifier: event.businessIdentifier);
-      yield TransactionsLoaded(transactions: transactions);
+      yield state.update(loading: false, transactions: transactions);
     } on ApiException catch (exception) {
-      yield FetchFailure(errorMessage: exception.error);
+      yield state.update(loading: false, errorMessage: exception.error);
     }
   }
 
   Stream<TransactionPickerScreenState> _mapClaimToState(Claim event) async* {
-    final currentState = state;
-    if (currentState is TransactionsLoaded) {
-      yield currentState.update(claiming: true);
-      try {
-        final TransactionResource transaction = await _transactionRepository.claimUnassigned(transactionId: event.transactionIdentifier);
-        yield currentState.update(claiming: false, claimSuccess: true, transaction: transaction);
-      } on ApiException catch (exception) {
-        yield currentState.update(claiming: false, errorMessage: exception.error);
-      }
+    yield state.update(claiming: true);
+    try {
+      final TransactionResource transaction = await _transactionRepository.claimUnassigned(transactionId: event.unassignedTransaction.transaction.identifier);
+      _updateBlocs(transaction: transaction, business: event.unassignedTransaction.business);
+      yield state.update(claiming: false, claimSuccess: true, transaction: transaction);
+    } on ApiException catch (exception) {
+      yield state.update(claiming: false, errorMessage: exception.error);
     }
   }
 
   Stream<TransactionPickerScreenState> _mapResetToState() async* {
-    final currentState = state;
-    if (currentState is TransactionsLoaded) {
-      yield currentState.update(claiming: false, errorMessage: "", claimSuccess: false);
-    }
+    yield state.update(claiming: false, errorMessage: "", claimSuccess: false);
+  }
+
+  void _updateBlocs({required TransactionResource transaction, required Business business}) {
+    _activeLocationBloc.add(TransactionAdded(
+      business: business,
+      transactionIdentifier: transaction.transaction.identifier
+    ));
+
+    _openTransactionsBloc.add(AddOpenTransaction(transaction: transaction));
   }
 }

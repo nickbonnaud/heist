@@ -17,7 +17,7 @@ class HistoricTransactionsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<DefaultAppBarBloc>(
-      create: (BuildContext context) => DefaultAppBarBloc(),
+      create: (_) => DefaultAppBarBloc(),
       child: BlocProvider<HistoricTransactionsBloc>(
         create: (BuildContext context) => HistoricTransactionsBloc(transactionRepository: _transactionRepository)
           ..add(FetchHistoricTransactions()),

@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
-import 'package:heist/resources/helpers/size_config.dart';
-import 'package:heist/resources/helpers/text_styles.dart';
-import 'package:heist/themes/global_colors.dart';
+import 'package:heist/resources/helpers/global_text.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ErrorCard extends StatelessWidget {
   final String _body;
@@ -18,7 +16,7 @@ class ErrorCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width,
-      padding: EdgeInsets.only(left: 8, right: 8, bottom: 20),
+      padding: EdgeInsets.only(left: 8.w, right: 8.w, bottom: 20.h),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.background,
         boxShadow: [
@@ -26,7 +24,7 @@ class ErrorCard extends StatelessWidget {
             color: Colors.grey.withOpacity(0.3),
             spreadRadius: 1.0,
             blurRadius: 5,
-            offset: Offset(0, -5)
+            offset: Offset(0, -5.h)
           )
         ]
       ),
@@ -36,14 +34,20 @@ class ErrorCard extends StatelessWidget {
           Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              SizedBox(height: SizeConfig.getHeight(2)),
-              VeryBoldText2(text: "Malfunction!", context: context),
-              SizedBox(height: SizeConfig.getHeight(6)),
-              PlatformText(_body,
+              SizedBox(height: 18.h),
+              Text(
+                "Malfunction!",
+                style: TextStyle(
+                  fontWeight: FontWeight.w900,
+                  fontSize: 30.sp
+                ),
+              ),
+              SizedBox(height: 40.h),
+              Text(
+                _body,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  color: Theme.of(context).colorScheme.onPrimarySubdued,
-                  fontSize: SizeConfig.getWidth(6),
+                  fontSize: 22.sp,
                   fontWeight: FontWeight.bold
                 ),
               )
@@ -52,14 +56,14 @@ class ErrorCard extends StatelessWidget {
           _onButtonPressed != null
             ? Row(
                 children: [
-                  SizedBox(width: SizeConfig.getWidth(20)),
+                  SizedBox(width: .1.sw),
                   Expanded(
                     child: ElevatedButton(
                       onPressed: _onButtonPressed,
-                      child: BoldText3(text: _buttonText!, context: context, color: Theme.of(context).colorScheme.onSecondary),
+                      child: ButtonText(text: _buttonText!)
                     )
                   ),
-                  SizedBox(width: SizeConfig.getWidth(20)),
+                  SizedBox(width: .1.sw),
                 ],
               )
             : Container()

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:heist/screens/receipt_screen/receipt_screen.dart';
-import 'package:heist/screens/receipt_screen/widgets/call_button.dart';
 import 'package:heist/screens/receipt_screen/widgets/receipt_screen_body.dart';
+import 'package:heist/screens/receipt_screen/widgets/widgets/call_button.dart';
 
 import '../helpers/test_title.dart';
 import 'issue_screen_test.dart';
@@ -50,6 +50,15 @@ class ReceiptScreenTest {
 
   Future<void> initRefunds() async {
     TestTitle.write(testName: "Receipt Screen Refunds Tests");
+
+    expect(find.byType(ReceiptScreen), findsOneWidget);
+
+    await _dismiss();
+    expect(find.byType(ReceiptScreenBody), findsNothing);
+  }
+
+  Future<void> initTransactionPicker() async {
+    TestTitle.write(testName: "Receipt Screen Transaction Picker Tests");
 
     expect(find.byType(ReceiptScreen), findsOneWidget);
 

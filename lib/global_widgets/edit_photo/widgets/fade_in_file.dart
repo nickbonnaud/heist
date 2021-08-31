@@ -1,16 +1,14 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:heist/resources/helpers/size_config.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class FadeInFile extends StatefulWidget {
   final XFile _imageFile;
-  final double _size;
 
-  FadeInFile({required XFile imageFile, double size = 25})
-    : _imageFile = imageFile,
-      _size = size;
+  FadeInFile({required XFile imageFile})
+    : _imageFile = imageFile;
 
   @override
   State<FadeInFile> createState() => _FadeInFileState();
@@ -35,7 +33,7 @@ class _FadeInFileState extends State<FadeInFile> with SingleTickerProviderStateM
       duration: Duration(milliseconds: 800),
       child: CircleAvatar(
         backgroundImage: Image.file(File(widget._imageFile.path)).image,
-        radius: SizeConfig.getWidth(widget._size),
+        radius: 100.w,
         backgroundColor: Colors.transparent,
       )
     );

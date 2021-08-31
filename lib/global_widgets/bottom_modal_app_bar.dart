@@ -1,10 +1,9 @@
 import 'dart:math';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:heist/resources/helpers/size_config.dart';
-import 'package:heist/resources/helpers/text_styles.dart';
+import 'package:heist/resources/helpers/global_text.dart';
 import 'package:heist/themes/global_colors.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class BottomModalAppBar extends StatefulWidget implements PreferredSizeWidget {
   final Color _backgroundColor;
@@ -54,7 +53,7 @@ class _BottomModalAppBarState extends State<BottomModalAppBar> with TickerProvid
       snap: false,
       elevation: 0,
       backgroundColor: widget._backgroundColor,
-      actions: <Widget>[
+      actions: [
         if (widget._trailingWidget != null)
           widget._trailingWidget!
       ],
@@ -64,10 +63,12 @@ class _BottomModalAppBarState extends State<BottomModalAppBar> with TickerProvid
 
   AppBar _buildDefaultAppBar({required BuildContext context}) {
     return AppBar(
-      title: widget._title != null ? BoldText2(text: widget._title!, context: context) : null,
+      title: widget._title != null
+        ? AppBarTitle(text: widget._title!)
+        : null,
       elevation: 0,
       backgroundColor: widget._backgroundColor,
-      actions: <Widget>[
+      actions: [
         if (widget._trailingWidget != null)
           widget._trailingWidget!
       ],
@@ -84,7 +85,7 @@ class _BottomModalAppBarState extends State<BottomModalAppBar> with TickerProvid
           icon: Icon(Icons.arrow_downward),
           onPressed: () => Navigator.of(context).pop(),
           color: Theme.of(context).colorScheme.topAppBarIcon,
-          iconSize: SizeConfig.getWidth(10),
+          iconSize: 40.w,
         ),
       )
     );

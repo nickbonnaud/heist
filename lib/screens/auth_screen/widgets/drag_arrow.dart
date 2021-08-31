@@ -1,11 +1,11 @@
 import 'dart:math' as math;
 
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/themes/global_colors.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../auth_screen.dart';
 import 'cubit/keyboard_visible_cubit.dart';
@@ -40,8 +40,8 @@ class _DragArrowState extends State<DragArrow> with SingleTickerProviderStateMix
     return Consumer<AnimationController>(
       builder: (context, animation, child) {
         return Positioned(
-          top: topMargin(context: context) + (1 - animation.value) * (mainSquareSize(context: context) + SizeConfig.getHeight(4)),
-          right: SizeConfig.getWidth(6),
+          top: topMargin(context: context) + (1 - animation.value) * (mainSquareSize(context: context) + 35.h),
+          right: 25.w,
           child: Transform.rotate(
             angle: math.pi * animation.value,
             child: GestureDetector(
@@ -70,7 +70,7 @@ class _DragArrowState extends State<DragArrow> with SingleTickerProviderStateMix
             opacity: keyboardVisible ? 0 : 1,
             child: Icon(
               Icons.arrow_upward,
-              size: SizeConfig.getWidth(8),
+              size: 35.w,
               color: Theme.of(context).colorScheme.callToAction,
             ),
           );

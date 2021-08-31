@@ -1,10 +1,9 @@
 import 'package:heist/models/transaction/transaction_resource.dart';
 import 'package:heist/resources/helpers/currency.dart';
-import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/routing/routes.dart';
 import 'package:heist/themes/global_colors.dart';
-import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class Details extends StatefulWidget {
   final String _keyValue;
@@ -57,7 +56,7 @@ class _DetailsState extends State<Details> with SingleTickerProviderStateMixin {
         return Opacity(
           opacity: _detailsController.value,
           child: Padding(
-            padding: EdgeInsets.only(right: 4),
+            padding: EdgeInsets.only(right: 4.w),
             child: GestureDetector(
               key: Key(widget._keyValue),
               onTap: () => _viewReceiptModal(),
@@ -72,7 +71,7 @@ class _DetailsState extends State<Details> with SingleTickerProviderStateMixin {
                     borderRadius: BorderRadius.circular(widget._borderRadius),
                     color: Theme.of(context).colorScheme.scrollBackground
                   ),
-                  padding: EdgeInsets.only(left: widget._height).add(EdgeInsets.all(8)),
+                  padding: EdgeInsets.only(left: widget._height).add(EdgeInsets.symmetric(horizontal: 8.w, vertical: 8.h)),
                   child: _buildContent(),
                 ),
               ),
@@ -86,30 +85,30 @@ class _DetailsState extends State<Details> with SingleTickerProviderStateMixin {
   Widget _buildContent() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: <Widget>[
-        PlatformText(
+      children: [
+        Text(
           "Bill at ${widget._transactionResource.business.profile.name}",
           style: TextStyle(
-            fontSize: SizeConfig.getWidth(4) * widget._controller.value,
+            fontSize: 16.sp * widget._controller.value,
             fontWeight: FontWeight.bold,
             color: Theme.of(context).colorScheme.onPrimary
           ),
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            PlatformText(
+          children: [
+            Text(
               "Total:",
               style: TextStyle(
-                fontSize: SizeConfig.getWidth(4) * widget._controller.value,
+                fontSize: 16.sp * widget._controller.value,
                 fontWeight: FontWeight.normal,
                 color: Theme.of(context).colorScheme.onPrimarySubdued,
               ),
             ),
-            PlatformText(
+            Text(
               Currency.create(cents: widget._transactionResource.transaction.total),
               style: TextStyle(
-                fontSize: SizeConfig.getWidth(4) * widget._controller.value,
+                fontSize: 16.sp * widget._controller.value,
                 fontWeight: FontWeight.bold,
                 color: Theme.of(context).colorScheme.onPrimary
               ),

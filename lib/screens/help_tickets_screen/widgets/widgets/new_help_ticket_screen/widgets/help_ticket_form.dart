@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:heist/resources/helpers/size_config.dart';
-import 'package:heist/resources/helpers/text_styles.dart';
+import 'package:heist/resources/helpers/global_text.dart';
 import 'package:heist/resources/helpers/vibrate.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
 import 'package:heist/themes/global_colors.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../bloc/help_ticket_form_bloc.dart';
 
@@ -43,7 +43,7 @@ class _HelpTicketFormState extends State<HelpTicketForm> {
       },
       child: Form(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16.0),
+          padding: EdgeInsets.symmetric(horizontal: 16.w),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -51,9 +51,9 @@ class _HelpTicketFormState extends State<HelpTicketForm> {
                 child: KeyboardActions(
                   config: _buildKeyboard(),
                   child: Column(
-                    mainAxisAlignment:  MainAxisAlignment.spaceEvenly,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      VeryBoldText2(text: 'Create Help Ticket', context: context),
+                      ScreenTitle(title: 'New Help Ticket'),
                       _subjectField(),
                       _messageField()
                     ],
@@ -61,13 +61,13 @@ class _HelpTicketFormState extends State<HelpTicketForm> {
                 )
               ),
               Padding(
-                padding: EdgeInsets.only(bottom: 16),
+                padding: EdgeInsets.only(bottom: 16.h),
                 child: Row(
                   children: [
                     Expanded(
                       child: _cancelButton()
                     ),
-                    SizedBox(width: 20.0),
+                    SizedBox(width: 20.w),
                     Expanded(
                       child: _submitButton()
                     )
@@ -101,12 +101,12 @@ class _HelpTicketFormState extends State<HelpTicketForm> {
             labelText: 'Subject',
             labelStyle: TextStyle(
               fontWeight: FontWeight.w400,
-              fontSize: SizeConfig.getWidth(5)
+              fontSize: 25.sp
             )
           ),
           style: TextStyle(
             fontWeight: FontWeight.w700,
-            fontSize: SizeConfig.getWidth(5)
+            fontSize: 28.sp
           ),
           controller: _subjectController,
           focusNode: _subjectFocus,
@@ -133,12 +133,12 @@ class _HelpTicketFormState extends State<HelpTicketForm> {
             labelText: "Message",
             labelStyle: TextStyle(
               fontWeight: FontWeight.w400,
-              fontSize: SizeConfig.getWidth(5)
+              fontSize: 25.sp
             ),
           ),
           style: TextStyle(
             fontWeight: FontWeight.w500,
-            fontSize: SizeConfig.getWidth(5)
+            fontSize: 28.sp
           ),
           controller: _messageController,
           focusNode: _messageFocus,
@@ -162,7 +162,7 @@ class _HelpTicketFormState extends State<HelpTicketForm> {
         return OutlinedButton(
           key: Key("cancelButtonKey"),
           onPressed: state.isSubmitting ? null : () => _cancelButtonPressed(),
-          child: BoldText3(text: 'Cancel', context: context, color: state.isSubmitting 
+          child: ButtonText(text: 'Cancel', color: state.isSubmitting 
             ? Theme.of(context).colorScheme.callToActionDisabled
             : Theme.of(context).colorScheme.callToAction
           ),
@@ -183,6 +183,13 @@ class _HelpTicketFormState extends State<HelpTicketForm> {
         );
       },
     );
+  }
+
+  Widget _buttonChild({required HelpTicketFormState state}) {
+    if (state.isSubmitting) {
+      return SizedBox(height: 25.w, width: 25.w, child: CircularProgressIndicator());
+    }
+    return ButtonText(text: "Submit");
   }
 
   void _onSubjectChanged() {
@@ -217,7 +224,7 @@ class _HelpTicketFormState extends State<HelpTicketForm> {
       content: Row(
         children: [
           Expanded(
-            child: BoldText4(text: text, context: context, color: Theme.of(context).colorScheme.onSecondary)
+            child: SnackbarText(text: text)
           )
         ],
       ),
@@ -237,13 +244,6 @@ class _HelpTicketFormState extends State<HelpTicketForm> {
         }
       }
     );
-  }
-
-  Widget _buttonChild({required HelpTicketFormState state}) {
-    if (state.isSubmitting) {
-      return SizedBox(height: SizeConfig.getWidth(5), width: SizeConfig.getWidth(5), child: CircularProgressIndicator());
-    }
-    return BoldText3(text: "Submit", context: context, color: Theme.of(context).colorScheme.onSecondary);
   }
   
   KeyboardActionsConfig _buildKeyboard() {
@@ -267,11 +267,11 @@ class _HelpTicketFormState extends State<HelpTicketForm> {
   }
 
   Widget _toolBarButton({required FocusNode node}) {
-    return GestureDetector(
-      onTap: () => node.unfocus(),
+    return TextButton(
+      onPressed: () => node.unfocus(),
       child: Padding(
-        padding: EdgeInsets.only(right: 16.0),
-        child: BoldText5(text: 'Done', context: context, color: Theme.of(context).primaryColor),
+        padding: EdgeInsets.only(right: 16.w),
+        child: ActionText()
       ),
     );
   }

@@ -5,6 +5,7 @@ import 'package:heist/models/transaction/transaction_resource.dart';
 import 'package:heist/routing/routes.dart';
 import 'package:heist/themes/global_colors.dart';
 import 'package:transparent_image/transparent_image.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'bloc/logo_transaction_button_bloc.dart';
 
@@ -57,7 +58,7 @@ class _LogoTransactionButtonState extends State<LogoTransactionButton> with Sing
       onTapUp: (_) => _toggleButtonPress(),
       onTap: () => _showCurrentTransaction(),
       child: Stack(
-        children: <Widget>[
+        children: [
           BlocBuilder<LogoTransactionButtonBloc, LogoTransactionButtonState>(
             builder: (context, state) {
               return Material(
@@ -80,13 +81,19 @@ class _LogoTransactionButtonState extends State<LogoTransactionButton> with Sing
           ),
           if ((widget._transactionResource.issue?.warningsSent ?? 0) != 0 && widget._transactionResource.transaction.status.code >= 500)
             Positioned(
-              bottom: 2.0,
-              left: 10.0,
+              bottom: 2.h,
+              left: 10.w,
               child: _createWarningIcon()
             )
         ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   Widget _createWarningIcon() {
@@ -120,11 +127,5 @@ class _LogoTransactionButtonState extends State<LogoTransactionButton> with Sing
 
   void _showCurrentTransaction() {
     Navigator.of(context).pushNamed(Routes.receipt, arguments: widget._transactionResource);
-  }
-  
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
   }
 }

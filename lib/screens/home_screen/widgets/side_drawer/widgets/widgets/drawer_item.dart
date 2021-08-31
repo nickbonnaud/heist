@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:heist/resources/helpers/text_styles.dart';
 import 'package:heist/themes/global_colors.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class DrawerItem extends StatelessWidget {
   final Key _key;
@@ -17,21 +17,28 @@ class DrawerItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 2.0),
+      padding: EdgeInsets.symmetric(vertical: 2.h),
       child: Material(
         color: Colors.transparent,
         child: InkWell(
           key: _key,
           onTap: _onPressed,
           child: Padding(
-            padding: EdgeInsets.symmetric(vertical: 8.0),
+            padding: EdgeInsets.symmetric(vertical: 8.h),
             child: Row(
-              children: <Widget>[
+              children: [
                 Container(
-                  padding: EdgeInsets.only(left: 16.0, right: 8.0),
+                  padding: EdgeInsets.symmetric(horizontal: 16.w),
                   child: _icon,
                 ),
-                BoldText3(text: _text, context: context, color: Theme.of(context).colorScheme.callToAction)
+                Text(
+                  _text,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 25.sp,
+                    color: Theme.of(context).colorScheme.callToAction
+                  ),
+                )
               ],
             ),
           ),

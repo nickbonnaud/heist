@@ -1,13 +1,12 @@
 
 import 'dart:math' as math;
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heist/models/business/business.dart';
-import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/routing/routes.dart';
 import 'package:heist/screens/refunds_screen/bloc/refunds_screen_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'bloc/filter_button_bloc.dart';
 
@@ -32,8 +31,8 @@ class FilterButton extends StatefulWidget {
 }
 
 class _FilterButtonState extends State<FilterButton> with SingleTickerProviderStateMixin {
-  final double _expandedSize = SizeConfig.getWidth(60);
-  final double _hiddenSize = SizeConfig.getWidth(1);
+  final double _expandedSize = 225.w;
+  final double _hiddenSize = 1.w;
   late AnimationController _controller;
   late Animation<Color?> _colorAnimation;
 
@@ -64,7 +63,7 @@ class _FilterButtonState extends State<FilterButton> with SingleTickerProviderSt
           builder: (BuildContext context, Widget? child) {
             return Stack(
               alignment: Alignment.center,
-              children: <Widget>[
+              children: [
                 _buildExpandedBackground(),
                 _buildOption(
                   option: Option.all, 
@@ -122,7 +121,7 @@ class _FilterButtonState extends State<FilterButton> with SingleTickerProviderSt
     
     double iconSize = 0.0;
     if (_controller.value > 0.8) {
-      iconSize = SizeConfig.getWidth(7) * (_controller.value - 0.8) * 5;
+      iconSize = 30.w * (_controller.value - 0.8) * 5;
     }
 
     return Transform.rotate(
@@ -130,7 +129,7 @@ class _FilterButtonState extends State<FilterButton> with SingleTickerProviderSt
       child: Align(
         alignment: Alignment.topCenter,
         child: Padding(
-          padding: EdgeInsets.only(top: 8.0),
+          padding: EdgeInsets.only(top: 8.h),
           child: IconButton(
             onPressed: () => _onSelection(option: option),
             icon: Transform.rotate(
@@ -178,7 +177,7 @@ class _FilterButtonState extends State<FilterButton> with SingleTickerProviderSt
             transform: Matrix4.identity()..scale(1.0, scaleFactor),
             child: Icon(
               state.isActive ? Icons.close : Icons.filter_list,
-              size: SizeConfig.getWidth(10),
+              size: 40.w,
               color: Theme.of(context).colorScheme.onSecondary,
             ),
           ),

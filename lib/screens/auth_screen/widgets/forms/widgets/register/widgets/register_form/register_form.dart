@@ -2,9 +2,8 @@ import "dart:math" as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
-import 'package:heist/resources/helpers/size_config.dart';
-import 'package:heist/resources/helpers/text_styles.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:heist/resources/helpers/global_text.dart';
 import 'package:heist/resources/helpers/vibrate.dart';
 import 'package:heist/routing/routes.dart';
 import 'package:heist/screens/auth_screen/widgets/cubit/keyboard_visible_cubit.dart';
@@ -68,37 +67,19 @@ class _RegisterFormState extends State<RegisterForm> {
             alignment: Alignment.center,
             children: [
               Positioned(
-                top: (1 - animation.value) * MediaQuery.of(context).size.height + SizeConfig.getHeight(6),
-                left: SizeConfig.getWidth(1),
-                right: SizeConfig.getWidth(1),
+                top: (1 - animation.value) * MediaQuery.of(context).size.height + 60.h,
+                left: 5.w,
+                right: 5.w,
                 child: Opacity(
                   opacity: math.max(0, 4 * notifier.page - 3),
                   child: child,
                 )
               ),
               Positioned(
-                bottom: animation.value * SizeConfig.getHeight(10) - SizeConfig.getHeight(4),
+                bottom: animation.value * 80.h - 30.h,
                 child: Consumer2<PageOffsetNotifier, AnimationController>(
                   builder: (context, notifier, animation, child) {
-                    return GestureDetector(
-                      onTap: () {
-                        if (animation.status != AnimationStatus.dismissed) {
-                          animation.reverse().then((_) {
-                            widget._pageController.previousPage(duration: Duration(seconds: 1), curve: Curves.decelerate);
-                          });
-                        } else {
-                          widget._pageController.previousPage(duration: Duration(seconds: 1), curve: Curves.decelerate);
-                        }
-                      },
-                      child: Text('Already have an Account?',
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.callToAction,
-                          fontSize: SizeConfig.getWidth(5),
-                          decoration: TextDecoration.underline,
-                          letterSpacing: 0.5
-                        )
-                      ),
-                    );
+                    return _goToLoginForm(animation: animation);
                   }
                 )
               )
@@ -108,7 +89,7 @@ class _RegisterFormState extends State<RegisterForm> {
         child: Form(
           key: Key("registerFormKey"),
           child: Padding(
-            padding: EdgeInsets.only(left: 16.0, right: 16.0),
+            padding: EdgeInsets.only(left: 16.w, right: 16.w),
             child: Container(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height,
@@ -118,148 +99,14 @@ class _RegisterFormState extends State<RegisterForm> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    BlocBuilder<RegisterBloc, RegisterState>(
-                      builder: (context, state) {
-                        return TextFormField(
-                          key: Key("emailFormFieldKey"),
-                          controller: _emailController,
-                          focusNode: _emailFocus,
-                          keyboardType: TextInputType.emailAddress,
-                          keyboardAppearance: Brightness.light,
-                          textInputAction: TextInputAction.next,
-                          onFieldSubmitted: (_) {
-                            _changeFocus(context, _emailFocus, _passwordFocus);
-                          },
-                          validator: (_) => !state.isEmailValid && _emailController.text.isNotEmpty 
-                            ? 'Invalid Email'
-                            : null,
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
-                          autocorrect: false,
-                          decoration: InputDecoration(
-                            enabledBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Theme.of(context).colorScheme.onSecondary)
-                            ),
-                            hintText: 'Email',
-                            hintStyle: TextStyle(
-                              color: Theme.of(context).colorScheme.onSecondarySubdued,
-                              fontSize: SizeConfig.getWidth(6)
-                            )
-                          ),
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.onSecondary,
-                            fontSize: SizeConfig.getWidth(6)
-                          ),
-                        );
-                      },
-                    ),
-                    SizedBox(height: SizeConfig.getHeight(5)),
-                    BlocBuilder<RegisterBloc, RegisterState>(
-                      builder: (context, state) {
-                        return TextFormField(
-                          key: Key("passwordFormFieldKey"),
-                          controller: _passwordController,
-                          focusNode: _passwordFocus,
-                          keyboardType: TextInputType.text,
-                          keyboardAppearance: Brightness.light,
-                          textInputAction: TextInputAction.next,
-                          onFieldSubmitted: (_) {
-                            _changeFocus(context, _passwordFocus, _passwordConfirmationFocus);
-                          },
-                          validator: (_) => !state.isPasswordValid && _passwordController.text.isNotEmpty
-                            ? 'Min 8 characters, at least 1 uppercase, 1 number, 1 special character'
-                            : null,
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
-                          autocorrect: false,
-                          decoration: InputDecoration(
-                            enabledBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Theme.of(context).colorScheme.onSecondary),
-                            ),
-                            errorMaxLines: 3,
-                            hintText: 'Password',
-                            hintStyle: TextStyle(
-                              color: Theme.of(context).colorScheme.onSecondarySubdued,
-                              fontSize: SizeConfig.getWidth(6)
-                            )
-                          ),
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.onSecondary,
-                            fontSize: SizeConfig.getWidth(6)
-                          ),
-                          obscureText: true,
-                        );
-                      },
-                    ),
-                    SizedBox(height: SizeConfig.getHeight(5)),
-                    BlocBuilder<RegisterBloc, RegisterState>(
-                      builder: (context, state) {
-                        return TextFormField(
-                          key: Key("passwordConfirmationFormFieldKey"),
-                          controller: _passwordConfirmationController,
-                          focusNode: _passwordConfirmationFocus,
-                          keyboardType: TextInputType.text,
-                          keyboardAppearance: Brightness.light,
-                          textInputAction: TextInputAction.done,
-                          onFieldSubmitted: (_) {
-                            _passwordConfirmationFocus.unfocus();
-                          },
-                          validator: (_) => !state.isPasswordConfirmationValid && _passwordConfirmationController.text.isNotEmpty 
-                            ? "Passwords do not match"
-                            : null,
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
-                          autocorrect: false,
-                          decoration: InputDecoration(
-                            enabledBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Theme.of(context).colorScheme.onSecondary)
-                            ),
-                            hintText: 'Password Confirmation',
-                            hintStyle: TextStyle(
-                              color: Theme.of(context).colorScheme.onSecondarySubdued,
-                              fontSize: SizeConfig.getWidth(6)
-                            )
-                          ),
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.onSecondary,
-                            fontSize: SizeConfig.getWidth(6)
-                          ),
-                          obscureText: true,
-                        );
-                      },
-                    ),
-                    SizedBox(height: SizeConfig.getHeight(5)),
-                    BlocBuilder<RegisterBloc, RegisterState>(
-                      builder: (context, state) {
-                        return GestureDetector(
-                          onTap: () => _submit(state),
-                          child: Container(
-                            alignment: Alignment.center,
-                            width: double.infinity,
-                            height: SizeConfig.getHeight(7),
-                            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 0),
-                            decoration: BoxDecoration(
-                              border: (_isRegisterButtonEnabled(state) || state.isSubmitting)
-                                ? Border.all(color: Theme.of(context).colorScheme.onSecondary)
-                                : null,
-                              borderRadius: BorderRadius.circular(50)
-                            ),
-                            child: state.isSubmitting
-                              ? SizedBox(height: SizeConfig.getWidth(5), width: SizeConfig.getWidth(5), child: CircularProgressIndicator())
-                              : (_isRegisterButtonEnabled(state)
-                                  ? PlatformText(
-                                      "Register",
-                                      key: Key("registerButtonTextKey"),
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.normal,
-                                        color: Theme.of(context).colorScheme.onSecondary,
-                                        fontSize: SizeConfig.getWidth(6)
-                                      ),
-                                    )
-                                  : null
-                                ),
-                          ),
-                        );
-                      },
-                    ),
+                  children: [
+                    _emailTextField(),
+                    SizedBox(height: 40.h),
+                    _passwordTextField(),
+                    SizedBox(height: 40.h),
+                    _passwordConfirmationTextField(),
+                    SizedBox(height: 40.h),
+                    _submitButton(),
                   ],
                 ),
               ),
@@ -282,6 +129,185 @@ class _RegisterFormState extends State<RegisterForm> {
     super.dispose();
   }
 
+  Widget _emailTextField() {
+    return BlocBuilder<RegisterBloc, RegisterState>(
+      builder: (context, state) {
+        return TextFormField(
+          key: Key("emailFormFieldKey"),
+          controller: _emailController,
+          focusNode: _emailFocus,
+          keyboardType: TextInputType.emailAddress,
+          keyboardAppearance: Brightness.light,
+          textInputAction: TextInputAction.next,
+          onFieldSubmitted: (_) {
+            _changeFocus(context: context, current: _emailFocus, next: _passwordFocus);
+          },
+          validator: (_) => !state.isEmailValid && _emailController.text.isNotEmpty 
+            ? 'Invalid Email'
+            : null,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          autocorrect: false,
+          decoration: InputDecoration(
+            enabledBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: Theme.of(context).colorScheme.onSecondary)
+            ),
+            hintText: 'Email',
+            hintStyle: TextStyle(
+              color: Theme.of(context).colorScheme.onSecondarySubdued,
+              fontSize: 25.sp
+            )
+          ),
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.onSecondary,
+            fontSize: 25.sp
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _passwordTextField() {
+    return BlocBuilder<RegisterBloc, RegisterState>(
+      builder: (context, state) {
+        return TextFormField(
+          key: Key("passwordFormFieldKey"),
+          controller: _passwordController,
+          focusNode: _passwordFocus,
+          keyboardType: TextInputType.text,
+          keyboardAppearance: Brightness.light,
+          textInputAction: TextInputAction.next,
+          onFieldSubmitted: (_) {
+            _changeFocus(context: context, current: _passwordFocus, next: _passwordConfirmationFocus);
+          },
+          validator: (_) => !state.isPasswordValid && _passwordController.text.isNotEmpty
+            ? 'Min 8 characters, at least 1 uppercase, 1 number, 1 special character'
+            : null,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          autocorrect: false,
+          decoration: InputDecoration(
+            enabledBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: Theme.of(context).colorScheme.onSecondary),
+            ),
+            errorMaxLines: 3,
+            hintText: 'Password',
+            hintStyle: TextStyle(
+              color: Theme.of(context).colorScheme.onSecondarySubdued,
+              fontSize: 25.sp
+            )
+          ),
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.onSecondary,
+            fontSize: 25.sp
+          ),
+          obscureText: true,
+        );
+      },
+    );
+  }
+
+  Widget _passwordConfirmationTextField() {
+    return BlocBuilder<RegisterBloc, RegisterState>(
+      builder: (context, state) {
+        return TextFormField(
+          key: Key("passwordConfirmationFormFieldKey"),
+          controller: _passwordConfirmationController,
+          focusNode: _passwordConfirmationFocus,
+          keyboardType: TextInputType.text,
+          keyboardAppearance: Brightness.light,
+          textInputAction: TextInputAction.done,
+          onFieldSubmitted: (_) {
+            _passwordConfirmationFocus.unfocus();
+          },
+          validator: (_) => !state.isPasswordConfirmationValid && _passwordConfirmationController.text.isNotEmpty 
+            ? "Passwords do not match"
+            : null,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          autocorrect: false,
+          decoration: InputDecoration(
+            enabledBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: Theme.of(context).colorScheme.onSecondary)
+            ),
+            hintText: 'Password Confirmation',
+            hintStyle: TextStyle(
+              color: Theme.of(context).colorScheme.onSecondarySubdued,
+              fontSize: 25.sp
+            )
+          ),
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.onSecondary,
+            fontSize: 25.sp
+          ),
+          obscureText: true,
+        );
+      },
+    );
+  }
+
+  Widget _submitButton() {
+    return BlocBuilder<RegisterBloc, RegisterState>(
+      builder: (context, state) {
+        return (_isRegisterButtonEnabled(state: state) || state.isSubmitting)
+          ? Row(
+              children: [
+                SizedBox(width: .1.sw),
+                Expanded(
+                  child: OutlinedButton(
+                    onPressed: _isRegisterButtonEnabled(state: state)
+                      ? () => _submit(state: state)
+                      : null,
+                    style: OutlinedButton.styleFrom(
+                      padding: EdgeInsets.only(top: 15.h, bottom: 15.h),
+                      side: BorderSide(
+                        color: Theme.of(context).colorScheme.onSecondary
+                      )
+                    ),
+                    child: _buttonChild(state: state)
+                  )
+                ),
+                SizedBox(width: .1.sw),
+              ],
+            )
+          : Container();
+      },
+    );
+  }
+
+  Widget _buttonChild({required RegisterState state}) {
+    return state.isSubmitting
+      ? SizedBox(height: 25.w, width: 25.w, child: CircularProgressIndicator())
+      : Text(
+          "Register",
+          key: Key("registerButtonTextKey"),
+          style: TextStyle(
+            fontWeight: FontWeight.normal,
+            color: Theme.of(context).colorScheme.onSecondary,
+            fontSize: 23.sp
+          ),
+        );
+  }
+
+  Widget _goToLoginForm({required AnimationController animation}) {
+    return TextButton(
+      onPressed: () {
+        if (animation.status != AnimationStatus.dismissed) {
+          animation.reverse().then((_) {
+            widget._pageController.previousPage(duration: Duration(seconds: 1), curve: Curves.decelerate);
+          });
+        } else {
+          widget._pageController.previousPage(duration: Duration(seconds: 1), curve: Curves.decelerate);
+        }
+      },
+      child: Text('Already have an Account?',
+        style: TextStyle(
+          color: Theme.of(context).colorScheme.callToAction,
+          fontSize: 20.sp,
+          decoration: TextDecoration.underline,
+          letterSpacing: 0.5.w
+        )
+      )
+    );
+  }
+
   void keyboardVisibilityChanged() {
     final bool keyboardVisible = _emailFocus.hasFocus || _passwordFocus.hasFocus || _passwordConfirmationFocus.hasFocus;
     context.read<KeyboardVisibleCubit>().toggle(isVisible: keyboardVisible);
@@ -299,17 +325,17 @@ class _RegisterFormState extends State<RegisterForm> {
     _registerBloc.add(PasswordConfirmationChanged(passwordConfirmation: _passwordConfirmationController.text, password: _passwordController.text));
   }
 
-  void _changeFocus(BuildContext context, FocusNode current, FocusNode next) {
+  void _changeFocus({required BuildContext context, required FocusNode current, required FocusNode next}) {
     current.unfocus();
     FocusScope.of(context).requestFocus(next);
   }
   
-  bool _isRegisterButtonEnabled(RegisterState state) {
+  bool _isRegisterButtonEnabled({required RegisterState state}) {
     return state.isFormValid && isPopulated && !state.isSubmitting;
   }
 
-  void _submit(RegisterState state) {
-    if (_isRegisterButtonEnabled(state)) {
+  void _submit({required RegisterState state}) {
+    if (_isRegisterButtonEnabled(state: state)) {
       _onFormSubmitted();
     }
   }
@@ -327,12 +353,12 @@ class _RegisterFormState extends State<RegisterForm> {
           focusNode: _emailFocus,
           toolbarButtons: [
             (node) {
-              return GestureDetector(
-                onTap: () => node.unfocus(),
+              return TextButton(
+                onPressed: () => node.unfocus(), 
                 child: Padding(
-                  padding: EdgeInsets.only(right: 16.0),
-                  child: BoldText5(text: 'Done', context: context, color: Theme.of(context).colorScheme.callToAction),
-                ),
+                  padding: EdgeInsets.only(right: 16.w),
+                  child: ActionText()
+                )
               );
             }
           ]
@@ -341,12 +367,12 @@ class _RegisterFormState extends State<RegisterForm> {
           focusNode: _passwordFocus,
           toolbarButtons: [
             (node) {
-              return GestureDetector(
-                onTap: () => node.unfocus(),
+              return TextButton(
+                onPressed: () => node.unfocus(), 
                 child: Padding(
-                  padding: EdgeInsets.only(right: 16.0),
-                  child: BoldText5(text: 'Done', context: context, color: Theme.of(context).colorScheme.callToAction),
-                ),
+                  padding: EdgeInsets.only(right: 16.w),
+                  child: ActionText()
+                )
               );
             }
           ]
@@ -355,12 +381,12 @@ class _RegisterFormState extends State<RegisterForm> {
           focusNode: _passwordConfirmationFocus,
           toolbarButtons: [
             (node) {
-              return GestureDetector(
-                onTap: () => node.unfocus(),
+              return TextButton(
+                onPressed: () => node.unfocus(), 
                 child: Padding(
-                  padding: EdgeInsets.only(right: 16.0),
-                  child: BoldText5(text: 'Done', context: context, color: Theme.of(context).colorScheme.callToAction),
-                ),
+                  padding: EdgeInsets.only(right: 16.w),
+                  child: ActionText()
+                )
               );
             }
           ]
@@ -375,13 +401,9 @@ class _RegisterFormState extends State<RegisterForm> {
       key: Key("errorRegisterSnackbarKey"),
       content: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
+        children: [
           Expanded(
-            child: BoldText4(
-              text: error,
-              context: context,
-              color: Theme.of(context).colorScheme.onError
-            )
+            child: SnackbarText(text: error)
           )
         ],
       ),

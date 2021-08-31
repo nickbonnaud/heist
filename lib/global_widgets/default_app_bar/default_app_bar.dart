@@ -1,6 +1,6 @@
 
 import 'package:flutter/material.dart';
-import 'package:heist/resources/helpers/text_styles.dart';
+import 'package:heist/resources/helpers/global_text.dart';
 import 'package:heist/themes/main_theme.dart';
 
 import 'widgets/animated_leading_icon.dart';
@@ -33,11 +33,13 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   AppBar _buildDefaultAppBar({required BuildContext context}) {
     return AppBar(
-      title: _title != null ? BoldText2(text: _title!, context: context) : null,
+      title: _title != null
+        ? AppBarTitle(text: _title!)
+        : null,
       elevation: 0,
       backgroundColor: _backgroundColor,
       leading: AnimatedLeadingIcon(),
-      actions: <Widget>[
+      actions: [
         if (_trailingWidget != null)
           _trailingWidget!
       ],
@@ -46,11 +48,13 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   SliverAppBar _buildSliverAppBar({required BuildContext context}) {
     return SliverAppBar(
-      title: _title != null ? BoldText2(text: _title!, context: context) : null,
+      title: _title != null
+        ? AppBarTitle(text: _title!)
+        : null,
       elevation: 0,
       backgroundColor: _backgroundColor,
       leading: AnimatedLeadingIcon(),
-      actions: <Widget>[
+      actions: [
         if (_trailingWidget != null)
           _trailingWidget!
       ],

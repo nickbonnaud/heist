@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heist/blocs/open_transactions/open_transactions_bloc.dart';
 import 'package:heist/models/transaction/transaction_resource.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'shared_list_items/logo_button/logo_button.dart';
 import 'shared_list_items/logo_details/transaction_logo_details/transaction_logo_details.dart';
@@ -92,8 +93,8 @@ class OpenTransactionsList extends StatelessWidget {
 
   double _logoLeftMargin({required int index}) {
     return lerp(
-      min: index == 0 ? 3 : index * ((sharedSizes.horizontalSpacing + sharedSizes.startSize)),
-      max: 8
+      min: index == 0 ? 3.w : index * ((sharedSizes.horizontalSpacing + sharedSizes.startSize)),
+      max: 8.w
     );
   }
   

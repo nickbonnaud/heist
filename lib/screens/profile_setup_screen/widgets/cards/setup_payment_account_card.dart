@@ -4,9 +4,12 @@ import 'package:heist/blocs/customer/customer_bloc.dart';
 import 'package:heist/models/customer/customer.dart';
 import 'package:heist/models/status.dart';
 import 'package:heist/resources/constants.dart';
-import 'package:heist/resources/helpers/text_styles.dart';
+import 'package:heist/resources/helpers/global_text.dart';
 import 'package:heist/screens/profile_setup_screen/bloc/profile_setup_screen_bloc.dart';
 import 'package:heist/themes/global_colors.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import './widgets/title_text.dart';
 
 class SetupPaymentAccountCard extends StatelessWidget {
   final CustomerBloc _customerBloc;
@@ -20,44 +23,46 @@ class SetupPaymentAccountCard extends StatelessWidget {
       height: MediaQuery.of(context).size.height,
       width: MediaQuery.of(context).size.width,
       child: Padding(
-        padding: EdgeInsets.only(left: 16.0, bottom: 16, right: 16.0),
+        padding: EdgeInsets.only(left: 16.w, bottom: 16.h, right: 16.w),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
+          children: [
             Expanded(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Widget>[
-                  VeryBoldText4(
-                    text: "Let's add your Payment Method!", 
-                    context: context,
-                  ),
+                children: [
+                  TitleText(text: "Let's add a Payment Method!"),
                   ElevatedButton(
                     key: Key("addPaymentButtonKey"),
                     onPressed: () => _connectButtonPressed(context: context),
-                    child: BoldText3(text: 'Connect', context: context, color: Theme.of(context).colorScheme.onSecondary)
+                    child: ButtonText(text: 'Connect')
                   ),
-                  Text2(
-                    text: "${Constants.appName} uses a secure 3rd party service to create your payment account.", 
-                    context: context, 
-                    color: Theme.of(context).colorScheme.onPrimarySubdued
+                  Text(
+                    "${Constants.appName} uses a secure 3rd party service to create your payment account.", 
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onPrimarySubdued,
+                      fontSize: 20.sp,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
                 ],
               )
             ),
             Row(
-              children: <Widget>[
+              children: [
+                SizedBox(width: .1.sw),
                 Expanded(
                   child: BlocBuilder<CustomerBloc, CustomerState>(
                     builder: (context, state) {
                       return ElevatedButton(
                         key: Key("submitPaymentMethdKey"),
                         onPressed: _isNextButtonEnabled(state: state) ? () => _nextButtonPressed(context) : null,
-                        child: BoldText3(text: 'Next', context: context, color: Theme.of(context).colorScheme.onSecondary)
+                        child: ButtonText(text: 'Next')
                       );
                     },
                   )
                 ),
+                SizedBox(width: .1.sw)
               ],
             ),
           ],

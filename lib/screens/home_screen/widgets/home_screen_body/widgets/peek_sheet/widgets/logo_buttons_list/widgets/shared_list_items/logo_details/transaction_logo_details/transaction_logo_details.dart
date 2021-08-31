@@ -1,6 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:heist/models/transaction/transaction_resource.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'widgets/details.dart';
 
@@ -39,7 +39,7 @@ class TransactionLogoDetails extends StatelessWidget {
       top: _topMargin,
       left: _leftMargin,
       height: _height,
-      right: 16,
+      right: 16.w,
       child: _controller.status == AnimationStatus.completed
         ? Details(
             keyValue: _keyValue,

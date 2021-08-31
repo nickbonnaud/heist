@@ -20,7 +20,7 @@ class SetupTipCard extends StatelessWidget {
       height: MediaQuery.of(context).size.height,
       width: MediaQuery.of(context).size.width,
       child: BlocProvider<SetupTipCardBloc>(
-        create: (BuildContext context) => SetupTipCardBloc(
+        create: (_) => SetupTipCardBloc(
           accountRepository: _accountRepository, 
           customerBloc: _customerBloc
         ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:heist/resources/helpers/size_config.dart';
 import 'package:provider/provider.dart';
 import 'package:heist/themes/global_colors.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'page_offset_notifier.dart';
 
@@ -15,10 +15,10 @@ class PageIndicator extends StatelessWidget {
         return Align(
           alignment: Alignment.bottomCenter,
           child: Padding(
-            padding: EdgeInsets.only(bottom: SizeConfig.getHeight(3)),
+            padding: EdgeInsets.only(bottom: 25.h),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
+              children: [
                 Container(
                   key: Key("loginIndicatorKey"),
                   decoration: BoxDecoration(
@@ -27,10 +27,10 @@ class PageIndicator extends StatelessWidget {
                       ? Theme.of(context).colorScheme.onSecondary
                       : Theme.of(context).colorScheme.onSecondarySubdued
                   ),
-                  height: 6,
-                  width: 6,
+                  height: 6.h,
+                  width: 6.w,
                 ),
-                SizedBox(width: 8),
+                SizedBox(width: 8.w),
                 Container(
                   key: Key("registerIndicatorKey"),
                   decoration: BoxDecoration(
@@ -39,8 +39,8 @@ class PageIndicator extends StatelessWidget {
                       ? Theme.of(context).colorScheme.onSecondary
                       : Theme.of(context).colorScheme.onSecondarySubdued
                   ),
-                  height: 6,
-                  width: 6,
+                  height: 6.h,
+                  width: 6.w,
                 )
               ],
             ),

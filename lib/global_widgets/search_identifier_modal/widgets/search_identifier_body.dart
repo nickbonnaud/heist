@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heist/global_widgets/search_identifier_modal/cubit/search_identifier_modal_cubit.dart';
-import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/themes/global_colors.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SearchIdentifierBody extends StatefulWidget {
   final String _hintText;
@@ -33,6 +33,7 @@ class _SearchIdentifierBodyState extends State<SearchIdentifierBody> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
+        SizedBox(height: 10.h),
         BlocBuilder<SearchIdentifierModalCubit, bool>(
           builder: (context, isUuidValid) {
             return TextFormField(
@@ -45,13 +46,13 @@ class _SearchIdentifierBodyState extends State<SearchIdentifierBody> {
               textInputAction: TextInputAction.search,
               style: TextStyle(
                 fontWeight: FontWeight.w700,
-                fontSize: SizeConfig.getWidth(7),
+                fontSize: 28.sp,
               ),
               decoration: InputDecoration(
                 hintText: widget._hintText,
                 hintStyle: TextStyle(
                   fontWeight: FontWeight.w700,
-                  fontSize: SizeConfig.getWidth(7),
+                  fontSize: 28.sp,
                   color: Theme.of(context).colorScheme.onPrimaryDisabled
                 ),
               ),

@@ -20,7 +20,11 @@ class NearbyBusinessesMap extends StatelessWidget {
         if (state is LocationLoaded) {
           return BlocProvider<GoogleMapScreenBloc>(
             create: (_) => GoogleMapScreenBloc(),
-            child: GoogleMapScreen(latitude: state.latitude, longitude: state.longitude, preMarkers: _preMarkers),
+            child: GoogleMapScreen(
+              latitude: state.latitude,
+              longitude: state.longitude,
+              preMarkers: _preMarkers
+            ),
           ); 
         } else {
           return LoadingLocation();

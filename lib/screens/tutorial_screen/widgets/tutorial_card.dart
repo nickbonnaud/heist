@@ -2,12 +2,11 @@ import 'package:flare_flutter/flare_actor.dart';
 import 'package:flare_flutter/flare_controls.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
-import 'package:heist/resources/helpers/size_config.dart';
-import 'package:heist/resources/helpers/text_styles.dart';
+import 'package:heist/resources/helpers/global_text.dart';
 import 'package:heist/screens/tutorial_screen/bloc/tutorial_screen_bloc.dart';
 import 'package:heist/screens/tutorial_screen/models/tutorial.dart';
 import 'package:heist/themes/global_colors.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'faq_body/bloc/faq_body_bloc.dart';
 import 'faq_body/faq_body.dart';
@@ -34,9 +33,9 @@ class _TutorialCardState extends State<TutorialCard> {
           duration: Duration(milliseconds: 500),
           top: state.tutorialCards.firstWhere((card) => card.type == widget._tutorialCard.type).dismissed
             ? MediaQuery.of(context).size.height
-            : state.tutorialCards.indexOf(widget._tutorialCard) * 10.0,
+            : state.tutorialCards.indexOf(widget._tutorialCard) * 10.h,
           bottom: state.tutorialCards.firstWhere((card) => card.type == widget._tutorialCard.type).dismissed
-            ? - MediaQuery.of(context).size.height
+            ? -MediaQuery.of(context).size.height
             : 0,
           child: Container(
             key: Key("card${widget._tutorialCard.key}"),
@@ -50,7 +49,7 @@ class _TutorialCardState extends State<TutorialCard> {
                   color: Colors.grey.withOpacity(0.3), 
                   spreadRadius: 1.0,
                   blurRadius: 5,
-                  offset: Offset(0, -5)
+                  offset: Offset(0, -5.h)
                 )
               ]
             ),
@@ -94,7 +93,7 @@ class _TutorialCardState extends State<TutorialCard> {
 
   Widget _getBody({required BuildContext context, required TutorialScreenState state}) {
     return Padding(
-      padding: EdgeInsets.only(left: 8, right: 8, bottom: 20),
+      padding: EdgeInsets.only(left: 8.w, right: 8.w, bottom: 20.h),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -105,37 +104,43 @@ class _TutorialCardState extends State<TutorialCard> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Padding(
-                    padding: EdgeInsets.only(left: SizeConfig.getWidth(2)), 
-                    child: VeryBoldText2(text: widget._tutorialCard.header, context: context)
+                    padding: EdgeInsets.only(left: 8.w),
+                    child: Text(
+                      widget._tutorialCard.header,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w900,
+                        fontSize: 35.sp,
+                      ),
+                    )
                   ),
                   Padding(
-                    padding: EdgeInsets.only(top: SizeConfig.getHeight(1)),
-                    child: PlatformIconButton(
+                    padding: EdgeInsets.only(top: 8.h),
+                    child: IconButton(
                       key: Key("exitButton${widget._tutorialCard.key}"),
                       icon: Icon(
                         Icons.clear, 
                         color: Theme.of(context).colorScheme.callToAction,
-                        size: SizeConfig.getWidth(6),
+                        size: 25.w,
                       ),
                       onPressed: () => Navigator.of(context).pop(),
                     ),
                   )
                 ],
               ),
-              SizedBox(height: SizeConfig.getHeight(4)),
+              SizedBox(height: 30.h),
               widget._tutorialCard.type != TutorialCardType.faq
-                ? PlatformText(
-                  widget._tutorialCard.body,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.onPrimarySubdued,
-                    fontSize: SizeConfig.getWidth(6),
-                    fontWeight: FontWeight.bold
-                  ),
-                )
+                ? Text(
+                    widget._tutorialCard.body,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onPrimarySubdued,
+                      fontSize: 22.sp,
+                      fontWeight: FontWeight.bold
+                    ),
+                  )
                 : BlocProvider<FaqBodyBloc>(
-                  create: (_) => FaqBodyBloc(),
-                  child: FaqBody(),
+                    create: (_) => FaqBodyBloc(),
+                    child: FaqBody(),
                   ),
             ],
           ),
@@ -147,27 +152,26 @@ class _TutorialCardState extends State<TutorialCard> {
                   onPressed: state.currentIndex != state.tutorialCards.length - 1
                     ? () => BlocProvider.of<TutorialScreenBloc>(context).add(Previous())
                     : null,
-                  child: BoldText3(
-                    text: 'Previous', 
-                    context: context, 
-                    color: state.currentIndex != state.tutorialCards.length - 1 ? Theme.of(context).colorScheme.callToAction : Theme.of(context).colorScheme.callToActionDisabled,
-                  ),
+                  child: ButtonText(
+                    text: 'Previous',
+                    color: state.currentIndex != state.tutorialCards.length - 1
+                      ? Theme.of(context).colorScheme.callToAction
+                      : Theme.of(context).colorScheme.callToActionDisabled,
+                  )
                 )
               ) ,
-              SizedBox(width: SizeConfig.getWidth(4)),
+              SizedBox(width: 15.w),
               Expanded(
                 child: ElevatedButton(
                   key: Key("nextButton${widget._tutorialCard.key}"),
                   onPressed: state.currentIndex != 0
                     ? () => BlocProvider.of<TutorialScreenBloc>(context).add(Next())
                     : () => Navigator.of(context).pop(),
-                  child: BoldText3(
+                  child: ButtonText(
                     text: state.currentIndex != 0
                       ? 'Next'
-                      : 'Close', 
-                    context: context, 
-                    color: Theme.of(context).colorScheme.onSecondary
-                  ),
+                      : 'Close',
+                  )
                 )
               )
             ],

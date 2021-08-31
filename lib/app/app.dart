@@ -6,7 +6,6 @@ import 'package:heist/blocs/customer/customer_bloc.dart';
 import 'package:heist/blocs/nearby_businesses/nearby_businesses_bloc.dart';
 import 'package:heist/blocs/open_transactions/open_transactions_bloc.dart';
 import 'package:heist/blocs/permissions/permissions_bloc.dart';
-import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/screens/splash_screen/splash_screen.dart';
 
 import 'bloc/app_ready_bloc.dart';
@@ -36,7 +35,6 @@ class App extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
-    SizeConfig().init(context);
     return BlocBuilder<AuthenticationBloc, AuthenticationState>(
       buildWhen: (previousState, currentState) => previousState is Unknown,
       builder: (context, state) => BlocProvider<AppReadyBloc>(

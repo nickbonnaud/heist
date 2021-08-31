@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heist/models/reset_password_args.dart';
-import 'package:heist/resources/helpers/size_config.dart';
-import 'package:heist/resources/helpers/text_styles.dart';
+import 'package:heist/resources/helpers/global_text.dart';
 import 'package:heist/resources/helpers/vibrate.dart';
 import 'package:heist/routing/routes.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:heist/screens/request_reset_password_screen/bloc/request_reset_form_bloc.dart';
 import 'package:heist/themes/global_colors.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
@@ -43,7 +43,7 @@ class _RequestResetPasswordFormState extends State<RequestResetPasswordForm> {
       },
       child: Form(
         child: Padding(
-          padding: EdgeInsets.only(left: 16.0, right: 16.0),
+          padding: EdgeInsets.only(left: 16.w, right: 16.w),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -53,20 +53,20 @@ class _RequestResetPasswordFormState extends State<RequestResetPasswordForm> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      VeryBoldText2(text: 'Verify Your Email', context: context),
+                      ScreenTitle(title: 'Verify Email'),
                       _emailTextField(),
-                      SizedBox(height: SizeConfig.getHeight(10)),
+                      SizedBox(height: 65.h),
                     ],
                   ),
                 )
               ),
               Padding(
-                padding: EdgeInsets.only(bottom: 16),
+                padding: EdgeInsets.only(bottom: 16.w),
                 child: Row(
                   children: [
-                    SizedBox(width: SizeConfig.getWidth(10)),
+                    SizedBox(width: .1.sw),
                     Expanded(child: _submitButton()),
-                    SizedBox(width: SizeConfig.getWidth(10)),
+                    SizedBox(width: .1.sw),
                   ],
                 ),
               )
@@ -93,12 +93,12 @@ class _RequestResetPasswordFormState extends State<RequestResetPasswordForm> {
             labelText: 'Email',
             labelStyle: TextStyle(
               fontWeight: FontWeight.w400,
-              fontSize: SizeConfig.getWidth(6),
+              fontSize: 25.sp,
             ),
           ),
           style: TextStyle(
             fontWeight: FontWeight.w700,
-            fontSize: SizeConfig.getWidth(7)
+            fontSize: 28.sp
           ),
           controller: _emailController,
           keyboardType: TextInputType.emailAddress,
@@ -130,9 +130,9 @@ class _RequestResetPasswordFormState extends State<RequestResetPasswordForm> {
 
   Widget _buttonChild({required RequestResetFormState state}) {
     if (state.isSubmitting) {
-      return SizedBox(height: SizeConfig.getWidth(5), width: SizeConfig.getWidth(5), child: CircularProgressIndicator());
+      return SizedBox(height: 25.w, width: 25.w, child: CircularProgressIndicator());
     } else {
-      return BoldText3(text: 'Submit', context: context, color: Theme.of(context).colorScheme.onSecondary);
+      return ButtonText(text: 'Submit');
     }
   }
 
@@ -157,9 +157,9 @@ class _RequestResetPasswordFormState extends State<RequestResetPasswordForm> {
       key: Key("requestResetSnackBarKey"),
       content: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
+        children: [
           Expanded(
-            child: BoldText4(text: text, context: context, color: Theme.of(context).colorScheme.onSecondary)
+            child: SnackbarText(text: text)
           ),
         ],
       ),
@@ -187,12 +187,12 @@ class _RequestResetPasswordFormState extends State<RequestResetPasswordForm> {
           focusNode: _emailFocusNode,
           toolbarButtons: [
             (node) {
-              return GestureDetector(
-                onTap: () => node.unfocus(),
+              return TextButton(
+                onPressed: () => node.unfocus(), 
                 child: Padding(
-                  padding: EdgeInsets.only(right: 16.0),
-                  child: BoldText5(text: 'Done', context: context, color: Theme.of(context).colorScheme.primary),
-                ),
+                  padding: EdgeInsets.only(right: 16.w),
+                  child: ActionText()
+                )
               );
             }
           ]

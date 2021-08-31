@@ -1,14 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:heist/resources/helpers/size_config.dart';
-import 'package:heist/resources/helpers/text_styles.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:heist/resources/helpers/global_text.dart';
 import 'package:heist/resources/helpers/vibrate.dart';
 import 'package:heist/screens/profile_setup_screen/bloc/profile_setup_screen_bloc.dart';
 import 'package:heist/themes/global_colors.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
 
 import 'bloc/profile_name_form_bloc.dart';
+import '../../widgets/title_text.dart';
 
 class ProfileNameBody extends StatefulWidget {
 
@@ -21,7 +22,6 @@ class _ProfileNameBodyState extends State<ProfileNameBody> {
   final FocusNode _firstNameFocus = FocusNode();
   late TextEditingController _lastNameController;
   final FocusNode _lastNameFocus = FocusNode();
-
 
   bool get isPopulated => _firstNameController.text.isNotEmpty && _lastNameController.text.isNotEmpty;
 
@@ -49,33 +49,32 @@ class _ProfileNameBodyState extends State<ProfileNameBody> {
       },
       child: Form(
         child: Padding(
-          padding: EdgeInsets.only(left: 16.0, bottom: 16, right: 16.0),
+          padding: EdgeInsets.only(left: 16.w, bottom: 16.h, right: 16.w),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
+            children: [
               Expanded(
                 child: KeyboardActions(
                   config: _buildKeyboard(),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: <Widget>[
-                      SizedBox(height: SizeConfig.getHeight(1)),
-                      VeryBoldText4(
-                        text: "Let's start with your name!",
-                        context: context,
-                      ),
+                    children: [
+                      SizedBox(height: 10.h),
+                      TitleText(text: "Let's start with your name!"),
                       _firstNameField(),
                       _lastNameTextField(),
-                      SizedBox(height: SizeConfig.getHeight(10)),
+                      SizedBox(height: 65.h),
                     ],
                   ),
                 ),
               ),
               Row(
-                children: <Widget>[
+                children: [
+                  SizedBox(width: .1.sw),
                   Expanded(
                     child: _submitButton()
-                  )
+                  ),
+                  SizedBox(width: .1.sw),
                 ],
               )
             ],
@@ -104,12 +103,12 @@ class _ProfileNameBodyState extends State<ProfileNameBody> {
             labelText: 'First Name',
             labelStyle: TextStyle(
               fontWeight: FontWeight.w400,
-              fontSize: SizeConfig.getWidth(6)
+              fontSize: 25.sp
             )
           ),
           style: TextStyle(
             fontWeight: FontWeight.w700,
-            fontSize: SizeConfig.getWidth(7)
+            fontSize: 28.sp
           ),
           controller: _firstNameController,
           focusNode: _firstNameFocus,
@@ -137,12 +136,12 @@ class _ProfileNameBodyState extends State<ProfileNameBody> {
             labelText: 'Last Name',
             labelStyle: TextStyle(
               fontWeight: FontWeight.w400,
-              fontSize: SizeConfig.getWidth(6)
+              fontSize: 25.sp
             )
           ),
           style: TextStyle(
             fontWeight: FontWeight.w700,
-            fontSize: SizeConfig.getWidth(7)
+            fontSize: 28.sp
           ),
           controller: _lastNameController,
           focusNode: _lastNameFocus,
@@ -191,9 +190,9 @@ class _ProfileNameBodyState extends State<ProfileNameBody> {
   
   Widget _buttonChild({required ProfileNameFormState state}) {
     if (state.isSubmitting) {
-      return SizedBox(height: SizeConfig.getWidth(5), width: SizeConfig.getWidth(5), child: CircularProgressIndicator());
+      return SizedBox(height: 25.w, width: 25.w, child: CircularProgressIndicator());
     } else {
-      return BoldText3(text: 'Save', context: context, color: Theme.of(context).colorScheme.onSecondary);
+      return ButtonText(text: 'Save');
     }
   }
 
@@ -208,9 +207,9 @@ class _ProfileNameBodyState extends State<ProfileNameBody> {
       duration: Duration(seconds: 1),
       content: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
+        children: [
           Expanded(
-            child: BoldText4(text: message, context: context, color: Theme.of(context).colorScheme.onSecondary)
+            child: SnackbarText(text: message)
           ),
         ],
       ),
@@ -240,12 +239,12 @@ class _ProfileNameBodyState extends State<ProfileNameBody> {
           focusNode: _firstNameFocus,
           toolbarButtons: [
             (node) {
-              return GestureDetector(
-                onTap: () => node.unfocus(),
+              return TextButton(
+                onPressed: () => node.unfocus(), 
                 child: Padding(
-                  padding: EdgeInsets.only(right: 16.0),
-                  child: BoldText5(text: 'Done', context: context, color: Theme.of(context).primaryColor),
-                ),
+                  padding: EdgeInsets.only(right: 16.w),
+                  child: ActionText()
+                )
               );
             }
           ]
@@ -254,12 +253,12 @@ class _ProfileNameBodyState extends State<ProfileNameBody> {
           focusNode: _lastNameFocus,
           toolbarButtons: [
             (node) {
-              return GestureDetector(
-                onTap: () => node.unfocus(),
+              return TextButton(
+                onPressed: () => node.unfocus(), 
                 child: Padding(
-                  padding: EdgeInsets.only(right: 16.0),
-                  child: BoldText5(text: 'Done', context: context, color: Theme.of(context).primaryColor),
-                ),
+                  padding: EdgeInsets.only(right: 16.w),
+                  child: ActionText()
+                )
               );
             }
           ]

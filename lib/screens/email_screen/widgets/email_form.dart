@@ -1,13 +1,12 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heist/models/customer/customer.dart';
-import 'package:heist/resources/helpers/size_config.dart';
-import 'package:heist/resources/helpers/text_styles.dart';
+import 'package:heist/resources/helpers/global_text.dart';
 import 'package:heist/resources/helpers/vibrate.dart';
 import 'package:heist/screens/email_screen/bloc/email_form_bloc.dart';
 import 'package:heist/themes/global_colors.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class EmailForm extends StatefulWidget {
   final Customer _customer;
@@ -45,31 +44,31 @@ class _EmailFormState extends State<EmailForm> {
       },
       child: Form(
         child: Padding(
-          padding: EdgeInsets.only(left: 16.0, right: 16.0),
+          padding: EdgeInsets.symmetric(horizontal: 16.w),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
+            children: [
               Expanded(
                 child: KeyboardActions(
                   config: _buildKeyboard(),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: <Widget>[
-                      VeryBoldText1(text: 'Edit Email', context: context),
+                    children: [
+                      ScreenTitle(title: 'Edit Email'),
                       _email(),
-                      SizedBox(height: SizeConfig.getHeight(10)),
+                      SizedBox(height: 60.h),
                     ],
                   ),
                 ),
               ),
               Padding(
-                padding: EdgeInsets.only(bottom: 16),
+                padding: EdgeInsets.only(bottom: 16.h),
                 child: Row(
-                  children: <Widget>[
+                  children: [
                     Expanded(
                       child: _cancelButton()
                     ),
-                    SizedBox(width: 20.0),
+                    SizedBox(width: 20.w),
                     Expanded(
                       child: _submitButton()
                     ),
@@ -99,12 +98,12 @@ class _EmailFormState extends State<EmailForm> {
             labelText: 'Email',
             labelStyle: TextStyle(
               fontWeight: FontWeight.w400,
-              fontSize: SizeConfig.getWidth(6)
+              fontSize: 25.sp
             )
           ),
           style: TextStyle(
             fontWeight: FontWeight.w700,
-            fontSize: SizeConfig.getWidth(7)
+            fontSize: 28.sp
           ),
           controller: _emailController,
           keyboardType: TextInputType.emailAddress,
@@ -124,7 +123,7 @@ class _EmailFormState extends State<EmailForm> {
         return OutlinedButton(
           key: Key("cancelButtonKey"),
           onPressed: state.isSubmitting ? null : () => _cancelButtonPressed(),
-          child: BoldText3(text: 'Cancel', context: context, color: state.isSubmitting
+          child: ButtonText(text: 'Cancel', color: state.isSubmitting
             ? Theme.of(context).colorScheme.callToActionDisabled
             : Theme.of(context).colorScheme.callToAction
           ),
@@ -145,6 +144,14 @@ class _EmailFormState extends State<EmailForm> {
     );
   }
 
+  Widget _buttonChild({required EmailFormState state}) {
+    if (state.isSubmitting) {
+      return SizedBox(height: 25.w, width: 25.w, child: CircularProgressIndicator());
+    } else {
+      return ButtonText(text: 'Save');
+    }
+  }
+
   void _showSnackbar({required bool isSuccess, String? error}) async {
     isSuccess ? Vibrate.success() : Vibrate.error();
 
@@ -156,9 +163,9 @@ class _EmailFormState extends State<EmailForm> {
       key: Key("emailFormSnackbarKey"),
       content: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
+        children: [
           Expanded(
-            child: BoldText4(text: text, context: context, color: Theme.of(context).colorScheme.onSecondary)
+            child: SnackbarText(text: text)
           ),
         ],
       ),
@@ -202,14 +209,6 @@ class _EmailFormState extends State<EmailForm> {
     }
   }
 
-  Widget _buttonChild({required EmailFormState state}) {
-    if (state.isSubmitting) {
-      return SizedBox(height: SizeConfig.getWidth(5), width: SizeConfig.getWidth(5), child: CircularProgressIndicator());
-    } else {
-      return BoldText3(text: 'Save', context: context, color: Theme.of(context).colorScheme.onSecondary);
-    }
-  }
-
   KeyboardActionsConfig _buildKeyboard() {
     return KeyboardActionsConfig(
       keyboardActionsPlatform: KeyboardActionsPlatform.ALL,
@@ -218,11 +217,11 @@ class _EmailFormState extends State<EmailForm> {
           focusNode: _emailFocusNode,
           toolbarButtons: [
             (node) {
-              return GestureDetector(
-                onTap: () => node.unfocus(),
+              return TextButton(
+                onPressed: () => node.unfocus(),
                 child: Padding(
-                  padding: EdgeInsets.only(right: 16.0),
-                  child: BoldText5(text: 'Done', context: context, color: Theme.of(context).colorScheme.primary),
+                  padding: EdgeInsets.only(right: 16.w),
+                  child: ActionText()
                 ),
               );
             }

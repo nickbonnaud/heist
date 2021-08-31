@@ -25,7 +25,7 @@ class Register extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       alignment: Alignment.center,
-      children: <Widget>[
+      children: [
         WelcomeLabel(),
         BlocProvider<RegisterBloc>(
           create: (_) => RegisterBloc(authenticationRepository: _authenticationRepository, authenticationBloc: _authenticationBloc),

@@ -4,26 +4,26 @@ import 'package:flutter/material.dart';
 @immutable
 class Beacon extends Equatable {
   final String regionIdentifier;
-  final String identifier;
+  final String proximityUUID;
   final int major;
   final int minor;
 
   Beacon({
-    required this.identifier,
+    required this.regionIdentifier,
+    required this.proximityUUID,
     required this.major,
     required this.minor,
-    required this.regionIdentifier
   });
 
   Beacon.fromJson({required Map<String, dynamic> json}) 
     : regionIdentifier = json['region_identifier'],
-      identifier = json['identifier'],
+      proximityUUID = json['proximity_uuid'],
       major = json['major'],
       minor = json['minor'];
   
   @override
-  List<Object> get props => [identifier, major, minor, regionIdentifier];
+  List<Object> get props => [regionIdentifier, proximityUUID, major, minor];
 
   @override
-  String toString() => 'Beacon { identifier: $identifier, major: $major, minor: $minor, regionIdentifier: $regionIdentifier }';
+  String toString() => 'Beacon { regionIdentifier: $regionIdentifier, proximityUUID: $proximityUUID, major: $major, minor: $minor }';
 }

@@ -1,21 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:heist/resources/helpers/text_styles.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class LoadingLocation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(left: 15.0, right: 15.0),
+      padding: EdgeInsets.only(left: 15.w, right: 15.w),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
+        children: [
           Center(
-            child: BoldText3(text: 'Fetching Current Location', context: context),
+            child: Text(
+              'Fetching Current Location',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 25.sp
+              ),
+            )
           ),
-          SizedBox(height: 15.0),
+          SizedBox(height: 15.h),
           CircularProgressIndicator(),
-          SizedBox(height: 15.0),
+          SizedBox(height: 15.h),
         ],
       ),
     );

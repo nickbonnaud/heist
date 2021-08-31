@@ -1,14 +1,13 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heist/models/transaction/transaction_resource.dart';
 import 'package:heist/resources/enums/issue_type.dart';
-import 'package:heist/resources/helpers/size_config.dart';
-import 'package:heist/resources/helpers/text_styles.dart';
+import 'package:heist/resources/helpers/global_text.dart';
 import 'package:heist/resources/helpers/vibrate.dart';
 import 'package:heist/screens/issue_screen/bloc/issue_form_bloc.dart';
 import 'package:heist/themes/global_colors.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class IssueForm extends StatefulWidget {
   final IssueType _type;
@@ -42,39 +41,39 @@ class _IssueFormState extends State<IssueForm> {
     return BlocListener<IssueFormBloc, IssueFormState>(
       listener: (context, state) {
         if (state.errorMessage.isNotEmpty) {
-          _showSnackbar(context, state.errorMessage, state);
+          _showSnackbar(message: state.errorMessage, state: state);
         } else if (state.isSuccess) {
-          _showSnackbar(context, 'Issue created.', state);
+          _showSnackbar(message: 'Issue created.', state: state);
         }
       },
       child: Form(
         child: Padding(
-          padding: EdgeInsets.only(left: 16.0, right: 16.0),
+          padding: EdgeInsets.symmetric(horizontal: 16.w),
           child: Container(
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
             child: KeyboardActions(
-              config: _buildKeyboard(context),
+              config: _buildKeyboard(),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
+                children: [
                   Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      SizedBox(height: SizeConfig.getHeight(3)),
-                      BoldTextCustom(text: _formatIssueType(), context: context, size: SizeConfig.getWidth(9)),
-                      SizedBox(height: SizeConfig.getHeight(15)),
+                    children: [
+                      SizedBox(height: 25.h),
+                      ScreenTitle(title: _formatIssueType()),
+                      SizedBox(height: 120.h),
                       _inputField()
                     ],
                   ),
                   Padding(
-                    padding: EdgeInsets.only(bottom: 16),
+                    padding: EdgeInsets.only(bottom: 16.h),
                     child: Row(
-                      children: <Widget>[
+                      children: [
                         Expanded(
                           child: _cancelButton()
                         ),
-                        SizedBox(width: 20.0),
+                        SizedBox(width: 20.w),
                         Expanded(
                           child: _submitButton()
                         ),
@@ -106,12 +105,12 @@ class _IssueFormState extends State<IssueForm> {
             labelText: "Issue",
             labelStyle: TextStyle(
               fontWeight: FontWeight.w400,
-              fontSize: SizeConfig.getWidth(6)
+              fontSize: 25.sp
             )
           ),
           style: TextStyle(
             fontWeight: FontWeight.w700,
-            fontSize: SizeConfig.getWidth(7)
+            fontSize: 28.sp
           ),
           controller: _messageController,
           focusNode: _messageFocusNode,
@@ -131,8 +130,8 @@ class _IssueFormState extends State<IssueForm> {
       builder: (context, state) {
         return OutlinedButton(
           key: Key("cancelButtonKey"),
-          onPressed: state.isSubmitting ? null : () => _cancelButtonPressed(context),
-          child: BoldText3(text: 'Cancel', context: context, color: state.isSubmitting 
+          onPressed: state.isSubmitting ? null : () => _cancelButtonPressed(),
+          child: ButtonText(text: 'Cancel', color: state.isSubmitting 
             ? Theme.of(context).colorScheme.callToActionDisabled
             : Theme.of(context).colorScheme.callToAction
           ),
@@ -146,27 +145,35 @@ class _IssueFormState extends State<IssueForm> {
       builder: (context, state) {
         return ElevatedButton(
           key: Key("submitButtonKey"),
-          onPressed: _isSaveButtonEnabled(state) ? () => _saveButtonPressed(state) : null,
+          onPressed: _isSaveButtonEnabled(state: state) ? () => _saveButtonPressed(state: state) : null,
           child: _buttonChild(context: context, state: state),
         );
       }
     );
+  }
+
+  Widget _buttonChild({required BuildContext context, required IssueFormState state}) {
+    if (state.isSubmitting) {
+      return SizedBox(height: 25.w, width: 25.w, child: CircularProgressIndicator());
+    } else {
+      return ButtonText(text: 'Save');
+    }
   }
   
   void _onMessageChanged() {
     _issueFormBloc.add(MessageChanged(message: _messageController.text));
   }
 
-  bool _isSaveButtonEnabled(IssueFormState state) {
+  bool _isSaveButtonEnabled({required IssueFormState state}) {
     return state.isMessageValid && _messageController.text.isNotEmpty && !state.isSubmitting;
   }
   
-  void _cancelButtonPressed(BuildContext context) {
+  void _cancelButtonPressed() {
     Navigator.pop(context);
   }
 
-  void _saveButtonPressed(IssueFormState state) {
-    if (_isSaveButtonEnabled(state)) {
+  void _saveButtonPressed({required IssueFormState state}) {
+    if (_isSaveButtonEnabled(state: state)) {
       _messageFocusNode.unfocus();
       widget._transaction.issue == null 
         ?
@@ -183,23 +190,15 @@ class _IssueFormState extends State<IssueForm> {
     }
   }
 
-  Widget _buttonChild({required BuildContext context, required IssueFormState state}) {
-    if (state.isSubmitting) {
-      return SizedBox(height: SizeConfig.getWidth(5), width: SizeConfig.getWidth(5), child: CircularProgressIndicator());
-    } else {
-      return BoldText3(text: 'Save', context: context, color: Theme.of(context).colorScheme.onSecondary);
-    }
-  }
-
-  void _showSnackbar(BuildContext context, String message, IssueFormState state) async {
+  void _showSnackbar({required String message, required IssueFormState state}) async {
     state.isSuccess ? Vibrate.success() : Vibrate.error();
     final SnackBar snackBar = SnackBar(
       key: Key("snackBarKey"),
       content: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
+        children: [
           Expanded(
-            child: BoldText4(text: message, context: context, color: Theme.of(context).colorScheme.onSecondary)
+            child: SnackbarText(text: message)
           ),
         ],
       ),
@@ -231,7 +230,7 @@ class _IssueFormState extends State<IssueForm> {
     }
   }
 
-  KeyboardActionsConfig _buildKeyboard(BuildContext context) {
+  KeyboardActionsConfig _buildKeyboard() {
     return KeyboardActionsConfig(
       keyboardActionsPlatform: KeyboardActionsPlatform.ALL,
       actions: [
@@ -240,11 +239,11 @@ class _IssueFormState extends State<IssueForm> {
           focusNode: _messageFocusNode,
           toolbarButtons: [
             (node) {
-              return GestureDetector(
-                onTap: () => node.unfocus(),
+              return TextButton(
+                onPressed: () => node.unfocus(),
                 child: Padding(
-                  padding: EdgeInsets.only(right: 16),
-                  child: BoldText5(text: 'Done', context: context, color: Theme.of(context).primaryColor),
+                  padding: EdgeInsets.only(right: 16.w),
+                  child: ActionText()
                 ),
               );
             }

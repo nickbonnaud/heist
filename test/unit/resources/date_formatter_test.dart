@@ -26,5 +26,11 @@ void main() {
       expect(DateFormatter.toStandardDate(date: dateTime), isA<String>());
       expect(DateFormatter.toStringDate(date: dateTime).contains(" AM") || DateFormatter.toStringDate(date: dateTime).contains(" PM"), false);
     });
+
+    test("Date Formatter parses DateTime to string time", () {
+      DateTime dateTime = DateTime.now();
+      expect(DateFormatter.toStringTime(date: dateTime), isA<String>());
+      expect(DateFormatter.toStringTime(date: dateTime).length <= 8, true);
+    });
   });
 }

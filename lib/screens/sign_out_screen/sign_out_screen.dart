@@ -17,7 +17,7 @@ class SignOutScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).colorScheme.background,
       appBar: BottomModalAppBar(context: context),
       body: BlocProvider<SignOutBloc>(
         create: (_) => SignOutBloc(

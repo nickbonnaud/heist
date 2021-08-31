@@ -1,3 +1,4 @@
+import 'package:heist/models/business/beacon.dart';
 import 'package:heist/models/customer/active_location.dart';
 import 'package:heist/models/paginate_data_holder.dart';
 import 'package:heist/providers/active_location_provider.dart';
@@ -11,8 +12,12 @@ class ActiveLocationRepository extends BaseRepository {
   ActiveLocationRepository({required ActiveLocationProvider activeLocationProvider})
     : _activeLocationProvider = activeLocationProvider;
 
-  Future<ActiveLocation> enterBusiness({required String beaconIdentifier}) async {
-    final Map<String, dynamic> body = {'beacon_identifier': beaconIdentifier};
+  Future<ActiveLocation> enterBusiness({required Beacon beacon}) async {
+    final Map<String, dynamic> body = {
+      'proximity_uuid': beacon.proximityUUID,
+      'major': beacon.major,
+      'minor': beacon.minor
+    };
     
     final Map<String, dynamic> json = await this.send(request: _activeLocationProvider.enterBusiness(body: body));
     return deserialize(json: json);

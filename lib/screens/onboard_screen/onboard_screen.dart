@@ -23,7 +23,7 @@ class OnboardScreen extends StatelessWidget {
       resizeToAvoidBottomInset: false,
       backgroundColor: Theme.of(context).colorScheme.background,
       body: BlocProvider<OnboardBloc>(
-        create: (BuildContext context) => OnboardBloc(
+        create: (_) => OnboardBloc(
           customerStatus: _customerBloc.customer!.status,
           numberValidPermissions: _permissionsBloc.numberValidPermissions
         ),

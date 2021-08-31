@@ -4,8 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heist/blocs/permissions/permissions_bloc.dart';
 import 'package:heist/models/status.dart';
 import 'package:heist/resources/constants.dart';
-import 'package:heist/resources/helpers/size_config.dart';
-import 'package:heist/resources/helpers/text_styles.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:heist/routing/routes.dart';
 import 'package:heist/screens/onboard_screen/bloc/onboard_bloc.dart';
 import 'package:heist/themes/global_colors.dart';
@@ -50,7 +49,7 @@ class _OnboardBodyState extends State<OnboardBody> with SingleTickerProviderStat
     );
 
     _onboardTitleAnimation = Tween<Offset>(
-      begin: Offset(0, 50), 
+      begin: Offset(0, 50.h), 
       end: Offset.zero
     ).animate(CurvedAnimation(
       parent: _animationController, 
@@ -58,7 +57,7 @@ class _OnboardBodyState extends State<OnboardBody> with SingleTickerProviderStat
     ));
 
     _profileTitleAnimation = Tween<Offset>(
-      begin: Offset(0, 100),
+      begin: Offset(0, 100.h),
       end: Offset.zero
     ).animate(CurvedAnimation(
       parent: _animationController, 
@@ -66,7 +65,7 @@ class _OnboardBodyState extends State<OnboardBody> with SingleTickerProviderStat
     ));
 
     _tutorialTitleAnimation = Tween<Offset>(
-      begin: Offset(0, 100),
+      begin: Offset(0, 100.h),
       end: Offset.zero
     ).animate(CurvedAnimation(
       parent: _animationController, 
@@ -74,7 +73,7 @@ class _OnboardBodyState extends State<OnboardBody> with SingleTickerProviderStat
     ));
 
     _permissionsTitleAnimation = Tween<Offset>(
-      begin: Offset(0, 100),
+      begin: Offset(0, 100.h),
       end: Offset.zero
     ).animate(CurvedAnimation(
       parent: _animationController, 
@@ -82,7 +81,7 @@ class _OnboardBodyState extends State<OnboardBody> with SingleTickerProviderStat
     ));
 
     _onboardBodyAnimation = Tween<Offset>(
-      begin: Offset(50, 0), 
+      begin: Offset(50.w, 0), 
       end: Offset.zero
     ).animate(CurvedAnimation(
       parent: _animationController, 
@@ -90,7 +89,7 @@ class _OnboardBodyState extends State<OnboardBody> with SingleTickerProviderStat
     ));
 
     _finishTitleAnimation = Tween<Offset>(
-      begin: Offset(0, 100),
+      begin: Offset(0, 100.h),
       end: Offset.zero
     ).animate(CurvedAnimation(
       parent: _animationController,
@@ -98,7 +97,7 @@ class _OnboardBodyState extends State<OnboardBody> with SingleTickerProviderStat
     ));
 
     _buttonAnimation = Tween<Offset>(
-      begin: Offset(-50.0, 0.0), 
+      begin: Offset(-50.w, 0.0), 
       end: Offset.zero
     ).animate(CurvedAnimation(
       parent: _animationController, 
@@ -111,19 +110,25 @@ class _OnboardBodyState extends State<OnboardBody> with SingleTickerProviderStat
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(left: 16, right: 16),
+      padding: EdgeInsets.only(left: 16.w, right: 16.w),
       child: Center(
         child: BlocBuilder<OnboardBloc, int>(
           builder: (context, currentStep) {
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
+              children: [
                 AnimatedOpacity(
                   opacity: _animationController.value, 
                   duration: Duration(milliseconds: 300),
-                  child: VeryBoldText1(text: "Account Setup", context: context),
+                  child: Text(
+                    "Account Setup",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w900,
+                      fontSize: 40.sp
+                    ),
+                  )
                 ),
-                SizedBox(height: SizeConfig.getHeight(5)),
+                SizedBox(height: 35.h),
                 Stepper(
                   key: Key("onboardStepperKey"),
                   currentStep: currentStep,
@@ -135,11 +140,7 @@ class _OnboardBodyState extends State<OnboardBody> with SingleTickerProviderStat
                         builder: (BuildContext context, Widget? child) {
                           return SlideTransition(
                             position: _onboardBodyAnimation,
-                            child: BoldText3(
-                              text: "Let's get Started! Don't worry it's only a few steps.",
-                              context: context,
-                              color: Theme.of(context).colorScheme.onPrimarySubdued
-                            )
+                            child: _stepText(text: "Let's get Started! Don't worry it's only a few steps.")
                           );
                         }
                       ),
@@ -148,41 +149,33 @@ class _OnboardBodyState extends State<OnboardBody> with SingleTickerProviderStat
                     ),
                     Step(
                       title: _createTitle(title: "Profile", currentStep: currentStep, animation: _profileTitleAnimation), 
-                      content: BoldText3(
+                      content: _stepText(
                         text: _customerOnboarded 
                           ? "Go to next step." 
-                          : "First let's setup your Profile Account!",
-                        context: context, 
-                        color: Theme.of(context).colorScheme.onPrimarySubdued
+                          : "First let's setup your Profile Account!"
                       ),
                       isActive: currentStep == 1,
                       state: _setCurrentStepState(currentStep: currentStep, stepIndex: 1)
                     ),
                     Step(
                       title: _createTitle(title: "Tutorial", currentStep: currentStep, animation: _tutorialTitleAnimation), 
-                      content: BoldText3(
-                        text: "Learn how to use ${Constants.appName}!", 
-                        context: context, 
-                        color: Theme.of(context).colorScheme.onPrimarySubdued
-                      ),
+                      content: _stepText(text: "Learn how to use ${Constants.appName}!"),
                       isActive: currentStep == 2,
                       state: _setCurrentStepState(currentStep: currentStep, stepIndex: 2)
                     ),
                     Step(
                       title: _createTitle(title: "Permissions", currentStep: currentStep, animation: _permissionsTitleAnimation), 
-                      content: BoldText3(
+                      content: _stepText(
                         text: _permissionsReady 
                           ? "Next Step"
-                          : "Lastly let's configure your permissions!", 
-                        context: context, 
-                        color: Theme.of(context).colorScheme.onPrimarySubdued
+                          : "Lastly let's configure your permissions!"
                       ),
                       isActive: currentStep == 3,
                       state: _setCurrentStepState(currentStep: currentStep, stepIndex: 3)
                     ),
                     Step(
                       title: _createTitle(title: "Finished!", currentStep: currentStep, animation: _finishTitleAnimation),
-                      content: BoldText3(text: "Onboarding Complete!", context: context, color: Theme.of(context).colorScheme.onPrimarySubdued),
+                      content: _stepText(text: "Onboarding Complete!"),
                       isActive: currentStep == 4,
                       state: _setCurrentStepState(currentStep: currentStep, stepIndex: 4)
                     )
@@ -196,7 +189,14 @@ class _OnboardBodyState extends State<OnboardBody> with SingleTickerProviderStat
                             child: TextButton(
                               key: Key("stepperButtonKey"),
                               onPressed: () => _buttonPressed(context, currentStep),
-                              child: BoldText3(text: _buttonText(currentStep: currentStep), context: context, color: Theme.of(context).colorScheme.callToAction),
+                              child: Text(
+                                _buttonText(currentStep: currentStep),
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 25.sp,
+                                  color: Theme.of(context).colorScheme.callToAction
+                                ),
+                              )
                             ),
                           );
                         }
@@ -223,15 +223,29 @@ class _OnboardBodyState extends State<OnboardBody> with SingleTickerProviderStat
       builder: (BuildContext context, Widget? child) {
         return SlideTransition(
           position: animation,
-          child: BoldText1(
-            text: title, 
-            context: context, 
-            color: currentStep == 0 
-              ? Theme.of(context).colorScheme.onPrimary
-              : Theme.of(context).colorScheme.onPrimaryDisabled
+          child: Text(
+            title,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 35.sp,
+              color: currentStep == 0 
+                ? Theme.of(context).colorScheme.onPrimary
+                : Theme.of(context).colorScheme.onPrimaryDisabled
+            ),
           )
         );
       }
+    );
+  }
+
+  Widget _stepText({required String text}) {
+    return Text(
+      text,
+      style: TextStyle(
+        fontWeight: FontWeight.bold,
+        fontSize: 25.sp,
+        color: Theme.of(context).colorScheme.onPrimarySubdued
+      ),
     );
   }
   

@@ -1,9 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heist/global_widgets/bottom_modal_app_bar.dart';
 import 'package:heist/global_widgets/search_identifier_modal/widgets/search_identifier_body.dart';
 import 'package:heist/themes/global_colors.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'cubit/search_identifier_modal_cubit.dart';
 
@@ -20,7 +20,7 @@ class SearchIdentifierModal extends StatelessWidget {
       appBar: BottomModalAppBar(context: context, backgroundColor: Theme.of(context).colorScheme.scrollBackground),
       backgroundColor: Theme.of(context).colorScheme.scrollBackground,
       body: Padding(
-        padding: EdgeInsets.only(left: 16, right: 16),
+        padding: EdgeInsets.symmetric(horizontal: 16.w),
         child: BlocProvider<SearchIdentifierModalCubit>(
           create: (_) => SearchIdentifierModalCubit(),
           child: SearchIdentifierBody(hintText: _hintText),

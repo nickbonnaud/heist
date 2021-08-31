@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:heist/blocs/active_location/active_location_bloc.dart';
 import 'package:heist/blocs/authentication/authentication_bloc.dart';
 import 'package:heist/blocs/beacon/beacon_bloc.dart';
 import 'package:heist/blocs/customer/customer_bloc.dart';
@@ -68,6 +69,9 @@ import 'package:heist/screens/reset_password_screen/reset_password_screen.dart';
 import 'package:heist/screens/settings_screen/settings_screen.dart';
 import 'package:heist/screens/sign_out_screen/sign_out_screen.dart';
 import 'package:heist/screens/tip_screen/tip_screen.dart';
+import 'package:heist/screens/transaction_business_picker_screen/transaction_business_picker_screen.dart';
+import 'package:heist/screens/transaction_picker_screen/models/transaction_picker_args.dart';
+import 'package:heist/screens/transaction_picker_screen/transaction_picker_screen.dart';
 import 'package:heist/screens/tutorial_screen/tutorial_screen.dart';
 
 import 'route_data.dart';
@@ -123,7 +127,8 @@ class AppRouter {
               ), 
               permissionsBloc: BlocProvider.of<PermissionsBloc>(context)
             ),
-            nearbyBusinessesBloc: BlocProvider.of<NearbyBusinessesBloc>(context)
+            nearbyBusinessesBloc: BlocProvider.of<NearbyBusinessesBloc>(context),
+            activeLocationBloc: BlocProvider.of<ActiveLocationBloc>(context),
           ),
           name: routeData.route
         );
@@ -141,7 +146,32 @@ class AppRouter {
         );
         break;
       case Routes.business:
-        route = OverlayRouteTest(screen: BusinessScreen(business: routeData.args as Business), name: routeData.route);
+        route = OverlayRouteTest(
+          screen: BusinessScreen(
+            business: routeData.args as Business,
+          ),
+          name: routeData.route
+        );
+        break;
+      case Routes.transactionBusinessPicker:
+        route = _createRouteDefault(
+          screen: TransactionBusinessPickerScreen(
+            availableBusinesses: routeData.args as List<Business>,
+          ),
+          name: routeData.route
+        );
+        break;
+      case Routes.transactionPicker:
+        route = _createFullScreenDialogRoute(
+          screen: TransactionPickerScreen(
+            transactionRepository: TransactionRepository(transactionProvider: TransactionProvider()),
+            business: (routeData.args as TransactionPickerArgs).business,
+            fromSettings: (routeData.args as TransactionPickerArgs).fromSettings,
+            activeLocationBloc: BlocProvider.of<ActiveLocationBloc>(context),
+            openTransactionsBloc: BlocProvider.of<OpenTransactionsBloc>(context),
+          ),
+          name: routeData.route
+        );
         break;
       case Routes.requestReset:
         route = _createFullScreenDialogRoute(
@@ -357,7 +387,8 @@ class AppRouter {
               ), 
               permissionsBloc: BlocProvider.of<PermissionsBloc>(context)
             ),
-            nearbyBusinessesBloc: BlocProvider.of<NearbyBusinessesBloc>(context)
+            nearbyBusinessesBloc: BlocProvider.of<NearbyBusinessesBloc>(context),
+            activeLocationBloc: BlocProvider.of<ActiveLocationBloc>(context),
           ),
           name: routeData.route
         );

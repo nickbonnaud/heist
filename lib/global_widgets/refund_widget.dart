@@ -5,9 +5,9 @@ import 'package:heist/models/transaction/refund_resource.dart';
 import 'package:heist/models/transaction/transaction_resource.dart';
 import 'package:heist/resources/helpers/currency.dart';
 import 'package:heist/resources/helpers/date_formatter.dart';
-import 'package:heist/resources/helpers/text_styles.dart';
 import 'package:heist/routing/routes.dart';
 import 'package:heist/themes/global_colors.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'default_app_bar/bloc/default_app_bar_bloc.dart';
 
@@ -26,22 +26,29 @@ class RefundWidget extends StatelessWidget {
       child: ListTile(
         leading: CachedAvatarHero(
           url: _refundResource.business.photos.logo.smallUrl, 
-          radius: 6, 
+          radius: 30.w, 
           tag: _refundResource.transaction.identifier
         ),
-        title: BoldText4(
-          text: _refundResource.business.profile.name,
-          context: context
+        title: Text(
+          _refundResource.business.profile.name,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 18.sp
+          ),
         ),
-        subtitle: Text2(
-          text: 'Refund: ${Currency.create(cents: _refundResource.refund.total)}',
-          context: context,
-          color: Theme.of(context).colorScheme.onPrimarySubdued
+        subtitle: Text(
+          'Refund: ${Currency.create(cents: _refundResource.refund.total)}',
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.onPrimarySubdued,
+            fontSize: 16.sp
+          ),
         ),
-        trailing: Text2(
-          text: DateFormatter.toStandardDate(date: _refundResource.refund.createdAt),
-          context: context,
-          color: Theme.of(context).colorScheme.onPrimarySubdued
+        trailing: Text(
+          DateFormatter.toStandardDate(date: _refundResource.refund.createdAt),
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.onPrimarySubdued,
+            fontSize: 16.sp
+          ),
         ),
         onTap: () => _showFullTransaction(context: context),
       ),

@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:heist/global_widgets/default_app_bar/bloc/default_app_bar_bloc.dart';
 import 'package:heist/models/help_ticket/help_ticket.dart';
-import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/routing/routes.dart';
 import 'package:heist/screens/help_tickets_screen/bloc/help_tickets_screen_bloc.dart';
 import 'package:heist/screens/help_tickets_screen/models/help_ticket_args.dart';
 import 'package:heist/themes/global_colors.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class HelpTicketWidget extends StatelessWidget {
   final HelpTicket _helpTicket;
@@ -32,37 +31,35 @@ class HelpTicketWidget extends StatelessWidget {
               ? Theme.of(context).colorScheme.callToAction 
               : Theme.of(context).colorScheme.callToActionDisabled
             ),
-            title: PlatformText(
+            title: Text(
               _helpTicket.subject,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 color: _hasUnreadMessage() && !_helpTicket.resolved
                   ? Theme.of(context).colorScheme.onPrimary 
                   : Theme.of(context).colorScheme.onPrimaryDisabled,
-                fontSize: SizeConfig.getWidth(6),
+                fontSize: 22.sp,
               ),
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
             ),
             subtitle: _helpTicket.replies.length > 0 
-              ? PlatformText(
+              ? Text(
                 _helpTicket.replies.last.message,
                 style: TextStyle(
-                  fontWeight: FontWeight.bold,
                   color: !_helpTicket.replies.last.fromCustomer && !_helpTicket.replies.last.read && !_helpTicket.resolved
                     ? Theme.of(context).colorScheme.onPrimary 
                     : Theme.of(context).colorScheme.onPrimaryDisabled,
-                  fontSize: SizeConfig.getWidth(4)
+                  fontSize: 16.sp
                 ),
                 maxLines: 3,
                 overflow: TextOverflow.ellipsis,
             )
-              : PlatformText(
+              : Text(
                 _helpTicket.message,
                 style: TextStyle(
-                  fontWeight: FontWeight.bold,
                   color: Theme.of(context).colorScheme.onPrimaryDisabled,
-                  fontSize: SizeConfig.getWidth(4)
+                  fontSize: 16.sp
                 ),
                 maxLines: 3,
                 overflow: TextOverflow.ellipsis,

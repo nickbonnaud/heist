@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:heist/global_widgets/bottom_loader.dart';
 import 'package:heist/global_widgets/default_app_bar/bloc/default_app_bar_bloc.dart';
 import 'package:heist/global_widgets/default_app_bar/default_app_bar.dart';
 import 'package:heist/global_widgets/error_screen/error_screen.dart';
-import 'package:heist/resources/helpers/size_config.dart';
-import 'package:heist/resources/helpers/text_styles.dart';
 import 'package:heist/routing/routes.dart';
 import 'package:heist/screens/help_tickets_screen/bloc/help_tickets_screen_bloc.dart';
 import 'package:heist/themes/global_colors.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'widgets/filter_button/bloc/filter_button_bloc.dart';
 import 'widgets/filter_button/filter_button.dart';
@@ -22,7 +22,7 @@ class HelpTicketsScreenBody extends StatefulWidget {
 
 class _HelpTicketsScreenBodyState extends State<HelpTicketsScreenBody> {
   final ScrollController _scrollController = ScrollController();
-  final double _scrollThreshold = 200.0;
+  final double _scrollThreshold = 200.h;
   
   late HelpTicketsScreenBloc _helpTicketsScreenBloc;
   
@@ -71,7 +71,7 @@ class _HelpTicketsScreenBodyState extends State<HelpTicketsScreenBody> {
           isSliver: true,
           title: "Help",
           trailingWidget: Padding(
-            padding: EdgeInsets.only(right: 8),
+            padding: EdgeInsets.only(right: 8.w),
             child: IconButton(
               icon: Icon(Icons.edit), 
               onPressed: () => _showCreateHelpTicketForm(),
@@ -88,27 +88,31 @@ class _HelpTicketsScreenBodyState extends State<HelpTicketsScreenBody> {
     if (state is Loaded) {
       if (state.helpTickets.isEmpty) {
         return SliverPadding(
-          padding: EdgeInsets.only(left: 8, right: 8),
+          padding: EdgeInsets.symmetric(horizontal: 8.w),
           sliver: SliverFillRemaining(
             child: Center(
-              child: BoldText1(
-                text: 'No Help Tickets found!',
-                context: context,
-              ),
+              child: Text(
+                'No Help Tickets found!',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 28.sp,
+                ),
+              )
             ),
             hasScrollBody: false,
           ),
         );
       }
       return SliverPadding(
-        padding: EdgeInsets.only(left: 8, right: 8),
+        padding: EdgeInsets.symmetric(horizontal: 8.w),
         sliver: SliverList(
-          delegate: SliverChildBuilderDelegate((BuildContext context, int index) => index >= state.helpTickets.length
-            ? CircularProgressIndicator()
-            : HelpTicketWidget(
-              helpTicket: state.helpTickets[index],
-              key: Key('helpTicketKey-$index'),
-            ),
+          delegate: SliverChildBuilderDelegate(
+            (BuildContext context, int index) => index >= state.helpTickets.length
+              ? BottomLoader()
+              : HelpTicketWidget(
+                  helpTicket: state.helpTickets[index],
+                  key: Key('helpTicketKey-$index'),
+                ),
             childCount: state.hasReachedEnd
               ? state.helpTickets.length
               : state.helpTickets.length + 1
@@ -117,7 +121,7 @@ class _HelpTicketsScreenBodyState extends State<HelpTicketsScreenBody> {
       );
     }
     return SliverPadding(
-      padding: EdgeInsets.only(left: 8, right: 8),
+      padding: EdgeInsets.symmetric(horizontal: 8.w),
       sliver: SliverFillRemaining(
         child: Center(
           child: CircularProgressIndicator(),
@@ -130,8 +134,8 @@ class _HelpTicketsScreenBodyState extends State<HelpTicketsScreenBody> {
   Widget _filterButton({required HelpTicketsScreenState state}) {
     if (state is Loaded) {
       return Positioned(
-        bottom: -SizeConfig.getHeight(5),
-        right: -SizeConfig.getWidth(10 ),
+        bottom: -40.h,
+        right: -40.w,
         child: BlocProvider<FilterButtonBloc>(
           create: (_) => FilterButtonBloc(),
           child: FilterButton(

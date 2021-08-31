@@ -5,7 +5,7 @@ import 'package:heist/models/help_ticket/help_ticket.dart';
 import 'package:heist/models/help_ticket/reply.dart';
 import 'package:heist/repositories/help_repository.dart';
 import 'package:heist/resources/helpers/api_exception.dart';
-import 'package:heist/screens/help_ticket_screen/widgets/message_list/bloc/message_list_bloc.dart';
+import 'package:heist/screens/help_ticket_screen/widgets/help_ticket_body/widgets/message_list/bloc/message_list_bloc.dart';
 import 'package:heist/screens/help_tickets_screen/bloc/help_tickets_screen_bloc.dart';
 import 'package:mocktail/mocktail.dart';
 

@@ -20,27 +20,27 @@ class StartBeaconMonitoring extends BeaconEvent {
 }
 
 class Enter extends BeaconEvent {
-  final Region region;
+  final businessBeacon.Beacon beacon;
 
-  Enter({required this.region});
-
-  @override
-  List<Object> get props => [region];
+  Enter({required this.beacon});
 
   @override
-  String toString() => 'Enter { region: $region }';
+  List<Object> get props => [beacon];
+
+  @override
+  String toString() => 'Enter { beacon: $beacon }';
 }
 
 class Exit extends BeaconEvent {
-  final Region region;
+  final businessBeacon.Beacon beacon;
 
-  Exit({required this.region});
-
-  @override
-  List<Object> get props => [region];
+  Exit({required this.beacon});
 
   @override
-  String toString() => 'Exit { region: $region }';
+  List<Object> get props => [beacon];
+
+  @override
+  String toString() => 'Exit { beacon: $beacon }';
 }
 
 class BeaconCancelled extends BeaconEvent {}

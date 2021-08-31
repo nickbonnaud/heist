@@ -1,9 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:heist/resources/helpers/size_config.dart';
-import 'package:heist/resources/helpers/text_styles.dart';
 import 'package:heist/routing/routes.dart';
 import 'package:heist/themes/global_colors.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SettingsList extends StatelessWidget {
   
@@ -11,16 +9,22 @@ class SettingsList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: <Widget>[
-        SizedBox(height: SizeConfig.getHeight(2)),
+      children: [
+        SizedBox(height: 15.h),
         ListTile(
           key: Key("profileTileKey"),
           leading: Icon(
             Icons.person, 
             color: Theme.of(context).colorScheme.secondary,
-            size: SizeConfig.getWidth(8)
+            size: 30.w
           ),
-          title: Text1(text: 'Change Profile', context: context, color: Theme.of(context).colorScheme.callToAction),
+          title: Text(
+            'Change Profile',
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.callToAction,
+              fontSize: 24.sp
+            )
+          ),
           onTap: () => Navigator.of(context).pushNamed(Routes.profile)
         ),
         ListTile(
@@ -28,9 +32,15 @@ class SettingsList extends StatelessWidget {
           leading: Icon(
             Icons.email,
             color: Theme.of(context).colorScheme.secondary,
-            size: SizeConfig.getWidth(8)
+            size: 30.w
           ),
-          title: Text1(text: 'Change Email', context: context, color: Theme.of(context).colorScheme.callToAction),
+          title: Text(
+            'Change Email', 
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.callToAction,
+              fontSize: 24.sp
+            )
+          ),
           onTap: () => Navigator.of(context).pushNamed(Routes.email)
         ),
         ListTile(
@@ -38,9 +48,15 @@ class SettingsList extends StatelessWidget {
           leading: Icon(
             Icons.lock,
             color: Theme.of(context).colorScheme.secondary,
-            size: SizeConfig.getWidth(8)
+            size: 30.w
           ),
-          title: Text1(text: 'Change Password', context: context, color: Theme.of(context).colorScheme.callToAction),
+          title: Text(
+            'Change Password', 
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.callToAction,
+              fontSize: 24.sp
+            )
+          ),
           onTap: () => Navigator.of(context).pushNamed(Routes.password)
         ),
         ListTile(
@@ -48,9 +64,15 @@ class SettingsList extends StatelessWidget {
           leading: Icon(
             Icons.payment,
             color: Theme.of(context).colorScheme.secondary,
-            size: SizeConfig.getWidth(8)
+            size: 30.w
           ),
-          title: Text1(text: 'Change Payment Method', context: context, color: Theme.of(context).colorScheme.callToAction),
+          title: Text(
+            'Change Payment', 
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.callToAction,
+              fontSize: 24.sp
+            )
+          ),
           onTap: () => print('show payment screen'),
         ),
         ListTile(
@@ -58,9 +80,15 @@ class SettingsList extends StatelessWidget {
           leading: Icon(
             Icons.thumb_up,
             color: Theme.of(context).colorScheme.secondary,
-            size: SizeConfig.getWidth(8)
+            size: 30.w
           ),
-          title: Text1(text: 'Change Tip Settings', context: context, color: Theme.of(context).colorScheme.callToAction),
+          title: Text(
+            'Change Tips', 
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.callToAction,
+              fontSize: 24.sp
+            )
+          ),
           onTap: () => Navigator.of(context).pushNamed(Routes.tips)
         ),
         ListTile(
@@ -68,12 +96,18 @@ class SettingsList extends StatelessWidget {
           leading: Icon(
             Icons.logout,
             color: Theme.of(context).colorScheme.secondary,
-            size: SizeConfig.getWidth(8)
+            size: 30.sp
           ),
-          title: Text1(text: "Logout", context: context, color: Theme.of(context).colorScheme.callToAction),
+          title: Text(
+            'Logout', 
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.callToAction,
+              fontSize: 24.sp
+            )
+          ),
           onTap: () => Navigator.of(context).pushNamed(Routes.logout),
         ),
-        SizedBox(height: SizeConfig.getHeight(10))
+        SizedBox(height: 80.h)
       ],
     );
   }

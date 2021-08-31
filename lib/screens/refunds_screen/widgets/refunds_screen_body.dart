@@ -1,14 +1,12 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heist/global_widgets/bottom_loader.dart';
 import 'package:heist/global_widgets/default_app_bar/default_app_bar.dart';
 import 'package:heist/global_widgets/error_screen/error_screen.dart';
 import 'package:heist/global_widgets/refund_widget.dart';
-import 'package:heist/resources/helpers/size_config.dart';
-import 'package:heist/resources/helpers/text_styles.dart';
 import 'package:heist/screens/refunds_screen/bloc/refunds_screen_bloc.dart';
 import 'package:heist/themes/global_colors.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'filter_button/bloc/filter_button_bloc.dart';
 import 'filter_button/filter_button.dart';
@@ -21,7 +19,7 @@ class RefundsScreenBody extends StatefulWidget {
 
 class _RefundsScreenBodyState extends State<RefundsScreenBody> {
   final ScrollController _scrollController = ScrollController();
-  final double _scrollThreshold = 200.0;
+  final double _scrollThreshold = 200.h;
   late RefundsScreenBloc _refundsScreenBloc;
 
   @override
@@ -45,9 +43,9 @@ class _RefundsScreenBodyState extends State<RefundsScreenBody> {
 
         return Stack(
           key: Key("refundsListKey"),
-          children: <Widget>[
-            _buildRefundsBody(state: state),
-            _buildFilterButton(context: context, state: state)
+          children: [
+            _refundsBody(state: state),
+            _filterButton(context: context, state: state)
           ],
         );
       }
@@ -60,10 +58,10 @@ class _RefundsScreenBodyState extends State<RefundsScreenBody> {
     super.dispose();
   }
 
-  Widget _buildRefundsBody({required RefundsScreenState state}) {
+  Widget _refundsBody({required RefundsScreenState state}) {
     return CustomScrollView(
       controller: _scrollController,
-      slivers: <Widget>[
+      slivers: [
         DefaultAppBar(
           backgroundColor: Theme.of(context).colorScheme.scrollBackground,
           isSliver: true,
@@ -78,20 +76,23 @@ class _RefundsScreenBodyState extends State<RefundsScreenBody> {
     if (state is RefundsLoaded) {
       if (state.refunds.isEmpty) {
         return SliverPadding(
-          padding: EdgeInsets.only(left: 8, right: 8),
+          padding: EdgeInsets.symmetric(horizontal: 8.w),
           sliver: SliverFillRemaining(
             child: Center(
-              child: BoldText1(
-                text: 'No Refunds Found!', 
-                context: context,
-              ),
+              child: Text(
+                'No Refunds Found!',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 28.sp,
+                ),
+              )
             ),
             hasScrollBody: false,
           ),
         );
       }
       return SliverPadding(
-        padding: EdgeInsets.only(left: 8, right: 8),
+        padding: EdgeInsets.symmetric(horizontal: 8.w),
         sliver: SliverList(
           delegate: SliverChildBuilderDelegate(
             (BuildContext context, int index) => index >= state.refunds.length
@@ -109,7 +110,7 @@ class _RefundsScreenBodyState extends State<RefundsScreenBody> {
       );
     }
     return SliverPadding(
-      padding: EdgeInsets.only(left: 8, right: 8),
+      padding: EdgeInsets.symmetric(horizontal: 8.w),
       sliver: SliverFillRemaining(
         child: Center(
           child: CircularProgressIndicator(),
@@ -119,11 +120,11 @@ class _RefundsScreenBodyState extends State<RefundsScreenBody> {
     );
   }
 
-  Widget _buildFilterButton({required BuildContext context, required RefundsScreenState state}) {
+  Widget _filterButton({required BuildContext context, required RefundsScreenState state}) {
     if (state is RefundsLoaded) {
       return Positioned(
-        bottom: -SizeConfig.getHeight(5),
-        right: -SizeConfig.getWidth(10 ),
+        bottom: -40.h,
+        right: -40.w,
         child: BlocProvider<FilterButtonBloc>(
           create: (_) => FilterButtonBloc(),
           child: FilterButton(

@@ -17,4 +17,8 @@ class DateFormatter {
   static String toStandardDate({required DateTime date}) {
     return DateFormat('E, MMM d').format(date);
   }
+
+  static String toStringTime({required DateTime date}) {
+    return DateFormat.jm().format(date);
+  }
 }

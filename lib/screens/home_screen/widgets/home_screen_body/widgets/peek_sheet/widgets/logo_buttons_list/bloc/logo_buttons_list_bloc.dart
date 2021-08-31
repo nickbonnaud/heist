@@ -59,7 +59,7 @@ class LogoButtonsListBloc extends Bloc<LogoButtonsListEvent, LogoButtonsListStat
   List<Business> get nonActiveNearby {
     return _nearbyBusinessesBloc.businesses.where((business) {
       return !_activeLocationBloc.state.activeLocations
-        .any((activeLocation) => activeLocation.beaconIdentifier == business.location.beacon.identifier);
+        .any((activeLocation) => activeLocation.business == business);
     }).toList();
   }
 

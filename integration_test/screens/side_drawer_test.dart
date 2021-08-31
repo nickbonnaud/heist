@@ -7,6 +7,7 @@ import 'help_tickets_screen_test.dart';
 import 'historic_transactions_screen_test.dart';
 import 'refunds_screen_test.dart';
 import 'settings_screen_test.dart';
+import 'transaction_business_picker_screen_test.dart';
 import 'tutorial_screen_test.dart';
 
 class SideDrawerTest {
@@ -22,6 +23,8 @@ class SideDrawerTest {
 
     expect(find.byType(DrawerBody), findsOneWidget);
 
+    await TransactionBusinessPickerScreenTest(tester: tester).init();
+    
     await HistoricTransactionsScreenTest(tester: tester).init();
 
     await RefundsScreenTest(tester: tester).init();

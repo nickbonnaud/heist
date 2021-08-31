@@ -2,8 +2,7 @@ import "dart:math" as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:heist/resources/helpers/size_config.dart';
-import 'package:heist/resources/helpers/text_styles.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:heist/screens/auth_screen/auth_screen.dart';
 import 'package:heist/screens/auth_screen/widgets/cubit/keyboard_visible_cubit.dart';
 import 'package:heist/screens/auth_screen/widgets/page_offset_notifier.dart';
@@ -17,8 +16,8 @@ class WelcomeLabel extends StatelessWidget {
     return Consumer2<PageOffsetNotifier, AnimationController>(
       builder: (context, notifier, animation, child) {
         return Positioned(
-          top: (1 - animation.value) * (mainSquareSize(context: context) + topMargin(context: context) + SizeConfig.getHeight(4)) + (animation.value * SizeConfig.getHeight(6)),
-          left: SizeConfig.getWidth(6) + MediaQuery.of(context).size.width - notifier.offset,
+          top: (1 - animation.value) * (mainSquareSize(context: context) + topMargin(context: context) + 32.h) + (animation.value * 50.h),
+          left: 24.w + MediaQuery.of(context).size.width - notifier.offset,
           child: BlocBuilder<KeyboardVisibleCubit, bool>(
             builder: (context, keyboardVisible) {
               return Opacity(
@@ -29,10 +28,13 @@ class WelcomeLabel extends StatelessWidget {
           )
         );
       },
-      child: VeryBoldText2(
-        text: 'Register', 
-        context: context,
-        color: Theme.of(context).colorScheme.onSecondary,
+      child: Text(
+        'Register',
+        style: TextStyle(
+          fontWeight: FontWeight.w900,
+          color: Theme.of(context).colorScheme.onSecondary,
+          fontSize: 35.sp,
+        ),
       )
     );
   }

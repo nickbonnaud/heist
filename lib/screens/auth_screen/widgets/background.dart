@@ -2,11 +2,11 @@ import 'package:flare_flutter/flare_actor.dart';
 import 'package:flare_flutter/flare_controls.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'page_offset_notifier.dart';
 
 class Background extends StatelessWidget {
-  static const _offsetWidth =  275;
   final FlareControls _controls = FlareControls();
   
   @override
@@ -14,7 +14,7 @@ class Background extends StatelessWidget {
     return Consumer2<PageOffsetNotifier, AnimationController>(
       builder: (context, notifier, animation, child) {
         return Positioned(
-          left: -_offsetWidth * (notifier.offset / 375),
+          left: -275.w * (notifier.offset / 375.w),
           child: Transform.scale(
             scale: 1.1 - 0.1 * animation.value,
             child: Opacity(

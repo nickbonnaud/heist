@@ -3,9 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heist/global_widgets/cached_avatar.dart';
 import 'package:heist/global_widgets/search_business_name_modal/bloc/search_business_name_bloc.dart';
 import 'package:heist/models/business/business.dart';
-import 'package:heist/resources/helpers/size_config.dart';
-import 'package:heist/resources/helpers/text_styles.dart';
 import 'package:heist/themes/global_colors.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SearchBusinessNameBody extends StatefulWidget {
 
@@ -29,9 +28,9 @@ class _SearchBusinessNameBodyState extends State<SearchBusinessNameBody> {
         key: Key("searchBusinessNameBodyKey"),
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          SizedBox(height: SizeConfig.getHeight(1)),
+          SizedBox(height: 10.h),
           _textField(),
-          SizedBox(height: SizeConfig.getHeight(3)),
+          SizedBox(height: 25.h),
           _body()
         ],
       ),
@@ -50,13 +49,13 @@ class _SearchBusinessNameBodyState extends State<SearchBusinessNameBody> {
       focusNode: _focusNode,
       style: TextStyle(
         fontWeight: FontWeight.w700,
-        fontSize: SizeConfig.getWidth(7),
+        fontSize: 28.sp,
       ),
       decoration: InputDecoration(
         hintText: "Business Name",
         hintStyle: TextStyle(
           fontWeight: FontWeight.w700,
-          fontSize: SizeConfig.getWidth(7),
+          fontSize: 28.sp,
           color: Theme.of(context).colorScheme.onPrimaryDisabled
         ),
       ),
@@ -72,13 +71,14 @@ class _SearchBusinessNameBodyState extends State<SearchBusinessNameBody> {
   Widget _body() {
     return BlocBuilder<SearchBusinessNameBloc, SearchBusinessNameState>(
       builder: (context, state) {
+        
         if (state.isSubmitting) return CircularProgressIndicator();
 
-        if (state.errorMessage.isNotEmpty) return Center(key: Key("errorSearchBusinessNameKey"), child: Text2(text: state.errorMessage, context: context, color: Theme.of(context).colorScheme.error));
+        if (state.errorMessage.isNotEmpty) return Center(key: Key("errorSearchBusinessNameKey"), child: Text(state.errorMessage, style: TextStyle(color: Theme.of(context).colorScheme.error, fontWeight: FontWeight.bold, fontSize: 28.sp)));
 
         if (state.businesses == null) return Container();
 
-        if (state.businesses!.isEmpty) return Center(child: Text2(text: "No Businesses Found!", context: context));
+        if (state.businesses!.isEmpty) return Center(child: Text("No Businesses Found!", style: TextStyle(color: Theme.of(context).colorScheme.error, fontWeight: FontWeight.bold, fontSize: 28.sp)));
 
         return _businessList(businesses: state.businesses!);
       }
@@ -94,14 +94,19 @@ class _SearchBusinessNameBodyState extends State<SearchBusinessNameBody> {
           return Card(
             key: Key("businessNameCardKey-$index"),
             child: Padding(
-              padding: EdgeInsets.all(8),
+              padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 8.h),
               child: ListTile(
                 onTap: () => Navigator.of(context).pop(businesses[index]),
                 leading: CachedAvatar(
                   url: businesses[index].photos.logo.smallUrl, 
-                  radius: 8
+                  radius: 40.w
                 ),
-                title: BoldText4(text: businesses[index].profile.name, context: context),
+                title: Text(
+                  businesses[index].profile.name,
+                  style: TextStyle(
+                    fontSize: 22.sp
+                  ),
+                )
               ),
             )
           );

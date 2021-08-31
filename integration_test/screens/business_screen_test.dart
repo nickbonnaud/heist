@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:heist/screens/business_screen/business_screen.dart';
 
 import '../helpers/test_title.dart';
+import 'transaction_picker_screen_test.dart';
 
 class BusinessScreenTest {
   final WidgetTester tester;
@@ -19,13 +20,30 @@ class BusinessScreenTest {
     await _dismissScreenButton();
   }
 
-  Future<void> initLogoButton() async {
+  Future<void> initLogoButtonNearby() async {
     expect(find.byKey(Key("bannerKey")), findsOneWidget);
     expect(find.byKey(Key("logoKey")), findsOneWidget);
 
     expect(find.byKey(Key("websiteButtonKey")), findsOneWidget);
     expect(find.byKey(Key("phoneButtonKey")), findsOneWidget);
     expect(find.byKey(Key("hoursKey")), findsOneWidget);
+
+    await _scrollDescription();
+    
+    expect(find.byType(BusinessScreen), findsOneWidget);
+    await _dismissButtonSwipe();
+  }
+
+  Future<void> initLogoButtonActive() async {
+    expect(find.byKey(Key("bannerKey")), findsOneWidget);
+    expect(find.byKey(Key("logoKey")), findsOneWidget);
+
+    expect(find.byKey(Key("websiteButtonKey")), findsOneWidget);
+    expect(find.byKey(Key("phoneButtonKey")), findsOneWidget);
+    expect(find.byKey(Key("hoursKey")), findsOneWidget);
+
+    expect(find.byKey(Key("claimTransactionButtonKey")), findsOneWidget);
+    await TransactionPickerScreenTest(tester: tester).initBusinessScreen();
 
     await _scrollDescription();
     

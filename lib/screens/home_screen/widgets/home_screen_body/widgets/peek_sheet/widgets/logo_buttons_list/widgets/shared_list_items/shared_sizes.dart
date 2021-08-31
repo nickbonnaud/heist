@@ -1,14 +1,12 @@
-import 'package:heist/resources/helpers/size_config.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SharedSizes {
-  final double startSize = SizeConfig.getWidth(12);
-  final double endSize = SizeConfig.getWidth(22);
+  final double startSize = 45.w;
+  final double endSize = 85.w;
   
-  final double startMarginTop = SizeConfig.getHeight(1);
-  final double endMarginTop = SizeConfig.getHeight(1);
+  final double startMarginTop = 3.h;
+  final double endMarginTop = 3.h;
   
-  final double verticalSpacing = SizeConfig.getHeight(4);
-  final double horizontalSpacing = SizeConfig.getWidth(4);
-
-  final double minLogoRightBorderRadius = SizeConfig.getWidth(2);
+  final double verticalSpacing = 30.h;
+  final double horizontalSpacing = 15.w;
 }

@@ -2,14 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:heist/models/customer/account.dart';
-import 'package:heist/resources/helpers/size_config.dart';
-import 'package:heist/resources/helpers/text_styles.dart';
+import 'package:heist/resources/helpers/global_text.dart';
 import 'package:heist/resources/helpers/vibrate.dart';
 import 'package:heist/screens/tip_screen/bloc/tip_form_bloc.dart';
 import 'package:heist/themes/global_colors.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class TipForm extends StatefulWidget {
   final Account _account;
@@ -54,45 +53,42 @@ class _TipFormState extends State<TipForm> {
       },
       child: Form(
         child: Padding(
-          padding: EdgeInsets.only(left: 16.0, right: 16.0),
+          padding: EdgeInsets.symmetric(horizontal: 16.w),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
+            children: [
               Expanded(
                 child: KeyboardActions(
                   config: _buildKeyboard(),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: <Widget>[
-                      VeryBoldText1(
-                        text: 'Edit Tip Rates', 
-                        context: context, 
-                      ),
+                    children: [
+                      ScreenTitle(title: 'Edit Tip Rates'),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: <Widget>[
+                        children: [
                           Expanded(
                             child: _defaultTip()
                           ),
-                          SizedBox(width: SizeConfig.getWidth(10)),
+                          SizedBox(width: 40.w),
                           Expanded(
                             child: _quickTip()
                           ),
                         ],
                       ),
-                      SizedBox(height: SizeConfig.getHeight(1)),
+                      SizedBox(height: 10.h),
                     ],
                   ),
                 ) ,
               ),
               Padding(
-                padding: EdgeInsets.only(bottom: 16),
+                padding: EdgeInsets.only(bottom: 16.h),
                 child: Row(
-                  children: <Widget>[
+                  children: [
                     Expanded(
                       child: _cancelButton()
                     ),
-                    SizedBox(width: 20),
+                    SizedBox(width: 20.w),
                     Expanded(
                       child: _submitButton() 
                     ),
@@ -123,21 +119,21 @@ class _TipFormState extends State<TipForm> {
           key: Key("defaultTipFieldKey"),
           decoration: InputDecoration(
             labelText: 'Default Tip Rate',
-            suffix: PlatformText(
+            suffix: Text(
               '%',
               style: TextStyle(
                 fontWeight: FontWeight.w700,
-                fontSize: SizeConfig.getWidth(7)
+                fontSize: 28.sp
               ),
             ),
             labelStyle: TextStyle(
               fontWeight: FontWeight.w400,
-              fontSize: SizeConfig.getWidth(5)
+              fontSize: 24.sp
             )
           ),
           style: TextStyle(
             fontWeight: FontWeight.w700,
-            fontSize: SizeConfig.getWidth(7)
+            fontSize: 28.sp
           ),
           controller: _tipRateController,
           keyboardType: TextInputType.number,
@@ -161,21 +157,21 @@ class _TipFormState extends State<TipForm> {
           key: Key("quickTipFieldKey"),
           decoration: InputDecoration(
             labelText: 'Quick Tip Rate',
-            suffix: PlatformText(
+            suffix: Text(
               '%',
               style: TextStyle(
                 fontWeight: FontWeight.w700,
-                fontSize: SizeConfig.getWidth(7)
+                fontSize: 28.sp
               ),
             ),
             labelStyle: TextStyle(
               fontWeight: FontWeight.w400,
-              fontSize: SizeConfig.getWidth(5)
+              fontSize: 24.sp
             )
           ),
           style: TextStyle(
             fontWeight: FontWeight.w700,
-            fontSize: SizeConfig.getWidth(7)
+            fontSize: 28.sp
           ),
           controller: _quickTipRateController,
           keyboardType: TextInputType.number,
@@ -198,13 +194,10 @@ class _TipFormState extends State<TipForm> {
         return OutlinedButton(
           key: Key("cancelButtonKey"),
           onPressed: state.isSubmitting ? null : () => _cancelButtonPressed(),
-          child: BoldText3(
-            text: 'Cancel', 
-            context: context, 
-            color: state.isSubmitting 
-              ? Theme.of(context).colorScheme.callToActionDisabled
-              : Theme.of(context).colorScheme.callToAction
-          ),
+          child: ButtonText(text: 'Cancel', color: state.isSubmitting
+            ? Theme.of(context).colorScheme.callToActionDisabled
+            : Theme.of(context).colorScheme.callToAction
+          )
         );
       }
     );
@@ -224,9 +217,9 @@ class _TipFormState extends State<TipForm> {
   
   Widget _buttonChild({required TipFormState state}) {
     if (state.isSubmitting) {
-      return SizedBox(height: SizeConfig.getWidth(5), width: SizeConfig.getWidth(5), child: CircularProgressIndicator()); 
+      return SizedBox(height: 25.w, width: 25.w, child: CircularProgressIndicator()); 
     } else {
-      return BoldText3(text: 'Save', context: context, color: Theme.of(context).colorScheme.onSecondary);
+      return ButtonText(text: 'Save');
     }
   }
 
@@ -267,9 +260,9 @@ class _TipFormState extends State<TipForm> {
       key: Key("tipFormSnackbarKey"),
       content: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
+        children: [
           Expanded(
-            child: BoldText4(text: message, context: context, color: Theme.of(context).colorScheme.onSecondary)
+            child: SnackbarText(text: message)
           ),
         ],
       ),
@@ -299,12 +292,12 @@ class _TipFormState extends State<TipForm> {
           focusNode: _tipRateNode,
           toolbarButtons: [
             (node) {
-              return GestureDetector(
-                onTap: () => node.unfocus(),
+              return TextButton(
+                onPressed: () => node.unfocus(), 
                 child: Padding(
-                  padding: EdgeInsets.only(right: 16.0),
-                  child: BoldText5(text: 'Done', context: context, color: Theme.of(context).primaryColor),
-                ),
+                  padding: EdgeInsets.only(right: 16.w),
+                  child: ActionText()
+                )
               );
             }
           ]
@@ -313,12 +306,12 @@ class _TipFormState extends State<TipForm> {
           focusNode: _quickTipRateNode,
           toolbarButtons: [
             (node) {
-              return GestureDetector(
-                onTap: () => node.unfocus(),
+              return TextButton(
+                onPressed: () => node.unfocus(), 
                 child: Padding(
-                  padding: EdgeInsets.only(right: 16.0),
-                  child: BoldText5(text: 'Done', context: context, color: Theme.of(context).primaryColor),
-                ),
+                  padding: EdgeInsets.only(right: 16.w),
+                  child: ActionText()
+                )
               );
             }
           ]

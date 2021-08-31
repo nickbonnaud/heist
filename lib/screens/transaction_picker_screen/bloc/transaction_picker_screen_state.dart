@@ -1,75 +1,69 @@
 part of 'transaction_picker_screen_bloc.dart';
 
-abstract class TransactionPickerScreenState extends Equatable {
-  const TransactionPickerScreenState();
-
-  @override
-  List<Object?> get props => [];
-}
-
-class Uninitialized extends TransactionPickerScreenState {}
-
-class Loading extends TransactionPickerScreenState {}
-
-class TransactionsLoaded extends TransactionPickerScreenState {
+@immutable
+class TransactionPickerScreenState extends Equatable {
+  final bool loading;
   final List<UnassignedTransactionResource> transactions;
   final bool claiming;
   final bool claimSuccess;
   final TransactionResource? transaction;
   final String errorMessage;
 
-  const TransactionsLoaded({
+  TransactionPickerScreenState({
+    required this.loading,
     required this.transactions,
-    this.claiming = false,
-    this.claimSuccess = false,
-    this.transaction,
-    this.errorMessage = ""
+    required this.claiming,
+    required this.claimSuccess,
+    required this.transaction,
+    required this.errorMessage
   });
 
-  TransactionsLoaded update({
+  factory TransactionPickerScreenState.initial() {
+    return TransactionPickerScreenState(
+      loading: false,
+      transactions: [],
+      claiming: false,
+      claimSuccess: false,
+      transaction: null,
+      errorMessage: ""
+    );
+  }
+
+  TransactionPickerScreenState update({
+    bool? loading,
+    List<UnassignedTransactionResource>? transactions,
     bool? claiming,
     bool? claimSuccess,
     TransactionResource? transaction,
     String? errorMessage
-  }) {
-    return copyWith(
-      claiming: claiming,
-      claimSuccess: claimSuccess,
-      transaction: transaction,
-      errorMessage: errorMessage
-    );
-  }
+  }) => TransactionPickerScreenState(
+    loading: loading ?? this.loading,
+    transactions: transactions ?? this.transactions,
+    claiming: claiming ?? this.claiming,
+    claimSuccess: claimSuccess ?? this.claimSuccess,
+    transaction: transaction ?? this.transaction,
+    errorMessage: errorMessage ?? this.errorMessage
+  );
   
-  TransactionsLoaded copyWith({
-    bool? claiming,
-    bool? claimSuccess,
-    TransactionResource? transaction,
-    String? errorMessage
-  }) {
-    return TransactionsLoaded(
-      transactions: this.transactions,
-      claiming: claiming ?? this.claiming,
-      claimSuccess: claimSuccess ?? this.claimSuccess,
-      transaction: transaction ?? this.transaction,
-      errorMessage: errorMessage ?? this.errorMessage
-    );
+  @override
+  List<Object?> get props => [
+    loading,
+    transactions,
+    claiming,
+    claimSuccess,
+    transaction,
+    errorMessage
+  ];
+
+  @override
+  String toString() {
+    return '''TransactionPickerScreenState {
+      loading: $loading
+      transactions: $transactions,
+      claiming: $claiming
+      claimSuccess: $claimSuccess,
+      transaction: $transaction,
+      errorMessage: $errorMessage
+    }''';
   }
-
-  @override
-  List<Object?> get props => [transactions, claiming, claimSuccess, transaction, errorMessage];
-
-  @override
-  String toString() => 'TransactionsLoaded { transactions: $transactions, claiming: $claiming, claimSuccess: $claimSuccess transaction: $transaction, errorMessage: $errorMessage }';
-}
-
-class FetchFailure extends TransactionPickerScreenState {
-  final String errorMessage;
-
-  const FetchFailure({required this.errorMessage});
-
-  @override
-  List<Object?> get props => [errorMessage];
-
-  @override
-  String toString() => "FetchFailure { errorMessage: $errorMessage }";
 }

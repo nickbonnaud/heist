@@ -8,6 +8,7 @@ import 'widgets/active_locations_list.dart';
 import 'widgets/nearby_businesses_list.dart';
 import 'widgets/open_transactions_list.dart';
 import 'widgets/shared_list_items/shared_sizes.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class LogoButtonsList extends StatelessWidget {
   final AnimationController _controller;
@@ -51,7 +52,7 @@ class LogoButtonsList extends StatelessWidget {
     int logosLength = state.numberOpenTransactions + state.numberActiveLocations + BlocProvider.of<LogoButtonsListBloc>(context).numberNearbySlots;
     double padding = _setPadding(logosLength: logosLength, state: state, isHeight: true);
 
-    return sharedSizes.endMarginTop + ((logosLength + padding) * (sharedSizes.verticalSpacing + sharedSizes.endSize)) + (_topMargin * 2.5);
+    return sharedSizes.endMarginTop + ((logosLength + padding) * (sharedSizes.verticalSpacing + sharedSizes.endSize)) + (_topMargin * 2.5.h);
   }
 
   double _getContainerWidth({required BuildContext context, required LogoButtonsListState state}) {
@@ -62,10 +63,10 @@ class LogoButtonsList extends StatelessWidget {
   }
 
   double _setPadding({required int logosLength, required LogoButtonsListState state, required bool isHeight}) {
-    if (logosLength < 6) return isHeight ? 2 : 2.25;
+    if (logosLength < 6) return isHeight ? 2.h : 2.25.w;
     if (state.numberOpenTransactions == 0 && state.numberActiveLocations == 0) return 0;
-    if (state.numberOpenTransactions > 0 && state.numberActiveLocations > 0) return isHeight ? 2 : 2.25;
-    return isHeight ? 1 : 1.25;
+    if (state.numberOpenTransactions > 0 && state.numberActiveLocations > 0) return isHeight ? 2.h : 2.25.w;
+    return isHeight ? 1.h : 1.25.w;
   }
 
   double lerp({required double min, required double max}) {

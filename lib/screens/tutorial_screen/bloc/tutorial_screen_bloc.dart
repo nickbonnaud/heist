@@ -59,7 +59,7 @@ class TutorialScreenBloc extends Bloc<TutorialScreenEvent, TutorialScreenState> 
         header = 'At Register';
         break;
       case TutorialCardType.withBill:
-        header = 'Paying Tab/Check';
+        header = 'With Tab/Check';
         break;
       case TutorialCardType.approvePayment:
         header = 'Approve';

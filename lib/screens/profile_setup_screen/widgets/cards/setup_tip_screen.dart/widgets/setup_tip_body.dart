@@ -1,14 +1,14 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
-import 'package:heist/resources/helpers/size_config.dart';
-import 'package:heist/resources/helpers/text_styles.dart';
+import 'package:heist/resources/helpers/global_text.dart';
 import 'package:heist/resources/helpers/vibrate.dart';
 import 'package:heist/screens/profile_setup_screen/bloc/profile_setup_screen_bloc.dart';
-import 'package:heist/screens/profile_setup_screen/widgets/cards/setup_tip_screen.dart/bloc/setup_tip_card_bloc.dart';
 import 'package:heist/themes/global_colors.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import '../../widgets/title_text.dart';
+import '../bloc/setup_tip_card_bloc.dart';
 
 class SetupTipBody extends StatefulWidget {
   final String _accountIdentifier;
@@ -43,49 +43,48 @@ class _SetupTipBodyState extends State<SetupTipBody> {
     return BlocListener<SetupTipCardBloc, SetupTipCardState>(
       listener: (context, state) {
         if (state.errorMessage.isNotEmpty) {
-          _showSnackbar(context, state.errorMessage, state);
+          _showSnackbar(context: context, message: state.errorMessage, state: state);
         } else if (state.isSuccess) {
-          _showSnackbar(context, 'Tip Settings Saved!', state);
+          _showSnackbar(context: context, message: 'Tip Settings Saved!', state: state);
         }
       },
       child: Form(
         child: Padding(
-          padding: EdgeInsets.only(left: 16.0, bottom: 16, right: 16.0),
+          padding: EdgeInsets.only(left: 16.w, bottom: 16.h, right: 16.w),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
+            children: [
               Expanded(
                 child: KeyboardActions(
                   config: _buildKeyboard(context),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: <Widget>[
-                      VeryBoldText4(
-                        text: 'Next, set your tip rates!', 
-                        context: context, 
-                      ),
+                    children: [
+                      TitleText(text: 'Next, set your tip rates!'),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: <Widget>[
+                        children: [
                           Expanded(
                             child: _defaultTipRateField()
                           ),
-                          SizedBox(width: SizeConfig.getWidth(10)),
+                          SizedBox(width: 40.w),
                           Expanded(
                             child: _quickTipRateField()
                           )
                         ],
                       ),
-                      SizedBox(height: SizeConfig.getHeight(1)),
+                      SizedBox(height: 10.h),
                     ],
                   ),
                 )
               ),
               Row(
-                children: <Widget>[
+                children: [
+                  SizedBox(width: .1.sw),
                   Expanded(
                     child: _submitButton()
-                  )
+                  ),
+                  SizedBox(width: .1.sw)
                 ],
               ),
             ],
@@ -112,21 +111,21 @@ class _SetupTipBodyState extends State<SetupTipBody> {
           key: Key("defaultTipRateFieldKey"),
           decoration: InputDecoration(
             labelText: 'Default Tip Rate',
-            suffix: PlatformText(
+            suffix: Text(
               '%',
               style: TextStyle(
                 fontWeight: FontWeight.w700,
-                fontSize: SizeConfig.getWidth(7)
+                fontSize: 28.sp
               ),
             ),
             labelStyle: TextStyle(
               fontWeight: FontWeight.w400,
-              fontSize: SizeConfig.getWidth(5)
+              fontSize: 24.sp
             )
           ),
           style: TextStyle(
             fontWeight: FontWeight.w700,
-            fontSize: SizeConfig.getWidth(7)
+            fontSize: 28.sp
           ),
           controller: _tipRateController,
           keyboardType: TextInputType.number,
@@ -148,21 +147,21 @@ class _SetupTipBodyState extends State<SetupTipBody> {
           key: Key("quickTipRateFieldKey"),
           decoration: InputDecoration(
             labelText: 'Quick Tip Rate',
-            suffix: PlatformText(
+            suffix: Text(
               '%',
               style: TextStyle(
                 fontWeight: FontWeight.w700,
-                fontSize: SizeConfig.getWidth(7)
+                fontSize: 28.sp
               ),
             ),
             labelStyle: TextStyle(
               fontWeight: FontWeight.w400,
-              fontSize: SizeConfig.getWidth(5)
+              fontSize: 24.sp
             )
           ),
           style: TextStyle(
             fontWeight: FontWeight.w700,
-            fontSize: SizeConfig.getWidth(7)
+            fontSize: 28.sp
           ),
           controller: _quickTipRateController,
           keyboardType: TextInputType.number,
@@ -182,11 +181,19 @@ class _SetupTipBodyState extends State<SetupTipBody> {
       builder: (context, state) {
         return ElevatedButton(
           key: Key("submitTipRatesButtonKey"),
-          onPressed: _isSaveButtonEnabled(state) ? () => _saveButtonPressed(context, state) : null,
-          child: _buttonChild(state),
+          onPressed: _isSaveButtonEnabled(state: state) ? () => _saveButtonPressed(context: context, state: state) : null,
+          child: _buttonChild(state: state),
         );
       }
     );
+  }
+
+  Widget _buttonChild({required SetupTipCardState state}) {
+    if (state.isSubmitting) {
+      return SizedBox(height: 25.w, width: 25.w, child: CircularProgressIndicator());
+    } else {
+      return ButtonText(text: 'Save');
+    }
   }
 
   void _onTipRateChanged() {
@@ -197,12 +204,12 @@ class _SetupTipBodyState extends State<SetupTipBody> {
     _setupTipCardBloc.add(QuickTipRateChanged(quickTipRate: _quickTipRateController.text));
   }
 
-  bool _isSaveButtonEnabled(SetupTipCardState state) {
+  bool _isSaveButtonEnabled({required SetupTipCardState state}) {
     return state.isFormValid && isPopulated && !state.isSubmitting;
   }
 
-  void _saveButtonPressed(BuildContext context, SetupTipCardState state) {
-    if (_isSaveButtonEnabled(state)) {
+  void _saveButtonPressed({required BuildContext context, required SetupTipCardState state}) {
+    if (_isSaveButtonEnabled(state: state)) {
       _setupTipCardBloc.add(Submitted(
         accountIdentifier: widget._accountIdentifier,
         tipRate: int.parse(_tipRateController.text),
@@ -211,16 +218,16 @@ class _SetupTipBodyState extends State<SetupTipBody> {
     }
   }
 
-  void _showSnackbar(BuildContext context, String message, SetupTipCardState state) async {
+  void _showSnackbar({required BuildContext context, required String message, required SetupTipCardState state}) async {
     state.isSuccess ? Vibrate.success() : Vibrate.error();
     final SnackBar snackBar = SnackBar(
       key: Key("tipsSnackBarKey"),
       duration: Duration(seconds: 1),
       content: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
+        children: [
           Expanded(
-            child: BoldText4(text: message, context: context, color: Theme.of(context).colorScheme.onSecondary)
+            child: SnackbarText(text: message)
           ),
         ],
       ),
@@ -241,14 +248,6 @@ class _SetupTipBodyState extends State<SetupTipBody> {
       }
     );
   }
-
-  Widget _buttonChild(SetupTipCardState state) {
-    if (state.isSubmitting) {
-      return SizedBox(height: SizeConfig.getWidth(5), width: SizeConfig.getWidth(5), child: CircularProgressIndicator());
-    } else {
-      return BoldText3(text: 'Save', context: context, color: Theme.of(context).colorScheme.onSecondary);
-    }
-  }
   
   KeyboardActionsConfig _buildKeyboard(BuildContext context) {
     return KeyboardActionsConfig(
@@ -258,12 +257,12 @@ class _SetupTipBodyState extends State<SetupTipBody> {
           focusNode: _tipRateNode,
           toolbarButtons: [
             (node) {
-              return GestureDetector(
-                onTap: () => node.unfocus(),
+              return TextButton(
+                onPressed: () => node.unfocus(), 
                 child: Padding(
-                  padding: EdgeInsets.only(right: 16.0),
-                  child: BoldText5(text: 'Done', context: context, color: Theme.of(context).primaryColor),
-                ),
+                  padding: EdgeInsets.only(right: 16.w),
+                  child: ActionText()
+                )
               );
             }
           ]
@@ -272,12 +271,12 @@ class _SetupTipBodyState extends State<SetupTipBody> {
           focusNode: _quickTipRateNode,
           toolbarButtons: [
             (node) {
-              return GestureDetector(
-                onTap: () => node.unfocus(),
+              return TextButton(
+                onPressed: () => node.unfocus(), 
                 child: Padding(
-                  padding: EdgeInsets.only(right: 16.0),
-                  child: BoldText5(text: 'Done', context: context, color: Theme.of(context).primaryColor),
-                ),
+                  padding: EdgeInsets.only(right: 16.w),
+                  child: ActionText()
+                )
               );
             }
           ]

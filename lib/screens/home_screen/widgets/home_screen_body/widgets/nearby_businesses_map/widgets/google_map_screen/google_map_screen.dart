@@ -1,13 +1,12 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:heist/blocs/geo_location/geo_location_bloc.dart';
 import 'package:heist/global_widgets/cached_avatar_hero.dart';
 import 'package:heist/models/business/business.dart';
-import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/screens/business_screen/business_screen.dart';
 import 'package:heist/screens/home_screen/blocs/business_screen_visible_cubit.dart';
 import 'package:heist/screens/home_screen/blocs/side_drawer_bloc/side_drawer_bloc.dart';
@@ -20,7 +19,11 @@ class GoogleMapScreen extends StatefulWidget{
   final double _longitude;
   final List<PreMarker> _preMarkers;
 
-  GoogleMapScreen({required double latitude, required double longitude, required List<PreMarker> preMarkers})
+  GoogleMapScreen({
+    required double latitude,
+    required double longitude,
+    required List<PreMarker> preMarkers,
+  })
     : _latitude = latitude,
       _longitude = longitude,
       _preMarkers = preMarkers;
@@ -43,7 +46,7 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
       },
       child: Scaffold(
         body: Stack(
-          children: <Widget>[
+          children: [
             GoogleMap(
               onMapCreated: (GoogleMapController controller) => _controller = controller,
               initialCameraPosition: CameraPosition(
@@ -63,11 +66,11 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
                 if (state.screenCoordinate != null) {
                   return Positioned(
                     key: Key("${state.business!.identifier}"),
-                    top: state.screenCoordinate!.y.toDouble() - SizeConfig.getHeight(6),
-                    left: state.screenCoordinate!.x.toDouble() - SizeConfig.getWidth(7),
+                    top: state.screenCoordinate!.y.toDouble().h - 40.h,
+                    left: state.screenCoordinate!.x.toDouble().w - 5.h,
                     child: CachedAvatarHero(
                       url: state.business!.photos.logo.smallUrl, 
-                      radius: 7, 
+                      radius: 5.w, 
                       tag: state.business!.identifier + "-map"
                     )
                   );
@@ -106,7 +109,7 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
   void _showBusinessSheet({required Business business}) {
     context.read<BusinessScreenVisibleCubit>().toggle();
     BlocProvider.of<SideDrawerBloc>(context).add(ButtonVisibilityChanged(isVisible: false));
-
+    
     Navigator.of(context).push(PageRouteBuilder(
       opaque: false,
       fullscreenDialog: true,
@@ -136,7 +139,6 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
         }
       );
     }).toSet()..add(_createCustomerLocationMarker());
-    // print(markers);
     return markers;
   }
 }

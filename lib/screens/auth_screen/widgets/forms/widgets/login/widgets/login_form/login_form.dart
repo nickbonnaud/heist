@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:heist/blocs/customer/customer_bloc.dart';
 import 'package:heist/blocs/permissions/permissions_bloc.dart';
-import 'package:heist/resources/helpers/size_config.dart';
-import 'package:heist/resources/helpers/text_styles.dart';
+import 'package:heist/resources/helpers/global_text.dart';
 import 'package:heist/resources/helpers/vibrate.dart';
 import 'package:heist/routing/routes.dart';
 import 'package:heist/screens/auth_screen/widgets/cubit/keyboard_visible_cubit.dart';
@@ -79,16 +78,16 @@ class _LoginFormState extends State<LoginForm> {
             alignment: Alignment.center,
             children: [
               Positioned(
-                top: (1 - animation.value) * MediaQuery.of(context).size.height + SizeConfig.getHeight(12),
-                left: SizeConfig.getWidth(1),
-                right: SizeConfig.getWidth(1),
+                top: (1 - animation.value) * MediaQuery.of(context).size.height + 95.h,
+                left: 5.w,
+                right: 5.w,
                 child: Opacity(
                   opacity: 1 - (2 * notifier.page),
                   child: child,
                 )
               ),
               Positioned(
-                bottom: animation.value * SizeConfig.getHeight(10) - SizeConfig.getHeight(4),
+                bottom: animation.value * 80.h - 30.h,
                 child: Consumer2<PageOffsetNotifier, AnimationController>(
                   builder: (context, notifier, animation, child) {
                     return _goToRegisterForm(animation: animation);
@@ -101,7 +100,7 @@ class _LoginFormState extends State<LoginForm> {
         child: Form(
           key: Key("loginFormKey"),
           child: Padding(
-            padding: EdgeInsets.only(left: 16.0, right: 16.0),
+            padding: EdgeInsets.only(left: 16.w, right: 16.w),
             child: Container(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height,
@@ -111,19 +110,19 @@ class _LoginFormState extends State<LoginForm> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
+                  children: [
                     _emailTextField(),
-                    SizedBox(height: SizeConfig.getHeight(5)),
+                    SizedBox(height: 40.h),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         _passwordTextField(),
-                        SizedBox(height: SizeConfig.getHeight(3)),
+                        SizedBox(height: 25.h),
                         _requestResetPasswordButton()
                       ],
                     ),
-                    SizedBox(height: SizeConfig.getHeight(5)),
+                    SizedBox(height: 40.h),
                     _submitButton(),
                   ],
                 )
@@ -156,7 +155,7 @@ class _LoginFormState extends State<LoginForm> {
           keyboardAppearance: Brightness.light,
           textInputAction: TextInputAction.next,
           onFieldSubmitted: (_) {
-            _changeFocus(context, _emailFocus, _passwordFocus);
+            _changeFocus(context: context, current: _emailFocus, next: _passwordFocus);
           },
           validator: (_) => !state.isEmailValid && _emailController.text.isNotEmpty
             ? 'Invalid Email'
@@ -170,12 +169,12 @@ class _LoginFormState extends State<LoginForm> {
             hintText: 'Email',
             hintStyle: TextStyle(
               color: Theme.of(context).colorScheme.onSecondarySubdued,
-              fontSize: SizeConfig.getWidth(6)
+              fontSize: 25.sp
             ),
           ),
           style: TextStyle(
             color: Theme.of(context).colorScheme.onSecondary,
-            fontSize: SizeConfig.getWidth(6)
+            fontSize: 25.sp
           ),
         );
       }
@@ -207,12 +206,12 @@ class _LoginFormState extends State<LoginForm> {
             hintText: 'Password',
             hintStyle: TextStyle(
               color: Theme.of(context).colorScheme.onSecondarySubdued,
-              fontSize: SizeConfig.getWidth(6)
+              fontSize: 25.sp
             )
           ),
           style: TextStyle(
             color: Theme.of(context).colorScheme.onSecondary,
-            fontSize: SizeConfig.getWidth(6)
+            fontSize: 25.sp
           ),
           obscureText: true,
         );
@@ -221,8 +220,8 @@ class _LoginFormState extends State<LoginForm> {
   }
 
   Widget _goToRegisterForm({required AnimationController animation}) {
-    return GestureDetector(
-      onTap: () {
+    return TextButton(
+      onPressed: () {
         if (animation.status != AnimationStatus.dismissed) {
           animation.reverse().then((_) {
             widget._pageController.nextPage(duration: Duration(seconds: 1), curve: Curves.decelerate);
@@ -234,23 +233,23 @@ class _LoginFormState extends State<LoginForm> {
       child: Text("Don't have an account?",
         style: TextStyle(
           color: Theme.of(context).colorScheme.callToAction,
-          fontSize: SizeConfig.getWidth(5),
+          fontSize: 20.sp,
           decoration: TextDecoration.underline,
-          letterSpacing: 0.5
+          letterSpacing: 0.5.w
         )
       ),
     );
   }
   
   Widget _requestResetPasswordButton() {
-    return GestureDetector(
-      onTap: () => Navigator.of(context).pushNamed(Routes.requestReset),
+    return TextButton(
+      onPressed: () => Navigator.of(context).pushNamed(Routes.requestReset),
       child: Text("Forgot your password?",
         style: TextStyle(
           color: Theme.of(context).colorScheme.callToAction,
-          fontSize: SizeConfig.getWidth(4),
+          fontSize: 16.sp,
           decoration: TextDecoration.underline,
-          letterSpacing: 0.5
+          letterSpacing: 0.5.w
         )
       ),
     );
@@ -259,37 +258,44 @@ class _LoginFormState extends State<LoginForm> {
   Widget _submitButton() {
     return BlocBuilder<LoginBloc, LoginState>(
       builder: (context, state) {
-        return GestureDetector(
-          onTap: () => _submit(state),
-          child: Container(
-            alignment: Alignment.center,
-            width: double.infinity,
-            height: SizeConfig.getHeight(7),
-            padding: EdgeInsets.symmetric(vertical: 10,horizontal: 0),
-            decoration: BoxDecoration(
-              border: (_isLoginButtonEnabled(state) || state.isSubmitting)
-                ? Border.all(color: Theme.of(context).colorScheme.onSecondary)
-                : null,
-              borderRadius: BorderRadius.circular(50),
-            ),
-            child: state.isSubmitting
-              ? SizedBox(height: SizeConfig.getWidth(5), width: SizeConfig.getWidth(5), child: CircularProgressIndicator())
-              : (_isLoginButtonEnabled(state)
-                  ? PlatformText(
-                      'Login',
-                      key: Key("loginButtonTextKey"),
-                      style: TextStyle(
-                        fontWeight: FontWeight.normal,
-                        color: Theme.of(context).colorScheme.onSecondary,
-                        fontSize: SizeConfig.getWidth(6)
-                      ),
+        return (_isLoginButtonEnabled(state: state) || state.isSubmitting)
+        ? Row(
+            children: [
+              SizedBox(width: .1.sw),
+              Expanded(
+                child: OutlinedButton(
+                  onPressed: _isLoginButtonEnabled(state: state)
+                    ? () => _submit(state: state)
+                    : null,
+                  style: OutlinedButton.styleFrom(
+                    padding: EdgeInsets.only(top: 15.h, bottom: 15.h),
+                    side: BorderSide(
+                      color: Theme.of(context).colorScheme.onSecondary
                     )
-                  : null
-                ),
-          ),
-        );
+                  ),
+                  child: _buttonChild(state: state),
+                )
+              ) ,
+              SizedBox(width: .1.sw),
+            ],
+          )
+        : Container();
       }
     );
+  }
+
+  Widget _buttonChild({required LoginState state}) {
+    return state.isSubmitting
+      ? SizedBox(height: 25.w, width: 25.w, child: CircularProgressIndicator())
+      : Text(
+          "Login",
+          key: Key("loginButtonTextKey"),
+          style: TextStyle(
+            fontWeight: FontWeight.normal,
+            color: Theme.of(context).colorScheme.onSecondary,
+            fontSize: 23.sp
+          ),
+        );
   }
 
   void keyboardVisibilityChanged() {
@@ -305,17 +311,17 @@ class _LoginFormState extends State<LoginForm> {
     _loginBloc.add(PasswordChanged(password: _passwordController.text));
   }
 
-  void _changeFocus(BuildContext context, FocusNode current, FocusNode next) {
+  void _changeFocus({required BuildContext context, required FocusNode current, required FocusNode next}) {
     current.unfocus();
     FocusScope.of(context).requestFocus(next);
   }
 
-  bool _isLoginButtonEnabled(LoginState state) {
+  bool _isLoginButtonEnabled({required LoginState state}) {
     return state.isFormValid && isPopulated && !state.isSubmitting;
   }
 
-  void _submit(LoginState state) {
-    if (_isLoginButtonEnabled(state)) {
+  void _submit({required LoginState state}) {
+    if (_isLoginButtonEnabled(state: state)) {
       _onFormSubmitted();
     }
   }
@@ -333,12 +339,12 @@ class _LoginFormState extends State<LoginForm> {
           focusNode: _emailFocus,
           toolbarButtons: [
             (node) {
-              return GestureDetector(
-                onTap: () => node.unfocus(),
+              return TextButton(
+                onPressed: () => node.unfocus(), 
                 child: Padding(
-                  padding: EdgeInsets.only(right: 16.0),
-                  child: BoldText5(text: 'Done', context: context, color: Theme.of(context).colorScheme.callToAction),
-                ),
+                  padding: EdgeInsets.only(right: 16.w),
+                  child: ActionText()
+                )
               );
             }
           ]
@@ -347,12 +353,12 @@ class _LoginFormState extends State<LoginForm> {
           focusNode: _passwordFocus,
           toolbarButtons: [
             (node) {
-              return GestureDetector(
-                onTap: () => node.unfocus(),
+              return TextButton(
+                onPressed: () => node.unfocus(), 
                 child: Padding(
-                  padding: EdgeInsets.only(right: 16.0),
-                  child: BoldText5(text: 'Done', context: context, color: Theme.of(context).colorScheme.callToAction),
-                ),
+                  padding: EdgeInsets.only(right: 16.w),
+                  child: ActionText()
+                )
               );
             }
           ]
@@ -367,13 +373,9 @@ class _LoginFormState extends State<LoginForm> {
       key: Key("errorLoginSnackbarKey"),
       content: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
+        children: [
           Expanded(
-            child: BoldText4(
-              text: error,
-              context: context,
-              color: Theme.of(context).colorScheme.onError
-            )
+            child: SnackbarText(text: error)
           ),
         ],
       ),

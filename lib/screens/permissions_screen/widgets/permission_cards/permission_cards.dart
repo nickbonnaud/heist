@@ -4,6 +4,7 @@ import 'package:heist/blocs/geo_location/geo_location_bloc.dart';
 import 'package:heist/blocs/permissions/permissions_bloc.dart';
 import 'package:heist/repositories/initial_login_repository.dart';
 import 'package:heist/screens/permissions_screen/widgets/permission_buttons/permission_buttons.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'widgets/beacon_body.dart';
 import 'widgets/bluetooth_body.dart';
@@ -54,14 +55,14 @@ class PermissionCards extends StatelessWidget {
     return AnimatedPositioned(
       duration: Duration(milliseconds: 500),
       top: currentInvalidPermissions.contains(permissionType) 
-        ? currentInvalidPermissions.indexOf(permissionType) * 10.0 
+        ? currentInvalidPermissions.indexOf(permissionType) * 10.h
         : MediaQuery.of(context).size.height,
       bottom: currentInvalidPermissions.contains(permissionType)
         ? 0 
-        : - MediaQuery.of(context).size.height,
+        : -MediaQuery.of(context).size.height,
       child: Container(
         width: MediaQuery.of(context).size.width,
-        padding: EdgeInsets.symmetric(horizontal: 8),
+        padding: EdgeInsets.symmetric(horizontal: 8.w),
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.background,
           boxShadow: [
@@ -69,7 +70,7 @@ class PermissionCards extends StatelessWidget {
               color: Colors.grey.withOpacity(0.3), 
               spreadRadius: 1.0,
               blurRadius: 5,
-              offset: Offset(0, -5)
+              offset: Offset(0, -5.h)
             )
           ]
         ),
@@ -118,6 +119,6 @@ class PermissionCards extends StatelessWidget {
         ));
         break;
     }
-    return Padding(padding: EdgeInsets.only(bottom: 20), child: body);
+    return Padding(padding: EdgeInsets.only(bottom: 20.w), child: body);
   }
 }

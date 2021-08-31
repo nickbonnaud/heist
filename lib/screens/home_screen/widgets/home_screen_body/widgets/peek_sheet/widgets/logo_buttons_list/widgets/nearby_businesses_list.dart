@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heist/blocs/nearby_businesses/nearby_businesses_bloc.dart';
 import 'package:heist/models/business/business.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:heist/screens/home_screen/widgets/home_screen_body/widgets/peek_sheet/widgets/logo_buttons_list/bloc/logo_buttons_list_bloc.dart';
 
 import 'shared_list_items/logo_button/logo_button.dart';
@@ -86,13 +87,6 @@ class NearbyBusinessesList extends StatelessWidget {
       subListIndex: index
     ));
   }
-
-  // List<Business> _getNonActiveLocations({required BuildContext context, required List<Business> businesses}) {
-  //   return businesses.where((business) {
-  //     return !BlocProvider.of<ActiveLocationBloc>(context).state.activeLocations
-  //       .any((activeLocation) => activeLocation.beaconIdentifier == business.location.beacon.identifier);
-  //   }).toList();
-  // }
   
   int _setIndex({required BuildContext context, required NearbyBusinessLoaded state, required Business business}) {
     List<Business> nonActiveLocations = BlocProvider.of<LogoButtonsListBloc>(context).nonActiveNearby;
@@ -112,12 +106,6 @@ class NearbyBusinessesList extends StatelessWidget {
       return 0;
     }
   }
-  
-  // int _numberNearbyToShow({required int numberNonActiveLocations}) {
-  //   final int numberSlotsLeft = 6 - (_numberOpenTransactions + _numberActiveLocations);
-  //   final int slotsToShow = numberSlotsLeft <= 0 ? 3 : numberSlotsLeft;
-  //   return slotsToShow > numberNonActiveLocations ? numberNonActiveLocations : slotsToShow;
-  // }
   
   Widget _buildLogoButton({required BuildContext context, required Business business, required NearbyBusinessLoaded state, required int subListIndex}) {
     final int fullIndex = _setIndex(context: context, state: state, business: business);
@@ -159,8 +147,8 @@ class NearbyBusinessesList extends StatelessWidget {
 
   double _logoLeftMargin({required int index}) {
     return lerp(
-      min: index == 0 ? 3 : index * ((sharedSizes.horizontalSpacing + sharedSizes.startSize)),
-      max: 8
+      min: index == 0 ? 3.w : index * ((sharedSizes.horizontalSpacing + sharedSizes.startSize)),
+      max: 8.w
     );
   }
   

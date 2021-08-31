@@ -3,8 +3,8 @@ part of 'active_location_bloc.dart';
 @immutable
 class ActiveLocationState extends Equatable {
   final List<ActiveLocation> activeLocations;
-  final List<String> addingLocations;
-  final List<String> removingLocations;
+  final List<Beacon> addingLocations;
+  final List<Beacon> removingLocations;
   final String errorMessage;
 
   ActiveLocationState({
@@ -25,8 +25,8 @@ class ActiveLocationState extends Equatable {
 
   ActiveLocationState update({
     List<ActiveLocation>? activeLocations,
-    List<String>? addingLocations,
-    List<String>? removingLocations,
+    List<Beacon>? addingLocations,
+    List<Beacon>? removingLocations,
     String? errorMessage
   }) => ActiveLocationState(
     activeLocations: activeLocations ?? this.activeLocations,

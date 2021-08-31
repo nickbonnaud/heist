@@ -19,7 +19,7 @@ class EmailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).colorScheme.background,
       appBar: BottomModalAppBar(context: context),
       body: BlocProvider<EmailFormBloc>(
         create: (_) => EmailFormBloc(customerRepository: _customerRepository, customerBloc: _customerBloc),

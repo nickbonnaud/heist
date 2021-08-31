@@ -41,7 +41,12 @@ class ProfileScreen extends StatelessWidget {
           profileRepository: _profileRepository, 
           customerBloc: _customerBloc
         ),
-        child: ProfileForm(profile: _profile, photoRepository: _photoRepository, photoPickerRepository: _photoPickerRepository, customerBloc: _customerBloc),
+        child: ProfileForm(
+          profile: _profile,
+          photoRepository: _photoRepository,
+          photoPickerRepository: _photoPickerRepository,
+          customerBloc: _customerBloc
+        ),
       )
     );
   }  

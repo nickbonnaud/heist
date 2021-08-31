@@ -6,9 +6,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heist/blocs/active_location/active_location_bloc.dart';
 import 'package:heist/blocs/nearby_businesses/nearby_businesses_bloc.dart';
 import 'package:heist/blocs/open_transactions/open_transactions_bloc.dart';
-import 'package:heist/resources/helpers/size_config.dart';
 import 'package:heist/screens/home_screen/blocs/side_drawer_bloc/side_drawer_bloc.dart';
 import 'package:heist/themes/global_colors.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'widgets/drag_button.dart';
 import 'widgets/logo_buttons_list/bloc/logo_buttons_list_bloc.dart';
@@ -25,10 +25,10 @@ class _PeekSheetState extends State<PeekSheet> with SingleTickerProviderStateMix
   late AnimationController _controller;
   
   double get _maxHeight => MediaQuery.of(context).size.height;
-  double get _topMargin => lerp(min: 20, max: 20 + MediaQuery.of(context).padding.top);
-  double get _headerFontSize => lerp(min: SizeConfig.getWidth(5), max: SizeConfig.getWidth(8));
-  double get _buttonSize => lerp(min: SizeConfig.getWidth(7), max: SizeConfig.getWidth(10));
-  double get _pullLineHeight => lerp(min: SizeConfig.getHeight(1), max: SizeConfig.getHeight(5));
+  double get _topMargin => lerp(min: 20.h, max: 20.h + MediaQuery.of(context).padding.top);
+  double get _headerFontSize => lerp(min: 24.sp, max: 30.sp);
+  double get _buttonSize => lerp(min: 28.w, max: 38.w);
+  double get _pullLineHeight => lerp(min: 8.h, max: 40.h);
 
   @override
   void initState() {
@@ -54,12 +54,12 @@ class _PeekSheetState extends State<PeekSheet> with SingleTickerProviderStateMix
       animation: _controller, 
       builder: (context, child) {
         return Positioned(
-          height: lerp(min: SizeConfig.getHeight(17), max: _maxHeight),
+          height: lerp(min: 140.h, max: _maxHeight),
           left: 0,
           right: 0,
           bottom: 0,
           child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 8),
+            padding: EdgeInsets.symmetric(horizontal: 8.w),
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.background,
               borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
@@ -68,7 +68,7 @@ class _PeekSheetState extends State<PeekSheet> with SingleTickerProviderStateMix
                   color: Colors.grey.withOpacity(0.3), 
                   spreadRadius: 4.0,
                   blurRadius: 5,
-                  offset: Offset(0, -5)
+                  offset: Offset(0, -5.h)
                 )
               ]
             ),
@@ -82,13 +82,13 @@ class _PeekSheetState extends State<PeekSheet> with SingleTickerProviderStateMix
                 numberNearbyLocations: BlocProvider.of<NearbyBusinessesBloc>(context).state.businesses.length
               ),
               child: Stack(
-                children: <Widget>[
+                children: [
                   Positioned(
                     top: _pullLineHeight,
-                    left: SizeConfig.getWidth(10),
-                    right: SizeConfig.getWidth(10),
+                    left: 35.w,
+                    right: 35.w,
                     child: Container(
-                      height: 4,
+                      height: 4.h,
                       color: Theme.of(context).colorScheme.draggableBar,
                     )
                   ),

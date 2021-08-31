@@ -136,10 +136,10 @@ class RegisterScreenTest {
   }
 
   Future<void> _tapSubmitButtonSuccess() async {
-    expect(find.byKey(Key("registerButtonTextKey")), findsNWidgets(2));
+    expect(find.byKey(Key("registerButtonTextKey")), findsOneWidget);
     expect(find.byType(CircularProgressIndicator), findsNothing);
 
-    await tester.tap(find.byKey(Key("registerButtonTextKey")).first);
+    await tester.tap(find.byKey(Key("registerButtonTextKey")));
     await tester.pump();
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
   }

@@ -1,14 +1,19 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:heist/blocs/active_location/active_location_bloc.dart';
 import 'package:heist/global_widgets/cached_avatar_hero.dart';
 import 'package:heist/models/business/business.dart';
 import 'package:heist/models/business/hours.dart';
-import 'package:heist/resources/helpers/size_config.dart';
-import 'package:heist/resources/helpers/text_styles.dart';
+import 'package:heist/models/customer/active_location.dart';
+import 'package:heist/resources/helpers/global_text.dart';
+import 'package:heist/routing/routes.dart';
+import 'package:heist/screens/transaction_picker_screen/models/transaction_picker_args.dart';
 import 'package:heist/themes/global_colors.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:collection/collection.dart';
 
 class BusinessScreen extends StatefulWidget {
   final Business _business;
@@ -37,13 +42,13 @@ class _BusinessScreenState extends State<BusinessScreen> with SingleTickerProvid
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: Stack(
-          children: <Widget>[
+          children: [
             Positioned(
-              top: 200,
+              top: 200.h,
               child: _banner()
             ),
             Positioned(
-              top: 100,
+              top: 100.h,
               right: 0,
               left: 0,
               child: Align(
@@ -52,27 +57,31 @@ class _BusinessScreenState extends State<BusinessScreen> with SingleTickerProvid
               )
             ),
             Positioned(
-              top: 400,
+              top: 400.h,
                 child: Container(
                 color: Colors.white,
                 width: MediaQuery.of(context).size.width,
-                height: 500,
+                height: 500.h,
                 child: Stack(
-                  children: <Widget>[
+                  children: [
                     Padding(
-                      padding: EdgeInsets.all(16.0),
+                      padding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 16.w),
                       child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
+                          children: [
                             _dragBar(),
-                            SizedBox(height: 20),
+                            SizedBox(height: 20.h),
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
+                              children: [
                                 Expanded(
-                                  child: BoldText2(text: widget._business.profile.name, context: context, color: Theme.of(context).colorScheme.primary)
+                                  child: Text(
+                                    widget._business.profile.name,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 28.sp,
+                                    ),
+                                  )
                                 ),
-                                SizedBox(width: SizeConfig.getWidth(2)),
                                 _dismissButton()
                               ],
                             ),
@@ -114,7 +123,7 @@ class _BusinessScreenState extends State<BusinessScreen> with SingleTickerProvid
       elevation: 5,
       child: CachedAvatarHero(
         url: widget._business.photos.logo.smallUrl, 
-        radius: 25, 
+        radius: 100.w, 
         tag: widget._fromMapScreen
           ? widget._business.identifier + "-map"
           : widget._business.identifier, 
@@ -126,7 +135,7 @@ class _BusinessScreenState extends State<BusinessScreen> with SingleTickerProvid
     return Center(
       key: Key("dragBarKey"),
       child: Container(
-        height: 4,
+        height: 4.h,
         color: Theme.of(context).colorScheme.draggableBar,
         width: MediaQuery.of(context).size.width / 2,
       ),
@@ -134,14 +143,14 @@ class _BusinessScreenState extends State<BusinessScreen> with SingleTickerProvid
   }
 
   Widget _dismissButton() {
-    return GestureDetector(
+    return IconButton(
       key: Key("dismissBusinessButtonKey"),
-      onTap: () => Navigator.of(context).pop(),
-      child: Icon(
+      onPressed: () => Navigator.of(context).pop(),
+      icon: Icon(
         Icons.arrow_downward,
-        size: SizeConfig.getWidth(7),
+        size: 30.w,
         color: Theme.of(context).colorScheme.callToAction,
-      ),
+      )
     );
   }
 
@@ -150,36 +159,85 @@ class _BusinessScreenState extends State<BusinessScreen> with SingleTickerProvid
       key: Key("scrollBodyKey"),
       child: Column(
         children: [
-          SizedBox(height: 20),
+          SizedBox(height: 20.h),
+          _claimTransactionButton(),
           _website(),
-          SizedBox(height: 10),
           _phone(),
-          SizedBox(height: 10),
+          SizedBox(height: 10.h),
           _hours(),
-          SizedBox(height: 20),
+          SizedBox(height: 20.h),
           Container(
-            height: 2,
+            height: 2.h,
             color: Colors.grey.shade100,
           ),
-          SizedBox(height: 20),
-          BoldText3(text: "About ${widget._business.profile.name}", context: context),
-          SizedBox(height: 10),
-          Text2(text: widget._business.profile.description, context: context, color: Theme.of(context).colorScheme.onPrimarySubdued),
-          SizedBox(height: SizeConfig.getHeight(10))
+          SizedBox(height: 20.h),
+          Text(
+            "About ${widget._business.profile.name}",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 25.sp
+            ),
+          ),
+          SizedBox(height: 10.h),
+          Text(
+            widget._business.profile.description,
+            style: TextStyle(
+              fontSize: 18.sp,
+              color: Theme.of(context).colorScheme.onPrimarySubdued
+            ),
+          ),
+          SizedBox(height: 90.h)
         ],
       ),
     );
   }
   
+  Widget _claimTransactionButton() {
+    return BlocBuilder<ActiveLocationBloc, ActiveLocationState>(
+      buildWhen: (previousState, currentState) => previousState.activeLocations != currentState.activeLocations,
+      builder: (context, state) {
+        ActiveLocation? activeLocation = state.activeLocations.firstWhereOrNull((activeLocation) => activeLocation.business == widget._business);
+        if (activeLocation == null || activeLocation.transactionIdentifier != null) return Container();
+        
+        return Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(width: .05.sw),
+                Expanded(
+                  child: ElevatedButton(
+                    key: Key("claimTransactionButtonKey"),
+                    onPressed: () => _goToTransactionFinderScreen(), 
+                    child: ButtonText(text: "Claim Bill")
+                  ),
+                ),
+                SizedBox(width: .05.sw),
+              ],
+            ),
+            Divider(),
+          ],
+        );
+      }
+    );
+  }
+  
   Widget _website() {
     return Row(
-      children: <Widget>[
+      children: [
         Icon(Icons.public),
-        SizedBox(width: 16.0),
-        GestureDetector(
+        SizedBox(width: 16.w),
+        TextButton(
           key: Key("websiteButtonKey"),
-          onTap: () => _navigateToWebsite(),
-          child: BoldText4(text: _formatWebsite(), context: context, color: Theme.of(context).colorScheme.callToAction),
+          onPressed: () => _navigateToWebsite(),
+          child: Text(
+            _formatWebsite(),
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 18.sp,
+              color: Theme.of(context).colorScheme.callToAction
+            ),
+          )
         )
       ],
     );
@@ -187,13 +245,20 @@ class _BusinessScreenState extends State<BusinessScreen> with SingleTickerProvid
 
   Widget _phone() {
     return Row(
-      children: <Widget>[
+      children: [
         Icon(Icons.phone),
-        SizedBox(width: 16),
-        GestureDetector(
+        SizedBox(width: 16.w),
+        TextButton(
           key: Key("phoneButtonKey"),
-          onTap: () => launch("tel://${widget._business.profile.phone}"),
-          child: BoldText4(text: _formatPhone(), context: context, color: Theme.of(context).colorScheme.callToAction),
+          onPressed: () => launch("tel://${widget._business.profile.phone}"),
+          child: Text(
+            _formatPhone(),
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 18.sp,
+              color: Theme.of(context).colorScheme.callToAction
+            ),
+          )
         )
       ],
     );
@@ -203,9 +268,15 @@ class _BusinessScreenState extends State<BusinessScreen> with SingleTickerProvid
     return Row(
       key: Key("hoursKey"),
       children: <Widget>[
-        Icon(Icons.access_time),
-        SizedBox(width: 16),
-        BoldText4(text: _formatOpenHour(), context: context)
+        Icon(Icons.access_time, color: Theme.of(context).colorScheme.onPrimary),
+        SizedBox(width: 16.w),
+        Text(
+          _formatOpenHour(),
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 18.sp,
+          ),
+        )
       ],
     );
   }
@@ -265,5 +336,9 @@ class _BusinessScreenState extends State<BusinessScreen> with SingleTickerProvid
     } else {
       print('cannot launch url');
     }
+  }
+
+  void _goToTransactionFinderScreen() {
+    Navigator.of(context).pushNamed(Routes.transactionPicker, arguments: TransactionPickerArgs(business: widget._business, fromSettings: false));
   }
 }

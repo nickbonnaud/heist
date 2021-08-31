@@ -1,8 +1,8 @@
 import 'dart:math' as math;
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:heist/themes/global_colors.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class DragButton extends StatelessWidget {
   final double _size;
@@ -19,18 +19,18 @@ class DragButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      top: _topMargin - 5,
+      top: _topMargin - 5.h,
       right: 0,
       child: Transform.rotate(
         angle: math.pi * _controller.value,
-        child: GestureDetector(
-          onTap: () => _toggle,
-          child: Icon(
+        child: IconButton(
+          onPressed: () => _toggle,
+          icon: Icon(
             Icons.arrow_upward,
             size: _size,
             color: Theme.of(context).colorScheme.callToAction,
-          ),
-        ),
+          )
+        )
       ),
     );
   }

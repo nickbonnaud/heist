@@ -29,6 +29,7 @@ dependencies:
   flutter_bloc: ^7.1.0
   flutter_cache_manager: ^3.0.2
   flutter_platform_widgets: ^1.9.0
+  flutter_screenutil: ^5.0.0+2
   flutter_secure_storage: ^4.2.1
   geolocator: ^7.0.3
   google_fonts: ^2.1.0

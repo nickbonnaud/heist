@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heist/resources/constants.dart';
-import 'package:heist/resources/helpers/size_config.dart';
-import 'package:heist/resources/helpers/text_styles.dart';
+import 'package:heist/resources/helpers/global_text.dart';
 import 'package:heist/resources/helpers/vibrate.dart';
 import 'package:heist/themes/global_colors.dart';
 import 'package:heist/screens/sign_out_screen/bloc/sign_out_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SignOutBody extends StatelessWidget {
 
@@ -18,7 +18,7 @@ class SignOutBody extends StatelessWidget {
         }
       },
       child: Padding(
-        padding: EdgeInsets.only(left: 16.0, right: 16.0),
+        padding: EdgeInsets.symmetric(horizontal: 16.w),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -26,24 +26,36 @@ class SignOutBody extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  VeryBoldText1(text: "Log Out?", context: context, color: Theme.of(context).colorScheme.danger),
+                  ScreenTitle(title: "Log Out?", color: Theme.of(context).colorScheme.danger),
                   Column(
                     children: [
-                      BoldText3(text: "Are you sure?", context: context),
-                      SizedBox(height: SizeConfig.getHeight(1)),
-                      BoldText3(text: "${Constants.appName} does not work if you are not logged in!", context: context),
+                      Text(
+                        "Are you sure?",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 25.sp
+                        ),
+                      ),
+                      SizedBox(height: 20.h),
+                      Text(
+                        "${Constants.appName} does not work if you are not logged in!",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 22.sp
+                        ),
+                      ),
                     ],
                   ),
-                  SizedBox(height: SizeConfig.getHeight(10)),
+                  SizedBox(height: 40.h),
                 ],
               )
             ),
             Padding(
-              padding: EdgeInsets.only(bottom: 16),
+              padding: EdgeInsets.only(bottom: 16.h),
               child: Row(
                 children: [
                   Expanded(child: _cancelButton(context: context)),
-                  SizedBox(width: 20),
+                  SizedBox(width: 20.w),
                   Expanded(child: _submitButton(context: context))
                 ],
               ),
@@ -60,7 +72,7 @@ class SignOutBody extends StatelessWidget {
         return OutlinedButton(
           key: Key("cancelButtonKey"),
           onPressed: state.isSubmitting ? null : () => _cancelButtonPressed(context: context),
-          child: BoldText3(text: 'Cancel', context: context, color: state.isSubmitting
+          child: ButtonText(text: 'Cancel', color: state.isSubmitting
             ? Theme.of(context).colorScheme.callToActionDisabled
             : Theme.of(context).colorScheme.callToAction
           ),
@@ -86,9 +98,9 @@ class SignOutBody extends StatelessWidget {
 
   Widget _buttonChild({required BuildContext context, required SignOutState state}) {
     if (state.isSubmitting) {
-      return SizedBox(height: SizeConfig.getWidth(5), width: SizeConfig.getWidth(5), child: CircularProgressIndicator(color: Theme.of(context).colorScheme.onDanger));
+      return SizedBox(height: 25.w, width: 25.w, child: CircularProgressIndicator(color: Theme.of(context).colorScheme.onDanger));
     } else {
-      return BoldText3(text: 'Logout', context: context, color: Theme.of(context).colorScheme.onSecondary);
+      return ButtonText(text: 'Logout');
     }
   }
 
@@ -109,9 +121,9 @@ class SignOutBody extends StatelessWidget {
       key: Key("signOutSnackbarKey"),
       content: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
+        children: [
           Expanded(
-            child: BoldText4(text: error, context: context, color: Theme.of(context).colorScheme.onSecondary)
+            child: SnackbarText(text: error)
           ),
         ],
       ),

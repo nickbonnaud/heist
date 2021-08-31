@@ -17,8 +17,6 @@ class IssueScreen extends StatelessWidget {
   final IssueType _type;
   final TransactionResource _transaction;
 
-
-
   IssueScreen({required TransactionIssueRepository issueRepository, required IssueType type, required TransactionResource transaction})
     : _issueRepository = issueRepository,
       _type = type,
