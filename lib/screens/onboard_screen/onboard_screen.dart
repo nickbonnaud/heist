@@ -27,9 +27,11 @@ class OnboardScreen extends StatelessWidget {
           customerStatus: _customerBloc.customer!.status,
           numberValidPermissions: _permissionsBloc.numberValidPermissions
         ),
-        child: OnboardBody(
-          permissionsBloc: _permissionsBloc,
-          customerStatus: _customerBloc.customer!.status,
+        child: SafeArea(
+          child: OnboardBody(
+            permissionsBloc: _permissionsBloc,
+            customerStatus: _customerBloc.customer!.status,
+          )
         ),
       ),
     );

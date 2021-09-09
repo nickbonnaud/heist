@@ -26,7 +26,7 @@ class Background extends StatelessWidget {
       },
       child: IgnorePointer(
         child: Container(
-          height: MediaQuery.of(context).size.height,
+          height: MediaQuery.of(context).size.height * 1.2,
           width: MediaQuery.of(context).size.width * 2,
           child: FlareActor(
             'assets/auth_screen.flr',

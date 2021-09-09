@@ -16,7 +16,6 @@ class NotificationBody extends StatelessWidget {
     : _permissionButtons = permissionButtons;
 
   final String notificationText = 
-  'Please allow ${Constants.appName} to send you notifications.\n\n'
   'Notifications are required to receive and pay for transactions.';
   
   @override
@@ -28,17 +27,8 @@ class NotificationBody extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             SizedBox(height: 15.h),
-            TitleText(text: 'Notications'),
-            SizedBox(height: 50.h),
-            Text('Stage 2',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.onPrimary,
-                fontSize: 24.sp,
-                fontWeight: FontWeight.bold,
-                decoration: TextDecoration.underline
-              ),
-            ),
+            TitleText(text: 'Stage: Notifications'),
+            SizedBox(height: 25.h),
             Text(notificationText,
               textAlign: TextAlign.center,
               style: TextStyle(

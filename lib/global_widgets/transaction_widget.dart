@@ -25,7 +25,7 @@ class TransactionWidget extends StatelessWidget {
       child: ListTile(
         leading: CachedAvatarHero(
           url: _transactionResource.business.photos.logo.smallUrl,
-          radius: 30.w,
+          radius: 35.sp,
           tag: _transactionResource.transaction.identifier
         ),
         title: Text(

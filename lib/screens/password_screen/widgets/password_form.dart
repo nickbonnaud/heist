@@ -231,7 +231,7 @@ class _PasswordFormState extends State<PasswordForm> {
 
   Widget _buttonChild({required PasswordFormState state}) {
     if (state.isSubmitting) {
-      return SizedBox(height: 25.w, width: 25.w, child: CircularProgressIndicator());
+      return SizedBox(height: 25.sp, width: 25.sp, child: CircularProgressIndicator());
     } else {
       String text = state.isOldPasswordVerified ? 'Save' : 'Verify';
       return ButtonText(text: text);

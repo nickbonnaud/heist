@@ -39,7 +39,7 @@ class PayButton extends StatelessWidget {
 
   Widget _buttonChild({required BuildContext context, required PayButtonState state}) {
     if (state.isSubmitting) {
-      return SizedBox(height: 25.w, width: 25.w, child: CircularProgressIndicator());
+      return SizedBox(height: 25.sp, width: 25.sp, child: CircularProgressIndicator());
     } else {
       return Text(
         'Pay',

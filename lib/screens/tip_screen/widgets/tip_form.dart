@@ -217,7 +217,7 @@ class _TipFormState extends State<TipForm> {
   
   Widget _buttonChild({required TipFormState state}) {
     if (state.isSubmitting) {
-      return SizedBox(height: 25.w, width: 25.w, child: CircularProgressIndicator()); 
+      return SizedBox(height: 25.sp, width: 25.sp, child: CircularProgressIndicator()); 
     } else {
       return ButtonText(text: 'Save');
     }

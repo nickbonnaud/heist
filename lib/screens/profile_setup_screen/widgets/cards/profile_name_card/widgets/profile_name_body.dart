@@ -190,7 +190,7 @@ class _ProfileNameBodyState extends State<ProfileNameBody> {
   
   Widget _buttonChild({required ProfileNameFormState state}) {
     if (state.isSubmitting) {
-      return SizedBox(height: 25.w, width: 25.w, child: CircularProgressIndicator());
+      return SizedBox(height: 25.sp, width: 25.sp, child: CircularProgressIndicator());
     } else {
       return ButtonText(text: 'Save');
     }

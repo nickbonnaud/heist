@@ -119,6 +119,6 @@ class PermissionCards extends StatelessWidget {
         ));
         break;
     }
-    return Padding(padding: EdgeInsets.only(bottom: 20.w), child: body);
+    return Padding(padding: EdgeInsets.only(bottom: 25.h), child: body);
   }
 }

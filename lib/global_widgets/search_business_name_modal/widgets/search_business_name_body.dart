@@ -99,7 +99,7 @@ class _SearchBusinessNameBodyState extends State<SearchBusinessNameBody> {
                 onTap: () => Navigator.of(context).pop(businesses[index]),
                 leading: CachedAvatar(
                   url: businesses[index].photos.logo.smallUrl, 
-                  radius: 40.w
+                  radius: 40.sp
                 ),
                 title: Text(
                   businesses[index].profile.name,

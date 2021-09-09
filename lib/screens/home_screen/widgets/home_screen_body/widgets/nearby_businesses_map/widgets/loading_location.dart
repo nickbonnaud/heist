@@ -5,7 +5,7 @@ class LoadingLocation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(left: 15.w, right: 15.w),
+      padding: EdgeInsets.symmetric(horizontal: 15.w),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,

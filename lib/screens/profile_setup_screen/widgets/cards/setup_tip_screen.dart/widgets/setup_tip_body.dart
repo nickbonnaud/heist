@@ -190,7 +190,7 @@ class _SetupTipBodyState extends State<SetupTipBody> {
 
   Widget _buttonChild({required SetupTipCardState state}) {
     if (state.isSubmitting) {
-      return SizedBox(height: 25.w, width: 25.w, child: CircularProgressIndicator());
+      return SizedBox(height: 25.sp, width: 25.sp, child: CircularProgressIndicator());
     } else {
       return ButtonText(text: 'Save');
     }

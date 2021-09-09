@@ -98,7 +98,7 @@ class SignOutBody extends StatelessWidget {
 
   Widget _buttonChild({required BuildContext context, required SignOutState state}) {
     if (state.isSubmitting) {
-      return SizedBox(height: 25.w, width: 25.w, child: CircularProgressIndicator(color: Theme.of(context).colorScheme.onDanger));
+      return SizedBox(height: 25.sp, width: 25.sp, child: CircularProgressIndicator(color: Theme.of(context).colorScheme.onDanger));
     } else {
       return ButtonText(text: 'Logout');
     }

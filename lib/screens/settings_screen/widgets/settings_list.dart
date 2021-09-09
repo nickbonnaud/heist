@@ -16,7 +16,7 @@ class SettingsList extends StatelessWidget {
           leading: Icon(
             Icons.person, 
             color: Theme.of(context).colorScheme.secondary,
-            size: 30.w
+            size: 35.sp
           ),
           title: Text(
             'Change Profile',
@@ -32,7 +32,7 @@ class SettingsList extends StatelessWidget {
           leading: Icon(
             Icons.email,
             color: Theme.of(context).colorScheme.secondary,
-            size: 30.w
+            size: 35.sp
           ),
           title: Text(
             'Change Email', 
@@ -48,7 +48,7 @@ class SettingsList extends StatelessWidget {
           leading: Icon(
             Icons.lock,
             color: Theme.of(context).colorScheme.secondary,
-            size: 30.w
+            size: 35.sp
           ),
           title: Text(
             'Change Password', 
@@ -64,7 +64,7 @@ class SettingsList extends StatelessWidget {
           leading: Icon(
             Icons.payment,
             color: Theme.of(context).colorScheme.secondary,
-            size: 30.w
+            size: 35.sp
           ),
           title: Text(
             'Change Payment', 
@@ -80,7 +80,7 @@ class SettingsList extends StatelessWidget {
           leading: Icon(
             Icons.thumb_up,
             color: Theme.of(context).colorScheme.secondary,
-            size: 30.w
+            size: 35.sp
           ),
           title: Text(
             'Change Tips', 
@@ -96,7 +96,7 @@ class SettingsList extends StatelessWidget {
           leading: Icon(
             Icons.logout,
             color: Theme.of(context).colorScheme.secondary,
-            size: 30.sp
+            size: 35.sp
           ),
           title: Text(
             'Logout', 

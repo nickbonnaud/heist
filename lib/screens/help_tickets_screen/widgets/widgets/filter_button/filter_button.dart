@@ -20,8 +20,8 @@ class FilterButton extends StatefulWidget {
 }
 
 class _FilterButtonState extends State<FilterButton> with SingleTickerProviderStateMixin {
-  final double _expandedSize = 225.w;
-  final double _hiddenSize = 1.w;
+  final double _expandedSize = 225.sp;
+  final double _hiddenSize = 1.sp;
   final double _topPoint = 2 * math.pi * 1.2;
   final double _bottomPoint =  2 * math.pi * .68;
   
@@ -59,17 +59,26 @@ class _FilterButtonState extends State<FilterButton> with SingleTickerProviderSt
                 _buildExpandedBackground(),
                 _buildOption(
                   option: Option.all, 
-                  icon: Icon(Icons.refresh, color: Theme.of(context).colorScheme.onSecondary), 
+                  icon: Icon(
+                    Icons.refresh,
+                    color: Theme.of(context).colorScheme.onSecondary
+                  ), 
                   angle: _setAngle(index: 1)
                 ),
                 _buildOption(
                   option: Option.open, 
-                  icon: Icon(Icons.lock_open, color: Theme.of(context).colorScheme.onSecondary), 
+                  icon: Icon(
+                    Icons.lock_open,
+                    color: Theme.of(context).colorScheme.onSecondary
+                  ), 
                   angle: _setAngle(index: 2)
                 ),
                 _buildOption(
                   option: Option.resolved, 
-                  icon: Icon(Icons.lock_outline, color: Theme.of(context).colorScheme.onSecondary), 
+                  icon: Icon(
+                    Icons.lock_outline,
+                    color: Theme.of(context).colorScheme.onSecondary
+                  ), 
                   angle: _setAngle(index: 3)
                 ),
                 _buildBaseButton(),
@@ -111,7 +120,7 @@ class _FilterButtonState extends State<FilterButton> with SingleTickerProviderSt
 
     double iconSize = 0.0;
     if (_controller.value > 0.8) {
-      iconSize = 30.w * (_controller.value - 0.8) * 5;
+      iconSize = 35.sp * (_controller.value - 0.8) * 5;
     }
 
     return Transform.rotate(
@@ -174,7 +183,7 @@ class _FilterButtonState extends State<FilterButton> with SingleTickerProviderSt
             transform: Matrix4.identity()..scale(1.0, scaleFactor),
             child: Icon(
               state.isActive ? Icons.close : Icons.filter_list,
-              size: 40.w,
+              size: 45.sp,
               color: Theme.of(context).colorScheme.onSecondary,
             ),
           ),

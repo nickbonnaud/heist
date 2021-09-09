@@ -87,7 +87,7 @@ class _LoginFormState extends State<LoginForm> {
                 )
               ),
               Positioned(
-                bottom: animation.value * 80.h - 30.h,
+                bottom: animation.value * 60.h + ((1 - animation.value) * -60.h),
                 child: Consumer2<PageOffsetNotifier, AnimationController>(
                   builder: (context, notifier, animation, child) {
                     return _goToRegisterForm(animation: animation);
@@ -100,12 +100,11 @@ class _LoginFormState extends State<LoginForm> {
         child: Form(
           key: Key("loginFormKey"),
           child: Padding(
-            padding: EdgeInsets.only(left: 16.w, right: 16.w),
+            padding: EdgeInsets.symmetric(horizontal: 16.w),
             child: Container(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height,
               child: KeyboardActions(
-                tapOutsideToDismiss: true,
                 config: _buildKeyboard(context: context),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -286,7 +285,7 @@ class _LoginFormState extends State<LoginForm> {
 
   Widget _buttonChild({required LoginState state}) {
     return state.isSubmitting
-      ? SizedBox(height: 25.w, width: 25.w, child: CircularProgressIndicator())
+      ? SizedBox(height: 25.sp, width: 25.sp, child: CircularProgressIndicator())
       : Text(
           "Login",
           key: Key("loginButtonTextKey"),

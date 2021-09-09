@@ -33,7 +33,7 @@ class _TutorialCardState extends State<TutorialCard> {
           duration: Duration(milliseconds: 500),
           top: state.tutorialCards.firstWhere((card) => card.type == widget._tutorialCard.type).dismissed
             ? MediaQuery.of(context).size.height
-            : state.tutorialCards.indexOf(widget._tutorialCard) * 10.h,
+            : state.tutorialCards.indexOf(widget._tutorialCard) * 15.h,
           bottom: state.tutorialCards.firstWhere((card) => card.type == widget._tutorialCard.type).dismissed
             ? -MediaQuery.of(context).size.height
             : 0,
@@ -43,7 +43,10 @@ class _TutorialCardState extends State<TutorialCard> {
             height: MediaQuery.of(context).size.height,
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.background,
-              borderRadius: BorderRadius.circular(30),
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(30),
+                topRight: Radius.circular(30)
+              ),
               boxShadow: [
                 BoxShadow(
                   color: Colors.grey.withOpacity(0.3), 
@@ -62,23 +65,30 @@ class _TutorialCardState extends State<TutorialCard> {
 
   Widget _getScaffold({required BuildContext context, required TutorialScreenState state}) {
     if (widget._tutorialCard.type != TutorialCardType.faq) {
-      return Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      return Stack(
         children: [
-          Container(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.width,
-            child: FlareActor(
-              'assets/tutorial.flr',
-              animation: 'main',
-              artboard: widget._tutorialCard.artboard,
-              isPaused: _isPaused(state: state),
-              controller: _controls,
-              callback: (_) => _controls.play('repeat'),
+          Positioned(
+            top: 0,
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.width,
+              child: FlareActor(
+                'assets/tutorial.flr',
+                animation: 'main',
+                artboard: widget._tutorialCard.artboard,
+                isPaused: _isPaused(state: state),
+                controller: _controls,
+                callback: (_) => _controls.play('repeat'),
+              )
             )
           ),
-          Expanded(
-            child: _getBody(context: context, state: state)
+          Positioned(
+            bottom: 0,
+            child: Container(
+              color: Theme.of(context).colorScheme.background,
+              width: MediaQuery.of(context).size.width,
+              child: _getBody(context: context, state: state)
+            )
           )
         ],
       );
@@ -120,7 +130,7 @@ class _TutorialCardState extends State<TutorialCard> {
                       icon: Icon(
                         Icons.clear, 
                         color: Theme.of(context).colorScheme.callToAction,
-                        size: 25.w,
+                        size: 35.sp,
                       ),
                       onPressed: () => Navigator.of(context).pop(),
                     ),
@@ -144,6 +154,7 @@ class _TutorialCardState extends State<TutorialCard> {
                   ),
             ],
           ),
+          SizedBox(height: 30.h),
           Row(
             children: [
               Expanded(

@@ -68,60 +68,64 @@ class _TransactionState extends State<Transaction> {
   }
 
   Widget _underlayBody() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            SizedBox(height: 140.h),
-            PurchasedItemWidget(
-              purchasedItem: PurchasedItem(name: "Purchased", subName: null, price: 199, quantity: 1, total: 199),
-              index: 0,
-            ),
-            Divider(),
-            PurchasedItemWidget(
-              purchasedItem: PurchasedItem(name: "Item", subName: null, price: 500, quantity: 2, total: 1000),
-              index: 1,
-            ),
-            Divider(),
-            PurchasedItemWidget(
-              purchasedItem: PurchasedItem(name: "Another Item", subName: null, price: 1000, quantity: 3, total: 3000),
-              index: 2,
-            ),
-            Divider(),
-            // where unique item is overlayed
-            ListTile(),
-            //
-            Divider(),
-            SizedBox(height: 30.h),
-            _createFooterRow(title: "Subtotal", value: 4199),
-            SizedBox(height: 10.h),
-            _createFooterRow(title: "Tax", value: 525),
-            SizedBox(height: 30.h),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "Total",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 28.sp,
+    return SingleChildScrollView(
+      physics: NeverScrollableScrollPhysics(),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              SizedBox(height: 140.h),
+              PurchasedItemWidget(
+                purchasedItem: PurchasedItem(name: "Purchased", subName: null, price: 199, quantity: 1, total: 199),
+                index: 0,
+              ),
+              Divider(),
+              PurchasedItemWidget(
+                purchasedItem: PurchasedItem(name: "Item", subName: null, price: 500, quantity: 2, total: 1000),
+                index: 1,
+              ),
+              Divider(),
+              PurchasedItemWidget(
+                purchasedItem: PurchasedItem(name: "Another Item", subName: null, price: 1000, quantity: 3, total: 3000),
+                index: 2,
+              ),
+              Divider(),
+              PurchasedItemWidget(
+                purchasedItem: PurchasedItem(name: "Last Item", subName: null, price: 2399, quantity: 1, total: 2399),
+                index: 2,
+              ),
+              Divider(),
+              SizedBox(height: 30.h),
+              _createFooterRow(title: "Subtotal", value: 4199),
+              SizedBox(height: 10.h),
+              _createFooterRow(title: "Tax", value: 525),
+              SizedBox(height: 30.h),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Total",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 28.sp,
+                    ),
                   ),
-                ),
-                Text(
-                  Currency.create(cents: 4724),
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 28.sp,
+                  Text(
+                    Currency.create(cents: 4724),
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 28.sp,
+                    ),
                   ),
-                ),
-              ],
-            )
-          ],
-        ),
-        Row()
-      ],
+                ],
+              )
+            ],
+          ),
+          Row()
+        ],
+      ),
     );
   }
 
@@ -156,7 +160,7 @@ class _TransactionState extends State<Transaction> {
               children: [
                 CachedAvatar(
                   url: widget._transactions[0].business.photos.logo.smallUrl,
-                  radius: 50.w
+                  radius: 55.sp
                 ),
                 SizedBox(width: 5.w),
                 Expanded(
@@ -187,7 +191,7 @@ class _TransactionState extends State<Transaction> {
                 ),
               ],
             ),
-            SizedBox(height: 255.h),
+            SizedBox(height: .2.sh),
             _uniquePurchase(widget._transactions[index])
           ],
         ),
@@ -223,7 +227,7 @@ class _TransactionState extends State<Transaction> {
 
   Widget _buttonChild({required TransactionPickerScreenState state}) {
     if (state.claiming) {
-      return SizedBox(height: 25.w, width: 25.w, child: CircularProgressIndicator());
+      return SizedBox(height: 25.sp, width: 25.sp, child: CircularProgressIndicator());
     }
     
     return ButtonText(text: 'Claim');

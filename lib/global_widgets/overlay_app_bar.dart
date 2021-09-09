@@ -50,7 +50,7 @@ class _OverlayAppBarState extends State<OverlayAppBar> with TickerProviderStateM
             icon: Icon(Icons.close),
             onPressed: () => Navigator.of(context).pop(),
             color: Theme.of(context).colorScheme.topAppBarIcon,
-            iconSize: 40.w,
+            iconSize: 45.sp,
           ),
         )
       ),

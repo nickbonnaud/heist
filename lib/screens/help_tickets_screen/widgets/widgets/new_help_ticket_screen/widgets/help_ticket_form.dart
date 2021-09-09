@@ -187,7 +187,7 @@ class _HelpTicketFormState extends State<HelpTicketForm> {
 
   Widget _buttonChild({required HelpTicketFormState state}) {
     if (state.isSubmitting) {
-      return SizedBox(height: 25.w, width: 25.w, child: CircularProgressIndicator());
+      return SizedBox(height: 25.sp, width: 25.sp, child: CircularProgressIndicator());
     }
     return ButtonText(text: "Submit");
   }

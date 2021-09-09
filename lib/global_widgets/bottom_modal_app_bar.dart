@@ -85,7 +85,7 @@ class _BottomModalAppBarState extends State<BottomModalAppBar> with TickerProvid
           icon: Icon(Icons.arrow_downward),
           onPressed: () => Navigator.of(context).pop(),
           color: Theme.of(context).colorScheme.topAppBarIcon,
-          iconSize: 40.w,
+          iconSize: 45.sp,
         ),
       )
     );

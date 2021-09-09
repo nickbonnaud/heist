@@ -13,7 +13,7 @@ class InfoButton extends StatelessWidget {
         key: Key("infoButtonKey"),
         icon: Icon(
           Icons.info,
-          size: 30.w,
+          size: 40.sp,
           color: Theme.of(context).colorScheme.callToAction
         ),
         onPressed: () => _showInfoDialog(context),

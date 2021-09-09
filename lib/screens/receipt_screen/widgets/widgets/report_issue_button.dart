@@ -29,7 +29,7 @@ class ReportIssueButton extends StatelessWidget {
         onSelected: (Options selection) => _filterSelection(selection: selection, context: context),
         icon: Icon(
           Icons.more_vert,
-          size: 40.w,
+          size: 45.sp,
           color: Theme.of(context).colorScheme.topAppBarIcon,
         ),
         itemBuilder: (BuildContext context) => <PopupMenuEntry<Options>>[

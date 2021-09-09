@@ -67,10 +67,10 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
                   return Positioned(
                     key: Key("${state.business!.identifier}"),
                     top: state.screenCoordinate!.y.toDouble().h - 40.h,
-                    left: state.screenCoordinate!.x.toDouble().w - 5.h,
+                    left: state.screenCoordinate!.x.toDouble().w - 5.w,
                     child: CachedAvatarHero(
                       url: state.business!.photos.logo.smallUrl, 
-                      radius: 5.w, 
+                      radius: 5.sp, 
                       tag: state.business!.identifier + "-map"
                     )
                   );

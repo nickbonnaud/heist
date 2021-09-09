@@ -33,11 +33,12 @@ class DialogBody extends StatelessWidget {
               : PlatformText('Delete Help Ticket'),
             content: state.isSubmitting
               ? Column(
+                mainAxisSize: MainAxisSize.min,
                   children: [
                     Container(
                       margin: EdgeInsets.only(top: 10.h),
-                      height: 40.w,
-                      width: 40.w,
+                      height: 45.sp,
+                      width: 45.sp,
                       child: CircularProgressIndicator(),
                     )
                   ],

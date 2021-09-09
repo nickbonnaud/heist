@@ -21,12 +21,20 @@ class FetchBusinessesFailScreen extends StatelessWidget {
           buttonText: state is Loading ? "Fetching" : "Retry",
           onButtonPressed: state is Loading 
             ? null 
-            : () => _nearbyBusinessesBloc.add(FetchNearby(
-                lat: _geoLocationBloc.currentLocation!['lat']!,
-                lng: _geoLocationBloc.currentLocation!['lng']!,
-              )),
+            : () => _retryButtonPressed()
         );
       },
     );
+  }
+
+  void _retryButtonPressed() {
+    if (_geoLocationBloc.currentLocation == null) {
+      _geoLocationBloc.add(FetchLocation(accuracy: Accuracy.MEDIUM));
+    } else {
+      _nearbyBusinessesBloc.add(FetchNearby(
+        lat: _geoLocationBloc.currentLocation!['lat']!,
+        lng: _geoLocationBloc.currentLocation!['lng']!,
+      ));
+    }
   }
 }

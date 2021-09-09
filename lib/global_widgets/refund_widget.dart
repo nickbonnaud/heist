@@ -26,7 +26,7 @@ class RefundWidget extends StatelessWidget {
       child: ListTile(
         leading: CachedAvatarHero(
           url: _refundResource.business.photos.logo.smallUrl, 
-          radius: 30.w, 
+          radius: 35.sp, 
           tag: _refundResource.transaction.identifier
         ),
         title: Text(

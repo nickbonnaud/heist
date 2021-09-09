@@ -33,7 +33,7 @@ class _FadeInFileState extends State<FadeInFile> with SingleTickerProviderStateM
       duration: Duration(milliseconds: 800),
       child: CircleAvatar(
         backgroundImage: Image.file(File(widget._imageFile.path)).image,
-        radius: 100.w,
+        radius: 100.sp,
         backgroundColor: Colors.transparent,
       )
     );

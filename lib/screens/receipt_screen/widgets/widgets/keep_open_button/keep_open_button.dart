@@ -46,7 +46,7 @@ class KeepOpenButton extends StatelessWidget {
 
   Widget _buttonChild({required BuildContext context, required KeepOpenButtonState state}) {
     if (state.isSubmitting) {
-      return SizedBox(height: 25.w, width: 25.w, child: CircularProgressIndicator());
+      return SizedBox(height: 25.sp, width: 25.sp, child: CircularProgressIndicator());
     } else {
       return Text(
         'Keep Open',

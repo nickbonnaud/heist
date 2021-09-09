@@ -7,7 +7,7 @@ PODS:
   - FMDB (2.7.5):
     - FMDB/standard (= 2.7.5)
   - FMDB/standard (2.7.5)
-  - geolocator (6.2.0):
+  - geolocator_apple (1.2.0):
     - Flutter
   - google_maps_flutter (0.0.1):
     - Flutter
@@ -21,11 +21,10 @@ PODS:
     - Flutter
   - integration_test (0.0.1):
     - Flutter
-  - OneSignal (3.5.2)
-  - onesignal_flutter (3.0.0):
+  - onesignal_flutter (3.2.3):
     - Flutter
-    - OneSignalXCFramework (= 3.4.4)
-  - OneSignalXCFramework (3.4.4)
+    - OneSignalXCFramework (= 3.7.0)
+  - OneSignalXCFramework (3.7.0)
   - path_provider (0.0.1):
     - Flutter
   - "permission_handler (5.1.0+2)":
@@ -40,12 +39,12 @@ DEPENDENCIES:
   - Flutter (from `Flutter`)
   - flutter_beacon (from `.symlinks/plugins/flutter_beacon/ios`)
   - flutter_secure_storage (from `.symlinks/plugins/flutter_secure_storage/ios`)
-  - geolocator (from `.symlinks/plugins/geolocator/ios`)
+  - geolocator_apple (from `.symlinks/plugins/geolocator_apple/ios`)
   - google_maps_flutter (from `.symlinks/plugins/google_maps_flutter/ios`)
   - image_picker (from `.symlinks/plugins/image_picker/ios`)
   - integration_test (from `.symlinks/plugins/integration_test/ios`)
-  - OneSignal (< 4.0, >= 3.4.3)
   - onesignal_flutter (from `.symlinks/plugins/onesignal_flutter/ios`)
+  - OneSignalXCFramework (< 4.0, >= 3.4.3)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
   - permission_handler (from `.symlinks/plugins/permission_handler/ios`)
   - sqflite (from `.symlinks/plugins/sqflite/ios`)
@@ -55,7 +54,6 @@ SPEC REPOS:
   trunk:
     - FMDB
     - GoogleMaps
-    - OneSignal
     - OneSignalXCFramework
 
 EXTERNAL SOURCES:
@@ -65,8 +63,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_beacon/ios"
   flutter_secure_storage:
     :path: ".symlinks/plugins/flutter_secure_storage/ios"
-  geolocator:
-    :path: ".symlinks/plugins/geolocator/ios"
+  geolocator_apple:
+    :path: ".symlinks/plugins/geolocator_apple/ios"
   google_maps_flutter:
     :path: ".symlinks/plugins/google_maps_flutter/ios"
   image_picker:
@@ -89,19 +87,18 @@ SPEC CHECKSUMS:
   flutter_beacon: 2525df9d96b904623f325968a73bac805e648119
   flutter_secure_storage: 7953c38a04c3fdbb00571bcd87d8e3b5ceb9daec
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
-  geolocator: f5e3de65e241caba7ce3e8a618803387bda73384
-  google_maps_flutter: df4e7de95264aa0a2f11aac0fc7e313acb8ffc7e
+  geolocator_apple: b741765c55dc21950e3e106e8b3584e55cf81ce5
+  google_maps_flutter: 279865bd07e2d8751f43a3bc64bac7f6075d0c93
   GoogleMaps: 008e2c80e38605b56b560e8deb73d4194ff30bef
   image_picker: e06f7a68f000bd36f552c1847e33cda96ed31f1f
   integration_test: 6eb66a19f7104200dcfdd62bc0077e1b09686e4f
-  OneSignal: 055f4c94ee8af87417777ad33fb807cea70df320
-  onesignal_flutter: 6a582e3051074be6d9d129002a93a3bfd04a5b88
-  OneSignalXCFramework: eaf286b7438aa1f030f03e5fa9f1c79ede5d8f04
+  onesignal_flutter: abfc75e8d08a0d9c977aacfab9454af58f4f4fcc
+  OneSignalXCFramework: 974dc438d68910cf04f3c8ab034e0131d41438c1
   path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
   permission_handler: ccb20a9fad0ee9b1314a52b70b76b473c5f8dab0
   sqflite: 6d358c025f5b867b29ed92fc697fd34924e11904
   url_launcher: 6fef411d543ceb26efce54b05a0a40bfd74cbbef
 
-PODFILE CHECKSUM: b1e7cea1fd7fc4b8fca7a77d97787b719adb7287
+PODFILE CHECKSUM: 2bff004675aa6e3842a829871de74ddbc4c8d5b9
 
 COCOAPODS: 1.10.1

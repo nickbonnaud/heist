@@ -110,104 +110,12 @@ class _OnboardBodyState extends State<OnboardBody> with SingleTickerProviderStat
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(left: 16.w, right: 16.w),
-      child: Center(
-        child: BlocBuilder<OnboardBloc, int>(
-          builder: (context, currentStep) {
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                AnimatedOpacity(
-                  opacity: _animationController.value, 
-                  duration: Duration(milliseconds: 300),
-                  child: Text(
-                    "Account Setup",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w900,
-                      fontSize: 40.sp
-                    ),
-                  )
-                ),
-                SizedBox(height: 35.h),
-                Stepper(
-                  key: Key("onboardStepperKey"),
-                  currentStep: currentStep,
-                  steps: [
-                    Step(
-                      title: _createTitle(title: "Onboard", currentStep: currentStep, animation: _onboardTitleAnimation), 
-                      content: AnimatedBuilder(
-                        animation: _animationController,
-                        builder: (BuildContext context, Widget? child) {
-                          return SlideTransition(
-                            position: _onboardBodyAnimation,
-                            child: _stepText(text: "Let's get Started! Don't worry it's only a few steps.")
-                          );
-                        }
-                      ),
-                      isActive: currentStep == 0,
-                      state: _setCurrentStepState(currentStep: currentStep, stepIndex: 0)
-                    ),
-                    Step(
-                      title: _createTitle(title: "Profile", currentStep: currentStep, animation: _profileTitleAnimation), 
-                      content: _stepText(
-                        text: _customerOnboarded 
-                          ? "Go to next step." 
-                          : "First let's setup your Profile Account!"
-                      ),
-                      isActive: currentStep == 1,
-                      state: _setCurrentStepState(currentStep: currentStep, stepIndex: 1)
-                    ),
-                    Step(
-                      title: _createTitle(title: "Tutorial", currentStep: currentStep, animation: _tutorialTitleAnimation), 
-                      content: _stepText(text: "Learn how to use ${Constants.appName}!"),
-                      isActive: currentStep == 2,
-                      state: _setCurrentStepState(currentStep: currentStep, stepIndex: 2)
-                    ),
-                    Step(
-                      title: _createTitle(title: "Permissions", currentStep: currentStep, animation: _permissionsTitleAnimation), 
-                      content: _stepText(
-                        text: _permissionsReady 
-                          ? "Next Step"
-                          : "Lastly let's configure your permissions!"
-                      ),
-                      isActive: currentStep == 3,
-                      state: _setCurrentStepState(currentStep: currentStep, stepIndex: 3)
-                    ),
-                    Step(
-                      title: _createTitle(title: "Finished!", currentStep: currentStep, animation: _finishTitleAnimation),
-                      content: _stepText(text: "Onboarding Complete!"),
-                      isActive: currentStep == 4,
-                      state: _setCurrentStepState(currentStep: currentStep, stepIndex: 4)
-                    )
-                  ],
-                  controlsBuilder: (BuildContext context, {VoidCallback? onStepContinue, VoidCallback? onStepCancel}) {
-                      return AnimatedBuilder(
-                        animation: _animationController, 
-                        builder: (BuildContext context, Widget? child) {
-                          return SlideTransition(
-                            position: _buttonAnimation,
-                            child: TextButton(
-                              key: Key("stepperButtonKey"),
-                              onPressed: () => _buttonPressed(context, currentStep),
-                              child: Text(
-                                _buttonText(currentStep: currentStep),
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 25.sp,
-                                  color: Theme.of(context).colorScheme.callToAction
-                                ),
-                              )
-                            ),
-                          );
-                        }
-                      );
-                    }
-                )
-              ],
-            );
-          }
-        ),
-      )  
+      padding: EdgeInsets.symmetric(horizontal: 16.w),
+      child: BlocBuilder<OnboardBloc, int>(
+        builder: (context, currentStep) {
+          return _body(currentStep: currentStep);
+        }
+      ),
     );
   }
 
@@ -215,6 +123,95 @@ class _OnboardBodyState extends State<OnboardBody> with SingleTickerProviderStat
   void dispose() {
     _animationController.dispose();
     super.dispose();
+  }
+
+  Widget _body({required int currentStep}) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        Text(
+          "Account Setup",
+          style: TextStyle(
+            fontWeight: FontWeight.w900,
+            fontSize: 40.sp
+          ),
+        ),
+        Stepper(
+          key: Key("onboardStepperKey"),
+          currentStep: currentStep,
+          steps: [
+            Step(
+              title: _createTitle(title: "Onboard", currentStep: currentStep, animation: _onboardTitleAnimation), 
+              content: AnimatedBuilder(
+                animation: _animationController,
+                builder: (BuildContext context, Widget? child) {
+                  return SlideTransition(
+                    position: _onboardBodyAnimation,
+                    child: _stepText(text: "Let's get Started! Don't worry it's only a few steps.")
+                  );
+                }
+              ),
+              isActive: currentStep == 0,
+              state: _setCurrentStepState(currentStep: currentStep, stepIndex: 0)
+            ),
+            Step(
+              title: _createTitle(title: "Profile", currentStep: currentStep, animation: _profileTitleAnimation), 
+              content: _stepText(
+                text: _customerOnboarded 
+                  ? "Go to next step." 
+                  : "First let's setup your Profile Account!"
+              ),
+              isActive: currentStep == 1,
+              state: _setCurrentStepState(currentStep: currentStep, stepIndex: 1)
+            ),
+            Step(
+              title: _createTitle(title: "Tutorial", currentStep: currentStep, animation: _tutorialTitleAnimation), 
+              content: _stepText(text: "Learn how to use ${Constants.appName}!"),
+              isActive: currentStep == 2,
+              state: _setCurrentStepState(currentStep: currentStep, stepIndex: 2)
+            ),
+            Step(
+              title: _createTitle(title: "Permissions", currentStep: currentStep, animation: _permissionsTitleAnimation), 
+              content: _stepText(
+                text: _permissionsReady 
+                  ? "Next Step"
+                  : "Lastly let's configure your permissions!"
+              ),
+              isActive: currentStep == 3,
+              state: _setCurrentStepState(currentStep: currentStep, stepIndex: 3)
+            ),
+            Step(
+              title: _createTitle(title: "Finished!", currentStep: currentStep, animation: _finishTitleAnimation),
+              content: _stepText(text: "Onboarding Complete!"),
+              isActive: currentStep == 4,
+              state: _setCurrentStepState(currentStep: currentStep, stepIndex: 4)
+            )
+          ],
+          controlsBuilder: (BuildContext context, {VoidCallback? onStepContinue, VoidCallback? onStepCancel}) {
+              return AnimatedBuilder(
+                animation: _animationController, 
+                builder: (BuildContext context, Widget? child) {
+                  return SlideTransition(
+                    position: _buttonAnimation,
+                    child: TextButton(
+                      key: Key("stepperButtonKey"),
+                      onPressed: () => _buttonPressed(context, currentStep),
+                      child: Text(
+                        _buttonText(currentStep: currentStep),
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 25.sp,
+                          color: Theme.of(context).colorScheme.callToAction
+                        ),
+                      )
+                    ),
+                  );
+                }
+              );
+            }
+        )
+      ],
+    );
   }
 
   AnimatedBuilder _createTitle({required String title, required int currentStep, required Animation<Offset> animation}) {

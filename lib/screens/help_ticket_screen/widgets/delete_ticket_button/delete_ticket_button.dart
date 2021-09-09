@@ -26,7 +26,7 @@ class DeleteTicketButton extends StatelessWidget {
       icon: Icon(Icons.delete_forever), 
       onPressed: () => _deleteButtonPressed(context: context),
       color: Theme.of(context).colorScheme.danger,
-      iconSize: 35.w,
+      iconSize: 40.sp,
     );
   }
 

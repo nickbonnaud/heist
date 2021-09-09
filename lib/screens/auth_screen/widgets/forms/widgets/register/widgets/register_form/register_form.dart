@@ -76,7 +76,7 @@ class _RegisterFormState extends State<RegisterForm> {
                 )
               ),
               Positioned(
-                bottom: animation.value * 80.h - 30.h,
+                bottom: animation.value * 60.h + ((1 - animation.value) * -60.h),
                 child: Consumer2<PageOffsetNotifier, AnimationController>(
                   builder: (context, notifier, animation, child) {
                     return _goToLoginForm(animation: animation);
@@ -94,7 +94,6 @@ class _RegisterFormState extends State<RegisterForm> {
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height,
               child: KeyboardActions(
-                tapOutsideToDismiss: true,
                 config: _buildKeyboard(context: context),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -274,7 +273,7 @@ class _RegisterFormState extends State<RegisterForm> {
 
   Widget _buttonChild({required RegisterState state}) {
     return state.isSubmitting
-      ? SizedBox(height: 25.w, width: 25.w, child: CircularProgressIndicator())
+      ? SizedBox(height: 25.sp, width: 25.sp, child: CircularProgressIndicator())
       : Text(
           "Register",
           key: Key("registerButtonTextKey"),

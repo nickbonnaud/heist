@@ -149,7 +149,7 @@ class ReceiptScreenBody extends StatelessWidget {
       children: [
         CachedAvatarHero(
           url: transactionResource.business.photos.logo.smallUrl,
-          radius: 50.w,
+          radius: 55.sp,
           tag: transactionResource.transaction.identifier
         ),
         SizedBox(width: 5.w),

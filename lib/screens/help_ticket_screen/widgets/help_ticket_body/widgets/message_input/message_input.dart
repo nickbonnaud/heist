@@ -116,7 +116,7 @@ class _MessageInputState extends State<MessageInput> {
         ? IconButton(
             key: Key("submitButtonKey"),
             icon: Icon(Icons.send), 
-            iconSize: 30.w,
+            iconSize: 40.sp,
             onPressed: state.isInputValid 
               ? () => _submitButtonPressed()
               : null,

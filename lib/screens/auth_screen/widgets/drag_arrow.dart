@@ -70,7 +70,7 @@ class _DragArrowState extends State<DragArrow> with SingleTickerProviderStateMix
             opacity: keyboardVisible ? 0 : 1,
             child: Icon(
               Icons.arrow_upward,
-              size: 35.w,
+              size: 45.sp,
               color: Theme.of(context).colorScheme.callToAction,
             ),
           );

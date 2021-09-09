@@ -30,9 +30,13 @@ class FilterButton extends StatefulWidget {
   @override
   State<FilterButton> createState() => _FilterButtonState();
 }
+
 class _FilterButtonState extends State<FilterButton> with SingleTickerProviderStateMixin {
-  final double _expandedSize = 225.w;
-  final double _hiddenSize = 1.w;
+  final double _expandedSize = 225.sp;
+  final double _hiddenSize = 1.sp;
+  final double topPoint = 2 * math.pi * 1.2;
+  final double bottomPoint =  2 * math.pi * .68;
+  
   late AnimationController _controller;
   late Animation<Color?> _colorAnimation;
 
@@ -120,7 +124,7 @@ class _FilterButtonState extends State<FilterButton> with SingleTickerProviderSt
     
     double iconSize = 0.0;
     if (_controller.value > 0.8) {
-      iconSize = 30.w * (_controller.value - 0.8) * 5;
+      iconSize = 35.sp * (_controller.value - 0.8) * 5;
     }
 
     return Transform.rotate(
@@ -145,9 +149,6 @@ class _FilterButtonState extends State<FilterButton> with SingleTickerProviderSt
   }
 
   double _setAngle({required int index}) {
-    final double topPoint = 2 * math.pi * 1.2;
-    final double bottomPoint =  2 * math.pi * .68;
-
     double length = (topPoint - bottomPoint) / Option.values.length;
     return topPoint - (length * index);
   }
@@ -234,7 +235,7 @@ class _FilterButtonState extends State<FilterButton> with SingleTickerProviderSt
             transform: Matrix4.identity()..scale(1.0, scaleFactor),
             child: Icon(
               state.isActive ? Icons.close : Icons.filter_list,
-              size: 40.w,
+              size: 45.sp,
               color: Theme.of(context).colorScheme.onSecondary,
             ),
           ),

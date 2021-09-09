@@ -40,7 +40,7 @@ class _AnimatedLeadingIconState extends State<AnimatedLeadingIcon> with TickerPr
             icon: Icon(Icons.arrow_back),
             onPressed: () => Navigator.of(context).pop(),
             color: Theme.of(context).colorScheme.topAppBarIcon,
-            iconSize: 40.w,
+            iconSize: 45.sp,
           ),
         )
       ),

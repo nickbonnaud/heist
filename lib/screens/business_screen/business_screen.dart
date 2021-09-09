@@ -123,7 +123,7 @@ class _BusinessScreenState extends State<BusinessScreen> with SingleTickerProvid
       elevation: 5,
       child: CachedAvatarHero(
         url: widget._business.photos.logo.smallUrl, 
-        radius: 100.w, 
+        radius: 100.sp, 
         tag: widget._fromMapScreen
           ? widget._business.identifier + "-map"
           : widget._business.identifier, 
@@ -148,7 +148,7 @@ class _BusinessScreenState extends State<BusinessScreen> with SingleTickerProvid
       onPressed: () => Navigator.of(context).pop(),
       icon: Icon(
         Icons.arrow_downward,
-        size: 30.w,
+        size: 36.sp,
         color: Theme.of(context).colorScheme.callToAction,
       )
     );
@@ -234,7 +234,7 @@ class _BusinessScreenState extends State<BusinessScreen> with SingleTickerProvid
             _formatWebsite(),
             style: TextStyle(
               fontWeight: FontWeight.bold,
-              fontSize: 18.sp,
+              fontSize: 22.sp,
               color: Theme.of(context).colorScheme.callToAction
             ),
           )

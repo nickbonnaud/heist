@@ -20,8 +20,7 @@ class LocationBody extends StatelessWidget {
     "${Constants.appName} uses Location Services to load nearby locations and for security purposes.";
   
   final String locationTextAndroid = 
-    'Location Services are required to use ${Constants.appName}.\n\n'
-    'This enables ${Constants.appName} to be detected by beacons.';
+    'Location Services enable ${Constants.appName} to be detected by beacons.';
 
   @override
   Widget build(BuildContext context) {
@@ -32,17 +31,8 @@ class LocationBody extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             SizedBox(height: 15.h),
-            TitleText(text: 'Location Services'),
-            SizedBox(height: 50.h),
-            Text('Stage 3',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.onPrimary,
-                fontSize: 24.sp,
-                fontWeight: FontWeight.bold,
-                decoration: TextDecoration.underline
-              ),
-            ),
+            TitleText(text: 'Stage: Location Services'),
+            SizedBox(height: 25.h),
             PlatformWidget(
               cupertino: (_, __) => Text(locationTextIos,
                 textAlign: TextAlign.center,

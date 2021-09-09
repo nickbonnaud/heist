@@ -15,8 +15,7 @@ class BluetoothBody extends StatelessWidget {
     : _permissionButtons = permissionButtons;
 
   final String bluetoothText = 
-  'Bluetooth is a core part of ${Constants.appName}.\n\n'
-  'This enables ${Constants.appName} to interact with Bluetooth Beacons.';
+  'Bluetooth enables ${Constants.appName} to interact with Beacons.';
 
   @override
   Widget build(BuildContext context) {
@@ -27,17 +26,8 @@ class BluetoothBody extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             SizedBox(height: 15.h),
-            TitleText(text: 'Bluetooth'),
-            SizedBox(height: 50.h),
-            Text('Stage 1',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.onPrimary,
-                fontSize: 24.sp,
-                fontWeight: FontWeight.bold,
-                decoration: TextDecoration.underline
-              ),
-            ),
+            TitleText(text: 'Stage: Bluetooth'),
+            SizedBox(height: 25.h),
             Text(bluetoothText,
               textAlign: TextAlign.center,
               style: TextStyle(

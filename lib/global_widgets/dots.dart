@@ -33,11 +33,11 @@ class Dots extends StatelessWidget {
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 8.w),
         child: Container(
-          width: 20.w,
-          height: 20.w,
+          width: 25.sp,
+          height: 25.sp,
           decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.secondary.withOpacity(0.3),
-            borderRadius: BorderRadius.circular(50.w)
+            borderRadius: BorderRadius.circular(50.sp)
           ),
         ),
       ),
@@ -47,13 +47,13 @@ class Dots extends StatelessWidget {
   Widget _inactiveSlide({required int index, required BuildContext context}) {
     return Container(
       child: Padding(
-        padding: EdgeInsets.only(left: 5.w, right: 5.w),
+        padding: EdgeInsets.symmetric(horizontal: 5.w),
         child: Container(
           width: 10.w,
           height: 10.w,
           decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.surface.withOpacity(0.7),
-            borderRadius: BorderRadius.circular(50.w)
+            borderRadius: BorderRadius.circular(50.sp)
           ),
         ),
       ),

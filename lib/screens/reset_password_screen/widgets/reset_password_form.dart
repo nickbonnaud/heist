@@ -48,7 +48,7 @@ class _ResetPasswordFormState extends State<ResetPasswordForm> {
       },
       child: Form(
         child: Padding(
-          padding: EdgeInsets.only(left: 16.w, right: 16.w),
+          padding: EdgeInsets.symmetric(horizontal: 16.w),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -70,7 +70,7 @@ class _ResetPasswordFormState extends State<ResetPasswordForm> {
                 )
               ),
               Padding(
-                padding: EdgeInsets.only(bottom: 16.w),
+                padding: EdgeInsets.only(bottom: 20.h),
                 child: Row(
                   children: [
                     SizedBox(width: .1.sw),
@@ -206,7 +206,7 @@ class _ResetPasswordFormState extends State<ResetPasswordForm> {
 
   Widget _buttonChild({required ResetPasswordFormState state}) {
     if (state.isSubmitting) {
-      return SizedBox(height: 25.w, width: 25.w,  child: CircularProgressIndicator());
+      return SizedBox(height: 25.sp, width: 25.sp,  child: CircularProgressIndicator());
     } else {
       return ButtonText(text: 'Submit');
     }

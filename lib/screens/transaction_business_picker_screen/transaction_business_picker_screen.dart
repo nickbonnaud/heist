@@ -31,7 +31,7 @@ class TransactionBusinessPickerScreen extends StatelessWidget {
                   title: "Select Business",
                 ),
                 SliverPadding(
-                  padding: EdgeInsets.only(left: 8.w, right: 8.w, top: 20.w),
+                  padding: EdgeInsets.only(left: 8.w, right: 8.w, top: 25.h),
                   sliver: SliverList(
                     delegate: SliverChildBuilderDelegate(
                       (context, index) => _businessTile(
@@ -53,13 +53,13 @@ class TransactionBusinessPickerScreen extends StatelessWidget {
 
   Widget _businessTile({required BuildContext context, required Business business, required String key}) {
     return Padding(
-      padding: EdgeInsets.only(bottom: 10.w),
+      padding: EdgeInsets.only(bottom: 15.h),
       child: Card(
         child: ListTile(
           key: Key(key),
           leading: CachedAvatar(
             url: business.photos.logo.smallUrl,
-            radius: 30.w,
+            radius: 35.sp,
           ),
           title: Text(
             business.profile.name,

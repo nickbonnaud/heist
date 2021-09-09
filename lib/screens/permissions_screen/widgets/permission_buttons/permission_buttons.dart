@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_beacon/flutter_beacon.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -66,36 +68,69 @@ class PermissionButtons extends StatelessWidget {
     }
     
     if (permission == PermissionType.bluetooth) {
-      BluetoothState currentBleState = await flutterBeacon.bluetoothState;
-      if (currentBleState == BluetoothState.stateUnknown) {
-        flutterBeacon.bluetoothStateChanged().listen((BluetoothState state) {
-          _initialLoginRepository.setIsInitialLogin(isInitial: false).then((_) {
-            _updateIfGranted(context: context, granted: state == BluetoothState.stateOn, type: permission);
-          });
-        });
-      } else {
-         _initialLoginRepository.setIsInitialLogin(isInitial: false).then((_) {
-          _updateIfGranted(context: context, granted: currentBleState == BluetoothState.stateOn, type: permission);
-        });
-      }
+      _requestBluetooth(context: context, permission: permission);
     } else if (permission == PermissionType.location) {
-      final PermissionStatus status = await Permission.locationWhenInUse.request();
-      if (status.isGranted) {
-        _geoLocationBloc.add(GeoLocationReady());
-      }
-      _updateIfGranted(context: context, granted: status.isGranted, type: permission);
+      _requestLocation(context: context, permission: permission);
     } else if (permission == PermissionType.notification) {
-      bool status = await OneSignal.shared.promptUserForPushNotificationPermission(fallbackToSettings: true);
-      if (status) {
-        OneSignal.shared.setExternalUserId(_customerIdentifier);
-      }
-      _updateIfGranted(context: context, granted: status, type: permission);
+      _requestNotification(context: context, permission: permission);
     } else if (permission == PermissionType.beacon) {
-     BlocProvider.of<PermissionButtonsBloc>(context).add(PermissionButtonsEvent.enable);
-      if (await Permission.locationAlways.isGranted) {
-        _updateIfGranted(context: context, granted: true, type: permission);
-      } else {
+      _requestBeacon(context: context, permission: permission);
+    }
+  }
+
+  void _requestBluetooth({required BuildContext context, required PermissionType permission}) async {
+    BluetoothState currentBleState = await flutterBeacon.bluetoothState;
+    if (currentBleState == BluetoothState.stateUnknown) {
+      flutterBeacon.bluetoothStateChanged().listen((BluetoothState state) {
+        _initialLoginRepository.setIsInitialLogin(isInitial: false).then((_) {
+          _updateIfGranted(context: context, granted: state == BluetoothState.stateOn, type: permission);
+        });
+      });
+    } else {
+        _initialLoginRepository.setIsInitialLogin(isInitial: false).then((_) {
+        _updateIfGranted(context: context, granted: currentBleState == BluetoothState.stateOn, type: permission);
+      });
+    }
+  }
+
+  void _requestLocation({required BuildContext context, required PermissionType permission}) async {
+    final PermissionStatus status = await Permission.locationWhenInUse.request();
+    if (status.isGranted) {
+      _geoLocationBloc.add(GeoLocationReady());
+    }
+    _updateIfGranted(context: context, granted: status.isGranted, type: permission);
+  }
+
+  void _requestNotification({required BuildContext context, required PermissionType permission}) async {
+    bool status;
+    if (Platform.isIOS) {
+      status = await OneSignal.shared.promptUserForPushNotificationPermission(fallbackToSettings: true);
+    } else {
+      status = await Permission.notification.isGranted;
+    }
+
+    if (status) {
+      OneSignal.shared.setExternalUserId(_customerIdentifier);
+    }
+    _updateIfGranted(context: context, granted: status, type: permission);
+  }
+
+  void _requestBeacon({required BuildContext context, required PermissionType permission}) async {
+    BlocProvider.of<PermissionButtonsBloc>(context).add(PermissionButtonsEvent.enable);
+    if (await Permission.locationAlways.isGranted) {
+      _updateIfGranted(context: context, granted: true, type: permission);
+    } else {
+      if (Platform.isIOS) {
         openAppSettings();
+      } else {
+        if (await Permission.locationAlways.isPermanentlyDenied) {
+          openAppSettings();
+        } else {
+          await Permission.locationAlways.request();
+          bool granted = await Permission.locationAlways.isGranted;
+          print(granted);
+          _updateIfGranted(context: context, granted: granted, type: permission);
+        }
       }
     }
   }
@@ -125,7 +160,7 @@ class PermissionButtons extends StatelessWidget {
     }
   }
 
-  void _showPermissionDeniedAlert({required BuildContext context, required PermissionType type}) {
+  void _showPermissionDeniedAlert({required BuildContext context, required PermissionType type}) async {
     String title;
     String body;
     switch (type) {
@@ -152,11 +187,10 @@ class PermissionButtons extends StatelessWidget {
       builder: (_) => PlatformAlertDialog(
         title: PlatformText(title),
         content: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            SizedBox(height: 10.h),
             PlatformText(body),
-            SizedBox(height: 15.h),
+            SizedBox(height: 10.h),
             PlatformText("* May restart app")
           ],
         ),
@@ -168,11 +202,19 @@ class PermissionButtons extends StatelessWidget {
           PlatformDialogAction(
             key: Key("enablePermissionButtonKey"),
             child: PlatformText('Enable'),
-            onPressed: () {
+            onPressed: () async {
               if (context.read<IsTestingCubit>().state) {
                 _updatePermissionsBloc(true, type);
               } else {
-                openAppSettings();
+                if (Platform.isAndroid) {
+                  if (type == PermissionType.location) {
+                    openAppSettings();
+                  } else if (type == PermissionType.beacon) {
+                    await Permission.locationAlways.request().isGranted;
+                  }
+                } else {
+                  openAppSettings();
+                }
               }
               return Navigator.pop(context);
             }

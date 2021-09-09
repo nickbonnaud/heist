@@ -37,13 +37,16 @@ class ProfileSetupScreen extends StatelessWidget {
       body: BlocProvider<ProfileSetupScreenBloc>(
         create: (context) => ProfileSetupScreenBloc()
           ..add(Init(status: _customerBloc.customer!.status)),
-        child: ProfileSetupCards(
-          customerBloc: _customerBloc,
-          profileRepository: _profileRepository,
-          photoRepository: _photoRepository,
-          accountRepository: _accountRepository,
-          photoPickerRepository: _photoPickerRepository,
+        child: SafeArea(
+          bottom: false,
+          child: ProfileSetupCards(
+            customerBloc: _customerBloc,
+            profileRepository: _profileRepository,
+            photoRepository: _photoRepository,
+            accountRepository: _accountRepository,
+            photoPickerRepository: _photoPickerRepository,
           )
+        )
       )
     );
   }

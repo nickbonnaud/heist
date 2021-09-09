@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,10 +16,13 @@ class BeaconBody extends StatelessWidget {
   BeaconBody({required PermissionButtons permissionButtons})
     : _permissionButtons = permissionButtons;
 
-  final String beaconText = 
-  'Beacons ensure that you are in the correct Business.\n\n'
-  "Beacon Settings are a part of Location Services.\n\n"
-  "Press Enable > Select 'Location' > Change to 'Always'.";
+  final String beaconIosText = 
+    "Beacon Settings are a part of Location Services.\n"
+    "Press Enable > Select 'Location' > Change to 'Always'.";
+
+  final String beaconAndroidText = 
+    "Beacon Settings are a part of Location Services.\n"
+    "Press Enable > Change to 'Allow all the time'.";
 
   @override
   Widget build(BuildContext context) {
@@ -28,18 +33,12 @@ class BeaconBody extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             SizedBox(height: 15.h),
-            TitleText(text: 'Beacons'),
-            SizedBox(height: 50.h),
-            Text('Stage 4',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.onPrimary,
-                fontSize: 24.sp,
-                fontWeight: FontWeight.bold,
-                decoration: TextDecoration.underline
-              ),
-            ),
-           Text(beaconText,
+            TitleText(text: 'Stage: Beacons'),
+            SizedBox(height: 25.h),
+            Text(
+              Platform.isIOS
+                ? beaconIosText
+                : beaconAndroidText,
               textAlign: TextAlign.center,
               style:TextStyle(
                 color: Theme.of(context).colorScheme.onPrimarySubdued,

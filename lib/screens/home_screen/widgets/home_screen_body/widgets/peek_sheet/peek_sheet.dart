@@ -27,7 +27,7 @@ class _PeekSheetState extends State<PeekSheet> with SingleTickerProviderStateMix
   double get _maxHeight => MediaQuery.of(context).size.height;
   double get _topMargin => lerp(min: 20.h, max: 20.h + MediaQuery.of(context).padding.top);
   double get _headerFontSize => lerp(min: 24.sp, max: 30.sp);
-  double get _buttonSize => lerp(min: 28.w, max: 38.w);
+  double get _buttonSize => lerp(min: 32.sp, max: 42.sp);
   double get _pullLineHeight => lerp(min: 8.h, max: 40.h);
 
   @override

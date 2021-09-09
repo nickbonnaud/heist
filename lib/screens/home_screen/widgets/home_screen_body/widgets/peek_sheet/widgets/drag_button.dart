@@ -19,7 +19,7 @@ class DragButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      top: _topMargin - 5.h,
+      top: _topMargin - 10.h,
       right: 0,
       child: Transform.rotate(
         angle: math.pi * _controller.value,

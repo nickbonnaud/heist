@@ -45,7 +45,7 @@ class EditPhoto extends StatelessWidget {
               _createAvatar(state: state),
               Positioned(
                 bottom: 0.0,
-                right: 0.0,
+                right: -10.0,
                 child: RawMaterialButton(
                   key: Key("addPhotoButtonKey"),
                   onPressed: () => _editPhoto(context: context, state: state),
@@ -60,7 +60,7 @@ class EditPhoto extends StatelessWidget {
                   shape: CircleBorder(),
                   elevation: 5.0,
                   fillColor: Theme.of(context).colorScheme.callToAction,
-                  padding: EdgeInsets.all(15.w),
+                  padding: EdgeInsets.all(15.sp),
                 )
               )
             ],
@@ -82,13 +82,13 @@ class EditPhoto extends StatelessWidget {
     } else if (_profile.photos.largeUrl.isEmpty) {
       return CircleAvatar(
         child: Image.asset('assets/profile_customer.png'),
-        radius: 100.w,
+        radius: 100.sp,
         backgroundColor: Colors.transparent,
       );
     } else {
       return CachedAvatar(
         url: _profile.photos.largeUrl,
-        radius: 100.w,
+        radius: 100.sp,
       );
     }
   }
