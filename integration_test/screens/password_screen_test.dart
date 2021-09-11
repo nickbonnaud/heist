@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:heist/screens/password_screen/password_screen.dart';
+import 'dart:io';
 
 import '../helpers/test_title.dart';
 
@@ -50,7 +51,7 @@ class PasswordScreenTest {
     await tester.pump(Duration(milliseconds: 300));
     expect(find.text('Invalid Password'), findsNothing);
 
-    await tester.tap(find.text("Done"));
+    await tester.tap(find.text(Platform.isIOS ? 'Done' : 'DONE'));
     await tester.pump();
   }
 
@@ -69,7 +70,7 @@ class PasswordScreenTest {
     await tester.enterText(find.byKey(Key("currentPasswordFieldKey")), "cfvv!&123jcKGFF9*");
     await tester.pump(Duration(milliseconds: 300));
 
-    await tester.tap(find.text("Done"));
+    await tester.tap(find.text(Platform.isIOS ? 'Done' : 'DONE'));
     await tester.pump();
   }
 
@@ -111,7 +112,7 @@ class PasswordScreenTest {
     await tester.pump(Duration(milliseconds: 300));
     expect(find.text('Confirmation does not match'), findsNothing);
 
-    await tester.tap(find.text("Done"));
+    await tester.tap(find.text(Platform.isIOS ? 'Done' : 'DONE'));
     await tester.pump();
   }
 
@@ -135,7 +136,7 @@ class PasswordScreenTest {
     await tester.enterText(find.byKey(Key("newPasswordConfirmationFieldKey")), "cfvv!&123jcKGFF9*");
     await tester.pump(Duration(milliseconds: 300));
 
-    await tester.tap(find.text("Done"));
+    await tester.tap(find.text(Platform.isIOS ? 'Done' : 'DONE'));
     await tester.pump();
   }
 

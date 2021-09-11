@@ -19,6 +19,7 @@ void main() {
 
     await SplashScreenTest(tester: tester).init();
     await RequestResetPasswordScreenTest(tester: tester).init();
+
     await ResetPasswordScreenTest(tester: tester).init();
     await LoginScreenTest(tester: tester).init();
     await OnboardScreenTest(tester: tester).initLogin();

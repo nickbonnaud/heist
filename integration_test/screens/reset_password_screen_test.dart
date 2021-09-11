@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:heist/screens/reset_password_screen/reset_password_screen.dart';
+import 'dart:io';
 
 import '../helpers/test_title.dart';
 
@@ -44,7 +45,7 @@ class ResetPasswordScreenTest {
     await tester.enterText(find.byKey(Key("passwordConfirmationKey")), "jdhFS34#*fcm785!Sg");
     await tester.pump(Duration(milliseconds: 300));
 
-    await tester.tap(find.text("Done"));
+    await tester.tap(find.text(Platform.isIOS ? 'Done' : 'DONE'));
     await tester.pumpAndSettle();
   }
 
@@ -116,7 +117,7 @@ class ResetPasswordScreenTest {
 
     expect(find.text('Passwords do not match'), findsNothing);
 
-    await tester.tap(find.text("Done"));
+    await tester.tap(find.text(Platform.isIOS ? 'Done' : 'DONE'));
     await tester.pumpAndSettle();
   }
 

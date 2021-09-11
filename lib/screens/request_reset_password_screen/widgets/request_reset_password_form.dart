@@ -106,7 +106,7 @@ class _RequestResetPasswordFormState extends State<RequestResetPasswordForm> {
           autocorrect: false,
           autovalidateMode: AutovalidateMode.onUserInteraction,
           focusNode: _emailFocusNode,
-          validator: (_) => !state.isEmailValid
+          validator: (_) => !state.isEmailValid && _emailController.text.isNotEmpty
             ? "Invalid Email"
             : null,
         );

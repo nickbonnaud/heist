@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:heist/resources/constants.dart';
 import 'package:heist/themes/global_colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 

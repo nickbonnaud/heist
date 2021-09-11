@@ -101,7 +101,7 @@ class HomeScreenTest {
   Future<void> _horizontalScrollPeekSheet() async {
     double inititalPosition = tester.getCenter(find.byKey(Key("openLogoButtonKey-0"))).dx;
     
-    await tester.drag(find.byKey(Key('activeLogoButtonKey-0')), Offset(500, 0));
+    await tester.drag(find.byKey(Key('activeLogoButtonKey-0')), Offset(-500, 0));
     await tester.pump();
 
     double finalPosition = tester.getCenter(find.byKey(Key("openLogoButtonKey-0"))).dx;

@@ -75,12 +75,12 @@ class ReceiptScreenTest {
     Offset initialPositionPurchasedItem = tester.getCenter(find.byKey(Key('purchasedItemKey-0')));
     
     await tester.pump(Duration(seconds: 1));
-    await tester.drag(find.byKey(Key("receiptBodyWithAppBarKey")), Offset(0, -500));
+    await tester.drag(find.byKey(Key("receiptBodyWithAppBarKey")), Offset(0, -250));
     await tester.pumpAndSettle();
     
     expect(initialPositionPurchasedItem.dy != tester.getCenter(find.byKey(Key('purchasedItemKey-0'))).dy, true);
 
-    await tester.drag(find.byKey(Key("receiptBodyWithAppBarKey")), Offset(0, 500));
+    await tester.drag(find.byKey(Key("receiptBodyWithAppBarKey")), Offset(0, 250));
     await tester.pumpAndSettle();
   }
 

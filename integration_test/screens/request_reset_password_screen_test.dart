@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:heist/screens/request_reset_password_screen/request_reset_password_screen.dart';
@@ -42,7 +44,7 @@ class RequestResetPasswordScreenTest {
     await tester.enterText(find.byKey(Key("emailFormFieldKey")), "error@gmail.com");
     await tester.pump(Duration(milliseconds: 300));
 
-    await tester.tap(find.text("Done"));
+    await tester.tap(find.text(Platform.isIOS ? 'Done' : 'DONE'));
     await tester.pumpAndSettle();
   }
 
@@ -63,7 +65,7 @@ class RequestResetPasswordScreenTest {
 
     expect(find.text("Invalid Email"), findsNothing);
 
-    await tester.enterText(find.byKey(Key("emailFormFieldKey")), "not * email");
+    await tester.enterText(find.byKey(Key("emailFormFieldKey")), "not 7 email");
     await tester.pump(Duration(milliseconds: 300));
 
     expect(find.text("Invalid Email"), findsOneWidget);
@@ -77,7 +79,7 @@ class RequestResetPasswordScreenTest {
 
     expect(find.text("Invalid Email"), findsNothing);
 
-    await tester.tap(find.text("Done"));
+    await tester.tap(find.text(Platform.isIOS ? 'Done' : 'DONE'));
     await tester.pumpAndSettle();
   }
 

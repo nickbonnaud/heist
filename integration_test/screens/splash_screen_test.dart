@@ -31,13 +31,13 @@ class SplashScreenTest {
   }
 
   Future<void> _dragBetweenForms() async {
-    await tester.pump(Duration(milliseconds: 300));
+    await tester.pump(Duration(milliseconds: 500));
     expect(find.byKey(Key("loginFormKey")), findsOneWidget);
     expect(find.byKey(Key("registerFormKey")), findsNothing);
 
     expect(find.byKey(Key("dragArrowKey")), findsOneWidget);
     await tester.tap(find.byKey(Key("dragArrowKey")));
-    await tester.pump(Duration(milliseconds: 300));
+    await tester.pump(Duration(milliseconds: 500));
 
     expect(find.byKey(Key("loginFormKey")), findsNothing);
 

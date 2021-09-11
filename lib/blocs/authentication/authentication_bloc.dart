@@ -5,7 +5,6 @@ import 'package:equatable/equatable.dart';
 import 'package:heist/blocs/customer/customer_bloc.dart';
 import 'package:heist/models/customer/customer.dart';
 import 'package:heist/repositories/authentication_repository.dart';
-import 'package:heist/resources/helpers/api_exception.dart';
 
 part 'authentication_event.dart';
 part 'authentication_state.dart';
@@ -35,9 +34,9 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
   Stream<AuthenticationState> _mapInitToState() async* {
     // TEST CHANGE //
     
-    // final bool isSignedIn = await _authenticationRepository.isSignedIn();
+    final bool isSignedIn = await _authenticationRepository.isSignedIn();
 
-    final bool isSignedIn = true;
+    // final bool isSignedIn = true;
 
     if (isSignedIn) {
       _customerBloc.add(CustomerAuthenticated());

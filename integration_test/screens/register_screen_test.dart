@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'dart:io';
 
 import '../helpers/test_title.dart';
 
@@ -57,7 +58,7 @@ class RegisterScreenTest {
     await tester.enterText(find.byKey(Key("passwordConfirmationFormFieldKey")), "s^!hHd34Gjs76@");
     await tester.pump(Duration(milliseconds: 300));
 
-    await tester.tap(find.text("Done"));
+    await tester.tap(find.text(Platform.isIOS ? 'Done' : 'DONE'));
     await tester.pump();
   }
 
@@ -131,7 +132,7 @@ class RegisterScreenTest {
 
     expect(find.text("Passwords do not match"), findsNothing);
 
-    await tester.tap(find.text("Done"));
+    await tester.tap(find.text(Platform.isIOS ? 'Done' : 'DONE'));
     await tester.pump();
   }
 

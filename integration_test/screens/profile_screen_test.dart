@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:heist/screens/profile_screen/profile_screen.dart';
+import 'dart:io';
 
 import '../helpers/test_title.dart';
 
@@ -72,7 +73,7 @@ class ProfileScreenTest {
   Future<void> _submitError() async {
     expect(find.byKey(Key("profileFormSnackbarKey")), findsNothing);
     
-    await tester.tap(find.text("Done"));
+    await tester.tap(find.text(Platform.isIOS ? 'Done' : 'DONE'));
     await tester.pump();
     
     await tester.tap(find.byKey(Key("submitButtonKey")));
@@ -97,7 +98,7 @@ class ProfileScreenTest {
     expect(find.byKey(Key("profileFormSnackbarKey")), findsNothing);
     expect(find.byType(CircularProgressIndicator), findsNothing);
     
-    await tester.tap(find.text("Done"));
+    await tester.tap(find.text(Platform.isIOS ? 'Done' : 'DONE'));
     await tester.pump();
     
     await tester.tap(find.byKey(Key("submitButtonKey")));

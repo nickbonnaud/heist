@@ -2,6 +2,7 @@ import 'package:faker/faker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:heist/screens/help_tickets_screen/widgets/widgets/new_help_ticket_screen/new_help_ticket_screen.dart';
+import 'dart:io';
 
 import '../helpers/test_title.dart';
 
@@ -70,7 +71,7 @@ class NewHelpTicketScreenTest {
     expect(find.byType(CircularProgressIndicator), findsNothing);
     expect(find.byKey(Key("newHelpTicketSnackbarKey")), findsNothing);
 
-    await tester.tap(find.text("Done"));
+    await tester.tap(find.text(Platform.isIOS ? 'Done' : 'DONE'));
     await tester.pump();
     
     await tester.tap(find.byKey(Key("submitButtonKey")));

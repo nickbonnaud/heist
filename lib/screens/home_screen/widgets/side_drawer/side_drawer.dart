@@ -34,7 +34,7 @@ class _SideDrawerState extends State<SideDrawer> with SingleTickerProviderStateM
   static const double _borderRadius = 32.0;
   
   late Animation<double> _animation, _scaleAnimation;
-  late Animation<BorderRadius> _radiusAnimation;
+  late Animation<BorderRadius?> _radiusAnimation;
   late AnimationController _animationController;
 
   _open(BuildContext context) {

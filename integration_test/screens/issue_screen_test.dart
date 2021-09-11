@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:heist/screens/issue_screen/issue_screen.dart';
+import 'dart:io';
 
 import '../helpers/test_title.dart';
 
@@ -15,7 +16,7 @@ class IssueScreenTest {
     expect(find.byType(IssueScreen), findsOneWidget);
     expect(find.text('Wrong Bill'), findsOneWidget);
 
-    await tester.tap(find.text('Done'));
+    await tester.tap(find.text(Platform.isIOS ? 'Done' : 'DONE'));
     await tester.pump();
     
     await tester.tap(find.byKey(Key("cancelButtonKey")));
@@ -90,7 +91,7 @@ class IssueScreenTest {
     await tester.pump(Duration(milliseconds: 300));
     expect(find.text('Issue must be at least 5 characters long'), findsNothing);
 
-    await tester.tap(find.text("Done"));
+    await tester.tap(find.text(Platform.isIOS ? 'Done' : 'DONE'));
     await tester.pump();
     
     await tester.tap(find.byKey(Key("submitButtonKey")));
@@ -108,7 +109,7 @@ class IssueScreenTest {
     await tester.enterText(find.byKey(Key("issueFieldKey")), "Some Issue");
     await tester.pump(Duration(milliseconds: 300));
 
-    await tester.tap(find.text("Done"));
+    await tester.tap(find.text(Platform.isIOS ? 'Done' : 'DONE'));
     await tester.pump();
     
     await tester.tap(find.byKey(Key("submitButtonKey")));

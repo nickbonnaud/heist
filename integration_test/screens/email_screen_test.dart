@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:heist/screens/email_screen/email_screen.dart';
+import 'dart:io';
 
 import '../helpers/test_title.dart';
 
@@ -42,7 +43,7 @@ class EmailScreenTest {
   Future<void> _submitError() async {
     expect(find.byKey(Key("emailFormSnackbarKey")), findsNothing);
 
-    await tester.tap(find.text("Done"));
+    await tester.tap(find.text(Platform.isIOS ? 'Done' : 'DONE'));
     await tester.pump();
 
     await tester.tap(find.byKey(Key("submitButtonKey")));
@@ -62,7 +63,7 @@ class EmailScreenTest {
     expect(find.byKey(Key("emailFormSnackbarKey")), findsNothing);
     expect(find.byType(CircularProgressIndicator), findsNothing);
 
-    await tester.tap(find.text("Done"));
+    await tester.tap(find.text(Platform.isIOS ? 'Done' : 'DONE'));
     await tester.pump();
 
     await tester.tap(find.byKey(Key("submitButtonKey")));

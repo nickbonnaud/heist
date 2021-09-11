@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'dart:io';
 
 import '../helpers/test_title.dart';
 
@@ -53,7 +54,7 @@ class LoginScreenTest {
     await tester.enterText(find.byKey(Key("passwordFormFieldKey")), "jdgDKXV2!^***4652vbFbd42@");
     await tester.pump(Duration(milliseconds: 300));
 
-    await tester.tap(find.text("Done"));
+    await tester.tap(find.text(Platform.isIOS ? 'Done' : 'DONE'));
     await tester.pump();
   }
 
@@ -85,7 +86,7 @@ class LoginScreenTest {
     await tester.pump(Duration(milliseconds: 300));
 
     expect(find.text("Invalid Password"), findsNothing);
-    await tester.tap(find.text("Done"));
+    await tester.tap(find.text(Platform.isIOS ? 'Done' : 'DONE'));
     await tester.pump();
   }
 

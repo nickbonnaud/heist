@@ -25,7 +25,7 @@ class PermissionsScreenTest {
 
     expect(find.byKey(Key("enablePermissionButtonKey")), findsOneWidget);
     await tester.tap(find.byKey(Key("enablePermissionButtonKey")));
-    await tester.pump(Duration(milliseconds: 500));
+    await tester.pump(Duration(seconds: 3));
   }
 
   Future<void> _tapEnableNotificationsButton() async {
@@ -34,7 +34,7 @@ class PermissionsScreenTest {
 
     expect(find.byKey(Key("enablePermissionButtonKey")), findsOneWidget);
     await tester.tap(find.byKey(Key("enablePermissionButtonKey")));
-    await tester.pump(Duration(milliseconds: 500));
+    await tester.pump(Duration(seconds: 3));
   }
 
   Future<void> _tapEnableLocationButton() async {
@@ -43,7 +43,7 @@ class PermissionsScreenTest {
 
     expect(find.byKey(Key("enablePermissionButtonKey")), findsOneWidget);
     await tester.tap(find.byKey(Key("enablePermissionButtonKey")));
-    await tester.pump(Duration(milliseconds: 500));
+    await tester.pump(Duration(seconds: 3));
   }
 
   Future<void> _tapEnableBeaconButton() async {

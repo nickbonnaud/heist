@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:heist/screens/transaction_picker_screen/transaction_picker_screen.dart';
@@ -54,7 +56,7 @@ class TransactionPickerScreenTest {
   }
 
   Future<void> _cancelDialog() async {
-    await tester.tap(find.text('Cancel'));
+    await tester.tap(find.text(Platform.isIOS ? 'Cancel' : 'CANCEL'));
     await tester.pump();
 
     expect(find.byKey(Key("confirmClaimDialogKey")), findsNothing);
@@ -63,7 +65,7 @@ class TransactionPickerScreenTest {
   Future<void> _confirmDialog() async {
     expect(find.byType(CircularProgressIndicator), findsNothing);
 
-    await tester.tap(find.text('Confirm'));
+    await tester.tap(find.text(Platform.isIOS ? 'Confirm' : 'CONFIRM'));
     await tester.pump();
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
 

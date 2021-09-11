@@ -1,6 +1,7 @@
 import 'package:faker/faker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'dart:io';
 
 import '../helpers/test_title.dart';
 
@@ -40,7 +41,7 @@ class ProfileSetupScreenTest {
     await tester.enterText(find.byKey(Key("lastNameFieldKey")), faker.person.lastName());
     await tester.pump(Duration(milliseconds: 300));
 
-    await tester.tap(find.text("Done"));
+    await tester.tap(find.text(Platform.isIOS ? 'Done' : 'DONE'));
     await tester.pumpAndSettle();
   }
 
@@ -74,7 +75,7 @@ class ProfileSetupScreenTest {
     await tester.pump(Duration(milliseconds: 300));
     expect(find.text("Invalid last name"), findsNothing);
 
-    await tester.tap(find.text("Done"));
+    await tester.tap(find.text(Platform.isIOS ? 'Done' : 'DONE'));
     await tester.pumpAndSettle();
   }
 
@@ -117,7 +118,7 @@ class ProfileSetupScreenTest {
     await tester.enterText(find.byKey(Key("quickTipRateFieldKey")), "17");
     await tester.pump(Duration(milliseconds: 300));
 
-    await tester.tap(find.text("Done"));
+    await tester.tap(find.text(Platform.isIOS ? 'Done' : 'DONE'));
     await tester.pumpAndSettle();
   }
 
@@ -160,7 +161,7 @@ class ProfileSetupScreenTest {
     await tester.pump(Duration(milliseconds: 300));
     expect(find.text('Must be between 0 and 20'), findsNothing);
 
-    await tester.tap(find.text("Done"));
+    await tester.tap(find.text(Platform.isIOS ? 'Done' : 'DONE'));
     await tester.pumpAndSettle();
   }
 

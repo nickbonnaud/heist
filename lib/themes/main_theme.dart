@@ -52,10 +52,6 @@ class MainTheme {
       iconTheme: IconThemeData(
         color: Color(0xFF016fb9)
       ),
-      appBarTheme: AppBarTheme(
-        textTheme: _getTextTheme(context: context)
-      ),
-    
       inputDecorationTheme: InputDecorationTheme(
         focusColor: Theme.of(context).colorScheme.callToAction,
         focusedBorder: UnderlineInputBorder(
@@ -68,6 +64,10 @@ class MainTheme {
 
       snackBarTheme: SnackBarThemeData(
         contentTextStyle: getDefaultFont()
+      ),
+
+      appBarTheme: AppBarTheme(
+        textTheme: _getTextTheme(context: context)
       ),
 
       colorScheme: ColorScheme(
@@ -97,6 +97,8 @@ class MainTheme {
   static TextTheme _getTextTheme({required BuildContext context}) {
     return GoogleFonts.racingSansOneTextTheme(Theme.of(context).textTheme);
   }
+
+  
 
   static TextStyle getDefaultFont() {
     return GoogleFonts.racingSansOne();
