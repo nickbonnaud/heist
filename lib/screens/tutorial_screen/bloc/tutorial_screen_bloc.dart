@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:heist/resources/constants.dart';
@@ -19,25 +17,24 @@ enum TutorialCardType {
 }
 
 class TutorialScreenBloc extends Bloc<TutorialScreenEvent, TutorialScreenState> {
-  TutorialScreenBloc() : super(TutorialScreenState.initial(tutorialCards: _createCards()));
+  TutorialScreenBloc()
+    : super(TutorialScreenState.initial(tutorialCards: _createCards())) {
+      _eventHandler();
+  }
 
   List<Tutorial> get tutorialCards => state.tutorialCards;
   
-  @override
-  Stream<TutorialScreenState> mapEventToState(TutorialScreenEvent event) async* {
-    if (event is Next) {
-      yield* _mapNextToState();
-    } else if (event is Previous) {
-      yield* _mapPreviousToState();
-    }
+  void _eventHandler() {
+    on<Next>((event, emit) => _mapNextToState(emit: emit));
+    on<Previous>((event, emit) => _mapPreviousToState(emit: emit));
   }
 
-  Stream<TutorialScreenState> _mapNextToState() async* {
-    yield state.updateNext();
+  void _mapNextToState({required Emitter<TutorialScreenState> emit}) async {
+    emit(state.updateNext());
   }
 
-  Stream<TutorialScreenState> _mapPreviousToState() async* {
-    yield state.updatePrevious();
+  void _mapPreviousToState({required Emitter<TutorialScreenState> emit}) async {
+    emit(state.updatePrevious());
   }
 
   static List<Tutorial> _createCards() {

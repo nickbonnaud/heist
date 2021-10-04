@@ -29,6 +29,8 @@ class NearbyBusinessesBloc extends Bloc<NearbyBusinessesEvent, NearbyBusinessesS
       _iconCreatorRepository = iconCreatorRepository,
       super(NearbyUninitialized()) {
 
+        _eventHandler();
+        
         _geoLocationBlocSubscription = geoLocationBloc.stream.listen((GeoLocationState state) {
           if (state is LocationLoaded) {
             add(FetchNearby(lat: state.latitude, lng: state.longitude));
@@ -36,11 +38,8 @@ class NearbyBusinessesBloc extends Bloc<NearbyBusinessesEvent, NearbyBusinessesS
         });
       }
   
-  @override
-  Stream<NearbyBusinessesState> mapEventToState(NearbyBusinessesEvent event) async* {
-    if (event is FetchNearby) {
-      yield* _mapFetchNearbyToState(event: event);
-    }
+  void _eventHandler() {
+    on<FetchNearby>((event, emit) => _mapFetchNearbyToState(event: event, emit: emit));
   }
 
   @override
@@ -49,7 +48,7 @@ class NearbyBusinessesBloc extends Bloc<NearbyBusinessesEvent, NearbyBusinessesS
     return super.close();
   }
 
-  Stream<NearbyBusinessesState> _mapFetchNearbyToState({required FetchNearby event}) async* {
+  void _mapFetchNearbyToState({required FetchNearby event, required Emitter<NearbyBusinessesState> emit}) async {
     try {
       final List<Business> businesses = await _locationRepository.sendLocation(
         lat: event.lat,
@@ -62,9 +61,9 @@ class NearbyBusinessesBloc extends Bloc<NearbyBusinessesEvent, NearbyBusinessesS
         ? await _createPreMarkers(businesses)
         : [];
       
-      yield NearbyBusinessLoaded(businesses: businesses, preMarkers: preMarkers);
+      emit(NearbyBusinessLoaded(businesses: businesses, preMarkers: preMarkers));
     } on ApiException catch (exception) {
-      yield FailedToLoadNearby(error: exception.error);
+      emit(FailedToLoadNearby(error: exception.error));
     }
   }
 

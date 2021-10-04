@@ -29,29 +29,31 @@ class BeaconBloc extends Bloc<BeaconEvent, BeaconState> {
       _activeLocationBloc = activeLocationBloc,
       super(BeaconUninitialized()) {
 
+        _eventHandler();
+        
         _nearbyBusinessSubscription = nearbyBusinessesBloc.stream.listen((NearbyBusinessesState state) {
           if (state is NearbyBusinessLoaded) {
             add(StartBeaconMonitoring(businesses: state.businesses));
 
             // TEST CHANGE //
 
-            Business business = state.businesses.first;
-            businessBeacon.Beacon beacon = _regionToBeacon(region: Region(
-              identifier: business.location.beacon.regionIdentifier,
-              proximityUUID: business.location.beacon.proximityUUID,
-              major: business.location.beacon.major,
-              minor: business.location.beacon.minor
-            )) ;
-            add(Enter(beacon: beacon));
+            // Business business = state.businesses.first;
+            // businessBeacon.Beacon beacon = _regionToBeacon(region: Region(
+            //   identifier: business.location.beacon.regionIdentifier,
+            //   proximityUUID: business.location.beacon.proximityUUID,
+            //   major: business.location.beacon.major,
+            //   minor: business.location.beacon.minor
+            // )) ;
+            // add(Enter(beacon: beacon));
 
-            business = state.businesses[1];
-            beacon = _regionToBeacon(region: Region(
-              identifier: business.location.beacon.regionIdentifier,
-              proximityUUID: business.location.beacon.proximityUUID,
-              major: business.location.beacon.major,
-              minor: business.location.beacon.minor
-            ));
-            add(Enter(beacon: beacon));
+            // business = state.businesses[1];
+            // beacon = _regionToBeacon(region: Region(
+            //   identifier: business.location.beacon.regionIdentifier,
+            //   proximityUUID: business.location.beacon.proximityUUID,
+            //   major: business.location.beacon.major,
+            //   minor: business.location.beacon.minor
+            // ));
+            // add(Enter(beacon: beacon));
 
             // Business business = state.businesses[2];
             // add(Enter(region: Region(
@@ -64,17 +66,11 @@ class BeaconBloc extends Bloc<BeaconEvent, BeaconState> {
         });
       }
 
-  @override
-  Stream<BeaconState> mapEventToState(BeaconEvent event) async* {
-    if (event is StartBeaconMonitoring) {
-      yield* _mapStartBeaconMonitoringToState(event: event);
-    } else if (event is BeaconCancelled) {
-      yield* _mapBeaconCancelledToState();
-    } else if (event is Enter) {
-      yield* _mapEnterToState(event: event);
-    } else if (event is Exit) {
-      yield* _mapExitToState(event: event);
-    }
+  void _eventHandler() {
+    on<StartBeaconMonitoring>((event, emit) => _mapStartBeaconMonitoringToState(event: event, emit: emit));
+    on<BeaconCancelled>((event, emit) => _mapBeaconCancelledToState(emit: emit));
+    on<Enter>((event, emit) => _mapEnterToState(event: event));
+    on<Exit>((event, emit) => _mapExitToState(event: event));
   }
 
   @override
@@ -84,8 +80,8 @@ class BeaconBloc extends Bloc<BeaconEvent, BeaconState> {
     return super.close();
   }
 
-  Stream<BeaconState> _mapStartBeaconMonitoringToState({required StartBeaconMonitoring event}) async* {
-    yield LoadingBeacons();
+  void _mapStartBeaconMonitoringToState({required StartBeaconMonitoring event, required Emitter<BeaconState> emit}) async {
+    emit(LoadingBeacons());
     _beaconSubscription?.cancel();
     _beaconSubscription = _beaconRepository.startMonitoring(businesses: event.businesses).listen((MonitoringResult beaconEvent) {
       if (beaconEvent.monitoringEventType == MonitoringEventType.didEnterRegion) {
@@ -94,19 +90,19 @@ class BeaconBloc extends Bloc<BeaconEvent, BeaconState> {
         add(Exit(beacon: _regionToBeacon(region: beaconEvent.region)));
       }
     });
-    yield Monitoring();
+    emit(Monitoring());
   }
 
-  Stream<BeaconState> _mapBeaconCancelledToState() async* {
+  void _mapBeaconCancelledToState({required Emitter<BeaconState> emit}) async {
     _beaconSubscription?.cancel();
-    yield BeaconsCancelled();
+    emit(BeaconsCancelled());
   }
 
-  Stream<BeaconState> _mapEnterToState({required Enter event}) async* {
+  void _mapEnterToState({required Enter event}) async {
     _activeLocationBloc.add(NewActiveLocation(beacon: event.beacon));
   }
 
-  Stream<BeaconState> _mapExitToState({required Exit event}) async* {
+  void _mapExitToState({required Exit event}) async {
     _activeLocationBloc.add(RemoveActiveLocation(beacon: event.beacon));
   }
 

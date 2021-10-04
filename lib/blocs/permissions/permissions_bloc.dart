@@ -23,7 +23,7 @@ class PermissionsBloc extends Bloc<PermissionsEvent, PermissionsState> {
   PermissionsBloc({required InitialLoginRepository initialLoginRepository, required PermissionsChecker permissionsChecker})
     : _initialLoginRepository = initialLoginRepository,
       _permissionsChecker = permissionsChecker,
-      super(PermissionsState.unknown());
+      super(PermissionsState.unknown()) { _eventHandler(); }
 
   bool get allPermissionsValid => state.bleEnabled && state.locationEnabled && state.notificationEnabled && state.beaconEnabled;
   
@@ -46,56 +46,47 @@ class PermissionsBloc extends Bloc<PermissionsEvent, PermissionsState> {
     return incompletePermissions;
   }
 
-  @override
-  Stream<PermissionsState> mapEventToState(PermissionsEvent event) async* {
-    if (event is BleStatusChanged) {
-      yield* _mapBleStatusChangedToState(event: event);
-    } else if (event is LocationStatusChanged) {
-      yield* _mapLocationStatusChangedToState(event: event);
-    } else if (event is NotificationStatusChanged) {
-      yield* _mapNotificationStatusChangedToState(event: event);
-    } else if (event is BeaconStatusChanged) {
-      yield* _mapBeaconStatusChangedToState(event: event);
-    } else if (event is UpdateAllPermissions) {
-      yield* _mapUpdateAllPermissionsToState(event: event);
-    } else if (event is IsInitialLogin) {
-      yield* _mapIsInitialLoginToState();
-    } else if (event is CheckPermissions) {
-      yield* _checkPermissions();
-    }
+  void _eventHandler() {
+    on<BleStatusChanged>((event, emit) => _mapBleStatusChangedToState(event: event, emit: emit));
+    on<LocationStatusChanged>((event, emit) => _mapLocationStatusChangedToState(event: event, emit: emit));
+    on<NotificationStatusChanged>((event, emit) => _mapNotificationStatusChangedToState(event: event, emit: emit));
+    on<BeaconStatusChanged>((event, emit) => _mapBeaconStatusChangedToState(event: event, emit: emit));
+    on<UpdateAllPermissions>((event, emit) => _mapUpdateAllPermissionsToState(event: event, emit: emit));
+    on<IsInitialLogin>((event, emit) => _mapIsInitialLoginToState(emit: emit));
+    on<CheckPermissions>((event, emit) => _checkPermissions(emit: emit));
   }
 
-  Stream<PermissionsState> _mapBleStatusChangedToState({required BleStatusChanged event}) async* {
-    yield state.update(bleEnabled: event.granted);
+  void _mapBleStatusChangedToState({required BleStatusChanged event, required Emitter<PermissionsState> emit}) async {
+    emit(state.update(bleEnabled: event.granted));
   }
 
-  Stream<PermissionsState> _mapLocationStatusChangedToState({required LocationStatusChanged event}) async* {
-    yield state.update(locationEnabled: event.granted);
+  void _mapLocationStatusChangedToState({required LocationStatusChanged event, required Emitter<PermissionsState> emit}) async {
+    emit(state.update(locationEnabled: event.granted));
   }
 
-  Stream<PermissionsState> _mapNotificationStatusChangedToState({required NotificationStatusChanged event}) async* {
-    yield state.update(notificationEnabled: event.granted);
+  void _mapNotificationStatusChangedToState({required NotificationStatusChanged event, required Emitter<PermissionsState> emit}) async {
+    emit(state.update(notificationEnabled: event.granted));
   }
 
-  Stream<PermissionsState> _mapBeaconStatusChangedToState({required BeaconStatusChanged event}) async* {
-    yield state.update(beaconEnabled: event.granted);
+  void _mapBeaconStatusChangedToState({required BeaconStatusChanged event, required Emitter<PermissionsState> emit}) async {
+    emit(state.update(beaconEnabled: event.granted));
   }
 
-  Stream<PermissionsState> _mapUpdateAllPermissionsToState({required UpdateAllPermissions event}) async* {
-    yield state.update(
+  void _mapUpdateAllPermissionsToState({required UpdateAllPermissions event, required Emitter<PermissionsState> emit}) async {
+    emit(state.update(
       bleEnabled: event.bleGranted,
       locationEnabled: event.locationGranted,
       notificationEnabled: event.notificationGranted,
       beaconEnabled: event.beaconGranted,
       checksComplete: event.checksComplete
-    );
+    ));
   }
 
-  Stream<PermissionsState> _mapIsInitialLoginToState() async* {
-    yield PermissionsState.isInitial();
+  void _mapIsInitialLoginToState({required Emitter<PermissionsState> emit}) async {
+    emit(PermissionsState.isInitial());
   }
   
-  Stream<PermissionsState> _checkPermissions() async* {
+  void _checkPermissions({required Emitter<PermissionsState> emit}) async {
     // TEST CHANGE //
     
     bool isInitial =  await _initialLoginRepository.isInitialLogin();
@@ -115,13 +106,13 @@ class PermissionsBloc extends Bloc<PermissionsEvent, PermissionsState> {
       //   beaconEnabled: true,
       //   checksComplete: true,
       // );
-      yield state.update(
+      emit(state.update(
         bleEnabled: results[0],
         locationEnabled: results[1],
         notificationEnabled: results[2],
         beaconEnabled: results[3],
         checksComplete: true,
-      );
+      ));
     } else {
       add(IsInitialLogin());
     }

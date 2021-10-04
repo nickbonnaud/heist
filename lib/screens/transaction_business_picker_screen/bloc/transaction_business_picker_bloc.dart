@@ -16,18 +16,16 @@ class TransactionBusinessPickerBloc extends Bloc<TransactionBusinessPickerEvent,
   TransactionBusinessPickerBloc({required ActiveLocationBloc activeLocationBloc})
     : super(TransactionBusinessPickerState.initial()) {
       
+      _eventHandler();
+      
       _activeLocationsSubscription = activeLocationBloc.stream.listen((ActiveLocationState state) { 
         add(ActiveLocationsChanged(activeLocations: state.activeLocations));
       });
     }
 
-  @override
-  Stream<TransactionBusinessPickerState> mapEventToState(TransactionBusinessPickerEvent event) async* {
-    if (event is Init) {
-      yield* _mapInitToState(event: event);
-    } else if (event is ActiveLocationsChanged) {
-      yield* _mapActiveLocationsChangedToState(event: event);
-    }
+  void _eventHandler() {
+    on<Init>((event, emit) => _mapInitToState(event: event, emit: emit));
+    on<ActiveLocationsChanged>((event, emit) => _mapActiveLocationsChangedToState(event: event, emit: emit));
   }
 
   @override
@@ -36,16 +34,14 @@ class TransactionBusinessPickerBloc extends Bloc<TransactionBusinessPickerEvent,
     return super.close();
   }
 
-  Stream<TransactionBusinessPickerState> _mapInitToState({required Init event}) async* {
+  void _mapInitToState({required Init event, required Emitter<TransactionBusinessPickerState> emit}) async {
     List<Business> possibleBusinesses = _getAvailableBusinesses(activeLocations: event.activeLocations);
-    
-    yield state.update(availableBusinesses: possibleBusinesses);
+    emit(state.update(availableBusinesses: possibleBusinesses));
   }
   
-  Stream<TransactionBusinessPickerState> _mapActiveLocationsChangedToState({required ActiveLocationsChanged event}) async* {
+  void _mapActiveLocationsChangedToState({required ActiveLocationsChanged event, required Emitter<TransactionBusinessPickerState> emit}) async {
     List<Business> possibleBusinesses = _getAvailableBusinesses(activeLocations: event.activeLocations);
-    
-    yield state.update(availableBusinesses: possibleBusinesses);
+    emit(state.update(availableBusinesses: possibleBusinesses));
   }
 
   

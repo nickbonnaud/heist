@@ -20,20 +20,17 @@ class SplashScreenBloc extends Bloc<SplashScreenEvent, SplashScreenState> {
   SplashScreenBloc({required AppReadyBloc appReadyBloc}) 
     : super(SplashScreenState.initial()) {
         
-        _appReadyBlocSubscription = appReadyBloc.stream.listen((AppReadyState state) {
-          add(AppReadyBlocUpdated(appReadyState: state));
-        });
-      }
+      _eventHandler();
+      
+      _appReadyBlocSubscription = appReadyBloc.stream.listen((AppReadyState state) {
+        add(AppReadyBlocUpdated(appReadyState: state));
+      });
+  }
 
-  @override
-  Stream<SplashScreenState> mapEventToState(SplashScreenEvent event) async* {
-    if (event is MainAnimationCompleted) {
-      yield state.update(mainAnimationComplete: true);
-    } else if (event is EndAnimationCompleted) {
-      yield state.update(endAnimationComplete: true);
-    } else if (event is AppReadyBlocUpdated) {
-      yield* _mapBootBlocUpdatedToState(appReadyState: event.appReadyState);
-    }
+  void _eventHandler() {
+    on<MainAnimationCompleted>((event, emit) => _mapMainAnimationCompletedToState(emit: emit));
+    on<EndAnimationCompleted>((event, emit) => _mapEndAnimationCompletedToState(emit: emit));
+    on<AppReadyBlocUpdated>((event, emit) => _mapBootBlocUpdatedToState(event: event, emit: emit));
   }
 
   @override
@@ -42,26 +39,34 @@ class SplashScreenBloc extends Bloc<SplashScreenEvent, SplashScreenState> {
     return super.close();
   }
 
-  Stream<SplashScreenState> _mapBootBlocUpdatedToState({required AppReadyState appReadyState}) async* {
+  void _mapMainAnimationCompletedToState({required Emitter<SplashScreenState> emit}) async {
+    emit(state.update(mainAnimationComplete: true));
+  }
+
+  void _mapEndAnimationCompletedToState({required Emitter<SplashScreenState> emit}) async {
+    emit(state.update(endAnimationComplete: true));
+  }
+  
+  void _mapBootBlocUpdatedToState({required AppReadyBlocUpdated event, required Emitter<SplashScreenState> emit}) async {
     if (state.nextScreen == null) {
-      if (appReadyState.authCheckComplete) {
-        if (!appReadyState.isAuthenticated) {
-          yield state.update(nextScreen: NextScreen.auth);
+      if (event.appReadyState.authCheckComplete) {
+        if (!event.appReadyState.isAuthenticated) {
+          emit(state.update(nextScreen: NextScreen.auth));
           return;
         }
 
-        if (appReadyState.permissionChecksComplete && !appReadyState.permissionsReady) {
-          yield state.update(nextScreen: NextScreen.onboard);
+        if (event.appReadyState.permissionChecksComplete && !event.appReadyState.permissionsReady) {
+          emit(state.update(nextScreen: NextScreen.onboard));
           return;
         }
 
-        if (!appReadyState.customerOnboarded) {
-          yield state.update(nextScreen: NextScreen.onboard);
+        if (!event.appReadyState.customerOnboarded) {
+          emit(state.update(nextScreen: NextScreen.onboard));
           return;
         }
 
-        if (appReadyState.isDataLoaded) {
-          yield state.update(nextScreen: NextScreen.main);
+        if (event.appReadyState.isDataLoaded) {
+          emit(state.update(nextScreen: NextScreen.main));
           return;
         }
       }

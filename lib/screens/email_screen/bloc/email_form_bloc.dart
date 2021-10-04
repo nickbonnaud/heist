@@ -1,14 +1,12 @@
-import 'dart:async';
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:heist/blocs/customer/customer_bloc.dart';
 import 'package:heist/models/customer/customer.dart';
 import 'package:heist/repositories/customer_repository.dart';
 import 'package:heist/resources/helpers/api_exception.dart';
+import 'package:heist/resources/helpers/debouncer.dart';
 import 'package:heist/resources/helpers/validators.dart';
 import 'package:meta/meta.dart';
-import 'package:rxdart/rxdart.dart';
 
 part 'email_form_event.dart';
 part 'email_form_state.dart';
@@ -17,47 +15,33 @@ class EmailFormBloc extends Bloc<EmailFormEvent, EmailFormState> {
   final CustomerRepository _customerRepository;
   final CustomerBloc _customerBloc;
 
-
   EmailFormBloc({required CustomerRepository customerRepository, required CustomerBloc customerBloc})
     : _customerRepository = customerRepository,
       _customerBloc = customerBloc,
-      super(EmailFormState.initial());
+      super(EmailFormState.initial()) { _eventHandler(); }
 
-  @override
-  Stream<Transition<EmailFormEvent, EmailFormState>> transformEvents(Stream<EmailFormEvent> events, transitionFn) {
-    final nonDebounceStream = events.where((event) => event is !EmailChanged);
-    final debounceStream = events.where((event) => event is EmailChanged)
-      .debounceTime(Duration(milliseconds: 300));
-    return super.transformEvents(nonDebounceStream.mergeWith([debounceStream]), transitionFn);
+  void _eventHandler() {
+    on<EmailChanged>((event, emit) => _mapEmailChangedToState(event: event, emit: emit), transformer: Debouncer.bounce(duration: Duration(milliseconds: 300)));
+    on<Submitted>((event, emit) => _mapSubmittedToState(event: event, emit: emit));
+    on<Reset>((event, emit) => _mapResetToState(emit: emit));
   }
   
-  @override
-  Stream<EmailFormState> mapEventToState(EmailFormEvent event) async* {
-    if (event is EmailChanged) {
-      yield* _mapEmailChangedToState(event: event);
-    } else if (event is Submitted) {
-      yield* _mapSubmittedToState(event: event);
-    } else if (event is Reset) {
-      yield* _mapResetToState();
-    }
+  void _mapEmailChangedToState({required EmailChanged event, required Emitter<EmailFormState> emit}) async {
+    emit(state.update(isEmailValid: Validators.isValidEmail(email: event.email)));
   }
 
-  Stream<EmailFormState> _mapEmailChangedToState({required EmailChanged event}) async* {
-    yield state.update(isEmailValid: Validators.isValidEmail(email: event.email));
-  }
-
-  Stream<EmailFormState> _mapSubmittedToState({required Submitted event}) async* {
-    yield state.update(isSubmitting: true);
+  void _mapSubmittedToState({required Submitted event, required Emitter<EmailFormState> emit}) async {
+    emit(state.update(isSubmitting: true));
     try {
       Customer customer = await _customerRepository.updateEmail(email: event.email, customerId: event.identifier);
-      yield state.update(isSubmitting: false, isSuccess: true);
+      emit(state.update(isSubmitting: false, isSuccess: true));
       _customerBloc.add(CustomerUpdated(customer: customer));
     } on ApiException catch (exception) {
-      yield state.update(isSubmitting: false, errorMessage: exception.error);
+      emit(state.update(isSubmitting: false, errorMessage: exception.error));
     }
   }
 
-  Stream<EmailFormState> _mapResetToState() async* {
-    yield state.update(errorMessage: "", isSuccess: false);
+  void _mapResetToState({required Emitter<EmailFormState> emit}) async {
+    emit(state.update(errorMessage: "", isSuccess: false));
   }
 }

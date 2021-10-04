@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:heist/blocs/open_transactions/open_transactions_bloc.dart';
@@ -25,36 +23,32 @@ class KeepOpenButtonBloc extends Bloc<KeepOpenButtonEvent, KeepOpenButtonState> 
     : _transactionRepository = transactionRepository,
       _receiptScreenBloc = receiptScreenBloc,
       _openTransactionsBloc = openTransactionsBloc,
-      super(KeepOpenButtonState.initial());
+      super(KeepOpenButtonState.initial()) { _eventHandler(); }
 
-  @override
-  Stream<KeepOpenButtonState> mapEventToState(KeepOpenButtonEvent event) async* {
-    if (event is Submitted) {
-      yield* _mapKeepOpenSubmitted(event);
-    } else if (event is Reset) {
-      yield* _mapResetKeepOpen(event);
-    }
+  void _eventHandler() {
+    on<Submitted>((event, emit) => _mapKeepOpenSubmitted(event: event, emit: emit));
+    on<Reset>((event, emit) => _mapResetKeepOpen(event: event, emit: emit));
   }
 
-  Stream<KeepOpenButtonState> _mapKeepOpenSubmitted(Submitted event) async* {
+  void _mapKeepOpenSubmitted({required Submitted event, required Emitter<KeepOpenButtonState> emit}) async {
     if (!state.isSubmitting) {
-      yield state.update(isSubmitting: true);
+      emit(state.update(isSubmitting: true));
       try {
         TransactionResource transactionResource = await _transactionRepository.keepBillOpen(transactionId: event.transactionId);
-        yield state.update(isSubmitting: false, isSubmitSuccess: true);
+        emit(state.update(isSubmitting: false, isSubmitSuccess: true));
         _receiptScreenBloc.add(TransactionChanged(transactionResource: transactionResource));
         _openTransactionsBloc.add(UpdateOpenTransaction(transaction: transactionResource));
       } on ApiException catch (exception) {
-        yield state.update(isSubmitting: false, errorMessage: exception.error);
+        emit(state.update(isSubmitting: false, errorMessage: exception.error));
       }
     }
   }
 
-  Stream<KeepOpenButtonState> _mapResetKeepOpen(Reset event) async* {
-    yield state.update(
+  void _mapResetKeepOpen({required Reset event, required Emitter<KeepOpenButtonState> emit}) async {
+    emit(state.update(
       isSubmitting: false,
       isSubmitSuccess: false,
       errorMessage: ""
-    );
+    ));
   }
 }

@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:heist/repositories/help_repository.dart';
@@ -17,30 +15,30 @@ class DeleteTicketButtonBloc extends Bloc<DeleteTicketButtonEvent, DeleteTicketB
   DeleteTicketButtonBloc({required HelpRepository helpRepository, required HelpTicketsScreenBloc helpTicketsScreenBloc})
     : _helpRepository = helpRepository,
       _helpTicketsScreenBloc = helpTicketsScreenBloc,
-      super(DeleteTicketButtonState.initial());
+      super(DeleteTicketButtonState.initial()) { _eventHandler(); }
 
-  @override
-  Stream<DeleteTicketButtonState> mapEventToState(DeleteTicketButtonEvent event) async* {
-    if (event is Submitted) {
-      yield* _mapSubmittedToState(event: event);
-    } else if (event is Reset) {
-      yield state.update(isSuccess: false, errorMessage: "");
-    }
+  void _eventHandler() {
+    on<Submitted>((event, emit) => _mapSubmittedToState(event: event, emit: emit));
+    on<Reset>((event, emit) => _mapResetToState(emit: emit));
   }
 
-  Stream<DeleteTicketButtonState> _mapSubmittedToState({required Submitted event}) async* {
-    yield state.update(isSubmitting: true);
+  void _mapSubmittedToState({required Submitted event, required Emitter<DeleteTicketButtonState> emit}) async {
+    emit(state.update(isSubmitting: true));
 
     try {
       bool helpTicketDeleted = await _helpRepository.deleteHelpTicket(identifier: event.ticketIdentifier);
       if (helpTicketDeleted) {
         _helpTicketsScreenBloc.add(HelpTicketDeleted(helpTicketIdentifier: event.ticketIdentifier));
-        yield state.update(isSubmitting: false, isSuccess: true);
+        emit(state.update(isSubmitting: false, isSuccess: true));
       } else {
-        yield state.update(isSubmitting: false, errorMessage: "Unable to remove Help Ticket. Please try again.");
+        emit(state.update(isSubmitting: false, errorMessage: "Unable to remove Help Ticket. Please try again."));
       }
     } on ApiException catch (exception) {
-      yield state.update(isSubmitting: false, errorMessage: exception.error);
+      emit(state.update(isSubmitting: false, errorMessage: exception.error));
     }
+  }
+
+  void _mapResetToState({required Emitter<DeleteTicketButtonState> emit}) async {
+    emit(state.update(isSuccess: false, errorMessage: ""));
   }
 }

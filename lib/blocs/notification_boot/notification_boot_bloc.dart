@@ -22,6 +22,8 @@ class NotificationBootBloc extends Bloc<NotificationBootEvent, NotificationBootS
   })
     : super(NotificationBootState.initial()) {
 
+        _eventHandler();
+        
         _permissionsBlocSubscription = permissionsBloc.stream.listen((PermissionsState state) {
           if (!this.isPermissionReady && state.notificationEnabled) {
             add(PermissionReady());
@@ -39,19 +41,14 @@ class NotificationBootBloc extends Bloc<NotificationBootEvent, NotificationBootS
             add(OpenTransactionsReady());
           }
         });
-      }
+  }
   
   bool get isPermissionReady => state.permissionReady;
 
-  @override
-  Stream<NotificationBootState> mapEventToState(NotificationBootEvent event) async* {
-    if (event is NearbyBusinessesReady) {
-      yield state.update(nearbyBusinessesReady: true);
-    } else if (event is OpenTransactionsReady) {
-      yield state.update(openTransactionsReady: true);
-    } else if (event is PermissionReady) {
-      yield state.update(permissionReady: true);
-    }
+  void _eventHandler() {
+    on<NearbyBusinessesReady>((event, emit) => _mapNearbyBusinessesReadyToState(emit: emit));
+    on<OpenTransactionsReady>((event, emit) => _mapOpenTransactionsReadyToState(emit: emit));
+    on<PermissionReady>((event, emit) => _mapPermissionReadyToState(emit: emit));
   }
 
   @override
@@ -60,5 +57,17 @@ class NotificationBootBloc extends Bloc<NotificationBootEvent, NotificationBootS
     _nearbyBusinessesBlocSubscription.cancel();
     _openTransactionsBlocSubscription.cancel();
     return super.close();
+  }
+
+  void _mapNearbyBusinessesReadyToState({required Emitter<NotificationBootState> emit}) async {
+    emit(state.update(nearbyBusinessesReady: true));
+  }
+
+  void _mapOpenTransactionsReadyToState({required Emitter<NotificationBootState> emit}) async {
+    emit(state.update(openTransactionsReady: true));
+  }
+
+  void _mapPermissionReadyToState({required Emitter<NotificationBootState> emit}) async {
+    emit(state.update(permissionReady: true));
   }
 }

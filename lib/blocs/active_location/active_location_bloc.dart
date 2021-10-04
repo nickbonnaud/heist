@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:bloc/bloc.dart';
 import 'package:collection/collection.dart';
 import 'package:equatable/equatable.dart';
@@ -18,45 +16,39 @@ class ActiveLocationBloc extends Bloc<ActiveLocationEvent, ActiveLocationState> 
   
   ActiveLocationBloc({required ActiveLocationRepository activeLocationRepository})
     : _activeLocationRepository = activeLocationRepository,
-      super(ActiveLocationState.initial());
+      super(ActiveLocationState.initial()) { _eventHandler(); }
 
-  @override
-  Stream<ActiveLocationState> mapEventToState(ActiveLocationEvent event) async* {
-    if (event is NewActiveLocation) {
-      yield* _mapNewActiveLocationToState(event: event);
-    } else if (event is RemoveActiveLocation) {
-      yield* _mapRemoveActiveLocationToState(event: event);
-    } else if (event is TransactionAdded) {
-      yield* _mapTransactionAddedToState(event: event);
-    } else if (event is ResetActiveLocations) {
-      yield* _mapResetToState();
-    }
+  void _eventHandler() {
+    on<NewActiveLocation>((event, emit) => _mapNewActiveLocationToState(event: event, emit: emit));
+    on<RemoveActiveLocation>((event, emit) => _mapRemoveActiveLocationToState(event: event, emit: emit));
+    on<TransactionAdded>((event, emit) => _mapTransactionAddedToState(event: event, emit: emit));
+    on<ResetActiveLocations>((event, emit) => _mapResetToState(emit: emit));
   }
 
-  Stream<ActiveLocationState> _mapNewActiveLocationToState({required NewActiveLocation event}) async* {
+  void _mapNewActiveLocationToState({required NewActiveLocation event, required Emitter<ActiveLocationState> emit}) async {
     if (!state.activeLocations.any((activeLocation) => activeLocation.business.location.beacon == event.beacon) && !state.addingLocations.contains(event.beacon)) {
-      yield state.update(addingLocations: state.addingLocations + [event.beacon]);
+      emit(state.update(addingLocations: state.addingLocations + [event.beacon]));
       try {
         ActiveLocation activeLocation = await _activeLocationRepository.enterBusiness(beacon: event.beacon);
         
-        yield state.update(
+        emit(state.update(
           activeLocations: state.activeLocations + [activeLocation],
           addingLocations: state.addingLocations.where((beacon) => beacon != event.beacon).toList()
-        );
+        ));
       } on ApiException catch (exception) {
-        yield state.update(
+        emit(state.update(
           errorMessage: exception.error,
           addingLocations: state.addingLocations.where((beacon) => beacon != event.beacon).toList()
-        );
+        ));
       }
     }
   }
 
-  Stream<ActiveLocationState> _mapRemoveActiveLocationToState({required RemoveActiveLocation event}) async* {
+  void _mapRemoveActiveLocationToState({required RemoveActiveLocation event, required Emitter<ActiveLocationState> emit}) async {
     final ActiveLocation? locationToRemove = state.activeLocations
       .firstWhereOrNull((ActiveLocation activeLocation) => activeLocation.business.location.beacon == event.beacon);
     if (locationToRemove != null && !state.removingLocations.contains(event.beacon)) {
-      yield state.update(removingLocations: state.removingLocations + [event.beacon]);
+      emit(state.update(removingLocations: state.removingLocations + [event.beacon]));
       try {
         bool didRemove = await _activeLocationRepository.exitBusiness(activeLocationId: locationToRemove.identifier);
         if (didRemove) {
@@ -65,32 +57,32 @@ class ActiveLocationBloc extends Bloc<ActiveLocationEvent, ActiveLocationState> 
             .where((activeLocation) => activeLocation != locationToRemove)
             .toList();
           
-          yield state.update(
+          emit(state.update(
             activeLocations: updatedActiveLocations, 
-            removingLocations: state.removingLocations.where((beacon) => beacon != event.beacon).toList());
+            removingLocations: state.removingLocations.where((beacon) => beacon != event.beacon).toList()));
         } else {
-          yield state.update(
+          emit(state.update(
             errorMessage: "Unable to remove active location.",
-            removingLocations: state.removingLocations.where((beacon) => beacon != event.beacon).toList());
+            removingLocations: state.removingLocations.where((beacon) => beacon != event.beacon).toList()));
         }
       } on ApiException catch (exception) {
-        yield state.update(
+        emit(state.update(
           errorMessage: exception.error,
-          removingLocations: state.removingLocations.where((beacon) => beacon != event.beacon).toList());
+          removingLocations: state.removingLocations.where((beacon) => beacon != event.beacon).toList()));
       }
     }
   }
 
-  Stream<ActiveLocationState> _mapTransactionAddedToState({required TransactionAdded event}) async* {
+  void _mapTransactionAddedToState({required TransactionAdded event, required Emitter<ActiveLocationState> emit}) async {
     ActiveLocation? locationToUpdate = state.activeLocations.firstWhereOrNull((activeLocation) => activeLocation.business.identifier == event.business.identifier);
 
     if (locationToUpdate != null) {
       List<ActiveLocation> updatedLocations = state.activeLocations.where((activeLocation) => activeLocation != locationToUpdate).toList() + [locationToUpdate.update(transactionIdentifier: event.transactionIdentifier)];
-      yield state.update(activeLocations: updatedLocations);
+      emit(state.update(activeLocations: updatedLocations));
     }
   }
 
-  Stream<ActiveLocationState> _mapResetToState() async* {
-    yield state.update(errorMessage: "");
+  void _mapResetToState({required Emitter<ActiveLocationState> emit}) async {
+    emit(state.update(errorMessage: ""));
   }
 }

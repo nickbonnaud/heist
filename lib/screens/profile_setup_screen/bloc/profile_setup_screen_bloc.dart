@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:heist/models/status.dart';
@@ -17,37 +15,34 @@ enum Section {
 
 class ProfileSetupScreenBloc extends Bloc<ProfileSetupScreenEvent, ProfileSetupScreenState> {
   
-  ProfileSetupScreenBloc() : super(ProfileSetupScreenState.initial());
+  ProfileSetupScreenBloc()
+    : super(ProfileSetupScreenState.initial()) { _eventHandler(); }
 
   List<Section> get incompleteSections => state.incompleteSections;
   
-  @override
-  Stream<ProfileSetupScreenState> mapEventToState(ProfileSetupScreenEvent event) async* {
-    if (event is SectionCompleted) {
-      yield* _mapSectionCompletedToState(event);
-    } else if (event is Init) {
-      yield* _mapInitToState(event);
-    }
+  void _eventHandler() {
+    on<SectionCompleted>((event, emit) => _mapSectionCompletedToState(event: event, emit: emit));
+    on<Init>((event, emit) => _mapInitToState(event: event, emit: emit));
   }
 
-  Stream<ProfileSetupScreenState> _mapSectionCompletedToState(SectionCompleted event) async* {
+  void _mapSectionCompletedToState({required SectionCompleted event, required Emitter<ProfileSetupScreenState> emit}) async {
     switch (event.section) {
       case Section.name:
-        yield state.update(isNameComplete: true);
+        emit(state.update(isNameComplete: true));
         break;
       case Section.photo:
-        yield state.update(isPhotoComplete: true);
+        emit(state.update(isPhotoComplete: true));
         break;
       case Section.tip:
-        yield state.update(isTipComplete: true);
+        emit(state.update(isTipComplete: true));
         break;
       case Section.paymentAccount:
-        yield state.update(isPaymentAccountComplete: true);
+        emit(state.update(isPaymentAccountComplete: true));
         break;
     }
   }
 
-  Stream<ProfileSetupScreenState> _mapInitToState(Init event) async* {
+  void _mapInitToState({required Init event, required Emitter<ProfileSetupScreenState> emit}) async {
     int statusCode = event.status.code;
     bool isIntroComplete = false;
     bool isNameComplete = false;
@@ -74,13 +69,13 @@ class ProfileSetupScreenBloc extends Bloc<ProfileSetupScreenEvent, ProfileSetupS
       isTipSettingsComplete = true;
       isPaymentAccountComplete = true;
     }
-    yield state.update(
+    
+    emit(state.update(
       isIntroComplete: isIntroComplete,
       isNameComplete: isNameComplete,
       isPhotoComplete: isPhotoComplete,
       isPaymentAccountComplete: isPaymentAccountComplete,
       isTipComplete: isTipSettingsComplete
-    );
-    
+    ));
   }
 }

@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
@@ -9,14 +7,19 @@ part 'default_app_bar_state.dart';
 
 class DefaultAppBarBloc extends Bloc<DefaultAppBarEvent, DefaultAppBarState> {
   
-  DefaultAppBarBloc() : super(DefaultAppBarState.initial());
+  DefaultAppBarBloc()
+    : super(DefaultAppBarState.initial()) { _eventHandler(); }
 
-  @override
-  Stream<DefaultAppBarState> mapEventToState(DefaultAppBarEvent event) async* {
-    if (event is Rotate) {
-      yield state.update(isRotated: true);
-    } else if (event is Reset) {
-      yield state.update(isRotated: false);
-    }
+  void _eventHandler() {
+    on<Rotate>((event, emit) => _mapRotateToState(emit: emit));
+    on<Reset>((event, emit) => _mapResetToState(emit: emit));
+  }
+
+  void _mapRotateToState({required Emitter<DefaultAppBarState> emit}) async {
+    emit(state.update(isRotated: true));
+  }
+
+  void _mapResetToState({required Emitter<DefaultAppBarState> emit}) async {
+    emit(state.update(isRotated: false));
   }
 }

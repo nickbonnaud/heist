@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
@@ -8,22 +6,19 @@ part 'side_drawer_event.dart';
 part 'side_drawer_state.dart';
 
 class SideDrawerBloc extends Bloc<SideDrawerEvent, SideDrawerState> {
-  SideDrawerBloc() : super(SideDrawerState.initial());
+  SideDrawerBloc()
+    : super(SideDrawerState.initial()) { _eventHandler(); }
 
-  @override
-  Stream<SideDrawerState> mapEventToState(SideDrawerEvent event) async* {
-    if (event is DrawerStatusChanged) {
-      yield* _mapDrawerStatusChangedToState(event);
-    } else if (event is ButtonVisibilityChanged) {
-      yield* _mapToggleButtonVisibilityToState(event);
-    }
+  void _eventHandler() {
+    on<DrawerStatusChanged>((event, emit) => _mapDrawerStatusChangedToState(event: event, emit: emit));
+    on<ButtonVisibilityChanged>((event, emit) => _mapToggleButtonVisibilityToState(event: event, emit: emit));
   }
 
-  Stream<SideDrawerState> _mapDrawerStatusChangedToState(DrawerStatusChanged event) async* {
-    yield state.update(menuOpened: event.menuOpen, buttonVisible: !event.menuOpen);
+  void _mapDrawerStatusChangedToState({required DrawerStatusChanged event, required Emitter<SideDrawerState> emit}) async {
+    emit(state.update(menuOpened: event.menuOpen, buttonVisible: !event.menuOpen));
   }
 
-  Stream<SideDrawerState> _mapToggleButtonVisibilityToState(ButtonVisibilityChanged event) async* {
-    yield state.update(buttonVisible: event.isVisible);
+  void _mapToggleButtonVisibilityToState({required ButtonVisibilityChanged event, required Emitter<SideDrawerState> emit}) async {
+    emit(state.update(buttonVisible: event.isVisible));
   }
 }

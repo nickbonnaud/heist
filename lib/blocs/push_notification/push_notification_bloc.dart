@@ -50,6 +50,8 @@ class PushNotificationBloc extends Bloc<PushNotificationEvent, PushNotificationS
       _externalUrlHandler = externalUrlHandler,
       super(PushNotificatinsUninitialized()) {
 
+        _eventHandler();
+        
         _notificationBootBlocSubscription = notificationBootBloc.stream.listen((NotificationBootState state) {
           if (state.isReady) {
             add(StartPushNotificationMonitoring(
@@ -85,11 +87,8 @@ class PushNotificationBloc extends Bloc<PushNotificationEvent, PushNotificationS
         });
       }
 
-  @override
-  Stream<PushNotificationState> mapEventToState(PushNotificationEvent event) async* {
-    if (event is StartPushNotificationMonitoring) {
-      yield* _mapStartMonitoringToState(event: event);
-    }
+  void _eventHandler() {
+    on<StartPushNotificationMonitoring>((event, emit) => _mapStartMonitoringToState(event: event, emit: emit));
   }
 
   @override
@@ -98,8 +97,8 @@ class PushNotificationBloc extends Bloc<PushNotificationEvent, PushNotificationS
     return super.close();
   }
 
-  Stream<PushNotificationState> _mapStartMonitoringToState({required StartPushNotificationMonitoring event}) async* {
+  void _mapStartMonitoringToState({required StartPushNotificationMonitoring event, required Emitter<PushNotificationState> emit}) async {
     _pushNotificationRepository.startMonitoring(onMessageReceived: event.onMessageReceived, onMessageInteraction: event.onMessageInteraction);
-    yield MonitoringPushNotifications();
+    emit(MonitoringPushNotifications());
   }
 }

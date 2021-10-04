@@ -18,125 +18,186 @@ class HistoricTransactionsBloc extends Bloc<HistoricTransactionsEvent, HistoricT
 
   HistoricTransactionsBloc({required TransactionRepository transactionRepository})
     : _transactionRepository = transactionRepository,
-      super(Uninitialized());
+      super(Uninitialized()) { _eventHandler(); }
 
-  @override
-  Stream<HistoricTransactionsState> mapEventToState(HistoricTransactionsEvent event) async* {
+  void _eventHandler() {
+    on<FetchHistoricTransactions>((event, emit) => _mapFetchHistoricTransactionsToState(event: event, emit: emit));
+    on<FetchTransactionsByDateRange>((event, emit) => _mapFetchTransactionsByDateRangeToState(event: event, emit: emit));
+    on<FetchTransactionsByBusiness>((event, emit) => _mapFetchTransactionsByBusinessToState(event: event, emit: emit));
+    on<FetchTransactionByIdentifier>((event, emit) => _mapFetchTransactionByIdentifierToState(event: event, emit: emit));
+    on<FetchMoreTransactions>((event, emit) => _mapFetchMoreTransactionsToState(emit: emit));
+  }
+
+  void _mapFetchHistoricTransactionsToState({required FetchHistoricTransactions event, required Emitter<HistoricTransactionsState> emit}) async {
     if (state is !Loading) {
-      if (event is FetchHistoricTransactions) {
-        yield* _mapFetchHistoricTransactionsToState(event);
-      } else if (event is FetchTransactionsByDateRange) {
-        yield* _mapFetchTransactionsByDateRangeToState(event);
-      } else if (event is FetchTransactionsByBusiness) {
-        yield* _mapFetchTransactionsByBusinessToState(event);
-      } else if (event is FetchTransactionByIdentifier) {
-        yield* _mapFetchTransactionByIdentifierToState(event);
-      } else if (event is FetchMoreTransactions) {
-        yield* _mapFetchMoreTransactionsToState();
+      if (event.reset) {
+        _fetchUnitialized(
+          fetchFunction: () => _transactionRepository.fetchHistoric(),
+          currentQuery: Option.all,
+          queryParams: null,
+          emit: emit
+        );
+      } else {
+        final currentState = state;
+        if (currentState is Uninitialized) {
+          _fetchUnitialized(
+            fetchFunction: () => _transactionRepository.fetchHistoric(),
+            currentQuery: Option.all,
+            queryParams: null,
+            emit: emit
+          );
+        } else if (currentState is TransactionsLoaded) {
+          _fetchMore(
+            fetchFunction: () => _transactionRepository.paginate(url: currentState.nextUrl!),
+            state: currentState,
+            currentQuery: Option.all,
+            queryParams: null,
+            emit: emit
+          );
+        }
       }
     }
   }
 
-  Stream<HistoricTransactionsState> _mapFetchHistoricTransactionsToState(FetchHistoricTransactions event) async* {
-    if (event.reset) {
-      yield* _fetchUnitialized(fetchFunction: () => _transactionRepository.fetchHistoric(), currentQuery: Option.all, queryParams: null);
-    } else {
+  void _mapFetchTransactionsByDateRangeToState({required FetchTransactionsByDateRange event, required Emitter<HistoricTransactionsState> emit}) async {
+    if (state is !Loading) {  
+      if (event.reset) {
+        _fetchUnitialized(
+          fetchFunction: () => _transactionRepository.fetchDateRange(dateRange: event.dateRange),
+          currentQuery: Option.date,
+          queryParams: event.dateRange,
+          emit: emit
+        );
+      } else {
+        final currentState = state;
+        if (currentState is TransactionsLoaded) {
+          _fetchMore(
+            fetchFunction: () => _transactionRepository.paginate(url: currentState.nextUrl!),
+            state: currentState,
+            currentQuery: Option.date,
+            queryParams: event.dateRange,
+            emit: emit
+          );
+        } 
+      }
+    }
+  }
+
+  void _mapFetchTransactionsByBusinessToState({required FetchTransactionsByBusiness event, required Emitter<HistoricTransactionsState> emit}) async {
+    if (state is !Loading) {  
+      if (event.reset) {
+        _fetchUnitialized(
+          fetchFunction: () => _transactionRepository.fetchByBusiness(identifier: event.identifier),
+          currentQuery: Option.businessName,
+          queryParams: event.identifier,
+          emit: emit
+        );
+      } else {
+        final currentState = state;
+        if (currentState is TransactionsLoaded) {
+          _fetchMore(
+            fetchFunction: () => _transactionRepository.paginate(url: currentState.nextUrl!),
+            state: currentState,
+            currentQuery: Option.businessName,
+            queryParams: event.identifier,
+            emit: emit
+          );
+        }
+      }
+    }
+  }
+
+  void _mapFetchTransactionByIdentifierToState({required FetchTransactionByIdentifier event, required Emitter<HistoricTransactionsState> emit}) async {
+    if (state is !Loading) {  
+      if (event.reset) {
+        _fetchUnitialized(
+          fetchFunction: () => _transactionRepository.fetchByIdentifier(identifier: event.identifier),
+          currentQuery: Option.transactionId,
+          queryParams: event.identifier,
+          emit: emit
+        );
+      } else {
+        final currentState = state;
+        if (currentState is TransactionsLoaded) {
+          _fetchMore(
+            fetchFunction: () => _transactionRepository.paginate(url: currentState.nextUrl!,),
+            state: currentState,
+            currentQuery: Option.transactionId,
+            queryParams: event.identifier,
+            emit: emit
+          );
+        }
+      }
+    }
+  }
+
+  void _mapFetchMoreTransactionsToState({required Emitter<HistoricTransactionsState> emit}) async {
+    if (state is !Loading) {  
       final currentState = state;
-      if (currentState is Uninitialized) {
-        yield* _fetchUnitialized(fetchFunction: () => _transactionRepository.fetchHistoric(), currentQuery: Option.all, queryParams: null);
-      } else if (currentState is TransactionsLoaded) {
-        yield* _fetchMore(fetchFunction: () => _transactionRepository.paginate(url: currentState.nextUrl!), state: currentState, currentQuery: Option.all, queryParams: null);
+      if (currentState is TransactionsLoaded && !currentState.paginating) {
+        switch (currentState.currentQuery) {
+          case Option.all:
+            _mapFetchHistoricTransactionsToState(event: FetchHistoricTransactions(reset: false), emit: emit);
+            break;
+          case Option.date:
+            _mapFetchTransactionsByDateRangeToState(event: FetchTransactionsByDateRange(dateRange: currentState.queryParams, reset: false), emit: emit);
+            break;
+          case Option.businessName:
+            _mapFetchTransactionsByBusinessToState(event: FetchTransactionsByBusiness(identifier: currentState.queryParams, reset: false), emit: emit);
+            break;
+          case Option.transactionId:
+            _mapFetchTransactionByIdentifierToState(event: FetchTransactionByIdentifier(identifier: currentState.queryParams, reset: false), emit: emit);
+            break;
+          default:
+        }
       }
     }
   }
 
-  Stream<HistoricTransactionsState> _mapFetchTransactionsByDateRangeToState(FetchTransactionsByDateRange event) async* {
-    if (event.reset) {
-      yield* _fetchUnitialized(fetchFunction: () => _transactionRepository.fetchDateRange(dateRange: event.dateRange), currentQuery: Option.date, queryParams: event.dateRange);
-    } else {
-      final currentState = state;
-      if (currentState is TransactionsLoaded) {
-        yield* _fetchMore(fetchFunction: () => _transactionRepository.paginate(url: currentState.nextUrl!), state: currentState, currentQuery: Option.date, queryParams: event.dateRange);
-      } 
-    }
-  }
-
-  Stream<HistoricTransactionsState> _mapFetchTransactionsByBusinessToState(FetchTransactionsByBusiness event) async* {
-    if (event.reset) {
-      yield* _fetchUnitialized(fetchFunction: () => _transactionRepository.fetchByBusiness(identifier: event.identifier), currentQuery: Option.businessName, queryParams: event.identifier);
-    } else {
-      final currentState = state;
-      if (currentState is TransactionsLoaded) {
-        yield* _fetchMore(fetchFunction: () => _transactionRepository.paginate(url: currentState.nextUrl!), state: currentState, currentQuery: Option.businessName, queryParams: event.identifier);
-      }
-    }
-  }
-
-  Stream<HistoricTransactionsState> _mapFetchTransactionByIdentifierToState(FetchTransactionByIdentifier event) async* {
-    if (event.reset) {
-      yield* _fetchUnitialized(fetchFunction: () => _transactionRepository.fetchByIdentifier(identifier: event.identifier), currentQuery: Option.transactionId, queryParams: event.identifier);
-    } else {
-      final currentState = state;
-      if (currentState is TransactionsLoaded) {
-        yield* _fetchMore(fetchFunction: () => _transactionRepository.paginate(url: currentState.nextUrl!,), state: currentState, currentQuery: Option.transactionId, queryParams: event.identifier);
-      }
-    }
-  }
-
-  Stream<HistoricTransactionsState> _mapFetchMoreTransactionsToState() async* {
-    final currentState = state;
-    if (currentState is TransactionsLoaded && !currentState.paginating) {
-      switch (currentState.currentQuery) {
-        case Option.all:
-          yield* _mapFetchHistoricTransactionsToState(FetchHistoricTransactions(reset: false));
-          break;
-        case Option.date:
-          yield* _mapFetchTransactionsByDateRangeToState(FetchTransactionsByDateRange(dateRange: currentState.queryParams, reset: false));
-          break;
-        case Option.businessName:
-          yield* _mapFetchTransactionsByBusinessToState(FetchTransactionsByBusiness(identifier: currentState.queryParams, reset: false));
-          break;
-        case Option.transactionId:
-          yield* _mapFetchTransactionByIdentifierToState(FetchTransactionByIdentifier(identifier: currentState.queryParams, reset: false));
-          break;
-        default:
-      }
-    }
-  }
-
-  Stream<HistoricTransactionsState> _fetchUnitialized({required Future<PaginateDataHolder>Function() fetchFunction, required Option currentQuery, required dynamic queryParams}) async* {
-    yield Loading();
+  void _fetchUnitialized({
+    required Future<PaginateDataHolder>Function() fetchFunction,
+    required Option currentQuery,
+    required dynamic queryParams,
+    required Emitter<HistoricTransactionsState> emit
+  }) async {
+    emit(Loading());
     try {
       final PaginateDataHolder paginateHolder = await fetchFunction();
-      yield TransactionsLoaded(
+      emit(TransactionsLoaded(
         transactions: (paginateHolder.data as List<TransactionResource>),
         paginating: false,
         nextUrl: paginateHolder.next,
         hasReachedEnd: paginateHolder.next == null,
         currentQuery: currentQuery,
         queryParams: queryParams
-      );
+      ));
     } on ApiException catch(exception) {
-      yield FetchFailure(errorMessage: exception.error);
+      emit(FetchFailure(errorMessage: exception.error));
     }
   }
 
-  Stream<HistoricTransactionsState> _fetchMore({required Future<PaginateDataHolder>Function() fetchFunction, required TransactionsLoaded state, required Option currentQuery, required dynamic queryParams}) async* {
+  void _fetchMore({
+    required Future<PaginateDataHolder>Function() fetchFunction,
+    required TransactionsLoaded state,
+    required Option currentQuery,
+    required dynamic queryParams,
+    required Emitter<HistoricTransactionsState> emit
+  }) async {
     final currentState = state;
     if (!_hasReachedMax(currentState)) {
-      yield state.copyWith(paginating: true);
+      emit(state.copyWith(paginating: true));
       try {
         final PaginateDataHolder paginateHolder = await fetchFunction();
-        yield TransactionsLoaded(
+        emit(TransactionsLoaded(
           transactions: currentState.transactions + (paginateHolder.data as List<TransactionResource>), 
           nextUrl: paginateHolder.next,
           paginating: false, 
           hasReachedEnd: paginateHolder.next == null, 
           currentQuery: currentQuery,
           queryParams: queryParams
-        );
+        ));
       } on ApiException catch (exception) {
-        yield FetchFailure(errorMessage: exception.error);
+        emit(FetchFailure(errorMessage: exception.error));
       }
     }
   }

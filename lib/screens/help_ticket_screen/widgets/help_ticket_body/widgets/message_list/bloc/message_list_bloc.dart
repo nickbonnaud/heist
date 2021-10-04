@@ -24,6 +24,9 @@ class MessageListBloc extends Bloc<MessageListEvent, MessageListState> {
       _helpTicket = helpTicket,
       _helpRepository = helpRepository,
       super(MessageListState.initial(helpTicket: helpTicket)) {
+      
+      _eventHandler();
+
       helpTicketsScreenBlocSubscription = helpTicketsScreenBloc.stream.listen((HelpTicketsScreenState helpTicketsScreenstate) {
         final HelpTicket? helpTicket = (helpTicketsScreenstate as Loaded)
           .helpTickets.firstWhereOrNull((ticket) => ticket.identifier == state.helpTicket.identifier);
@@ -34,16 +37,16 @@ class MessageListBloc extends Bloc<MessageListEvent, MessageListState> {
       });
   }
 
-  @override
-  Stream<MessageListState> mapEventToState(MessageListEvent event) async* {
-    if (event is ReplyAdded) {
-      yield state.update(helpTicket: event.helpTicket);
-    } else if (event is RepliesViewed) {
-      yield* _mapRepliesViewedToState();
-    }
+  void _eventHandler() {
+    on<ReplyAdded>((event, emit) => _mapReplyAddedToState(event: event, emit: emit));
+    on<RepliesViewed>((event, emit) => _mapRepliesViewedToState(emit: emit));
   }
 
-  Stream<MessageListState> _mapRepliesViewedToState() async* {
+  void _mapReplyAddedToState({required ReplyAdded event, required Emitter<MessageListState> emit}) async {
+    emit(state.update(helpTicket: event.helpTicket));
+  }
+  
+  void _mapRepliesViewedToState({required Emitter<MessageListState> emit}) async {
     final bool hasUnread = _helpTicket.replies.any((reply) => !reply.fromCustomer && !reply.read);
     if (!_helpTicket.resolved && hasUnread) {
       try {
@@ -51,9 +54,9 @@ class MessageListBloc extends Bloc<MessageListEvent, MessageListState> {
         HelpTicket updatedTicket = state.helpTicket.markAsRead();
         
         _helpTicketsScreenBloc.add(HelpTicketUpdated(helpTicket: updatedTicket));
-        yield state.update(helpTicket: updatedTicket);
+        emit(state.update(helpTicket: updatedTicket));
       } on ApiException catch(exception) {
-        yield state.update(errorMessage: exception.error);
+        emit(state.update(errorMessage: exception.error));
       }
     }
   }

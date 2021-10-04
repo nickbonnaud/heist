@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
@@ -27,42 +25,37 @@ class TransactionPickerScreenBloc extends Bloc<TransactionPickerScreenEvent, Tra
     : _transactionRepository = transactionRepository,
       _activeLocationBloc = activeLocationBloc,
       _openTransactionsBloc = openTransactionsBloc,
-      super(TransactionPickerScreenState.initial());
+      super(TransactionPickerScreenState.initial()) { _eventHandler(); }
 
-  @override
-  Stream<TransactionPickerScreenState> mapEventToState(TransactionPickerScreenEvent event) async* {
-    if (event is Fetch) {
-      yield* _mapFetchToState(event);
-    } else if (event is Claim) {
-      yield* _mapClaimToState(event);
-    } else if (event is Reset) {
-      yield* _mapResetToState();
-    }
+  void _eventHandler() {
+    on<Fetch>((event, emit) => _mapFetchToState(event: event, emit: emit));
+    on<Claim>((event, emit) => _mapClaimToState(event: event, emit: emit));
+    on<Reset>((event, emit) => _mapResetToState(emit: emit));
   }
 
-  Stream<TransactionPickerScreenState> _mapFetchToState(Fetch event) async* {
-    yield state.update(loading: true);
+  void _mapFetchToState({required Fetch event, required Emitter<TransactionPickerScreenState> emit}) async {
+    emit(state.update(loading: true));
     try {
       final List<UnassignedTransactionResource> transactions = await _transactionRepository.fetchUnassigned(businessIdentifier: event.businessIdentifier);
-      yield state.update(loading: false, transactions: transactions);
+      emit(state.update(loading: false, transactions: transactions));
     } on ApiException catch (exception) {
-      yield state.update(loading: false, errorMessage: exception.error);
+      emit(state.update(loading: false, errorMessage: exception.error));
     }
   }
 
-  Stream<TransactionPickerScreenState> _mapClaimToState(Claim event) async* {
-    yield state.update(claiming: true);
+  void _mapClaimToState({required Claim event, required Emitter<TransactionPickerScreenState> emit}) async {
+    emit(state.update(claiming: true));
     try {
       final TransactionResource transaction = await _transactionRepository.claimUnassigned(transactionId: event.unassignedTransaction.transaction.identifier);
       _updateBlocs(transaction: transaction, business: event.unassignedTransaction.business);
-      yield state.update(claiming: false, claimSuccess: true, transaction: transaction);
+      emit(state.update(claiming: false, claimSuccess: true, transaction: transaction));
     } on ApiException catch (exception) {
-      yield state.update(claiming: false, errorMessage: exception.error);
+      emit(state.update(claiming: false, errorMessage: exception.error));
     }
   }
 
-  Stream<TransactionPickerScreenState> _mapResetToState() async* {
-    yield state.update(claiming: false, errorMessage: "", claimSuccess: false);
+  void _mapResetToState({required Emitter<TransactionPickerScreenState> emit}) async {
+    emit(state.update(claiming: false, errorMessage: "", claimSuccess: false));
   }
 
   void _updateBlocs({required TransactionResource transaction, required Business business}) {

@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
@@ -17,36 +15,32 @@ class SignOutBloc extends Bloc<SignOutEvent, SignOutState> {
   SignOutBloc({required AuthenticationRepository authenticationRepository, required AuthenticationBloc authenticationBloc})
     : _authenticationRepository = authenticationRepository,
       _authenticationBloc = authenticationBloc,
-      super(SignOutState.initial());
+      super(SignOutState.initial()) { _eventHandler(); }
 
-  @override
-  Stream<SignOutState> mapEventToState(SignOutEvent event) async* {
-    if (event is Submitted) {
-      yield* _mapSubmittedToState();
-    } else if (event is Reset) {
-      yield* _mapResetToState();
-    }
+  void _eventHandler() {
+    on<Submitted>((event, emit) => _mapSubmittedToState(emit: emit));
+    on<Reset>((event, emit) => _mapResetToState(emit: emit));
   }
 
-  Stream<SignOutState> _mapSubmittedToState() async* {
+  void _mapSubmittedToState({required Emitter<SignOutState> emit}) async {
     if (!state.isSubmitting) {
-      yield state.update(isSubmitting: true);
+      emit(state.update(isSubmitting: true));
 
       try {
         final bool loggedOut = await _authenticationRepository.logout();
         if (loggedOut) {
-          yield state.update(isSubmitting: false, isSuccess: true);
+          emit(state.update(isSubmitting: false, isSuccess: true));
           _authenticationBloc.add(LoggedOut());
         } else {
-          yield state.update(isSubmitting: false, errorMessage: "An error occurred. Please try again.");
+          emit(state.update(isSubmitting: false, errorMessage: "An error occurred. Please try again."));
         }
       } on ApiException catch (exception) {
-        yield state.update(isSubmitting: false, errorMessage: exception.error);
+        emit(state.update(isSubmitting: false, errorMessage: exception.error));
       }
     }
   }
 
-  Stream<SignOutState> _mapResetToState() async* {
-    yield state.update(isSuccess: false, errorMessage: "");
+  void _mapResetToState({required Emitter<SignOutState> emit}) async {
+    emit(state.update(isSuccess: false, errorMessage: ""));
   }
 }

@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:heist/blocs/open_transactions/open_transactions_bloc.dart';
@@ -26,58 +24,55 @@ class PayButtonBloc extends Bloc<PayButtonEvent, PayButtonState> {
     : _transactionRepository = transactionRepository,
       _receiptScreenBloc = receiptScreenBloc,
       _openTransactionsBloc = openTransactionsBloc,
-      super(PayButtonState.initial(isEnabled: _isButtonEnabled(transactionResource: transactionResource)));
+      super(PayButtonState.initial(isEnabled: _isButtonEnabled(transactionResource: transactionResource))) {
+        _eventHandler();
+  }
 
-  @override
-  Stream<PayButtonState> mapEventToState(PayButtonEvent event) async* {
-    if (event is TransactionStatusChanged) {
-      yield* _mapTransactionChangedToState(event);
-    } else if (event is Submitted) {
-      yield* _mapSubmittedToState(event);
-    } else if (event is Reset) {
-      yield* _mapResetToState(event: event);
-    }
+  void _eventHandler() {
+    on<TransactionStatusChanged>((event, emit) => _mapTransactionChangedToState(event: event, emit: emit));
+    on<Submitted>((event, emit) => _mapSubmittedToState(event: event, emit: emit));
+    on<Reset>((event, emit) => _mapResetToState(event: event, emit: emit));
   }
   
-  Stream<PayButtonState> _mapTransactionChangedToState(TransactionStatusChanged event) async* {
-    yield state.update(
+  void _mapTransactionChangedToState({required TransactionStatusChanged event, required Emitter<PayButtonState> emit}) async {
+    emit(state.update(
       isEnabled: _isButtonEnabled(transactionResource: event.transactionResource)
-    );
+    ));
   }
 
-  Stream<PayButtonState> _mapSubmittedToState(Submitted event) async* {
+  void _mapSubmittedToState({required Submitted event, required Emitter<PayButtonState> emit}) async {
     if (state.isEnabled && !state.isSubmitting) {
-      yield state.update(isSubmitting: true);
+      emit(state.update(isSubmitting: true));
       try {
         TransactionResource transactionResource = await _transactionRepository.approveTransaction(transactionId: event.transactionId);
         if (transactionResource.transaction.status.code == 103) {
-          yield state.update(
+          emit(state.update(
             isSubmitting: false,  
             isSubmitSuccess: true,
             isEnabled: _isButtonEnabled(transactionResource: transactionResource)
-          );
+          ));
           _receiptScreenBloc.add(TransactionChanged(transactionResource: transactionResource));
           _openTransactionsBloc.add(RemoveOpenTransaction(transaction: transactionResource));
         } else {
           _receiptScreenBloc.add(TransactionChanged(transactionResource: transactionResource));
-          yield state.update(
+          emit(state.update(
             isSubmitting: false, 
             errorMessage: "Oops! Something went wrong submitting payment.",
             isEnabled: _isButtonEnabled(transactionResource: transactionResource)
-          );
+          ));
         }
       } on ApiException catch (exception) {
-        yield state.update(isSubmitting: false, errorMessage: exception.error );
+        emit(state.update(isSubmitting: false, errorMessage: exception.error ));
       }
     }
   }
 
-  Stream<PayButtonState> _mapResetToState({required Reset event}) async* {
-    yield state.update(
+  void _mapResetToState({required Reset event, required Emitter<PayButtonState> emit}) async {
+    emit(state.update(
       errorMessage: "",
       isSubmitSuccess: false,
       isEnabled: _isButtonEnabled(transactionResource: event.transactionResource),
-    );
+    ));
   }
 
   static bool _isButtonEnabled({required TransactionResource transactionResource}) {

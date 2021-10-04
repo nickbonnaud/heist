@@ -1,12 +1,10 @@
-import 'dart:async';
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:heist/repositories/authentication_repository.dart';
 import 'package:heist/resources/helpers/api_exception.dart';
+import 'package:heist/resources/helpers/debouncer.dart';
 import 'package:heist/resources/helpers/validators.dart';
-import 'package:rxdart/rxdart.dart';
 
 part 'request_reset_form_event.dart';
 part 'request_reset_form_state.dart';
@@ -16,43 +14,30 @@ class RequestResetFormBloc extends Bloc<RequestResetFormEvent, RequestResetFormS
   
   RequestResetFormBloc({required AuthenticationRepository authenticationRepository}) 
     : _authenticationRepository = authenticationRepository,
-      super(RequestResetFormState.initial());
+      super(RequestResetFormState.initial()) { _eventHandler(); }
 
-  @override
-  Stream<Transition<RequestResetFormEvent, RequestResetFormState>> transformEvents(Stream<RequestResetFormEvent> events, TransitionFunction<RequestResetFormEvent, RequestResetFormState> transitionFn) {
-    final nonDebounceStream = events.where((event) => event is !EmailChanged);
-    final debounceStream = events.where((event) => event is EmailChanged)
-      .debounceTime(Duration(milliseconds: 300));
-    return super.transformEvents(nonDebounceStream.mergeWith([debounceStream]), transitionFn);
-  }
-  
-  @override
-  Stream<RequestResetFormState> mapEventToState(RequestResetFormEvent event) async* {
-    if (event is EmailChanged) {
-      yield* _mapEmailChangedToState(event: event);
-    } else if (event is Submitted) {
-      yield* _mapSubmittedToState(event: event);
-    } else if (event is Reset) {
-      yield* _mapResetToState();
-    }
+  void _eventHandler() {
+    on<EmailChanged>((event, emit) => _mapEmailChangedToState(event: event, emit: emit), transformer: Debouncer.bounce(duration: Duration(milliseconds: 300)));
+    on<Submitted>((event, emit) => _mapSubmittedToState(event: event, emit: emit));
+    on<Reset>((event, emit) => _mapResetToState(emit: emit));
   }
 
-  Stream<RequestResetFormState> _mapEmailChangedToState({required EmailChanged event}) async* {
-    yield state.update(isEmailValid: Validators.isValidEmail(email: event.email));
+  void _mapEmailChangedToState({required EmailChanged event, required Emitter<RequestResetFormState> emit}) async {
+    emit(state.update(isEmailValid: Validators.isValidEmail(email: event.email)));
   }
 
-  Stream<RequestResetFormState> _mapSubmittedToState({required Submitted event}) async* {
-    yield state.update(isSubmitting: true);
+  void _mapSubmittedToState({required Submitted event, required Emitter<RequestResetFormState> emit}) async {
+    emit(state.update(isSubmitting: true));
 
     try {
       await _authenticationRepository.requestPasswordReset(email: event.email);
-      yield state.update(isSubmitting: false, isSuccess: true);
+      emit(state.update(isSubmitting: false, isSuccess: true));
     } on ApiException catch (exception) {
-      yield state.update(isSubmitting: false, errorMessage: exception.error);
+      emit(state.update(isSubmitting: false, errorMessage: exception.error));
     }
   }
 
-  Stream<RequestResetFormState> _mapResetToState() async* {
-    yield state.update(errorMessage: "", isSubmitting: false, isSuccess: false);
+  void _mapResetToState({required Emitter<RequestResetFormState> emit}) async {
+    emit(state.update(errorMessage: "", isSubmitting: false, isSuccess: false));
   }
 }

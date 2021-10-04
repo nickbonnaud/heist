@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:heist/resources/constants.dart';
@@ -22,21 +20,21 @@ final List<String> _answers = [
 ];
 
 class FaqBodyBloc extends Bloc<FaqBodyEvent, FaqBodyState> {
-  FaqBodyBloc() : super(FaqBodyState.initial(questions: questions, answers: _answers));
-
-  @override
-  Stream<FaqBodyState> mapEventToState(FaqBodyEvent event) async* {
-    if (event is ToggleAnswerVisibility) {
-      yield* _mapToggleAnswerVisibilityToState(faqToUpdate: event.faq);
-    }
+  FaqBodyBloc()
+    : super(FaqBodyState.initial(questions: questions, answers: _answers)) {
+      _eventHandler();
   }
 
-  Stream<FaqBodyState> _mapToggleAnswerVisibilityToState({required Faq faqToUpdate}) async* {
+  void _eventHandler() {
+    on<ToggleAnswerVisibility>((event, emit) => _mapToggleAnswerVisibilityToState(faqToUpdate: event.faq, emit: emit));
+  }
+
+  void _mapToggleAnswerVisibilityToState({required Faq faqToUpdate, required Emitter<FaqBodyState> emit}) async {
     final List<Faq> updatedFaqs = state.faqs.map((faq){
       return faq == faqToUpdate 
         ? faqToUpdate.update(answerVisible: !faqToUpdate.answerVisible) 
         : faq.answerVisible ? faq.update(answerVisible: false) : faq;
     }).toList();
-    yield FaqBodyState(faqs: updatedFaqs);
+    emit(FaqBodyState(faqs: updatedFaqs));
   }
 }

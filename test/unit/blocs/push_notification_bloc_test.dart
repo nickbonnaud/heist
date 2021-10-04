@@ -21,8 +21,6 @@ class MockOpenTransactionsBloc extends Mock implements OpenTransactionsBloc {}
 class MockNotificationNavigationBloc extends Mock implements NotificationNavigationBloc {}
 class MockExternalUrlHandler extends Mock implements ExternalUrlHandler {}
 
-
-
 void main() {
   group("Push Notification Bloc Tests", () {
     late PushNotificationRepository pushNotificationRepository;

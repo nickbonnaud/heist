@@ -38,6 +38,8 @@ class AppReadyBloc extends Bloc<AppReadyEvent, AppReadyState> {
   })
     : super(AppReadyState.initial()) {
         
+      _eventHandler();
+      
       _authenticationBlocSubscription = authenticationBloc.stream.listen((AuthenticationState authenticationState) {
         if (authenticationState is !Unknown && !state.authCheckComplete) {
           add(AuthCheckComplete(isAuthenticated: authenticationState is Authenticated));
@@ -80,8 +82,14 @@ class AppReadyBloc extends Bloc<AppReadyEvent, AppReadyState> {
         }
       });
   }
-      
 
+  void _eventHandler() {
+    on<CustomerStatusChanged>((event, emit) => _mapCustomerStatusChangedToState(event: event, emit: emit));
+    on<PermissionChecksComplete>((event, emit) => _mapPermissionChecksCompleteToState(event: event, emit: emit));
+    on<AuthCheckComplete>((event, emit) => _mapAuthCheckCompleteToState(event: event, emit: emit));
+    on<DataLoaded>((event, emit) => _mapDataLoadedToState(event: event, emit: emit));
+  }
+  
   bool get isDataLoaded => state.isDataLoaded;
   bool get arePermissionChecksComplete => state.permissionChecksComplete;
   bool get arePermissionsReady => state.permissionsReady;
@@ -89,19 +97,6 @@ class AppReadyBloc extends Bloc<AppReadyEvent, AppReadyState> {
   bool get areBeaconsLoaded => state.areBeaconsLoaded;
   bool get areOpenTransactionsLoaded => state.areOpenTransactionsLoaded;
   bool get isCustomerOnboarded => state.customerOnboarded;
-
-  @override
-  Stream<AppReadyState> mapEventToState(AppReadyEvent event) async* {
-    if (event is CustomerStatusChanged) {
-      yield* _mapCustomerStatusChangedToState(event: event);
-    } else if (event is PermissionChecksComplete) {
-      yield* _mapPermissionChecksCompleteToState(event: event);
-    } else if (event is AuthCheckComplete) {
-      yield* _mapAuthCheckCompleteToState(event: event);
-    } else if (event is DataLoaded) {
-      yield* _mapDataLoadedToState(event: event);
-    }
-  }
 
   @override
   Future<void> close() {
@@ -114,28 +109,28 @@ class AppReadyBloc extends Bloc<AppReadyEvent, AppReadyState> {
     return super.close();
   }
 
-  Stream<AppReadyState> _mapCustomerStatusChangedToState({required CustomerStatusChanged event}) async* {
-    yield state.update(customerOnboarded: event.customerStatus.code > 103);
+  void _mapCustomerStatusChangedToState({required CustomerStatusChanged event, required Emitter<AppReadyState> emit}) async {
+    emit(state.update(customerOnboarded: event.customerStatus.code > 103));
   }
 
-  Stream<AppReadyState> _mapPermissionChecksCompleteToState({required PermissionChecksComplete event}) async* {
-    yield state.update(permissionChecksComplete: true, permissionsReady: event.permissionsReady);
+  void _mapPermissionChecksCompleteToState({required PermissionChecksComplete event, required Emitter<AppReadyState> emit}) async {
+    emit(state.update(permissionChecksComplete: true, permissionsReady: event.permissionsReady));
   }
 
-  Stream<AppReadyState>  _mapAuthCheckCompleteToState({required AuthCheckComplete event}) async* {
-    yield state.update(authCheckComplete: true, isAuthenticated: event.isAuthenticated);
+  void _mapAuthCheckCompleteToState({required AuthCheckComplete event, required Emitter<AppReadyState> emit}) async {
+    emit(state.update(authCheckComplete: true, isAuthenticated: event.isAuthenticated));
   }
 
-  Stream<AppReadyState> _mapDataLoadedToState({required DataLoaded event}) async* {
+  void _mapDataLoadedToState({required DataLoaded event, required Emitter<AppReadyState> emit}) async {
     switch (event.type) {
       case DataType.transactions:
-        yield state.update(openTransactionsLoaded: true);
+        emit(state.update(openTransactionsLoaded: true));
         break;
       case DataType.businesses:
-        yield state.update(nearbyBusinessesLoaded: true);
+        emit(state.update(nearbyBusinessesLoaded: true));
         break;
       case DataType.beacons:
-        yield state.update(beaconsLoaded: true);
+        emit(state.update(beaconsLoaded: true));
         break;
     }
   }

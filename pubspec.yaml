@@ -26,7 +26,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_beacon: ^0.5.1
-  flutter_bloc: ^7.2.0
+  flutter_bloc: ^7.3.0
   flutter_cache_manager: ^3.1.2
   flutter_platform_widgets: ^1.9.5
   flutter_screenutil: ^5.0.0+2
@@ -48,7 +48,7 @@ dependencies:
   url_launcher: ^6.0.10
 
 dev_dependencies:
-  bloc_test: ^8.1.0
+  bloc_test: ^8.2.0
   faker: ^2.0.0
   flutter_driver:
     sdk: flutter

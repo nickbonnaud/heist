@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:heist/blocs/customer/customer_bloc.dart';
@@ -16,22 +14,17 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
   AuthenticationBloc({required AuthenticationRepository authenticationRepository, required CustomerBloc customerBloc})
     : _authenticationRepository = authenticationRepository,
       _customerBloc = customerBloc,
-      super(Unknown());
+      super(Unknown()) { _eventHandler(); }
+
+  void _eventHandler() {
+    on<Init>((event, emit) => _mapInitToState(emit: emit));
+    on<LoggedIn>((event, emit) => _mapLoggedInToState(event: event, emit: emit));
+    on<LoggedOut>((event, emit) => _mapLoggedOutToState(emit: emit));
+  }
 
   bool get isAuthenticated => state is Authenticated;
 
-  @override
-  Stream<AuthenticationState> mapEventToState(AuthenticationEvent event) async* {
-    if (event is Init) {
-      yield* _mapInitToState();
-    } else if (event is LoggedIn) {
-      yield* _mapLoggedInToState(event: event);
-    } else if (event is LoggedOut) {
-      yield* _mapLoggedOutToState();
-    }
-  }
-
-  Stream<AuthenticationState> _mapInitToState() async* {
+  void _mapInitToState({required Emitter<AuthenticationState> emit}) async {
     // TEST CHANGE //
     
     final bool isSignedIn = await _authenticationRepository.isSignedIn();
@@ -40,19 +33,19 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
 
     if (isSignedIn) {
       _customerBloc.add(CustomerAuthenticated());
-      yield Authenticated();
+      emit(Authenticated());
     } else {
-      yield Unauthenticated();
+      emit(Unauthenticated());
     }
   }
 
-  Stream<AuthenticationState> _mapLoggedInToState({required LoggedIn event}) async* {
+  void _mapLoggedInToState({required LoggedIn event, required Emitter<AuthenticationState> emit}) async {
     _customerBloc.add(CustomerLoggedIn(customer: event.customer));
-    yield Authenticated();
+    emit(Authenticated());
   }
 
-  Stream<AuthenticationState> _mapLoggedOutToState() async* {
+  void _mapLoggedOutToState({required Emitter<AuthenticationState> emit}) async {
     _customerBloc.add(CustomerLoggedOut());
-    yield Unauthenticated();
+    emit(Unauthenticated());
   }
 }

@@ -1,73 +1,58 @@
-import 'dart:async';
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:heist/repositories/authentication_repository.dart';
 import 'package:heist/resources/helpers/api_exception.dart';
+import 'package:heist/resources/helpers/debouncer.dart';
 import 'package:heist/resources/helpers/validators.dart';
-import 'package:rxdart/rxdart.dart';
 
 part 'reset_password_form_event.dart';
 part 'reset_password_form_state.dart';
 
 class ResetPasswordFormBloc extends Bloc<ResetPasswordFormEvent, ResetPasswordFormState> {
   final AuthenticationRepository _authenticationRepository;
+
+  final Duration debounceTime = Duration(milliseconds: 300);
   
   ResetPasswordFormBloc({required AuthenticationRepository authenticationRepository, required String email})
     : _authenticationRepository = authenticationRepository,
-      super(ResetPasswordFormState.initial(email: email));
+      super(ResetPasswordFormState.initial(email: email)) { _eventHandler(); }
 
-  @override
-  Stream<Transition<ResetPasswordFormEvent, ResetPasswordFormState>> transformEvents(Stream<ResetPasswordFormEvent> events, TransitionFunction<ResetPasswordFormEvent, ResetPasswordFormState> transitionFn) {
-    final nonDebounceStream = events.where((event) => event is !ResetCodeChanged && event is !PasswordChanged && event is !PasswordConfirmationChanged);
-    final debounceStream = events.where((event) => event is ResetCodeChanged || event is PasswordChanged || event is PasswordConfirmationChanged)
-      .debounceTime(Duration(milliseconds: 300));
-    return super.transformEvents(nonDebounceStream.mergeWith([debounceStream]), transitionFn);
-  }
-  
-  @override
-  Stream<ResetPasswordFormState> mapEventToState(ResetPasswordFormEvent event) async* {
-    if (event is ResetCodeChanged) {
-      yield* _mapResetCodeChangedToState(event: event);
-    } else if (event is PasswordChanged) {
-      yield* _mapPasswordChangedToState(event: event);
-    } else if (event is PasswordConfirmationChanged) {
-      yield* _mapPasswordConfirmationChangedToState(event: event);
-    } else if (event is Submitted) {
-      yield* _mapSubmittedToState(event: event);
-    } else if (event is Reset) {
-      yield* _mapResetToState();
-    }
+  void _eventHandler() {
+    on<ResetCodeChanged>((event, emit) => _mapResetCodeChangedToState(event: event, emit: emit), transformer: Debouncer.bounce(duration: debounceTime));
+    on<PasswordChanged>((event, emit) => _mapPasswordChangedToState(event: event, emit: emit), transformer: Debouncer.bounce(duration: debounceTime));
+    on<PasswordConfirmationChanged>((event, emit) => _mapPasswordConfirmationChangedToState(event: event, emit: emit), transformer: Debouncer.bounce(duration: debounceTime));
+    on<Submitted>((event, emit) => _mapSubmittedToState(event: event, emit: emit));
+    on<Reset>((event, emit) => _mapResetToState(emit: emit));
   }
 
-  Stream<ResetPasswordFormState> _mapResetCodeChangedToState({required ResetCodeChanged event}) async* {
-    yield state.update(isResetCodeValid: Validators.isValidResetCode(resetCode: event.resetCode));
+  void _mapResetCodeChangedToState({required ResetCodeChanged event, required Emitter<ResetPasswordFormState> emit}) async {
+    emit(state.update(isResetCodeValid: Validators.isValidResetCode(resetCode: event.resetCode)));
   }
 
-  Stream<ResetPasswordFormState> _mapPasswordChangedToState({required PasswordChanged event}) async* {
+  void _mapPasswordChangedToState({required PasswordChanged event, required Emitter<ResetPasswordFormState> emit}) async {
     final bool isPasswordConfirmationValid = event.passwordConfirmation.isNotEmpty
       ? Validators.isPasswordConfirmationValid(password: event.password, passwordConfirmation: event.passwordConfirmation)
       : false;
-    yield state.update(isPasswordValid: Validators.isValidPassword(password: event.password), isPasswordConfirmationValid: isPasswordConfirmationValid);
+    emit(state.update(isPasswordValid: Validators.isValidPassword(password: event.password), isPasswordConfirmationValid: isPasswordConfirmationValid));
   }
 
-  Stream<ResetPasswordFormState> _mapPasswordConfirmationChangedToState({required PasswordConfirmationChanged event}) async* {
-    yield state.update(isPasswordConfirmationValid: Validators.isPasswordConfirmationValid(password: event.password, passwordConfirmation: event.passwordConfirmation));
+  void _mapPasswordConfirmationChangedToState({required PasswordConfirmationChanged event, required Emitter<ResetPasswordFormState> emit}) async {
+    emit(state.update(isPasswordConfirmationValid: Validators.isPasswordConfirmationValid(password: event.password, passwordConfirmation: event.passwordConfirmation)));
   }
 
-  Stream<ResetPasswordFormState> _mapSubmittedToState({required Submitted event}) async* {
-    yield state.update(isSubmitting: true);
+  void _mapSubmittedToState({required Submitted event, required Emitter<ResetPasswordFormState> emit}) async {
+    emit(state.update(isSubmitting: true));
 
     try {
       await _authenticationRepository.resetPassword(email: state.email, resetCode: event.resetCode, password: event.password, passwordConfirmation: event.passwordConfirmation);
-      yield state.update(isSubmitting: false, isSuccess: true);
+      emit(state.update(isSubmitting: false, isSuccess: true));
     } on ApiException catch (exception) {
-      yield state.update(isSubmitting: false, errorMessage: exception.error);
+      emit(state.update(isSubmitting: false, errorMessage: exception.error));
     }
   }
 
-  Stream<ResetPasswordFormState> _mapResetToState() async* {
-    yield state.update(errorMessage: "", isSubmitting: false, isSuccess: false);
+  void _mapResetToState({required Emitter<ResetPasswordFormState> emit}) async {
+    emit(state.update(errorMessage: "", isSubmitting: false, isSuccess: false));
   }
 }

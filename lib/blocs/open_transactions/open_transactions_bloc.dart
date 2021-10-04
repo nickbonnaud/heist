@@ -20,6 +20,8 @@ class OpenTransactionsBloc extends Bloc<OpenTransactionsEvent, OpenTransactionsS
     : _transactionRepository = transactionRepository,
       super(Uninitialized()) {
 
+        _eventHandler();
+        
         _authenticationBlocSubscription = authenticationBloc.stream.listen((AuthenticationState state) {
           if (state is Authenticated && (_previousAuthenticationState is Unknown || _previousAuthenticationState is Unauthenticated)) {
             add(FetchOpenTransactions());
@@ -30,17 +32,11 @@ class OpenTransactionsBloc extends Bloc<OpenTransactionsEvent, OpenTransactionsS
 
   List<TransactionResource> get openTransactions => state.openTransactions;
 
-  @override
-  Stream<OpenTransactionsState> mapEventToState(OpenTransactionsEvent event) async* {
-    if (event is FetchOpenTransactions) {
-      yield* _mapFetchOpenTransactionsToState();
-    } else if (event is AddOpenTransaction) {
-      yield* _mapAddOpenTransactionToState(event);
-    } else if (event is RemoveOpenTransaction) {
-      yield* _mapRemoveOpenTransactionToState(event);
-    } else if (event is UpdateOpenTransaction) {
-      yield* _mapUpdateOpenTransactionToState(event);
-    }
+  void _eventHandler() {
+    on<FetchOpenTransactions>((event, emit) => _mapFetchOpenTransactionsToState(emit: emit));
+    on<AddOpenTransaction>((event, emit) => _mapAddOpenTransactionToState(event: event, emit: emit));
+    on<RemoveOpenTransaction>((event, emit) => _mapRemoveOpenTransactionToState(event: event, emit: emit));
+    on<UpdateOpenTransaction>((event, emit) => _mapUpdateOpenTransactionToState(event: event, emit: emit));
   }
 
   @override
@@ -49,16 +45,16 @@ class OpenTransactionsBloc extends Bloc<OpenTransactionsEvent, OpenTransactionsS
     return super.close();
   }
 
-  Stream<OpenTransactionsState> _mapFetchOpenTransactionsToState() async* {
+  void _mapFetchOpenTransactionsToState({required Emitter<OpenTransactionsState> emit}) async {
     try {
       List<TransactionResource> transactions = await _transactionRepository.fetchOpen();
-      yield OpenTransactionsLoaded(transactions: transactions);
+      emit(OpenTransactionsLoaded(transactions: transactions));
     } on ApiException catch (exception) {
-      yield FailedToFetchOpenTransactions(errorMessage: exception.error);
+      emit(FailedToFetchOpenTransactions(errorMessage: exception.error));
     }
   }
   
-  Stream<OpenTransactionsState> _mapAddOpenTransactionToState(AddOpenTransaction event) async* {
+  void _mapAddOpenTransactionToState({required AddOpenTransaction event, required Emitter<OpenTransactionsState> emit}) async {
     final currentState = state;
     if (currentState is OpenTransactionsLoaded) {
       if (!currentState.transactions.contains(event.transaction)) {
@@ -66,23 +62,23 @@ class OpenTransactionsBloc extends Bloc<OpenTransactionsEvent, OpenTransactionsS
           .transactions
           .toList()
           ..add(event.transaction);
-        yield OpenTransactionsLoaded(transactions: updatedTransactions);
+        emit(OpenTransactionsLoaded(transactions: updatedTransactions));
       }
     }
   }
 
-  Stream<OpenTransactionsState> _mapRemoveOpenTransactionToState(RemoveOpenTransaction event) async* {
+  void _mapRemoveOpenTransactionToState({required RemoveOpenTransaction event, required Emitter<OpenTransactionsState> emit}) async {
     final currentState = state;
     if (currentState is OpenTransactionsLoaded) {
       final updatedTransactions = currentState
         .transactions
         .where((transaction) => transaction != event.transaction)
         .toList();
-      yield OpenTransactionsLoaded(transactions: updatedTransactions);
+      emit(OpenTransactionsLoaded(transactions: updatedTransactions));
     }
   }
 
-  Stream<OpenTransactionsState> _mapUpdateOpenTransactionToState(UpdateOpenTransaction event) async* {
+  void _mapUpdateOpenTransactionToState({required UpdateOpenTransaction event, required Emitter<OpenTransactionsState> emit}) async {
     final currentState = state;
     if (currentState is OpenTransactionsLoaded) {
       final List<TransactionResource> updatedTransactions = currentState
@@ -91,7 +87,7 @@ class OpenTransactionsBloc extends Bloc<OpenTransactionsEvent, OpenTransactionsS
         .toList()
         ..add(event.transaction);
       
-      yield OpenTransactionsLoaded(transactions: updatedTransactions);
+      emit(OpenTransactionsLoaded(transactions: updatedTransactions));
     }
   }
 }

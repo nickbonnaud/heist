@@ -21,7 +21,7 @@ class HelpTicketsScreenBloc extends Bloc<HelpTicketsScreenEvent, HelpTicketsScre
 
   HelpTicketsScreenBloc({required HelpRepository helpRepository})
     : _helpRepository = helpRepository,
-      super(Uninitialized());
+      super(Uninitialized()) { _eventHandler(); }
 
   bool get paginateEnd {
     final currentState = state;
@@ -30,176 +30,176 @@ class HelpTicketsScreenBloc extends Bloc<HelpTicketsScreenEvent, HelpTicketsScre
 
   List<HelpTicket> get helpTickets => (state as Loaded).helpTickets;
 
-  @override
-  Stream<HelpTicketsScreenState> mapEventToState(HelpTicketsScreenEvent event) async* {
-    if (event is FetchAll) {
-      yield* _mapFetchAllToState(event: event);
-    } else if (event is FetchResolved) {
-      yield* _mapFetchResolvedToState(event: event);
-    } else if (event is FetchOpen) {
-      yield* _mapFetchOpenToState(event: event);
-    } else if (event is HelpTicketUpdated) {
-      yield* _mapHelpTicketUpdatedToState(event: event);
-    } else if (event is HelpTicketAdded) {
-      yield* _mapHelpTicketAddedToState(event: event);
-    } else if (event is HelpTicketDeleted) {
-      yield* _mapHelpTicketDeletedToState(event: event);
-    } else if (event is FetchMore) {
-      yield* _mapFetchMoreToState();
-    }
+  void _eventHandler() {
+    on<FetchAll>((event, emit) => _mapFetchAllToState(event: event, emit: emit));
+    on<FetchResolved>((event, emit) => _mapFetchResolvedToState(event: event, emit: emit));
+    on<FetchOpen>((event, emit) => _mapFetchOpenToState(event: event, emit: emit));
+    on<HelpTicketUpdated>((event, emit) => _mapHelpTicketUpdatedToState(event: event, emit: emit));
+    on<HelpTicketAdded>((event, emit) => _mapHelpTicketAddedToState(event: event, emit: emit));
+    on<HelpTicketDeleted>((event, emit) => _mapHelpTicketDeletedToState(event: event, emit: emit));
+    on<FetchMore>((event, emit) => _mapFetchMoreToState(emit: emit));
   }
 
-  Stream<HelpTicketsScreenState> _mapFetchAllToState({required FetchAll event}) async* {
+  void _mapFetchAllToState({required FetchAll event, required Emitter<HelpTicketsScreenState> emit}) async {
     if (event.reset) {
-      yield* _fetchUnitialized(
+      _fetchUnitialized(
         fetchFunction: () => _helpRepository.fetchAll(), 
         currentQuery: Option.all, 
-        queryParams: null
+        queryParams: null,
+        emit: emit
       );
     } else {
       final currentState = state;
       if (currentState is Uninitialized) {
-        yield* _fetchUnitialized(
+         _fetchUnitialized(
           fetchFunction: () => _helpRepository.fetchAll(), 
           currentQuery: Option.all, 
-          queryParams: null
+          queryParams: null,
+          emit: emit
         );
       } else if (currentState is Loaded) {
         if (!currentState.paginating) {
-          yield* _fetchMore(
+          _fetchMore(
             fetchFunction: () => _helpRepository.paginate(url: currentState.nextUrl!),
             state: currentState,
             currentQuery: Option.all,
-            queryParams: null
+            queryParams: null,
+            emit: emit
           );
         }
       }
     }
   }
 
-  Stream<HelpTicketsScreenState> _mapFetchResolvedToState({required FetchResolved event}) async* {
+  void _mapFetchResolvedToState({required FetchResolved event, required Emitter<HelpTicketsScreenState> emit}) async {
     if (event.reset) {
-      yield* _fetchUnitialized(
+      _fetchUnitialized(
         fetchFunction: () => _helpRepository.fetchResolved(), 
         currentQuery: Option.resolved,
-        queryParams: null
+        queryParams: null,
+        emit: emit
       );
     } else {
       final currentState = state;
       if (currentState is Loaded) {
-        yield* _fetchMore(
+        _fetchMore(
           fetchFunction: () => _helpRepository.paginate(url: currentState.nextUrl!), 
           state: currentState,
           currentQuery: Option.resolved, 
-          queryParams: null
+          queryParams: null,
+          emit: emit
         );
       }
     }
   }
 
-  Stream<HelpTicketsScreenState> _mapFetchOpenToState({required FetchOpen event}) async* {
+  void _mapFetchOpenToState({required FetchOpen event, required Emitter<HelpTicketsScreenState> emit}) async {
     if (event.reset) {
-      yield* _fetchUnitialized(
+      _fetchUnitialized(
         fetchFunction: () => _helpRepository.fetchOpen(),
         currentQuery: Option.open, 
-        queryParams: null
+        queryParams: null,
+        emit: emit
       );
     } else {
       final currentState = state;
       if (currentState is Loaded) {
-        yield* _fetchMore(
+        _fetchMore(
           fetchFunction: () => _helpRepository.paginate(url: currentState.nextUrl!),
           state: currentState,
           currentQuery: Option.open, 
-          queryParams: null
+          queryParams: null,
+          emit: emit
         );
       }
     }
   }
 
-  Stream<HelpTicketsScreenState> _mapHelpTicketUpdatedToState({required HelpTicketUpdated event}) async* {
+  void _mapHelpTicketUpdatedToState({required HelpTicketUpdated event, required Emitter<HelpTicketsScreenState> emit}) async {
     if (state is Loaded) {
       final List<HelpTicket> updatedtHelpTickets = (state as Loaded).helpTickets.map((helpTicket) {
         return helpTicket.identifier == event.helpTicket.identifier ? event.helpTicket : helpTicket;
       }).toList();
-      yield (state as Loaded).copyWith(helpTickets: updatedtHelpTickets);
+      emit((state as Loaded).copyWith(helpTickets: updatedtHelpTickets));
     }
   }
 
-  Stream<HelpTicketsScreenState> _mapHelpTicketAddedToState({required HelpTicketAdded event}) async* {
+  void _mapHelpTicketAddedToState({required HelpTicketAdded event, required Emitter<HelpTicketsScreenState> emit}) async {
     if (state is Loaded) {
       final List<HelpTicket> updatedHelpTickets = List.from((state as Loaded).helpTickets)
         ..insert(0, event.helpTicket);
-      yield (state as Loaded).copyWith(helpTickets: updatedHelpTickets);
+      emit((state as Loaded).copyWith(helpTickets: updatedHelpTickets));
     }
   }
 
-  Stream<HelpTicketsScreenState> _mapHelpTicketDeletedToState({required HelpTicketDeleted event}) async* {
+  void _mapHelpTicketDeletedToState({required HelpTicketDeleted event, required Emitter<HelpTicketsScreenState> emit}) async {
     if (state is Loaded) {
       final List<HelpTicket> updatedHelpTickets = List.from((state as Loaded).helpTickets.where((helpTicket) => helpTicket.identifier != event.helpTicketIdentifier));
-      yield (state as Loaded).copyWith(helpTickets: updatedHelpTickets);
+      emit((state as Loaded).copyWith(helpTickets: updatedHelpTickets));
     }
   }
 
-  Stream<HelpTicketsScreenState> _mapFetchMoreToState() async* {
+  void _mapFetchMoreToState({required Emitter<HelpTicketsScreenState> emit}) async {
     final currentState = state;
 
     if (currentState is Loaded && !currentState.paginating) {
       switch (currentState.currentQuery) {
         case Option.all:
-          yield* _mapFetchAllToState(event: FetchAll(reset: false));
+          _mapFetchAllToState(event: FetchAll(reset: false), emit: emit);
           break;
         case Option.open:
-          yield* _mapFetchOpenToState(event: FetchOpen(reset: false));
+          _mapFetchOpenToState(event: FetchOpen(reset: false), emit: emit);
           break;
         case Option.resolved:
-          yield* _mapFetchResolvedToState(event: FetchResolved(reset: false));
+          _mapFetchResolvedToState(event: FetchResolved(reset: false), emit: emit);
           break;
       }
     }
   }
   
-  Stream<HelpTicketsScreenState> _fetchUnitialized({
+  void _fetchUnitialized({
     required Future<PaginateDataHolder>Function() fetchFunction,
     required Option currentQuery,
-    required dynamic queryParams
-  }) async* {
+    required dynamic queryParams,
+    required Emitter<HelpTicketsScreenState> emit
+  }) async {
     try {
-      yield Loading();
+      emit(Loading());
       final PaginateDataHolder paginateHolder = await fetchFunction();
-      yield Loaded(
+      emit(Loaded(
         helpTickets: (paginateHolder.data as List<HelpTicket>),
         paginating: false,
         nextUrl: paginateHolder.next,
         hasReachedEnd: paginateHolder.next == null,
         currentQuery: currentQuery,
         queryParams: queryParams
-      );
+      ));
     } on ApiException catch(exception) {
-      yield FetchFailure(errorMessage: exception.error);
+      emit(FetchFailure(errorMessage: exception.error));
     }
   }
 
-  Stream<HelpTicketsScreenState> _fetchMore({
+  void _fetchMore({
     required Future<PaginateDataHolder>Function() fetchFunction,
     required Loaded state,
     required Option currentQuery,
-    required dynamic queryParams
-  }) async* {
+    required dynamic queryParams,
+    required Emitter<HelpTicketsScreenState> emit
+  }) async {
     if (!paginateEnd) {
-      yield state.copyWith(paginating: true);
+      emit(state.copyWith(paginating: true));
       try {
         final PaginateDataHolder paginateHolder = await fetchFunction();
-        yield Loaded(
+        emit(Loaded(
           helpTickets: state.helpTickets + (paginateHolder.data as List<HelpTicket>),
           nextUrl: paginateHolder.next,
           paginating: false,
           hasReachedEnd: paginateHolder.next == null, 
           currentQuery: currentQuery,
           queryParams: queryParams
-        );
+        ));
       } on ApiException catch(exception) {
-        yield FetchFailure(errorMessage: exception.error);
+        emit(FetchFailure(errorMessage: exception.error));
       }
     }
   }

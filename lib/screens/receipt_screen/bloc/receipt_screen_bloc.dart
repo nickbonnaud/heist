@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:heist/models/transaction/transaction_resource.dart';
@@ -11,13 +9,16 @@ part 'receipt_screen_state.dart';
 class ReceiptScreenBloc extends Bloc<ReceiptScreenEvent, ReceiptScreenState> {
 
   ReceiptScreenBloc({required TransactionResource transactionResource})
-    : super(ReceiptScreenState.initial(transactionResource: transactionResource, isButtonVisible: _isButtonVisible(transactionResource: transactionResource)));
+    : super(ReceiptScreenState.initial(transactionResource: transactionResource, isButtonVisible: _isButtonVisible(transactionResource: transactionResource))) {
+      _eventHandler();
+  }
 
-  @override
-  Stream<ReceiptScreenState> mapEventToState(ReceiptScreenEvent event) async* {
-    if (event is TransactionChanged) {
-      yield state.update(transactionResource: event.transactionResource, isButtonVisible: _isButtonVisible(transactionResource: event.transactionResource));
-    }
+  void _eventHandler() {
+    on<TransactionChanged>((event, emit) => _mapTransactionChangedToState(event: event, emit: emit));
+  }
+
+  void _mapTransactionChangedToState({required TransactionChanged event, required Emitter<ReceiptScreenState> emit}) async {
+    emit(state.update(transactionResource: event.transactionResource, isButtonVisible: _isButtonVisible(transactionResource: event.transactionResource)));
   }
 
   static bool _isButtonVisible({required TransactionResource transactionResource}) {

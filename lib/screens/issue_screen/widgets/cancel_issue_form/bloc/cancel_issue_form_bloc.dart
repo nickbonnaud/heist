@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:heist/blocs/open_transactions/open_transactions_bloc.dart';
@@ -18,29 +16,27 @@ class CancelIssueFormBloc extends Bloc<CancelIssueFormEvent, CancelIssueFormStat
   CancelIssueFormBloc({required TransactionIssueRepository issueRepository, required OpenTransactionsBloc openTransactionsBloc, required TransactionResource transactionResource})
     : _issueRepository = issueRepository,
       _openTransactionsBloc = openTransactionsBloc,
-      super(CancelIssueFormState.initial(transactionResource: transactionResource));
-
-  @override
-  Stream<CancelIssueFormState> mapEventToState(CancelIssueFormEvent event) async* {
-    if (event is Submitted) {
-      yield* _mapSubmittedToState(event);
-    } else if (event is Reset) {
-      yield* _mapResetToState();
-    }
+      super(CancelIssueFormState.initial(transactionResource: transactionResource)) {
+        _eventHandler();
   }
 
-  Stream<CancelIssueFormState> _mapSubmittedToState(Submitted event) async* {
-    yield state.update(isSubmitting: true);
+  void _eventHandler() {
+    on<Submitted>((event, emit) => _mapSubmittedToState(event: event, emit: emit));
+    on<Reset>((event, emit) => _mapResetToState(emit: emit));
+  }
+
+  void _mapSubmittedToState({required Submitted event, required Emitter<CancelIssueFormState> emit}) async {
+    emit(state.update(isSubmitting: true));
     try {
       TransactionResource transaction = await _issueRepository.cancelIssue(issueId: event.issueIdentifier);
       _openTransactionsBloc.add(UpdateOpenTransaction(transaction: transaction));
-      yield state.update(isSubmitting: false, isSuccess: true, transactionResource: transaction);
+      emit(state.update(isSubmitting: false, isSuccess: true, transactionResource: transaction));
     } on ApiException catch (exception) {
-      yield state.update(isSubmitting: false, errorMessage: exception.error);
+      emit(state.update(isSubmitting: false, errorMessage: exception.error));
     }
   }
 
-  Stream<CancelIssueFormState> _mapResetToState() async* {
-    yield state.update(isSuccess: false, errorMessage: "");
+  void _mapResetToState({required Emitter<CancelIssueFormState> emit}) async {
+    emit(state.update(isSuccess: false, errorMessage: ""));
   }
 }

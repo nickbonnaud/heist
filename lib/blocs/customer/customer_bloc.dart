@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
@@ -15,44 +13,38 @@ class CustomerBloc extends Bloc<CustomerEvent, CustomerState> {
 
   CustomerBloc({required CustomerRepository customerRepository})
     : _customerRepository = customerRepository,
-      super(CustomerState.initial());
+      super(CustomerState.initial()) { _eventHandler(); }
 
   Customer? get customer => state.customer;
   bool get onboarded => state.onboarded;
 
-  @override
-  Stream<CustomerState> mapEventToState(CustomerEvent event) async* {
-    if (event is CustomerAuthenticated) {
-      yield* _mapCustomerAuthenticatedToState();
-    } else if (event is CustomerLoggedIn) {
-      yield* _mapCustomerLoggedInToState(event: event);
-    } else if (event is CustomerLoggedOut) {
-      yield* _mapCustomerLoggedOutToState();
-    } else if (event is CustomerUpdated) {
-      yield* _mapCustomerUpdatedToState(event: event);
-    }
+  void _eventHandler() {
+    on<CustomerAuthenticated>((event, emit) => _mapCustomerAuthenticatedToState(emit: emit));
+    on<CustomerLoggedIn>((event, emit) => _mapCustomerLoggedInToState(event: event, emit: emit));
+    on<CustomerLoggedOut>((event, emit) => _mapCustomerLoggedOutToState(emit: emit));
+    on<CustomerUpdated>((event, emit) => _mapCustomerUpdatedToState(event: event, emit: emit));
   }
-
-  Stream<CustomerState> _mapCustomerAuthenticatedToState() async* {
-    yield state.update(loading: true);
+  
+  void _mapCustomerAuthenticatedToState({required Emitter<CustomerState> emit}) async {
+    emit(state.update(loading: true));
 
     try {
       final Customer customer = await _customerRepository.fetchCustomer();
-      yield state.update(loading: false, customer: customer);
+      emit(state.update(loading: false, customer: customer));
     } on ApiException catch (exception) {
-      yield state.update(loading: false, errorMessage: exception.error);
+      emit(state.update(loading: false, errorMessage: exception.error));
     }
   }
 
-  Stream<CustomerState> _mapCustomerLoggedInToState({required CustomerLoggedIn event}) async* {
-    yield state.update(customer: event.customer, loading: false, errorMessage: "");
+  void _mapCustomerLoggedInToState({required CustomerLoggedIn event, required Emitter<CustomerState> emit}) async {
+    emit(state.update(customer: event.customer, loading: false, errorMessage: ""));
   }
 
-  Stream<CustomerState> _mapCustomerLoggedOutToState() async* {
-    yield state.update(customer: null, loading: false, errorMessage: "");
+  void _mapCustomerLoggedOutToState({required Emitter<CustomerState> emit}) async {
+    emit(state.update(customer: null, loading: false, errorMessage: ""));
   }
   
-  Stream<CustomerState> _mapCustomerUpdatedToState({required CustomerUpdated event}) async* {
-    yield state.update(customer: event.customer);
+  void _mapCustomerUpdatedToState({required CustomerUpdated event, required Emitter<CustomerState> emit}) async {
+    emit(state.update(customer: event.customer));
   }
 }

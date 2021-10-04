@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:heist/blocs/customer/customer_bloc.dart';
@@ -17,25 +15,25 @@ class EditPhotoBloc extends Bloc<EditPhotoEvent, EditPhotoState> {
   EditPhotoBloc({required PhotoRepository photoRepository, required CustomerBloc customerBloc})
     : _photoRepository = photoRepository,
       _customerBloc = customerBloc,
-      super(PhotoUnchanged());
+      super(PhotoUnchanged()) { _eventHandler(); }
 
-  @override
-  Stream<EditPhotoState> mapEventToState(EditPhotoEvent event) async* {
-    if (event is ChangePhoto) {
-      yield* _mapChangePhotoToState(event);
-    } else if (event is ResetPhotoForm) {
-      yield PhotoUnchanged();
+  void _eventHandler() {
+    on<ChangePhoto>((event, emit) => _mapChangePhotoToState(event: event, emit: emit));
+    on<ResetPhotoForm>((event, emit) => _mapResetPhotoFormToState(emit: emit));
+  }
+
+  void _mapChangePhotoToState({required ChangePhoto event, required Emitter<EditPhotoState> emit}) async {
+    emit(Submitting(photo: event.photo));
+    try {
+      Customer customer = await _photoRepository.upload(photo: event.photo, profileIdentifier: event.profileIdentifier);
+      emit(SubmitSuccess(photo: event.photo));
+      _customerBloc.add(CustomerUpdated(customer: customer));
+    } catch (_) {
+      emit(SubmitFailed());
     }
   }
 
-  Stream<EditPhotoState> _mapChangePhotoToState(ChangePhoto event) async* {
-    yield Submitting(photo: event.photo);
-    try {
-      Customer customer = await _photoRepository.upload(photo: event.photo, profileIdentifier: event.profileIdentifier);
-      yield SubmitSuccess(photo: event.photo);
-      _customerBloc.add(CustomerUpdated(customer: customer));
-    } catch (_) {
-      yield SubmitFailed();
-    }
+  void _mapResetPhotoFormToState({required Emitter<EditPhotoState> emit}) async {
+    emit(PhotoUnchanged());
   }
 }

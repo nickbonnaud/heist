@@ -35,6 +35,9 @@ class LogoButtonsListBloc extends Bloc<LogoButtonsListEvent, LogoButtonsListStat
           numberActiveLocations: numberActiveLocations,
           numberNearbyLocations: numberNearbyLocations
         )) {
+          
+          _eventHandler();
+
           openTransactionsSubscription = openTransactionsBloc.stream.listen((OpenTransactionsState openTransactionsState) {
             if (openTransactionsState is OpenTransactionsLoaded) {
               add(NumberOpenTransactionsChanged(numberOpenTransactions: openTransactionsState.openTransactions.length));
@@ -69,15 +72,10 @@ class LogoButtonsListBloc extends Bloc<LogoButtonsListEvent, LogoButtonsListStat
     return slotsToShow > nonActiveNearby.length ? nonActiveNearby.length : slotsToShow;
   }
 
-  @override
-  Stream<LogoButtonsListState> mapEventToState(LogoButtonsListEvent event) async* {
-    if (event is NumberOpenTransactionsChanged) {
-      yield state.update(numberOpenTransactions: event.numberOpenTransactions);
-    } else if (event is NumberActiveLocationsChanged) {
-      yield state.update(numberActiveLocations: event.numberActiveLocations);
-    } else if (event is NumberNearbyBusinessesChanged) {
-      yield state.update(numberNearbyLocations: event.numberNearbyBusinesses);
-    }
+  void _eventHandler() {
+    on<NumberOpenTransactionsChanged>((event, emit) => _mapNumberOpenTransactionsChangedToState(event: event, emit: emit));
+    on<NumberActiveLocationsChanged>((event, emit) => _mapNumberActiveLocationsChangedToState(event: event, emit: emit));
+    on<NumberNearbyBusinessesChanged>((event, emit) => _mapNumberNearbyBusinessesChangedToState(event: event, emit: emit));
   }
 
   @override
@@ -86,5 +84,17 @@ class LogoButtonsListBloc extends Bloc<LogoButtonsListEvent, LogoButtonsListStat
     activeLocationSubscription.cancel();
     nearbyBusinessesSubscription.cancel();
     return super.close();
+  }
+
+  void _mapNumberOpenTransactionsChangedToState({required NumberOpenTransactionsChanged event, required Emitter<LogoButtonsListState> emit}) async {
+    emit(state.update(numberOpenTransactions: event.numberOpenTransactions));
+  }
+
+  void _mapNumberActiveLocationsChangedToState({required NumberActiveLocationsChanged event, required Emitter<LogoButtonsListState> emit}) async {
+    emit(state.update(numberActiveLocations: event.numberActiveLocations));
+  }
+
+  void _mapNumberNearbyBusinessesChangedToState({required NumberNearbyBusinessesChanged event, required Emitter<LogoButtonsListState> emit}) async {
+    emit(state.update(numberNearbyLocations: event.numberNearbyBusinesses));
   }
 }

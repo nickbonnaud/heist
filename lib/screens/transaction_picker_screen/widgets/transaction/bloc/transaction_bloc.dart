@@ -1,17 +1,17 @@
-import 'dart:async';
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
 part 'transaction_event.dart';
 
 class TransactionBloc extends Bloc<TransactionEvent, DateTime?> {
-  TransactionBloc() : super(null);
+  TransactionBloc()
+    : super(null) { _eventHandler(); }
 
-  @override
-  Stream<DateTime> mapEventToState(TransactionEvent event) async* {
-    if (event is PickerChanged) {
-      yield event.transactionUpdatedAt;
-    }
+  void _eventHandler() {
+    on<PickerChanged>((event, emit) => _mapPickerChangedToState(event: event, emit: emit));
+  }
+
+  void _mapPickerChangedToState({required PickerChanged event, required Emitter<DateTime?> emit}) async {
+    emit(event.transactionUpdatedAt);
   }
 }
