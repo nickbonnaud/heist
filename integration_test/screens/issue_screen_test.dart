@@ -17,7 +17,7 @@ class IssueScreenTest {
     expect(find.text('Wrong Bill'), findsOneWidget);
 
     await tester.tap(find.text(Platform.isIOS ? 'Done' : 'DONE'));
-    await tester.pump();
+    await tester.pumpAndSettle();
     
     await tester.tap(find.byKey(Key("cancelButtonKey")));
     await tester.pumpAndSettle();
@@ -92,25 +92,29 @@ class IssueScreenTest {
     expect(find.text('Issue must be at least 5 characters long'), findsNothing);
 
     await tester.tap(find.text(Platform.isIOS ? 'Done' : 'DONE'));
-    await tester.pump();
+    await tester.pumpAndSettle();
     
     await tester.tap(find.byKey(Key("submitButtonKey")));
     await tester.pump();
+
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
     await tester.pumpAndSettle();
 
     expect(find.byKey(Key("snackBarKey")).last, findsOneWidget);
 
     await tester.fling(find.byKey(Key("snackBarKey")).last, Offset(0, 500), 500);
-    await tester.pump();
+    await tester.pumpAndSettle();
   }
 
   Future<void> _enterValidIssue() async {
+    await tester.tap(find.byKey(Key("issueFieldKey")));
+    await tester.pumpAndSettle();
+
     await tester.enterText(find.byKey(Key("issueFieldKey")), "Some Issue");
     await tester.pump(Duration(milliseconds: 300));
 
     await tester.tap(find.text(Platform.isIOS ? 'Done' : 'DONE'));
-    await tester.pump();
+    await tester.pumpAndSettle();
     
     await tester.tap(find.byKey(Key("submitButtonKey")));
     await tester.pumpAndSettle();

@@ -14,11 +14,11 @@ class SideDrawerBloc extends Bloc<SideDrawerEvent, SideDrawerState> {
     on<ButtonVisibilityChanged>((event, emit) => _mapToggleButtonVisibilityToState(event: event, emit: emit));
   }
 
-  void _mapDrawerStatusChangedToState({required DrawerStatusChanged event, required Emitter<SideDrawerState> emit}) async {
+  void _mapDrawerStatusChangedToState({required DrawerStatusChanged event, required Emitter<SideDrawerState> emit}) {
     emit(state.update(menuOpened: event.menuOpen, buttonVisible: !event.menuOpen));
   }
 
-  void _mapToggleButtonVisibilityToState({required ButtonVisibilityChanged event, required Emitter<SideDrawerState> emit}) async {
+  void _mapToggleButtonVisibilityToState({required ButtonVisibilityChanged event, required Emitter<SideDrawerState> emit}) {
     emit(state.update(buttonVisible: event.isVisible));
   }
 }

@@ -28,12 +28,12 @@ class TransactionPickerScreenBloc extends Bloc<TransactionPickerScreenEvent, Tra
       super(TransactionPickerScreenState.initial()) { _eventHandler(); }
 
   void _eventHandler() {
-    on<Fetch>((event, emit) => _mapFetchToState(event: event, emit: emit));
-    on<Claim>((event, emit) => _mapClaimToState(event: event, emit: emit));
+    on<Fetch>((event, emit) async => await _mapFetchToState(event: event, emit: emit));
+    on<Claim>((event, emit) async => await _mapClaimToState(event: event, emit: emit));
     on<Reset>((event, emit) => _mapResetToState(emit: emit));
   }
 
-  void _mapFetchToState({required Fetch event, required Emitter<TransactionPickerScreenState> emit}) async {
+  Future<void> _mapFetchToState({required Fetch event, required Emitter<TransactionPickerScreenState> emit}) async {
     emit(state.update(loading: true));
     try {
       final List<UnassignedTransactionResource> transactions = await _transactionRepository.fetchUnassigned(businessIdentifier: event.businessIdentifier);
@@ -43,7 +43,7 @@ class TransactionPickerScreenBloc extends Bloc<TransactionPickerScreenEvent, Tra
     }
   }
 
-  void _mapClaimToState({required Claim event, required Emitter<TransactionPickerScreenState> emit}) async {
+  Future<void> _mapClaimToState({required Claim event, required Emitter<TransactionPickerScreenState> emit}) async {
     emit(state.update(claiming: true));
     try {
       final TransactionResource transaction = await _transactionRepository.claimUnassigned(transactionId: event.unassignedTransaction.transaction.identifier);
@@ -54,7 +54,7 @@ class TransactionPickerScreenBloc extends Bloc<TransactionPickerScreenEvent, Tra
     }
   }
 
-  void _mapResetToState({required Emitter<TransactionPickerScreenState> emit}) async {
+  void _mapResetToState({required Emitter<TransactionPickerScreenState> emit}) {
     emit(state.update(claiming: false, errorMessage: "", claimSuccess: false));
   }
 

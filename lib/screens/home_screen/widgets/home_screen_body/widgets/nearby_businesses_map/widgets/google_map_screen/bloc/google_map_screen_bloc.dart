@@ -16,11 +16,11 @@ class GoogleMapScreenBloc extends Bloc<GoogleMapScreenEvent, GoogleMapScreenStat
     on<Reset>((event, emit) => _mapResetToState(emit: emit));
   }
   
-  void _mapTappedToState({required Tapped event, required Emitter<GoogleMapScreenState> emit}) async {
+  void _mapTappedToState({required Tapped event, required Emitter<GoogleMapScreenState> emit}) {
     emit(GoogleMapScreenState(screenCoordinate: event.screenCoordinate, business: event.business));
   }
 
-  void _mapResetToState({required Emitter<GoogleMapScreenState> emit}) async {
+  void _mapResetToState({required Emitter<GoogleMapScreenState> emit}) {
     emit(GoogleMapScreenState.initial());
   }
 }

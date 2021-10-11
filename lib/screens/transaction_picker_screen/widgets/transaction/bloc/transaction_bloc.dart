@@ -11,7 +11,7 @@ class TransactionBloc extends Bloc<TransactionEvent, DateTime?> {
     on<PickerChanged>((event, emit) => _mapPickerChangedToState(event: event, emit: emit));
   }
 
-  void _mapPickerChangedToState({required PickerChanged event, required Emitter<DateTime?> emit}) async {
+  void _mapPickerChangedToState({required PickerChanged event, required Emitter<DateTime?> emit}) {
     emit(event.transactionUpdatedAt);
   }
 }

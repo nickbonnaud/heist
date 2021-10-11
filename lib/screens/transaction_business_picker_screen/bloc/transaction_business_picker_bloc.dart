@@ -34,12 +34,12 @@ class TransactionBusinessPickerBloc extends Bloc<TransactionBusinessPickerEvent,
     return super.close();
   }
 
-  void _mapInitToState({required Init event, required Emitter<TransactionBusinessPickerState> emit}) async {
+  void _mapInitToState({required Init event, required Emitter<TransactionBusinessPickerState> emit}) {
     List<Business> possibleBusinesses = _getAvailableBusinesses(activeLocations: event.activeLocations);
     emit(state.update(availableBusinesses: possibleBusinesses));
   }
   
-  void _mapActiveLocationsChangedToState({required ActiveLocationsChanged event, required Emitter<TransactionBusinessPickerState> emit}) async {
+  void _mapActiveLocationsChangedToState({required ActiveLocationsChanged event, required Emitter<TransactionBusinessPickerState> emit}) {
     List<Business> possibleBusinesses = _getAvailableBusinesses(activeLocations: event.activeLocations);
     emit(state.update(availableBusinesses: possibleBusinesses));
   }

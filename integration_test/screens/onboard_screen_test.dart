@@ -61,7 +61,7 @@ class OnboardScreenTest {
   }
 
   Future<void> _finishOnboarding() async {
-    await tester.tap(find.byKey(Key("stepperButtonKey")).at(4));
+    await tester.tap(find.byKey(Key("stepperButtonKey")).last);
     await tester.pumpAndSettle();
   }
 }

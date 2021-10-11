@@ -67,6 +67,9 @@ class PasswordScreenTest {
   }
 
   Future<void> _changeCurrentSuccess() async {
+    await tester.tap(find.byKey(Key("currentPasswordFieldKey")));
+    await tester.pumpAndSettle();
+    
     await tester.enterText(find.byKey(Key("currentPasswordFieldKey")), "cfvv!&123jcKGFF9*");
     await tester.pump(Duration(milliseconds: 300));
 

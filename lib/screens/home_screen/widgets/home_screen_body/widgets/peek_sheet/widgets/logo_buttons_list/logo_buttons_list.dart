@@ -52,7 +52,7 @@ class LogoButtonsList extends StatelessWidget {
     int logosLength = state.numberOpenTransactions + state.numberActiveLocations + BlocProvider.of<LogoButtonsListBloc>(context).numberNearbySlots;
     double padding = _setPadding(logosLength: logosLength, state: state, isHeight: true);
 
-    return sharedSizes.endMarginTop + ((logosLength + padding) * (sharedSizes.verticalSpacing + sharedSizes.endSize)) + (_topMargin * 2.5.h);
+    return sharedSizes.endMarginTop + ((logosLength + padding) * (sharedSizes.verticalSpacing + sharedSizes.endSize)) + (_topMargin * 6.h);
   }
 
   double _getContainerWidth({required BuildContext context, required LogoButtonsListState state}) {

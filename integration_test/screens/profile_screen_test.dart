@@ -34,16 +34,12 @@ class ProfileScreenTest {
     await _cancelButton();
   }
 
-  Future<void> _changePhoto() async {
-    await tester.tap(find.byKey(Key("addPhotoButtonKey")));
-    await tester.pumpAndSettle();
-
-    await tester.fling(find.byKey(Key("editPhotoSnackbarKey")), Offset(0, 500), 500);
-    await tester.pumpAndSettle();
-  }
-
   Future<void> _changeFirstNameError() async {
     expect(find.text('Invalid First Name'), findsNothing);
+
+    
+    await tester.tap(find.byKey(Key("firstNameFieldKey")));
+    await tester.pumpAndSettle();
 
     await tester.enterText(find.byKey(Key("firstNameFieldKey")), "e");
     await tester.pump(Duration(milliseconds: 300));
@@ -54,11 +50,17 @@ class ProfileScreenTest {
     await tester.pump(Duration(milliseconds: 300));
 
     expect(find.text('Invalid First Name'), findsNothing);
+
+    await tester.tap(find.text(Platform.isIOS ? 'Done' : 'DONE'));
+    await tester.pumpAndSettle();
   }
 
   Future<void> _changeLastNameError() async {
-    expect(find.text('Invalid Last Name'), findsNothing);
+  expect(find.text('Invalid Last Name'), findsNothing);
 
+    await tester.tap(find.byKey(Key("lastNameFieldKey")));
+    await tester.pumpAndSettle();
+    
     await tester.enterText(find.byKey(Key("lastNameFieldKey")), "a");
     await tester.pump(Duration(milliseconds: 300));
 
@@ -68,13 +70,13 @@ class ProfileScreenTest {
     await tester.pump(Duration(milliseconds: 300));
 
     expect(find.text('Invalid Last Name'), findsNothing);
+
+    await tester.tap(find.text(Platform.isIOS ? 'Done' : 'DONE'));
+    await tester.pumpAndSettle();
   }
 
   Future<void> _submitError() async {
     expect(find.byKey(Key("profileFormSnackbarKey")), findsNothing);
-    
-    await tester.tap(find.text(Platform.isIOS ? 'Done' : 'DONE'));
-    await tester.pump();
     
     await tester.tap(find.byKey(Key("submitButtonKey")));
     await tester.pumpAndSettle();
@@ -84,22 +86,39 @@ class ProfileScreenTest {
     await tester.pump();
   }
 
+    Future<void> _changePhoto() async {
+    await tester.tap(find.byKey(Key("addPhotoButtonKey")));
+    await tester.pumpAndSettle();
+
+    await tester.fling(find.byKey(Key("editPhotoSnackbarKey")), Offset(0, 500), 500);
+    await tester.pumpAndSettle();
+  }
+
   Future<void> _changeFirstName() async {
+    await tester.tap(find.byKey(Key("firstNameFieldKey")));
+    await tester.pumpAndSettle();
+    
     await tester.enterText(find.byKey(Key("firstNameFieldKey")), "first");
     await tester.pump(Duration(milliseconds: 300));
+
+    await tester.tap(find.text(Platform.isIOS ? 'Done' : 'DONE'));
+    await tester.pumpAndSettle();
   }
 
   Future<void> _changeLastName() async {
+    await tester.tap(find.byKey(Key("lastNameFieldKey")));
+    await tester.pumpAndSettle();
+    
     await tester.enterText(find.byKey(Key("lastNameFieldKey")), "last");
     await tester.pump(Duration(milliseconds: 300));
+
+    await tester.tap(find.text(Platform.isIOS ? 'Done' : 'DONE'));
+    await tester.pumpAndSettle();
   }
 
   Future<void> _submitSuccess() async {
     expect(find.byKey(Key("profileFormSnackbarKey")), findsNothing);
     expect(find.byType(CircularProgressIndicator), findsNothing);
-    
-    await tester.tap(find.text(Platform.isIOS ? 'Done' : 'DONE'));
-    await tester.pump();
     
     await tester.tap(find.byKey(Key("submitButtonKey")));
     await tester.pump();

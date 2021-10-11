@@ -12,7 +12,7 @@ class PermissionButtonsBloc extends Bloc<PermissionButtonsEvent, bool> {
     on<PermissionButtonsEvent>((event, emit) => _mapPermissionButtonsEventToState(event: event, emit: emit));
   }
 
-  void _mapPermissionButtonsEventToState({required PermissionButtonsEvent event, required Emitter<bool> emit}) async {
+  void _mapPermissionButtonsEventToState({required PermissionButtonsEvent event, required Emitter<bool> emit}) {
     emit(event == PermissionButtonsEvent.enable);
   }
 }

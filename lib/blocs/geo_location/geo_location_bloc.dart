@@ -46,8 +46,8 @@ class GeoLocationBloc extends Bloc<GeoLocationEvent, GeoLocationState> {
   }
 
   void _eventHandler() {
-    on<GeoLocationReady>((event, emit) => _mapAppReadyToState(emit: emit));
-    on<FetchLocation>((event, emit) => _mapFetchLocationToState(event: event, emit: emit));
+    on<GeoLocationReady>((event, emit) async => await _mapAppReadyToState(emit: emit));
+    on<FetchLocation>((event, emit) async => await _mapFetchLocationToState(event: event, emit: emit));
   }
 
   @override
@@ -56,7 +56,7 @@ class GeoLocationBloc extends Bloc<GeoLocationEvent, GeoLocationState> {
     return super.close();
   }
 
-  void _mapAppReadyToState({required Emitter<GeoLocationState> emit}) async {
+  Future<void> _mapAppReadyToState({required Emitter<GeoLocationState> emit}) async {
     emit(Loading());
     try {
       Position position = await _geolocatorRepository.fetchMed();
@@ -66,7 +66,7 @@ class GeoLocationBloc extends Bloc<GeoLocationEvent, GeoLocationState> {
     }
   }
 
-  void _mapFetchLocationToState({required FetchLocation event, required Emitter<GeoLocationState> emit}) async {
+  Future<void> _mapFetchLocationToState({required FetchLocation event, required Emitter<GeoLocationState> emit}) async {
     emit(Loading());
     try {
       Position position;

@@ -23,16 +23,16 @@ class IssueFormBloc extends Bloc<IssueFormEvent, IssueFormState> {
 
   void _eventHandler() {
     on<MessageChanged>((event, emit) => _mapMessageChangedToState(event: event, emit: emit), transformer: Debouncer.bounce(duration: Duration(milliseconds: 300)));
-    on<Submitted>((event, emit) => _mapSubmittedToState(event: event, emit: emit));
-    on<Updated>((event, emit) => _mapUpdatedToState(event: event, emit: emit));
+    on<Submitted>((event, emit) async => await _mapSubmittedToState(event: event, emit: emit));
+    on<Updated>((event, emit) async => await _mapUpdatedToState(event: event, emit: emit));
     on<Reset>((event, emit) => _mapResetToState(emit: emit));
   }
 
-  void _mapMessageChangedToState({required MessageChanged event, required Emitter<IssueFormState> emit}) async {
+  void _mapMessageChangedToState({required MessageChanged event, required Emitter<IssueFormState> emit}) {
     emit(state.update(isMessageValid: event.message.length >=5));
   }
 
-  void _mapSubmittedToState({required Submitted event, required Emitter<IssueFormState> emit}) async {
+  Future<void> _mapSubmittedToState({required Submitted event, required Emitter<IssueFormState> emit}) async {
     emit(state.update(isSubmitting: true));
 
     try {
@@ -44,7 +44,7 @@ class IssueFormBloc extends Bloc<IssueFormEvent, IssueFormState> {
     }
   }
 
-  void _mapUpdatedToState({required Updated event, required Emitter<IssueFormState> emit}) async {
+  Future<void> _mapUpdatedToState({required Updated event, required Emitter<IssueFormState> emit}) async {
     emit(state.update(isSubmitting: true));
 
     try {
@@ -56,7 +56,7 @@ class IssueFormBloc extends Bloc<IssueFormEvent, IssueFormState> {
     }
   }
 
-  void _mapResetToState({required Emitter<IssueFormState> emit}) async {
+  void _mapResetToState({required Emitter<IssueFormState> emit}) {
     emit(state.update(isSuccess: false, errorMessage: ""));
   }
 }

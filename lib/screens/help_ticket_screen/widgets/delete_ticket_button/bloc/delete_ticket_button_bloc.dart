@@ -18,11 +18,11 @@ class DeleteTicketButtonBloc extends Bloc<DeleteTicketButtonEvent, DeleteTicketB
       super(DeleteTicketButtonState.initial()) { _eventHandler(); }
 
   void _eventHandler() {
-    on<Submitted>((event, emit) => _mapSubmittedToState(event: event, emit: emit));
+    on<Submitted>((event, emit) async => await _mapSubmittedToState(event: event, emit: emit));
     on<Reset>((event, emit) => _mapResetToState(emit: emit));
   }
 
-  void _mapSubmittedToState({required Submitted event, required Emitter<DeleteTicketButtonState> emit}) async {
+  Future<void> _mapSubmittedToState({required Submitted event, required Emitter<DeleteTicketButtonState> emit}) async {
     emit(state.update(isSubmitting: true));
 
     try {
@@ -38,7 +38,7 @@ class DeleteTicketButtonBloc extends Bloc<DeleteTicketButtonEvent, DeleteTicketB
     }
   }
 
-  void _mapResetToState({required Emitter<DeleteTicketButtonState> emit}) async {
+  void _mapResetToState({required Emitter<DeleteTicketButtonState> emit}) {
     emit(state.update(isSuccess: false, errorMessage: ""));
   }
 }

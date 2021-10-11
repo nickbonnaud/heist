@@ -17,14 +17,14 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
       super(Unknown()) { _eventHandler(); }
 
   void _eventHandler() {
-    on<Init>((event, emit) => _mapInitToState(emit: emit));
+    on<Init>((event, emit) async => await _mapInitToState(emit: emit));
     on<LoggedIn>((event, emit) => _mapLoggedInToState(event: event, emit: emit));
     on<LoggedOut>((event, emit) => _mapLoggedOutToState(emit: emit));
   }
 
   bool get isAuthenticated => state is Authenticated;
 
-  void _mapInitToState({required Emitter<AuthenticationState> emit}) async {
+  Future<void> _mapInitToState({required Emitter<AuthenticationState> emit}) async {
     // TEST CHANGE //
     
     final bool isSignedIn = await _authenticationRepository.isSignedIn();
@@ -39,12 +39,12 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
     }
   }
 
-  void _mapLoggedInToState({required LoggedIn event, required Emitter<AuthenticationState> emit}) async {
+  void _mapLoggedInToState({required LoggedIn event, required Emitter<AuthenticationState> emit}) {
     _customerBloc.add(CustomerLoggedIn(customer: event.customer));
     emit(Authenticated());
   }
 
-  void _mapLoggedOutToState({required Emitter<AuthenticationState> emit}) async {
+  void _mapLoggedOutToState({required Emitter<AuthenticationState> emit}) {
     _customerBloc.add(CustomerLoggedOut());
     emit(Unauthenticated());
   }

@@ -21,11 +21,11 @@ class CancelIssueFormBloc extends Bloc<CancelIssueFormEvent, CancelIssueFormStat
   }
 
   void _eventHandler() {
-    on<Submitted>((event, emit) => _mapSubmittedToState(event: event, emit: emit));
+    on<Submitted>((event, emit) async => await _mapSubmittedToState(event: event, emit: emit));
     on<Reset>((event, emit) => _mapResetToState(emit: emit));
   }
 
-  void _mapSubmittedToState({required Submitted event, required Emitter<CancelIssueFormState> emit}) async {
+  Future<void> _mapSubmittedToState({required Submitted event, required Emitter<CancelIssueFormState> emit}) async {
     emit(state.update(isSubmitting: true));
     try {
       TransactionResource transaction = await _issueRepository.cancelIssue(issueId: event.issueIdentifier);
@@ -36,7 +36,7 @@ class CancelIssueFormBloc extends Bloc<CancelIssueFormEvent, CancelIssueFormStat
     }
   }
 
-  void _mapResetToState({required Emitter<CancelIssueFormState> emit}) async {
+  void _mapResetToState({required Emitter<CancelIssueFormState> emit}) {
     emit(state.update(isSuccess: false, errorMessage: ""));
   }
 }

@@ -18,11 +18,11 @@ class SignOutBloc extends Bloc<SignOutEvent, SignOutState> {
       super(SignOutState.initial()) { _eventHandler(); }
 
   void _eventHandler() {
-    on<Submitted>((event, emit) => _mapSubmittedToState(emit: emit));
+    on<Submitted>((event, emit) async => await _mapSubmittedToState(emit: emit));
     on<Reset>((event, emit) => _mapResetToState(emit: emit));
   }
 
-  void _mapSubmittedToState({required Emitter<SignOutState> emit}) async {
+  Future<void> _mapSubmittedToState({required Emitter<SignOutState> emit}) async {
     if (!state.isSubmitting) {
       emit(state.update(isSubmitting: true));
 
@@ -40,7 +40,7 @@ class SignOutBloc extends Bloc<SignOutEvent, SignOutState> {
     }
   }
 
-  void _mapResetToState({required Emitter<SignOutState> emit}) async {
+  void _mapResetToState({required Emitter<SignOutState> emit}) {
     emit(state.update(isSuccess: false, errorMessage: ""));
   }
 }

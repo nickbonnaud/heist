@@ -15,11 +15,11 @@ class DefaultAppBarBloc extends Bloc<DefaultAppBarEvent, DefaultAppBarState> {
     on<Reset>((event, emit) => _mapResetToState(emit: emit));
   }
 
-  void _mapRotateToState({required Emitter<DefaultAppBarState> emit}) async {
+  void _mapRotateToState({required Emitter<DefaultAppBarState> emit}) {
     emit(state.update(isRotated: true));
   }
 
-  void _mapResetToState({required Emitter<DefaultAppBarState> emit}) async {
+  void _mapResetToState({required Emitter<DefaultAppBarState> emit}) {
     emit(state.update(isRotated: false));
   }
 }

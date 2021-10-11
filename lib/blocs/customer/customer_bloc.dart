@@ -19,13 +19,13 @@ class CustomerBloc extends Bloc<CustomerEvent, CustomerState> {
   bool get onboarded => state.onboarded;
 
   void _eventHandler() {
-    on<CustomerAuthenticated>((event, emit) => _mapCustomerAuthenticatedToState(emit: emit));
+    on<CustomerAuthenticated>((event, emit) async => await _mapCustomerAuthenticatedToState(emit: emit));
     on<CustomerLoggedIn>((event, emit) => _mapCustomerLoggedInToState(event: event, emit: emit));
     on<CustomerLoggedOut>((event, emit) => _mapCustomerLoggedOutToState(emit: emit));
     on<CustomerUpdated>((event, emit) => _mapCustomerUpdatedToState(event: event, emit: emit));
   }
   
-  void _mapCustomerAuthenticatedToState({required Emitter<CustomerState> emit}) async {
+  Future<void> _mapCustomerAuthenticatedToState({required Emitter<CustomerState> emit}) async {
     emit(state.update(loading: true));
 
     try {
@@ -36,15 +36,15 @@ class CustomerBloc extends Bloc<CustomerEvent, CustomerState> {
     }
   }
 
-  void _mapCustomerLoggedInToState({required CustomerLoggedIn event, required Emitter<CustomerState> emit}) async {
+  void _mapCustomerLoggedInToState({required CustomerLoggedIn event, required Emitter<CustomerState> emit}) {
     emit(state.update(customer: event.customer, loading: false, errorMessage: ""));
   }
 
-  void _mapCustomerLoggedOutToState({required Emitter<CustomerState> emit}) async {
+  void _mapCustomerLoggedOutToState({required Emitter<CustomerState> emit}) {
     emit(state.update(customer: null, loading: false, errorMessage: ""));
   }
   
-  void _mapCustomerUpdatedToState({required CustomerUpdated event, required Emitter<CustomerState> emit}) async {
+  void _mapCustomerUpdatedToState({required CustomerUpdated event, required Emitter<CustomerState> emit}) {
     emit(state.update(customer: event.customer));
   }
 }

@@ -39,7 +39,7 @@ class NearbyBusinessesBloc extends Bloc<NearbyBusinessesEvent, NearbyBusinessesS
       }
   
   void _eventHandler() {
-    on<FetchNearby>((event, emit) => _mapFetchNearbyToState(event: event, emit: emit));
+    on<FetchNearby>((event, emit) async => await _mapFetchNearbyToState(event: event, emit: emit));
   }
 
   @override
@@ -48,7 +48,7 @@ class NearbyBusinessesBloc extends Bloc<NearbyBusinessesEvent, NearbyBusinessesS
     return super.close();
   }
 
-  void _mapFetchNearbyToState({required FetchNearby event, required Emitter<NearbyBusinessesState> emit}) async {
+  Future<void> _mapFetchNearbyToState({required FetchNearby event, required Emitter<NearbyBusinessesState> emit}) async {
     try {
       final List<Business> businesses = await _locationRepository.sendLocation(
         lat: event.lat,

@@ -86,15 +86,15 @@ class LogoButtonsListBloc extends Bloc<LogoButtonsListEvent, LogoButtonsListStat
     return super.close();
   }
 
-  void _mapNumberOpenTransactionsChangedToState({required NumberOpenTransactionsChanged event, required Emitter<LogoButtonsListState> emit}) async {
+  void _mapNumberOpenTransactionsChangedToState({required NumberOpenTransactionsChanged event, required Emitter<LogoButtonsListState> emit}) {
     emit(state.update(numberOpenTransactions: event.numberOpenTransactions));
   }
 
-  void _mapNumberActiveLocationsChangedToState({required NumberActiveLocationsChanged event, required Emitter<LogoButtonsListState> emit}) async {
+  void _mapNumberActiveLocationsChangedToState({required NumberActiveLocationsChanged event, required Emitter<LogoButtonsListState> emit}) {
     emit(state.update(numberActiveLocations: event.numberActiveLocations));
   }
 
-  void _mapNumberNearbyBusinessesChangedToState({required NumberNearbyBusinessesChanged event, required Emitter<LogoButtonsListState> emit}) async {
+  void _mapNumberNearbyBusinessesChangedToState({required NumberNearbyBusinessesChanged event, required Emitter<LogoButtonsListState> emit}) {
     emit(state.update(numberNearbyLocations: event.numberNearbyBusinesses));
   }
 }

@@ -39,15 +39,15 @@ class SplashScreenBloc extends Bloc<SplashScreenEvent, SplashScreenState> {
     return super.close();
   }
 
-  void _mapMainAnimationCompletedToState({required Emitter<SplashScreenState> emit}) async {
+  void _mapMainAnimationCompletedToState({required Emitter<SplashScreenState> emit}) {
     emit(state.update(mainAnimationComplete: true));
   }
 
-  void _mapEndAnimationCompletedToState({required Emitter<SplashScreenState> emit}) async {
+  void _mapEndAnimationCompletedToState({required Emitter<SplashScreenState> emit}) {
     emit(state.update(endAnimationComplete: true));
   }
   
-  void _mapBootBlocUpdatedToState({required AppReadyBlocUpdated event, required Emitter<SplashScreenState> emit}) async {
+  void _mapBootBlocUpdatedToState({required AppReadyBlocUpdated event, required Emitter<SplashScreenState> emit}) {
     if (state.nextScreen == null) {
       if (event.appReadyState.authCheckComplete) {
         if (!event.appReadyState.isAuthenticated) {

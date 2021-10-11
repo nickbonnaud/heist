@@ -18,10 +18,11 @@ class RequestResetPasswordScreenTest {
 
     await _tapGoToRequestResetPasswordButton();
 
+    await _enterInvalidEmail();
+    
     await _enterErrorEmail();
     await _tapSubmitButtonFail();
     
-    await _enterInvalidEmail();
     await _enterValidEmail();
 
     await _tapSubmitButtonSuccess();
@@ -40,9 +41,22 @@ class RequestResetPasswordScreenTest {
     expect(find.byType(RequestResetPasswordScreen), findsOneWidget);
   }
 
+  Future<void> _enterInvalidEmail() async {
+    expect(find.byKey(Key("emailFormFieldKey")), findsOneWidget);
+
+    expect(find.text("Invalid Email"), findsNothing);
+    
+    await tester.enterText(find.byKey(Key("emailFormFieldKey")), "not 7 email");
+    await tester.pump(Duration(milliseconds: 300));
+
+    expect(find.text("Invalid Email"), findsOneWidget);
+  }
+
   Future<void> _enterErrorEmail() async {
     await tester.enterText(find.byKey(Key("emailFormFieldKey")), "error@gmail.com");
     await tester.pump(Duration(milliseconds: 300));
+
+    expect(find.text("Invalid Email"), findsNothing);
 
     await tester.tap(find.text(Platform.isIOS ? 'Done' : 'DONE'));
     await tester.pumpAndSettle();
@@ -57,27 +71,15 @@ class RequestResetPasswordScreenTest {
     expect(find.byKey(Key("requestResetSnackBarKey")), findsOneWidget);
 
     await tester.fling(find.byKey(Key("requestResetSnackBarKey")), Offset(0, 500), 500);
-    await tester.pump();
-  }
-
-  Future<void> _enterInvalidEmail() async {
-    expect(find.byKey(Key("emailFormFieldKey")), findsOneWidget);
-
-    expect(find.text("Invalid Email"), findsNothing);
-
-    await tester.enterText(find.byKey(Key("emailFormFieldKey")), "not 7 email");
-    await tester.pump(Duration(milliseconds: 300));
-
-    expect(find.text("Invalid Email"), findsOneWidget);
+    await tester.pumpAndSettle();
   }
 
   Future<void> _enterValidEmail() async {
-    expect(find.text("Invalid Email"), findsOneWidget);
-
+    await tester.tap(find.byKey(Key("emailFormFieldKey")));
+    await tester.pumpAndSettle();
+    
     await tester.enterText(find.byKey(Key("emailFormFieldKey")), "nick@yahoo.com");
     await tester.pump(Duration(milliseconds: 300));
-
-    expect(find.text("Invalid Email"), findsNothing);
 
     await tester.tap(find.text(Platform.isIOS ? 'Done' : 'DONE'));
     await tester.pumpAndSettle();

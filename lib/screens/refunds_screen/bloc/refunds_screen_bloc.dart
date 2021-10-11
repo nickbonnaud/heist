@@ -20,18 +20,18 @@ class RefundsScreenBloc extends Bloc<RefundsScreenEvent, RefundsScreenState> {
       super(Uninitialized()) { _eventHandler(); }
 
   void _eventHandler() {
-    on<FetchAllRefunds>((event, emit) => _mapFetchAllRefundsToState(event: event, emit: emit));
-    on<FetchRefundsByDateRange>((event, emit) => _mapFetchRefundsByDateRangeToState(event: event, emit: emit));
-    on<FetchRefundByIdentifier>((event, emit) => _mapFetchRefundByIdentifierToState(event: event, emit: emit));
-    on<FetchRefundByBusiness>((event, emit) => _mapFetchRefundByBusinessToState(event: event, emit: emit));
-    on<FetchRefundByTransaction>((event, emit) => _mapFetchRefundByTransactionToState(event: event, emit: emit));
-    on<FetchMoreRefunds>((event, emit) => _mapFetchMoreRefundsToState(emit: emit));
+    on<FetchAllRefunds>((event, emit) async => await _mapFetchAllRefundsToState(event: event, emit: emit));
+    on<FetchRefundsByDateRange>((event, emit) async => await _mapFetchRefundsByDateRangeToState(event: event, emit: emit));
+    on<FetchRefundByIdentifier>((event, emit) async => await _mapFetchRefundByIdentifierToState(event: event, emit: emit));
+    on<FetchRefundByBusiness>((event, emit) async => await _mapFetchRefundByBusinessToState(event: event, emit: emit));
+    on<FetchRefundByTransaction>((event, emit) async => await _mapFetchRefundByTransactionToState(event: event, emit: emit));
+    on<FetchMoreRefunds>((event, emit) => _mapFetchMoreRefundsToState());
   }
 
-  void _mapFetchAllRefundsToState({required FetchAllRefunds event, required Emitter<RefundsScreenState> emit}) async {
+  Future<void> _mapFetchAllRefundsToState({required FetchAllRefunds event, required Emitter<RefundsScreenState> emit}) async {
     if (state is !Loading) {
       if (event.reset) {
-        _fetchUnitialized(
+        await _fetchUnitialized(
           fetchFunction: () => _refundRepository.fetchAll(),
           state: state,
           currentQuery: Option.all,
@@ -41,7 +41,7 @@ class RefundsScreenBloc extends Bloc<RefundsScreenEvent, RefundsScreenState> {
       } else {
         final currentState = state;
         if (currentState is Uninitialized) {
-          _fetchUnitialized(
+          await _fetchUnitialized(
             fetchFunction: () => _refundRepository.fetchAll(),
             state: currentState,
             currentQuery: Option.all,
@@ -49,7 +49,7 @@ class RefundsScreenBloc extends Bloc<RefundsScreenEvent, RefundsScreenState> {
             emit: emit
           );
         } else if (currentState is RefundsLoaded) {
-          _fetchMore(
+          await _fetchMore(
             fetchFunction: () => _refundRepository.paginate(url: currentState.nextUrl!),
             state: currentState,
             currentQuery: Option.all,
@@ -61,10 +61,10 @@ class RefundsScreenBloc extends Bloc<RefundsScreenEvent, RefundsScreenState> {
     }
   }
 
-  void _mapFetchRefundsByDateRangeToState({required FetchRefundsByDateRange event, required Emitter<RefundsScreenState> emit}) async {
+  Future<void> _mapFetchRefundsByDateRangeToState({required FetchRefundsByDateRange event, required Emitter<RefundsScreenState> emit}) async {
     if (state is !Loading) {
       if (event.reset) {
-        _fetchUnitialized(
+        await _fetchUnitialized(
           fetchFunction: () => _refundRepository.fetchAll(dateRange: event.dateRange),
           state: state,
           currentQuery: Option.date,
@@ -74,7 +74,7 @@ class RefundsScreenBloc extends Bloc<RefundsScreenEvent, RefundsScreenState> {
       } else {
         final currentState = state;
         if (currentState is RefundsLoaded) {
-          _fetchMore(
+          await _fetchMore(
             fetchFunction: () => _refundRepository.paginate(url: currentState.nextUrl!),
             state: currentState, 
             currentQuery: Option.date,
@@ -86,10 +86,10 @@ class RefundsScreenBloc extends Bloc<RefundsScreenEvent, RefundsScreenState> {
     }
   }
 
-  void _mapFetchRefundByIdentifierToState({required FetchRefundByIdentifier event, required Emitter<RefundsScreenState> emit}) async {
+  Future<void> _mapFetchRefundByIdentifierToState({required FetchRefundByIdentifier event, required Emitter<RefundsScreenState> emit}) async {
     if (state is !Loading) {
       if (event.reset) {
-        _fetchUnitialized(
+        await _fetchUnitialized(
           fetchFunction: () => _refundRepository.fetchByIdentifier(identifier: event.identifier),
           state: state,
           currentQuery: Option.refundId,
@@ -99,7 +99,7 @@ class RefundsScreenBloc extends Bloc<RefundsScreenEvent, RefundsScreenState> {
       } else {
         final currentState = state;
         if (currentState is RefundsLoaded) {
-          _fetchMore(
+          await _fetchMore(
             fetchFunction: () => _refundRepository.paginate(url: currentState.nextUrl!),
             state: currentState,
             currentQuery: Option.refundId,
@@ -111,10 +111,10 @@ class RefundsScreenBloc extends Bloc<RefundsScreenEvent, RefundsScreenState> {
     }
   }
 
-  void _mapFetchRefundByBusinessToState({required FetchRefundByBusiness event, required Emitter<RefundsScreenState> emit}) async {
+  Future<void> _mapFetchRefundByBusinessToState({required FetchRefundByBusiness event, required Emitter<RefundsScreenState> emit}) async {
     if (state is !Loading) {
       if (event.reset) {
-        _fetchUnitialized(
+        await _fetchUnitialized(
           fetchFunction: () => _refundRepository.fetchByBusiness(identifier: event.identifier),
           state: state,
           currentQuery: Option.businessName,
@@ -124,7 +124,7 @@ class RefundsScreenBloc extends Bloc<RefundsScreenEvent, RefundsScreenState> {
       } else {
         final currentState = state;
         if (currentState is RefundsLoaded) {
-          _fetchMore(
+          await _fetchMore(
             fetchFunction: () => _refundRepository.paginate(url: currentState.nextUrl!),
             state: currentState,
             currentQuery: Option.businessName,
@@ -136,10 +136,10 @@ class RefundsScreenBloc extends Bloc<RefundsScreenEvent, RefundsScreenState> {
     }
   }
 
-  void _mapFetchRefundByTransactionToState({required FetchRefundByTransaction event, required Emitter<RefundsScreenState> emit}) async {
+  Future<void> _mapFetchRefundByTransactionToState({required FetchRefundByTransaction event, required Emitter<RefundsScreenState> emit}) async {
     if (state is !Loading) {
       if (event.reset) {
-        _fetchUnitialized(
+        await _fetchUnitialized(
           fetchFunction: () => _refundRepository.fetchByTransactionIdentifier(identifier: event.identifier),
           state: state,
           currentQuery: Option.transactionId,
@@ -149,7 +149,7 @@ class RefundsScreenBloc extends Bloc<RefundsScreenEvent, RefundsScreenState> {
       } else {
         final currentState = state;
         if (currentState is RefundsLoaded) {
-          _fetchMore(
+          await _fetchMore(
             fetchFunction: () => _refundRepository.paginate(url: currentState.nextUrl!),
             state: currentState,
             currentQuery: Option.transactionId,
@@ -161,30 +161,30 @@ class RefundsScreenBloc extends Bloc<RefundsScreenEvent, RefundsScreenState> {
     }
   }
 
-  void _mapFetchMoreRefundsToState({required Emitter<RefundsScreenState> emit}) async {
+  void _mapFetchMoreRefundsToState() {
     final currentState = state;
     if (currentState is RefundsLoaded && !currentState.paginating) {
       switch (currentState.currentQuery) {
         case Option.all:
-          _mapFetchAllRefundsToState(event: FetchAllRefunds(reset: false), emit: emit);
+          add(FetchAllRefunds(reset: false));
           break;
         case Option.date:
-          _mapFetchRefundsByDateRangeToState(event: FetchRefundsByDateRange(dateRange: currentState.queryParams, reset: false), emit: emit);
+          add(FetchRefundsByDateRange(dateRange: currentState.queryParams, reset: false));
           break;
         case Option.refundId:
-          _mapFetchRefundByIdentifierToState(event: FetchRefundByIdentifier(identifier: currentState.queryParams, reset: false), emit: emit);
+          add(FetchRefundByIdentifier(identifier: currentState.queryParams, reset: false));
           break;
         case Option.businessName:
-          _mapFetchRefundByBusinessToState(event: FetchRefundByBusiness(identifier: currentState.queryParams, reset: false), emit: emit);
+          add(FetchRefundByBusiness(identifier: currentState.queryParams, reset: false));
           break;
         case Option.transactionId:
-          _mapFetchRefundByTransactionToState(event: FetchRefundByTransaction(identifier: currentState.queryParams, reset: false), emit: emit);
+          add(FetchRefundByTransaction(identifier: currentState.queryParams, reset: false));
           break;
       }
     }
   }
   
-  void _fetchUnitialized({
+  Future<void> _fetchUnitialized({
     required Future<PaginateDataHolder>Function() fetchFunction,
     required RefundsScreenState state,
     required Option currentQuery,
@@ -207,7 +207,7 @@ class RefundsScreenBloc extends Bloc<RefundsScreenEvent, RefundsScreenState> {
     }
   }
 
-  void _fetchMore({
+  Future<void> _fetchMore({
     required Future<PaginateDataHolder>Function() fetchFunction,
     required RefundsLoaded state,
     required Option currentQuery,

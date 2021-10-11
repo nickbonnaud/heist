@@ -37,16 +37,22 @@ class MessageListBloc extends Bloc<MessageListEvent, MessageListState> {
       });
   }
 
+  @override
+  Future<void> close() {
+    helpTicketsScreenBlocSubscription.cancel();
+    return super.close();
+  }
+
   void _eventHandler() {
     on<ReplyAdded>((event, emit) => _mapReplyAddedToState(event: event, emit: emit));
     on<RepliesViewed>((event, emit) => _mapRepliesViewedToState(emit: emit));
   }
 
-  void _mapReplyAddedToState({required ReplyAdded event, required Emitter<MessageListState> emit}) async {
+  void _mapReplyAddedToState({required ReplyAdded event, required Emitter<MessageListState> emit}) {
     emit(state.update(helpTicket: event.helpTicket));
   }
   
-  void _mapRepliesViewedToState({required Emitter<MessageListState> emit}) async {
+  void _mapRepliesViewedToState({required Emitter<MessageListState> emit}) {
     final bool hasUnread = _helpTicket.replies.any((reply) => !reply.fromCustomer && !reply.read);
     if (!_helpTicket.resolved && hasUnread) {
       try {
@@ -59,11 +65,5 @@ class MessageListBloc extends Bloc<MessageListEvent, MessageListState> {
         emit(state.update(errorMessage: exception.error));
       }
     }
-  }
-
-  @override
-  Future<void> close() {
-    helpTicketsScreenBlocSubscription.cancel();
-    return super.close();
   }
 }

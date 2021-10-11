@@ -58,13 +58,16 @@ class ResetPasswordScreenTest {
     expect(find.byKey(Key("resetSnackBarKey")), findsOneWidget);
     
     await tester.fling(find.byKey(Key("resetSnackBarKey")), Offset(0, 500), 500);
-    await tester.pump();
+    await tester.pumpAndSettle();
   }
 
   Future<void> _enterInvalidResetCode() async {
     expect(find.byKey(Key("resetCodeFormKey")), findsOneWidget);
     expect(find.text("Invalid Reset Code"), findsNothing);
 
+    await tester.tap(find.byKey(Key("resetCodeFormKey")));
+    await tester.pumpAndSettle();
+    
     await tester.enterText(find.byKey(Key("resetCodeFormKey")), "@not ");
     await tester.pump(Duration(milliseconds: 300));
 

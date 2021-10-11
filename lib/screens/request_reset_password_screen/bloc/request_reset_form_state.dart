@@ -16,7 +16,7 @@ class RequestResetFormState extends Equatable {
 
   factory RequestResetFormState.initial() {
     return RequestResetFormState(
-      isEmailValid: false,
+      isEmailValid: true,
       isSubmitting: false,
       isSuccess: false,
       errorMessage: ""

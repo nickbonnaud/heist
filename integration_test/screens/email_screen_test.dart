@@ -51,10 +51,13 @@ class EmailScreenTest {
     expect(find.byKey(Key("emailFormSnackbarKey")), findsOneWidget);
 
     await tester.fling(find.byKey(Key("emailFormSnackbarKey")), Offset(0, 500), 500);
-    await tester.pump();
+    await tester.pumpAndSettle();
   }
 
   Future<void> _changeEmail() async {
+    await tester.tap(find.byKey(Key("emailFieldKey")));
+    await tester.pumpAndSettle();
+
     await tester.enterText(find.byKey(Key("emailFieldKey")), "john@nova.ai");
     await tester.pump(Duration(milliseconds: 300));
   }
@@ -64,7 +67,7 @@ class EmailScreenTest {
     expect(find.byType(CircularProgressIndicator), findsNothing);
 
     await tester.tap(find.text(Platform.isIOS ? 'Done' : 'DONE'));
-    await tester.pump();
+    await tester.pumpAndSettle();
 
     await tester.tap(find.byKey(Key("submitButtonKey")));
     await tester.pump(Duration(milliseconds: 250));

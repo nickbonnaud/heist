@@ -14,7 +14,7 @@ class HelpTicketFormBloc extends Bloc<HelpTicketFormEvent, HelpTicketFormState> 
   final HelpRepository _helpRepository;
   final HelpTicketsScreenBloc _helpTicketsScreenBloc;
 
-  final Duration debounceTime = Duration(milliseconds: 300);
+  final Duration _debounceTime = Duration(milliseconds: 300);
   
   HelpTicketFormBloc({required HelpRepository helpRepository, required HelpTicketsScreenBloc helpTicketsScreenBloc}) 
   : _helpRepository = helpRepository,
@@ -22,21 +22,21 @@ class HelpTicketFormBloc extends Bloc<HelpTicketFormEvent, HelpTicketFormState> 
     super(HelpTicketFormState.initial()) { _eventHandler(); }
 
   void _eventHandler() {
-    on<SubjectChanged>((event, emit) => _mapSubjectChangedToState(event: event, emit: emit), transformer: Debouncer.bounce(duration: debounceTime));
-    on<MessageChanged>((event, emit) => _mapMessageChangedToState(event: event, emit: emit), transformer: Debouncer.bounce(duration: debounceTime));
-    on<Submitted>((event, emit) => _mapSubmittedToState(event: event, emit: emit));
+    on<SubjectChanged>((event, emit) => _mapSubjectChangedToState(event: event, emit: emit), transformer: Debouncer.bounce(duration: _debounceTime));
+    on<MessageChanged>((event, emit) => _mapMessageChangedToState(event: event, emit: emit), transformer: Debouncer.bounce(duration: _debounceTime));
+    on<Submitted>((event, emit) async => await _mapSubmittedToState(event: event, emit: emit));
     on<Reset>((event, emit) => _mapResetToState(emit: emit));
   }
 
-  void _mapSubjectChangedToState({required SubjectChanged event, required Emitter<HelpTicketFormState> emit}) async {
+  void _mapSubjectChangedToState({required SubjectChanged event, required Emitter<HelpTicketFormState> emit}) {
     emit(state.update(isSubjectValid: event.subject.trim().isNotEmpty));
   }
 
-  void _mapMessageChangedToState({required MessageChanged event, required Emitter<HelpTicketFormState> emit}) async {
+  void _mapMessageChangedToState({required MessageChanged event, required Emitter<HelpTicketFormState> emit}) {
     emit(state.update(isMessageValid: event.message.trim().isNotEmpty));
   }
 
-  void _mapSubmittedToState({required Submitted event, required Emitter<HelpTicketFormState> emit}) async {
+  Future<void> _mapSubmittedToState({required Submitted event, required Emitter<HelpTicketFormState> emit}) async {
     emit(state.update(isSubmitting: true));
 
     try {
@@ -48,7 +48,7 @@ class HelpTicketFormBloc extends Bloc<HelpTicketFormEvent, HelpTicketFormState> 
     }
   }
   
-  void _mapResetToState({required Emitter<HelpTicketFormState> emit}) async {
+  void _mapResetToState({required Emitter<HelpTicketFormState> emit}) {
     emit(state.update(isSuccess: false, errorMessage: ""));
   }
 }

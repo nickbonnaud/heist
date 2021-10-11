@@ -13,7 +13,7 @@ class LogoBusinessButtonBloc extends Bloc<LogoBusinessButtonEvent, LogoBusinessB
     on<TogglePressed>((event, emit) => _mapTogglePressedToState(emit: emit));
   }
 
-  void _mapTogglePressedToState({required Emitter<LogoBusinessButtonState> emit}) async {
+  void _mapTogglePressedToState({required Emitter<LogoBusinessButtonState> emit}) {
     emit(state.update(isPressed: !state.pressed));
   }
 }

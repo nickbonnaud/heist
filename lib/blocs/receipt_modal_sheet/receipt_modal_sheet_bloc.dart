@@ -16,7 +16,7 @@ class ReceiptModalSheetBloc extends Bloc<ReceiptModalSheetEvent, ReceiptModalShe
     on<Toggle>((event, emit) => _mapToggleToState(emit: emit));
   }
 
-  void _mapToggleToState({required Emitter<ReceiptModalSheetState> emit}) async {
+  void _mapToggleToState({required Emitter<ReceiptModalSheetState> emit}) {
     emit(state.update(visible: !state.visible));
   }
 }

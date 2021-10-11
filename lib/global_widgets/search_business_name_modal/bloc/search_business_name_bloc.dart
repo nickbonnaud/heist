@@ -10,8 +10,6 @@ import 'package:meta/meta.dart';
 part 'search_business_name_event.dart';
 part 'search_business_name_state.dart';
 
-
-
 class SearchBusinessNameBloc extends Bloc<SearchBusinessNameEvent, SearchBusinessNameState> {
   final BusinessRepository _businessRepository;
   
@@ -20,11 +18,11 @@ class SearchBusinessNameBloc extends Bloc<SearchBusinessNameEvent, SearchBusines
       super(SearchBusinessNameState.initial()) { _eventHandler(); }
 
   void _eventHandler() {
-    on<BusinessNameChanged>((event, emit) => _mapBusinessNameChangedToState(event: event, emit: emit), transformer: Debouncer.bounce(duration: Duration(milliseconds: 500)));
+    on<BusinessNameChanged>((event, emit) async => await _mapBusinessNameChangedToState(event: event, emit: emit), transformer: Debouncer.bounce(duration: Duration(milliseconds: 500)));
     on<Reset>((event, emit) => _mapResetToState(emit: emit));
   }
   
-  void _mapBusinessNameChangedToState({required BusinessNameChanged event, required Emitter<SearchBusinessNameState> emit}) async {
+  Future<void> _mapBusinessNameChangedToState({required BusinessNameChanged event, required Emitter<SearchBusinessNameState> emit}) async {
     if (event.name.isNotEmpty) {
       emit(state.update(isSubmitting: true, errorMessage: ""));
 
@@ -39,7 +37,7 @@ class SearchBusinessNameBloc extends Bloc<SearchBusinessNameEvent, SearchBusines
     }
   }
 
-  void _mapResetToState({required Emitter<SearchBusinessNameState> emit}) async {
+  void _mapResetToState({required Emitter<SearchBusinessNameState> emit}) {
     emit(state.update(isSubmitting: false, businesses: null, resetBusinesses: true, errorMessage: ""));
   }
 }

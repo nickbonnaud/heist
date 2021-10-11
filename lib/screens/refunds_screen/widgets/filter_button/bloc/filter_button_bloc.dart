@@ -13,7 +13,7 @@ class FilterButtonBloc extends Bloc<FilterButtonEvent, FilterButtonState> {
     on<Toggle>((event, emit) => _mapToggleToState(emit: emit));
   }
 
-  void _mapToggleToState({required Emitter<FilterButtonState> emit}) async {
+  void _mapToggleToState({required Emitter<FilterButtonState> emit}) {
     emit(state.update(isActive: !state.isActive));
   }
 }

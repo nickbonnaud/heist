@@ -37,31 +37,23 @@ class BeaconBloc extends Bloc<BeaconEvent, BeaconState> {
 
             // TEST CHANGE //
 
-            // Business business = state.businesses.first;
-            // businessBeacon.Beacon beacon = _regionToBeacon(region: Region(
-            //   identifier: business.location.beacon.regionIdentifier,
-            //   proximityUUID: business.location.beacon.proximityUUID,
-            //   major: business.location.beacon.major,
-            //   minor: business.location.beacon.minor
-            // )) ;
-            // add(Enter(beacon: beacon));
+            Business business = state.businesses.first;
+            businessBeacon.Beacon beacon = _regionToBeacon(region: Region(
+              identifier: business.location.beacon.regionIdentifier,
+              proximityUUID: business.location.beacon.proximityUUID,
+              major: business.location.beacon.major,
+              minor: business.location.beacon.minor
+            )) ;
+            add(Enter(beacon: beacon));
 
-            // business = state.businesses[1];
-            // beacon = _regionToBeacon(region: Region(
-            //   identifier: business.location.beacon.regionIdentifier,
-            //   proximityUUID: business.location.beacon.proximityUUID,
-            //   major: business.location.beacon.major,
-            //   minor: business.location.beacon.minor
-            // ));
-            // add(Enter(beacon: beacon));
-
-            // Business business = state.businesses[2];
-            // add(Enter(region: Region(
-            //   identifier: business.location.beacon.regionIdentifier,
-            //   proximityUUID: business.location.beacon.proximityUUID,
-            //   major: business.location.beacon.major,
-            //   minor: business.location.beacon.minor
-            // )));
+            business = state.businesses[1];
+            beacon = _regionToBeacon(region: Region(
+              identifier: business.location.beacon.regionIdentifier,
+              proximityUUID: business.location.beacon.proximityUUID,
+              major: business.location.beacon.major,
+              minor: business.location.beacon.minor
+            ));
+            add(Enter(beacon: beacon));
           }
         });
       }
@@ -80,7 +72,7 @@ class BeaconBloc extends Bloc<BeaconEvent, BeaconState> {
     return super.close();
   }
 
-  void _mapStartBeaconMonitoringToState({required StartBeaconMonitoring event, required Emitter<BeaconState> emit}) async {
+  void _mapStartBeaconMonitoringToState({required StartBeaconMonitoring event, required Emitter<BeaconState> emit}) {
     emit(LoadingBeacons());
     _beaconSubscription?.cancel();
     _beaconSubscription = _beaconRepository.startMonitoring(businesses: event.businesses).listen((MonitoringResult beaconEvent) {
@@ -93,16 +85,16 @@ class BeaconBloc extends Bloc<BeaconEvent, BeaconState> {
     emit(Monitoring());
   }
 
-  void _mapBeaconCancelledToState({required Emitter<BeaconState> emit}) async {
+  void _mapBeaconCancelledToState({required Emitter<BeaconState> emit}) {
     _beaconSubscription?.cancel();
     emit(BeaconsCancelled());
   }
 
-  void _mapEnterToState({required Enter event}) async {
+  void _mapEnterToState({required Enter event}) {
     _activeLocationBloc.add(NewActiveLocation(beacon: event.beacon));
   }
 
-  void _mapExitToState({required Exit event}) async {
+  void _mapExitToState({required Exit event}) {
     _activeLocationBloc.add(RemoveActiveLocation(beacon: event.beacon));
   }
 

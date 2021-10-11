@@ -33,7 +33,7 @@ class OpenTransactionsBloc extends Bloc<OpenTransactionsEvent, OpenTransactionsS
   List<TransactionResource> get openTransactions => state.openTransactions;
 
   void _eventHandler() {
-    on<FetchOpenTransactions>((event, emit) => _mapFetchOpenTransactionsToState(emit: emit));
+    on<FetchOpenTransactions>((event, emit) async => await _mapFetchOpenTransactionsToState(emit: emit));
     on<AddOpenTransaction>((event, emit) => _mapAddOpenTransactionToState(event: event, emit: emit));
     on<RemoveOpenTransaction>((event, emit) => _mapRemoveOpenTransactionToState(event: event, emit: emit));
     on<UpdateOpenTransaction>((event, emit) => _mapUpdateOpenTransactionToState(event: event, emit: emit));
@@ -45,7 +45,7 @@ class OpenTransactionsBloc extends Bloc<OpenTransactionsEvent, OpenTransactionsS
     return super.close();
   }
 
-  void _mapFetchOpenTransactionsToState({required Emitter<OpenTransactionsState> emit}) async {
+  Future<void> _mapFetchOpenTransactionsToState({required Emitter<OpenTransactionsState> emit}) async {
     try {
       List<TransactionResource> transactions = await _transactionRepository.fetchOpen();
       emit(OpenTransactionsLoaded(transactions: transactions));
@@ -54,7 +54,7 @@ class OpenTransactionsBloc extends Bloc<OpenTransactionsEvent, OpenTransactionsS
     }
   }
   
-  void _mapAddOpenTransactionToState({required AddOpenTransaction event, required Emitter<OpenTransactionsState> emit}) async {
+  void _mapAddOpenTransactionToState({required AddOpenTransaction event, required Emitter<OpenTransactionsState> emit}) {
     final currentState = state;
     if (currentState is OpenTransactionsLoaded) {
       if (!currentState.transactions.contains(event.transaction)) {
@@ -67,7 +67,7 @@ class OpenTransactionsBloc extends Bloc<OpenTransactionsEvent, OpenTransactionsS
     }
   }
 
-  void _mapRemoveOpenTransactionToState({required RemoveOpenTransaction event, required Emitter<OpenTransactionsState> emit}) async {
+  void _mapRemoveOpenTransactionToState({required RemoveOpenTransaction event, required Emitter<OpenTransactionsState> emit}) {
     final currentState = state;
     if (currentState is OpenTransactionsLoaded) {
       final updatedTransactions = currentState
@@ -78,7 +78,7 @@ class OpenTransactionsBloc extends Bloc<OpenTransactionsEvent, OpenTransactionsS
     }
   }
 
-  void _mapUpdateOpenTransactionToState({required UpdateOpenTransaction event, required Emitter<OpenTransactionsState> emit}) async {
+  void _mapUpdateOpenTransactionToState({required UpdateOpenTransaction event, required Emitter<OpenTransactionsState> emit}) {
     final currentState = state;
     if (currentState is OpenTransactionsLoaded) {
       final List<TransactionResource> updatedTransactions = currentState

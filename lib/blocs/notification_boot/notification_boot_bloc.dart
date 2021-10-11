@@ -59,15 +59,15 @@ class NotificationBootBloc extends Bloc<NotificationBootEvent, NotificationBootS
     return super.close();
   }
 
-  void _mapNearbyBusinessesReadyToState({required Emitter<NotificationBootState> emit}) async {
+  void _mapNearbyBusinessesReadyToState({required Emitter<NotificationBootState> emit}) {
     emit(state.update(nearbyBusinessesReady: true));
   }
 
-  void _mapOpenTransactionsReadyToState({required Emitter<NotificationBootState> emit}) async {
+  void _mapOpenTransactionsReadyToState({required Emitter<NotificationBootState> emit}) {
     emit(state.update(openTransactionsReady: true));
   }
 
-  void _mapPermissionReadyToState({required Emitter<NotificationBootState> emit}) async {
+  void _mapPermissionReadyToState({required Emitter<NotificationBootState> emit}) {
     emit(state.update(permissionReady: true));
   }
 }

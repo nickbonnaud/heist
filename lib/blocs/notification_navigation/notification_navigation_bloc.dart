@@ -14,11 +14,11 @@ class NotificationNavigationBloc extends Bloc<NotificationNavigationEvent, Notif
     on<ResetFromNotification>((event, emit) => _mapResetFromNotificationToState(emit: emit));
   }
 
-  void _mapNavigateToToState({required NavigateTo event, required Emitter<NotificationNavigationState> emit}) async {
+  void _mapNavigateToToState({required NavigateTo event, required Emitter<NotificationNavigationState> emit}) {
     emit(state.update(route: event.route, arguments: event.arguments));
   }
 
-  void _mapResetFromNotificationToState({required Emitter<NotificationNavigationState> emit}) async {
+  void _mapResetFromNotificationToState({required Emitter<NotificationNavigationState> emit}) {
     emit(NotificationNavigationState.empty());
   }
 }

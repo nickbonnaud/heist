@@ -26,11 +26,11 @@ class KeepOpenButtonBloc extends Bloc<KeepOpenButtonEvent, KeepOpenButtonState> 
       super(KeepOpenButtonState.initial()) { _eventHandler(); }
 
   void _eventHandler() {
-    on<Submitted>((event, emit) => _mapKeepOpenSubmitted(event: event, emit: emit));
+    on<Submitted>((event, emit) async => await _mapKeepOpenSubmitted(event: event, emit: emit));
     on<Reset>((event, emit) => _mapResetKeepOpen(event: event, emit: emit));
   }
 
-  void _mapKeepOpenSubmitted({required Submitted event, required Emitter<KeepOpenButtonState> emit}) async {
+  Future<void> _mapKeepOpenSubmitted({required Submitted event, required Emitter<KeepOpenButtonState> emit}) async {
     if (!state.isSubmitting) {
       emit(state.update(isSubmitting: true));
       try {
@@ -44,7 +44,7 @@ class KeepOpenButtonBloc extends Bloc<KeepOpenButtonEvent, KeepOpenButtonState> 
     }
   }
 
-  void _mapResetKeepOpen({required Reset event, required Emitter<KeepOpenButtonState> emit}) async {
+  void _mapResetKeepOpen({required Reset event, required Emitter<KeepOpenButtonState> emit}) {
     emit(state.update(
       isSubmitting: false,
       isSubmitSuccess: false,

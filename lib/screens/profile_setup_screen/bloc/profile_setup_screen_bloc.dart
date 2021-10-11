@@ -25,7 +25,7 @@ class ProfileSetupScreenBloc extends Bloc<ProfileSetupScreenEvent, ProfileSetupS
     on<Init>((event, emit) => _mapInitToState(event: event, emit: emit));
   }
 
-  void _mapSectionCompletedToState({required SectionCompleted event, required Emitter<ProfileSetupScreenState> emit}) async {
+  void _mapSectionCompletedToState({required SectionCompleted event, required Emitter<ProfileSetupScreenState> emit}) {
     switch (event.section) {
       case Section.name:
         emit(state.update(isNameComplete: true));
@@ -42,7 +42,7 @@ class ProfileSetupScreenBloc extends Bloc<ProfileSetupScreenEvent, ProfileSetupS
     }
   }
 
-  void _mapInitToState({required Init event, required Emitter<ProfileSetupScreenState> emit}) async {
+  void _mapInitToState({required Init event, required Emitter<ProfileSetupScreenState> emit}) {
     int statusCode = event.status.code;
     bool isIntroComplete = false;
     bool isNameComplete = false;

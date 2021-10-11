@@ -29,7 +29,7 @@ class FaqBodyBloc extends Bloc<FaqBodyEvent, FaqBodyState> {
     on<ToggleAnswerVisibility>((event, emit) => _mapToggleAnswerVisibilityToState(faqToUpdate: event.faq, emit: emit));
   }
 
-  void _mapToggleAnswerVisibilityToState({required Faq faqToUpdate, required Emitter<FaqBodyState> emit}) async {
+  void _mapToggleAnswerVisibilityToState({required Faq faqToUpdate, required Emitter<FaqBodyState> emit}) {
     final List<Faq> updatedFaqs = state.faqs.map((faq){
       return faq == faqToUpdate 
         ? faqToUpdate.update(answerVisible: !faqToUpdate.answerVisible) 

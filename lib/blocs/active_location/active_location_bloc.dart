@@ -19,13 +19,13 @@ class ActiveLocationBloc extends Bloc<ActiveLocationEvent, ActiveLocationState> 
       super(ActiveLocationState.initial()) { _eventHandler(); }
 
   void _eventHandler() {
-    on<NewActiveLocation>((event, emit) => _mapNewActiveLocationToState(event: event, emit: emit));
-    on<RemoveActiveLocation>((event, emit) => _mapRemoveActiveLocationToState(event: event, emit: emit));
+    on<NewActiveLocation>((event, emit) async => await _mapNewActiveLocationToState(event: event, emit: emit));
+    on<RemoveActiveLocation>((event, emit) async => await _mapRemoveActiveLocationToState(event: event, emit: emit));
     on<TransactionAdded>((event, emit) => _mapTransactionAddedToState(event: event, emit: emit));
     on<ResetActiveLocations>((event, emit) => _mapResetToState(emit: emit));
   }
 
-  void _mapNewActiveLocationToState({required NewActiveLocation event, required Emitter<ActiveLocationState> emit}) async {
+  Future<void> _mapNewActiveLocationToState({required NewActiveLocation event, required Emitter<ActiveLocationState> emit}) async {
     if (!state.activeLocations.any((activeLocation) => activeLocation.business.location.beacon == event.beacon) && !state.addingLocations.contains(event.beacon)) {
       emit(state.update(addingLocations: state.addingLocations + [event.beacon]));
       try {
@@ -44,7 +44,7 @@ class ActiveLocationBloc extends Bloc<ActiveLocationEvent, ActiveLocationState> 
     }
   }
 
-  void _mapRemoveActiveLocationToState({required RemoveActiveLocation event, required Emitter<ActiveLocationState> emit}) async {
+  Future<void> _mapRemoveActiveLocationToState({required RemoveActiveLocation event, required Emitter<ActiveLocationState> emit}) async {
     final ActiveLocation? locationToRemove = state.activeLocations
       .firstWhereOrNull((ActiveLocation activeLocation) => activeLocation.business.location.beacon == event.beacon);
     if (locationToRemove != null && !state.removingLocations.contains(event.beacon)) {
@@ -73,7 +73,7 @@ class ActiveLocationBloc extends Bloc<ActiveLocationEvent, ActiveLocationState> 
     }
   }
 
-  void _mapTransactionAddedToState({required TransactionAdded event, required Emitter<ActiveLocationState> emit}) async {
+  void _mapTransactionAddedToState({required TransactionAdded event, required Emitter<ActiveLocationState> emit}) {
     ActiveLocation? locationToUpdate = state.activeLocations.firstWhereOrNull((activeLocation) => activeLocation.business.identifier == event.business.identifier);
 
     if (locationToUpdate != null) {
@@ -82,7 +82,7 @@ class ActiveLocationBloc extends Bloc<ActiveLocationEvent, ActiveLocationState> 
     }
   }
 
-  void _mapResetToState({required Emitter<ActiveLocationState> emit}) async {
+  void _mapResetToState({required Emitter<ActiveLocationState> emit}) {
     emit(state.update(errorMessage: ""));
   }
 }

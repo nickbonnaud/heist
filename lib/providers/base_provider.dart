@@ -4,11 +4,12 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:heist/models/api_response.dart';
 import 'package:heist/models/paginated_api_response.dart';
+import 'package:heist/resources/http/api_endpoints.dart';
 import 'package:heist/resources/http/test_api_interceptors.dart';
 
 @immutable
 class BaseProvider {
-  final String _baseUrl = 'http://novapay.ai/api/customer';
+  final String _baseUrl = ApiEndpoints.base;
   final Dio _dio;
 
   BaseProvider({Dio? dio})

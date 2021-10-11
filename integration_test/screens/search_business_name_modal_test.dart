@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:heist/global_widgets/search_business_name_modal/search_business_name_modal.dart';
 
 import '../helpers/test_title.dart';
 
@@ -10,6 +11,8 @@ class SearchBusinessNameModalTest {
 
   Future<void> initTransactions() async {
     TestTitle.write(testName: "Search Business Name Modal Transactions Tests");
+
+    expect(find.byType(SearchBusinessNameModal), findsOneWidget);
 
     await _enterErrorName();
 
@@ -63,11 +66,9 @@ class SearchBusinessNameModalTest {
   }
 
   Future<void> _selectBusiness() async {
-    expect(find.byType(CircularProgressIndicator), findsNothing);
     await tester.tap(find.byKey(Key("businessNameCardKey-0")));
-    await tester.pump(Duration(milliseconds: 300));
-    expect(find.byType(CircularProgressIndicator), findsOneWidget);
-
     await tester.pumpAndSettle();
+
+    expect(find.byType(SearchBusinessNameModal), findsNothing);
   }
 }

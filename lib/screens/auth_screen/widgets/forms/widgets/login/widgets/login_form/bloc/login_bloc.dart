@@ -16,29 +16,29 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final AuthenticationRepository _authenticationRepository;
   final AuthenticationBloc _authenticationBloc;
 
-  final Duration debounceTime = Duration(milliseconds: 300);
+  final Duration _debounceTime = Duration(milliseconds: 300);
 
   LoginBloc({required AuthenticationRepository authenticationRepository, required AuthenticationBloc authenticationBloc})
     : _authenticationRepository = authenticationRepository,
       _authenticationBloc = authenticationBloc,
-    super(LoginState.empty()) { _eventHandler(); }
+      super(LoginState.empty()) { _eventHandler(); }
 
   void _eventHandler() {
-    on<EmailChanged>((event, emit) => _mapEmailChangedToState(event: event, emit: emit), transformer: Debouncer.bounce(duration: debounceTime));
-    on<PasswordChanged>((event, emit) => _mapPasswordChangedToState(event: event, emit: emit), transformer: Debouncer.bounce(duration: debounceTime));
-    on<Submitted>((event, emit) => _mapSubmittedToState(event: event, emit: emit));
+    on<EmailChanged>((event, emit) => _mapEmailChangedToState(event: event, emit: emit), transformer: Debouncer.bounce(duration: _debounceTime));
+    on<PasswordChanged>((event, emit) => _mapPasswordChangedToState(event: event, emit: emit), transformer: Debouncer.bounce(duration: _debounceTime));
+    on<Submitted>((event, emit) async => await _mapSubmittedToState(event: event, emit: emit));
     on<Reset>((event, emit) => _mapResetToState(emit: emit));
   }
 
-  void _mapEmailChangedToState({required EmailChanged event, required Emitter<LoginState> emit}) async {
+  void _mapEmailChangedToState({required EmailChanged event, required Emitter<LoginState> emit}) {
     emit(state.update(isEmailValid: Validators.isValidEmail(email: event.email)));
   }
 
-  void _mapPasswordChangedToState({required PasswordChanged event, required Emitter<LoginState> emit}) async {
+  void _mapPasswordChangedToState({required PasswordChanged event, required Emitter<LoginState> emit}) {
     emit(state.update(isPasswordValid: Validators.isValidPassword(password: event.password)));
   }
 
-  void _mapSubmittedToState({required Submitted event, required Emitter<LoginState> emit}) async {
+  Future<void> _mapSubmittedToState({required Submitted event, required Emitter<LoginState> emit}) async {
     emit(LoginState.loading());
     try {
      Customer customer = await _authenticationRepository.login(email: event.email, password: event.password);
@@ -49,7 +49,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     }
   }
 
-  void _mapResetToState({required Emitter<LoginState> emit}) async {
+  void _mapResetToState({required Emitter<LoginState> emit}) {
     emit(state.update(isSubmitting: false, errorMessage: ""));
   }
 }

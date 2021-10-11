@@ -18,11 +18,11 @@ class EditPhotoBloc extends Bloc<EditPhotoEvent, EditPhotoState> {
       super(PhotoUnchanged()) { _eventHandler(); }
 
   void _eventHandler() {
-    on<ChangePhoto>((event, emit) => _mapChangePhotoToState(event: event, emit: emit));
+    on<ChangePhoto>((event, emit) async => await _mapChangePhotoToState(event: event, emit: emit));
     on<ResetPhotoForm>((event, emit) => _mapResetPhotoFormToState(emit: emit));
   }
 
-  void _mapChangePhotoToState({required ChangePhoto event, required Emitter<EditPhotoState> emit}) async {
+  Future<void> _mapChangePhotoToState({required ChangePhoto event, required Emitter<EditPhotoState> emit}) async {
     emit(Submitting(photo: event.photo));
     try {
       Customer customer = await _photoRepository.upload(photo: event.photo, profileIdentifier: event.profileIdentifier);
@@ -33,7 +33,7 @@ class EditPhotoBloc extends Bloc<EditPhotoEvent, EditPhotoState> {
     }
   }
 
-  void _mapResetPhotoFormToState({required Emitter<EditPhotoState> emit}) async {
+  void _mapResetPhotoFormToState({required Emitter<EditPhotoState> emit}) {
     emit(PhotoUnchanged());
   }
 }

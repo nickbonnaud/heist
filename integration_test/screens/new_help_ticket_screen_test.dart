@@ -72,7 +72,7 @@ class NewHelpTicketScreenTest {
     expect(find.byKey(Key("newHelpTicketSnackbarKey")), findsNothing);
 
     await tester.tap(find.text(Platform.isIOS ? 'Done' : 'DONE'));
-    await tester.pump();
+    await tester.pumpAndSettle();
     
     await tester.tap(find.byKey(Key("submitButtonKey")));
     await tester.pump(Duration(milliseconds: 250));
@@ -85,9 +85,13 @@ class NewHelpTicketScreenTest {
   Future<void> _dismissSnackbar() async {
     await tester.fling(find.byKey(Key("newHelpTicketSnackbarKey")), Offset(0, 500), 500);
     await tester.pumpAndSettle();
+    expect(find.byKey(Key("newHelpTicketSnackbarKey")), findsNothing);
   }
 
   Future<void> _enterSubject() async {
+    await tester.tap(find.byKey(Key("subjectFieldKey")));
+    await tester.pumpAndSettle();
+    
     await tester.enterText(find.byKey(Key("subjectFieldKey")), "Start new issue");
     await tester.pump(Duration(milliseconds: 300));
   }

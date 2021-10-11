@@ -18,7 +18,7 @@ class PasswordFormBloc extends Bloc<PasswordFormEvent, PasswordFormState> {
   final AuthenticationRepository _authenticationRepository;
   final CustomerBloc _customerBloc;
 
-  final Duration debounceTime = Duration(milliseconds: 300);
+  final Duration _debounceTime = Duration(milliseconds: 300);
   
   PasswordFormBloc({required CustomerRepository customerRepository, required AuthenticationRepository authenticationRepository, required CustomerBloc customerBloc})
     : _customerRepository = customerRepository,
@@ -27,30 +27,30 @@ class PasswordFormBloc extends Bloc<PasswordFormEvent, PasswordFormState> {
       super(PasswordFormState.initial()) { _eventHandler(); }
 
   void _eventHandler() {
-    on<OldPasswordChanged>((event, emit) => _mapOldPasswordChangedToState(event: event, emit: emit), transformer: Debouncer.bounce(duration: debounceTime));
-    on<PasswordChanged>((event, emit) => _mapPasswordChangedToState(event: event, emit: emit), transformer: Debouncer.bounce(duration: debounceTime));
-    on<PasswordConfirmationChanged>((event, emit) => _mapPasswordConfirmationChangedToState(event: event, emit: emit), transformer: Debouncer.bounce(duration: debounceTime));
-    on<OldPasswordSubmitted>((event, emit) => _mapOldPasswordSubmittedToState(event: event, emit: emit));
-    on<NewPasswordSubmitted>((event, emit) => _mapNewPasswordSubmittedToState(event: event, emit: emit));
+    on<OldPasswordChanged>((event, emit) => _mapOldPasswordChangedToState(event: event, emit: emit), transformer: Debouncer.bounce(duration: _debounceTime));
+    on<PasswordChanged>((event, emit) => _mapPasswordChangedToState(event: event, emit: emit), transformer: Debouncer.bounce(duration: _debounceTime));
+    on<PasswordConfirmationChanged>((event, emit) => _mapPasswordConfirmationChangedToState(event: event, emit: emit), transformer: Debouncer.bounce(duration: _debounceTime));
+    on<OldPasswordSubmitted>((event, emit) async => await _mapOldPasswordSubmittedToState(event: event, emit: emit));
+    on<NewPasswordSubmitted>((event, emit) async => await _mapNewPasswordSubmittedToState(event: event, emit: emit));
     on<Reset>((event, emit) => _mapResetToState(emit: emit));
   }
   
-  void _mapOldPasswordChangedToState({required OldPasswordChanged event, required Emitter<PasswordFormState> emit}) async {
+  void _mapOldPasswordChangedToState({required OldPasswordChanged event, required Emitter<PasswordFormState> emit}) {
     emit(state.update(isOldPasswordValid: Validators.isValidPassword(password: event.oldPassword)));
   }
 
-  void _mapPasswordChangedToState({required PasswordChanged event, required Emitter<PasswordFormState> emit}) async {
+  void _mapPasswordChangedToState({required PasswordChanged event, required Emitter<PasswordFormState> emit}) {
     final bool isPasswordConfirmationValid = event.passwordConfirmation.isNotEmpty
       ? Validators.isPasswordConfirmationValid(password: event.password, passwordConfirmation: event.passwordConfirmation)
       : true;
     emit(state.update(isPasswordValid: Validators.isValidPassword(password:  event.password), isPasswordConfirmationValid: isPasswordConfirmationValid));
   }
 
-  void _mapPasswordConfirmationChangedToState({required PasswordConfirmationChanged event, required Emitter<PasswordFormState> emit}) async {
+  void _mapPasswordConfirmationChangedToState({required PasswordConfirmationChanged event, required Emitter<PasswordFormState> emit}) {
     emit(state.update(isPasswordConfirmationValid: Validators.isPasswordConfirmationValid(password: event.password, passwordConfirmation: event.passwordConfirmation)));
   }
 
-  void _mapOldPasswordSubmittedToState({required OldPasswordSubmitted event, required Emitter<PasswordFormState> emit}) async {
+  Future<void> _mapOldPasswordSubmittedToState({required OldPasswordSubmitted event, required Emitter<PasswordFormState> emit}) async {
     emit(state.update(isSubmitting: true));
     try {
       bool isPasswordVerified = await _authenticationRepository.checkPassword(password: event.oldPassword);
@@ -64,7 +64,7 @@ class PasswordFormBloc extends Bloc<PasswordFormEvent, PasswordFormState> {
     }
   }
 
-  void _mapNewPasswordSubmittedToState({required NewPasswordSubmitted event, required Emitter<PasswordFormState> emit}) async {
+  Future<void> _mapNewPasswordSubmittedToState({required NewPasswordSubmitted event, required Emitter<PasswordFormState> emit}) async {
     emit(state.update(isSubmitting: true));
     try {
       Customer customer = await _customerRepository.updatePassword(
@@ -80,7 +80,7 @@ class PasswordFormBloc extends Bloc<PasswordFormEvent, PasswordFormState> {
     }
   }
 
-  void _mapResetToState({required Emitter<PasswordFormState> emit}) async {
+  void _mapResetToState({required Emitter<PasswordFormState> emit}) {
     emit(state.update(isSuccess: false, isSuccessOldPassword: false, errorMessage: ""));
   }
 }

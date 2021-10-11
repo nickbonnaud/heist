@@ -12,36 +12,36 @@ part 'reset_password_form_state.dart';
 class ResetPasswordFormBloc extends Bloc<ResetPasswordFormEvent, ResetPasswordFormState> {
   final AuthenticationRepository _authenticationRepository;
 
-  final Duration debounceTime = Duration(milliseconds: 300);
+  final Duration _debounceTime = Duration(milliseconds: 300);
   
   ResetPasswordFormBloc({required AuthenticationRepository authenticationRepository, required String email})
     : _authenticationRepository = authenticationRepository,
       super(ResetPasswordFormState.initial(email: email)) { _eventHandler(); }
 
   void _eventHandler() {
-    on<ResetCodeChanged>((event, emit) => _mapResetCodeChangedToState(event: event, emit: emit), transformer: Debouncer.bounce(duration: debounceTime));
-    on<PasswordChanged>((event, emit) => _mapPasswordChangedToState(event: event, emit: emit), transformer: Debouncer.bounce(duration: debounceTime));
-    on<PasswordConfirmationChanged>((event, emit) => _mapPasswordConfirmationChangedToState(event: event, emit: emit), transformer: Debouncer.bounce(duration: debounceTime));
-    on<Submitted>((event, emit) => _mapSubmittedToState(event: event, emit: emit));
+    on<ResetCodeChanged>((event, emit) => _mapResetCodeChangedToState(event: event, emit: emit), transformer: Debouncer.bounce(duration: _debounceTime));
+    on<PasswordChanged>((event, emit) => _mapPasswordChangedToState(event: event, emit: emit), transformer: Debouncer.bounce(duration: _debounceTime));
+    on<PasswordConfirmationChanged>((event, emit) => _mapPasswordConfirmationChangedToState(event: event, emit: emit), transformer: Debouncer.bounce(duration: _debounceTime));
+    on<Submitted>((event, emit) async => await _mapSubmittedToState(event: event, emit: emit));
     on<Reset>((event, emit) => _mapResetToState(emit: emit));
   }
 
-  void _mapResetCodeChangedToState({required ResetCodeChanged event, required Emitter<ResetPasswordFormState> emit}) async {
+  void _mapResetCodeChangedToState({required ResetCodeChanged event, required Emitter<ResetPasswordFormState> emit}) {
     emit(state.update(isResetCodeValid: Validators.isValidResetCode(resetCode: event.resetCode)));
   }
 
-  void _mapPasswordChangedToState({required PasswordChanged event, required Emitter<ResetPasswordFormState> emit}) async {
+  void _mapPasswordChangedToState({required PasswordChanged event, required Emitter<ResetPasswordFormState> emit}) {
     final bool isPasswordConfirmationValid = event.passwordConfirmation.isNotEmpty
       ? Validators.isPasswordConfirmationValid(password: event.password, passwordConfirmation: event.passwordConfirmation)
       : false;
     emit(state.update(isPasswordValid: Validators.isValidPassword(password: event.password), isPasswordConfirmationValid: isPasswordConfirmationValid));
   }
 
-  void _mapPasswordConfirmationChangedToState({required PasswordConfirmationChanged event, required Emitter<ResetPasswordFormState> emit}) async {
+  void _mapPasswordConfirmationChangedToState({required PasswordConfirmationChanged event, required Emitter<ResetPasswordFormState> emit}) {
     emit(state.update(isPasswordConfirmationValid: Validators.isPasswordConfirmationValid(password: event.password, passwordConfirmation: event.passwordConfirmation)));
   }
 
-  void _mapSubmittedToState({required Submitted event, required Emitter<ResetPasswordFormState> emit}) async {
+  Future<void> _mapSubmittedToState({required Submitted event, required Emitter<ResetPasswordFormState> emit}) async {
     emit(state.update(isSubmitting: true));
 
     try {
@@ -52,7 +52,7 @@ class ResetPasswordFormBloc extends Bloc<ResetPasswordFormEvent, ResetPasswordFo
     }
   }
 
-  void _mapResetToState({required Emitter<ResetPasswordFormState> emit}) async {
+  void _mapResetToState({required Emitter<ResetPasswordFormState> emit}) {
     emit(state.update(errorMessage: "", isSubmitting: false, isSuccess: false));
   }
 }

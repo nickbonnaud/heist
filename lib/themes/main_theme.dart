@@ -63,11 +63,11 @@ class MainTheme {
       ),
 
       snackBarTheme: SnackBarThemeData(
-        contentTextStyle: getDefaultFont()
+        contentTextStyle: _getDefaultFont()
       ),
 
       appBarTheme: AppBarTheme(
-        textTheme: _getTextTheme(context: context)
+        toolbarTextStyle: _getDefaultFont()
       ),
 
       colorScheme: ColorScheme(
@@ -89,7 +89,6 @@ class MainTheme {
         brightness: Brightness.light,
       ),
       textTheme: _getTextTheme(context: context),
-      buttonColor: Color(0xFF016fb9),
       disabledColor: Color(0xFFcce2f1),
     );
   }
@@ -100,7 +99,7 @@ class MainTheme {
 
   
 
-  static TextStyle getDefaultFont() {
+  static TextStyle _getDefaultFont() {
     return GoogleFonts.racingSansOne();
   }
 }

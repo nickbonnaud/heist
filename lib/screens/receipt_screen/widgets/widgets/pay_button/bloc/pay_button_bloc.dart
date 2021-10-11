@@ -30,17 +30,17 @@ class PayButtonBloc extends Bloc<PayButtonEvent, PayButtonState> {
 
   void _eventHandler() {
     on<TransactionStatusChanged>((event, emit) => _mapTransactionChangedToState(event: event, emit: emit));
-    on<Submitted>((event, emit) => _mapSubmittedToState(event: event, emit: emit));
+    on<Submitted>((event, emit) async => await _mapSubmittedToState(event: event, emit: emit));
     on<Reset>((event, emit) => _mapResetToState(event: event, emit: emit));
   }
   
-  void _mapTransactionChangedToState({required TransactionStatusChanged event, required Emitter<PayButtonState> emit}) async {
+  void _mapTransactionChangedToState({required TransactionStatusChanged event, required Emitter<PayButtonState> emit}) {
     emit(state.update(
       isEnabled: _isButtonEnabled(transactionResource: event.transactionResource)
     ));
   }
 
-  void _mapSubmittedToState({required Submitted event, required Emitter<PayButtonState> emit}) async {
+  Future<void> _mapSubmittedToState({required Submitted event, required Emitter<PayButtonState> emit}) async {
     if (state.isEnabled && !state.isSubmitting) {
       emit(state.update(isSubmitting: true));
       try {
@@ -67,7 +67,7 @@ class PayButtonBloc extends Bloc<PayButtonEvent, PayButtonState> {
     }
   }
 
-  void _mapResetToState({required Reset event, required Emitter<PayButtonState> emit}) async {
+  void _mapResetToState({required Reset event, required Emitter<PayButtonState> emit}) {
     emit(state.update(
       errorMessage: "",
       isSubmitSuccess: false,

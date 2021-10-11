@@ -29,11 +29,11 @@ class TutorialScreenBloc extends Bloc<TutorialScreenEvent, TutorialScreenState> 
     on<Previous>((event, emit) => _mapPreviousToState(emit: emit));
   }
 
-  void _mapNextToState({required Emitter<TutorialScreenState> emit}) async {
+  void _mapNextToState({required Emitter<TutorialScreenState> emit}) {
     emit(state.updateNext());
   }
 
-  void _mapPreviousToState({required Emitter<TutorialScreenState> emit}) async {
+  void _mapPreviousToState({required Emitter<TutorialScreenState> emit}) {
     emit(state.updatePrevious());
   }
 

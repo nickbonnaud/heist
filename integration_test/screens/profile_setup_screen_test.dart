@@ -58,6 +58,10 @@ class ProfileSetupScreenTest {
   
   Future<void> _addFirstAndLastName() async {
     expect(find.text("Invalid first name"), findsNothing);
+
+    await tester.tap(find.byKey(Key("firstNameFieldKey")));
+    await tester.pumpAndSettle();
+
     await tester.enterText(find.byKey(Key("firstNameFieldKey")), "1");
     await tester.pump(Duration(milliseconds: 300));
     expect(find.text("Invalid first name"), findsOneWidget);
@@ -66,6 +70,9 @@ class ProfileSetupScreenTest {
     await tester.pump(Duration(milliseconds: 300));
     expect(find.text("Invalid first name"), findsNothing);
 
+    await tester.tap(find.byKey(Key("lastNameFieldKey")));
+    await tester.pumpAndSettle();
+    
     expect(find.text("Invalid last name"), findsNothing);
     await tester.enterText(find.byKey(Key("lastNameFieldKey")), "a");
     await tester.pump(Duration(milliseconds: 300));

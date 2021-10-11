@@ -27,7 +27,7 @@ class TransactionBusinessPickerScreenTest {
     expect(find.byType(TransactionPickerScreen), findsNothing);
 
     await tester.tap(find.byKey(Key("businessCardKey-0")));
-    await tester.pump(Duration(milliseconds: 350));
+    await tester.pump(Duration(milliseconds: 300));
     
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
     await tester.pumpAndSettle();

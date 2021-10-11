@@ -21,17 +21,17 @@ class HistoricTransactionsBloc extends Bloc<HistoricTransactionsEvent, HistoricT
       super(Uninitialized()) { _eventHandler(); }
 
   void _eventHandler() {
-    on<FetchHistoricTransactions>((event, emit) => _mapFetchHistoricTransactionsToState(event: event, emit: emit));
-    on<FetchTransactionsByDateRange>((event, emit) => _mapFetchTransactionsByDateRangeToState(event: event, emit: emit));
-    on<FetchTransactionsByBusiness>((event, emit) => _mapFetchTransactionsByBusinessToState(event: event, emit: emit));
-    on<FetchTransactionByIdentifier>((event, emit) => _mapFetchTransactionByIdentifierToState(event: event, emit: emit));
-    on<FetchMoreTransactions>((event, emit) => _mapFetchMoreTransactionsToState(emit: emit));
+    on<FetchHistoricTransactions>((event, emit) async => await _mapFetchHistoricTransactionsToState(event: event, emit: emit));
+    on<FetchTransactionsByDateRange>((event, emit) async => await _mapFetchTransactionsByDateRangeToState(event: event, emit: emit));
+    on<FetchTransactionsByBusiness>((event, emit) async => await _mapFetchTransactionsByBusinessToState(event: event, emit: emit));
+    on<FetchTransactionByIdentifier>((event, emit) async => await _mapFetchTransactionByIdentifierToState(event: event, emit: emit));
+    on<FetchMoreTransactions>((event, emit) => _mapFetchMoreTransactionsToState());
   }
 
-  void _mapFetchHistoricTransactionsToState({required FetchHistoricTransactions event, required Emitter<HistoricTransactionsState> emit}) async {
+  Future<void> _mapFetchHistoricTransactionsToState({required FetchHistoricTransactions event, required Emitter<HistoricTransactionsState> emit}) async {
     if (state is !Loading) {
       if (event.reset) {
-        _fetchUnitialized(
+        await _fetchUnitialized(
           fetchFunction: () => _transactionRepository.fetchHistoric(),
           currentQuery: Option.all,
           queryParams: null,
@@ -40,14 +40,14 @@ class HistoricTransactionsBloc extends Bloc<HistoricTransactionsEvent, HistoricT
       } else {
         final currentState = state;
         if (currentState is Uninitialized) {
-          _fetchUnitialized(
+          await _fetchUnitialized(
             fetchFunction: () => _transactionRepository.fetchHistoric(),
             currentQuery: Option.all,
             queryParams: null,
             emit: emit
           );
         } else if (currentState is TransactionsLoaded) {
-          _fetchMore(
+          await _fetchMore(
             fetchFunction: () => _transactionRepository.paginate(url: currentState.nextUrl!),
             state: currentState,
             currentQuery: Option.all,
@@ -59,10 +59,10 @@ class HistoricTransactionsBloc extends Bloc<HistoricTransactionsEvent, HistoricT
     }
   }
 
-  void _mapFetchTransactionsByDateRangeToState({required FetchTransactionsByDateRange event, required Emitter<HistoricTransactionsState> emit}) async {
+  Future<void> _mapFetchTransactionsByDateRangeToState({required FetchTransactionsByDateRange event, required Emitter<HistoricTransactionsState> emit}) async {
     if (state is !Loading) {  
       if (event.reset) {
-        _fetchUnitialized(
+        await _fetchUnitialized(
           fetchFunction: () => _transactionRepository.fetchDateRange(dateRange: event.dateRange),
           currentQuery: Option.date,
           queryParams: event.dateRange,
@@ -71,7 +71,7 @@ class HistoricTransactionsBloc extends Bloc<HistoricTransactionsEvent, HistoricT
       } else {
         final currentState = state;
         if (currentState is TransactionsLoaded) {
-          _fetchMore(
+          await _fetchMore(
             fetchFunction: () => _transactionRepository.paginate(url: currentState.nextUrl!),
             state: currentState,
             currentQuery: Option.date,
@@ -83,10 +83,10 @@ class HistoricTransactionsBloc extends Bloc<HistoricTransactionsEvent, HistoricT
     }
   }
 
-  void _mapFetchTransactionsByBusinessToState({required FetchTransactionsByBusiness event, required Emitter<HistoricTransactionsState> emit}) async {
+  Future<void> _mapFetchTransactionsByBusinessToState({required FetchTransactionsByBusiness event, required Emitter<HistoricTransactionsState> emit}) async {
     if (state is !Loading) {  
       if (event.reset) {
-        _fetchUnitialized(
+        await _fetchUnitialized(
           fetchFunction: () => _transactionRepository.fetchByBusiness(identifier: event.identifier),
           currentQuery: Option.businessName,
           queryParams: event.identifier,
@@ -95,7 +95,7 @@ class HistoricTransactionsBloc extends Bloc<HistoricTransactionsEvent, HistoricT
       } else {
         final currentState = state;
         if (currentState is TransactionsLoaded) {
-          _fetchMore(
+          await _fetchMore(
             fetchFunction: () => _transactionRepository.paginate(url: currentState.nextUrl!),
             state: currentState,
             currentQuery: Option.businessName,
@@ -107,10 +107,10 @@ class HistoricTransactionsBloc extends Bloc<HistoricTransactionsEvent, HistoricT
     }
   }
 
-  void _mapFetchTransactionByIdentifierToState({required FetchTransactionByIdentifier event, required Emitter<HistoricTransactionsState> emit}) async {
+  Future<void> _mapFetchTransactionByIdentifierToState({required FetchTransactionByIdentifier event, required Emitter<HistoricTransactionsState> emit}) async {
     if (state is !Loading) {  
       if (event.reset) {
-        _fetchUnitialized(
+        await _fetchUnitialized(
           fetchFunction: () => _transactionRepository.fetchByIdentifier(identifier: event.identifier),
           currentQuery: Option.transactionId,
           queryParams: event.identifier,
@@ -119,7 +119,7 @@ class HistoricTransactionsBloc extends Bloc<HistoricTransactionsEvent, HistoricT
       } else {
         final currentState = state;
         if (currentState is TransactionsLoaded) {
-          _fetchMore(
+          await _fetchMore(
             fetchFunction: () => _transactionRepository.paginate(url: currentState.nextUrl!,),
             state: currentState,
             currentQuery: Option.transactionId,
@@ -131,22 +131,22 @@ class HistoricTransactionsBloc extends Bloc<HistoricTransactionsEvent, HistoricT
     }
   }
 
-  void _mapFetchMoreTransactionsToState({required Emitter<HistoricTransactionsState> emit}) async {
+  void _mapFetchMoreTransactionsToState() async {
     if (state is !Loading) {  
       final currentState = state;
       if (currentState is TransactionsLoaded && !currentState.paginating) {
         switch (currentState.currentQuery) {
           case Option.all:
-            _mapFetchHistoricTransactionsToState(event: FetchHistoricTransactions(reset: false), emit: emit);
+            add(FetchHistoricTransactions(reset: false));
             break;
           case Option.date:
-            _mapFetchTransactionsByDateRangeToState(event: FetchTransactionsByDateRange(dateRange: currentState.queryParams, reset: false), emit: emit);
+            add(FetchTransactionsByDateRange(dateRange: currentState.queryParams, reset: false));
             break;
           case Option.businessName:
-            _mapFetchTransactionsByBusinessToState(event: FetchTransactionsByBusiness(identifier: currentState.queryParams, reset: false), emit: emit);
+            add(FetchTransactionsByBusiness(identifier: currentState.queryParams, reset: false));
             break;
           case Option.transactionId:
-            _mapFetchTransactionByIdentifierToState(event: FetchTransactionByIdentifier(identifier: currentState.queryParams, reset: false), emit: emit);
+            add(FetchTransactionByIdentifier(identifier: currentState.queryParams, reset: false));
             break;
           default:
         }
@@ -154,7 +154,7 @@ class HistoricTransactionsBloc extends Bloc<HistoricTransactionsEvent, HistoricT
     }
   }
 
-  void _fetchUnitialized({
+  Future<void> _fetchUnitialized({
     required Future<PaginateDataHolder>Function() fetchFunction,
     required Option currentQuery,
     required dynamic queryParams,
@@ -176,7 +176,7 @@ class HistoricTransactionsBloc extends Bloc<HistoricTransactionsEvent, HistoricT
     }
   }
 
-  void _fetchMore({
+  Future<void> _fetchMore({
     required Future<PaginateDataHolder>Function() fetchFunction,
     required TransactionsLoaded state,
     required Option currentQuery,

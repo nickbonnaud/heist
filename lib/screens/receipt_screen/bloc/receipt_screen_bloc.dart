@@ -17,7 +17,7 @@ class ReceiptScreenBloc extends Bloc<ReceiptScreenEvent, ReceiptScreenState> {
     on<TransactionChanged>((event, emit) => _mapTransactionChangedToState(event: event, emit: emit));
   }
 
-  void _mapTransactionChangedToState({required TransactionChanged event, required Emitter<ReceiptScreenState> emit}) async {
+  void _mapTransactionChangedToState({required TransactionChanged event, required Emitter<ReceiptScreenState> emit}) {
     emit(state.update(transactionResource: event.transactionResource, isButtonVisible: _isButtonVisible(transactionResource: event.transactionResource)));
   }
 
