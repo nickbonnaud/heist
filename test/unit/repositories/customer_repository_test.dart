@@ -20,7 +20,7 @@ void main() {
     late CustomerRepository customerRepositoryWithMock;
 
     setUp(() {
-      registerFallbackValue<Token>(MockToken());
+      registerFallbackValue(MockToken());
       tokenRepository = MockTokenRepository();
       when(() => tokenRepository.saveToken(token: any(named: "token"))).thenAnswer((_) async => null);
       customerRepository = CustomerRepository(customerProvider: CustomerProvider(), tokenRepository: tokenRepository);

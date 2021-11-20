@@ -27,9 +27,9 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
   Future<void> _mapInitToState({required Emitter<AuthenticationState> emit}) async {
     // TEST CHANGE //
     
-    final bool isSignedIn = await _authenticationRepository.isSignedIn();
+    // final bool isSignedIn = await _authenticationRepository.isSignedIn();
 
-    // final bool isSignedIn = true;
+    final bool isSignedIn = true;
 
     if (isSignedIn) {
       _customerBloc.add(CustomerAuthenticated());

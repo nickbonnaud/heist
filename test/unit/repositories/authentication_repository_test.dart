@@ -20,7 +20,7 @@ void main() {
     late AuthenticationRepository authenticationRepositoryWithMock;
 
     setUp(() {
-      registerFallbackValue<Token>(MockToken());
+      registerFallbackValue(MockToken());
       mockTokenRepository = MockTokenRepository();
       when(() => mockTokenRepository.saveToken(token: any(named: "token"))).thenAnswer((_) async => null);
       when(() => mockTokenRepository.deleteToken()).thenAnswer((_) async => null);
