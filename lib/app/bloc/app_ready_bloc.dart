@@ -37,9 +37,8 @@ class AppReadyBloc extends Bloc<AppReadyEvent, AppReadyState> {
     required CustomerBloc customerBloc
   })
     : super(AppReadyState.initial()) {
-        
       _eventHandler();
-      
+
       _authenticationBlocSubscription = authenticationBloc.stream.listen((AuthenticationState authenticationState) {
         if (authenticationState is !Unknown && !state.authCheckComplete) {
           add(AuthCheckComplete(isAuthenticated: authenticationState is Authenticated));
@@ -54,30 +53,30 @@ class AppReadyBloc extends Bloc<AppReadyEvent, AppReadyState> {
         }
       });
 
-      _openTransactionsBlocSubscription = openTransactionsBloc.stream.listen((OpenTransactionsState state) { 
-        if (!this.areOpenTransactionsLoaded && (state is OpenTransactionsLoaded || state is FailedToFetchOpenTransactions)) {
+      _openTransactionsBlocSubscription = openTransactionsBloc.stream.listen((OpenTransactionsState openTransactionsState) { 
+        if (!state.areOpenTransactionsLoaded && (openTransactionsState is OpenTransactionsLoaded || openTransactionsState is FailedToFetchOpenTransactions)) {
           add(DataLoaded(type: DataType.transactions));
           _openTransactionsBlocSubscription.cancel();
         }
       });
 
-      _beaconBlocSubscription = beaconBloc.stream.listen((BeaconState state) { 
-        if (!this.areBeaconsLoaded && state is Monitoring) {
+      _beaconBlocSubscription = beaconBloc.stream.listen((BeaconState beaconState) { 
+        if (!state.areBeaconsLoaded && beaconState is Monitoring) {
           add(DataLoaded(type: DataType.beacons));
           _beaconBlocSubscription.cancel();
         }
       });
 
-      _nearbyBusinessesBlocSubscription = nearbyBusinessesBloc.stream.listen((NearbyBusinessesState state) {
-        if (!this.areBusinessesLoaded && (state is NearbyBusinessLoaded || state is FailedToLoadNearby)) {
+      _nearbyBusinessesBlocSubscription = nearbyBusinessesBloc.stream.listen((NearbyBusinessesState nearbyBusinessesState) {
+        if (!state.areBusinessesLoaded && (nearbyBusinessesState is NearbyBusinessLoaded || nearbyBusinessesState is FailedToLoadNearby)) {
           add(DataLoaded(type: DataType.businesses));
           _nearbyBusinessesBlocSubscription.cancel();
         }
       });
 
-      _permissionsBlocSubscription = permissionsBloc.stream.listen((PermissionsState state) {
-        if (!this.arePermissionChecksComplete && state.checksComplete) {
-          add(PermissionChecksComplete(permissionsReady: state.allPermissionsValid));
+      _permissionsBlocSubscription = permissionsBloc.stream.listen((PermissionsState permissionsState) {
+        if (!state.permissionChecksComplete && permissionsState.checksComplete) {
+          add(PermissionChecksComplete(permissionsReady: permissionsState.allPermissionsValid));
           _permissionsBlocSubscription.cancel();
         }
       });

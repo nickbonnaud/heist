@@ -19,15 +19,14 @@ class PhaseThree extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider<OpenTransactionsBloc>(
-          create: (_) => OpenTransactionsBloc(
+          create: (context) => OpenTransactionsBloc(
             authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
             transactionRepository: TransactionRepository(transactionProvider: TransactionProvider())
           )
         ),
 
-
         BlocProvider<NearbyBusinessesBloc>(
-          create: (_) => NearbyBusinessesBloc(
+          create: (context) => NearbyBusinessesBloc(
             locationRepository: LocationRepository(locationProvider: LocationProvider()),
             iconCreatorRepository: IconCreatorRepository(iconCreatorProvider: IconCreatorProvider()),
             geoLocationBloc: BlocProvider.of<GeoLocationBloc>(context)

@@ -19,31 +19,27 @@ class NotificationBootBloc extends Bloc<NotificationBootEvent, NotificationBootS
     required PermissionsBloc permissionsBloc,
     required NearbyBusinessesBloc nearbyBusinessesBloc,
     required OpenTransactionsBloc openTransactionsBloc
-  })
-    : super(NotificationBootState.initial()) {
-
+  })  : super(NotificationBootState.initial()) {
         _eventHandler();
         
-        _permissionsBlocSubscription = permissionsBloc.stream.listen((PermissionsState state) {
-          if (!this.isPermissionReady && state.notificationEnabled) {
+        _permissionsBlocSubscription = permissionsBloc.stream.listen((PermissionsState permissionsState) {
+          if (!state.permissionReady && permissionsState.notificationEnabled) {
             add(PermissionReady());
           }
         });
 
-        _nearbyBusinessesBlocSubscription = nearbyBusinessesBloc.stream.listen((NearbyBusinessesState state) {
-          if (state is NearbyBusinessLoaded) {
+        _nearbyBusinessesBlocSubscription = nearbyBusinessesBloc.stream.listen((NearbyBusinessesState nearbyBusinessesState) {
+          if (nearbyBusinessesState is NearbyBusinessLoaded) {
             add(NearbyBusinessesReady());
           }
         });
 
-        _openTransactionsBlocSubscription = openTransactionsBloc.stream.listen((OpenTransactionsState state) {
-          if (state is OpenTransactionsLoaded) {
+        _openTransactionsBlocSubscription = openTransactionsBloc.stream.listen((OpenTransactionsState openTransactionsState) {
+          if (openTransactionsState is OpenTransactionsLoaded) {
             add(OpenTransactionsReady());
           }
         });
   }
-  
-  bool get isPermissionReady => state.permissionReady;
 
   void _eventHandler() {
     on<NearbyBusinessesReady>((event, emit) => _mapNearbyBusinessesReadyToState(emit: emit));

@@ -4,7 +4,6 @@ import 'package:heist/models/transaction/transaction_resource.dart';
 import 'package:heist/models/unassigned_transaction/unassigned_transaction_resource.dart';
 import 'package:heist/providers/transaction_provider.dart';
 import 'package:heist/repositories/base_repository.dart';
-import 'package:meta/meta.dart';
 
 @immutable
 class TransactionRepository extends BaseRepository {

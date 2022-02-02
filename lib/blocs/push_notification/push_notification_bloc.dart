@@ -49,11 +49,10 @@ class PushNotificationBloc extends Bloc<PushNotificationEvent, PushNotificationS
       _notificationNavigationBloc = notificationNavigationBloc,
       _externalUrlHandler = externalUrlHandler,
       super(PushNotificatinsUninitialized()) {
-
         _eventHandler();
         
-        _notificationBootBlocSubscription = notificationBootBloc.stream.listen((NotificationBootState state) {
-          if (state.isReady) {
+        _notificationBootBlocSubscription = notificationBootBloc.stream.listen((NotificationBootState notificationBootState) {
+          if (notificationBootState.isReady) {
             add(StartPushNotificationMonitoring(
               onMessageReceived: ((OSNotificationReceivedEvent notificationReceivedEvent) {
                 MessageReceivedHandler handler = MessageReceivedHandler(
@@ -61,6 +60,7 @@ class PushNotificationBloc extends Bloc<PushNotificationEvent, PushNotificationS
                   openTransactionsBloc: _openTransactionsBloc
                 );
                 handler.init(notification: PushNotification.fromOsNotification(notification: notificationReceivedEvent.notification));
+                notificationReceivedEvent.complete(notificationReceivedEvent.notification);
               }),
               onMessageInteraction: ((OSNotificationOpenedResult interaction) {
                 if (interaction.action?.actionId != null) {

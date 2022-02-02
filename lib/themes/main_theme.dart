@@ -5,7 +5,6 @@ import 'package:heist/themes/global_colors.dart';
 class MainTheme {
   static Color topAppBar = Colors.white10;
 
-
   static Color _primary = Colors.white;
   static Color _primaryVariant = Colors.grey[300]!;
   static Color _constrastPrimary = Colors.black;
@@ -94,12 +93,10 @@ class MainTheme {
   }
 
   static TextTheme _getTextTheme({required BuildContext context}) {
-    return GoogleFonts.racingSansOneTextTheme(Theme.of(context).textTheme);
+    return GoogleFonts.robotoCondensedTextTheme(Theme.of(context).textTheme);
   }
 
-  
-
   static TextStyle _getDefaultFont() {
-    return GoogleFonts.racingSansOne();
+    return GoogleFonts.robotoCondensed();
   }
 }

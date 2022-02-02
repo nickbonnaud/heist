@@ -23,11 +23,11 @@ class PhaseTwo extends StatelessWidget {
           create: (context) => AuthenticationBloc(
             authenticationRepository: AuthenticationRepository(tokenRepository: TokenRepository(tokenProvider: StorageProvider()), authenticationProvider: AuthenticationProvider()),
             customerBloc: BlocProvider.of<CustomerBloc>(context)
-          )..add(Init())
+          )
         ),
 
         BlocProvider<GeoLocationBloc>(
-          create: (_) => GeoLocationBloc(
+          create: (context) => GeoLocationBloc(
             geolocatorRepository: GeolocatorRepository(geolocatorProvider: GeolocatorProvider(testing: context.read<IsTestingCubit>().state)),
             permissionsBloc: BlocProvider.of<PermissionsBloc>(context)
           )

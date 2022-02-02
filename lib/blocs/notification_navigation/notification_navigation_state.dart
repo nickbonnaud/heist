@@ -7,10 +7,12 @@ class NotificationNavigationState extends Equatable {
 
   NotificationNavigationState({required this.route, required this.arguments});
 
-  factory NotificationNavigationState.empty() => NotificationNavigationState(
-    route: null,
-    arguments: null
-  );
+  factory NotificationNavigationState.empty() {
+    return NotificationNavigationState(
+      route: null,
+      arguments: null
+    );
+  }
 
   NotificationNavigationState update({
     String? route,

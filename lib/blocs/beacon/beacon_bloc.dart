@@ -16,6 +16,7 @@ part 'beacon_state.dart';
 class BeaconBloc extends Bloc<BeaconEvent, BeaconState> {
   final BeaconRepository _beaconRepository;
   final ActiveLocationBloc _activeLocationBloc;
+  final bool _testing;
 
   late StreamSubscription _nearbyBusinessSubscription;
   StreamSubscription<MonitoringResult>? _beaconSubscription;
@@ -23,37 +24,38 @@ class BeaconBloc extends Bloc<BeaconEvent, BeaconState> {
   BeaconBloc({
     required BeaconRepository beaconRepository,
     required ActiveLocationBloc activeLocationBloc,
-    required NearbyBusinessesBloc nearbyBusinessesBloc
+    required NearbyBusinessesBloc nearbyBusinessesBloc,
+    required bool testing
   })
     : _beaconRepository = beaconRepository,
       _activeLocationBloc = activeLocationBloc,
+      _testing = testing,
       super(BeaconUninitialized()) {
-
         _eventHandler();
         
         _nearbyBusinessSubscription = nearbyBusinessesBloc.stream.listen((NearbyBusinessesState state) {
           if (state is NearbyBusinessLoaded) {
             add(StartBeaconMonitoring(businesses: state.businesses));
 
-            // TEST CHANGE //
+            if (_testing) {
+              Business business = state.businesses.first;
+              businessBeacon.Beacon beacon = _regionToBeacon(region: Region(
+                identifier: business.location.beacon.regionIdentifier,
+                proximityUUID: business.location.beacon.proximityUUID,
+                major: business.location.beacon.major,
+                minor: business.location.beacon.minor
+              )) ;
+              add(Enter(beacon: beacon));
 
-            Business business = state.businesses.first;
-            businessBeacon.Beacon beacon = _regionToBeacon(region: Region(
-              identifier: business.location.beacon.regionIdentifier,
-              proximityUUID: business.location.beacon.proximityUUID,
-              major: business.location.beacon.major,
-              minor: business.location.beacon.minor
-            )) ;
-            add(Enter(beacon: beacon));
-
-            business = state.businesses[1];
-            beacon = _regionToBeacon(region: Region(
-              identifier: business.location.beacon.regionIdentifier,
-              proximityUUID: business.location.beacon.proximityUUID,
-              major: business.location.beacon.major,
-              minor: business.location.beacon.minor
-            ));
-            add(Enter(beacon: beacon));
+              business = state.businesses[1];
+              beacon = _regionToBeacon(region: Region(
+                identifier: business.location.beacon.regionIdentifier,
+                proximityUUID: business.location.beacon.proximityUUID,
+                major: business.location.beacon.major,
+                minor: business.location.beacon.minor
+              ));
+              add(Enter(beacon: beacon));
+            }
           }
         });
       }

@@ -3,7 +3,6 @@ import 'package:heist/models/paginate_data_holder.dart';
 import 'package:heist/models/transaction/refund_resource.dart';
 import 'package:heist/providers/refund_provider.dart';
 import 'package:heist/repositories/base_repository.dart';
-import 'package:meta/meta.dart';
 
 @immutable
 class RefundRepository extends BaseRepository {

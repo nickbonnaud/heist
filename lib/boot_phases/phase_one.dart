@@ -38,7 +38,6 @@ class PhaseOne extends StatelessWidget {
             initialLoginRepository: InitialLoginRepository(tutorialProvider: StorageProvider()),
             permissionsChecker: PermissionsChecker()
           )
-            ..add(CheckPermissions())
         ),
 
         BlocProvider<IsTestingCubit>(create: (_) => IsTestingCubit(testing: _testing))

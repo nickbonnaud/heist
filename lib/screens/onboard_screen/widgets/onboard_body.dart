@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heist/blocs/permissions/permissions_bloc.dart';
@@ -187,7 +186,7 @@ class _OnboardBodyState extends State<OnboardBody> with SingleTickerProviderStat
               state: _setCurrentStepState(currentStep: currentStep, stepIndex: 4)
             )
           ],
-          controlsBuilder: (BuildContext context, {VoidCallback? onStepContinue, VoidCallback? onStepCancel}) {
+          controlsBuilder: (context, details) {
               return AnimatedBuilder(
                 animation: _animationController, 
                 builder: (BuildContext context, Widget? child) {

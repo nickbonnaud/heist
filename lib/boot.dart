@@ -14,6 +14,7 @@ class Boot extends StatelessWidget {
     return ScreenUtilInit(
       designSize: Size(375, 812),
       builder: () => MaterialApp(
+        debugShowCheckedModeBanner: false,
         theme: MainTheme.themeData(context: context),
         initialRoute: Routes.app,
         title: Constants.appName,

@@ -13,3 +13,5 @@ class NearbyBusinessesReady extends NotificationBootEvent {}
 class OpenTransactionsReady extends NotificationBootEvent {}
 
 class PermissionReady extends NotificationBootEvent {}
+
+class InitNotificationBoot extends NotificationBootEvent {}

@@ -50,7 +50,7 @@ class HomeScreenBody extends StatelessWidget {
         return AnimatedOpacity(
           key: Key("dimmerKey"),
           opacity: isVisible
-            ? 0.9
+            ? 0.5
             : 0.0,
           duration: Duration(milliseconds: 350),
           curve: Curves.easeInOut,
@@ -58,7 +58,7 @@ class HomeScreenBody extends StatelessWidget {
             child: Container(
               height: MediaQuery.of(context).size.height,
               width: MediaQuery.of(context).size.width,
-              color: Colors.grey,
+              color: Colors.black,
             ),
           ),
         );

@@ -17,20 +17,20 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
       super(Unknown()) { _eventHandler(); }
 
   void _eventHandler() {
-    on<Init>((event, emit) async => await _mapInitToState(emit: emit));
+    on<InitAuthentication>((event, emit) async => await _mapInitAuthenticationToState(emit: emit));
     on<LoggedIn>((event, emit) => _mapLoggedInToState(event: event, emit: emit));
     on<LoggedOut>((event, emit) => _mapLoggedOutToState(emit: emit));
   }
 
   bool get isAuthenticated => state is Authenticated;
 
-  Future<void> _mapInitToState({required Emitter<AuthenticationState> emit}) async {
+  Future<void> _mapInitAuthenticationToState({required Emitter<AuthenticationState> emit}) async {
     // TEST CHANGE //
     
-    // final bool isSignedIn = await _authenticationRepository.isSignedIn();
+    final bool isSignedIn = await _authenticationRepository.isSignedIn();
 
-    final bool isSignedIn = true;
-
+    // final bool isSignedIn = true;
+    
     if (isSignedIn) {
       _customerBloc.add(CustomerAuthenticated());
       emit(Authenticated());

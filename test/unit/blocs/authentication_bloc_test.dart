@@ -42,7 +42,7 @@ void main() {
       build: () => authenticationBloc,
       act: (bloc) {
         when(() => authenticationRepository.isSignedIn()).thenAnswer((_) async => true);
-        bloc.add(Init());
+        bloc.add(InitAuthentication());
       },
       verify: (_) {
         verify(() => authenticationRepository.isSignedIn()).called(1);
@@ -54,7 +54,7 @@ void main() {
       build: () => authenticationBloc,
       act: (bloc) {
         when(() => authenticationRepository.isSignedIn()).thenAnswer((_) async => true);
-        bloc.add(Init());
+        bloc.add(InitAuthentication());
       },
       expect: () => [isA<Authenticated>()]
     );
@@ -64,7 +64,7 @@ void main() {
       build: () => authenticationBloc,
       act: (bloc) {
         when(() => authenticationRepository.isSignedIn()).thenAnswer((_) async => true);
-        bloc.add(Init());
+        bloc.add(InitAuthentication());
       },
       verify: (_) {
         verify(() => customerBloc.add(any(that: isA<CustomerEvent>()))).called(1);
@@ -76,7 +76,7 @@ void main() {
       build: () => authenticationBloc,
       act: (bloc) {
         when(() => authenticationRepository.isSignedIn()).thenAnswer((_) async => false);
-        bloc.add(Init());
+        bloc.add(InitAuthentication());
       },
       expect: () => [isA<Unauthenticated>()]
     );

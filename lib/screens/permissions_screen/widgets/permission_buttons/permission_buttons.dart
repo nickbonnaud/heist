@@ -128,7 +128,6 @@ class PermissionButtons extends StatelessWidget {
         } else {
           await Permission.locationAlways.request();
           bool granted = await Permission.locationAlways.isGranted;
-          print(granted);
           _updateIfGranted(context: context, granted: granted, type: permission);
         }
       }

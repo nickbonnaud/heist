@@ -19,6 +19,7 @@ class PhaseFive extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<PushNotificationBloc>(
+      lazy: false,
       create: (context) => PushNotificationBloc(
         pushNotificationRepository: PushNotificationRepository(pushNotificationProvider: PushNotificationProvider()),
         businessRepository: BusinessRepository(businessProvider: BusinessProvider()),

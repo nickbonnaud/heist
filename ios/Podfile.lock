@@ -21,10 +21,10 @@ PODS:
     - Flutter
   - integration_test (0.0.1):
     - Flutter
-  - onesignal_flutter (3.2.3):
+  - onesignal_flutter (3.2.7):
     - Flutter
-    - OneSignalXCFramework (= 3.7.0)
-  - OneSignalXCFramework (3.7.0)
+    - OneSignalXCFramework (= 3.9.1)
+  - OneSignalXCFramework (3.9.1)
   - path_provider (0.0.1):
     - Flutter
   - "permission_handler (5.1.0+2)":
@@ -91,9 +91,9 @@ SPEC CHECKSUMS:
   google_maps_flutter: 279865bd07e2d8751f43a3bc64bac7f6075d0c93
   GoogleMaps: 008e2c80e38605b56b560e8deb73d4194ff30bef
   image_picker: e06f7a68f000bd36f552c1847e33cda96ed31f1f
-  integration_test: 7db6d89f336f671dcbc7563ee27a5b08f6f8aee1
-  onesignal_flutter: abfc75e8d08a0d9c977aacfab9454af58f4f4fcc
-  OneSignalXCFramework: 974dc438d68910cf04f3c8ab034e0131d41438c1
+  integration_test: a1e7d09bd98eca2fc37aefd79d4f41ad37bdbbe5
+  onesignal_flutter: be350169f5b07461e7b1e9c978d8a39908c5cf37
+  OneSignalXCFramework: 27159b0a150cdfe528c85325215c9d78b2f973c7
   path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
   permission_handler: ccb20a9fad0ee9b1314a52b70b76b473c5f8dab0
   sqflite: 6d358c025f5b867b29ed92fc697fd34924e11904
@@ -101,4 +101,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 2bff004675aa6e3842a829871de74ddbc4c8d5b9
 
-COCOAPODS: 1.10.1
+COCOAPODS: 1.11.2

@@ -436,7 +436,7 @@ class MockResponses {
     final int tax = (netSales * .10).round();
     return {
       "transaction": {
-        "identifier": faker.guid.guid(),
+        "identifier": 'fake',
         "employee_id": faker.guid.guid(),
         "tax": tax,
         "tip": 0,
@@ -761,16 +761,16 @@ class MockResponses {
   static Map<String, dynamic> generateLogo() {
     return {
       'name': faker.lorem.word(),
-      'small_url': faker.image.image(width: 200, height: 200, keywords: ['logo']),
-      'large_url': faker.image.image(width: 400, height: 400, keywords: ['logo'])
+      'small_url': faker.image.image(width: 200, height: 200, keywords: ['restaurant']),
+      'large_url': faker.image.image(width: 400, height: 400, keywords: ['restaurant'])
     };
   }
 
   static Map<String, dynamic> generateBanner() {
     return {
       'name': faker.lorem.word(),
-      'small_url': faker.image.image(width: 500, height: 325, keywords: ['logo']),
-      'large_url': faker.image.image(width: 1000, height: 650, keywords: ['logo'])
+      'small_url': faker.image.image(width: 500, height: 325, keywords: ['bar']),
+      'large_url': faker.image.image(width: 1000, height: 650, keywords: ['bar'])
     };
   }
 

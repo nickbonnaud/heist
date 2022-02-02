@@ -74,7 +74,7 @@ class HomeScreenTest {
     await tester.tap(find.byKey(Key("nearbyLogoButtonKey-0")));
     await tester.pumpAndSettle();
     expect(find.byKey(Key("menuFabKey")), findsNothing);
-    expect(tester.widget<AnimatedOpacity>(find.byKey(Key("dimmerKey"))).opacity, 0.9);
+    expect(tester.widget<AnimatedOpacity>(find.byKey(Key("dimmerKey"))).opacity, 0.5);
 
     await businessScreenTest.initLogoButtonDismiss();
 

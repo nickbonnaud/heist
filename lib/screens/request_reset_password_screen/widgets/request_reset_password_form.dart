@@ -35,10 +35,8 @@ class _RequestResetPasswordFormState extends State<RequestResetPasswordForm> {
       listener: (context, state) {
         if (state.isSuccess) {
           _showSnackbar();
-          Navigator.of(context).pushReplacementNamed(Routes.resetPassword, arguments: ResetPasswordArgs(email: _emailController.text));
         } else if (state.errorMessage.isNotEmpty) {
           _showSnackbar(error: state.errorMessage);
-          _formBloc.add(Reset());
         }
       },
       child: Form(
@@ -171,7 +169,12 @@ class _RequestResetPasswordFormState extends State<RequestResetPasswordForm> {
     ScaffoldMessenger.of(context)
       ..hideCurrentSnackBar()
       ..showSnackBar(snackBar)
-      .closed.then((_) => _formBloc.add(Reset()));
+      .closed.then((_) {
+        _formBloc.add(Reset());
+        if (error == null) {
+          Navigator.of(context).pushReplacementNamed(Routes.resetPassword, arguments: ResetPasswordArgs(email: _emailController.text));
+        }
+      });
   }
 
   void _onEmailChanged() {

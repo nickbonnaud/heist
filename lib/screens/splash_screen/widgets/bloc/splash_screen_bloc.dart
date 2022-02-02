@@ -19,11 +19,10 @@ class SplashScreenBloc extends Bloc<SplashScreenEvent, SplashScreenState> {
 
   SplashScreenBloc({required AppReadyBloc appReadyBloc}) 
     : super(SplashScreenState.initial()) {
-        
       _eventHandler();
       
-      _appReadyBlocSubscription = appReadyBloc.stream.listen((AppReadyState state) {
-        add(AppReadyBlocUpdated(appReadyState: state));
+      _appReadyBlocSubscription = appReadyBloc.stream.listen((AppReadyState appReadyState) {
+        add(AppReadyBlocUpdated(appReadyState: appReadyState));
       });
   }
 
