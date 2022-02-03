@@ -59,7 +59,8 @@ class RegisterScreenTest {
     await tester.pump(Duration(milliseconds: 300));
 
     await tester.tap(find.text(Platform.isIOS ? 'Done' : 'DONE'));
-    await tester.pump();
+    await tester.pump(Duration(seconds: 3));
+    await tester.pump(Duration(seconds: 1));
   }
 
   Future<void> _tapSubmitButtonFail() async {
@@ -133,7 +134,8 @@ class RegisterScreenTest {
     expect(find.text("Passwords do not match"), findsNothing);
 
     await tester.tap(find.text(Platform.isIOS ? 'Done' : 'DONE'));
-    await tester.pump();
+    await tester.pump(Duration(seconds: 3));
+    await tester.pump(Duration(seconds: 1));
   }
 
   Future<void> _tapSubmitButtonSuccess() async {

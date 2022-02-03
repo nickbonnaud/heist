@@ -25,7 +25,7 @@ class BeaconBloc extends Bloc<BeaconEvent, BeaconState> {
     required BeaconRepository beaconRepository,
     required ActiveLocationBloc activeLocationBloc,
     required NearbyBusinessesBloc nearbyBusinessesBloc,
-    required bool testing
+    bool testing = false
   })
     : _beaconRepository = beaconRepository,
       _activeLocationBloc = activeLocationBloc,

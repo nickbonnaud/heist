@@ -21,18 +21,18 @@ PODS:
     - Flutter
   - integration_test (0.0.1):
     - Flutter
-  - onesignal_flutter (3.2.7):
+  - onesignal_flutter (3.2.8):
     - Flutter
-    - OneSignalXCFramework (= 3.9.1)
-  - OneSignalXCFramework (3.9.1)
-  - path_provider (0.0.1):
+    - OneSignalXCFramework (= 3.10.0)
+  - OneSignalXCFramework (3.10.0)
+  - path_provider_ios (0.0.1):
     - Flutter
   - "permission_handler (5.1.0+2)":
     - Flutter
   - sqflite (0.0.2):
     - Flutter
     - FMDB (>= 2.7.5)
-  - url_launcher (0.0.1):
+  - url_launcher_ios (0.0.1):
     - Flutter
 
 DEPENDENCIES:
@@ -45,10 +45,10 @@ DEPENDENCIES:
   - integration_test (from `.symlinks/plugins/integration_test/ios`)
   - onesignal_flutter (from `.symlinks/plugins/onesignal_flutter/ios`)
   - OneSignalXCFramework (< 4.0, >= 3.4.3)
-  - path_provider (from `.symlinks/plugins/path_provider/ios`)
+  - path_provider_ios (from `.symlinks/plugins/path_provider_ios/ios`)
   - permission_handler (from `.symlinks/plugins/permission_handler/ios`)
   - sqflite (from `.symlinks/plugins/sqflite/ios`)
-  - url_launcher (from `.symlinks/plugins/url_launcher/ios`)
+  - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
 
 SPEC REPOS:
   trunk:
@@ -73,14 +73,14 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/integration_test/ios"
   onesignal_flutter:
     :path: ".symlinks/plugins/onesignal_flutter/ios"
-  path_provider:
-    :path: ".symlinks/plugins/path_provider/ios"
+  path_provider_ios:
+    :path: ".symlinks/plugins/path_provider_ios/ios"
   permission_handler:
     :path: ".symlinks/plugins/permission_handler/ios"
   sqflite:
     :path: ".symlinks/plugins/sqflite/ios"
-  url_launcher:
-    :path: ".symlinks/plugins/url_launcher/ios"
+  url_launcher_ios:
+    :path: ".symlinks/plugins/url_launcher_ios/ios"
 
 SPEC CHECKSUMS:
   Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
@@ -88,16 +88,16 @@ SPEC CHECKSUMS:
   flutter_secure_storage: 7953c38a04c3fdbb00571bcd87d8e3b5ceb9daec
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   geolocator_apple: b741765c55dc21950e3e106e8b3584e55cf81ce5
-  google_maps_flutter: 279865bd07e2d8751f43a3bc64bac7f6075d0c93
+  google_maps_flutter: abdb8dee6c52d4be36ad131ee6ebfacd14417c5a
   GoogleMaps: 008e2c80e38605b56b560e8deb73d4194ff30bef
-  image_picker: e06f7a68f000bd36f552c1847e33cda96ed31f1f
+  image_picker: 0d37d1cb66231c2473a0e3ccb8d062d0c2b3d297
   integration_test: a1e7d09bd98eca2fc37aefd79d4f41ad37bdbbe5
-  onesignal_flutter: be350169f5b07461e7b1e9c978d8a39908c5cf37
-  OneSignalXCFramework: 27159b0a150cdfe528c85325215c9d78b2f973c7
-  path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
+  onesignal_flutter: 532fddb1b5921fb1145e4baef5177b9bca1c9d36
+  OneSignalXCFramework: 10648e60ff3d335fbffa62d9b44b700b56d49b51
+  path_provider_ios: 7d7ce634493af4477d156294792024ec3485acd5
   permission_handler: ccb20a9fad0ee9b1314a52b70b76b473c5f8dab0
   sqflite: 6d358c025f5b867b29ed92fc697fd34924e11904
-  url_launcher: 6fef411d543ceb26efce54b05a0a40bfd74cbbef
+  url_launcher_ios: 02f1989d4e14e998335b02b67a7590fa34f971af
 
 PODFILE CHECKSUM: 2bff004675aa6e3842a829871de74ddbc4c8d5b9
 

@@ -24,6 +24,13 @@ class Boot extends StatelessWidget {
           DefaultCupertinoLocalizations.delegate,
           DefaultMaterialLocalizations.delegate,
         ],
+        builder: (context, widget) {
+          ScreenUtil.setContext(context);
+          return MediaQuery(
+            data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+            child: widget!,
+          );
+        },
       )
     );
   }

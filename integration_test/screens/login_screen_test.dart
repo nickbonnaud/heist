@@ -55,12 +55,13 @@ class LoginScreenTest {
     await tester.pump(Duration(milliseconds: 300));
 
     await tester.tap(find.text(Platform.isIOS ? 'Done' : 'DONE'));
-    await tester.pump();
+    await tester.pump(Duration(seconds: 3));
+    await tester.pump(Duration(seconds: 1));
   }
 
   Future<void> _tapSubmitButtonFail() async {
     expect(find.byKey(Key("errorLoginSnackbarKey")), findsNothing);
-    await tester.tap(find.byKey(Key("loginButtonTextKey")).first);
+    await tester.tap(find.byKey(Key("loginButtonTextKey")));
     await tester.pump(Duration(seconds: 3));
     await tester.pump();
     expect(find.byKey(Key("errorLoginSnackbarKey")), findsOneWidget);
@@ -87,7 +88,8 @@ class LoginScreenTest {
 
     expect(find.text("Invalid Password"), findsNothing);
     await tester.tap(find.text(Platform.isIOS ? 'Done' : 'DONE'));
-    await tester.pump();
+    await tester.pump(Duration(seconds: 3));
+    await tester.pump(Duration(seconds: 1));
   }
 
   Future<void> _tapSubmitButtonSuccess() async {

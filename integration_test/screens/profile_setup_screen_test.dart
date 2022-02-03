@@ -70,6 +70,9 @@ class ProfileSetupScreenTest {
     await tester.pump(Duration(milliseconds: 300));
     expect(find.text("Invalid first name"), findsNothing);
 
+    await tester.tap(find.text(Platform.isIOS ? 'Done' : 'DONE'));
+    await tester.pumpAndSettle();
+
     await tester.tap(find.byKey(Key("lastNameFieldKey")));
     await tester.pumpAndSettle();
     
