@@ -25,7 +25,6 @@ class IssueScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: OverlayAppBar(context: context),
       body: _type != IssueType.cancel

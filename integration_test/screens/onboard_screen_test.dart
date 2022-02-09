@@ -1,3 +1,5 @@
+import 'dart:io' show Platform;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -19,10 +21,11 @@ class OnboardScreenTest {
     await _goToProfileSetup();
     await _goToTutorialScreen();
     
-    await tester.tap(find.byKey(Key("stepperButtonKey")).at(3));
-    await tester.pump(Duration(milliseconds: 500));
-
-    await _finishOnboarding();
+    if (Platform.isIOS) {
+      await tester.tap(find.byKey(Key("stepperButtonKey")).at(3));
+      await tester.pump(Duration(milliseconds: 500));
+      await _finishOnboarding();
+    }
   }
 
   Future<void> initLogin() async {

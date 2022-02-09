@@ -36,7 +36,7 @@ class TransactionPickerBody extends StatelessWidget {
           if (state.loading) return Center(child: CircularProgressIndicator());
           if (state.errorMessage.isNotEmpty) {
             return ErrorScreen(
-              body: "Oops! An error occurred fetching Unclaimed Transactions!\n\n Please try again.",
+              body: "Oops! An error occurred fetching Unclaimed Transactions!",
               buttonText: "Retry",
               onButtonPressed: () => BlocProvider.of<TransactionPickerScreenBloc>(context).add(Fetch(businessIdentifier: _businessIdentifier)),
             );

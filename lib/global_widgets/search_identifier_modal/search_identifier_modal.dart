@@ -16,7 +16,6 @@ class SearchIdentifierModal extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
       appBar: BottomModalAppBar(context: context, backgroundColor: Theme.of(context).colorScheme.scrollBackground),
       backgroundColor: Theme.of(context).colorScheme.scrollBackground,
       body: Padding(

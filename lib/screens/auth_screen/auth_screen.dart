@@ -71,7 +71,6 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
       backgroundColor: Color.fromRGBO(11, 13, 35, 1),
       body: ChangeNotifierProvider(
         create: (_) => PageOffsetNotifier(pageController: _pageController),

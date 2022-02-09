@@ -35,7 +35,7 @@ class _HistoricTransactionsBodyState extends State<HistoricTransactionsBody> {
       builder: (context, state) {
         if (state is FetchFailure) {
           return ErrorScreen(
-            body: "Oops! An error occurred fetching previous transactions!\n\n Please try again.",
+            body: "Oops! An error occurred fetching previous transactions!",
             buttonText: "Retry",
             onButtonPressed: () => BlocProvider.of<HistoricTransactionsBloc>(context).add(FetchHistoricTransactions(reset: true)),
           );

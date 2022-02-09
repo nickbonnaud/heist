@@ -17,7 +17,7 @@ class FetchBusinessesFailScreen extends StatelessWidget {
     return BlocBuilder<NearbyBusinessesBloc, NearbyBusinessesState>(
       builder: (context, state) {
         return ErrorScreen(
-          body: "Oops! An error occurred fetching nearby businesses!\n\n Please try again.",
+          body: "Oops! An error occurred fetching nearby businesses!",
           buttonText: state is Loading ? "Fetching" : "Retry",
           onButtonPressed: state is Loading 
             ? null 

@@ -156,11 +156,17 @@ class HomeScreenTest {
 
   Future<void> _tapNearbyLocationDetails() async {
     expect(find.byType(BusinessScreen), findsNothing);
+
+    await tester.fling(find.byKey(Key('activeDetailsKey-0')), Offset(0, -500), 200);
+    await tester.pumpAndSettle();
     
     await tester.tap(find.byKey(Key("nearbyDetailsKey-0")));
     await tester.pumpAndSettle();
 
     await BusinessScreenTest(tester: tester).initDetails(shouldSwipe: true);
+
+    await tester.fling(find.byKey(Key('nearbyDetailsKey-0')), Offset(0, 500), 200);
+    await tester.pumpAndSettle();
   }
 
   Future<void> _verticalScrollPeekSheet() async {

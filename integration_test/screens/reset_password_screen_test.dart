@@ -87,6 +87,9 @@ class ResetPasswordScreenTest {
     expect(find.byKey(Key("passwordFormKey")), findsOneWidget);
     expect(find.text('Min 8 characters, at least 1 uppercase, 1 number, 1 special character'), findsNothing);
 
+    await tester.enterText(find.byKey(Key("passwordFormKey")), "");
+    await tester.pump(Duration(milliseconds: 300));
+    
     await tester.enterText(find.byKey(Key("passwordFormKey")), "wrong");
     await tester.pump(Duration(milliseconds: 300));
 

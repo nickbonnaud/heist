@@ -71,11 +71,11 @@ class MainTheme {
 
       colorScheme: ColorScheme(
         primary: Theme.of(context).colorScheme.callToAction, 
-        primaryVariant: _primaryVariant,
+        primaryContainer: _primaryVariant,
         onPrimary: _constrastPrimary,
 
         secondary: _secondary,
-        secondaryVariant: _secondaryVariant, 
+        secondaryContainer: _secondaryVariant, 
         onSecondary: _constrastSecondary, 
 
         surface: Colors.grey,

@@ -12,7 +12,6 @@ class SettingsScreen extends StatelessWidget {
     return BlocProvider<DefaultAppBarBloc>(
       create: (BuildContext context) => DefaultAppBarBloc(),
       child: Scaffold(
-        resizeToAvoidBottomInset: false,
         appBar: DefaultAppBar(title: 'Settings'),
         body: Padding(
           padding: EdgeInsets.symmetric(horizontal: 16.w),

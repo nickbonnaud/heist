@@ -18,7 +18,6 @@ class EmailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: BottomModalAppBar(context: context),
       body: BlocProvider<EmailFormBloc>(

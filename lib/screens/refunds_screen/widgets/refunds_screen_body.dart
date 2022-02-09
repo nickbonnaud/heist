@@ -35,7 +35,7 @@ class _RefundsScreenBodyState extends State<RefundsScreenBody> {
       builder: (context, state) {
         if (state is FetchFailure) {
           return ErrorScreen(
-            body: "Oops! An error occurred fetching previous refunds!\n\n Please try again.",
+            body: "Oops! An error occurred fetching previous refunds!",
             buttonText: "Retry",
             onButtonPressed: () => BlocProvider.of<RefundsScreenBloc>(context).add(FetchAllRefunds(reset: true)),
           );

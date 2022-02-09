@@ -33,7 +33,6 @@ class ProfileSetupScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       key: Key("profileSetupScreenKey"),
-      resizeToAvoidBottomInset: false,
       body: BlocProvider<ProfileSetupScreenBloc>(
         create: (context) => ProfileSetupScreenBloc()
           ..add(Init(status: _customerBloc.customer!.status)),

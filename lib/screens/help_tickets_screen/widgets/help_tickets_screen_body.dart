@@ -39,7 +39,7 @@ class _HelpTicketsScreenBodyState extends State<HelpTicketsScreenBody> {
       builder: (context, state) {
         if (state is FetchFailure) {
           return ErrorScreen(
-            body: "Oh no! An error occurred fetching your help tickets.\n\n Please try again.",
+            body: "Oh no! An error occurred fetching your help tickets.",
             buttonText: "Retry",
             onButtonPressed: () => _helpTicketsScreenBloc.add(FetchAll(reset: true)),
           );

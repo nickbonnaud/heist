@@ -41,7 +41,7 @@ class BeaconBody extends StatelessWidget {
               textAlign: TextAlign.center,
               style:TextStyle(
                 color: Theme.of(context).colorScheme.onPrimarySubdued,
-                fontSize: 22.sp,
+                fontSize: 20.sp,
                 fontWeight: FontWeight.bold
               ),
             ),
