@@ -12,8 +12,9 @@ import 'widgets/title_text.dart';
 class BeaconBody extends StatelessWidget {
   final PermissionButtons _permissionButtons;
   
-  BeaconBody({required PermissionButtons permissionButtons})
-    : _permissionButtons = permissionButtons;
+  const BeaconBody({required PermissionButtons permissionButtons, Key? key})
+    : _permissionButtons = permissionButtons,
+      super(key: key);
 
   final String beaconIosText = 
     "Beacon Settings are a part of Location Services.\n"
@@ -32,7 +33,7 @@ class BeaconBody extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             SizedBox(height: 15.h),
-            TitleText(text: 'Stage: Beacons'),
+            const TitleText(text: 'Stage: Beacons'),
             SizedBox(height: 25.h),
             Text(
               Platform.isIOS

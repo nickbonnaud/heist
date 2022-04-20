@@ -33,40 +33,40 @@ class SearchBusinessNameModalTest {
 
   Future<void> _enterErrorName() async {
     expect(find.byType(CircularProgressIndicator), findsNothing);
-    expect(find.byKey(Key("errorSearchBusinessNameKey")), findsNothing);
+    expect(find.byKey(const Key("errorSearchBusinessNameKey")), findsNothing);
 
-    await tester.enterText(find.byKey(Key("businessNameFieldKey")), "error");
-    await tester.pump(Duration(milliseconds: 500));
+    await tester.enterText(find.byKey(const Key("businessNameFieldKey")), "error");
+    await tester.pump(const Duration(milliseconds: 500));
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
 
     await tester.pumpAndSettle();
-    expect(find.byKey(Key("errorSearchBusinessNameKey")), findsOneWidget);
+    expect(find.byKey(const Key("errorSearchBusinessNameKey")), findsOneWidget);
   }
 
   Future<void> _enterValidName() async {
-    expect(find.byKey(Key("businessNameCardKey-0")), findsNothing);
+    expect(find.byKey(const Key("businessNameCardKey-0")), findsNothing);
 
-    await tester.enterText(find.byKey(Key("businessNameFieldKey")), "name");
-    await tester.pump(Duration(milliseconds: 500));
+    await tester.enterText(find.byKey(const Key("businessNameFieldKey")), "name");
+    await tester.pump(const Duration(milliseconds: 500));
     await tester.pumpAndSettle();
 
-    expect(find.byKey(Key("businessNameCardKey-0")), findsOneWidget);
+    expect(find.byKey(const Key("businessNameCardKey-0")), findsOneWidget);
   }
 
   Future<void> _scroll() async {
-    expect(find.byKey(Key("businessNameCardKey-0")), findsOneWidget);
+    expect(find.byKey(const Key("businessNameCardKey-0")), findsOneWidget);
 
-    await tester.fling(find.byKey(Key("searchBusinessNameBodyKey")), Offset(0, -800), 500);
+    await tester.fling(find.byKey(const Key("searchBusinessNameBodyKey")), const Offset(0, -800), 500);
     await tester.pumpAndSettle();
-    expect(find.byKey(Key("businessNameCardKey-0")), findsNothing);
+    expect(find.byKey(const Key("businessNameCardKey-0")), findsNothing);
 
-    await tester.fling(find.byKey(Key("searchBusinessNameBodyKey")), Offset(0, 800), 500);
+    await tester.fling(find.byKey(const Key("searchBusinessNameBodyKey")), const Offset(0, 800), 500);
     await tester.pumpAndSettle();
-    expect(find.byKey(Key("businessNameCardKey-0")), findsOneWidget);
+    expect(find.byKey(const Key("businessNameCardKey-0")), findsOneWidget);
   }
 
   Future<void> _selectBusiness() async {
-    await tester.tap(find.byKey(Key("businessNameCardKey-0")));
+    await tester.tap(find.byKey(const Key("businessNameCardKey-0")));
     await tester.pumpAndSettle();
 
     expect(find.byType(SearchBusinessNameModal), findsNothing);

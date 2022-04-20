@@ -28,7 +28,7 @@ void main() {
 
     test("Location Repository throws error on send location fail", () async {
       when(() => mockLocationProvider.sendLocation(body: any(named: 'body')))
-        .thenAnswer((_) async => PaginatedApiResponse(body: [], isOK: false));
+        .thenAnswer((_) async => const PaginatedApiResponse(body: [], isOK: false));
       
       expect(
         locationRepositoryWithMock.sendLocation(lat: 1.0, lng: 1.0, startLocation: true),

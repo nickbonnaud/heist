@@ -54,7 +54,7 @@ void main() {
       build: () => signOutBloc,
       act: (bloc) {
         when(() => authenticationRepository.logout())
-          .thenThrow(ApiException(error: "error"));
+          .thenThrow(const ApiException(error: "error"));
         bloc.add(Submitted());
       },
       expect: () => [_baseState.update(isSubmitting: true), _baseState.update(isSubmitting: false, errorMessage: 'error')]

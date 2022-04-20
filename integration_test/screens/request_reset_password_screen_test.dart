@@ -42,19 +42,19 @@ class RequestResetPasswordScreenTest {
   }
 
   Future<void> _enterInvalidEmail() async {
-    expect(find.byKey(Key("emailFormFieldKey")), findsOneWidget);
+    expect(find.byKey(const Key("emailFormFieldKey")), findsOneWidget);
 
     expect(find.text("Invalid Email"), findsNothing);
     
-    await tester.enterText(find.byKey(Key("emailFormFieldKey")), "not 7 email");
-    await tester.pump(Duration(milliseconds: 300));
+    await tester.enterText(find.byKey(const Key("emailFormFieldKey")), "not 7 email");
+    await tester.pump(const Duration(milliseconds: 300));
 
     expect(find.text("Invalid Email"), findsOneWidget);
   }
 
   Future<void> _enterErrorEmail() async {
-    await tester.enterText(find.byKey(Key("emailFormFieldKey")), "error@gmail.com");
-    await tester.pump(Duration(milliseconds: 300));
+    await tester.enterText(find.byKey(const Key("emailFormFieldKey")), "error@gmail.com");
+    await tester.pump(const Duration(milliseconds: 300));
 
     expect(find.text("Invalid Email"), findsNothing);
 
@@ -63,43 +63,43 @@ class RequestResetPasswordScreenTest {
   }
 
   Future<void> _tapSubmitButtonFail() async {
-    expect(find.byKey(Key("requestResetSnackBarKey")), findsNothing);
+    expect(find.byKey(const Key("requestResetSnackBarKey")), findsNothing);
 
-    await tester.tap(find.byKey(Key("submitButtonKey")));
+    await tester.tap(find.byKey(const Key("submitButtonKey")));
     await tester.pumpAndSettle();
 
-    expect(find.byKey(Key("requestResetSnackBarKey")), findsOneWidget);
+    expect(find.byKey(const Key("requestResetSnackBarKey")), findsOneWidget);
 
-    await tester.fling(find.byKey(Key("requestResetSnackBarKey")), Offset(0, 500), 500);
+    await tester.fling(find.byKey(const Key("requestResetSnackBarKey")), const Offset(0, 500), 500);
     await tester.pumpAndSettle();
   }
 
   Future<void> _enterValidEmail() async {
-    await tester.tap(find.byKey(Key("emailFormFieldKey")));
+    await tester.tap(find.byKey(const Key("emailFormFieldKey")));
     await tester.pumpAndSettle();
     
-    await tester.enterText(find.byKey(Key("emailFormFieldKey")), "nick@yahoo.com");
-    await tester.pump(Duration(milliseconds: 300));
+    await tester.enterText(find.byKey(const Key("emailFormFieldKey")), "nick@yahoo.com");
+    await tester.pump(const Duration(milliseconds: 300));
 
     await tester.tap(find.text(Platform.isIOS ? 'Done' : 'DONE'));
     await tester.pumpAndSettle();
   }
 
   Future<void> _tapSubmitButtonSuccess() async {
-    expect(find.byKey(Key("submitButtonKey")), findsOneWidget);
+    expect(find.byKey(const Key("submitButtonKey")), findsOneWidget);
     expect(find.byType(CircularProgressIndicator), findsNothing);
 
-    await tester.tap(find.byKey(Key("submitButtonKey")));
+    await tester.tap(find.byKey(const Key("submitButtonKey")));
     await tester.pump();
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
   }
 
   Future<void> _dismissSnackBar() async {
-    expect(find.byKey(Key("requestResetSnackBarKey")), findsOneWidget);
+    expect(find.byKey(const Key("requestResetSnackBarKey")), findsOneWidget);
 
-    await tester.fling(find.byKey(Key("requestResetSnackBarKey")), Offset(0, 500), 500);
+    await tester.fling(find.byKey(const Key("requestResetSnackBarKey")), const Offset(0, 500), 500);
     await tester.pumpAndSettle();
     
-    expect(find.byKey(Key("requestResetSnackBarKey")), findsNothing);
+    expect(find.byKey(const Key("requestResetSnackBarKey")), findsNothing);
   }
 }

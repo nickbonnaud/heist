@@ -13,7 +13,7 @@ class AnimatedRoutes {
           ).animate(
             CurvedAnimation(
               parent: animation,
-              curve: Interval(
+              curve: const Interval(
                 0.00,
                 0.50,
                 curve: Curves.linear
@@ -27,7 +27,7 @@ class AnimatedRoutes {
             ).animate(
               CurvedAnimation(
                 parent: animation,
-                curve: Interval(
+                curve: const Interval(
                   0.50,
                   1.00,
                   curve: Curves.linear
@@ -43,7 +43,7 @@ class AnimatedRoutes {
 
   static Route fadeOut(Widget screen) {
     return PageRouteBuilder(
-      transitionDuration: Duration(milliseconds: 500),
+      transitionDuration: const Duration(milliseconds: 500),
       pageBuilder: (context, animation, secondaryAnimation) => screen,
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         return FadeTransition(

@@ -3,7 +3,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 @immutable
 class StorageProvider {
-  final storage = new FlutterSecureStorage();
+  final storage = const FlutterSecureStorage();
 
 
   Future<String?> read({required String key}) async {

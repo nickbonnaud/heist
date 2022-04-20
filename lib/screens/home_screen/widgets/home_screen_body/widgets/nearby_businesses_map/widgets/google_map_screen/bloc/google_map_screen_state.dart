@@ -5,10 +5,10 @@ class GoogleMapScreenState extends Equatable {
   final ScreenCoordinate? screenCoordinate;
   final Business? business;
 
-  GoogleMapScreenState({required this.screenCoordinate, required this.business});
+  const GoogleMapScreenState({required this.screenCoordinate, required this.business});
 
   factory GoogleMapScreenState.initial() {
-    return GoogleMapScreenState(screenCoordinate: null, business: null);
+    return const GoogleMapScreenState(screenCoordinate: null, business: null);
   }
 
   @override

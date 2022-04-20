@@ -3,12 +3,15 @@ import 'package:flutter/material.dart';
 
 class ErrorAnimation extends StatelessWidget {
 
+  const ErrorAnimation({Key? key})
+    : super(key: key);
+  
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.width,
-      child: FlareActor(
+      child: const FlareActor(
         'assets/error.flr',
         animation: 'main',
         artboard: 'error',

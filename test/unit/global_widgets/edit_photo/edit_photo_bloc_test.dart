@@ -58,7 +58,7 @@ void main() {
       "EditPhotoBloc ChangePhoto event on fail changes state: [Submitting], [SubmitFailed()]",
       build: () {
         when(() => photoRepository.upload(photo: any(named: "photo"), profileIdentifier: any(named: "profileIdentifier")))
-          .thenThrow(ApiException(error: "error"));
+          .thenThrow(const ApiException(error: "error"));
         
         return editPhotoBloc;
       },

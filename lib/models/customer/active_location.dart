@@ -10,7 +10,7 @@ class ActiveLocation extends Equatable {
   final String? transactionIdentifier;
   final NotificationType? lastNotification;
 
-  ActiveLocation({
+  const ActiveLocation({
     required this.identifier,
     required this.business,
     required this.transactionIdentifier,
@@ -33,8 +33,8 @@ class ActiveLocation extends Equatable {
 
   ActiveLocation update({String? transactionIdentifier, NotificationType? lastNotification}) {
     return ActiveLocation(
-      identifier: this.identifier,
-      business: this.business,
+      identifier: identifier,
+      business: business,
       transactionIdentifier: transactionIdentifier ?? this.transactionIdentifier,
       lastNotification: lastNotification ?? this.lastNotification
     );

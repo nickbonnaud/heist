@@ -8,11 +8,11 @@ class ProfileProvider extends BaseProvider {
 
   Future<ApiResponse> store({required Map<String, dynamic> body}) async {
     String url = ApiEndpoints.profile;
-    return await this.post(url: url, body: body);
+    return await post(url: url, body: body);
   }
 
   Future<ApiResponse> update({required Map<String, dynamic> body, required String profileIdentifier}) async {
     String url = '${ApiEndpoints.profile}/$profileIdentifier';
-    return await this.patch(url: url, body: body);
+    return await patch(url: url, body: body);
   }
 }

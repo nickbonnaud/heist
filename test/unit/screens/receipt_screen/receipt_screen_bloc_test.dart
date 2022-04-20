@@ -19,7 +19,7 @@ void main() {
       _mockDataGenerator = MockDataGenerator();
 
       _transactionResource = _mockDataGenerator.createTransactionResource();
-      Transaction transaction = _transactionResource.transaction.update(status: Status(name: "name", code: 101));
+      Transaction transaction = _transactionResource.transaction.update(status: const Status(name: "name", code: 101));
       _transactionResource = _transactionResource.update(transaction: transaction);
 
       receiptScreenBloc = ReceiptScreenBloc(transactionResource: _transactionResource);
@@ -38,7 +38,7 @@ void main() {
       "ReceiptScreenBloc TransactionChanged event yields state: [transactionResource: transactionResource, isButtonVisible: false]",
       build: () => receiptScreenBloc,
       act: (bloc) {
-        Transaction transaction = _transactionResource.transaction.update(status: Status(name: "name", code: 200));
+        Transaction transaction = _transactionResource.transaction.update(status: const Status(name: "name", code: 200));
         _transactionResource = _transactionResource.update(transaction: transaction);
 
         bloc.add(TransactionChanged(transactionResource: _transactionResource));

@@ -54,13 +54,13 @@ class ActionButtonHandler {
       case NotificationType.exit:
         transactionResource = _updateTransaction(transactionResource: transactionResource, name: 'keep open notification sent', code: 105, notification: notification);
         break;
-      case NotificationType.auto_paid:
+      case NotificationType.autoPaid:
         transactionResource = _updateTransaction(transactionResource: transactionResource, name: 'payment processing', code: 103, notification: notification);
         break;
-      case NotificationType.bill_closed:
+      case NotificationType.billClosed:
         transactionResource = _updateTransaction(transactionResource: transactionResource, name: 'bill closed', code: 101, notification: notification);
         break;
-      case NotificationType.fix_bill:
+      case NotificationType.fixBill:
         if (transactionResource.transaction.status.code < 500) {
           transactionResource = await _fetchNetworkTransaction(notification: notification);
         } else {
@@ -113,7 +113,7 @@ class ActionButtonHandler {
       transactionResource = transactionResource.update(transaction: transactionResource.transaction.update(status: Status(name: name, code: code)));
     }
 
-    if (notification.type == NotificationType.auto_paid) {
+    if (notification.type == NotificationType.autoPaid) {
       _openTransactionsBloc.add(RemoveOpenTransaction(transaction: transactionResource));
     } else {
       _openTransactionsBloc.add(UpdateOpenTransaction(transaction: transactionResource));

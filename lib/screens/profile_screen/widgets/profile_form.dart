@@ -20,16 +20,18 @@ class ProfileForm extends StatefulWidget {
   final PhotoPickerRepository _photoPickerRepository;
   final CustomerBloc _customerBloc;
 
-  ProfileForm({
+  const ProfileForm({
     required Profile profile,
     required PhotoRepository photoRepository,
     required PhotoPickerRepository photoPickerRepository,
-    required CustomerBloc customerBloc
+    required CustomerBloc customerBloc,
+    Key? key
   })
     : _profile = profile,
       _photoRepository = photoRepository,
       _photoPickerRepository = photoPickerRepository,
-      _customerBloc = customerBloc;
+      _customerBloc = customerBloc,
+      super(key: key);
 
   @override
   State<ProfileForm> createState() => _ProfileFormState();
@@ -77,7 +79,7 @@ class _ProfileFormState extends State<ProfileForm> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      ScreenTitle(title: 'Edit Profile'),
+                      const ScreenTitle(title: 'Edit Profile'),
                       SizedBox(height: 50.h),
                       _photo(),
                       SizedBox(height: 50.h),
@@ -128,7 +130,7 @@ class _ProfileFormState extends State<ProfileForm> {
     return BlocBuilder<ProfileFormBloc, ProfileFormState>(
       builder: (context, state) {
         return TextFormField(
-          key: Key("firstNameFieldKey"),
+          key: const Key("firstNameFieldKey"),
           decoration: InputDecoration(
             labelText: 'First Name',
             labelStyle: TextStyle(
@@ -157,7 +159,7 @@ class _ProfileFormState extends State<ProfileForm> {
     return BlocBuilder<ProfileFormBloc, ProfileFormState>(
       builder: (context, state) {
         return TextFormField(
-          key: Key("lastNameFieldKey"),
+          key: const Key("lastNameFieldKey"),
           decoration: InputDecoration(
             labelText: 'Last Name',
             labelStyle: TextStyle(
@@ -187,7 +189,7 @@ class _ProfileFormState extends State<ProfileForm> {
       child: BlocBuilder<ProfileFormBloc, ProfileFormState>(
         builder: (context, state) {
           return OutlinedButton(
-            key: Key("cancelButtonKey"),
+            key: const Key("cancelButtonKey"),
             onPressed: state.isSubmitting ? null : () => _cancelButtonPressed(),
             child: ButtonText(text: 'Cancel', color: state.isSubmitting 
               ? Theme.of(context).colorScheme.callToActionDisabled
@@ -204,7 +206,7 @@ class _ProfileFormState extends State<ProfileForm> {
       child: BlocBuilder<ProfileFormBloc, ProfileFormState>(
         builder: (context, state) {
           return ElevatedButton(
-            key: Key("submitButtonKey"),
+            key: const Key("submitButtonKey"),
             onPressed: _isSaveButtonEnabled(state: state) ? () => _saveButtonPressed(state: state) : null,
             child: _buttonChild(state: state),
           );
@@ -215,9 +217,9 @@ class _ProfileFormState extends State<ProfileForm> {
   
   Widget _buttonChild({required ProfileFormState state}) {
     if (state.isSubmitting) {
-      return SizedBox(height: 25.sp, width: 25.sp, child: CircularProgressIndicator());
+      return SizedBox(height: 25.sp, width: 25.sp, child: const CircularProgressIndicator());
     } else {
-      return ButtonText(text: 'Save');
+      return const ButtonText(text: 'Save');
     }
   }
   
@@ -254,7 +256,7 @@ class _ProfileFormState extends State<ProfileForm> {
   void _showSnackbar({required String message, required ProfileFormState state}) async {
     state.isSuccess ? Vibrate.success() : Vibrate.error();
     final SnackBar snackBar = SnackBar(
-      key: Key("profileFormSnackbarKey"),
+      key: const Key("profileFormSnackbarKey"),
       content: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -293,7 +295,7 @@ class _ProfileFormState extends State<ProfileForm> {
                 onPressed: () => node.unfocus(), 
                 child: Padding(
                   padding: EdgeInsets.only(right: 16.w),
-                  child: ActionText()
+                  child: const ActionText()
                 )
               );
             }
@@ -307,7 +309,7 @@ class _ProfileFormState extends State<ProfileForm> {
                 onPressed: () => node.unfocus(), 
                 child: Padding(
                   padding: EdgeInsets.only(right: 16.w),
-                  child: ActionText()
+                  child: const ActionText()
                 )
               );
             }

@@ -8,26 +8,26 @@ import 'package:heist/resources/helpers/invalid_token_exception.dart';
 @immutable
 class TokenRepository {
   final StorageProvider _tokenProvider;
-  static const String TOKEN_KEY = 'token';
+  static const String tokenKey = 'token';
 
-  TokenRepository({required StorageProvider tokenProvider})
+  const TokenRepository({required StorageProvider tokenProvider})
     : _tokenProvider = tokenProvider;
   
   Future<void> saveToken({required Token token}) async {
-    return await _tokenProvider.write(key: TOKEN_KEY, value: jsonEncode(token.value));
+    return await _tokenProvider.write(key: tokenKey, value: jsonEncode(token.value));
   }
 
   Future<void> deleteToken() async {
-    return await _tokenProvider.delete(key: TOKEN_KEY);
+    return await _tokenProvider.delete(key: tokenKey);
   }
 
   Future<Token?> fetchToken() async {
-    final String? value = await _tokenProvider.read(key: TOKEN_KEY);
+    String? value = await _tokenProvider.read(key: tokenKey);
     return value != null ? Token(value: value) : null; 
   }
 
   Future<bool> hasValidToken() async {
-    final Token? token = await fetchToken();
+    Token? token = await fetchToken();
     if (token == null) return false;
     
     try {

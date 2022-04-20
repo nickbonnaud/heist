@@ -7,14 +7,14 @@ class SplashScreenState extends Equatable {
   final NextScreen? nextScreen;
 
 
-  SplashScreenState({
+  const SplashScreenState({
     required this.mainAnimationComplete,
     required this.endAnimationComplete,
     required this.nextScreen
   });
 
   factory SplashScreenState.initial() {
-    return SplashScreenState(
+    return const SplashScreenState(
       mainAnimationComplete: false,
       endAnimationComplete: false,
       nextScreen: null

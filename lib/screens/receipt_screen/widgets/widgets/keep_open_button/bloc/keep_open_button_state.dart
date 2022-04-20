@@ -6,14 +6,14 @@ class KeepOpenButtonState extends Equatable {
   final bool isSubmitSuccess;
   final String errorMessage;
 
-  KeepOpenButtonState({
+  const KeepOpenButtonState({
     required this.isSubmitting,
     required this.isSubmitSuccess,
     required this.errorMessage,
   });
 
   factory KeepOpenButtonState.initial() {
-    return KeepOpenButtonState(
+    return const KeepOpenButtonState(
       isSubmitting: false,
       isSubmitSuccess: false,
       errorMessage: ""

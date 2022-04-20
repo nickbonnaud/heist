@@ -7,8 +7,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class FadeInFile extends StatefulWidget {
   final XFile _imageFile;
 
-  FadeInFile({required XFile imageFile})
-    : _imageFile = imageFile;
+  const FadeInFile({required XFile imageFile, Key? key})
+    : _imageFile = imageFile,
+      super(key: key);
 
   @override
   State<FadeInFile> createState() => _FadeInFileState();
@@ -22,7 +23,7 @@ class _FadeInFileState extends State<FadeInFile> with SingleTickerProviderStateM
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 800)
+      duration: const Duration(milliseconds: 800)
     )..forward();
   }
   
@@ -30,7 +31,7 @@ class _FadeInFileState extends State<FadeInFile> with SingleTickerProviderStateM
   Widget build(BuildContext context) {
     return AnimatedOpacity(
       opacity: _controller.value, 
-      duration: Duration(milliseconds: 800),
+      duration: const Duration(milliseconds: 800),
       child: CircleAvatar(
         backgroundImage: Image.file(File(widget._imageFile.path)).image,
         radius: 100.sp,

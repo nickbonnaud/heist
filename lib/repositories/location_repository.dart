@@ -12,13 +12,13 @@ class LocationRepository extends BaseRepository {
     : _locationProvider = locationProvider;
 
   Future<List<Business>> sendLocation({required double lat, required double lng, required bool startLocation}) async {
-    final Map<String, dynamic> body = {
+    Map<String, dynamic> body = {
       "lat": lat,
       "lng": lng,
       "start_location": startLocation
     };
 
-    final PaginateDataHolder holder = await this.sendPaginated(request:  _locationProvider.sendLocation(body: body));
+    PaginateDataHolder holder = await sendPaginated(request:  _locationProvider.sendLocation(body: body));
     return deserialize(holder: holder);
   }
 

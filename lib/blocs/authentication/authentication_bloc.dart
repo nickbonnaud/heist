@@ -33,7 +33,7 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
     
     if (isSignedIn) {
       _customerBloc.add(CustomerAuthenticated());
-      emit(Authenticated());
+      emit(const Authenticated());
     } else {
       emit(Unauthenticated());
     }
@@ -41,7 +41,7 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
 
   void _mapLoggedInToState({required LoggedIn event, required Emitter<AuthenticationState> emit}) {
     _customerBloc.add(CustomerLoggedIn(customer: event.customer));
-    emit(Authenticated());
+    emit(const Authenticated());
   }
 
   void _mapLoggedOutToState({required Emitter<AuthenticationState> emit}) {

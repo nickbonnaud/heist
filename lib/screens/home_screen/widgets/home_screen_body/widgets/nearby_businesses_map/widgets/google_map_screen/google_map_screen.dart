@@ -19,21 +19,23 @@ class GoogleMapScreen extends StatefulWidget{
   final double _longitude;
   final List<PreMarker> _preMarkers;
 
-  GoogleMapScreen({
+  const GoogleMapScreen({
     required double latitude,
     required double longitude,
     required List<PreMarker> preMarkers,
+    Key? key
   })
     : _latitude = latitude,
       _longitude = longitude,
-      _preMarkers = preMarkers;
+      _preMarkers = preMarkers,
+      super(key: key);
 
   @override
   State<GoogleMapScreen> createState() => _GoogleMapScreenState();
 }
   
 class _GoogleMapScreenState extends State<GoogleMapScreen> {
-  static const MAP_KEY = 'MAP_KEY';
+  static const mapKey = 'MAP_KEY';
   late GoogleMapController _controller;
 
   @override
@@ -53,11 +55,11 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
                 target: LatLng(widget._latitude, widget._longitude),
                 zoom: 14.0,
               ),
-              gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>[
+              gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>{
                 Factory<OneSequenceGestureRecognizer>(
                   () => EagerGestureRecognizer()
                 )
-              ].toSet(),
+              },
               markers: _createMarkers(preMarkers: widget._preMarkers),
               myLocationButtonEnabled: false,
             ),
@@ -65,7 +67,7 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
               builder: (context, state) {
                 if (state.screenCoordinate != null) {
                   return Positioned(
-                    key: Key("${state.business!.identifier}"),
+                    key: const Key("state.business!.identifier"),
                     top: state.screenCoordinate!.y.toDouble().h - 40.h,
                     left: state.screenCoordinate!.x.toDouble().w - 5.w,
                     child: CachedAvatarHero(
@@ -81,8 +83,8 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
           ],
         ),
         floatingActionButton: FloatingActionButton(
-          heroTag: MAP_KEY,
-          child: Icon(Icons.my_location),
+          heroTag: mapKey,
+          child: const Icon(Icons.my_location),
           onPressed: () => _changeLocation(),
         ),
       )
@@ -97,18 +99,18 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
 
   Marker _createCustomerLocationMarker() {
     return Marker(
-      markerId: MarkerId('customer_marker'),
+      markerId: const MarkerId('customer_marker'),
       position: LatLng(widget._latitude, widget._longitude)
     );
   }
 
   void _changeLocation() {
-    BlocProvider.of<GeoLocationBloc>(context).add(FetchLocation(accuracy: Accuracy.MEDIUM));
+    BlocProvider.of<GeoLocationBloc>(context).add(const FetchLocation(accuracy: Accuracy.medium));
   }
 
   void _showBusinessSheet({required Business business}) {
     context.read<BusinessScreenVisibleCubit>().toggle();
-    BlocProvider.of<SideDrawerBloc>(context).add(ButtonVisibilityChanged(isVisible: false));
+    BlocProvider.of<SideDrawerBloc>(context).add(const ButtonVisibilityChanged(isVisible: false));
     
     Navigator.of(context).push(PageRouteBuilder(
       opaque: false,
@@ -116,9 +118,9 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
       pageBuilder: (BuildContext context, _, __) => BusinessScreen(business: business, fromMapScreen: true)
     )).then((_) {
       context.read<BusinessScreenVisibleCubit>().toggle();
-        BlocProvider.of<SideDrawerBloc>(context).add(ButtonVisibilityChanged(isVisible: true));
+        BlocProvider.of<SideDrawerBloc>(context).add(const ButtonVisibilityChanged(isVisible: true));
       
-      Future.delayed(Duration(milliseconds: 300)).then((_) =>
+      Future.delayed(const Duration(milliseconds: 300)).then((_) =>
         BlocProvider.of<GoogleMapScreenBloc>(context).add(Reset()) 
       );
     });

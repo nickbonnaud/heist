@@ -4,10 +4,10 @@ part of 'filter_button_bloc.dart';
 class FilterButtonState extends Equatable {
   final bool isActive;
 
-  FilterButtonState({required this.isActive});
+  const FilterButtonState({required this.isActive});
 
   factory FilterButtonState.initial() {
-    return FilterButtonState(isActive: false);
+    return const FilterButtonState(isActive: false);
   }
 
   FilterButtonState update({required bool isActive}) {

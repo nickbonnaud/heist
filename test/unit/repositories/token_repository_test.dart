@@ -15,12 +15,12 @@ void main() {
     setUp(() {
       tokenProvider = MockStorageProvider();
       tokenRepository = TokenRepository(tokenProvider: tokenProvider);
-      token = Token(value: "value");
+      token = const Token(value: "value");
     });
 
     test("Token Repository can save token", () async {
       when(() => tokenProvider.write(key: any(named: "key"), value: any(named: "value")))
-        .thenAnswer((_) async => null);
+        .thenAnswer((_) async => true);
       
       await tokenRepository.saveToken(token: token);
       verify(() => tokenProvider.write(key: any(named: "key"), value: any(named: "value"))).called(1);
@@ -28,7 +28,7 @@ void main() {
 
     test("Token Repository can delete token", () async {
       when(() => tokenProvider.delete(key: any(named: "key")))
-        .thenAnswer((_) async => null);
+        .thenAnswer((_) async => true);
       
       await tokenRepository.deleteToken();
       verify(() => tokenProvider.delete(key: any(named: "key"))).called(1);

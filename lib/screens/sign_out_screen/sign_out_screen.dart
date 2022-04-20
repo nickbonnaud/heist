@@ -10,9 +10,10 @@ class SignOutScreen extends StatelessWidget {
   final AuthenticationRepository _authenticationRepository;
   final AuthenticationBloc _authenticationBloc;
 
-  const SignOutScreen({required AuthenticationRepository authenticationRepository, required AuthenticationBloc authenticationBloc})
+  const SignOutScreen({required AuthenticationRepository authenticationRepository, required AuthenticationBloc authenticationBloc, Key? key})
     : _authenticationRepository = authenticationRepository,
-      _authenticationBloc = authenticationBloc;
+      _authenticationBloc = authenticationBloc,
+      super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +25,7 @@ class SignOutScreen extends StatelessWidget {
           authenticationRepository: _authenticationRepository,
           authenticationBloc: _authenticationBloc
         ),
-        child: SignOutBody(),
+        child: const SignOutBody(),
       ),
     );
   }

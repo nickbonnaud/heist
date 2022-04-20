@@ -14,7 +14,7 @@ class RefundResource extends Equatable {
   final Transaction transaction;
   final Issue? issue;
 
-  RefundResource({
+  const RefundResource({
     required this.refund,
     required this.business,
     required this.transaction,

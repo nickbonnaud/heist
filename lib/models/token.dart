@@ -9,12 +9,12 @@ class Token extends Equatable {
 
   const Token({required this.value});
 
-  bool get expired => JwtDecoder.isExpired(this.value);
+  bool get expired => JwtDecoder.isExpired(value);
   
   bool get valid {
     try {
-      JwtDecoder.decode(this.value);
-      return !this.expired;
+      JwtDecoder.decode(value);
+      return !expired;
     } on FormatException catch (_) {
       return false;
     }

@@ -18,7 +18,7 @@ class Transaction extends Equatable {
   final bool locked;
   final List<PurchasedItem> purchasedItems;
 
-  Transaction({
+  const Transaction({
     required this.identifier,
     required this.tax,
     required this.tip,
@@ -56,7 +56,7 @@ class Transaction extends Equatable {
     bool? locked,
     List<PurchasedItem>? purchasedItems
   }) => Transaction(
-    identifier: this.identifier,
+    identifier: identifier,
     tax: tax ?? this.tax,
     tip: tip ?? this.tip,
     netSales: netSales ?? this.netSales,

@@ -13,9 +13,10 @@ class IssueForm extends StatefulWidget {
   final IssueType _type;
   final TransactionResource _transaction;
 
-  IssueForm({required IssueType type, required TransactionResource transaction})
+  const IssueForm({required IssueType type, required TransactionResource transaction, Key? key})
     : _type = type,
-      _transaction = transaction;
+      _transaction = transaction,
+      super(key: key);
   
   @override
   State<StatefulWidget> createState() => _IssueFormState();
@@ -49,7 +50,7 @@ class _IssueFormState extends State<IssueForm> {
       child: Form(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 16.w),
-          child: Container(
+          child: SizedBox(
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
             child: KeyboardActions(
@@ -100,7 +101,7 @@ class _IssueFormState extends State<IssueForm> {
     return BlocBuilder<IssueFormBloc, IssueFormState>(
       builder: (context, state) {
         return TextFormField(
-          key: Key("issueFieldKey"),
+          key: const Key("issueFieldKey"),
           decoration: InputDecoration(
             labelText: "Issue",
             labelStyle: TextStyle(
@@ -118,7 +119,7 @@ class _IssueFormState extends State<IssueForm> {
           autocorrect: true,
           textCapitalization: TextCapitalization.sentences,
           autovalidateMode: AutovalidateMode.onUserInteraction,
-          validator: (_) => !state.isMessageValid && _messageController.text.length != 0 ? 'Issue must be at least 5 characters long' : null,
+          validator: (_) => !state.isMessageValid && _messageController.text.isNotEmpty ? 'Issue must be at least 5 characters long' : null,
           maxLines: null,
         );
       },
@@ -129,7 +130,7 @@ class _IssueFormState extends State<IssueForm> {
     return BlocBuilder<IssueFormBloc, IssueFormState>(
       builder: (context, state) {
         return OutlinedButton(
-          key: Key("cancelButtonKey"),
+          key: const Key("cancelButtonKey"),
           onPressed: state.isSubmitting ? null : () => _cancelButtonPressed(),
           child: ButtonText(text: 'Cancel', color: state.isSubmitting 
             ? Theme.of(context).colorScheme.callToActionDisabled
@@ -144,7 +145,7 @@ class _IssueFormState extends State<IssueForm> {
     return BlocBuilder<IssueFormBloc, IssueFormState>(
       builder: (context, state) {
         return ElevatedButton(
-          key: Key("submitButtonKey"),
+          key: const Key("submitButtonKey"),
           onPressed: _isSaveButtonEnabled(state: state) ? () => _saveButtonPressed(state: state) : null,
           child: _buttonChild(context: context, state: state),
         );
@@ -154,9 +155,9 @@ class _IssueFormState extends State<IssueForm> {
 
   Widget _buttonChild({required BuildContext context, required IssueFormState state}) {
     if (state.isSubmitting) {
-      return SizedBox(height: 25.sp, width: 25.sp, child: CircularProgressIndicator());
+      return SizedBox(height: 25.sp, width: 25.sp, child: const CircularProgressIndicator());
     } else {
-      return ButtonText(text: 'Save');
+      return const ButtonText(text: 'Save');
     }
   }
   
@@ -193,7 +194,7 @@ class _IssueFormState extends State<IssueForm> {
   void _showSnackbar({required String message, required IssueFormState state}) async {
     state.isSuccess ? Vibrate.success() : Vibrate.error();
     final SnackBar snackBar = SnackBar(
-      key: Key("snackBarKey"),
+      key: const Key("snackBarKey"),
       content: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -221,9 +222,9 @@ class _IssueFormState extends State<IssueForm> {
   }
 
   String _formatIssueType() {
-    if (widget._type == IssueType.wrong_bill) {
+    if (widget._type == IssueType.wrongBill) {
       return 'Wrong Bill';
-    } else if (widget._type == IssueType.error_in_bill) {
+    } else if (widget._type == IssueType.errorInBill) {
       return "Something's wrong";
     } else {
       return "What's wrong?";
@@ -243,7 +244,7 @@ class _IssueFormState extends State<IssueForm> {
                 onPressed: () => node.unfocus(),
                 child: Padding(
                   padding: EdgeInsets.only(right: 16.w),
-                  child: ActionText()
+                  child: const ActionText()
                 ),
               );
             }

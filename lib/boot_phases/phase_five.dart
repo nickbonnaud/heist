@@ -16,6 +16,9 @@ import 'package:heist/resources/helpers/external_url_handler.dart';
 
 class PhaseFive extends StatelessWidget {
 
+  const PhaseFive({Key? key})
+    : super(key: key);
+  
   @override
   Widget build(BuildContext context) {
     return BlocProvider<PushNotificationBloc>(

@@ -11,8 +11,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class EmailForm extends StatefulWidget {
   final Customer _customer;
 
-  EmailForm({required Customer customer})
-    : _customer = customer;
+  const EmailForm({required Customer customer, Key? key})
+    : _customer = customer,
+      super(key: key);
 
   @override
   State<EmailForm> createState() => _EmailFormState();
@@ -54,7 +55,7 @@ class _EmailFormState extends State<EmailForm> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      ScreenTitle(title: 'Edit Email'),
+                      const ScreenTitle(title: 'Edit Email'),
                       _email(),
                       SizedBox(height: 60.h),
                     ],
@@ -93,7 +94,7 @@ class _EmailFormState extends State<EmailForm> {
     return BlocBuilder<EmailFormBloc, EmailFormState>(
       builder: (context, state) {
         return TextFormField(
-          key: Key("emailFieldKey"),
+          key: const Key("emailFieldKey"),
           decoration: InputDecoration(
             labelText: 'Email',
             labelStyle: TextStyle(
@@ -121,7 +122,7 @@ class _EmailFormState extends State<EmailForm> {
     return BlocBuilder<EmailFormBloc, EmailFormState>(
       builder: (context, state) {
         return OutlinedButton(
-          key: Key("cancelButtonKey"),
+          key: const Key("cancelButtonKey"),
           onPressed: state.isSubmitting ? null : () => _cancelButtonPressed(),
           child: ButtonText(text: 'Cancel', color: state.isSubmitting
             ? Theme.of(context).colorScheme.callToActionDisabled
@@ -136,7 +137,7 @@ class _EmailFormState extends State<EmailForm> {
     return BlocBuilder<EmailFormBloc, EmailFormState>(
       builder: (context, state) {
         return ElevatedButton(
-          key: Key("submitButtonKey"),
+          key: const Key("submitButtonKey"),
           onPressed: _isSaveButtonEnabled(state: state) ? () => _saveButtonPressed(state: state) : null,
           child: _buttonChild(state: state),
         );
@@ -146,9 +147,9 @@ class _EmailFormState extends State<EmailForm> {
 
   Widget _buttonChild({required EmailFormState state}) {
     if (state.isSubmitting) {
-      return SizedBox(height: 25.sp, width: 25.sp, child: CircularProgressIndicator());
+      return SizedBox(height: 25.sp, width: 25.sp, child: const CircularProgressIndicator());
     } else {
-      return ButtonText(text: 'Save');
+      return const ButtonText(text: 'Save');
     }
   }
 
@@ -160,7 +161,7 @@ class _EmailFormState extends State<EmailForm> {
       : error!;
 
     final SnackBar snackBar = SnackBar(
-      key: Key("emailFormSnackbarKey"),
+      key: const Key("emailFormSnackbarKey"),
       content: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -221,7 +222,7 @@ class _EmailFormState extends State<EmailForm> {
                 onPressed: () => node.unfocus(),
                 child: Padding(
                   padding: EdgeInsets.only(right: 16.w),
-                  child: ActionText()
+                  child: const ActionText()
                 ),
               );
             }

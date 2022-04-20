@@ -9,6 +9,9 @@ import 'widgets/splash_screen_body.dart';
 
 class SplashScreen extends StatelessWidget {
 
+  const SplashScreen({Key? key})
+    : super(key: key);
+  
   @override
   Widget build(BuildContext context) {
     BlocProvider.of<PermissionsBloc>(context).add(CheckPermissions());
@@ -17,7 +20,7 @@ class SplashScreen extends StatelessWidget {
       create: (_) => SplashScreenBloc(
         appReadyBloc: BlocProvider.of<AppReadyBloc>(context)
       ),
-      child: SplashScreenBody(),
+      child: const SplashScreenBody(),
     );
   }
 }

@@ -9,8 +9,9 @@ import 'widgets/request_reset_password_form.dart';
 class RequestResetPasswordScreen extends StatelessWidget {
   final AuthenticationRepository _authenticationRepository;
 
-  const RequestResetPasswordScreen({required AuthenticationRepository authenticationRepository})
-    : _authenticationRepository = authenticationRepository;
+  const RequestResetPasswordScreen({required AuthenticationRepository authenticationRepository, Key? key})
+    : _authenticationRepository = authenticationRepository,
+      super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +20,7 @@ class RequestResetPasswordScreen extends StatelessWidget {
       appBar: BottomModalAppBar(context: context),
       body: BlocProvider<RequestResetFormBloc>(
         create: (_) => RequestResetFormBloc(authenticationRepository: _authenticationRepository),
-        child: RequestResetPasswordForm(),
+        child: const RequestResetPasswordForm(),
       ),
     );
   }

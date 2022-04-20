@@ -23,7 +23,7 @@ class AccountRepository extends BaseRepository {
       body.addAll({'primary': primary});
     }
 
-    final Map<String, dynamic> json = await this.send(request: _accountProvider.update(body: body, accountIdentifier: accountIdentifier));
+    final Map<String, dynamic> json = await send(request: _accountProvider.update(body: body, accountIdentifier: accountIdentifier));
     return deserialize(json: json);
   }
 

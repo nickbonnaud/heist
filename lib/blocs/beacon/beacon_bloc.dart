@@ -6,7 +6,7 @@ import 'package:flutter_beacon/flutter_beacon.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heist/blocs/active_location/active_location_bloc.dart';
 import 'package:heist/blocs/nearby_businesses/nearby_businesses_bloc.dart';
-import 'package:heist/models/business/beacon.dart' as businessBeacon;
+import 'package:heist/models/business/beacon.dart' as business_beacon;
 import 'package:heist/models/business/business.dart';
 import 'package:heist/repositories/beacon_repository.dart';
 
@@ -39,7 +39,7 @@ class BeaconBloc extends Bloc<BeaconEvent, BeaconState> {
 
             if (_testing) {
               Business business = state.businesses.first;
-              businessBeacon.Beacon beacon = _regionToBeacon(region: Region(
+              business_beacon.Beacon beacon = _regionToBeacon(region: Region(
                 identifier: business.location.beacon.regionIdentifier,
                 proximityUUID: business.location.beacon.proximityUUID,
                 major: business.location.beacon.major,
@@ -100,8 +100,8 @@ class BeaconBloc extends Bloc<BeaconEvent, BeaconState> {
     _activeLocationBloc.add(RemoveActiveLocation(beacon: event.beacon));
   }
 
-  businessBeacon.Beacon _regionToBeacon({required Region region}) {
-    return businessBeacon.Beacon(
+  business_beacon.Beacon _regionToBeacon({required Region region}) {
+    return business_beacon.Beacon(
       regionIdentifier: region.identifier,
       proximityUUID: region.proximityUUID!,
       major: region.major!,

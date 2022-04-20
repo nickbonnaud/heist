@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 class OverlayRouteTest extends PageRoute {
   final Widget _screen;
   
-  static final Offset _begin = Offset(0.0, 1.0);
-  static final Offset _end = Offset.zero;
-  static final Curve _curve = Curves.easeInOut; 
+  static const Offset _begin = Offset(0.0, 1.0);
+  static const Offset _end = Offset.zero;
+  static const Curve _curve = Curves.easeInOut; 
   
   OverlayRouteTest({required Widget screen, required String name})
     : _screen = screen,
@@ -21,7 +21,7 @@ class OverlayRouteTest extends PageRoute {
   bool get maintainState => true;
 
   @override
-  Duration get transitionDuration => Duration(milliseconds: 350);
+  Duration get transitionDuration => const Duration(milliseconds: 350);
 
   @override
   bool get opaque => false;

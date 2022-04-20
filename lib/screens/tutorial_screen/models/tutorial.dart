@@ -10,7 +10,7 @@ class Tutorial extends Equatable {
   final bool hasInitialAnimation;
   final bool dismissed;
 
-  Tutorial({
+  const Tutorial({
     required this.type,
     required this.key,
     required this.header,
@@ -21,12 +21,12 @@ class Tutorial extends Equatable {
   });
 
   Tutorial update({required bool dismissed}) => Tutorial(
-    type: this.type,
-    key: this.key,
-    header: this.header,
-    body: this.body,
-    artboard: this.artboard,
-    hasInitialAnimation: this.hasInitialAnimation,
+    type: type,
+    key: key,
+    header: header,
+    body: body,
+    artboard: artboard,
+    hasInitialAnimation: hasInitialAnimation,
     dismissed: dismissed
   );
   

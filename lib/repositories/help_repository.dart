@@ -12,58 +12,58 @@ class HelpRepository extends BaseRepository {
     : _helpProvider = helpProvider;
 
   Future<PaginateDataHolder> fetchAll() async {
-    final PaginateDataHolder holder = await this.sendPaginated(request: _helpProvider.fetchHelpTickets());
+    PaginateDataHolder holder = await sendPaginated(request: _helpProvider.fetchHelpTickets());
     return deserialize(holder: holder);
   }
 
   Future<PaginateDataHolder> fetchResolved() async {
-    final String query = this.formatQuery(baseQuery: "resolved=true");
+    String query = formatQuery(baseQuery: "resolved=true");
 
-    final PaginateDataHolder holder = await this.sendPaginated(request: _helpProvider.fetchHelpTickets(query: query));
+    PaginateDataHolder holder = await sendPaginated(request: _helpProvider.fetchHelpTickets(query: query));
     return deserialize(holder: holder);
   }
 
   Future<PaginateDataHolder> fetchOpen() async {
-    final String query = this.formatQuery(baseQuery: "resolved=false");
+    String query = formatQuery(baseQuery: "resolved=false");
 
-    final PaginateDataHolder holder = await this.sendPaginated(request: _helpProvider.fetchHelpTickets(query: query));
+    PaginateDataHolder holder = await sendPaginated(request: _helpProvider.fetchHelpTickets(query: query));
     return deserialize(holder: holder);
   }
 
   Future<PaginateDataHolder> paginate({required String url}) async {
-    final PaginateDataHolder holder = await this.sendPaginated(request: _helpProvider.fetchHelpTickets(paginateUrl: url));
+    PaginateDataHolder holder = await sendPaginated(request: _helpProvider.fetchHelpTickets(paginateUrl: url));
     return deserialize(holder: holder);
   }
   
   Future<HelpTicket> storeHelpTicket({required String subject, required String message}) async {
-    final Map<String, dynamic> body = {
+    Map<String, dynamic> body = {
       'subject': subject,
       'message': message
     };
 
-    final Map<String, dynamic> json = await this.send(request: _helpProvider.storeHelpTicket(body: body));
+    Map<String, dynamic> json = await send(request: _helpProvider.storeHelpTicket(body: body));
     return deserialize(json: json);
   }
 
   Future<HelpTicket> storeReply({required String identifier, required String message}) async {
-    final Map<String, dynamic> body = {
+    Map<String, dynamic> body = {
       'ticket_identifier': identifier,
       'message': message
     };
 
-    final Map<String, dynamic> json = await this.send(request: _helpProvider.storeReply(body: body));
+    Map<String, dynamic> json = await send(request: _helpProvider.storeReply(body: body));
     return deserialize(json: json);
   }
 
   Future<HelpTicket> updateRepliesAsRead({required String ticketIdentifier}) async {
-    final Map<String, dynamic> body = {'read': true};
+    Map<String, dynamic> body = {'read': true};
 
-    final Map<String, dynamic> json = await this.send(request: _helpProvider.updateReplies(body: body, ticketIdentifier: ticketIdentifier));
+    Map<String, dynamic> json = await send(request: _helpProvider.updateReplies(body: body, ticketIdentifier: ticketIdentifier));
     return deserialize(json: json);
   }
 
   Future<bool> deleteHelpTicket({required String identifier}) async {
-    return await this.send(request: _helpProvider.deleteHelpTicket(identifier: identifier))
+    return await send(request: _helpProvider.deleteHelpTicket(identifier: identifier))
       .then((json) => json['deleted']);
   }
 

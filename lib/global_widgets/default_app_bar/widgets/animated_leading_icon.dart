@@ -7,6 +7,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:heist/themes/global_colors.dart';
 
 class AnimatedLeadingIcon extends StatefulWidget{
+  
+  const AnimatedLeadingIcon({Key? key})
+    : super(key: key);
+  
   @override
   State<AnimatedLeadingIcon> createState() => _AnimatedLeadingIconState();
 }
@@ -18,7 +22,7 @@ class _AnimatedLeadingIconState extends State<AnimatedLeadingIcon> with TickerPr
   @override
   void initState() {
     super.initState();
-    _rotateAnimationController = AnimationController(vsync: this, duration: Duration(milliseconds: 300));
+    _rotateAnimationController = AnimationController(vsync: this, duration: const Duration(milliseconds: 300));
     _rotateAnimation = Tween(begin: 0.0, end: - pi / 2).animate(_rotateAnimationController);
   }
   
@@ -37,7 +41,7 @@ class _AnimatedLeadingIconState extends State<AnimatedLeadingIcon> with TickerPr
         builder: (context, child) => Transform.rotate(
           angle: _rotateAnimation.value,
           child: IconButton(
-            icon: Icon(Icons.arrow_back),
+            icon: const Icon(Icons.arrow_back),
             onPressed: () => Navigator.of(context).pop(),
             color: Theme.of(context).colorScheme.topAppBarIcon,
             iconSize: 45.sp,

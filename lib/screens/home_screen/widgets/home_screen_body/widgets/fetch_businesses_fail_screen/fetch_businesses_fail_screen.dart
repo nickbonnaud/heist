@@ -8,9 +8,10 @@ class FetchBusinessesFailScreen extends StatelessWidget {
   final NearbyBusinessesBloc _nearbyBusinessesBloc;
   final GeoLocationBloc _geoLocationBloc;
 
-  FetchBusinessesFailScreen({required NearbyBusinessesBloc nearbyBusinessesBloc, required GeoLocationBloc geoLocationBloc})
+  const FetchBusinessesFailScreen({required NearbyBusinessesBloc nearbyBusinessesBloc, required GeoLocationBloc geoLocationBloc, Key? key})
     : _nearbyBusinessesBloc = nearbyBusinessesBloc,
-      _geoLocationBloc = geoLocationBloc;
+      _geoLocationBloc = geoLocationBloc,
+      super(key: key);
   
   @override
   Widget build(BuildContext context) {
@@ -29,7 +30,7 @@ class FetchBusinessesFailScreen extends StatelessWidget {
 
   void _retryButtonPressed() {
     if (_geoLocationBloc.currentLocation == null) {
-      _geoLocationBloc.add(FetchLocation(accuracy: Accuracy.MEDIUM));
+      _geoLocationBloc.add(const FetchLocation(accuracy: Accuracy.medium));
     } else {
       _nearbyBusinessesBloc.add(FetchNearby(
         lat: _geoLocationBloc.currentLocation!['lat']!,

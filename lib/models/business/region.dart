@@ -9,7 +9,7 @@ class Region extends Equatable {
   final String zip;
   final String? neighborhood;
 
-  Region({
+  const Region({
     required this.identifier, 
     required this.city,
     required this.state,

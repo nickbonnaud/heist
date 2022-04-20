@@ -40,16 +40,16 @@ void main() {
     blocTest<TipFormBloc, TipFormState>(
       "TipFormBloc TipRateChanged event yields state: [isTipRateValid: true]",
       build: () => tipFormBloc,
-      wait: Duration(milliseconds: 300),
-      act: (bloc) => bloc.add(TipRateChanged(tipRate: '18')),
+      wait: const Duration(milliseconds: 300),
+      act: (bloc) => bloc.add(const TipRateChanged(tipRate: '18')),
       expect: () => [_baseState.update(isTipRateValid: true)]
     );
 
     blocTest<TipFormBloc, TipFormState>(
       "TipFormBloc QuickTipRateChanged event yields state: [isQuickTipRateValid: true]",
       build: () => tipFormBloc,
-      wait: Duration(milliseconds: 300),
-      act: (bloc) => bloc.add(QuickTipRateChanged(quickTipRate: '5')),
+      wait: const Duration(milliseconds: 300),
+      act: (bloc) => bloc.add(const QuickTipRateChanged(quickTipRate: '5')),
       expect: () => [_baseState.update(isQuickTipRateValid: true)]
     );
 
@@ -91,7 +91,7 @@ void main() {
       build: () => tipFormBloc,
       act: (bloc) {
         when(() => accountRepository.update(accountIdentifier: any(named: "accountIdentifier"), tipRate: any(named: "tipRate"), quickTipRate: any(named: "quickTipRate")))
-          .thenThrow(ApiException(error: "error"));
+          .thenThrow(const ApiException(error: "error"));
 
         bloc.add(Submitted(accountIdentifier: faker.guid.guid(), tipRate: 18, quickTipRate: 5));
       },

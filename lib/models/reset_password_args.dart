@@ -9,7 +9,7 @@ class ResetPasswordArgs extends Equatable {
   const ResetPasswordArgs({required this.email, this.resetCode});
 
   ResetPasswordArgs update({String? resetCode}) => ResetPasswordArgs(
-    email: this.email,
+    email: email,
     resetCode: resetCode ?? this.resetCode
   );
   

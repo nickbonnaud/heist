@@ -45,7 +45,7 @@ class ResetPasswordFormState extends Equatable {
     isResetCodeValid: isResetCodeValid ?? this.isResetCodeValid,
     isPasswordValid: isPasswordValid ?? this.isPasswordValid,
     isPasswordConfirmationValid: isPasswordConfirmationValid ?? this.isPasswordConfirmationValid,
-    email: this.email,
+    email: email,
     isSubmitting: isSubmitting ?? this.isSubmitting, 
     isSuccess: isSuccess ?? this.isSuccess,
     errorMessage: errorMessage ?? this.errorMessage

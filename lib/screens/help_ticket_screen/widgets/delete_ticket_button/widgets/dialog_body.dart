@@ -10,8 +10,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class DialogBody extends StatelessWidget {
   final HelpTicket _helpTicket;
 
-  DialogBody({required HelpTicket helpTicket})
-    : _helpTicket = helpTicket;
+  const DialogBody({required HelpTicket helpTicket, Key? key})
+    : _helpTicket = helpTicket,
+      super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +28,7 @@ class DialogBody extends StatelessWidget {
       child: BlocBuilder<DeleteTicketButtonBloc, DeleteTicketButtonState>(
         builder: (context, state) {
           return PlatformAlertDialog(
-            key: Key("deleteTicketDialogKey"),
+            key: const Key("deleteTicketDialogKey"),
             title: state.isSubmitting
               ? PlatformText('Deleting...')
               : PlatformText('Delete Help Ticket'),
@@ -39,7 +40,7 @@ class DialogBody extends StatelessWidget {
                       margin: EdgeInsets.only(top: 10.h),
                       height: 45.sp,
                       width: 45.sp,
-                      child: CircularProgressIndicator(),
+                      child: const CircularProgressIndicator(),
                     )
                   ],
                 )
@@ -49,14 +50,14 @@ class DialogBody extends StatelessWidget {
                 ),
             actions: [
               PlatformDialogAction(
-                key: Key("cancelDeleteTicketButtonKey"),
+                key: const Key("cancelDeleteTicketButtonKey"),
                 child: PlatformText("Cancel"), 
                 onPressed: state.isSubmitting
                   ? null
                   : () => Navigator.of(context).pop()
               ),
               PlatformDialogAction(
-                key: Key("confirmDeleteTicketButtonKey"),
+                key: const Key("confirmDeleteTicketButtonKey"),
                 child: PlatformText(
                   'Delete',
                   style: TextStyle(

@@ -17,10 +17,11 @@ class IssueScreen extends StatelessWidget {
   final IssueType _type;
   final TransactionResource _transaction;
 
-  IssueScreen({required TransactionIssueRepository issueRepository, required IssueType type, required TransactionResource transaction})
+  const IssueScreen({required TransactionIssueRepository issueRepository, required IssueType type, required TransactionResource transaction, Key? key})
     : _issueRepository = issueRepository,
       _type = type,
-      _transaction = transaction;
+      _transaction = transaction,
+      super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -11,7 +11,7 @@ class Location extends Equatable {
   final Beacon beacon;
   final Region region;
 
-  Location({
+  const Location({
     required this.geo,
     required this.beacon,
     required this.region

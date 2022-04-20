@@ -36,7 +36,7 @@ class Submitted extends SetupTipCardEvent {
   final int quickTipRate;
   final String accountIdentifier;
 
-  Submitted({required this.tipRate, required this.quickTipRate, required this.accountIdentifier});
+  const Submitted({required this.tipRate, required this.quickTipRate, required this.accountIdentifier});
 
   @override
   List<Object> get props => [tipRate, quickTipRate, accountIdentifier];

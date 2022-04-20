@@ -4,10 +4,10 @@ part of 'receipt_modal_sheet_bloc.dart';
 class ReceiptModalSheetState extends Equatable {
   final bool visible;
 
-  ReceiptModalSheetState({required this.visible});
+  const ReceiptModalSheetState({required this.visible});
 
   factory ReceiptModalSheetState.initial() {
-    return ReceiptModalSheetState(visible: false);
+    return const ReceiptModalSheetState(visible: false);
   }
 
   ReceiptModalSheetState update({required bool visible}) {

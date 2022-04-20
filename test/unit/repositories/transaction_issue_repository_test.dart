@@ -22,31 +22,31 @@ void main() {
     });
 
     test("Transaction Issue Repository can report an issue", () async {
-      var transaction = await transactionIssueRepository.reportIssue(type: IssueType.error_in_bill, transactionId: "transactionId", message: "message");
+      var transaction = await transactionIssueRepository.reportIssue(type: IssueType.errorInBill, transactionId: "transactionId", message: "message");
       expect(transaction, isA<TransactionResource>());
     });
 
     test("Transaction Issue Repository throws error on report an issue fail", () async {
       when(() => mockTransactionIssueProvider.postIssue(body: any(named: "body")))
-        .thenAnswer((_) async => ApiResponse(body: {}, error: "error", isOK: false));
+        .thenAnswer((_) async => const ApiResponse(body: {}, error: "error", isOK: false));
 
       expect(
-        transactionIssueRepositoryWithMock.reportIssue(type: IssueType.error_in_bill, transactionId: "transactionId", message: "message"),
+        transactionIssueRepositoryWithMock.reportIssue(type: IssueType.errorInBill, transactionId: "transactionId", message: "message"),
         throwsA(isA<ApiException>())
       );
     });
 
     test("Transaction Issue Repository can change issue", () async {
-      var transaction = await transactionIssueRepository.changeIssue(type: IssueType.wrong_bill, issueId: "issueId", message: "message");
+      var transaction = await transactionIssueRepository.changeIssue(type: IssueType.wrongBill, issueId: "issueId", message: "message");
       expect(transaction, isA<TransactionResource>());
     });
 
     test("Transaction Issue Repository throws error on change issue fail", () async {
       when(() => mockTransactionIssueProvider.patchIssue(body: any(named: "body"), issueId: any(named: "issueId")))
-        .thenAnswer((_) async => ApiResponse(body: {}, error: "error", isOK: false));
+        .thenAnswer((_) async => const ApiResponse(body: {}, error: "error", isOK: false));
 
       expect(
-        transactionIssueRepositoryWithMock.changeIssue(type: IssueType.wrong_bill, issueId: "issueId", message: "message"),
+        transactionIssueRepositoryWithMock.changeIssue(type: IssueType.wrongBill, issueId: "issueId", message: "message"),
         throwsA(isA<ApiException>())
       );
     });
@@ -58,7 +58,7 @@ void main() {
 
     test("Transaction Issue Repository throws error on cancel issue fail", () async {
       when(() => mockTransactionIssueProvider.deleteIssue(issueId: any(named: "issueId")))
-        .thenAnswer((_) async => ApiResponse(body: {}, error: "error", isOK: false));
+        .thenAnswer((_) async => const ApiResponse(body: {}, error: "error", isOK: false));
 
       expect(
         transactionIssueRepositoryWithMock.cancelIssue(issueId: "issueId"),

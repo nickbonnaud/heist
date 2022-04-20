@@ -37,7 +37,7 @@ void main() {
     });
 
     test("Refund Repository throws error on fetch all refunds fail", () async {
-      when(() => mockRefundProvider.fetch()).thenAnswer((_) async => PaginatedApiResponse(body: [], isOK: false));
+      when(() => mockRefundProvider.fetch()).thenAnswer((_) async => const PaginatedApiResponse(body: [], isOK: false));
 
       expect(
         refundRepositoryWithMock.fetchAll(),
@@ -53,7 +53,7 @@ void main() {
     });
 
     test("Refund Repository throws error on fetch refunds by business fail", () async {
-      when(() => mockRefundProvider.fetch(query: any(named: "query"))).thenAnswer((_) async => PaginatedApiResponse(body: [], isOK: false));
+      when(() => mockRefundProvider.fetch(query: any(named: "query"))).thenAnswer((_) async => const PaginatedApiResponse(body: [], isOK: false));
 
       expect(
         refundRepositoryWithMock.fetchByBusiness(identifier: "identifier"),
@@ -69,7 +69,7 @@ void main() {
     });
 
     test("Refund Repository throws error on fetch refunds by identifier fail", () async {
-      when(() => mockRefundProvider.fetch(query: any(named: "query"))).thenAnswer((_) async => PaginatedApiResponse(body: [], isOK: false));
+      when(() => mockRefundProvider.fetch(query: any(named: "query"))).thenAnswer((_) async => const PaginatedApiResponse(body: [], isOK: false));
 
       expect(
         refundRepositoryWithMock.fetchByIdentifier(identifier: "identifier"),
@@ -85,7 +85,7 @@ void main() {
     });
 
     test("Refund Repository throws error on fetch refunds by transaction identifier fail", () async {
-      when(() => mockRefundProvider.fetch(query: any(named: "query"))).thenAnswer((_) async => PaginatedApiResponse(body: [], isOK: false));
+      when(() => mockRefundProvider.fetch(query: any(named: "query"))).thenAnswer((_) async => const PaginatedApiResponse(body: [], isOK: false));
 
       expect(
         refundRepositoryWithMock.fetchByTransactionIdentifier(identifier: "identifier"),
@@ -101,7 +101,7 @@ void main() {
     });
 
     test("Refund Repository throws error on fetch refunds by status fail", () async {
-      when(() => mockRefundProvider.fetch(query: any(named: "query"))).thenAnswer((_) async => PaginatedApiResponse(body: [], isOK: false));
+      when(() => mockRefundProvider.fetch(query: any(named: "query"))).thenAnswer((_) async => const PaginatedApiResponse(body: [], isOK: false));
 
       expect(
         refundRepositoryWithMock.fetchByStatus(code: 100),
@@ -117,7 +117,7 @@ void main() {
     });
 
     test("Refund Repository throws error on paginate fail", () async {
-      when(() => mockRefundProvider.fetch(paginateUrl: any(named: "paginateUrl"))).thenAnswer((_) async => PaginatedApiResponse(body: [], isOK: false));
+      when(() => mockRefundProvider.fetch(paginateUrl: any(named: "paginateUrl"))).thenAnswer((_) async => const PaginatedApiResponse(body: [], isOK: false));
 
       expect(
         refundRepositoryWithMock.paginate(url: "http://novapay.ai/api/customer/refund?page=2"),

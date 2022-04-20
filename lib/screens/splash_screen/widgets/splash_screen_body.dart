@@ -11,6 +11,9 @@ import 'widgets/splash_control.dart';
 
 class SplashScreenBody extends StatefulWidget {
 
+  const SplashScreenBody({Key? key})
+    : super(key: key);
+  
   @override
   State<SplashScreenBody> createState() => _SplashScreenBodyState();
 }
@@ -43,7 +46,7 @@ class _SplashScreenBodyState extends State<SplashScreenBody> {
       },
       child: Scaffold(
         backgroundColor: Colors.white,
-        body: Container(
+        body: SizedBox(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
           child: FlareActor(

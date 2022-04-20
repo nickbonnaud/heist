@@ -7,9 +7,10 @@ class CachedAvatar extends StatelessWidget {
   final String _url;
   final double _radius;
 
-  CachedAvatar({required String url, required double radius})
+  const CachedAvatar({required String url, required double radius, Key? key})
     : _url = url,
-      _radius = radius;
+      _radius = radius,
+      super(key: key);
 
   @override
   Widget build(BuildContext context) {

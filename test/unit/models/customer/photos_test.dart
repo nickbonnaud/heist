@@ -12,7 +12,7 @@ void main() {
     });
 
     test("Photos can create an empty placeholder", () {
-      var photos = Photos.empty();
+      var photos = const Photos.empty();
       expect(photos, isA<Photos>());
     });
   });

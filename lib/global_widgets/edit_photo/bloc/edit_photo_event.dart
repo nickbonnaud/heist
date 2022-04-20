@@ -11,7 +11,7 @@ class ChangePhoto extends EditPhotoEvent {
   final String profileIdentifier;
   final XFile photo;
 
-  ChangePhoto({required this.profileIdentifier, required this.photo});
+  const ChangePhoto({required this.profileIdentifier, required this.photo});
 
   @override
   List<Object> get props => [profileIdentifier, photo];

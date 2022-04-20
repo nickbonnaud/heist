@@ -10,7 +10,7 @@ abstract class SideDrawerEvent extends Equatable {
 class DrawerStatusChanged extends SideDrawerEvent {
   final bool menuOpen;
 
-  DrawerStatusChanged({required this.menuOpen});
+  const DrawerStatusChanged({required this.menuOpen});
 
   @override
   List<Object> get props => [menuOpen];
@@ -23,7 +23,7 @@ class DrawerStatusChanged extends SideDrawerEvent {
 class ButtonVisibilityChanged extends SideDrawerEvent {
   final bool isVisible;
 
-  ButtonVisibilityChanged({required this.isVisible});
+  const ButtonVisibilityChanged({required this.isVisible});
 
   @override
   List<Object> get props => [isVisible];

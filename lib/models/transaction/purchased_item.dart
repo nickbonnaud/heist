@@ -9,7 +9,7 @@ class PurchasedItem extends Equatable {
   final int quantity;
   final int total;
 
-  PurchasedItem({
+  const PurchasedItem({
     required this.name,
     required this.subName,
     required this.price,

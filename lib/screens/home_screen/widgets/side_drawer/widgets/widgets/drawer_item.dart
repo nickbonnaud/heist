@@ -3,16 +3,15 @@ import 'package:heist/themes/global_colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class DrawerItem extends StatelessWidget {
-  final Key _key;
   final VoidCallback _onPressed;
   final String _text;
   final Widget _icon;
 
   const DrawerItem({required Key key, required VoidCallback onPressed, required String text, required Widget icon})
-    : _key = key,
-      _onPressed = onPressed,
+    : _onPressed = onPressed,
       _text = text,
-      _icon = icon;
+      _icon = icon,
+      super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +20,6 @@ class DrawerItem extends StatelessWidget {
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          key: _key,
           onTap: _onPressed,
           child: Padding(
             padding: EdgeInsets.symmetric(vertical: 8.h),

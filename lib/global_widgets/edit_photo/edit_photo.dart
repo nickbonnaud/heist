@@ -23,10 +23,11 @@ class EditPhoto extends StatelessWidget {
   final bool _autoDismiss;
   final Profile _profile;
 
-  EditPhoto({required PhotoPickerRepository photoPicker, required Profile profile, bool autoDismiss = false})
+  const EditPhoto({required PhotoPickerRepository photoPicker, required Profile profile, bool autoDismiss = false, Key? key})
     : _photoPicker = photoPicker,
       _autoDismiss = autoDismiss,
-      _profile = profile;
+      _profile = profile,
+      super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +48,7 @@ class EditPhoto extends StatelessWidget {
                 bottom: 0.0,
                 right: -10.0,
                 child: RawMaterialButton(
-                  key: Key("addPhotoButtonKey"),
+                  key: const Key("addPhotoButtonKey"),
                   onPressed: () => _editPhoto(context: context, state: state),
                   child: state is Submitting 
                     ? CircularProgressIndicator(
@@ -57,7 +58,7 @@ class EditPhoto extends StatelessWidget {
                         Icons.edit,
                         color: Theme.of(context).colorScheme.onCallToAction,
                       ),
-                  shape: CircleBorder(),
+                  shape: const CircleBorder(),
                   elevation: 5.0,
                   fillColor: Theme.of(context).colorScheme.callToAction,
                   padding: EdgeInsets.all(15.sp),
@@ -138,7 +139,7 @@ class EditPhoto extends StatelessWidget {
           ),
 
           PlatformDialogAction(
-            key: Key("enablePermissionButtonKey"),
+            key: const Key("enablePermissionButtonKey"),
             child: PlatformText('Enable'),
             onPressed: () {
               openAppSettings();
@@ -155,8 +156,8 @@ class EditPhoto extends StatelessWidget {
     isSuccess ? Vibrate.success() : Vibrate.error();
 
     final SnackBar snackBar = SnackBar(
-      key: Key("editPhotoSnackbarKey"),
-      duration: Duration(seconds: 1),
+      key: const Key("editPhotoSnackbarKey"),
+      duration: const Duration(seconds: 1),
       content: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

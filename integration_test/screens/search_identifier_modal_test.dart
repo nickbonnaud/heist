@@ -43,18 +43,18 @@ class SearchIdentifierModalTest {
   Future<void> _enterInvalidIdentifier() async {
     expect(find.text("Invalid ID"), findsNothing);
 
-    await tester.enterText(find.byKey(Key("identifierFieldKey")), "!ndj ss");
+    await tester.enterText(find.byKey(const Key("identifierFieldKey")), "!ndj ss");
     await tester.pump();
     expect(find.text("Invalid ID"), findsOneWidget);
 
     await tester.testTextInput.receiveAction(TextInputAction.search);
-    await tester.pump(Duration(milliseconds: 350));
+    await tester.pump(const Duration(milliseconds: 350));
     expect(find.byType(CircularProgressIndicator), findsNothing);
     await tester.pumpAndSettle();
   }
 
   Future<void> _navigateBack() async {
-    await tester.tap(find.byKey(Key("transactionsFilterButtonKey")));
+    await tester.tap(find.byKey(const Key("transactionsFilterButtonKey")));
     await tester.pumpAndSettle();
 
     await tester.tap(find.byIcon(Icons.receipt));
@@ -64,10 +64,10 @@ class SearchIdentifierModalTest {
   Future<void> _enterIdentifier() async {
     expect(find.byType(CircularProgressIndicator), findsNothing);
 
-    await tester.enterText(find.byKey(Key("identifierFieldKey")), "bcbv8y2bbcbxbccsfds4tgghsf3unxhw");
+    await tester.enterText(find.byKey(const Key("identifierFieldKey")), "bcbv8y2bbcbxbccsfds4tgghsf3unxhw");
     await tester.pump();
     await tester.testTextInput.receiveAction(TextInputAction.search);
-    await tester.pump(Duration(milliseconds: 100));
+    await tester.pump(const Duration(milliseconds: 100));
 
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
     await tester.pumpAndSettle();

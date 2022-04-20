@@ -38,8 +38,8 @@ void main() {
       activeLocationBloc = MockActiveLocationBloc();
       when(() => activeLocationBloc.state).thenReturn(ActiveLocationState(
         activeLocations: _activeLocations,
-        addingLocations: [],
-        removingLocations: [],
+        addingLocations: const [],
+        removingLocations: const [],
         errorMessage: ""
       ));
       whenListen(activeLocationBloc, Stream<ActiveLocationState>.fromIterable([]));
@@ -106,8 +106,8 @@ void main() {
               _activeLocations[1],
               _activeLocations[2]
             ],
-            addingLocations: [],
-            removingLocations: [],
+            addingLocations: const [],
+            removingLocations: const [],
             errorMessage: ""
           )
         ]));

@@ -16,23 +16,25 @@ class ProfileSetupScreen extends StatelessWidget {
   final AccountRepository _accountRepository;
   final PhotoPickerRepository _photoPickerRepository;
 
-  ProfileSetupScreen({
+  const ProfileSetupScreen({
     required CustomerBloc customerBloc,
     required ProfileRepository profileRepository,
     required PhotoRepository photoRepository,
     required AccountRepository accountRepository,
-    required PhotoPickerRepository photoPickerRepository
+    required PhotoPickerRepository photoPickerRepository,
+    Key? key
   })
     : _customerBloc = customerBloc,
       _profileRepository = profileRepository,
       _photoRepository = photoRepository,
       _accountRepository = accountRepository,
-      _photoPickerRepository = photoPickerRepository;
+      _photoPickerRepository = photoPickerRepository,
+      super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: Key("profileSetupScreenKey"),
+      key: const Key("profileSetupScreenKey"),
       body: BlocProvider<ProfileSetupScreenBloc>(
         create: (context) => ProfileSetupScreenBloc()
           ..add(Init(status: _customerBloc.customer!.status)),

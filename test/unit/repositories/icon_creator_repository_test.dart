@@ -20,7 +20,7 @@ void main() {
     late MockDataGenerator mockDataGenerator;
 
     setUp(() {
-      registerFallbackValue(Size(150, 150));
+      registerFallbackValue(const Size(150, 150));
       registerFallbackValue(MockBusiness());
 
       iconCreatorProvider = MockIconCreatorProvider();
@@ -32,7 +32,7 @@ void main() {
     });
 
     test("Icon Creator Repository creates a List of PreMarkers", () async {
-      final int numberBusinesses = 5;
+      int numberBusinesses = 5;
       final List<Business> businesses = List.generate(numberBusinesses, (index) => mockDataGenerator.createBusiness());
 
       var preMarkers = await iconCreatorRepository.createPreMarkers(businesses: businesses);

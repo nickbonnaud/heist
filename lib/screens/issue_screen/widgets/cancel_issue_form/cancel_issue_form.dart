@@ -10,8 +10,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class CancelIssueForm extends StatelessWidget {
   final TransactionResource _transactionResource;
 
-  CancelIssueForm({required TransactionResource transactionResource})
-    : _transactionResource = transactionResource;
+  const CancelIssueForm({required TransactionResource transactionResource, Key? key})
+    : _transactionResource = transactionResource,
+      super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +33,7 @@ class CancelIssueForm extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 SizedBox(height: 25.h),
-                ScreenTitle(title: "Cancel Issue?"),
+                const ScreenTitle(title: "Cancel Issue?"),
                 SizedBox(height: 120.h),
                 Text(
                   "${_transactionResource.issue!.message} is no longer a problem?",
@@ -64,7 +65,7 @@ class CancelIssueForm extends StatelessWidget {
     return BlocBuilder<CancelIssueFormBloc, CancelIssueFormState>(
       builder: (context, state) {
         return OutlinedButton(
-          key: Key("cancelButtonKey"),
+          key: const Key("cancelButtonKey"),
           onPressed: state.isSubmitting ? null : () => _cancelButtonPressed(context: context),
           child: ButtonText(text: 'Cancel', color: state.isSubmitting
             ? Theme.of(context).colorScheme.callToActionDisabled
@@ -79,7 +80,7 @@ class CancelIssueForm extends StatelessWidget {
     return BlocBuilder<CancelIssueFormBloc, CancelIssueFormState>(
       builder: (context, state) {
         return ElevatedButton(
-          key: Key("submitButtonKey"),
+          key: const Key("submitButtonKey"),
           onPressed: !state.isSubmitting ? () => _submitButtonPressed(context: context, state: state) : null,
           child: _buttonChild(context: context, state: state),
         );
@@ -89,9 +90,9 @@ class CancelIssueForm extends StatelessWidget {
 
   Widget _buttonChild({required BuildContext context, required CancelIssueFormState state}) {
     if (state.isSubmitting) {
-      return SizedBox(height: 25.sp, width: 25.sp, child: CircularProgressIndicator());
+      return SizedBox(height: 25.sp, width: 25.sp, child: const CircularProgressIndicator());
     } else {
-      return ButtonText(text: 'Submit');
+      return const ButtonText(text: 'Submit');
     }
   }
 
@@ -110,7 +111,7 @@ class CancelIssueForm extends StatelessWidget {
   void _showSnackbar({required BuildContext context, required String message, required CancelIssueFormState state}) async {
     state.isSuccess ? Vibrate.success() : Vibrate.error();
     final SnackBar snackBar = SnackBar(
-      key: Key("cancelIssueSnackbarKey"),
+      key: const Key("cancelIssueSnackbarKey"),
       content: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

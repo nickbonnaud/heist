@@ -8,11 +8,12 @@ class CachedAvatarHero extends StatelessWidget {
   final String _tag;
   final bool _showLoading;
 
-  CachedAvatarHero({required String url, required double radius, required String tag, bool showLoading = false})
+  const CachedAvatarHero({required String url, required double radius, required String tag, bool showLoading = false, Key? key})
     : _url = url,
       _radius = radius,
       _tag = tag,
-      _showLoading = showLoading;
+      _showLoading = showLoading,
+      super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +28,7 @@ class CachedAvatarHero extends StatelessWidget {
       ),
       placeholder: (_,__) => Image.memory(kTransparentImage),
       progressIndicatorBuilder: _showLoading 
-        ? (_, __, ___) => CircularProgressIndicator()
+        ? (_, __, ___) => const CircularProgressIndicator()
         : null,
     );
   }

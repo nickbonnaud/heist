@@ -16,18 +16,20 @@ class ProfileScreen extends StatelessWidget {
   final PhotoPickerRepository _photoPickerRepository;
   final CustomerBloc _customerBloc;
 
-  ProfileScreen({
+  const ProfileScreen({
     required ProfileRepository profileRepository,
     required PhotoRepository photoRepository,
     required Profile profile,
     required PhotoPickerRepository photoPickerRepository,
-    required CustomerBloc customerBloc
+    required CustomerBloc customerBloc,
+    Key? key
   })
     : _profileRepository = profileRepository,
       _photoRepository = photoRepository,
       _profile = profile,
       _photoPickerRepository = photoPickerRepository,
-      _customerBloc = customerBloc;
+      _customerBloc = customerBloc,
+      super(key: key);
 
   @override
   Widget build(BuildContext context) {

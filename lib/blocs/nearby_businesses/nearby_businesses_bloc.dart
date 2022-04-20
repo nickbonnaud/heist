@@ -57,7 +57,7 @@ class NearbyBusinessesBloc extends Bloc<NearbyBusinessesEvent, NearbyBusinessesS
       );
       
       
-      List<PreMarker> preMarkers = businesses.length > 0
+      List<PreMarker> preMarkers = businesses.isNotEmpty
         ? await _createPreMarkers(businesses)
         : [];
       

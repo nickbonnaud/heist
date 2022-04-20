@@ -10,6 +10,10 @@ import '../bloc/help_ticket_form_bloc.dart';
 
 class HelpTicketForm extends StatefulWidget {
 
+  const HelpTicketForm({Key? key})
+    : super(key: key);
+  
+  @override
   State<HelpTicketForm> createState() => _HelpTicketFormState();
 }
 
@@ -53,7 +57,7 @@ class _HelpTicketFormState extends State<HelpTicketForm> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      ScreenTitle(title: 'New Help Ticket'),
+                      const ScreenTitle(title: 'New Help Ticket'),
                       _subjectField(),
                       _messageField()
                     ],
@@ -95,7 +99,7 @@ class _HelpTicketFormState extends State<HelpTicketForm> {
     return BlocBuilder<HelpTicketFormBloc, HelpTicketFormState>(
       builder: (context, state) {
         return TextFormField(
-          key: Key("subjectFieldKey"),
+          key: const Key("subjectFieldKey"),
           cursorColor: Colors.black,
           decoration: InputDecoration(
             labelText: 'Subject',
@@ -127,7 +131,7 @@ class _HelpTicketFormState extends State<HelpTicketForm> {
     return BlocBuilder<HelpTicketFormBloc, HelpTicketFormState>(
       builder: (context, state) {
         return TextFormField(
-          key: Key("messageFieldKey"),
+          key: const Key("messageFieldKey"),
           cursorColor: Colors.black,
           decoration: InputDecoration(
             labelText: "Message",
@@ -160,7 +164,7 @@ class _HelpTicketFormState extends State<HelpTicketForm> {
     return BlocBuilder<HelpTicketFormBloc, HelpTicketFormState>(
       builder: (context, state) {
         return OutlinedButton(
-          key: Key("cancelButtonKey"),
+          key: const Key("cancelButtonKey"),
           onPressed: state.isSubmitting ? null : () => _cancelButtonPressed(),
           child: ButtonText(text: 'Cancel', color: state.isSubmitting 
             ? Theme.of(context).colorScheme.callToActionDisabled
@@ -175,7 +179,7 @@ class _HelpTicketFormState extends State<HelpTicketForm> {
     return BlocBuilder<HelpTicketFormBloc, HelpTicketFormState>(
       builder: (context, state) {
         return ElevatedButton(
-          key: Key("submitButtonKey"),
+          key: const Key("submitButtonKey"),
           onPressed: _isSubmitButtonEnabled(state: state)
             ? () => _submitButtonPressed(state: state)
             : null, 
@@ -187,9 +191,9 @@ class _HelpTicketFormState extends State<HelpTicketForm> {
 
   Widget _buttonChild({required HelpTicketFormState state}) {
     if (state.isSubmitting) {
-      return SizedBox(height: 25.sp, width: 25.sp, child: CircularProgressIndicator());
+      return SizedBox(height: 25.sp, width: 25.sp, child: const CircularProgressIndicator());
     }
-    return ButtonText(text: "Submit");
+    return const ButtonText(text: "Submit");
   }
 
   void _onSubjectChanged() {
@@ -220,7 +224,7 @@ class _HelpTicketFormState extends State<HelpTicketForm> {
   void _showSnackbar({required String text, required HelpTicketFormState state}) async {
     state.isSuccess ? Vibrate.success() : Vibrate.error();
     final SnackBar snackBar = SnackBar(
-      key: Key("newHelpTicketSnackbarKey"),
+      key: const Key("newHelpTicketSnackbarKey"),
       content: Row(
         children: [
           Expanded(
@@ -271,7 +275,7 @@ class _HelpTicketFormState extends State<HelpTicketForm> {
       onPressed: () => node.unfocus(),
       child: Padding(
         padding: EdgeInsets.only(right: 16.w),
-        child: ActionText()
+        child: const ActionText()
       ),
     );
   }

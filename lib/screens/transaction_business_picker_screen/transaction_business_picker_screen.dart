@@ -12,8 +12,9 @@ import 'package:heist/themes/global_colors.dart';
 class TransactionBusinessPickerScreen extends StatelessWidget {
   final List<Business> _availableBusinesses;
 
-  const TransactionBusinessPickerScreen({required List<Business> availableBusinesses})
-    : _availableBusinesses = availableBusinesses;
+  const TransactionBusinessPickerScreen({required List<Business> availableBusinesses, Key? key})
+    : _availableBusinesses = availableBusinesses,
+      super(key: key);
   
   @override
   Widget build(BuildContext context) {

@@ -80,14 +80,14 @@ void main() {
     blocTest<AppReadyBloc, AppReadyState>(
       "AppReadyBloc CustomerStatusChanged event changes state [customerOnboarded: true]",
       build: () => appReadyBloc,
-      act: (bloc) => bloc.add(CustomerStatusChanged(customerStatus: Status(name: "name", code: 200))),
+      act: (bloc) => bloc.add(const CustomerStatusChanged(customerStatus: Status(name: "name", code: 200))),
       expect: () => [_baseState.update(customerOnboarded: true)]
     );
     
     blocTest<AppReadyBloc, AppReadyState>(
       "AppReadyBloc customerBlocSubscription => [customerState.customer != null] changes state [customerOnboarded: true]",
       build: () {
-        var customer = _mockDataGenerator.createCustomer().update(status: Status(name: "name", code: 200));
+        var customer = _mockDataGenerator.createCustomer().update(status: const Status(name: "name", code: 200));
         CustomerState customerState = CustomerState(customer: customer, loading: false, errorMessage: "");
         whenListen(customerBloc, Stream<CustomerState>.fromIterable([customerState]));
         return AppReadyBloc(authenticationBloc: authenticationBloc, openTransactionsBloc: openTransactionsBloc, beaconBloc: beaconBloc, nearbyBusinessesBloc: nearbyBusinessesBloc, permissionsBloc: permissionsBloc, customerBloc: customerBloc);
@@ -98,7 +98,7 @@ void main() {
     blocTest<AppReadyBloc, AppReadyState>(
       "AppReadyBloc customerBlocSubscription => [customerState.customer == null] does not change state",
       build: () {
-        CustomerState customerState = CustomerState(loading: false, errorMessage: "");
+        CustomerState customerState = const CustomerState(loading: false, errorMessage: "");
         whenListen(customerBloc, Stream<CustomerState>.fromIterable([customerState]));
         return AppReadyBloc(authenticationBloc: authenticationBloc, openTransactionsBloc: openTransactionsBloc, beaconBloc: beaconBloc, nearbyBusinessesBloc: nearbyBusinessesBloc, permissionsBloc: permissionsBloc, customerBloc: customerBloc);
       },
@@ -108,14 +108,14 @@ void main() {
     blocTest<AppReadyBloc, AppReadyState>(
       "AppReadyBloc PermissionChecksComplete event changes state [permissionChecksComplete: true, permissionsReady: true]",
       build: () => appReadyBloc,
-      act: (bloc) => bloc.add(PermissionChecksComplete(permissionsReady: true)),
+      act: (bloc) => bloc.add(const PermissionChecksComplete(permissionsReady: true)),
       expect: () => [_baseState.update(permissionChecksComplete: true, permissionsReady: true)]
     );
 
     blocTest<AppReadyBloc, AppReadyState>(
       "AppReadyBloc permissionsBlocSubscription => [!this.arePermissionChecksComplete && state.checksComplete] changes state [permissionChecksComplete: true, permissionsReady: true]",
       build: () {
-        whenListen(permissionsBloc, Stream<PermissionsState>.fromIterable([PermissionsState(bleEnabled: true, locationEnabled: true, notificationEnabled: true, beaconEnabled: true, checksComplete: true)]));
+        whenListen(permissionsBloc, Stream<PermissionsState>.fromIterable([const PermissionsState(bleEnabled: true, locationEnabled: true, notificationEnabled: true, beaconEnabled: true, checksComplete: true)]));
         return AppReadyBloc(authenticationBloc: authenticationBloc, openTransactionsBloc: openTransactionsBloc, beaconBloc: beaconBloc, nearbyBusinessesBloc: nearbyBusinessesBloc, permissionsBloc: permissionsBloc, customerBloc: customerBloc);
       },
       expect: () => [_baseState.update(permissionChecksComplete: true, permissionsReady: true)]
@@ -124,7 +124,7 @@ void main() {
     blocTest<AppReadyBloc, AppReadyState>(
       "AppReadyBloc permissionsBlocSubscription => [!this.arePermissionChecksComplete && !state.checksComplete] does not change state",
       build: () {
-        whenListen(permissionsBloc, Stream<PermissionsState>.fromIterable([PermissionsState(bleEnabled: true, locationEnabled: true, notificationEnabled: true, beaconEnabled: false, checksComplete: false)]));
+        whenListen(permissionsBloc, Stream<PermissionsState>.fromIterable([const PermissionsState(bleEnabled: true, locationEnabled: true, notificationEnabled: true, beaconEnabled: false, checksComplete: false)]));
         return AppReadyBloc(authenticationBloc: authenticationBloc, openTransactionsBloc: openTransactionsBloc, beaconBloc: beaconBloc, nearbyBusinessesBloc: nearbyBusinessesBloc, permissionsBloc: permissionsBloc, customerBloc: customerBloc);
       },
       expect: () => []
@@ -133,14 +133,14 @@ void main() {
     blocTest<AppReadyBloc, AppReadyState>(
       "AppReadyBloc AuthCheckComplete event changes state [authCheckComplete: true, isAuthenticated: true]",
       build: () => appReadyBloc,
-      act: (bloc) => bloc.add(AuthCheckComplete(isAuthenticated: true)),
+      act: (bloc) => bloc.add(const AuthCheckComplete(isAuthenticated: true)),
       expect: () => [_baseState.update(authCheckComplete: true, isAuthenticated: true)]
     );
 
     blocTest<AppReadyBloc, AppReadyState>(
       "AppReadyBloc authenticationBlocSubscription => [Unknown, (Unauthenticated || Authenticated)] changes state [authCheckComplete: true, isAuthenticated: true]",
       build: () {
-        whenListen(authenticationBloc, Stream<AuthenticationState>.fromIterable([Unknown(), Authenticated()]));
+        whenListen(authenticationBloc, Stream<AuthenticationState>.fromIterable([Unknown(), const Authenticated()]));
         return AppReadyBloc(authenticationBloc: authenticationBloc, openTransactionsBloc: openTransactionsBloc, beaconBloc: beaconBloc, nearbyBusinessesBloc: nearbyBusinessesBloc, permissionsBloc: permissionsBloc, customerBloc: customerBloc);
       },
       expect: () => [_baseState.update(authCheckComplete: true, isAuthenticated: true)]
@@ -149,7 +149,7 @@ void main() {
     blocTest<AppReadyBloc, AppReadyState>(
       "AppReadyBloc authenticationBlocSubscription => [Authenticated, Authenticated)] changes state once",
       build: () {
-        whenListen(authenticationBloc, Stream<AuthenticationState>.fromIterable([Authenticated(), Authenticated()]));
+        whenListen(authenticationBloc, Stream<AuthenticationState>.fromIterable([const Authenticated(), const Authenticated()]));
         return AppReadyBloc(authenticationBloc: authenticationBloc, openTransactionsBloc: openTransactionsBloc, beaconBloc: beaconBloc, nearbyBusinessesBloc: nearbyBusinessesBloc, permissionsBloc: permissionsBloc, customerBloc: customerBloc);
       },
       expect: () => [_baseState.update(authCheckComplete: true, isAuthenticated: true)]
@@ -159,9 +159,9 @@ void main() {
       "AppReadyBloc DataLoaded event changes state [openTransactionsLoaded: true], [nearbyBusinessesLoaded: true], [beaconsLoaded: true]",
       build: () => appReadyBloc,
       act: (bloc) {
-        bloc.add(DataLoaded(type: DataType.transactions));
-        bloc.add(DataLoaded(type: DataType.businesses));
-        bloc.add(DataLoaded(type: DataType.beacons));
+        bloc.add(const DataLoaded(type: DataType.transactions));
+        bloc.add(const DataLoaded(type: DataType.businesses));
+        bloc.add(const DataLoaded(type: DataType.beacons));
       },
       expect: () {
         var firstState = _baseState.update(openTransactionsLoaded: true);
@@ -175,7 +175,7 @@ void main() {
     blocTest<AppReadyBloc, AppReadyState>(
       "AppReadyBloc openTransactionsBlocSubscription => [!openTransactionsLoaded && OpenTransactionsLoaded || FailedToFetchOpenTransactions] changes state [openTransactionsLoaded: true]",
       build: () {
-        whenListen(openTransactionsBloc, Stream<OpenTransactionsState>.fromIterable([OpenTransactionsLoaded(transactions: [])]));
+        whenListen(openTransactionsBloc, Stream<OpenTransactionsState>.fromIterable([const OpenTransactionsLoaded(transactions: [])]));
         return AppReadyBloc(authenticationBloc: authenticationBloc, openTransactionsBloc: openTransactionsBloc, beaconBloc: beaconBloc, nearbyBusinessesBloc: nearbyBusinessesBloc, permissionsBloc: permissionsBloc, customerBloc: customerBloc);
       },
       expect: () => [_baseState.update(openTransactionsLoaded: true)]
@@ -211,7 +211,7 @@ void main() {
     blocTest<AppReadyBloc, AppReadyState>(
       "AppReadyBloc nearbyBusinessesBlocSubscription => [!this.areBusinessesLoaded && (state is NearbyBusinessLoaded || state is FailedToLoadNearby)] changes state [nearbyBusinessesLoaded: true]",
       build: () {
-        whenListen(nearbyBusinessesBloc, Stream<NearbyBusinessesState>.fromIterable([NearbyBusinessLoaded(businesses: [], preMarkers: [])]));
+        whenListen(nearbyBusinessesBloc, Stream<NearbyBusinessesState>.fromIterable([const NearbyBusinessLoaded(businesses: [], preMarkers: [])]));
         return AppReadyBloc(authenticationBloc: authenticationBloc, openTransactionsBloc: openTransactionsBloc, beaconBloc: beaconBloc, nearbyBusinessesBloc: nearbyBusinessesBloc, permissionsBloc: permissionsBloc, customerBloc: customerBloc);
       },
       expect: () => [_baseState.update(nearbyBusinessesLoaded: true)]

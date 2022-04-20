@@ -5,7 +5,7 @@ class TutorialScreenState extends Equatable {
   final List<Tutorial> tutorialCards;
   final int currentIndex;
 
-  TutorialScreenState({
+  const TutorialScreenState({
     required this.tutorialCards,
     required this.currentIndex,
   });
@@ -18,18 +18,18 @@ class TutorialScreenState extends Equatable {
   }
 
   TutorialScreenState updateNext() {
-    this.tutorialCards[this.currentIndex] = this.tutorialCards[this.currentIndex].update(dismissed: true);
+    tutorialCards[currentIndex] = tutorialCards[currentIndex].update(dismissed: true);
     return TutorialScreenState(
-      tutorialCards: this.tutorialCards,
-      currentIndex: this.currentIndex - 1
+      tutorialCards: tutorialCards,
+      currentIndex: currentIndex - 1
     );
   }
 
   TutorialScreenState updatePrevious() {
-    this.tutorialCards[this.currentIndex + 1] = this.tutorialCards[this.currentIndex + 1].update(dismissed: false);
+    tutorialCards[currentIndex + 1] = tutorialCards[currentIndex + 1].update(dismissed: false);
     return TutorialScreenState(
-      tutorialCards: this.tutorialCards,
-      currentIndex: this.currentIndex + 1
+      tutorialCards: tutorialCards,
+      currentIndex: currentIndex + 1
     );
   }
 

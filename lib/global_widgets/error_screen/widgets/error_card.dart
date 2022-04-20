@@ -7,10 +7,11 @@ class ErrorCard extends StatelessWidget {
   final String? _buttonText;
   final VoidCallback? _onButtonPressed;
 
-  ErrorCard({required String body, String? buttonText, VoidCallback? onButtonPressed})
+  const ErrorCard({required String body, String? buttonText, VoidCallback? onButtonPressed, Key? key})
     : _body = body,
       _buttonText = buttonText,
-      _onButtonPressed = onButtonPressed;
+      _onButtonPressed = onButtonPressed,
+      super(key: key);
 
   @override
   Widget build(BuildContext context) {

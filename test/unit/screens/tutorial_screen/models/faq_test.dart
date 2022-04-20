@@ -5,7 +5,7 @@ void main() {
   group("Faq Tests", () {
 
     test("Faq can update it's attributes", () {
-      var faq = Faq(question: "question", answer: "answer", answerVisible: false);
+      var faq = const Faq(question: "question", answer: "answer", answerVisible: false);
 
       expect(faq.answerVisible, false);
       faq = faq.update(answerVisible: true);

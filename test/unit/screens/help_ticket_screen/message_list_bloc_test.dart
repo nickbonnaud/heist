@@ -103,7 +103,7 @@ void main() {
         helpTicket = helpTicket.update(replies: replies);
         
         when(() => helpRepository.updateRepliesAsRead(ticketIdentifier: any(named: "ticketIdentifier")))
-          .thenThrow(ApiException(error: "error"));
+          .thenThrow(const ApiException(error: "error"));
 
         bloc.add(RepliesViewed());
       },

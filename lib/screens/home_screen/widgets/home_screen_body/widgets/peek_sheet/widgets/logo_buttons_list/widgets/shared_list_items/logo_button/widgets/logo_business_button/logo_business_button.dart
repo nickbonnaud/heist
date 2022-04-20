@@ -15,16 +15,18 @@ class LogoBusinessButton extends StatelessWidget {
   final double _logoBorderRadius;
   final AnimationController _controller;
 
-  LogoBusinessButton({
+  const LogoBusinessButton({
     required Business business,
     required String keyValue,
     required double logoBorderRadius,
-    required AnimationController controller
+    required AnimationController controller,
+    Key? key
   })
     : _business = business,
       _keyValue = keyValue,
       _logoBorderRadius = logoBorderRadius,
-      _controller = controller;
+      _controller = controller,
+      super(key: key);
 
   
   @override
@@ -39,7 +41,7 @@ class LogoBusinessButton extends StatelessWidget {
         builder: (context, state) {
           return Material(
             color: Colors.transparent,
-            shape: CircleBorder(),
+            shape: const CircleBorder(),
             elevation: state.pressed ? 0 : 5,
             child: CachedNetworkImage(
               imageUrl: _business.photos.logo.smallUrl,
@@ -64,12 +66,12 @@ class LogoBusinessButton extends StatelessWidget {
 
   void _showBusinessSheet({required BuildContext context}) {
     context.read<BusinessScreenVisibleCubit>().toggle();
-    BlocProvider.of<SideDrawerBloc>(context).add(ButtonVisibilityChanged(isVisible: false));
+    BlocProvider.of<SideDrawerBloc>(context).add(const ButtonVisibilityChanged(isVisible: false));
     Navigator.of(context).pushNamed(Routes.business, arguments: _business)
       .then((_) {
         context.read<BusinessScreenVisibleCubit>().toggle();
         if (_controller.status != AnimationStatus.completed) {
-          BlocProvider.of<SideDrawerBloc>(context).add(ButtonVisibilityChanged(isVisible: true));
+          BlocProvider.of<SideDrawerBloc>(context).add(const ButtonVisibilityChanged(isVisible: true));
         }
       }
     );

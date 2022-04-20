@@ -54,7 +54,7 @@ class LogoButtonsListBloc extends Bloc<LogoButtonsListEvent, LogoButtonsListStat
             if (nearbyBusinessesState is NearbyBusinessLoaded) {
               add(NumberNearbyBusinessesChanged(numberNearbyBusinesses: nearbyBusinessesState.businesses.length));
             } else {
-              add(NumberNearbyBusinessesChanged(numberNearbyBusinesses: 0));
+              add(const NumberNearbyBusinessesChanged(numberNearbyBusinesses: 0));
             }
           });
   }

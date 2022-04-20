@@ -55,21 +55,21 @@ class AppReadyBloc extends Bloc<AppReadyEvent, AppReadyState> {
 
       _openTransactionsBlocSubscription = openTransactionsBloc.stream.listen((OpenTransactionsState openTransactionsState) { 
         if (!state.areOpenTransactionsLoaded && (openTransactionsState is OpenTransactionsLoaded || openTransactionsState is FailedToFetchOpenTransactions)) {
-          add(DataLoaded(type: DataType.transactions));
+          add(const DataLoaded(type: DataType.transactions));
           _openTransactionsBlocSubscription.cancel();
         }
       });
 
       _beaconBlocSubscription = beaconBloc.stream.listen((BeaconState beaconState) { 
         if (!state.areBeaconsLoaded && beaconState is Monitoring) {
-          add(DataLoaded(type: DataType.beacons));
+          add(const DataLoaded(type: DataType.beacons));
           _beaconBlocSubscription.cancel();
         }
       });
 
       _nearbyBusinessesBlocSubscription = nearbyBusinessesBloc.stream.listen((NearbyBusinessesState nearbyBusinessesState) {
         if (!state.areBusinessesLoaded && (nearbyBusinessesState is NearbyBusinessLoaded || nearbyBusinessesState is FailedToLoadNearby)) {
-          add(DataLoaded(type: DataType.businesses));
+          add(const DataLoaded(type: DataType.businesses));
           _nearbyBusinessesBlocSubscription.cancel();
         }
       });

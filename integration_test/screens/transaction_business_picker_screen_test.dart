@@ -15,7 +15,7 @@ class TransactionBusinessPickerScreenTest {
     TestTitle.write(testName: "Transaction Business Picker Screen Tests");
     expect(find.byType(TransactionBusinessPickerScreen), findsNothing);
 
-    await tester.tap(find.byKey(Key("transactionBusinessPickerItemKey")));
+    await tester.tap(find.byKey(const Key("transactionBusinessPickerItemKey")));
     await tester.pumpAndSettle();
     expect(find.byType(TransactionBusinessPickerScreen), findsOneWidget);
 
@@ -23,16 +23,16 @@ class TransactionBusinessPickerScreenTest {
   }
 
   Future<void> _selectBusiness() async {
-    expect(find.byKey(Key("businessCardKey-0")), findsOneWidget);
+    expect(find.byKey(const Key("businessCardKey-0")), findsOneWidget);
     expect(find.byType(TransactionPickerScreen), findsNothing);
 
-    await tester.tap(find.byKey(Key("businessCardKey-0")));
-    await tester.pump(Duration(milliseconds: 300));
+    await tester.tap(find.byKey(const Key("businessCardKey-0")));
+    await tester.pump(const Duration(milliseconds: 300));
     
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
     await tester.pumpAndSettle();
 
-    expect(find.byKey(Key("businessCardKey-0")), findsNothing);
+    expect(find.byKey(const Key("businessCardKey-0")), findsNothing);
     expect(find.byType(TransactionPickerScreen), findsOneWidget);
 
     await TransactionPickerScreenTest(tester: tester).initSideDrawer();

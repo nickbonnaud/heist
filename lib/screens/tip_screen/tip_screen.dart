@@ -11,9 +11,10 @@ class TipScreen extends StatelessWidget {
   final AccountRepository _accountRepository;
   final CustomerBloc _customerBloc;
 
-  TipScreen({required AccountRepository accountRepository, required CustomerBloc customerBloc})
+  const TipScreen({required AccountRepository accountRepository, required CustomerBloc customerBloc, Key? key})
     : _accountRepository = accountRepository,
-      _customerBloc = customerBloc;
+      _customerBloc = customerBloc,
+      super(key: key);
 
   @override
   Widget build(BuildContext context) {

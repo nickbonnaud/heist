@@ -16,7 +16,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final AuthenticationRepository _authenticationRepository;
   final AuthenticationBloc _authenticationBloc;
 
-  final Duration _debounceTime = Duration(milliseconds: 300);
+  final Duration _debounceTime = const Duration(milliseconds: 300);
 
   LoginBloc({required AuthenticationRepository authenticationRepository, required AuthenticationBloc authenticationBloc})
     : _authenticationRepository = authenticationRepository,

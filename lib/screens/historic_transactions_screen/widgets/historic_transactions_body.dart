@@ -13,6 +13,9 @@ import 'filter_button/filter_button.dart';
 
 class HistoricTransactionsBody extends StatefulWidget {
 
+  const HistoricTransactionsBody({Key? key})
+    : super(key: key);
+  
   @override
   State<HistoricTransactionsBody> createState() => _HistoricTransactionsBodyState();
 }
@@ -37,12 +40,12 @@ class _HistoricTransactionsBodyState extends State<HistoricTransactionsBody> {
           return ErrorScreen(
             body: "Oops! An error occurred fetching previous transactions!",
             buttonText: "Retry",
-            onButtonPressed: () => BlocProvider.of<HistoricTransactionsBloc>(context).add(FetchHistoricTransactions(reset: true)),
+            onButtonPressed: () => BlocProvider.of<HistoricTransactionsBloc>(context).add(const FetchHistoricTransactions(reset: true)),
           );
         }
 
         return Stack(
-          key: Key("transactionsListKey"),
+          key: const Key("transactionsListKey"),
           children: [
             _transactionsBody(state: state),
             _filterButton(context: context, state: state)
@@ -96,7 +99,7 @@ class _HistoricTransactionsBodyState extends State<HistoricTransactionsBody> {
         sliver: SliverList(
           delegate: SliverChildBuilderDelegate(
             (BuildContext context, int index) => index >= state.transactions.length
-              ? BottomLoader()
+              ? const BottomLoader()
               : TransactionWidget(
                   transactionResource: state.transactions[index],
                   key: Key("transactionKey-$index"),
@@ -110,7 +113,7 @@ class _HistoricTransactionsBodyState extends State<HistoricTransactionsBody> {
     }
     return SliverPadding(
       padding: EdgeInsets.symmetric(horizontal: 8.w),
-      sliver: SliverFillRemaining(
+      sliver: const SliverFillRemaining(
         child: Center(
           child: CircularProgressIndicator(),
         ),

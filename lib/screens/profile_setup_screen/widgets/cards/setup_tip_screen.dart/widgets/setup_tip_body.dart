@@ -13,17 +13,18 @@ import '../bloc/setup_tip_card_bloc.dart';
 class SetupTipBody extends StatefulWidget {
   final String _accountIdentifier;
 
-  const SetupTipBody({required String accountIdentifier})
-    : _accountIdentifier = accountIdentifier;
+  const SetupTipBody({required String accountIdentifier, Key? key})
+    : _accountIdentifier = accountIdentifier,
+      super(key: key);
   
   @override
   State<SetupTipBody> createState() => _SetupTipBodyState();
 }
 
 class _SetupTipBodyState extends State<SetupTipBody> {
-  late TextEditingController _tipRateController = TextEditingController(text: "15");
+  final TextEditingController _tipRateController = TextEditingController(text: "15");
   final FocusNode _tipRateNode = FocusNode();
-  late TextEditingController _quickTipRateController = TextEditingController(text: "5");
+  final TextEditingController _quickTipRateController = TextEditingController(text: "5");
   final FocusNode _quickTipRateNode = FocusNode();
 
   bool get isPopulated => _tipRateController.text.isNotEmpty && _quickTipRateController.text.isNotEmpty;
@@ -60,7 +61,7 @@ class _SetupTipBodyState extends State<SetupTipBody> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      TitleText(text: 'Next, set your tip rates!'),
+                      const TitleText(text: 'Next, set your tip rates!'),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
@@ -108,7 +109,7 @@ class _SetupTipBodyState extends State<SetupTipBody> {
     return BlocBuilder<SetupTipCardBloc, SetupTipCardState>(
       builder: (context, state) {
         return TextFormField(
-          key: Key("defaultTipRateFieldKey"),
+          key: const Key("defaultTipRateFieldKey"),
           decoration: InputDecoration(
             labelText: 'Default Tip Rate',
             suffix: Text(
@@ -144,7 +145,7 @@ class _SetupTipBodyState extends State<SetupTipBody> {
     return BlocBuilder<SetupTipCardBloc, SetupTipCardState>(
       builder: (context, state) {
         return TextFormField(
-          key: Key("quickTipRateFieldKey"),
+          key: const Key("quickTipRateFieldKey"),
           decoration: InputDecoration(
             labelText: 'Quick Tip Rate',
             suffix: Text(
@@ -180,7 +181,7 @@ class _SetupTipBodyState extends State<SetupTipBody> {
     return BlocBuilder<SetupTipCardBloc, SetupTipCardState>(
       builder: (context, state) {
         return ElevatedButton(
-          key: Key("submitTipRatesButtonKey"),
+          key: const Key("submitTipRatesButtonKey"),
           onPressed: _isSaveButtonEnabled(state: state) ? () => _saveButtonPressed(context: context, state: state) : null,
           child: _buttonChild(state: state),
         );
@@ -190,9 +191,9 @@ class _SetupTipBodyState extends State<SetupTipBody> {
 
   Widget _buttonChild({required SetupTipCardState state}) {
     if (state.isSubmitting) {
-      return SizedBox(height: 25.sp, width: 25.sp, child: CircularProgressIndicator());
+      return SizedBox(height: 25.sp, width: 25.sp, child: const CircularProgressIndicator());
     } else {
-      return ButtonText(text: 'Save');
+      return const ButtonText(text: 'Save');
     }
   }
 
@@ -221,8 +222,8 @@ class _SetupTipBodyState extends State<SetupTipBody> {
   void _showSnackbar({required BuildContext context, required String message, required SetupTipCardState state}) async {
     state.isSuccess ? Vibrate.success() : Vibrate.error();
     final SnackBar snackBar = SnackBar(
-      key: Key("tipsSnackBarKey"),
-      duration: Duration(seconds: 1),
+      key: const Key("tipsSnackBarKey"),
+      duration: const Duration(seconds: 1),
       content: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -241,7 +242,7 @@ class _SetupTipBodyState extends State<SetupTipBody> {
       ..showSnackBar(snackBar)
       .closed.then((_) => {
         if (state.isSuccess) {
-          BlocProvider.of<ProfileSetupScreenBloc>(context).add(SectionCompleted(section: Section.tip))
+          BlocProvider.of<ProfileSetupScreenBloc>(context).add(const SectionCompleted(section: Section.tip))
         } else {
           BlocProvider.of<SetupTipCardBloc>(context).add(Reset())
         }
@@ -261,7 +262,7 @@ class _SetupTipBodyState extends State<SetupTipBody> {
                 onPressed: () => node.unfocus(), 
                 child: Padding(
                   padding: EdgeInsets.only(right: 16.w),
-                  child: ActionText()
+                  child: const ActionText()
                 )
               );
             }
@@ -275,7 +276,7 @@ class _SetupTipBodyState extends State<SetupTipBody> {
                 onPressed: () => node.unfocus(), 
                 child: Padding(
                   padding: EdgeInsets.only(right: 16.w),
-                  child: ActionText()
+                  child: const ActionText()
                 )
               );
             }

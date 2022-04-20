@@ -72,22 +72,22 @@ class ReceiptScreenTest {
   }
 
   Future<void> _scroll() async {
-    Offset initialPositionPurchasedItem = tester.getCenter(find.byKey(Key('purchasedItemKey-0')));
+    Offset initialPositionPurchasedItem = tester.getCenter(find.byKey(const Key('purchasedItemKey-0')));
     
-    await tester.pump(Duration(seconds: 1));
-    await tester.drag(find.byKey(Key("receiptBodyWithAppBarKey")), Offset(0, -250));
+    await tester.pump(const Duration(seconds: 1));
+    await tester.drag(find.byKey(const Key("receiptBodyWithAppBarKey")), const Offset(0, -250));
     await tester.pumpAndSettle();
     
-    expect(initialPositionPurchasedItem.dy != tester.getCenter(find.byKey(Key('purchasedItemKey-0'))).dy, true);
+    expect(initialPositionPurchasedItem.dy != tester.getCenter(find.byKey(const Key('purchasedItemKey-0'))).dy, true);
 
-    await tester.drag(find.byKey(Key("receiptBodyWithAppBarKey")), Offset(0, 250));
+    await tester.drag(find.byKey(const Key("receiptBodyWithAppBarKey")), const Offset(0, 250));
     await tester.pumpAndSettle();
   }
 
   Future<void> _goToWrongBillScreen() async {
     IssueScreenTest issueScreenTest = IssueScreenTest(tester: tester);
     
-    await tester.tap(find.byKey(Key("reportIssueButtonKey")));
+    await tester.tap(find.byKey(const Key("reportIssueButtonKey")));
     await tester.pumpAndSettle();
 
     await tester.tap(find.text('Wrong Bill'));
@@ -95,7 +95,7 @@ class ReceiptScreenTest {
 
     await issueScreenTest.initCancel();
 
-    await tester.tap(find.byKey(Key("reportIssueButtonKey")));
+    await tester.tap(find.byKey(const Key("reportIssueButtonKey")));
     await tester.pumpAndSettle();
 
     await tester.tap(find.text('Wrong Bill'));
@@ -113,7 +113,7 @@ class ReceiptScreenTest {
   Future<void> _goToErrorInBillScreen() async {
     IssueScreenTest issueScreenTest = IssueScreenTest(tester: tester);
     
-    await tester.tap(find.byKey(Key("changeIssueButtonKey")));
+    await tester.tap(find.byKey(const Key("changeIssueButtonKey")));
     await tester.pumpAndSettle();
 
     await tester.tap(find.text("Change to Error in Bill"));
@@ -121,7 +121,7 @@ class ReceiptScreenTest {
 
     await issueScreenTest.initErrorInBillCancel();
 
-    await tester.tap(find.byKey(Key("changeIssueButtonKey")));
+    await tester.tap(find.byKey(const Key("changeIssueButtonKey")));
     await tester.pumpAndSettle();
 
     await tester.tap(find.text("Change to Error in Bill"));
@@ -131,7 +131,7 @@ class ReceiptScreenTest {
   }
 
   Future<void> _goToOtherErrorScreen() async {
-    await tester.tap(find.byKey(Key("changeIssueButtonKey")));
+    await tester.tap(find.byKey(const Key("changeIssueButtonKey")));
     await tester.pumpAndSettle();
 
     await tester.tap(find.text("Change to Other"));
@@ -143,7 +143,7 @@ class ReceiptScreenTest {
   Future<void> _goToCancelIssueScreen() async {
     IssueScreenTest issueScreenTest = IssueScreenTest(tester: tester);
     
-    await tester.tap(find.byKey(Key("changeIssueButtonKey")));
+    await tester.tap(find.byKey(const Key("changeIssueButtonKey")));
     await tester.pumpAndSettle();
 
     await tester.tap(find.text("Cancel Issue"));
@@ -154,7 +154,7 @@ class ReceiptScreenTest {
     expect(find.text("Issue reported"), findsOneWidget);
     expect(find.byType(CallButton), findsOneWidget);
 
-    await tester.tap(find.byKey(Key("changeIssueButtonKey")));
+    await tester.tap(find.byKey(const Key("changeIssueButtonKey")));
     await tester.pumpAndSettle();
 
     await tester.tap(find.text("Cancel Issue"));

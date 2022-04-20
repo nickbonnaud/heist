@@ -8,14 +8,14 @@ class NotificationBootState extends Equatable {
 
   bool get isReady => nearbyBusinessesReady && openTransactionsReady && permissionReady;
 
-  NotificationBootState({
+  const NotificationBootState({
     required this.nearbyBusinessesReady,
     required this.openTransactionsReady,
     required this.permissionReady
   });
 
   factory NotificationBootState.initial() {
-    return NotificationBootState(
+    return const NotificationBootState(
       nearbyBusinessesReady: false,
       openTransactionsReady: false,
       permissionReady: false

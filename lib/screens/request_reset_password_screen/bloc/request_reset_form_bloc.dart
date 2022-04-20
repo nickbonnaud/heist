@@ -17,7 +17,7 @@ class RequestResetFormBloc extends Bloc<RequestResetFormEvent, RequestResetFormS
       super(RequestResetFormState.initial()) { _eventHandler(); }
 
   void _eventHandler() {
-    on<EmailChanged>((event, emit) => _mapEmailChangedToState(event: event, emit: emit), transformer: Debouncer.bounce(duration: Duration(milliseconds: 300)));
+    on<EmailChanged>((event, emit) => _mapEmailChangedToState(event: event, emit: emit), transformer: Debouncer.bounce(duration: const Duration(milliseconds: 300)));
     on<Submitted>((event, emit) async => await _mapSubmittedToState(event: event, emit: emit));
     on<Reset>((event, emit) => _mapResetToState(emit: emit));
   }

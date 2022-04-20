@@ -33,28 +33,28 @@ class HelpTicketScreenTest {
   }
 
   Future<void> _addNewReplyError() async {
-    expect(find.byKey(Key("newReplySnackbarKey")), findsNothing);
-    await tester.enterText(find.byKey(Key("messageFieldKey")), "error");
-    await tester.pump(Duration(milliseconds: 300));
+    expect(find.byKey(const Key("newReplySnackbarKey")), findsNothing);
+    await tester.enterText(find.byKey(const Key("messageFieldKey")), "error");
+    await tester.pump(const Duration(milliseconds: 300));
 
-    await tester.tap(find.byKey(Key("submitButtonKey")));
+    await tester.tap(find.byKey(const Key("submitButtonKey")));
     await tester.pumpAndSettle();
 
-    expect(find.byKey(Key("newReplySnackbarKey")), findsOneWidget);
+    expect(find.byKey(const Key("newReplySnackbarKey")), findsOneWidget);
 
-    await tester.fling(find.byKey(Key("newReplySnackbarKey")), Offset(0, 500), 500);
+    await tester.fling(find.byKey(const Key("newReplySnackbarKey")), const Offset(0, 500), 500);
     await tester.pumpAndSettle(); 
   }
   
   Future<void> _addNewReply() async {
-    final String newMessage = "A new message";
+    String newMessage = "A new message";
     expect(find.text(newMessage), findsNothing);
 
-    await tester.enterText(find.byKey(Key("messageFieldKey")), newMessage);
-    await tester.pump(Duration(milliseconds: 300));
+    await tester.enterText(find.byKey(const Key("messageFieldKey")), newMessage);
+    await tester.pump(const Duration(milliseconds: 300));
 
-    await tester.tap(find.byKey(Key("submitButtonKey")));
-    await tester.pump(Duration(milliseconds: 250));
+    await tester.tap(find.byKey(const Key("submitButtonKey")));
+    await tester.pump(const Duration(milliseconds: 250));
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
     await tester.pumpAndSettle();
 
@@ -69,33 +69,33 @@ class HelpTicketScreenTest {
   }
 
   Future<void> _navigateBack() async {
-    await tester.tap(find.byKey(Key("helpTicketKey-0")));
+    await tester.tap(find.byKey(const Key("helpTicketKey-0")));
     await tester.pumpAndSettle();
     expect(find.byType(HelpTicketScreen), findsOneWidget);
   }
 
   Future<void> _deleteOpenCancel() async {
-    expect(find.byKey(Key("deleteTicketDialogKey")), findsNothing);
+    expect(find.byKey(const Key("deleteTicketDialogKey")), findsNothing);
     await tester.tap(find.byIcon(Icons.delete_forever));
     await tester.pump();
-    expect(find.byKey(Key("deleteTicketDialogKey")), findsOneWidget);
+    expect(find.byKey(const Key("deleteTicketDialogKey")), findsOneWidget);
 
-    await tester.tap(find.byKey(Key("cancelDeleteTicketButtonKey")));
+    await tester.tap(find.byKey(const Key("cancelDeleteTicketButtonKey")));
     await tester.pump();
 
-    expect(find.byKey(Key("deleteTicketDialogKey")), findsNothing);
+    expect(find.byKey(const Key("deleteTicketDialogKey")), findsNothing);
   }
   
   Future<void> _deleteOpenConfirm() async {
-    expect(find.byKey(Key("deleteTicketDialogKey")), findsNothing);
+    expect(find.byKey(const Key("deleteTicketDialogKey")), findsNothing);
     await tester.tap(find.byIcon(Icons.delete_forever));
     await tester.pump();
-    expect(find.byKey(Key("deleteTicketDialogKey")), findsOneWidget);
+    expect(find.byKey(const Key("deleteTicketDialogKey")), findsOneWidget);
 
     expect(find.byType(CircularProgressIndicator), findsNothing);
     expect(find.byType(HelpTicketsScreen), findsNothing);
 
-    await tester.tap(find.byKey(Key("confirmDeleteTicketButtonKey")));
+    await tester.tap(find.byKey(const Key("confirmDeleteTicketButtonKey")));
     await tester.pump();
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
 
@@ -116,9 +116,9 @@ class HelpTicketScreenTest {
   }
 
   Future<void> _scroll() async {
-    expect(find.byKey(Key("messageBubbleKey-0")), findsOneWidget);
-    await tester.fling(find.byKey(Key("messageListKey")), Offset(0, 800), 500);
-    expect(find.byKey(Key("messageBubbleKey-0")), findsNothing);
+    expect(find.byKey(const Key("messageBubbleKey-0")), findsOneWidget);
+    await tester.fling(find.byKey(const Key("messageListKey")), const Offset(0, 800), 500);
+    expect(find.byKey(const Key("messageBubbleKey-0")), findsNothing);
   }
 
   Future<void> _goBack() async {

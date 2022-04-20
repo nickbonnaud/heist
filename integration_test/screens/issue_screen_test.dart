@@ -19,7 +19,7 @@ class IssueScreenTest {
     await tester.tap(find.text(Platform.isIOS ? 'Done' : 'DONE'));
     await tester.pumpAndSettle();
     
-    await tester.tap(find.byKey(Key("cancelButtonKey")));
+    await tester.tap(find.byKey(const Key("cancelButtonKey")));
     await tester.pumpAndSettle();
 
     expect(find.byType(IssueScreen), findsNothing);
@@ -59,67 +59,67 @@ class IssueScreenTest {
     expect(find.byType(IssueScreen), findsOneWidget);
     expect(find.text("Cancel Issue?"), findsOneWidget);
 
-    await tester.tap(find.byKey(Key("cancelButtonKey")));
+    await tester.tap(find.byKey(const Key("cancelButtonKey")));
     await tester.pumpAndSettle();
   }
 
   Future<void> initCancelIssueSubmit() async {
-    expect(find.byKey(Key("cancelIssueSnackbarKey")), findsNothing);
+    expect(find.byKey(const Key("cancelIssueSnackbarKey")), findsNothing);
 
-    await tester.tap(find.byKey(Key("submitButtonKey")));
+    await tester.tap(find.byKey(const Key("submitButtonKey")));
     await tester.pump();
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
     await tester.pumpAndSettle();
 
-    expect(find.byKey(Key("cancelIssueSnackbarKey")).last, findsOneWidget);
+    expect(find.byKey(const Key("cancelIssueSnackbarKey")).last, findsOneWidget);
 
-    await tester.fling(find.byKey(Key("cancelIssueSnackbarKey")).last.last, Offset(0, 500), 500);
+    await tester.fling(find.byKey(const Key("cancelIssueSnackbarKey")).last.last, const Offset(0, 500), 500);
     await tester.pump();
   }
 
   Future<void> _enterIssueInvalid() async {
     expect(find.text('Issue must be at least 5 characters long'), findsNothing);
-    await tester.enterText(find.byKey(Key("issueFieldKey")), "asd");
-    await tester.pump(Duration(milliseconds: 300));
+    await tester.enterText(find.byKey(const Key("issueFieldKey")), "asd");
+    await tester.pump(const Duration(milliseconds: 300));
     expect(find.text('Issue must be at least 5 characters long'), findsOneWidget);
   }
 
   Future<void> _enterIssueError() async {
-    expect(find.byKey(Key("snackBarKey")), findsNothing);
+    expect(find.byKey(const Key("snackBarKey")), findsNothing);
 
-    await tester.enterText(find.byKey(Key("issueFieldKey")), "error");
-    await tester.pump(Duration(milliseconds: 300));
+    await tester.enterText(find.byKey(const Key("issueFieldKey")), "error");
+    await tester.pump(const Duration(milliseconds: 300));
     expect(find.text('Issue must be at least 5 characters long'), findsNothing);
 
     await tester.tap(find.text(Platform.isIOS ? 'Done' : 'DONE'));
     await tester.pumpAndSettle();
     
-    await tester.tap(find.byKey(Key("submitButtonKey")));
+    await tester.tap(find.byKey(const Key("submitButtonKey")));
     await tester.pump();
 
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
     await tester.pumpAndSettle();
 
-    expect(find.byKey(Key("snackBarKey")).last, findsOneWidget);
+    expect(find.byKey(const Key("snackBarKey")).last, findsOneWidget);
 
-    await tester.fling(find.byKey(Key("snackBarKey")).last, Offset(0, 500), 500);
+    await tester.fling(find.byKey(const Key("snackBarKey")).last, const Offset(0, 500), 500);
     await tester.pumpAndSettle();
   }
 
   Future<void> _enterValidIssue() async {
-    await tester.tap(find.byKey(Key("issueFieldKey")));
+    await tester.tap(find.byKey(const Key("issueFieldKey")));
     await tester.pumpAndSettle();
 
-    await tester.enterText(find.byKey(Key("issueFieldKey")), "Some Issue");
-    await tester.pump(Duration(milliseconds: 300));
+    await tester.enterText(find.byKey(const Key("issueFieldKey")), "Some Issue");
+    await tester.pump(const Duration(milliseconds: 300));
 
     await tester.tap(find.text(Platform.isIOS ? 'Done' : 'DONE'));
     await tester.pumpAndSettle();
     
-    await tester.tap(find.byKey(Key("submitButtonKey")));
+    await tester.tap(find.byKey(const Key("submitButtonKey")));
     await tester.pumpAndSettle();
 
-    await tester.fling(find.byKey(Key("snackBarKey")).last, Offset(0, 500), 500);
+    await tester.fling(find.byKey(const Key("snackBarKey")).last, const Offset(0, 500), 500);
     await tester.pumpAndSettle();
   }
 }

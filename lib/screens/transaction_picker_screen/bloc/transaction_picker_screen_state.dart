@@ -9,7 +9,7 @@ class TransactionPickerScreenState extends Equatable {
   final TransactionResource? transaction;
   final String errorMessage;
 
-  TransactionPickerScreenState({
+  const TransactionPickerScreenState({
     required this.loading,
     required this.transactions,
     required this.claiming,
@@ -19,7 +19,7 @@ class TransactionPickerScreenState extends Equatable {
   });
 
   factory TransactionPickerScreenState.initial() {
-    return TransactionPickerScreenState(
+    return const TransactionPickerScreenState(
       loading: false,
       transactions: [],
       claiming: false,

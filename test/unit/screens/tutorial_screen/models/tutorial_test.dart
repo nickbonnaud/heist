@@ -6,7 +6,7 @@ void main() {
   group("Tutorial Tests ", () {
 
     test("Tutorial can update it's attributes", () {
-      var tutorial = Tutorial(type: TutorialCardType.approvePayment, key: "key", header: "header", body: "body", hasInitialAnimation: true, dismissed: true);
+      var tutorial = const Tutorial(type: TutorialCardType.approvePayment, key: "key", header: "header", body: "body", hasInitialAnimation: true, dismissed: true);
 
       expect(tutorial.dismissed, true);
       tutorial = tutorial.update(dismissed: false);

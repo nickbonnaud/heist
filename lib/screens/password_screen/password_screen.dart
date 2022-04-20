@@ -13,10 +13,11 @@ class PasswordScreen extends StatelessWidget {
   final AuthenticationRepository _authenticationRepository;
   final CustomerBloc _customerBloc;
 
-  PasswordScreen({required CustomerRepository customerRepository, required AuthenticationRepository authenticationRepository, required CustomerBloc customerBloc})
+  const PasswordScreen({required CustomerRepository customerRepository, required AuthenticationRepository authenticationRepository, required CustomerBloc customerBloc, Key? key})
     : _customerRepository = customerRepository,
       _authenticationRepository = authenticationRepository,
-      _customerBloc = customerBloc;
+      _customerBloc = customerBloc,
+      super(key: key);
 
   @override
   Widget build(BuildContext context) {

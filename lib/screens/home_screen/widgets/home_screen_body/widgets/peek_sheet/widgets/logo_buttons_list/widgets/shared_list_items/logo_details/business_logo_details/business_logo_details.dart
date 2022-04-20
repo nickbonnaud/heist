@@ -15,7 +15,7 @@ class BusinessLogoDetails extends StatelessWidget {
   final AnimationController _controller;
   final int _subListIndex;
 
-  BusinessLogoDetails({
+  const BusinessLogoDetails({
     required String keyValue,
     required double topMargin,
     required double leftMargin,
@@ -23,7 +23,8 @@ class BusinessLogoDetails extends StatelessWidget {
     required double borderRadius,
     required Business business,
     required AnimationController controller,
-    required int subListIndex
+    required int subListIndex,
+    Key? key
   })
     : _keyValue = keyValue,
       _topMargin = topMargin,
@@ -32,7 +33,8 @@ class BusinessLogoDetails extends StatelessWidget {
       _borderRadius = borderRadius,
       _business = business,
       _controller = controller,
-      _subListIndex = subListIndex;
+      _subListIndex = subListIndex,
+      super(key: key);
 
 
   @override

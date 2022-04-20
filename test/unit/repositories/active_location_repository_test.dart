@@ -29,7 +29,7 @@ void main() {
 
     test("Active Location Repository throws error on create ActiveLocation", () async {
       when(() => mockActiveLocationProvider.enterBusiness(body: any(named: "body")))
-        .thenAnswer((_) async => ApiResponse(body: {}, error: "error", isOK: false));
+        .thenAnswer((_) async => const ApiResponse(body: {}, error: "error", isOK: false));
 
       expect(
         activeLocationRepositoryWithMock.enterBusiness(beacon: MockDataGenerator().createBeacon()),
@@ -44,7 +44,7 @@ void main() {
 
     test("Active Location Repository throws error on remove ActiveLocation", () async {
       when(() => mockActiveLocationProvider.exitBusiness(activeLocationId: any(named: "activeLocationId")))
-        .thenAnswer((_) async => ApiResponse(body: {}, error: "error", isOK: false));
+        .thenAnswer((_) async => const ApiResponse(body: {}, error: "error", isOK: false));
 
       expect(
         activeLocationRepositoryWithMock.exitBusiness(activeLocationId: "activeLocationId"), 

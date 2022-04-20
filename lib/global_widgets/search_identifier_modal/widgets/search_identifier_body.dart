@@ -8,8 +8,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class SearchIdentifierBody extends StatefulWidget {
   final String _hintText;
 
-  SearchIdentifierBody({required String hintText})
-    : _hintText = hintText; 
+  const SearchIdentifierBody({required String hintText, Key? key})
+    : _hintText = hintText,
+      super(key: key);
 
   @override
   State<SearchIdentifierBody> createState() => _SearchIdentifierBodyState();
@@ -37,7 +38,7 @@ class _SearchIdentifierBodyState extends State<SearchIdentifierBody> {
         BlocBuilder<SearchIdentifierModalCubit, bool>(
           builder: (context, isUuidValid) {
             return TextFormField(
-              key: Key("identifierFieldKey"),
+              key: const Key("identifierFieldKey"),
               focusNode: _identifierNode,
               controller: _controller,
               autocorrect: false,

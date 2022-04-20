@@ -12,13 +12,14 @@ import '../widgets/message_date_text.dart';
 class MessageList extends StatelessWidget {
   final ScrollController _scrollController;
 
-  MessageList({required ScrollController scrollController})
-    : _scrollController = scrollController;
+  const MessageList({required ScrollController scrollController, Key? key})
+    : _scrollController = scrollController,
+      super(key: key);
   
   @override
   Widget build(BuildContext context) {
     return Flexible(
-      key: Key("messageListKey"),
+      key: const Key("messageListKey"),
       child: BlocBuilder<MessageListBloc, MessageListState>(
         builder: (context, state) {
           return ListView.builder(
@@ -73,7 +74,7 @@ class MessageList extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Container(
-                child: MessageDateText(text: "${DateFormatter.toStringDateTime(date: state.helpTicket.updatedAt)}"),
+                child: MessageDateText(text: DateFormatter.toStringDateTime(date: state.helpTicket.updatedAt)),
                 margin: EdgeInsets.only(left: 5.w, top: 5.h, bottom: 5.h),
               )
             ],
@@ -81,10 +82,8 @@ class MessageList extends StatelessWidget {
           if (state.helpTicket.read)
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Container(
-                  child: MessageDateText(text: "Read", isDate: false)
-                )
+              children: const [
+                MessageDateText(text: "Read", isDate: false)
               ],
             )
         ],

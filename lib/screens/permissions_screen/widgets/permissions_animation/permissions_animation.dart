@@ -10,8 +10,9 @@ import 'widgets/takeoff_control.dart';
 class PermissionsAnimation extends StatefulWidget {
   final PermissionsBloc _permissionsBloc;
 
-  PermissionsAnimation({required PermissionsBloc permissionsBloc})
-    : _permissionsBloc = permissionsBloc;
+  const PermissionsAnimation({required PermissionsBloc permissionsBloc, Key? key})
+    : _permissionsBloc = permissionsBloc,
+      super(key: key);
 
   @override
   State<PermissionsAnimation> createState() => _PermissionsAnimationState();
@@ -45,7 +46,7 @@ class _PermissionsAnimationState extends State<PermissionsAnimation> {
           _playNext();
         }
       },
-      child: Container(
+      child: SizedBox(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.width,
         child: FlareActor(

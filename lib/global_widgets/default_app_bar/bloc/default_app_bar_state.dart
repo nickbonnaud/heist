@@ -4,10 +4,10 @@ part of 'default_app_bar_bloc.dart';
 class DefaultAppBarState extends Equatable {
   final bool isRotated;
 
-  DefaultAppBarState({required this.isRotated});
+  const DefaultAppBarState({required this.isRotated});
 
   factory DefaultAppBarState.initial() {
-    return DefaultAppBarState(isRotated: false);
+    return const DefaultAppBarState(isRotated: false);
   }
 
   DefaultAppBarState update({required bool isRotated}) {

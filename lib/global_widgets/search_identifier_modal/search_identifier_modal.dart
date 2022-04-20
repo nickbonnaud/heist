@@ -10,8 +10,9 @@ import 'cubit/search_identifier_modal_cubit.dart';
 class SearchIdentifierModal extends StatelessWidget {
   final String _hintText;
 
-  SearchIdentifierModal({required String hintText})
-    : _hintText = hintText;
+  const SearchIdentifierModal({required String hintText, Key? key})
+    : _hintText = hintText,
+      super(key: key);
   
   @override
   Widget build(BuildContext context) {

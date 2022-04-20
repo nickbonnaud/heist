@@ -7,7 +7,7 @@ class CancelIssueFormState extends Equatable {
   final TransactionResource transactionResource;
   final String errorMessage;
 
-  CancelIssueFormState({
+  const CancelIssueFormState({
     required this.isSubmitting,
     required this.isSuccess,
     required this.transactionResource,

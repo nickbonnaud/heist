@@ -6,7 +6,7 @@ class RouteData {
   final Map<String, String>? _queryParameters;
   final Object? args;
 
-  RouteData({required this.route, Map<String, String>? queryParameters, this.args})
+  const RouteData({required this.route, Map<String, String>? queryParameters, this.args})
     : _queryParameters = queryParameters;
   
   operator [](String key) => _queryParameters != null
@@ -25,7 +25,7 @@ class RouteData {
       );
     }
 
-    return RouteData(route: "/");
+    return const RouteData(route: "/");
   }
 
   @override

@@ -93,7 +93,7 @@ void main() {
     blocTest<BeaconBloc, BeaconState>(
       "Beacon Bloc nearbyBusinessSubscription => [state is NearbyBusinessLoaded] changes state [LoadingBeacons()], [Monitoring()]",
       build: () {
-        whenListen(nearbyBusinessesBloc, Stream.fromIterable([NearbyBusinessLoaded(businesses: [], preMarkers: [])]));
+        whenListen(nearbyBusinessesBloc, Stream.fromIterable([const NearbyBusinessLoaded(businesses: [], preMarkers: [])]));
         return BeaconBloc(beaconRepository: beaconRepository, activeLocationBloc: activeLocationBloc, nearbyBusinessesBloc: nearbyBusinessesBloc);
       },
       expect: () => [isA<LoadingBeacons>(), isA<Monitoring>()]

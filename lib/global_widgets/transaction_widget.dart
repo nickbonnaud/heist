@@ -12,16 +12,14 @@ import 'default_app_bar/bloc/default_app_bar_bloc.dart';
 
 class TransactionWidget extends StatelessWidget {
   final TransactionResource _transactionResource;
-  final Key _key;
 
   const TransactionWidget({required TransactionResource transactionResource, required Key key})
     : _transactionResource = transactionResource,
-      _key = key;
+      super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      key: _key,
       child: ListTile(
         leading: CachedAvatarHero(
           url: _transactionResource.business.photos.logo.smallUrl,

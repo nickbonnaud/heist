@@ -43,8 +43,8 @@ void main() {
 
         return searchBusinessNameBloc;
       },
-      wait: Duration(milliseconds: 500),
-      act: (bloc) => bloc.add(BusinessNameChanged(name: "name")),
+      wait: const Duration(milliseconds: 500),
+      act: (bloc) => bloc.add(const BusinessNameChanged(name: "name")),
       expect: () => [_baseState.update(isSubmitting: true), _baseState.update(isSubmitting: false, businesses: _businesses)]
     );
 
@@ -59,8 +59,8 @@ void main() {
         return searchBusinessNameBloc;
       },
       seed: () => _baseState.update(isSubmitting: true, businesses: List<Business>.generate(3, (index) => MockBusiness()), errorMessage: "error"),
-      wait: Duration(milliseconds: 500),
-      act: (bloc) => bloc.add(BusinessNameChanged(name: "")),
+      wait: const Duration(milliseconds: 500),
+      act: (bloc) => bloc.add(const BusinessNameChanged(name: "")),
       expect: () => [_baseState.update(isSubmitting: false, businesses: null, errorMessage: "")]
     );
 
@@ -75,8 +75,8 @@ void main() {
         return searchBusinessNameBloc;
       },
       seed: () => _baseState.update(isSubmitting: true, businesses: List<Business>.generate(3, (index) => MockBusiness()), errorMessage: "error"),
-      wait: Duration(milliseconds: 500),
-      act: (bloc) => bloc.add(BusinessNameChanged(name: "")),
+      wait: const Duration(milliseconds: 500),
+      act: (bloc) => bloc.add(const BusinessNameChanged(name: "")),
       verify: ((_) {
         verifyNever(() => businessRepository.fetchByName(name: any(named: "name")));
       })
@@ -92,8 +92,8 @@ void main() {
 
         return searchBusinessNameBloc;
       },
-      wait: Duration(milliseconds: 500),
-      act: (bloc) => bloc.add(BusinessNameChanged(name: "name")),
+      wait: const Duration(milliseconds: 500),
+      act: (bloc) => bloc.add(const BusinessNameChanged(name: "name")),
       verify: ((_) {
         verify(() => businessRepository.fetchByName(name: any(named: "name"))).called(1);
       })
@@ -104,12 +104,12 @@ void main() {
       build: () {
 
         when(() => businessRepository.fetchByName(name: any(named: "name")))
-          .thenThrow(ApiException(error: "error"));
+          .thenThrow(const ApiException(error: "error"));
 
         return searchBusinessNameBloc;
       },
-      wait: Duration(milliseconds: 500),
-      act: (bloc) => bloc.add(BusinessNameChanged(name: "name")),
+      wait: const Duration(milliseconds: 500),
+      act: (bloc) => bloc.add(const BusinessNameChanged(name: "name")),
       expect: () => [_baseState.update(isSubmitting: true), _baseState.update(isSubmitting: false, errorMessage: "error")]
     );
 

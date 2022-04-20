@@ -15,7 +15,7 @@ class EmailFormState extends Equatable {
   });
 
   factory EmailFormState.initial() {
-    return EmailFormState(
+    return const EmailFormState(
       isEmailValid: true,
       isSubmitting: false,
       isSuccess: false,

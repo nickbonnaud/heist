@@ -10,9 +10,10 @@ class MessageInput extends StatefulWidget {
   final String _ticketIdentifier;
   final ScrollController _scrollController;
 
-  MessageInput({required String ticketIdentifier, required ScrollController scrollController})
+  const MessageInput({required String ticketIdentifier, required ScrollController scrollController, Key? key})
     : _ticketIdentifier = ticketIdentifier,
-      _scrollController = scrollController;
+      _scrollController = scrollController,
+      super(key: key);
 
   @override
   State<MessageInput> createState() => _MessageInputState();
@@ -85,7 +86,7 @@ class _MessageInputState extends State<MessageInput> {
 
   Widget _textField() {
     return TextField(
-      key: Key("messageFieldKey"),
+      key: const Key("messageFieldKey"),
       cursorColor: Colors.black,
       keyboardType: TextInputType.multiline,
       minLines: 1,
@@ -114,15 +115,15 @@ class _MessageInputState extends State<MessageInput> {
       builder: (context, state) {
         return !state.isSubmitting
         ? IconButton(
-            key: Key("submitButtonKey"),
-            icon: Icon(Icons.send), 
+            key: const Key("submitButtonKey"),
+            icon: const Icon(Icons.send), 
             iconSize: 40.sp,
             onPressed: state.isInputValid 
               ? () => _submitButtonPressed()
               : null,
             color: Theme.of(context).colorScheme.callToAction,
           )
-        : CircularProgressIndicator();
+        : const CircularProgressIndicator();
       }
     );
   }
@@ -144,7 +145,7 @@ class _MessageInputState extends State<MessageInput> {
 
   void _showSnackbar({required String error}) async {
     final SnackBar snackBar = SnackBar(
-      key: Key("newReplySnackbarKey"),
+      key: const Key("newReplySnackbarKey"),
       content: Row(
         children: [
           Expanded(

@@ -5,10 +5,10 @@ class NotificationNavigationState extends Equatable {
   final String? route;
   final Object? arguments;
 
-  NotificationNavigationState({required this.route, required this.arguments});
+  const NotificationNavigationState({required this.route, required this.arguments});
 
   factory NotificationNavigationState.empty() {
-    return NotificationNavigationState(
+    return const NotificationNavigationState(
       route: null,
       arguments: null
     );

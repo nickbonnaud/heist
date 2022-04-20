@@ -11,9 +11,10 @@ class FilterButton extends StatefulWidget {
   final Color _startColor;
   final Color _endColor;
 
-  FilterButton({required Color startColor, required Color endColor})
+  const FilterButton({required Color startColor, required Color endColor, Key? key})
     : _startColor = startColor,
-      _endColor = endColor;
+      _endColor = endColor,
+      super(key: key);
 
   @override
   State<FilterButton> createState() => _FilterButtonState();
@@ -33,7 +34,7 @@ class _FilterButtonState extends State<FilterButton> with SingleTickerProviderSt
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 200)
+      duration: const Duration(milliseconds: 200)
     );
     _colorAnimation = ColorTween(
       begin: widget._startColor,
@@ -137,7 +138,7 @@ class _FilterButtonState extends State<FilterButton> with SingleTickerProviderSt
             ),
             iconSize: iconSize,
             alignment: Alignment.center,
-            padding: EdgeInsets.all(0.0),
+            padding: const EdgeInsets.all(0.0),
           ),
         ),
       ),
@@ -160,15 +161,15 @@ class _FilterButtonState extends State<FilterButton> with SingleTickerProviderSt
   }
 
   void _fetchAll() {
-    BlocProvider.of<HelpTicketsScreenBloc>(context).add(FetchAll(reset: true));
+    BlocProvider.of<HelpTicketsScreenBloc>(context).add(const FetchAll(reset: true));
   }
 
   void _fetchOpen() {
-    BlocProvider.of<HelpTicketsScreenBloc>(context).add(FetchOpen(reset: true));
+    BlocProvider.of<HelpTicketsScreenBloc>(context).add(const FetchOpen(reset: true));
   }
 
   void _fetchResolved() {
-    BlocProvider.of<HelpTicketsScreenBloc>(context).add(FetchResolved(reset: true));
+    BlocProvider.of<HelpTicketsScreenBloc>(context).add(const FetchResolved(reset: true));
   }
 
   Widget _buildBaseButton() {
@@ -176,7 +177,7 @@ class _FilterButtonState extends State<FilterButton> with SingleTickerProviderSt
     return BlocBuilder<FilterButtonBloc, FilterButtonState>(
       builder: (context, state) {
         return FloatingActionButton(
-          key: Key("helpTicketsFilterButtonKey"),
+          key: const Key("helpTicketsFilterButtonKey"),
           onPressed: () => BlocProvider.of<FilterButtonBloc>(context).add(Toggle()),
           child: Transform(
             alignment: Alignment.center,

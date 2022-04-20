@@ -11,7 +11,7 @@ class PermissionsState extends Equatable {
   bool get allPermissionsValid => bleEnabled && locationEnabled && notificationEnabled && beaconEnabled;
   bool get onStartPermissionsValid => bleEnabled && locationEnabled && beaconEnabled;
 
-  PermissionsState({
+  const PermissionsState({
     required this.bleEnabled,
     required this.locationEnabled,
     required this.notificationEnabled,
@@ -20,7 +20,7 @@ class PermissionsState extends Equatable {
   });
 
   factory PermissionsState.unknown() {
-    return PermissionsState(
+    return const PermissionsState(
       bleEnabled: false,
       locationEnabled: false,
       notificationEnabled: false,
@@ -30,7 +30,7 @@ class PermissionsState extends Equatable {
   }
 
   factory PermissionsState.isInitial() {
-    return PermissionsState(
+    return const PermissionsState(
       bleEnabled: false,
       locationEnabled: false,
       notificationEnabled: false,

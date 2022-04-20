@@ -6,10 +6,10 @@ class SignOutState extends Equatable {
   final bool isSuccess;
   final String errorMessage;
 
-  SignOutState({required this.isSubmitting, required this.isSuccess, required this.errorMessage});
+  const SignOutState({required this.isSubmitting, required this.isSuccess, required this.errorMessage});
 
   factory SignOutState.initial() {
-    return SignOutState(
+    return const SignOutState(
       isSubmitting: false,
       isSuccess: false,
       errorMessage: ""

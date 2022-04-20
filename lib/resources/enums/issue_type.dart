@@ -1,6 +1,6 @@
 enum IssueType {
-  wrong_bill,
-  error_in_bill,
+  wrongBill,
+  errorInBill,
   other,
   cancel
 }

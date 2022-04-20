@@ -13,7 +13,7 @@ class TransactionResource extends Equatable {
   final List<Refund> refunds;
   final Issue? issue;
 
-  TransactionResource({
+  const TransactionResource({
     required this.transaction, 
     required this.business, 
     required this.refunds, 

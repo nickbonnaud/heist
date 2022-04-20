@@ -8,7 +8,7 @@ class ProfileSetupScreenState extends Equatable {
   final bool isPaymentAccountComplete;
   final bool isTipComplete;
 
-  ProfileSetupScreenState({
+  const ProfileSetupScreenState({
     required this.isIntroComplete,
     required this.isNameComplete,
     required this.isPhotoComplete,
@@ -16,19 +16,19 @@ class ProfileSetupScreenState extends Equatable {
     required this.isTipComplete
   });
 
-  bool get isComplete => this.isNameComplete && this.isPhotoComplete && this.isPaymentAccountComplete && this.isTipComplete;
+  bool get isComplete => isNameComplete && isPhotoComplete && isPaymentAccountComplete && isTipComplete;
   List<Section> get incompleteSections {
     List<Section> incompleteSections = [];
-    if (!this.isPaymentAccountComplete) incompleteSections.add(Section.paymentAccount);
-    if (!this.isTipComplete) incompleteSections.add(Section.tip);
-    if (!this.isPhotoComplete) incompleteSections.add(Section.photo);
-    if (!this.isNameComplete) incompleteSections.add(Section.name);
+    if (!isPaymentAccountComplete) incompleteSections.add(Section.paymentAccount);
+    if (!isTipComplete) incompleteSections.add(Section.tip);
+    if (!isPhotoComplete) incompleteSections.add(Section.photo);
+    if (!isNameComplete) incompleteSections.add(Section.name);
 
     return incompleteSections;
   }
 
   factory ProfileSetupScreenState.initial() {
-    return ProfileSetupScreenState(
+    return const ProfileSetupScreenState(
       isIntroComplete: false,
       isNameComplete: false,
       isPhotoComplete: false,

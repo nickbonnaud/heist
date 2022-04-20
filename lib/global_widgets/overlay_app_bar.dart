@@ -8,14 +8,13 @@ class OverlayAppBar extends StatefulWidget implements PreferredSizeWidget {
   final Color _backgroundColor;
   final Widget? _trailingWidget;
 
-  OverlayAppBar({required BuildContext context, Color? backgroundColor, Widget? trailingWidget})
-    : _backgroundColor = backgroundColor == null
-        ? Theme.of(context).colorScheme.background
-        : backgroundColor,
-      _trailingWidget = trailingWidget;
+  OverlayAppBar({required BuildContext context, Color? backgroundColor, Widget? trailingWidget, Key? key})
+    : _backgroundColor = backgroundColor ?? Theme.of(context).colorScheme.background,
+      _trailingWidget = trailingWidget,
+      super(key: key);
 
   @override
-  Size get preferredSize => Size.fromHeight(kToolbarHeight);
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 
   @override
   State<StatefulWidget> createState() => _OverlayAppBarState();
@@ -28,7 +27,7 @@ class _OverlayAppBarState extends State<OverlayAppBar> with TickerProviderStateM
   @override
   void initState() {
     super.initState();
-    _showAnimationController = AnimationController(vsync: this, duration: Duration(milliseconds: 300));
+    _showAnimationController = AnimationController(vsync: this, duration: const Duration(milliseconds: 300));
     _showAnimation = Tween(begin: pi / 2, end: 0.0).animate(_showAnimationController);
     _showAnimationController.forward();
   }
@@ -47,7 +46,7 @@ class _OverlayAppBarState extends State<OverlayAppBar> with TickerProviderStateM
         builder: (context, child) => Transform.rotate(
           angle: _showAnimation.value,
           child: IconButton(
-            icon: Icon(Icons.close),
+            icon: const Icon(Icons.close),
             onPressed: () => Navigator.of(context).pop(),
             color: Theme.of(context).colorScheme.topAppBarIcon,
             iconSize: 45.sp,

@@ -7,7 +7,7 @@ class Photo extends Equatable {
   final String smallUrl;
   final String largeUrl;
 
-  Photo({
+  const Photo({
     required this.name,
     required this.smallUrl,
     required this.largeUrl

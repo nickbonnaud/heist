@@ -13,7 +13,7 @@ void main() {
     setUp(() {
       tutorialProvider = MockStorageProvider();
       when(() => tutorialProvider.write(key: any(named: "key"), value: any(named: "value")))
-        .thenAnswer((_) async => null);
+        .thenAnswer((_) async => true);
 
       when(() => tutorialProvider.read(key: any(named: "key")))
         .thenAnswer((_) async => "false");

@@ -10,8 +10,9 @@ import 'widgets/loading_location.dart';
 class NearbyBusinessesMap extends StatelessWidget {
   final List<PreMarker> _preMarkers;
 
-  NearbyBusinessesMap({required List<PreMarker> preMarkers})
-    : _preMarkers = preMarkers;
+  const NearbyBusinessesMap({required List<PreMarker> preMarkers, Key? key})
+    : _preMarkers = preMarkers,
+      super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +28,7 @@ class NearbyBusinessesMap extends StatelessWidget {
             ),
           ); 
         } else {
-          return LoadingLocation();
+          return const LoadingLocation();
         }
       },
     );

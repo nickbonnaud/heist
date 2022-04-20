@@ -9,11 +9,10 @@ import '../../widgets/message_date_text.dart';
 
 class MessageBubble extends StatelessWidget {
   final Reply _reply;
-  final Key _key;
 
-  MessageBubble({required Reply reply, required Key key})
+  const MessageBubble({required Reply reply, required Key key})
     : _reply = reply,
-      _key = key;
+      super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +25,6 @@ class MessageBubble extends StatelessWidget {
 
   Widget _customerReply({required BuildContext context}) {
     return Container(
-      key: _key,
       margin: EdgeInsets.only(bottom: 40.h),
       child: Column(
         children: [
@@ -48,7 +46,7 @@ class MessageBubble extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Container(
+              SizedBox(
                 width: .55.sw,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -61,7 +59,7 @@ class MessageBubble extends StatelessWidget {
                     if (_reply.read)
                       Container(
                         padding: EdgeInsets.only(right: 15.w, top: 5.h, bottom: 5.h),
-                        child: MessageDateText(text: "Read", isDate: false) 
+                        child: const MessageDateText(text: "Read", isDate: false) 
                       )
                   ],
                 )
@@ -75,7 +73,6 @@ class MessageBubble extends StatelessWidget {
 
   Widget _adminReply({required BuildContext context}) {
     return Container(
-      key: _key,
       margin: EdgeInsets.only(bottom: 40.h),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -96,7 +93,7 @@ class MessageBubble extends StatelessWidget {
           ),
           Row(
             children: [
-              Container(
+              SizedBox(
                 width: .55.sw,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -107,9 +104,7 @@ class MessageBubble extends StatelessWidget {
                     ),
 
                     if (_reply.read)
-                      Container(
-                        child: MessageDateText(text: "Read", isDate: false)
-                      )
+                      const MessageDateText(text: "Read", isDate: false)
                   ],
                 ),
               )

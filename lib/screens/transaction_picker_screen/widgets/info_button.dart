@@ -5,12 +5,16 @@ import 'package:heist/themes/global_colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class InfoButton extends StatelessWidget {
+  
+  const InfoButton({Key? key})
+    : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(right: 8.w),
       child: PlatformIconButton(
-        key: Key("infoButtonKey"),
+        key: const Key("infoButtonKey"),
         icon: Icon(
           Icons.info,
           size: 40.sp,
@@ -25,7 +29,7 @@ class InfoButton extends StatelessWidget {
     showPlatformDialog(
       context: context,
       builder: (_) => PlatformAlertDialog(
-          key: Key("transactionPickerInfoDialog"),
+          key: const Key("transactionPickerInfoDialog"),
           title: PlatformText("Why is the receipt blurry?"),
           content: PlatformText("The blurred receipt is a default image. ${Constants.appName} only shows 1 unique item per receipt to allow you to identify your bill."),
           actions: [

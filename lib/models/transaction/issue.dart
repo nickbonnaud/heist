@@ -12,7 +12,7 @@ class Issue extends Equatable {
   final int warningsSent;
   final DateTime updatedAt;
 
-  Issue({
+  const Issue({
     required this.identifier,
     required this.type,
     required this.message,
@@ -33,18 +33,18 @@ class Issue extends Equatable {
 
   static IssueType typeToEnum({required String jsonType}) {
     if (jsonType == 'wrong_bill') {
-      return IssueType.wrong_bill;
+      return IssueType.wrongBill;
     } else if (jsonType == 'error_in_bill') {
-      return IssueType.error_in_bill;
+      return IssueType.errorInBill;
     } else {
       return IssueType.other;
     }
   }
 
   static String enumToString({required IssueType type}) {
-    if (type == IssueType.wrong_bill) {
+    if (type == IssueType.wrongBill) {
       return 'wrong_bill';
-    } else if (type == IssueType.error_in_bill) {
+    } else if (type == IssueType.errorInBill) {
       return 'error_in_bill';
     } else {
       return 'other';
@@ -58,7 +58,7 @@ class Issue extends Equatable {
     int? warningsSent,
     DateTime? updatedAt,
   }) => Issue(
-    identifier: this.identifier,
+    identifier: identifier,
     type: type ?? this.type,
     message: message ?? this.message,
     resolved: resolved ?? this.resolved,

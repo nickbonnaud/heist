@@ -11,6 +11,9 @@ import 'package:keyboard_actions/keyboard_actions.dart';
 
 class RequestResetPasswordForm extends StatefulWidget {
 
+  const RequestResetPasswordForm({Key? key})
+    : super(key: key);
+  
   @override
   State<RequestResetPasswordForm> createState() => _RequestResetPasswordFormState();
 }
@@ -51,7 +54,7 @@ class _RequestResetPasswordFormState extends State<RequestResetPasswordForm> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      ScreenTitle(title: 'Verify Email'),
+                      const ScreenTitle(title: 'Verify Email'),
                       _emailTextField(),
                       SizedBox(height: 65.h),
                     ],
@@ -86,7 +89,7 @@ class _RequestResetPasswordFormState extends State<RequestResetPasswordForm> {
     return BlocBuilder<RequestResetFormBloc, RequestResetFormState>(
       builder: (context, state) {
         return TextFormField(
-          key: Key("emailFormFieldKey"),
+          key: const Key("emailFormFieldKey"),
           decoration: InputDecoration(
             labelText: 'Email',
             labelStyle: TextStyle(
@@ -116,7 +119,7 @@ class _RequestResetPasswordFormState extends State<RequestResetPasswordForm> {
     return BlocBuilder<RequestResetFormBloc, RequestResetFormState>(
       builder: (context, state) {
         return ElevatedButton(
-          key: Key("submitButtonKey"),
+          key: const Key("submitButtonKey"),
           onPressed: _buttonEnabled(state: state)
             ? () => _submitButtonPressed(state: state)
             : null,
@@ -128,9 +131,9 @@ class _RequestResetPasswordFormState extends State<RequestResetPasswordForm> {
 
   Widget _buttonChild({required RequestResetFormState state}) {
     if (state.isSubmitting) {
-      return SizedBox(height: 25.sp, width: 25.sp, child: CircularProgressIndicator());
+      return SizedBox(height: 25.sp, width: 25.sp, child: const CircularProgressIndicator());
     } else {
-      return ButtonText(text: 'Submit');
+      return const ButtonText(text: 'Submit');
     }
   }
 
@@ -146,13 +149,10 @@ class _RequestResetPasswordFormState extends State<RequestResetPasswordForm> {
 
   void _showSnackbar({String? error}) async {
     error == null ? Vibrate.success() : Vibrate.error();
-
-    final String text = error == null
-      ? 'Reset PIN code sent. Please check your email.'
-      : error;
+    final String text = error ?? 'Reset PIN code sent. Please check your email.';
 
     final SnackBar snackBar = SnackBar(
-      key: Key("requestResetSnackBarKey"),
+      key: const Key("requestResetSnackBarKey"),
       content: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -194,7 +194,7 @@ class _RequestResetPasswordFormState extends State<RequestResetPasswordForm> {
                 onPressed: () => node.unfocus(), 
                 child: Padding(
                   padding: EdgeInsets.only(right: 16.w),
-                  child: ActionText()
+                  child: const ActionText()
                 )
               );
             }

@@ -10,11 +10,12 @@ class PeekHeader extends StatelessWidget {
   final double _buttonSize;
   final AnimationController _controller;
 
-  PeekHeader({required double fontSize, required double topMargin, required double buttonSize, required AnimationController controller})
+  const PeekHeader({required double fontSize, required double topMargin, required double buttonSize, required AnimationController controller, Key? key})
     : _fontSize = fontSize,
       _topMargin = topMargin,
       _buttonSize = buttonSize,
-      _controller = controller;
+      _controller = controller,
+      super(key: key);
 
   @override
   Widget build(BuildContext context) {

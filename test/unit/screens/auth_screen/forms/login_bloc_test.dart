@@ -48,29 +48,29 @@ void main() {
       "LoginBloc EmailChanged event yields state: [isEmailValid: bool]",
       build: () => loginBloc,
       act: (bloc) => bloc.add(EmailChanged(email: faker.internet.email())),
-      wait: Duration(milliseconds: 300),
+      wait: const Duration(milliseconds: 300),
       expect: () => [_baseState.update(isEmailValid: true)]
     );
 
     blocTest<LoginBloc, LoginState>(
       "LoginBloc PasswordChanged event yields state: [isPasswordValid: bool]",
       build: () => loginBloc,
-      act: (bloc) => bloc.add(PasswordChanged(password: "kdkGDDKddj^hdhdg338dhh!!!hshs<ccHHH")),
-      wait: Duration(milliseconds: 300),
+      act: (bloc) => bloc.add(const PasswordChanged(password: "kdkGDDKddj^hdhdg338dhh!!!hshs<ccHHH")),
+      wait: const Duration(milliseconds: 300),
       expect: () => [_baseState.update(isPasswordValid: true)]
     );
 
     blocTest<LoginBloc, LoginState>(
       "LoginBloc Submitted event yields state: [LoginState.loading()], [LoginState.success()]",
       build: () => loginBloc,
-      act: (bloc) => bloc.add(Submitted(email: "email", password: "password")),
+      act: (bloc) => bloc.add(const Submitted(email: "email", password: "password")),
       expect: () => [LoginState.loading(), LoginState.success()]
     );
 
     blocTest<LoginBloc, LoginState>(
       "LoginBloc Submitted event calls authenticationRepository.login",
       build: () => loginBloc,
-      act: (bloc) => bloc.add(Submitted(email: "email", password: "password")),
+      act: (bloc) => bloc.add(const Submitted(email: "email", password: "password")),
       verify: (_) {
         verify(() => authenticationRepository.login(email: any(named: "email"), password: any(named: "password"))).called(1); 
       } 
@@ -80,10 +80,10 @@ void main() {
       "LoginBloc Submitted event on failure yields state: [LoginState.loading()], [LoginState.failure()]",
       build: () {
         when(() => authenticationRepository.login(email: any(named: "email"), password: any(named: "password")))
-          .thenThrow(ApiException(error: "error"));
+          .thenThrow(const ApiException(error: "error"));
         return loginBloc;
       },
-      act: (bloc) => bloc.add(Submitted(email: "email", password: "password")),
+      act: (bloc) => bloc.add(const Submitted(email: "email", password: "password")),
       expect: () => [LoginState.loading(), LoginState.failure(errorMessage: "error")]
     );
   });

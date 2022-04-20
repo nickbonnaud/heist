@@ -14,12 +14,13 @@ import './widgets/title_text.dart';
 class SetupPaymentAccountCard extends StatelessWidget {
   final CustomerBloc _customerBloc;
 
-  SetupPaymentAccountCard({required CustomerBloc customerBloc})
-    : _customerBloc = customerBloc;
+  const SetupPaymentAccountCard({required CustomerBloc customerBloc, Key? key})
+    : _customerBloc = customerBloc,
+      super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: MediaQuery.of(context).size.height,
       width: MediaQuery.of(context).size.width,
       child: Padding(
@@ -31,11 +32,11 @@ class SetupPaymentAccountCard extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  TitleText(text: "Let's add a Payment Method!"),
+                  const TitleText(text: "Let's add a Payment Method!"),
                   ElevatedButton(
-                    key: Key("addPaymentButtonKey"),
+                    key: const Key("addPaymentButtonKey"),
                     onPressed: () => _connectButtonPressed(context: context),
-                    child: ButtonText(text: 'Connect')
+                    child: const ButtonText(text: 'Connect')
                   ),
                   Text(
                     "${Constants.appName} uses a secure 3rd party service to create your payment account.", 
@@ -55,9 +56,9 @@ class SetupPaymentAccountCard extends StatelessWidget {
                   child: BlocBuilder<CustomerBloc, CustomerState>(
                     builder: (context, state) {
                       return ElevatedButton(
-                        key: Key("submitPaymentMethdKey"),
+                        key: const Key("submitPaymentMethdKey"),
                         onPressed: _isNextButtonEnabled(state: state) ? () => _nextButtonPressed(context) : null,
-                        child: ButtonText(text: 'Next')
+                        child: const ButtonText(text: 'Next')
                       );
                     },
                   )
@@ -72,7 +73,7 @@ class SetupPaymentAccountCard extends StatelessWidget {
   }
 
   void _connectButtonPressed({required BuildContext context}) {
-    Status status = Status(name: "pending", code: 120);
+    Status status = const Status(name: "pending", code: 120);
     Customer updatedCustomer = _customerBloc.state.customer!.update(status: status);
     _customerBloc.add(CustomerUpdated(customer: updatedCustomer));
   }
@@ -82,6 +83,6 @@ class SetupPaymentAccountCard extends StatelessWidget {
   }
 
   void _nextButtonPressed(BuildContext context) {
-    BlocProvider.of<ProfileSetupScreenBloc>(context).add(SectionCompleted(section: Section.paymentAccount));
+    BlocProvider.of<ProfileSetupScreenBloc>(context).add(const SectionCompleted(section: Section.paymentAccount));
   }
 }

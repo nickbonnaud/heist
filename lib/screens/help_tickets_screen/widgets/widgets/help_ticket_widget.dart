@@ -10,19 +10,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class HelpTicketWidget extends StatelessWidget {
   final HelpTicket _helpTicket;
-  final Key _key;
 
-  HelpTicketWidget({
-    required HelpTicket helpTicket,
-    required Key key
-  })
+  const HelpTicketWidget({required HelpTicket helpTicket, required Key key})
     : _helpTicket = helpTicket,
-      _key = key;
+      super(key: key);
   
   @override
   Widget build(BuildContext context) {
     return Card(
-      key: _key,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -43,7 +38,7 @@ class HelpTicketWidget extends StatelessWidget {
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
             ),
-            subtitle: _helpTicket.replies.length > 0 
+            subtitle: _helpTicket.replies.isNotEmpty 
               ? Text(
                 _helpTicket.replies.last.message,
                 style: TextStyle(

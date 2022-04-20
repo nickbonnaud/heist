@@ -20,7 +20,7 @@ void main() {
       
       mockBusinessProvider = MockBusinessProvider();
       when(() => mockBusinessProvider.fetch(query: any(named: "query")))
-        .thenAnswer((_) async => PaginatedApiResponse(body: [], isOK: false));
+        .thenAnswer((_) async => const PaginatedApiResponse(body: [], isOK: false));
       
       businessRepositoryWithMock = BusinessRepository(businessProvider: mockBusinessProvider);
     });

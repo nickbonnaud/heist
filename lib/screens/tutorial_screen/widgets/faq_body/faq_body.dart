@@ -6,13 +6,17 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'bloc/faq_body_bloc.dart';
 
 class FaqBody extends StatelessWidget {
+  
+  const FaqBody({Key? key})
+    : super(key: key);
+  
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<FaqBodyBloc, FaqBodyState>(
       builder: (context, state) {
         return ListView.separated(
-          key: Key("faqBodyKey"),
-          physics: NeverScrollableScrollPhysics(),
+          key: const Key("faqBodyKey"),
+          physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           itemCount: state.faqs.length,
           separatorBuilder: (_, __) => SizedBox(height: 24.h),

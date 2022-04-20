@@ -6,10 +6,10 @@ import 'package:heist/screens/home_screen/widgets/home_screen_body/widgets/nearb
 
 @immutable
 class IconCreatorRepository {
-  final Size _size = Size(150, 150);
+  static const Size _size = Size(150, 150);
   final IconCreatorProvider _iconCreatorProvider;
 
-  IconCreatorRepository({required IconCreatorProvider iconCreatorProvider})
+  const IconCreatorRepository({required IconCreatorProvider iconCreatorProvider})
     : _iconCreatorProvider = iconCreatorProvider;
 
   Future<List<PreMarker>> createPreMarkers({required List<Business> businesses}) async {

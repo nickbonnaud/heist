@@ -7,7 +7,7 @@ class ActiveLocationState extends Equatable {
   final List<Beacon> removingLocations;
   final String errorMessage;
 
-  ActiveLocationState({
+  const ActiveLocationState({
     required this.activeLocations,
     required this.addingLocations,
     required this.removingLocations,
@@ -15,7 +15,7 @@ class ActiveLocationState extends Equatable {
   });
 
   factory ActiveLocationState.initial() {
-    return ActiveLocationState(
+    return const ActiveLocationState(
       activeLocations: [], 
       addingLocations: [],
       removingLocations: [],

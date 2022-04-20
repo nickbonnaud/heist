@@ -19,16 +19,17 @@ class ChangeIssueButton extends StatelessWidget {
   final TransactionResource _transaction;
   final TransactionIssueRepository _transactionIssueRepository;
 
-  ChangeIssueButton({required TransactionResource transaction, required TransactionIssueRepository transactionIssueRepository})
+  const ChangeIssueButton({required TransactionResource transaction, required TransactionIssueRepository transactionIssueRepository, Key? key})
     : _transaction = transaction,
-      _transactionIssueRepository = transactionIssueRepository;
+      _transactionIssueRepository = transactionIssueRepository,
+      super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(right: 8.w),
       child: PopupMenuButton(
-        key: Key("changeIssueButtonKey"),
+        key: const Key("changeIssueButtonKey"),
         onSelected: (Options selection) => _filterSelection(selection: selection, context: context),
         icon: Icon(
           Icons.more_vert,
@@ -76,10 +77,10 @@ class ChangeIssueButton extends StatelessWidget {
     IssueType type;
     switch (selection) {
       case Options.changeToWrongBill:
-        type = IssueType.wrong_bill;
+        type = IssueType.wrongBill;
         break;
       case Options.changeToErrorInBill:
-        type = IssueType.error_in_bill;
+        type = IssueType.errorInBill;
         break;
       case Options.changeToOther:
         type = IssueType.other;

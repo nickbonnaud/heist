@@ -7,10 +7,8 @@ import 'package:meta/meta.dart';
 class BusinessProvider extends BaseProvider {
 
   Future<PaginatedApiResponse> fetch({String query = "", String? paginateUrl}) async {
-    final String url = paginateUrl == null
-      ? '${ApiEndpoints.business}$query'
-      : paginateUrl;
+    final String url = paginateUrl ?? '${ApiEndpoints.business}$query';
 
-    return await this.getPaginated(url: url);
+    return await getPaginated(url: url);
   }
 }

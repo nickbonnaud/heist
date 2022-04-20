@@ -9,6 +9,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SignOutBody extends StatelessWidget {
 
+  const SignOutBody({Key? key})
+    : super(key: key);
+  
   @override
   Widget build(BuildContext context) {
     return BlocListener<SignOutBloc, SignOutState>(
@@ -70,7 +73,7 @@ class SignOutBody extends StatelessWidget {
     return BlocBuilder<SignOutBloc, SignOutState>(
       builder: (context, state) {
         return OutlinedButton(
-          key: Key("cancelButtonKey"),
+          key: const Key("cancelButtonKey"),
           onPressed: state.isSubmitting ? null : () => _cancelButtonPressed(context: context),
           child: ButtonText(text: 'Cancel', color: state.isSubmitting
             ? Theme.of(context).colorScheme.callToActionDisabled
@@ -85,7 +88,7 @@ class SignOutBody extends StatelessWidget {
     return BlocBuilder<SignOutBloc, SignOutState>(
       builder: (context, state) {
         return ElevatedButton(
-          key: Key("submitButtonKey"),
+          key: const Key("submitButtonKey"),
           style: TextButton.styleFrom(backgroundColor: Theme.of(context).colorScheme.danger),
           onPressed: state.isSubmitting
             ? null
@@ -100,7 +103,7 @@ class SignOutBody extends StatelessWidget {
     if (state.isSubmitting) {
       return SizedBox(height: 25.sp, width: 25.sp, child: CircularProgressIndicator(color: Theme.of(context).colorScheme.onDanger));
     } else {
-      return ButtonText(text: 'Logout');
+      return const ButtonText(text: 'Logout');
     }
   }
 
@@ -118,7 +121,7 @@ class SignOutBody extends StatelessWidget {
     Vibrate.error();
     
     final SnackBar snackBar = SnackBar(
-      key: Key("signOutSnackbarKey"),
+      key: const Key("signOutSnackbarKey"),
       content: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

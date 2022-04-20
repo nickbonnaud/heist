@@ -10,7 +10,7 @@ class ProfileFormState extends Equatable {
 
   bool get isFormValid => isFirstNameValid && isLastNameValid;
 
-  ProfileFormState({
+  const ProfileFormState({
     required this.isFirstNameValid,
     required this.isLastNameValid,
     required this.isSubmitting,
@@ -19,7 +19,7 @@ class ProfileFormState extends Equatable {
   });
 
   factory ProfileFormState.initial() {
-    return ProfileFormState(
+    return const ProfileFormState(
       isFirstNameValid: true,
       isLastNameValid: true,
       isSubmitting: false,

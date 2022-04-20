@@ -50,7 +50,7 @@ class Submitted extends RegisterEvent {
   final String password;
   final String passwordConfirmation;
 
-  Submitted({required this.email, required this.password, required this.passwordConfirmation});
+  const Submitted({required this.email, required this.password, required this.passwordConfirmation});
 
   @override
   List<Object> get props => [email, password, passwordConfirmation];

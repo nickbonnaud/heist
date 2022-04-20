@@ -9,7 +9,7 @@ class PreMarker extends Equatable {
   final BitmapDescriptor icon;
   final Business business;
 
-  PreMarker({required this.markerId, required this.lat, required this.lng, required this.icon, required this.business});
+  const PreMarker({required this.markerId, required this.lat, required this.lng, required this.icon, required this.business});
 
   @override
   List<Object> get props => [markerId, lat, lng, icon, business];

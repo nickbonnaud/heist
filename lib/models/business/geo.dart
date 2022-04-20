@@ -8,7 +8,7 @@ class Geo extends Equatable {
   final double lng;
   final int radius;
 
-  Geo({
+  const Geo({
     required this.identifier,
     required this.lat,
     required this.lng,

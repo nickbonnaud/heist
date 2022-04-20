@@ -18,7 +18,7 @@ class PasswordFormBloc extends Bloc<PasswordFormEvent, PasswordFormState> {
   final AuthenticationRepository _authenticationRepository;
   final CustomerBloc _customerBloc;
 
-  final Duration _debounceTime = Duration(milliseconds: 300);
+  final Duration _debounceTime = const Duration(milliseconds: 300);
   
   PasswordFormBloc({required CustomerRepository customerRepository, required AuthenticationRepository authenticationRepository, required CustomerBloc customerBloc})
     : _customerRepository = customerRepository,

@@ -34,19 +34,19 @@ class HistoricTransactionsScreenTest {
   }
 
   Future<void> _loadTransactions() async {
-    await tester.tap(find.byKey(Key("transactionsDrawerItemKey")));
+    await tester.tap(find.byKey(const Key("transactionsDrawerItemKey")));
     await tester.pumpAndSettle();
     expect(find.byType(HistoricTransactionsScreen), findsOneWidget);
   } 
 
   Future<void> _scroll() async {
-    expect(find.byKey(Key("transactionKey-0")), findsOneWidget);
-    await tester.fling(find.byKey(Key("transactionsListKey")), Offset(0, -800), 500);
-    expect(find.byKey(Key("transactionKey-0")), findsNothing);
+    expect(find.byKey(const Key("transactionKey-0")), findsOneWidget);
+    await tester.fling(find.byKey(const Key("transactionsListKey")), const Offset(0, -800), 500);
+    expect(find.byKey(const Key("transactionKey-0")), findsNothing);
   }
 
   Future<void> _searchByBusinessName() async {
-    await tester.tap(find.byKey(Key("transactionsFilterButtonKey")));
+    await tester.tap(find.byKey(const Key("transactionsFilterButtonKey")));
     await tester.pumpAndSettle();
 
     await tester.tap(find.byIcon(Icons.business));
@@ -56,7 +56,7 @@ class HistoricTransactionsScreenTest {
   }
 
   Future<void> _searchByIdentifier() async {
-    await tester.tap(find.byKey(Key("transactionsFilterButtonKey")));
+    await tester.tap(find.byKey(const Key("transactionsFilterButtonKey")));
     await tester.pumpAndSettle();
 
     await tester.tap(find.byIcon(Icons.receipt));
@@ -66,7 +66,7 @@ class HistoricTransactionsScreenTest {
   }
 
   Future<void> _searchByDate() async {
-    await tester.tap(find.byKey(Key("transactionsFilterButtonKey")));
+    await tester.tap(find.byKey(const Key("transactionsFilterButtonKey")));
     await tester.pumpAndSettle();
 
     await tester.tap(find.byIcon(Icons.event));
@@ -76,7 +76,7 @@ class HistoricTransactionsScreenTest {
     await tester.pump();
     expect(find.byType(CircularProgressIndicator), findsNothing);
 
-    await tester.tap(find.byKey(Key("transactionsFilterButtonKey")));
+    await tester.tap(find.byKey(const Key("transactionsFilterButtonKey")));
     await tester.pumpAndSettle();
 
     await tester.tap(find.byIcon(Icons.event));
@@ -97,7 +97,7 @@ class HistoricTransactionsScreenTest {
   }
 
   Future<void> _reset() async {
-    await tester.tap(find.byKey(Key("transactionsFilterButtonKey")));
+    await tester.tap(find.byKey(const Key("transactionsFilterButtonKey")));
     await tester.pumpAndSettle();
 
     await tester.tap(find.byIcon(Icons.refresh));
@@ -110,7 +110,7 @@ class HistoricTransactionsScreenTest {
   Future<void> _showReceipt() async {
     expect(find.byType(ReceiptScreen), findsNothing);
 
-    await tester.tap(find.byKey(Key("transactionKey-0")));
+    await tester.tap(find.byKey(const Key("transactionKey-0")));
     await tester.pumpAndSettle();
 
     await ReceiptScreenTest(tester: tester).initHistoricTransactions();

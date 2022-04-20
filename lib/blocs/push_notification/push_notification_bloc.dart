@@ -99,6 +99,6 @@ class PushNotificationBloc extends Bloc<PushNotificationEvent, PushNotificationS
 
   void _mapStartMonitoringToState({required StartPushNotificationMonitoring event, required Emitter<PushNotificationState> emit}) {
     _pushNotificationRepository.startMonitoring(onMessageReceived: event.onMessageReceived, onMessageInteraction: event.onMessageInteraction);
-    emit(MonitoringPushNotifications());
+    emit(const MonitoringPushNotifications());
   }
 }

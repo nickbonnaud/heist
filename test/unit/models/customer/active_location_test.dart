@@ -38,7 +38,7 @@ void main() {
 
       final ActiveLocation updatedActiveLocation = activeLocation.update(
         transactionIdentifier: faker.guid.guid(),
-        lastNotification: NotificationType.bill_closed
+        lastNotification: NotificationType.billClosed
       );
 
       expect(activeLocation != updatedActiveLocation, true);

@@ -40,7 +40,7 @@ void main() {
       _mockDataGenerator = MockDataGenerator();
 
       _transactionResource = _mockDataGenerator.createTransactionResource();
-      Transaction transaction = _transactionResource.transaction.update(status: Status(name: "name", code: 101));
+      Transaction transaction = _transactionResource.transaction.update(status: const Status(name: "name", code: 101));
       _transactionResource = _transactionResource.update(transaction: transaction);
 
       payButtonBloc = PayButtonBloc(transactionRepository: transactionRepository, receiptScreenBloc: receiptScreenBloc, openTransactionsBloc: openTransactionsBloc, transactionResource: _transactionResource);
@@ -59,7 +59,7 @@ void main() {
       "PayButtonBloc TransactionStatusChanged event yields state: [isEnabled: false]",
       build: () => payButtonBloc,
       act: (bloc) {
-        Transaction transaction = _transactionResource.transaction.update(status: Status(name: "name", code: 200));
+        Transaction transaction = _transactionResource.transaction.update(status: const Status(name: "name", code: 200));
         _transactionResource = _transactionResource.update(transaction: transaction);
 
         bloc.add(TransactionStatusChanged(transactionResource: _transactionResource));
@@ -72,7 +72,7 @@ void main() {
       build: () => payButtonBloc,
       act: (bloc) {
         TransactionResource transactionResource = _mockDataGenerator.createTransactionResource();
-        Transaction transaction = _transactionResource.transaction.update(status: Status(name: "name", code: 103));
+        Transaction transaction = _transactionResource.transaction.update(status: const Status(name: "name", code: 103));
         transactionResource = _transactionResource.update(transaction: transaction);
         
         when(() => transactionRepository.approveTransaction(transactionId: any(named: "transactionId")))
@@ -94,7 +94,7 @@ void main() {
       build: () => payButtonBloc,
       act: (bloc) {
         TransactionResource transactionResource = _mockDataGenerator.createTransactionResource();
-        Transaction transaction = _transactionResource.transaction.update(status: Status(name: "name", code: 500));
+        Transaction transaction = _transactionResource.transaction.update(status: const Status(name: "name", code: 500));
         transactionResource = _transactionResource.update(transaction: transaction);
         
         when(() => transactionRepository.approveTransaction(transactionId: any(named: "transactionId")))
@@ -116,7 +116,7 @@ void main() {
       build: () => payButtonBloc,
       act: (bloc) {
         TransactionResource transactionResource = _mockDataGenerator.createTransactionResource();
-        Transaction transaction = _transactionResource.transaction.update(status: Status(name: "name", code: 500));
+        Transaction transaction = _transactionResource.transaction.update(status: const Status(name: "name", code: 500));
         transactionResource = _transactionResource.update(transaction: transaction);
         
         when(() => transactionRepository.approveTransaction(transactionId: any(named: "transactionId")))
@@ -141,7 +141,7 @@ void main() {
       build: () => payButtonBloc,
       act: (bloc) {
         when(() => transactionRepository.approveTransaction(transactionId: any(named: "transactionId")))
-          .thenThrow(ApiException(error: "error"));
+          .thenThrow(const ApiException(error: "error"));
 
         bloc.add(Submitted(transactionId: faker.guid.guid()));
       },

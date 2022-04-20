@@ -11,9 +11,10 @@ class ResetPasswordScreen extends StatelessWidget {
   final AuthenticationRepository _authenticationRepository;
   final ResetPasswordArgs _resetPasswordArgs;
 
-  const ResetPasswordScreen({required AuthenticationRepository authenticationRepository, required ResetPasswordArgs resetPasswordArgs})
+  const ResetPasswordScreen({required AuthenticationRepository authenticationRepository, required ResetPasswordArgs resetPasswordArgs, Key? key})
     : _authenticationRepository = authenticationRepository,
-      _resetPasswordArgs = resetPasswordArgs;
+      _resetPasswordArgs = resetPasswordArgs,
+      super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +23,7 @@ class ResetPasswordScreen extends StatelessWidget {
       appBar: BottomModalAppBar(context: context),
       body: BlocProvider<ResetPasswordFormBloc>(
         create: (_) => ResetPasswordFormBloc(authenticationRepository: _authenticationRepository, email: _resetPasswordArgs.email),
-        child: ResetPasswordForm(),
+        child: const ResetPasswordForm(),
       ),
     );
   }

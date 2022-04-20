@@ -15,8 +15,8 @@ class TransactionPickerScreenTest {
   Future<void> initBusinessScreen() async {
     TestTitle.write(testName: "Transaction Picker Screen Tests Business Screen");
     
-    await tester.tap(find.byKey(Key("claimTransactionButtonKey")));
-    await tester.pump(Duration(milliseconds: 350));
+    await tester.tap(find.byKey(const Key("claimTransactionButtonKey")));
+    await tester.pump(const Duration(milliseconds: 350));
 
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
     await tester.pumpAndSettle();
@@ -47,19 +47,19 @@ class TransactionPickerScreenTest {
   }
 
   Future<void> _tapSubmitButton() async {
-    expect(find.byKey(Key("confirmClaimDialogKey")), findsNothing);
+    expect(find.byKey(const Key("confirmClaimDialogKey")), findsNothing);
 
-    await tester.tap(find.byKey(Key("claimSubmitButtonKey")));
+    await tester.tap(find.byKey(const Key("claimSubmitButtonKey")));
     await tester.pump();
 
-    expect(find.byKey(Key("confirmClaimDialogKey")), findsOneWidget);
+    expect(find.byKey(const Key("confirmClaimDialogKey")), findsOneWidget);
   }
 
   Future<void> _cancelDialog() async {
     await tester.tap(find.text(Platform.isIOS ? 'Cancel' : 'CANCEL'));
     await tester.pump();
 
-    expect(find.byKey(Key("confirmClaimDialogKey")), findsNothing);
+    expect(find.byKey(const Key("confirmClaimDialogKey")), findsNothing);
   }
 
   Future<void> _confirmDialog() async {
@@ -73,25 +73,25 @@ class TransactionPickerScreenTest {
   }
 
   Future<void> _tapInfoButton() async {
-    expect(find.byKey(Key("transactionPickerInfoDialog")), findsNothing);
-    await tester.tap(find.byKey(Key("infoButtonKey")));
+    expect(find.byKey(const Key("transactionPickerInfoDialog")), findsNothing);
+    await tester.tap(find.byKey(const Key("infoButtonKey")));
     await tester.pumpAndSettle();
 
-    expect(find.byKey(Key("transactionPickerInfoDialog")), findsOneWidget);
+    expect(find.byKey(const Key("transactionPickerInfoDialog")), findsOneWidget);
 
     await tester.tap(find.text('OK'));
     await tester.pumpAndSettle();
-    expect(find.byKey(Key("transactionPickerInfoDialog")), findsNothing);
+    expect(find.byKey(const Key("transactionPickerInfoDialog")), findsNothing);
   }
 
   Future<void> _swipeTransactions() async {
-    expect(find.byKey(Key("overlayBodyKey-0")), findsOneWidget);
+    expect(find.byKey(const Key("overlayBodyKey-0")), findsOneWidget);
 
-    await tester.drag(find.byKey(Key("overlayBodyKey-0")), Offset(-400, 0));
+    await tester.drag(find.byKey(const Key("overlayBodyKey-0")), const Offset(-400, 0));
     await tester.pumpAndSettle();
 
-    expect(find.byKey(Key("overlayBodyKey-0")), findsNothing);
-    expect(find.byKey(Key("overlayBodyKey-1")), findsOneWidget);
+    expect(find.byKey(const Key("overlayBodyKey-0")), findsNothing);
+    expect(find.byKey(const Key("overlayBodyKey-1")), findsOneWidget);
   }
 
   Future<void> _dismiss() async {

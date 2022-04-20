@@ -18,12 +18,14 @@ class LoginForm extends StatefulWidget {
   final PageController _pageController;
   final PermissionsBloc _permissionsBloc;
 
-  LoginForm({
+  const LoginForm({
     required PageController pageController,
     required PermissionsBloc permissionsBloc,
+    Key? key
   })
     : _pageController = pageController,
-      _permissionsBloc = permissionsBloc;
+      _permissionsBloc = permissionsBloc,
+      super(key: key);
 
   @override
   State<LoginForm> createState() => _LoginFormState();
@@ -98,10 +100,10 @@ class _LoginFormState extends State<LoginForm> {
           );
         },
         child: Form(
-          key: Key("loginFormKey"),
+          key: const Key("loginFormKey"),
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 16.w),
-            child: Container(
+            child: SizedBox(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height,
               child: KeyboardActions(
@@ -147,7 +149,7 @@ class _LoginFormState extends State<LoginForm> {
     return BlocBuilder<LoginBloc, LoginState>(
       builder: (context, state) {
         return TextFormField(
-          key: Key("emailFormFieldKey"),
+          key: const Key("emailFormFieldKey"),
           controller: _emailController,
           focusNode: _emailFocus,
           keyboardType: TextInputType.emailAddress,
@@ -184,7 +186,7 @@ class _LoginFormState extends State<LoginForm> {
     return BlocBuilder<LoginBloc, LoginState>(
       builder: (context, state) {
         return TextFormField(
-          key: Key("passwordFormFieldKey"),
+          key: const Key("passwordFormFieldKey"),
           controller: _passwordController,
           focusNode: _passwordFocus,
           keyboardType: TextInputType.text,
@@ -223,10 +225,10 @@ class _LoginFormState extends State<LoginForm> {
       onPressed: () {
         if (animation.status != AnimationStatus.dismissed) {
           animation.reverse().then((_) {
-            widget._pageController.nextPage(duration: Duration(seconds: 1), curve: Curves.decelerate);
+            widget._pageController.nextPage(duration: const Duration(seconds: 1), curve: Curves.decelerate);
           });
         } else {
-          widget._pageController.nextPage(duration: Duration(seconds: 1), curve: Curves.decelerate);
+          widget._pageController.nextPage(duration: const Duration(seconds: 1), curve: Curves.decelerate);
         }
       },
       child: Text("Don't have an account?",
@@ -285,10 +287,10 @@ class _LoginFormState extends State<LoginForm> {
 
   Widget _buttonChild({required LoginState state}) {
     return state.isSubmitting
-      ? SizedBox(height: 25.sp, width: 25.sp, child: CircularProgressIndicator())
+      ? SizedBox(height: 25.sp, width: 25.sp, child: const CircularProgressIndicator())
       : Text(
           "Login",
-          key: Key("loginButtonTextKey"),
+          key: const Key("loginButtonTextKey"),
           style: TextStyle(
             fontWeight: FontWeight.normal,
             color: Theme.of(context).colorScheme.onSecondary,
@@ -342,7 +344,7 @@ class _LoginFormState extends State<LoginForm> {
                 onPressed: () => node.unfocus(), 
                 child: Padding(
                   padding: EdgeInsets.only(right: 16.w),
-                  child: ActionText()
+                  child: const ActionText()
                 )
               );
             }
@@ -356,7 +358,7 @@ class _LoginFormState extends State<LoginForm> {
                 onPressed: () => node.unfocus(), 
                 child: Padding(
                   padding: EdgeInsets.only(right: 16.w),
-                  child: ActionText()
+                  child: const ActionText()
                 )
               );
             }
@@ -369,7 +371,7 @@ class _LoginFormState extends State<LoginForm> {
   void _errorLogin({required String error}) async {
     Vibrate.error();
     final SnackBar snackBar = SnackBar(
-      key: Key("errorLoginSnackbarKey"),
+      key: const Key("errorLoginSnackbarKey"),
       content: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

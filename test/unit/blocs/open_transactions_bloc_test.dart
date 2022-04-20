@@ -76,7 +76,7 @@ void main() {
       "OpenTransactionsBloc FetchOpenTransactions event on error yields state: [FailedToFetchOpenTransactions()]",
       build: () => openTransactionsBloc,
       act: (bloc) {
-        when(() => transactionRepository.fetchOpen()).thenThrow(ApiException(error: "error"));
+        when(() => transactionRepository.fetchOpen()).thenThrow(const ApiException(error: "error"));
         bloc.add(FetchOpenTransactions());
       },
       expect: () => [isA<FailedToFetchOpenTransactions>()],
@@ -88,7 +88,7 @@ void main() {
     blocTest<OpenTransactionsBloc, OpenTransactionsState>(
       "OpenTransactionsBloc AddOpenTransaction event with no open transactions event yields state: [OpenTransactionsLoaded()]",
       build: () => openTransactionsBloc,
-      seed: () => OpenTransactionsLoaded(transactions: []),
+      seed: () => const OpenTransactionsLoaded(transactions: []),
       act: (bloc) {
         bloc.add(AddOpenTransaction(transaction: MockTransactionResource()));
       },
@@ -179,7 +179,7 @@ void main() {
       "OpenTransactionsBloc RemoveOpenTransaction does nothing if transactions list is empty",
       build: () => openTransactionsBloc,
       seed: () {
-        return OpenTransactionsLoaded(transactions: []);
+        return const OpenTransactionsLoaded(transactions: []);
       },
       act: (bloc) {
         bloc.add(RemoveOpenTransaction(transaction: _transaction));
@@ -233,7 +233,7 @@ void main() {
       "OpenTransactionsBloc authenticationBlocSubscription initial state is Unknown => [state is Authenticated && (_previousAuthenticationState is Unknown || _previousAuthenticationState is Unauthenticated)]",
       build: () {
         when(() => transactionRepository.fetchOpen()).thenAnswer((_) async => [MockTransactionResource()]);
-        whenListen(authenticationBloc, Stream<AuthenticationState>.fromIterable([Unknown(), Authenticated()]));
+        whenListen(authenticationBloc, Stream<AuthenticationState>.fromIterable([Unknown(), const Authenticated()]));
         return OpenTransactionsBloc(transactionRepository: transactionRepository, authenticationBloc: authenticationBloc);
       },
       expect: () => [isA<OpenTransactionsLoaded>()],

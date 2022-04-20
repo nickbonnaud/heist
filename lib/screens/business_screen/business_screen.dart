@@ -19,10 +19,12 @@ class BusinessScreen extends StatefulWidget {
   final Business _business;
   final bool _fromMapScreen;
 
-  BusinessScreen({required Business business, bool fromMapScreen = false})
+  const BusinessScreen({required Business business, bool fromMapScreen = false, Key? key})
     : _business = business,
-      _fromMapScreen = fromMapScreen;
+      _fromMapScreen = fromMapScreen,
+      super(key: key);
 
+  @override
   State<BusinessScreen> createState() => _BusinessScreenState();
 }
 
@@ -33,7 +35,7 @@ class _BusinessScreenState extends State<BusinessScreen> with SingleTickerProvid
   Widget build(BuildContext context) {
     return Dismissible(
       resizeDuration: null,
-      dismissThresholds: {
+      dismissThresholds: const {
         DismissDirection.down: 0.25
       },
       key: _key,
@@ -103,9 +105,9 @@ class _BusinessScreenState extends State<BusinessScreen> with SingleTickerProvid
 
   Widget _banner() {
     return ClipRRect(
-      key: Key("bannerKey"),
+      key: const Key("bannerKey"),
       borderRadius: BorderRadius.circular(20.0),
-      child: Container(
+      child: SizedBox(
         width: MediaQuery.of(context).size.width,
         child: CachedNetworkImage(
           imageUrl: widget._business.photos.banner.smallUrl,
@@ -117,9 +119,9 @@ class _BusinessScreenState extends State<BusinessScreen> with SingleTickerProvid
 
   Widget _logo() {
     return Material(
-      key: Key("logoKey"),
+      key: const Key("logoKey"),
       color: Colors.transparent,
-      shape: CircleBorder(),
+      shape: const CircleBorder(),
       elevation: 5,
       child: CachedAvatarHero(
         url: widget._business.photos.logo.smallUrl, 
@@ -133,7 +135,7 @@ class _BusinessScreenState extends State<BusinessScreen> with SingleTickerProvid
 
   Widget _dragBar() {
     return Center(
-      key: Key("dragBarKey"),
+      key: const Key("dragBarKey"),
       child: Container(
         height: 4.h,
         color: Theme.of(context).colorScheme.draggableBar,
@@ -144,7 +146,7 @@ class _BusinessScreenState extends State<BusinessScreen> with SingleTickerProvid
 
   Widget _dismissButton() {
     return IconButton(
-      key: Key("dismissBusinessButtonKey"),
+      key: const Key("dismissBusinessButtonKey"),
       onPressed: () => Navigator.of(context).pop(),
       icon: Icon(
         Icons.arrow_downward,
@@ -156,7 +158,7 @@ class _BusinessScreenState extends State<BusinessScreen> with SingleTickerProvid
 
   Widget _scrollBody() {
     return SingleChildScrollView(
-      key: Key("scrollBodyKey"),
+      key: const Key("scrollBodyKey"),
       child: Column(
         children: [
           SizedBox(height: 20.h),
@@ -207,15 +209,15 @@ class _BusinessScreenState extends State<BusinessScreen> with SingleTickerProvid
                 SizedBox(width: .05.sw),
                 Expanded(
                   child: ElevatedButton(
-                    key: Key("claimTransactionButtonKey"),
+                    key: const Key("claimTransactionButtonKey"),
                     onPressed: () => _goToTransactionFinderScreen(), 
-                    child: ButtonText(text: "Claim Bill")
+                    child: const ButtonText(text: "Claim Bill")
                   ),
                 ),
                 SizedBox(width: .05.sw),
               ],
             ),
-            Divider(),
+            const Divider(),
           ],
         );
       }
@@ -225,10 +227,10 @@ class _BusinessScreenState extends State<BusinessScreen> with SingleTickerProvid
   Widget _website() {
     return Row(
       children: [
-        Icon(Icons.public),
+        const Icon(Icons.public),
         SizedBox(width: 16.w),
         TextButton(
-          key: Key("websiteButtonKey"),
+          key: const Key("websiteButtonKey"),
           onPressed: () => _navigateToWebsite(),
           child: Text(
             _formatWebsite(),
@@ -246,10 +248,10 @@ class _BusinessScreenState extends State<BusinessScreen> with SingleTickerProvid
   Widget _phone() {
     return Row(
       children: [
-        Icon(Icons.phone),
+        const Icon(Icons.phone),
         SizedBox(width: 16.w),
         TextButton(
-          key: Key("phoneButtonKey"),
+          key: const Key("phoneButtonKey"),
           onPressed: () => launch("tel://${widget._business.profile.phone}"),
           child: Text(
             _formatPhone(),
@@ -266,7 +268,7 @@ class _BusinessScreenState extends State<BusinessScreen> with SingleTickerProvid
 
   Widget _hours() {
     return Row(
-      key: Key("hoursKey"),
+      key: const Key("hoursKey"),
       children: <Widget>[
         Icon(Icons.access_time, color: Theme.of(context).colorScheme.onPrimary),
         SizedBox(width: 16.w),

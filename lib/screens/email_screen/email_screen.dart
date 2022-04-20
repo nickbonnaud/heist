@@ -11,9 +11,10 @@ class EmailScreen extends StatelessWidget {
   final CustomerRepository _customerRepository;
   final CustomerBloc _customerBloc;
 
-  const EmailScreen({required CustomerRepository customerRepository, required CustomerBloc customerBloc})
+  const EmailScreen({required CustomerRepository customerRepository, required CustomerBloc customerBloc, Key? key})
     : _customerRepository = customerRepository,
-      _customerBloc = customerBloc;
+      _customerBloc = customerBloc,
+      super(key: key);
   
   @override
   Widget build(BuildContext context) {

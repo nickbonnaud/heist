@@ -8,7 +8,7 @@ class ApiInterceptors extends InterceptorsWrapper {
     Response res = Response(
       requestOptions: response.requestOptions,
       data: response.data['data'] ?? response.data,
-      extra: response.data['links'] ?? null
+      extra: response.data['links']
     );
     return handler.resolve(res);
   }

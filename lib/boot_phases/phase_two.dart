@@ -15,6 +15,9 @@ import 'package:heist/test_blocs/is_testing_cubit.dart';
 
 class PhaseTwo extends StatelessWidget {
   
+  const PhaseTwo({Key? key})
+    : super(key: key);
+  
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
@@ -33,7 +36,7 @@ class PhaseTwo extends StatelessWidget {
           )
         ),
       ], 
-      child: PhaseThree()
+      child: const PhaseThree()
     );
   }
 }

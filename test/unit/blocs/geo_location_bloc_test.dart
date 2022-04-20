@@ -39,7 +39,7 @@ void main() {
     blocTest<GeoLocationBloc, GeoLocationState>(
       "Geo Location Bloc has currentLocation getter",
       build: () => geoLocationBloc,
-      seed: () => LocationLoaded(latitude: 1.0, longitude: 1.0),
+      seed: () => const LocationLoaded(latitude: 1.0, longitude: 1.0),
       verify: (_) {
         expect(geoLocationBloc.currentLocation, {'lat': 1.0, 'lng': 1.0});
       }
@@ -50,7 +50,7 @@ void main() {
       build: () => geoLocationBloc,
       act: (bloc) {
         when(() => geolocatorRepository.fetchMed())
-          .thenAnswer((_) async => Position(longitude: 3.0, latitude: 4.0, timestamp: null, accuracy: 1.0, altitude: 1.0, heading: 1.0, speed: 1.0, speedAccuracy: 1.0));
+          .thenAnswer((_) async => const Position(longitude: 3.0, latitude: 4.0, timestamp: null, accuracy: 1.0, altitude: 1.0, heading: 1.0, speed: 1.0, speedAccuracy: 1.0));
 
         bloc.add(GeoLocationReady());
       },
@@ -66,7 +66,7 @@ void main() {
       build: () => geoLocationBloc,
       act: (bloc) {
         when(() => geolocatorRepository.fetchMed())
-          .thenAnswer((_) async => Position(longitude: 3.0, latitude: 4.0, timestamp: null, accuracy: 1.0, altitude: 1.0, heading: 1.0, speed: 1.0, speedAccuracy: 1.0));
+          .thenAnswer((_) async => const Position(longitude: 3.0, latitude: 4.0, timestamp: null, accuracy: 1.0, altitude: 1.0, heading: 1.0, speed: 1.0, speedAccuracy: 1.0));
 
         bloc.add(GeoLocationReady());
       },
@@ -92,9 +92,9 @@ void main() {
       build: () => geoLocationBloc,
       act: (bloc) {
         when(() => geolocatorRepository.fetchHigh())
-          .thenAnswer((_) async => Position(longitude: 10.0, latitude: 2.0, timestamp: null, accuracy: 1.0, altitude: 1.0, heading: 1.0, speed: 1.0, speedAccuracy: 1.0));
+          .thenAnswer((_) async => const Position(longitude: 10.0, latitude: 2.0, timestamp: null, accuracy: 1.0, altitude: 1.0, heading: 1.0, speed: 1.0, speedAccuracy: 1.0));
 
-        bloc.add(FetchLocation(accuracy: Accuracy.HIGH));
+        bloc.add(const FetchLocation(accuracy: Accuracy.high));
       },
       expect: () => [isA<Loading>(), isA<LocationLoaded>()],
       verify: (_) {
@@ -108,9 +108,9 @@ void main() {
       build: () => geoLocationBloc,
       act: (bloc) {
         when(() => geolocatorRepository.fetchHigh())
-          .thenAnswer((_) async => Position(longitude: 10.0, latitude: 2.0, timestamp: null, accuracy: 1.0, altitude: 1.0, heading: 1.0, speed: 1.0, speedAccuracy: 1.0));
+          .thenAnswer((_) async => const Position(longitude: 10.0, latitude: 2.0, timestamp: null, accuracy: 1.0, altitude: 1.0, heading: 1.0, speed: 1.0, speedAccuracy: 1.0));
 
-        bloc.add(FetchLocation(accuracy: Accuracy.HIGH));
+        bloc.add(const FetchLocation(accuracy: Accuracy.high));
       },
       expect: () => [isA<Loading>(), isA<LocationLoaded>()],
       verify: (_) {
@@ -125,7 +125,7 @@ void main() {
         when(() => geolocatorRepository.fetchHigh())
           .thenThrow(TimeoutException("message"));
 
-        bloc.add(FetchLocation(accuracy: Accuracy.HIGH));
+        bloc.add(const FetchLocation(accuracy: Accuracy.high));
       },
       expect: () => [isA<Loading>(), isA<FetchFailure>()],
     );
@@ -134,9 +134,9 @@ void main() {
       "Geo Location Bloc _permissionsBlocSubscription => [!this.isGeoLocationReady && state.onStartPermissionsValid] changes state [isA<Loading>(), isA<LocationLoaded>()]",
       build: () {
         when(() => geolocatorRepository.fetchMed())
-          .thenAnswer((_) async => Position(longitude: 3.0, latitude: 4.0, timestamp: null, accuracy: 1.0, altitude: 1.0, heading: 1.0, speed: 1.0, speedAccuracy: 1.0));
+          .thenAnswer((_) async => const Position(longitude: 3.0, latitude: 4.0, timestamp: null, accuracy: 1.0, altitude: 1.0, heading: 1.0, speed: 1.0, speedAccuracy: 1.0));
 
-        whenListen(permissionsBloc, Stream<PermissionsState>.fromIterable([PermissionsState(bleEnabled: true, locationEnabled: true, notificationEnabled: true, beaconEnabled: true, checksComplete: true)]));
+        whenListen(permissionsBloc, Stream<PermissionsState>.fromIterable([const PermissionsState(bleEnabled: true, locationEnabled: true, notificationEnabled: true, beaconEnabled: true, checksComplete: true)]));
         return GeoLocationBloc(geolocatorRepository: geolocatorRepository, permissionsBloc: permissionsBloc);
       },
       expect: () => [isA<Loading>(), isA<LocationLoaded>()],
@@ -146,9 +146,9 @@ void main() {
       "Geo Location Bloc _permissionsBlocSubscription => [!this.isGeoLocationReady && !state.onStartPermissionsValid] does not change state",
       build: () {
         when(() => geolocatorRepository.fetchMed())
-          .thenAnswer((_) async => Position(longitude: 3.0, latitude: 4.0, timestamp: null, accuracy: 1.0, altitude: 1.0, heading: 1.0, speed: 1.0, speedAccuracy: 1.0));
+          .thenAnswer((_) async => const Position(longitude: 3.0, latitude: 4.0, timestamp: null, accuracy: 1.0, altitude: 1.0, heading: 1.0, speed: 1.0, speedAccuracy: 1.0));
 
-        whenListen(permissionsBloc, Stream<PermissionsState>.fromIterable([PermissionsState(bleEnabled: false, locationEnabled: true, notificationEnabled: true, beaconEnabled: true, checksComplete: true)]));
+        whenListen(permissionsBloc, Stream<PermissionsState>.fromIterable([const PermissionsState(bleEnabled: false, locationEnabled: true, notificationEnabled: true, beaconEnabled: true, checksComplete: true)]));
         return GeoLocationBloc(geolocatorRepository: geolocatorRepository, permissionsBloc: permissionsBloc);
       },
       expect: () => [],

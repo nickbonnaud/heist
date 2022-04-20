@@ -12,7 +12,7 @@ void main() {
     });
 
     test("Account can create an empty placeholder", () {
-      var account = Account.empty();
+      var account = const Account.empty();
       expect(account, isA<Account>());
     });
 

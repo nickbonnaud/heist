@@ -40,13 +40,13 @@ class AppOpenedHandler {
       case NotificationType.exit:
         await _handleExit(notification: notification);
         break;
-      case NotificationType.bill_closed:
+      case NotificationType.billClosed:
         await _handleBillClosed(notification: notification);
         break;
-      case NotificationType.auto_paid:
+      case NotificationType.autoPaid:
         await _handleAutoPaid(notification: notification);
         break;
-      case NotificationType.fix_bill:
+      case NotificationType.fixBill:
         await _handleFixBill(notification: notification);
         break;
       case NotificationType.other:
@@ -119,7 +119,7 @@ class AppOpenedHandler {
       transactionResource = transactionResource.update(transaction: transactionResource.transaction.update(status: Status(name: name, code: code)));
     }
 
-    if (notification.type == NotificationType.auto_paid) {
+    if (notification.type == NotificationType.autoPaid) {
       _openTransactionsBloc.add(RemoveOpenTransaction(transaction: transactionResource));
     } else {
       _openTransactionsBloc.add(UpdateOpenTransaction(transaction: transactionResource));

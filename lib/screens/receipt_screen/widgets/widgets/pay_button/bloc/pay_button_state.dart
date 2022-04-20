@@ -7,7 +7,7 @@ class PayButtonState extends Equatable {
   final bool isSubmitSuccess;
   final String errorMessage;
 
-  PayButtonState({
+  const PayButtonState({
     required this.isEnabled,
     required this.isSubmitting,
     required this.isSubmitSuccess,

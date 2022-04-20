@@ -10,13 +10,14 @@ class SetupTipCard extends StatelessWidget {
   final AccountRepository _accountRepository;
   final CustomerBloc _customerBloc;
 
-  SetupTipCard({required AccountRepository accountRepository, required CustomerBloc customerBloc})
+  const SetupTipCard({required AccountRepository accountRepository, required CustomerBloc customerBloc, Key? key})
     : _accountRepository = accountRepository,
-      _customerBloc = customerBloc;
+      _customerBloc = customerBloc,
+      super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: MediaQuery.of(context).size.height,
       width: MediaQuery.of(context).size.width,
       child: BlocProvider<SetupTipCardBloc>(

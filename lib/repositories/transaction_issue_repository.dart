@@ -14,28 +14,28 @@ class TransactionIssueRepository extends BaseRepository {
     : _issueProvider = issueProvider;
 
   Future<TransactionResource> reportIssue({required IssueType type, required String transactionId, required String message}) async {
-    final Map<String, dynamic> body = {
+    Map<String, dynamic> body = {
       'transaction_identifier': transactionId,
       'type': Issue.enumToString(type: type),
       'issue': message
     };
 
-    final Map<String, dynamic> json = await this.send(request: _issueProvider.postIssue(body: body));
+    Map<String, dynamic> json = await send(request: _issueProvider.postIssue(body: body));
     return deserialize(json: json);
   }
 
   Future<TransactionResource> changeIssue({required IssueType type, required String issueId, required String message}) async {
-    final Map<String, dynamic> body = {
+    Map<String, dynamic> body = {
       'type': Issue.enumToString(type: type),
       'issue': message
     };
 
-    final Map<String, dynamic> json = await this.send(request: _issueProvider.patchIssue(body: body, issueId: issueId));
+    Map<String, dynamic> json = await send(request: _issueProvider.patchIssue(body: body, issueId: issueId));
     return deserialize(json: json);
   }
 
   Future<TransactionResource> cancelIssue({required String issueId}) async {
-    final Map<String, dynamic> json = await this.send(request: _issueProvider.deleteIssue(issueId: issueId));
+    Map<String, dynamic> json = await send(request: _issueProvider.deleteIssue(issueId: issueId));
     return deserialize(json: json);
   }
 

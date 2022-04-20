@@ -15,16 +15,18 @@ class LogoTransactionButton extends StatefulWidget {
   final double _logoBorderRadius;
   final double _warningIconSize;
 
-  LogoTransactionButton({
+  const LogoTransactionButton({
     required TransactionResource transactionResource,
     required String keyValue,
     required double logoBorderRadius,
-    required double warningIconSize
+    required double warningIconSize,
+    Key? key
   })
     : _transactionResource = transactionResource,
       _keyValue = keyValue,
       _logoBorderRadius = logoBorderRadius,
-      _warningIconSize = warningIconSize;
+      _warningIconSize = warningIconSize,
+      super(key: key);
 
   @override
   State<LogoTransactionButton> createState() => _LogoTransactionButtonState();
@@ -38,7 +40,7 @@ class _LogoTransactionButtonState extends State<LogoTransactionButton> with Sing
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: Duration(seconds: 1),
+      duration: const Duration(seconds: 1),
       lowerBound: 0.0,
       upperBound: 0.3,
     )..addListener(() {
@@ -63,7 +65,7 @@ class _LogoTransactionButtonState extends State<LogoTransactionButton> with Sing
             builder: (context, state) {
               return Material(
                 color: Colors.transparent,
-                shape: CircleBorder(),
+                shape: const CircleBorder(),
                 elevation: state.pressed ? 0 : 5,
                 child: CachedNetworkImage(
                   imageUrl: widget._transactionResource.business.photos.logo.smallUrl,
@@ -108,7 +110,7 @@ class _LogoTransactionButtonState extends State<LogoTransactionButton> with Sing
               color: Theme.of(context).colorScheme.background,
               size: widget._warningIconSize,
             ),
-            shape: CircleBorder(),
+            shape: const CircleBorder(),
             elevation: state.pressed ? 0 : 5,
             fillColor: widget._transactionResource.issue!.warningsSent == 1
               ? Theme.of(context).colorScheme.info

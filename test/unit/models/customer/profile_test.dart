@@ -12,7 +12,7 @@ void main() {
     });
 
     test("Profile can create an empty placeholder", () {
-      var profile = Profile.empty();
+      var profile = const Profile.empty();
       expect(profile, isA<Profile>());
     });
 

@@ -46,7 +46,7 @@ void main() {
     blocTest<SplashScreenBloc, SplashScreenState>(
       "SplashScreenBloc AppReadyBlocUpdated event yields state: [nextScreen: NextScreen.auth]",
       build: () => splashScreenBloc,
-      act: (bloc) => bloc.add(AppReadyBlocUpdated(
+      act: (bloc) => bloc.add(const AppReadyBlocUpdated(
         appReadyState: AppReadyState(customerOnboarded: false, permissionChecksComplete: true, permissionsReady: false, authCheckComplete: true, isAuthenticated: false, openTransactionsLoaded: false, nearbyBusinessesLoaded: true, beaconsLoaded: true)
       )),
       expect: () => [_baseState.update(nextScreen: NextScreen.auth)]
@@ -55,7 +55,7 @@ void main() {
     blocTest<SplashScreenBloc, SplashScreenState>(
       "SplashScreenBloc AppReadyBlocUpdated event && !permissionsReady yields state: [nextScreen: NextScreen.onboard]",
       build: () => splashScreenBloc,
-      act: (bloc) => bloc.add(AppReadyBlocUpdated(
+      act: (bloc) => bloc.add(const AppReadyBlocUpdated(
         appReadyState: AppReadyState(customerOnboarded: false, permissionChecksComplete: true, permissionsReady: false, authCheckComplete: true, isAuthenticated: true, openTransactionsLoaded: false, nearbyBusinessesLoaded: true, beaconsLoaded: true)
       )),
       expect: () => [_baseState.update(nextScreen: NextScreen.onboard)]
@@ -64,7 +64,7 @@ void main() {
     blocTest<SplashScreenBloc, SplashScreenState>(
       "SplashScreenBloc AppReadyBlocUpdated event yields state: [nextScreen: NextScreen.main]",
       build: () => splashScreenBloc,
-      act: (bloc) => bloc.add(AppReadyBlocUpdated(
+      act: (bloc) => bloc.add(const AppReadyBlocUpdated(
         appReadyState: AppReadyState(customerOnboarded: true, permissionChecksComplete: true, permissionsReady: true, authCheckComplete: true, isAuthenticated: true, openTransactionsLoaded: true, nearbyBusinessesLoaded: true, beaconsLoaded: true)
       )),
       expect: () => [_baseState.update(nextScreen: NextScreen.main)]
@@ -73,7 +73,7 @@ void main() {
     blocTest<SplashScreenBloc, SplashScreenState>(
       "SplashScreenBloc appReadyBloc.stream triggers AppReadyBlocUpdated",
       build: () {
-        whenListen(appReadyBloc, Stream<AppReadyState>.fromIterable([AppReadyState(customerOnboarded: false, permissionChecksComplete: false, permissionsReady: false, authCheckComplete: true, isAuthenticated: false, openTransactionsLoaded: false, nearbyBusinessesLoaded: false, beaconsLoaded: false)]));
+        whenListen(appReadyBloc, Stream<AppReadyState>.fromIterable([const AppReadyState(customerOnboarded: false, permissionChecksComplete: false, permissionsReady: false, authCheckComplete: true, isAuthenticated: false, openTransactionsLoaded: false, nearbyBusinessesLoaded: false, beaconsLoaded: false)]));
         return SplashScreenBloc(appReadyBloc: appReadyBloc);
       },
       expect: () => [_baseState.update(nextScreen: NextScreen.auth)]

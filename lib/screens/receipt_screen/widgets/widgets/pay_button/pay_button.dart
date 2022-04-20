@@ -11,8 +11,9 @@ import 'bloc/pay_button_bloc.dart';
 class PayButton extends StatelessWidget {
   final TransactionResource _transactionResource;
 
-  PayButton({required TransactionResource transactionResource})
-    : _transactionResource = transactionResource;
+  const PayButton({required TransactionResource transactionResource, Key? key})
+    : _transactionResource = transactionResource,
+      super(key: key);
   
   @override
   Widget build(BuildContext context) {
@@ -39,7 +40,7 @@ class PayButton extends StatelessWidget {
 
   Widget _buttonChild({required BuildContext context, required PayButtonState state}) {
     if (state.isSubmitting) {
-      return SizedBox(height: 25.sp, width: 25.sp, child: CircularProgressIndicator());
+      return SizedBox(height: 25.sp, width: 25.sp, child: const CircularProgressIndicator());
     } else {
       return Text(
         'Pay',

@@ -7,16 +7,16 @@ import 'package:meta/meta.dart';
 class CustomerProvider extends BaseProvider {
   Future<ApiResponse> fetchCustomer() async {
     String url = ApiEndpoints.self;
-    return await this.get(url: url);
+    return await get(url: url);
   }
 
   Future<ApiResponse> updateEmail({required Map<String, dynamic> body, required String customerId}) async {
     String url = '${ApiEndpoints.self}/$customerId';
-    return await this.patch(url: url, body: body);
+    return await patch(url: url, body: body);
   }
 
   Future<ApiResponse> updatePassword({required Map<String, dynamic> body, required String customerId}) async {
     String url = '${ApiEndpoints.self}/$customerId';
-    return await this.patch(url: url, body: body);
+    return await patch(url: url, body: body);
   }
 }

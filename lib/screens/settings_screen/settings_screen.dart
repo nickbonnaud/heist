@@ -7,6 +7,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SettingsScreen extends StatelessWidget {
 
+  const SettingsScreen({Key? key})
+    : super(key: key);
+  
   @override
   Widget build(BuildContext context) {
     return BlocProvider<DefaultAppBarBloc>(
@@ -15,7 +18,7 @@ class SettingsScreen extends StatelessWidget {
         appBar: DefaultAppBar(title: 'Settings'),
         body: Padding(
           padding: EdgeInsets.symmetric(horizontal: 16.w),
-          child: SettingsList()
+          child: const SettingsList()
         ),
       ),
     );

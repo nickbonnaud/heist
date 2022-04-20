@@ -19,20 +19,19 @@ class OpenTransactionsList extends StatelessWidget {
   double get _size => lerp(min: sharedSizes.startSize, max: sharedSizes.endSize);
   double get _borderRadius => lerp(min: sharedSizes.startSize, max: sharedSizes.endSize);
 
-  OpenTransactionsList({required AnimationController controller, required double topMargin})
+  OpenTransactionsList({required AnimationController controller, required double topMargin, Key? key})
     : _controller = controller,
-      _topMargin = topMargin;
+      _topMargin = topMargin,
+      super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<OpenTransactionsBloc, OpenTransactionsState>(
       builder: (context, state) {
         final currentState = state;
-        if (currentState is OpenTransactionsLoaded && currentState.transactions.length > 0) {
+        if (currentState is OpenTransactionsLoaded && currentState.transactions.isNotEmpty) {
           return Stack(
-            children: []
-              ..addAll(_detailsList(context: context, state: currentState))
-              ..addAll(_buttonsList(context: context, state: currentState))
+            children: [..._detailsList(context: context, state: currentState), ..._buttonsList(context: context, state: currentState)]
           );
         }
         return Container();

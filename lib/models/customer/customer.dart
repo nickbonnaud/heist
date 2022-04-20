@@ -13,7 +13,7 @@ class Customer extends Equatable {
   final Account account;
   final Status status;
 
-  Customer({
+  const Customer({
     required this.identifier,
     required this.email,
     required this.profile,
@@ -26,7 +26,7 @@ class Customer extends Equatable {
       email = json['email'],
       profile = json['profile'] != null 
         ? Profile.fromJson(json: json['profile']) 
-        : Profile.empty(),
+        : const Profile.empty(),
       account = Account.fromJson(json: json['account']),
       status = Status.fromJson(json: json['status']);
 
@@ -36,7 +36,7 @@ class Customer extends Equatable {
     Account? account,
     Status? status,
   }) => Customer(
-    identifier: this.identifier,
+    identifier: identifier,
     email: email ?? this.email,
     profile: profile ?? this.profile,
     account: account ?? this.account,

@@ -5,17 +5,17 @@ import 'package:heist/providers/storage_provider.dart';
 class InitialLoginRepository {
   final StorageProvider _tutorialProvider;
 
-  static const String PERMISSIONS_KEY = 'permissions';
+  static const String permissionsKey = 'permissions';
 
   const InitialLoginRepository({required StorageProvider tutorialProvider})
     : _tutorialProvider = tutorialProvider;
 
   Future<void> setIsInitialLogin({required bool isInitial}) async {
-    return await _tutorialProvider.write(key: PERMISSIONS_KEY, value: isInitial.toString().toLowerCase());
+    return await _tutorialProvider.write(key: permissionsKey, value: isInitial.toString().toLowerCase());
   }
 
   Future<bool> isInitialLogin() async {
-    final String? isInitial = await _tutorialProvider.read(key: PERMISSIONS_KEY);
+    String? isInitial = await _tutorialProvider.read(key: permissionsKey);
     // setIsInitialLogin(true);
     if (isInitial == null) {
       await setIsInitialLogin(isInitial: true);

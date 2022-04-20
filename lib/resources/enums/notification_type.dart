@@ -1,8 +1,8 @@
 enum NotificationType {
-  auto_paid,
-  bill_closed,
+  autoPaid,
+  billClosed,
   enter,
   exit,
-  fix_bill,
+  fixBill,
   other
 }

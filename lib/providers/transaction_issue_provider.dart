@@ -7,17 +7,17 @@ import 'package:meta/meta.dart';
 class TransactionIssueProvider extends BaseProvider {
 
   Future<ApiResponse> postIssue({required Map<String, dynamic> body}) async {
-    final String url = ApiEndpoints.transactionIssue;
-    return await this.post(url: url, body: body);
+    String url = ApiEndpoints.transactionIssue;
+    return await post(url: url, body: body);
   }
 
   Future<ApiResponse> patchIssue({required Map<String, dynamic> body, required String issueId}) async {
-    final String url = '${ApiEndpoints.transactionIssue}/$issueId';
-    return await this.patch(url: url, body: body);
+    String url = '${ApiEndpoints.transactionIssue}/$issueId';
+    return await patch(url: url, body: body);
   }
 
   Future<ApiResponse> deleteIssue({required String issueId}) async {
-    final String url = '${ApiEndpoints.transactionIssue}/$issueId';
-    return await this.delete(url: url);
+    String url = '${ApiEndpoints.transactionIssue}/$issueId';
+    return await delete(url: url);
   }
 }

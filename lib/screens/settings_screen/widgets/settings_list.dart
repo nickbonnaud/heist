@@ -5,6 +5,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SettingsList extends StatelessWidget {
   
+  const SettingsList({Key? key})
+    : super(key: key);
+  
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -12,7 +15,7 @@ class SettingsList extends StatelessWidget {
       children: [
         SizedBox(height: 15.h),
         ListTile(
-          key: Key("profileTileKey"),
+          key: const Key("profileTileKey"),
           leading: Icon(
             Icons.person, 
             color: Theme.of(context).colorScheme.secondary,
@@ -28,7 +31,7 @@ class SettingsList extends StatelessWidget {
           onTap: () => Navigator.of(context).pushNamed(Routes.profile)
         ),
         ListTile(
-          key: Key("emailTileKey"),
+          key: const Key("emailTileKey"),
           leading: Icon(
             Icons.email,
             color: Theme.of(context).colorScheme.secondary,
@@ -44,7 +47,7 @@ class SettingsList extends StatelessWidget {
           onTap: () => Navigator.of(context).pushNamed(Routes.email)
         ),
         ListTile(
-          key: Key("passwordTileKey"),
+          key: const Key("passwordTileKey"),
           leading: Icon(
             Icons.lock,
             color: Theme.of(context).colorScheme.secondary,
@@ -60,7 +63,7 @@ class SettingsList extends StatelessWidget {
           onTap: () => Navigator.of(context).pushNamed(Routes.password)
         ),
         ListTile(
-          key: Key("paymentTileKey"),
+          key: const Key("paymentTileKey"),
           leading: Icon(
             Icons.payment,
             color: Theme.of(context).colorScheme.secondary,
@@ -76,7 +79,7 @@ class SettingsList extends StatelessWidget {
           onTap: () => print('show payment screen'),
         ),
         ListTile(
-          key: Key("tipTileKey"),
+          key: const Key("tipTileKey"),
           leading: Icon(
             Icons.thumb_up,
             color: Theme.of(context).colorScheme.secondary,
@@ -92,7 +95,7 @@ class SettingsList extends StatelessWidget {
           onTap: () => Navigator.of(context).pushNamed(Routes.tips)
         ),
         ListTile(
-          key: Key("signOutTileKey"),
+          key: const Key("signOutTileKey"),
           leading: Icon(
             Icons.logout,
             color: Theme.of(context).colorScheme.secondary,

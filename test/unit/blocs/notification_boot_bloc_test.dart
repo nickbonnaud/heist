@@ -83,7 +83,7 @@ void main() {
     blocTest<NotificationBootBloc, NotificationBootState>(
       "NotificationBootBloc nearbyBusinessesBlocSubscription => [NearbyBusinessLoaded] changes state [nearbyBusinessesReady: true]",
       build: () {
-        whenListen(nearbyBusinessesBloc, Stream<NearbyBusinessesState>.fromIterable([NearbyBusinessLoaded(businesses: [], preMarkers: [])]));
+        whenListen(nearbyBusinessesBloc, Stream<NearbyBusinessesState>.fromIterable([const NearbyBusinessLoaded(businesses: [], preMarkers: [])]));
         return NotificationBootBloc(permissionsBloc: permissionsBloc, nearbyBusinessesBloc: nearbyBusinessesBloc, openTransactionsBloc: openTransactionsBloc);
       },
       expect: () => [_baseState.update(nearbyBusinessesReady: true)]
@@ -101,7 +101,7 @@ void main() {
     blocTest<NotificationBootBloc, NotificationBootState>(
       "NotificationBootBloc openTransactionsBlocSubscription => [OpenTransactionsLoaded] changes state [openTransactionsReady: true]",
       build: () {
-        whenListen(openTransactionsBloc, Stream<OpenTransactionsState>.fromIterable([OpenTransactionsLoaded(transactions: [])]));
+        whenListen(openTransactionsBloc, Stream<OpenTransactionsState>.fromIterable([const OpenTransactionsLoaded(transactions: [])]));
         return NotificationBootBloc(permissionsBloc: permissionsBloc, nearbyBusinessesBloc: nearbyBusinessesBloc, openTransactionsBloc: openTransactionsBloc);
       },
       expect: () => [_baseState.update(openTransactionsReady: true)]

@@ -24,7 +24,7 @@ extension GlobalColors on ColorScheme {
   Color get onSecondaryDisabled => Colors.white54;
 
   Color get topAppBar => Colors.white10;
-  Color get topAppBarIcon => Color(0xFF016fb9);
+  Color get topAppBarIcon => const Color(0xFF016fb9);
 
   Color get scrollBackground => Colors.grey.shade100;
 
@@ -35,8 +35,8 @@ extension GlobalColors on ColorScheme {
   Color get iconSecondary => Colors.grey[800]!;
   Color get iconButton => Colors.white;
 
-  Color get callToAction => Color(0xFF016fb9);
-  Color get callToActionDisabled => Color(0xFFcce2f1);
+  Color get callToAction => const Color(0xFF016fb9);
+  Color get callToActionDisabled => const Color(0xFFcce2f1);
   Color get onCallToAction => Colors.white;
 
 }

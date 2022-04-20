@@ -27,12 +27,14 @@ class NearbyBusinessesList extends StatelessWidget {
     required int numberOpenTransactions,
     required int numberActiveLocations,
     required AnimationController controller,
-    required double topMargin
+    required double topMargin,
+    Key? key
   })
     : _numberOpenTransactions = numberOpenTransactions,
       _numberActiveLocations = numberActiveLocations,
       _controller = controller,
-      _topMargin = topMargin;
+      _topMargin = topMargin,
+      super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -42,9 +44,7 @@ class NearbyBusinessesList extends StatelessWidget {
         final currentState = state;
         if (currentState is NearbyBusinessLoaded) {
           return Stack(
-            children: [_divider()]
-              ..addAll(_detailsList(context: context, state: currentState))
-              ..addAll(_buttonsList(context: context, state: currentState))
+            children: [_divider(), ..._detailsList(context: context, state: currentState), ..._buttonsList(context: context, state: currentState)]
           );
         }
         return Container();

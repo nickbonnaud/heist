@@ -40,7 +40,7 @@ void main() {
     blocTest<HelpTicketFormBloc, HelpTicketFormState>(
       "HelpTicketFormBloc SubjectChanged event yields state: [isSubjectValid: true]",
       build: () => helpTicketFormBloc,
-      wait: Duration(milliseconds: 300),
+      wait: const Duration(milliseconds: 300),
       act: (bloc) => bloc.add(SubjectChanged(subject: faker.lorem.sentence())),
       expect: () => [_baseState.update(isSubjectValid: true)]
     );
@@ -48,7 +48,7 @@ void main() {
     blocTest<HelpTicketFormBloc, HelpTicketFormState>(
       "HelpTicketFormBloc MessageChanged event yields state: [isMessageValid: true]",
       build: () => helpTicketFormBloc,
-      wait: Duration(milliseconds: 300),
+      wait: const Duration(milliseconds: 300),
       act: (bloc) => bloc.add(MessageChanged(message: faker.lorem.sentence())),
       expect: () => [_baseState.update(isMessageValid: true)]
     );
@@ -89,7 +89,7 @@ void main() {
       build: () => helpTicketFormBloc,
       act: (bloc) {
         when(() => helpRepository.storeHelpTicket(subject: any(named: "subject"), message: any(named: "message")))
-          .thenThrow(ApiException(error: "error"));
+          .thenThrow(const ApiException(error: "error"));
 
         bloc.add(Submitted(subject: faker.lorem.sentence(), message: faker.lorem.sentence()));
       },

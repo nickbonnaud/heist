@@ -11,7 +11,7 @@ class RegisterState extends Equatable {
 
   bool get isFormValid => isEmailValid && isPasswordValid && isPasswordConfirmationValid;
 
-  RegisterState({
+  const RegisterState({
     required this.isEmailValid,
     required this.isPasswordValid,
     required this.isPasswordConfirmationValid,
@@ -21,7 +21,7 @@ class RegisterState extends Equatable {
   });
 
   factory RegisterState.empty() {
-    return RegisterState(
+    return const RegisterState(
       isEmailValid: false,
       isPasswordValid: false,
       isPasswordConfirmationValid: false,
@@ -32,7 +32,7 @@ class RegisterState extends Equatable {
   }
 
   factory RegisterState.loading() {
-    return RegisterState(
+    return const RegisterState(
       isEmailValid: true,
       isPasswordValid: true,
       isPasswordConfirmationValid: true,
@@ -54,7 +54,7 @@ class RegisterState extends Equatable {
   }
 
   factory RegisterState.success() {
-    return RegisterState(
+    return const RegisterState(
       isEmailValid: true,
       isPasswordValid: true,
       isPasswordConfirmationValid: true,
@@ -92,7 +92,7 @@ class RegisterState extends Equatable {
       isPasswordValid: isPasswordValid ?? this.isPasswordValid,
       isPasswordConfirmationValid: isPasswordConfirmationValid ?? this.isPasswordConfirmationValid,
       isSubmitting: isSubmitting ?? this.isSubmitting,
-      isSuccess: this.isSuccess,
+      isSuccess: isSuccess,
       errorMessage: errorMessage ?? this.errorMessage,
     );
   }

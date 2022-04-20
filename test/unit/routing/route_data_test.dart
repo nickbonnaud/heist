@@ -12,27 +12,27 @@ void main() {
       RouteData routeData = RouteData(route: "fake", queryParameters: queryParams);
       expect(routeData['query'], queryParams["query"]);
 
-      routeData = RouteData(route: "fake");
+      routeData = const RouteData(route: "fake");
       expect(routeData['query'], "");
     });
 
     test("RouteData can receive args", () {
-      final Profile profile = Profile.empty();
+      Profile profile = const Profile.empty();
       
       RouteData routeData = RouteData(route: "fake", args: profile);
       expect(routeData.args, isA<Profile>());
     });
 
     test("RouteData factory can create RouteData", () {
-      final RouteSettings settings = RouteSettings(name: "fake?query=params" );
-      final RouteData routeData = RouteData.init(settings: settings);
+      RouteSettings settings = const RouteSettings(name: "fake?query=params" );
+      RouteData routeData = RouteData.init(settings: settings);
       expect(routeData.route, Uri.parse(settings.name!).path);
       expect(routeData['query'], Uri.parse(settings.name!).queryParameters['query']);
     });
 
     test("RouteData factory returns home route if settings name is null", () {
-      final RouteSettings settings = RouteSettings();
-      final RouteData routeData = RouteData.init(settings: settings);
+      RouteSettings settings = const RouteSettings();
+      RouteData routeData = RouteData.init(settings: settings);
       expect(routeData.route, "/");
     });
   });

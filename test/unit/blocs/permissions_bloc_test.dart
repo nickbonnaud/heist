@@ -47,28 +47,28 @@ void main() {
     blocTest<PermissionsBloc, PermissionsState>(
       "PermissionsBloc BleStatusChanged event changes state: [bleEnabled]",
       build: () => permissionsBloc,
-      act: (bloc) => bloc.add(BleStatusChanged(granted: true)),
+      act: (bloc) => bloc.add(const BleStatusChanged(granted: true)),
       expect: () => [_baseState.update(bleEnabled: true)]
     );
 
     blocTest<PermissionsBloc, PermissionsState>(
       "PermissionsBloc LocationStatusChanged event changes state: [locationEnabled]",
       build: () => permissionsBloc,
-      act: (bloc) => bloc.add(LocationStatusChanged(granted: true)),
+      act: (bloc) => bloc.add(const LocationStatusChanged(granted: true)),
       expect: () => [_baseState.update(locationEnabled: true)]
     );
 
     blocTest<PermissionsBloc, PermissionsState>(
       "PermissionsBloc NotificationStatusChanged event changes state: [notificationEnabled]",
       build: () => permissionsBloc,
-      act: (bloc) => bloc.add(NotificationStatusChanged(granted: true)),
+      act: (bloc) => bloc.add(const NotificationStatusChanged(granted: true)),
       expect: () => [_baseState.update(notificationEnabled: true)]
     );
 
     blocTest<PermissionsBloc, PermissionsState>(
       "PermissionsBloc UpdateAllPermissions event changes state: [bleEnabled, locationEnabled, notificationEnabled, beaconEnabled, checksComplete]",
       build: () => permissionsBloc,
-      act: (bloc) => bloc.add(UpdateAllPermissions(
+      act: (bloc) => bloc.add(const UpdateAllPermissions(
         bleGranted: true,
         locationGranted: true,
         notificationGranted: true,

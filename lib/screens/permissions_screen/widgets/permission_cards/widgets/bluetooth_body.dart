@@ -11,8 +11,9 @@ import 'widgets/title_text.dart';
 class BluetoothBody extends StatelessWidget {
   final PermissionButtons _permissionButtons;
   
-  BluetoothBody({required PermissionButtons permissionButtons})
-    : _permissionButtons = permissionButtons;
+  const BluetoothBody({required PermissionButtons permissionButtons, Key? key})
+    : _permissionButtons = permissionButtons,
+      super(key: key);
 
   final String bluetoothText = 
   'Bluetooth enables ${Constants.appName} to interact with Beacons.';
@@ -26,7 +27,7 @@ class BluetoothBody extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             SizedBox(height: 15.h),
-            TitleText(text: 'Stage: Bluetooth'),
+            const TitleText(text: 'Stage: Bluetooth'),
             SizedBox(height: 25.h),
             Text(bluetoothText,
               textAlign: TextAlign.center,

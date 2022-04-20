@@ -12,7 +12,7 @@ class Business extends Equatable {
   final Photos photos;
   final Location location;
 
-  Business({
+  const Business({
     required this.identifier,
     required this.profile,
     required this.photos,

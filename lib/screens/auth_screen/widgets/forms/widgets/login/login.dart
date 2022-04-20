@@ -14,22 +14,24 @@ class Login extends StatelessWidget {
   final PageController _pageController;
   final PermissionsBloc _permissionsBloc;
 
-  Login({
+  const Login({
     required AuthenticationRepository authenticationRepository,
     required AuthenticationBloc authenticationBloc,
     required PageController pageController,
-    required PermissionsBloc permissionsBloc
+    required PermissionsBloc permissionsBloc,
+    Key? key
   })
     : _authenticationRepository = authenticationRepository,
       _authenticationBloc = authenticationBloc,
       _pageController = pageController,
-      _permissionsBloc = permissionsBloc;
+      _permissionsBloc = permissionsBloc,
+      super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        WelcomeLabel(),
+        const WelcomeLabel(),
         BlocProvider<LoginBloc>(
           create: (_) => LoginBloc(authenticationRepository: _authenticationRepository, authenticationBloc: _authenticationBloc),
           child: LoginForm(

@@ -4,10 +4,10 @@ part of 'logo_business_button_bloc.dart';
 class LogoBusinessButtonState extends Equatable {
   final bool pressed;
 
-  LogoBusinessButtonState({required this.pressed});
+  const LogoBusinessButtonState({required this.pressed});
 
   factory LogoBusinessButtonState.initial() {
-    return LogoBusinessButtonState(pressed: false);
+    return const LogoBusinessButtonState(pressed: false);
   }
 
   LogoBusinessButtonState update({required bool isPressed}) {

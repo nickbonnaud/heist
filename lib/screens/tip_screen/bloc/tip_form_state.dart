@@ -10,7 +10,7 @@ class TipFormState extends Equatable {
 
   bool get isFormValid => isTipRateValid && isQuickTipRateValid;
 
-  TipFormState({
+  const TipFormState({
     required this.isTipRateValid,
     required this.isQuickTipRateValid,
     required this.isSubmitting,
@@ -19,7 +19,7 @@ class TipFormState extends Equatable {
   });
 
   factory TipFormState.initial() {
-    return TipFormState(
+    return const TipFormState(
       isTipRateValid: true,
       isQuickTipRateValid: true,
       isSubmitting: false,

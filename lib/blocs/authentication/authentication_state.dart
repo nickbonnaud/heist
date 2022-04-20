@@ -14,7 +14,7 @@ class Unauthenticated extends AuthenticationState{}
 class Authenticated extends AuthenticationState {
   final String? errorMessage;
 
-  Authenticated({this.errorMessage});
+  const Authenticated({this.errorMessage});
 
   @override
   List<Object?> get props => [errorMessage];

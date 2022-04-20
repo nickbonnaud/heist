@@ -8,11 +8,11 @@ class ActiveLocationProvider extends BaseProvider {
 
   Future<ApiResponse> enterBusiness({required Map<String, dynamic> body}) async {
     String url = ApiEndpoints.activeLocation;
-    return await this.post(url: url, body: body);
+    return await post(url: url, body: body);
   }
 
   Future<ApiResponse> exitBusiness({required String activeLocationId}) async {
     String url = "${ApiEndpoints.activeLocation}/$activeLocationId";
-    return await this.delete(url: url);
+    return await delete(url: url);
   }
 }

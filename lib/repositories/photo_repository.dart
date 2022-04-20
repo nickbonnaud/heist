@@ -13,9 +13,9 @@ class PhotoRepository extends BaseRepository {
     : _photoProvider = photoProvider;
 
   Future<Customer> upload({required XFile photo, required String profileIdentifier}) async {
-    final Map<String, dynamic> body = {'avatar': photo};
+    Map<String, dynamic> body = {'avatar': photo};
 
-    final Map<String, dynamic> json = await this.send(request: _photoProvider.upload(body: body, profileIdentifier: profileIdentifier));
+    Map<String, dynamic> json = await send(request: _photoProvider.upload(body: body, profileIdentifier: profileIdentifier));
     return deserialize(json: json);
   }
 

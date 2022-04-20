@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 class SlideUpRoute extends PageRouteBuilder {
-  static final Offset _begin = Offset(0.0, 1.0);
-  static final Offset _end = Offset.zero;
-  static final Curve _curve = Curves.easeInOut; 
+  static const Offset _begin = Offset(0.0, 1.0);
+  static const Offset _end = Offset.zero;
+  static const Curve _curve = Curves.easeInOut; 
   
   
   SlideUpRoute({required Widget screen, required String name, Duration? transitionDuration})
@@ -23,6 +23,6 @@ class SlideUpRoute extends PageRouteBuilder {
           position: animation.drive(Tween(begin: _begin, end: _end).chain(CurveTween(curve: _curve))),
           child: child,
         ),
-        transitionDuration: transitionDuration ?? Duration(milliseconds: 800)
+        transitionDuration: transitionDuration ?? const Duration(milliseconds: 800)
       );
 }

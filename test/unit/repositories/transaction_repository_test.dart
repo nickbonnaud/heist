@@ -32,7 +32,7 @@ void main() {
 
     test("Transaction Repository throws error on fetch historic transactions fail", () async {
       when(() => mockTransactionProvider.fetch(query: any(named: "query")))
-        .thenAnswer((_) async => PaginatedApiResponse(body: [], isOK: false));
+        .thenAnswer((_) async => const PaginatedApiResponse(body: [], isOK: false));
 
       expect(
         transactionRepositoryWithMock.fetchHistoric(),
@@ -49,7 +49,7 @@ void main() {
 
     test("Transaction Repository throws error on fetch date range fail", () async {
       when(() => mockTransactionProvider.fetch(query: any(named: "query")))
-        .thenAnswer((_) async => PaginatedApiResponse(body: [], isOK: false));
+        .thenAnswer((_) async => const PaginatedApiResponse(body: [], isOK: false));
 
       expect(
         transactionRepositoryWithMock.fetchDateRange(dateRange: DateTimeRange(start: DateTime.now(), end: DateTime.now())),
@@ -66,7 +66,7 @@ void main() {
 
     test("Transaction Repository throws error on fetch business fail", () async {
       when(() => mockTransactionProvider.fetch(query: any(named: "query")))
-        .thenAnswer((_) async => PaginatedApiResponse(body: [], isOK: false));
+        .thenAnswer((_) async => const PaginatedApiResponse(body: [], isOK: false));
 
       expect(
         transactionRepositoryWithMock.fetchByBusiness(identifier: "identifier"),
@@ -83,7 +83,7 @@ void main() {
 
     test("Transaction Repository throws error on fetch by transaction identifier fail", () async {
       when(() => mockTransactionProvider.fetch(query: any(named: "query")))
-        .thenAnswer((_) async => PaginatedApiResponse(body: [], isOK: false));
+        .thenAnswer((_) async => const PaginatedApiResponse(body: [], isOK: false));
 
       expect(
         transactionRepositoryWithMock.fetchByIdentifier(identifier: "identifier"),
@@ -98,7 +98,7 @@ void main() {
 
     test("Transaction Repository throws error on fetch open transactions fail", () async {
       when(() => mockTransactionProvider.fetch(query: any(named: "query")))
-        .thenAnswer((_) async => PaginatedApiResponse(body: [], isOK: false));
+        .thenAnswer((_) async => const PaginatedApiResponse(body: [], isOK: false));
 
       expect(
         transactionRepositoryWithMock.fetchOpen(),
@@ -115,7 +115,7 @@ void main() {
 
     test("Transaction Repository throws error on paginate fail", () async {
       when(() => mockTransactionProvider.fetch(paginateUrl: any(named: "paginateUrl")))
-        .thenAnswer((_) async => PaginatedApiResponse(body: [], isOK: false));
+        .thenAnswer((_) async => const PaginatedApiResponse(body: [], isOK: false));
 
       expect(
         transactionRepositoryWithMock.paginate(url: "http://novapay.ai/api/customer/transaction?status=200&page=2"),
@@ -130,7 +130,7 @@ void main() {
 
     test("Transaction Repository throws error on claim unassigned fail", () async {
       when(() => mockTransactionProvider.patchUnassigned(transactionId: any(named: "transactionId")))
-        .thenAnswer((_) async => ApiResponse(body: {}, error: "error", isOK: false));
+        .thenAnswer((_) async => const ApiResponse(body: {}, error: "error", isOK: false));
 
       expect(
         transactionRepositoryWithMock.claimUnassigned(transactionId: "transactionId"),
@@ -145,7 +145,7 @@ void main() {
 
     test("Transaction Repository throws error on approve transaction fail", () async {
       when(() => mockTransactionProvider.patchStatus(body: any(named: "body"), transactionId: any(named: "transactionId")))
-        .thenAnswer((_) async => ApiResponse(body: {}, error: "error", isOK: false));
+        .thenAnswer((_) async => const ApiResponse(body: {}, error: "error", isOK: false));
 
       expect(
         transactionRepositoryWithMock.approveTransaction(transactionId: "transactionId"),
@@ -160,7 +160,7 @@ void main() {
 
     test("Transaction Repository throws error on keep bill open fail", () async {
       when(() => mockTransactionProvider.patchStatus(body: any(named: "body"), transactionId: any(named: "transactionId")))
-        .thenAnswer((_) async => ApiResponse(body: {}, error: "error", isOK: false));
+        .thenAnswer((_) async => const ApiResponse(body: {}, error: "error", isOK: false));
 
       expect(
         transactionRepositoryWithMock.keepBillOpen(transactionId: "transactionId"),

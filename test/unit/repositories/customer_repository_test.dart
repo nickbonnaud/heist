@@ -22,7 +22,7 @@ void main() {
     setUp(() {
       registerFallbackValue(MockToken());
       tokenRepository = MockTokenRepository();
-      when(() => tokenRepository.saveToken(token: any(named: "token"))).thenAnswer((_) async => null);
+      when(() => tokenRepository.saveToken(token: any(named: "token"))).thenAnswer((_) async => true);
       customerRepository = CustomerRepository(customerProvider: CustomerProvider(), tokenRepository: tokenRepository);
       mockCustomerProvider = MockCustomerProvider();
       customerRepositoryWithMock = CustomerRepository(customerProvider: mockCustomerProvider, tokenRepository: tokenRepository);
@@ -35,7 +35,7 @@ void main() {
 
     test("Customer Repository throws error on fetch customer fail", () async {
       when(() => mockCustomerProvider.fetchCustomer())
-        .thenAnswer((_) async => ApiResponse(body: {}, error: "error", isOK: false));
+        .thenAnswer((_) async => const ApiResponse(body: {}, error: "error", isOK: false));
       
       expect(
         customerRepositoryWithMock.fetchCustomer(),
@@ -50,7 +50,7 @@ void main() {
 
     test("Customer Repository throws error on update email fail", () async {
       when(() => mockCustomerProvider.updateEmail(body: any(named: "body"), customerId: any(named: "customerId")))
-        .thenAnswer((_) async => ApiResponse(body: {}, error: "error", isOK: false));
+        .thenAnswer((_) async => const ApiResponse(body: {}, error: "error", isOK: false));
       
       expect(
         customerRepositoryWithMock.updateEmail(email: "email", customerId: "customerId"),
@@ -65,7 +65,7 @@ void main() {
 
     test("Customer Repository throws error on uupdate password fail", () async {
       when(() => mockCustomerProvider.updatePassword(body: any(named: "body"), customerId: any(named: "customerId")))
-        .thenAnswer((_) async => ApiResponse(body: {}, error: "error", isOK: false));
+        .thenAnswer((_) async => const ApiResponse(body: {}, error: "error", isOK: false));
       
       expect(
         customerRepositoryWithMock.updatePassword(oldPassword: "oldPassword", password: "password", passwordConfirmation: "passwordConfirmation", customerId: "customerId"),

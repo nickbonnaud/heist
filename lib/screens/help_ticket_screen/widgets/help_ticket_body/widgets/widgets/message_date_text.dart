@@ -6,9 +6,10 @@ class MessageDateText extends StatelessWidget {
   final String _text;
   final bool _isDate;
 
-  const MessageDateText({required String text, bool isDate: true})
+  const MessageDateText({required String text, bool isDate = true, Key? key})
     : _text = text,
-      _isDate = isDate;
+      _isDate = isDate,
+      super(key: key);
   
   @override
   Widget build(BuildContext context) {

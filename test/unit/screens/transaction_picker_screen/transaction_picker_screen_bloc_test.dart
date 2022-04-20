@@ -96,7 +96,7 @@ void main() {
       build: () => transactionPickerScreenBloc,
       act: (bloc) {
         when(() => transactionRepository.fetchUnassigned(businessIdentifier: any(named: "businessIdentifier")))
-          .thenThrow(ApiException(error: "error"));
+          .thenThrow(const ApiException(error: "error"));
         
         bloc.add(Fetch(businessIdentifier: faker.guid.guid()));
       },
@@ -153,7 +153,7 @@ void main() {
       },
       act: (bloc) {
         when(() => transactionRepository.claimUnassigned(transactionId: any(named: "transactionId")))
-          .thenThrow(ApiException(error: "error"));
+          .thenThrow(const ApiException(error: "error"));
         
         bloc.add(Claim(unassignedTransaction: _unclaimedTransactions.first));
       },

@@ -15,16 +15,18 @@ class Forms extends StatelessWidget {
   final PermissionsBloc _permissionsBloc;
 
 
-  Forms({
+  const Forms({
     required AuthenticationRepository authenticationRepository,
     required AuthenticationBloc authenticationBloc,
     required PageController pageController,
     required PermissionsBloc permissionsBloc,
+    Key? key
   })
     : _authenticationRepository = authenticationRepository,
       _authenticationBloc = authenticationBloc,
       _pageController = pageController,
-      _permissionsBloc = permissionsBloc;
+      _permissionsBloc = permissionsBloc,
+      super(key: key);
 
   @override
   Widget build(BuildContext context) {

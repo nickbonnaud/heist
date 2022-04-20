@@ -15,9 +15,10 @@ class TransactionPickerBody extends StatelessWidget {
   final String _businessIdentifier;
   final bool _fromSettings;
 
-  const TransactionPickerBody({required String businessIdentifier, required bool fromSettings})
+  const TransactionPickerBody({required String businessIdentifier, required bool fromSettings, Key? key})
     : _businessIdentifier = businessIdentifier,
-      _fromSettings = fromSettings;
+      _fromSettings = fromSettings,
+      super(key: key);
   
   @override
   Widget build(BuildContext context) {
@@ -33,7 +34,7 @@ class TransactionPickerBody extends StatelessWidget {
       },
       child: BlocBuilder<TransactionPickerScreenBloc, TransactionPickerScreenState>(
         builder: (context, state) {
-          if (state.loading) return Center(child: CircularProgressIndicator());
+          if (state.loading) return const Center(child: CircularProgressIndicator());
           if (state.errorMessage.isNotEmpty) {
             return ErrorScreen(
               body: "Oops! An error occurred fetching Unclaimed Transactions!",

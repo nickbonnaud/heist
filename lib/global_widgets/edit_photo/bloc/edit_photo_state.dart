@@ -12,7 +12,7 @@ class PhotoUnchanged extends EditPhotoState {}
 class Submitting extends EditPhotoState {
   final XFile photo;
 
-  Submitting({required this.photo});
+  const Submitting({required this.photo});
 
   @override
   List<Object> get props => [photo];
@@ -24,7 +24,7 @@ class Submitting extends EditPhotoState {
 class SubmitSuccess extends EditPhotoState {
   final XFile photo;
 
-  SubmitSuccess({required this.photo});
+  const SubmitSuccess({required this.photo});
 
   @override
   List<Object> get props => [photo];

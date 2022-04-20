@@ -22,7 +22,7 @@ class IssueFormBloc extends Bloc<IssueFormEvent, IssueFormState> {
       super(IssueFormState.initial(transactionResource: transactionResource)) { _eventHandler(); }
 
   void _eventHandler() {
-    on<MessageChanged>((event, emit) => _mapMessageChangedToState(event: event, emit: emit), transformer: Debouncer.bounce(duration: Duration(milliseconds: 300)));
+    on<MessageChanged>((event, emit) => _mapMessageChangedToState(event: event, emit: emit), transformer: Debouncer.bounce(duration: const Duration(milliseconds: 300)));
     on<Submitted>((event, emit) async => await _mapSubmittedToState(event: event, emit: emit));
     on<Updated>((event, emit) async => await _mapUpdatedToState(event: event, emit: emit));
     on<Reset>((event, emit) => _mapResetToState(emit: emit));

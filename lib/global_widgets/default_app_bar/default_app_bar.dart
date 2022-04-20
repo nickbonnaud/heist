@@ -11,16 +11,15 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Widget? _trailingWidget;
   final String? _title;
 
-  DefaultAppBar({bool isSliver = false, Widget? trailingWidget, Color? backgroundColor, String? title})
-    : _backgroundColor = backgroundColor == null
-        ? MainTheme.topAppBar
-        : backgroundColor,
+  DefaultAppBar({bool isSliver = false, Widget? trailingWidget, Color? backgroundColor, String? title, Key? key})
+    : _backgroundColor = backgroundColor ?? MainTheme.topAppBar,
       _isSliver = isSliver,
       _trailingWidget = trailingWidget,
-      _title = title;
+      _title = title,
+      super(key: key);
   
   @override
-  Size get preferredSize => Size.fromHeight(kToolbarHeight);
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +37,7 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
         : null,
       elevation: 0,
       backgroundColor: _backgroundColor,
-      leading: AnimatedLeadingIcon(),
+      leading: const AnimatedLeadingIcon(),
       actions: [
         if (_trailingWidget != null)
           _trailingWidget!
@@ -53,7 +52,7 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
         : null,
       elevation: 0,
       backgroundColor: _backgroundColor,
-      leading: AnimatedLeadingIcon(),
+      leading: const AnimatedLeadingIcon(),
       actions: [
         if (_trailingWidget != null)
           _trailingWidget!

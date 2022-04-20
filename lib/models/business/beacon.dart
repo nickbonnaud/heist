@@ -8,7 +8,7 @@ class Beacon extends Equatable {
   final int major;
   final int minor;
 
-  Beacon({
+  const Beacon({
     required this.regionIdentifier,
     required this.proximityUUID,
     required this.major,

@@ -21,20 +21,19 @@ class ActiveLocationsList extends StatelessWidget {
   double get _size => lerp(min: sharedSizes.startSize, max: sharedSizes.endSize);
   double get _borderRadius => lerp(min: sharedSizes.startSize, max: sharedSizes.endSize);
 
-  ActiveLocationsList({required int numberOpenTransactions, required AnimationController controller, required double topMargin})
+  ActiveLocationsList({required int numberOpenTransactions, required AnimationController controller, required double topMargin, Key? key})
     : _numberOpenTransactions = numberOpenTransactions,
       _controller = controller,
-      _topMargin = topMargin;
+      _topMargin = topMargin,
+      super(key: key);
   
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ActiveLocationBloc, ActiveLocationState>(
       builder: (context, state) {
-        if (state.activeLocations.length > 0) {
+        if (state.activeLocations.isNotEmpty) {
           return Stack(
-            children: [_divider()]
-              ..addAll(_detailsList(context: context, state: state))
-              ..addAll(_buttonsList(context: context, state: state))
+            children: [_divider(), ..._detailsList(context: context, state: state), ..._buttonsList(context: context, state: state)]
           );
         }
         return Container();

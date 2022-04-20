@@ -11,25 +11,25 @@ import 'package:heist/models/business/business.dart';
 class IconCreatorProvider {
 
   Future<BitmapDescriptor> createMarkers({required Size size, required Business business}) async {
-    final File markerImageFile = await DefaultCacheManager().getSingleFile(business.photos.logo.smallUrl);
-    final Uint8List imageBytes = await markerImageFile.readAsBytes();
+    File markerImageFile = await DefaultCacheManager().getSingleFile(business.photos.logo.smallUrl);
+    Uint8List imageBytes = await markerImageFile.readAsBytes();
     Uint8List marker = await _formatIcon(imageBytes, size);
     return BitmapDescriptor.fromBytes(marker);
   }
 
   Future<Uint8List> _formatIcon(Uint8List imageBytes, Size size) async {
-    final ui.PictureRecorder pictureRecorder = ui.PictureRecorder();
-    final Canvas canvas = Canvas(pictureRecorder);
+    ui.PictureRecorder pictureRecorder = ui.PictureRecorder();
+    Canvas canvas = Canvas(pictureRecorder);
 
-    final Radius radius = Radius.circular(size.width / 2);
+    Radius radius = Radius.circular(size.width / 2);
 
-    final Paint shadowPaint = Paint()..color = Color(0xFF016fb9);
-    final double shadowWidth = 8.0;
+    Paint shadowPaint = Paint()..color = const Color(0xFF016fb9);
+    double shadowWidth = 8.0;
 
-    final Paint borderPaint = Paint()..color = Colors.white;
-    final double borderWidth = 1.0;
+    Paint borderPaint = Paint()..color = Colors.white;
+    double borderWidth = 1.0;
 
-    final double imageOffset = shadowWidth + borderWidth;
+    double imageOffset = shadowWidth + borderWidth;
 
     // Add shadow circle
     canvas.drawRRect(
@@ -81,13 +81,13 @@ class IconCreatorProvider {
     paintImage(canvas: canvas, rect: oval, image: image, fit: BoxFit.fitWidth);
 
     // Convert canvas to image
-    final ui.Image markerAsImage = await pictureRecorder.endRecording().toImage(
+    ui.Image markerAsImage = await pictureRecorder.endRecording().toImage(
       size.width.toInt(), 
       size.height.toInt()
     );
 
     // Convert image to bytes
-    final ByteData? byteData = await markerAsImage.toByteData(format: ui.ImageByteFormat.png);
+    ByteData? byteData = await markerAsImage.toByteData(format: ui.ImageByteFormat.png);
     return byteData!.buffer.asUint8List();
   }
 }

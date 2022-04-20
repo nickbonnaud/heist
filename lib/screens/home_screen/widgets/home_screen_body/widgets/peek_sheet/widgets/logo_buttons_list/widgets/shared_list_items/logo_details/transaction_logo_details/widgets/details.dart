@@ -13,20 +13,22 @@ class Details extends StatefulWidget {
   final AnimationController _controller;
   final int _index;
 
-  Details({
+  const Details({
     required String keyValue,
     required double height,
     required double borderRadius,
     required TransactionResource transactionResource,
     required AnimationController controller,
-    required int index
+    required int index,
+    Key? key
   })
     : _keyValue = keyValue,
       _height = height,
       _borderRadius = borderRadius,
       _transactionResource = transactionResource,
       _controller = controller,
-      _index = index;
+      _index = index,
+      super(key: key);
 
   @override
   State<Details> createState() => _DetailsState();
@@ -42,7 +44,7 @@ class _DetailsState extends State<Details> with SingleTickerProviderStateMixin {
     super.initState();
     _detailsController = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 300),
     );
     
     Future.delayed(Duration(milliseconds: 200 * widget._index), () => _detailsController.forward());

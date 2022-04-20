@@ -4,7 +4,7 @@ part of 'faq_body_bloc.dart';
 class FaqBodyState extends Equatable {
   final List<Faq> faqs;
 
-  FaqBodyState({required this.faqs});
+  const FaqBodyState({required this.faqs});
 
   factory FaqBodyState.initial({required List<String> questions, required List<String> answers}) {
     return FaqBodyState(

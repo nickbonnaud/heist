@@ -6,9 +6,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'widgets/title_text.dart';
 
 class SuccessCard extends StatelessWidget {
-
-  final String successText =
-  'All permissions are ready. Start using ${Constants.appName} now!';
+  static const String successText = 'All permissions are ready. Start using ${Constants.appName} now!';
+  
+  const SuccessCard({Key? key})
+    : super(key: key);
   
   @override
   Widget build(BuildContext context) {
@@ -33,7 +34,7 @@ class SuccessCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               SizedBox(height: 15.h),
-              TitleText(text: 'Success'),
+              const TitleText(text: 'Success'),
               SizedBox(height: 50.h),
               Text('Permissions are a Go!',
                 textAlign: TextAlign.center,

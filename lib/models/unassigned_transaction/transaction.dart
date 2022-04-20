@@ -13,7 +13,7 @@ class Transaction extends Equatable {
   final DateTime updatedDate;
   final List<PurchasedItem> purchasedItems;
 
-  Transaction({
+  const Transaction({
     required this.identifier,
     required this.tax,
     required this.netSales,

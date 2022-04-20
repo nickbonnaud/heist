@@ -9,7 +9,7 @@ class Refund extends Equatable {
   final String status;
   final DateTime createdAt;
 
-  Refund({
+  const Refund({
     required this.identifier,
     required this.total,
     required this.status,

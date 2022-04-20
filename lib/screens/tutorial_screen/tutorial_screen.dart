@@ -6,15 +6,18 @@ import 'widgets/tutorial_cards.dart';
 
 class TutorialScreen extends StatelessWidget {
 
+  const TutorialScreen({Key? key})
+    : super(key: key);
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
+      body: SizedBox(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
         child: BlocProvider<TutorialScreenBloc>(
           create: (_) => TutorialScreenBloc(),
-          child: TutorialCards(),
+          child: const TutorialCards(),
         )
       )
     );

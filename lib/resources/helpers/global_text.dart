@@ -7,9 +7,10 @@ class ScreenTitle extends StatelessWidget {
   final String _title;
   final Color? _color;
 
-  const ScreenTitle({required String title, Color? color})
+  const ScreenTitle({required String title, Color? color, Key? key})
     : _title = title,
-      _color = color;
+      _color = color,
+      super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +18,7 @@ class ScreenTitle extends StatelessWidget {
       _title,
       style: TextStyle(
         fontWeight: FontWeight.w900,
-        color: _color == null ? Theme.of(context).colorScheme.onPrimary : _color,
+        color: _color ?? Theme.of(context).colorScheme.onPrimary,
         fontSize: 40.sp
       ),
     );
@@ -28,9 +29,10 @@ class ButtonText extends StatelessWidget {
   final String _text;
   final Color? _color;
 
-  const ButtonText({required String text, Color? color})
+  const ButtonText({required String text, Color? color, Key? key})
     : _text = text,
-      _color = color;
+      _color = color,
+      super(key: key);
   
   @override
   Widget build(BuildContext context) {
@@ -38,9 +40,7 @@ class ButtonText extends StatelessWidget {
       _text,
       style: TextStyle(
         fontWeight: FontWeight.bold,
-        color: _color == null
-          ? Theme.of(context).colorScheme.onSecondary
-          : _color,
+        color: _color ?? Theme.of(context).colorScheme.onSecondary,
         fontSize: 25.sp
       ),
     );
@@ -50,8 +50,9 @@ class ButtonText extends StatelessWidget {
 class SnackbarText extends StatelessWidget {
   final String _text;
 
-  const SnackbarText({required String text})
-    : _text = text;
+  const SnackbarText({required String text, Key? key})
+    : _text = text,
+      super(key: key);
   
   @override
   Widget build(BuildContext context) {
@@ -70,18 +71,17 @@ class ActionText extends StatelessWidget {
   final String? _text;
   final Color? _color;
 
-  const ActionText({String? text, Color? color})
+  const ActionText({String? text, Color? color, Key? key})
     : _text = text,
-      _color = color;
+      _color = color,
+      super(key: key);
   
   @override
   Widget build(BuildContext context) {
     return PlatformText(
       _text == null ? "Done" : _text!,
       style: TextStyle(
-        color: _color == null
-          ? Theme.of(context).colorScheme.callToAction
-          : _color,
+        color: _color ?? Theme.of(context).colorScheme.callToAction,
         fontSize: 20.sp,
         fontWeight: FontWeight.bold,
       ),
@@ -92,8 +92,9 @@ class ActionText extends StatelessWidget {
 class AppBarTitle extends StatelessWidget {
   final String _text;
 
-  const AppBarTitle({required String text})
-    : _text = text;
+  const AppBarTitle({required String text, Key? key})
+    : _text = text,
+      super(key: key);
 
   @override
   Widget build(BuildContext context) {

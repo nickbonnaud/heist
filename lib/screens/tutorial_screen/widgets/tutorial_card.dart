@@ -15,8 +15,9 @@ import 'faq_body/faq_body.dart';
 class TutorialCard extends StatefulWidget {
   final Tutorial _tutorialCard;
 
-  TutorialCard({required Tutorial tutorialCard})
-    : _tutorialCard = tutorialCard;
+  const TutorialCard({required Tutorial tutorialCard, Key? key})
+    : _tutorialCard = tutorialCard,
+      super(key: key);
       
   @override
   State<TutorialCard> createState() => _TutorialCardState();
@@ -30,7 +31,7 @@ class _TutorialCardState extends State<TutorialCard> {
     return BlocBuilder<TutorialScreenBloc, TutorialScreenState>(
       builder: (context, state) {
         return AnimatedPositioned(
-          duration: Duration(milliseconds: 500),
+          duration: const Duration(milliseconds: 500),
           top: state.tutorialCards.firstWhere((card) => card.type == widget._tutorialCard.type).dismissed
             ? MediaQuery.of(context).size.height
             : state.tutorialCards.indexOf(widget._tutorialCard) * 15.h,
@@ -43,7 +44,7 @@ class _TutorialCardState extends State<TutorialCard> {
             height: MediaQuery.of(context).size.height,
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.background,
-              borderRadius: BorderRadius.only(
+              borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(30),
                 topRight: Radius.circular(30)
               ),
@@ -69,7 +70,7 @@ class _TutorialCardState extends State<TutorialCard> {
         children: [
           Positioned(
             top: 0,
-            child: Container(
+            child: SizedBox(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.width,
               child: FlareActor(
@@ -150,7 +151,7 @@ class _TutorialCardState extends State<TutorialCard> {
                   )
                 : BlocProvider<FaqBodyBloc>(
                     create: (_) => FaqBodyBloc(),
-                    child: FaqBody(),
+                    child: const FaqBody(),
                   ),
             ],
           ),

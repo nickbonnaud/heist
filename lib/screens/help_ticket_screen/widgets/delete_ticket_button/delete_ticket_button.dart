@@ -15,15 +15,16 @@ class DeleteTicketButton extends StatelessWidget {
   final HelpRepository _helpRepository;
   final HelpTicketsScreenBloc _helpTicketsScreenBloc;
 
-  DeleteTicketButton({required HelpTicket helpTicket, required HelpRepository helpRepository, required HelpTicketsScreenBloc helpTicketsScreenBloc})
+  const DeleteTicketButton({required HelpTicket helpTicket, required HelpRepository helpRepository, required HelpTicketsScreenBloc helpTicketsScreenBloc, Key? key})
     : _helpTicket = helpTicket,
       _helpRepository = helpRepository,
-      _helpTicketsScreenBloc = helpTicketsScreenBloc;
+      _helpTicketsScreenBloc = helpTicketsScreenBloc,
+      super(key: key);
    
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      icon: Icon(Icons.delete_forever), 
+      icon: const Icon(Icons.delete_forever), 
       onPressed: () => _deleteButtonPressed(context: context),
       color: Theme.of(context).colorScheme.danger,
       iconSize: 40.sp,

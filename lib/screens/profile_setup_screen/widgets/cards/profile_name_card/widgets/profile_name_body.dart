@@ -12,6 +12,9 @@ import '../../widgets/title_text.dart';
 
 class ProfileNameBody extends StatefulWidget {
 
+  const ProfileNameBody({Key? key})
+    : super(key: key);
+  
   @override
   State<ProfileNameBody> createState() => _ProfileNameBodyState();
 }
@@ -59,7 +62,7 @@ class _ProfileNameBodyState extends State<ProfileNameBody> {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       SizedBox(height: 10.h),
-                      TitleText(text: "Let's start with your name!"),
+                      const TitleText(text: "Let's start with your name!"),
                       _firstNameField(),
                       _lastNameTextField(),
                       SizedBox(height: 65.h),
@@ -97,7 +100,7 @@ class _ProfileNameBodyState extends State<ProfileNameBody> {
     return BlocBuilder<ProfileNameFormBloc, ProfileNameFormState>(
       builder: (context, state) {
         return TextFormField(
-          key: Key("firstNameFieldKey"),
+          key: const Key("firstNameFieldKey"),
           decoration: InputDecoration(
             labelText: 'First Name',
             labelStyle: TextStyle(
@@ -130,7 +133,7 @@ class _ProfileNameBodyState extends State<ProfileNameBody> {
     return BlocBuilder<ProfileNameFormBloc, ProfileNameFormState>(
       builder: (context, state) {
         return TextFormField(
-          key: Key("lastNameFieldKey"),
+          key: const Key("lastNameFieldKey"),
           decoration: InputDecoration(
             labelText: 'Last Name',
             labelStyle: TextStyle(
@@ -162,7 +165,7 @@ class _ProfileNameBodyState extends State<ProfileNameBody> {
     return BlocBuilder<ProfileNameFormBloc, ProfileNameFormState>(
       builder: (context, state) {                        
         return ElevatedButton(
-          key: Key("submitNameButtonKey"),
+          key: const Key("submitNameButtonKey"),
           onPressed: _isSaveButtonEnabled(state: state) ? () => _saveButtonPressed(state: state) : null,
           child: _buttonChild(state: state),
         );
@@ -189,9 +192,9 @@ class _ProfileNameBodyState extends State<ProfileNameBody> {
   
   Widget _buttonChild({required ProfileNameFormState state}) {
     if (state.isSubmitting) {
-      return SizedBox(height: 25.sp, width: 25.sp, child: CircularProgressIndicator());
+      return SizedBox(height: 25.sp, width: 25.sp, child: const CircularProgressIndicator());
     } else {
-      return ButtonText(text: 'Save');
+      return const ButtonText(text: 'Save');
     }
   }
 
@@ -202,8 +205,8 @@ class _ProfileNameBodyState extends State<ProfileNameBody> {
   void _showSnackbar({required String message, required ProfileNameFormState state}) async {
     state.isSuccess ? Vibrate.success() : Vibrate.error();
     final SnackBar snackBar = SnackBar(
-      key: Key("nameSnackbarKey"),
-      duration: Duration(seconds: 1),
+      key: const Key("nameSnackbarKey"),
+      duration: const Duration(seconds: 1),
       content: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -222,7 +225,7 @@ class _ProfileNameBodyState extends State<ProfileNameBody> {
       ..showSnackBar(snackBar)
       .closed.then((_) {
         if (state.isSuccess) {
-          BlocProvider.of<ProfileSetupScreenBloc>(context).add(SectionCompleted(section: Section.name));
+          BlocProvider.of<ProfileSetupScreenBloc>(context).add(const SectionCompleted(section: Section.name));
         } else {
           BlocProvider.of<ProfileNameFormBloc>(context).add(Reset());
         }
@@ -242,7 +245,7 @@ class _ProfileNameBodyState extends State<ProfileNameBody> {
                 onPressed: () => node.unfocus(), 
                 child: Padding(
                   padding: EdgeInsets.only(right: 16.w),
-                  child: ActionText()
+                  child: const ActionText()
                 )
               );
             }
@@ -256,7 +259,7 @@ class _ProfileNameBodyState extends State<ProfileNameBody> {
                 onPressed: () => node.unfocus(), 
                 child: Padding(
                   padding: EdgeInsets.only(right: 16.w),
-                  child: ActionText()
+                  child: const ActionText()
                 )
               );
             }

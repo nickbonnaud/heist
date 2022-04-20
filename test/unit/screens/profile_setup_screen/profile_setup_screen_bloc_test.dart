@@ -28,14 +28,14 @@ void main() {
     blocTest<ProfileSetupScreenBloc, ProfileSetupScreenState>(
       "ProfileSetupScreenBloc SectionCompleted event yields state: [isTipComplete: true]",
       build: () => profileSetupScreenBloc,
-      act: (bloc) => bloc.add(SectionCompleted(section: Section.tip)),
+      act: (bloc) => bloc.add(const SectionCompleted(section: Section.tip)),
       expect: () => [_baseState.update(isTipComplete: true)]
     );
 
     blocTest<ProfileSetupScreenBloc, ProfileSetupScreenState>(
       "ProfileSetupScreenBloc Init event yields state: [isIntroComplete = true, isNameComplete = true, isPhotoComplete = true]",
       build: () => profileSetupScreenBloc,
-      act: (bloc) => bloc.add(Init(status: Status(name: "name", code: 102))),
+      act: (bloc) => bloc.add(const Init(status: Status(name: "name", code: 102))),
       expect: () => [_baseState.update(isIntroComplete: true, isNameComplete: true, isPhotoComplete: true)]
     );
   });

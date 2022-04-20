@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class LoadingLocation extends StatelessWidget {
+  
+  const LoadingLocation({Key? key})
+    : super(key: key);
+  
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -20,7 +24,7 @@ class LoadingLocation extends StatelessWidget {
             )
           ),
           SizedBox(height: 15.h),
-          CircularProgressIndicator(),
+          const CircularProgressIndicator(),
           SizedBox(height: 15.h),
         ],
       ),

@@ -5,7 +5,7 @@ class MessageListState extends Equatable {
   final HelpTicket helpTicket;
   final String errorMessage;
   
-  MessageListState({required this.helpTicket, required this.errorMessage});
+  const MessageListState({required this.helpTicket, required this.errorMessage});
 
   factory MessageListState.initial({required HelpTicket helpTicket}) {
     return MessageListState(helpTicket: helpTicket, errorMessage: "");

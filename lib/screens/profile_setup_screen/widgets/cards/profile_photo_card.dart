@@ -21,20 +21,22 @@ class ProfilePhotoCard extends StatelessWidget {
   final Profile _profile;
 
 
-  ProfilePhotoCard({
+  const ProfilePhotoCard({
     required PhotoRepository photoRepository,
     required PhotoPickerRepository photoPickerRepository,
     required CustomerBloc customerBloc,
-    required Profile profile
+    required Profile profile,
+    Key? key
   })
     : _photoRepository = photoRepository,
       _photoPickerRepository = photoPickerRepository,
       _customerBloc = customerBloc,
-      _profile = profile;
+      _profile = profile,
+      super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: MediaQuery.of(context).size.height,
       width: MediaQuery.of(context).size.width,
       child: Padding(
@@ -48,7 +50,7 @@ class ProfilePhotoCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   SizedBox(height: 10.h),
-                  TitleText(text: "Next add a Profile Photo."),
+                  const TitleText(text: "Next add a Profile Photo."),
                   BlocProvider<EditPhotoBloc>(
                     create: (BuildContext context) => EditPhotoBloc(
                       photoRepository: _photoRepository,
@@ -60,37 +62,35 @@ class ProfilePhotoCard extends StatelessWidget {
                       autoDismiss: false,
                     ),
                   ),
-                  Container(
-                    child: Column(
-                      children: [
-                        Text(
-                          "Your photo is used for your account security.",
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.onPrimarySubdued,
-                            fontSize: 20.sp,
-                          ),
-                          textAlign: TextAlign.center,
+                  Column(
+                    children: [
+                      Text(
+                        "Your photo is used for your account security.",
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.onPrimarySubdued,
+                          fontSize: 20.sp,
                         ),
-                        SizedBox(height: 20.h),
-                        Text(
-                          "Please use a photo from your shoulders up.",
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.onPrimarySubdued,
-                            fontSize: 20.sp,
-                          ),
-                          textAlign: TextAlign.center,
+                        textAlign: TextAlign.center,
+                      ),
+                      SizedBox(height: 20.h),
+                      Text(
+                        "Please use a photo from your shoulders up.",
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.onPrimarySubdued,
+                          fontSize: 20.sp,
                         ),
-                        SizedBox(height: 20.h),
-                        Text(
-                          "This allows servers and cashiers to easily identify you.",
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.onPrimarySubdued,
-                            fontSize: 20.sp,
-                          ),
-                          textAlign: TextAlign.center,
+                        textAlign: TextAlign.center,
+                      ),
+                      SizedBox(height: 20.h),
+                      Text(
+                        "This allows servers and cashiers to easily identify you.",
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.onPrimarySubdued,
+                          fontSize: 20.sp,
                         ),
-                      ],
-                    ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
                   ),
                   SizedBox(height: 65.h),
                 ],
@@ -103,9 +103,9 @@ class ProfilePhotoCard extends StatelessWidget {
                   child: BlocBuilder<CustomerBloc, CustomerState>(
                     builder: (context, state) {
                       return ElevatedButton(
-                        key: Key("submitPhotoButtonKey"),
+                        key: const Key("submitPhotoButtonKey"),
                         onPressed: _isNextButtonEnabled(customer: state.customer!) ? () => _nextButtonPressed(context: context) : null,
-                        child: ButtonText(text: 'Next')
+                        child: const ButtonText(text: 'Next')
                       );
                     }
                   )
@@ -124,6 +124,6 @@ class ProfilePhotoCard extends StatelessWidget {
   }
 
   void _nextButtonPressed({required BuildContext context}) {
-    BlocProvider.of<ProfileSetupScreenBloc>(context).add(SectionCompleted(section: Section.photo));
+    BlocProvider.of<ProfileSetupScreenBloc>(context).add(const SectionCompleted(section: Section.photo));
   }
 }

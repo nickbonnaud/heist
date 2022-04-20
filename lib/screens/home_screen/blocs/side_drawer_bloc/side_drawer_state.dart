@@ -5,13 +5,13 @@ class SideDrawerState extends Equatable {
   final bool menuOpened;
   final bool buttonVisible;
 
-  SideDrawerState({
+  const SideDrawerState({
     required this.menuOpened,
     required this.buttonVisible
   });
 
   factory SideDrawerState.initial() {
-    return SideDrawerState(
+    return const SideDrawerState(
       menuOpened: false,
       buttonVisible: true
     );

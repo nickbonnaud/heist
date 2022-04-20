@@ -91,12 +91,12 @@ class BaseProvider {
   ApiResponse _formatError({required DioError error}) {
     String errorMessage = error.response?.data ?? error.message;
     
-    return ApiResponse(body: {}, error: errorMessage, isOK: false);
+    return ApiResponse(body: const {}, error: errorMessage, isOK: false);
   }
   
   PaginatedApiResponse _formatErrorPaginated({required DioError error}) {
     String errorMessage = error.response?.data ?? error.message;
-    return PaginatedApiResponse(body: [], error: errorMessage, isOK: false, next: null);
+    return PaginatedApiResponse(body: const [], error: errorMessage, isOK: false, next: null);
   }
 }
 

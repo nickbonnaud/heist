@@ -8,6 +8,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SearchBusinessNameBody extends StatefulWidget {
 
+  const SearchBusinessNameBody({Key? key})
+    : super(key: key);
+  
   @override
   State<SearchBusinessNameBody> createState() => _SearchBusinessNameBodyState();
 }
@@ -22,10 +25,10 @@ class _SearchBusinessNameBodyState extends State<SearchBusinessNameBody> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: MediaQuery.of(context).size.height,
       child: Column(
-        key: Key("searchBusinessNameBodyKey"),
+        key: const Key("searchBusinessNameBodyKey"),
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           SizedBox(height: 10.h),
@@ -45,7 +48,7 @@ class _SearchBusinessNameBodyState extends State<SearchBusinessNameBody> {
 
   Widget _textField() {
     return TextField(
-      key: Key("businessNameFieldKey"),
+      key: const Key("businessNameFieldKey"),
       focusNode: _focusNode,
       style: TextStyle(
         fontWeight: FontWeight.w700,
@@ -72,9 +75,9 @@ class _SearchBusinessNameBodyState extends State<SearchBusinessNameBody> {
     return BlocBuilder<SearchBusinessNameBloc, SearchBusinessNameState>(
       builder: (context, state) {
         
-        if (state.isSubmitting) return CircularProgressIndicator();
+        if (state.isSubmitting) return const CircularProgressIndicator();
 
-        if (state.errorMessage.isNotEmpty) return Center(key: Key("errorSearchBusinessNameKey"), child: Text(state.errorMessage, style: TextStyle(color: Theme.of(context).colorScheme.error, fontWeight: FontWeight.bold, fontSize: 28.sp)));
+        if (state.errorMessage.isNotEmpty) return Center(key: const Key("errorSearchBusinessNameKey"), child: Text(state.errorMessage, style: TextStyle(color: Theme.of(context).colorScheme.error, fontWeight: FontWeight.bold, fontSize: 28.sp)));
 
         if (state.businesses == null) return Container();
 

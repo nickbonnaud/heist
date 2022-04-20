@@ -13,7 +13,7 @@ class ProfileSetupScreenTest {
   Future<void> init() async {
     TestTitle.write(testName: "Profile Setup Screen Tests");
 
-    expect(find.byKey(Key("profileSetupScreenKey")), findsOneWidget);
+    expect(find.byKey(const Key("profileSetupScreenKey")), findsOneWidget);
 
     await _fillOutNameForm();
 
@@ -35,54 +35,54 @@ class ProfileSetupScreenTest {
   }
 
   Future<void> _enterErrorName() async {
-    await tester.enterText(find.byKey(Key("firstNameFieldKey")), "error");
-    await tester.pump(Duration(milliseconds: 300));
+    await tester.enterText(find.byKey(const Key("firstNameFieldKey")), "error");
+    await tester.pump(const Duration(milliseconds: 300));
 
-    await tester.enterText(find.byKey(Key("lastNameFieldKey")), faker.person.lastName());
-    await tester.pump(Duration(milliseconds: 300));
+    await tester.enterText(find.byKey(const Key("lastNameFieldKey")), faker.person.lastName());
+    await tester.pump(const Duration(milliseconds: 300));
 
     await tester.tap(find.text(Platform.isIOS ? 'Done' : 'DONE'));
     await tester.pumpAndSettle();
   }
 
   Future<void> _submitFirstLastNameFail() async {
-    expect(find.byKey(Key("nameSnackbarKey")), findsNothing);
+    expect(find.byKey(const Key("nameSnackbarKey")), findsNothing);
     
-    await tester.tap(find.byKey(Key("submitNameButtonKey")));
+    await tester.tap(find.byKey(const Key("submitNameButtonKey")));
     await tester.pumpAndSettle();
 
-    expect(find.byKey(Key("nameSnackbarKey")), findsOneWidget);
-    await tester.fling(find.byKey(Key("nameSnackbarKey")), Offset(0, 500), 500);
+    expect(find.byKey(const Key("nameSnackbarKey")), findsOneWidget);
+    await tester.fling(find.byKey(const Key("nameSnackbarKey")), const Offset(0, 500), 500);
     await tester.pump();
   }
   
   Future<void> _addFirstAndLastName() async {
     expect(find.text("Invalid first name"), findsNothing);
 
-    await tester.tap(find.byKey(Key("firstNameFieldKey")));
+    await tester.tap(find.byKey(const Key("firstNameFieldKey")));
     await tester.pumpAndSettle();
 
-    await tester.enterText(find.byKey(Key("firstNameFieldKey")), "1");
-    await tester.pump(Duration(milliseconds: 300));
+    await tester.enterText(find.byKey(const Key("firstNameFieldKey")), "1");
+    await tester.pump(const Duration(milliseconds: 300));
     expect(find.text("Invalid first name"), findsOneWidget);
 
-    await tester.enterText(find.byKey(Key("firstNameFieldKey")), faker.person.firstName());
-    await tester.pump(Duration(milliseconds: 300));
+    await tester.enterText(find.byKey(const Key("firstNameFieldKey")), faker.person.firstName());
+    await tester.pump(const Duration(milliseconds: 300));
     expect(find.text("Invalid first name"), findsNothing);
 
     await tester.tap(find.text(Platform.isIOS ? 'Done' : 'DONE'));
     await tester.pumpAndSettle();
 
-    await tester.tap(find.byKey(Key("lastNameFieldKey")));
+    await tester.tap(find.byKey(const Key("lastNameFieldKey")));
     await tester.pumpAndSettle();
     
     expect(find.text("Invalid last name"), findsNothing);
-    await tester.enterText(find.byKey(Key("lastNameFieldKey")), "a");
-    await tester.pump(Duration(milliseconds: 300));
+    await tester.enterText(find.byKey(const Key("lastNameFieldKey")), "a");
+    await tester.pump(const Duration(milliseconds: 300));
     expect(find.text("Invalid last name"), findsOneWidget);
 
-    await tester.enterText(find.byKey(Key("lastNameFieldKey")), faker.person.lastName());
-    await tester.pump(Duration(milliseconds: 300));
+    await tester.enterText(find.byKey(const Key("lastNameFieldKey")), faker.person.lastName());
+    await tester.pump(const Duration(milliseconds: 300));
     expect(find.text("Invalid last name"), findsNothing);
 
     await tester.tap(find.text(Platform.isIOS ? 'Done' : 'DONE'));
@@ -90,25 +90,25 @@ class ProfileSetupScreenTest {
   }
 
   Future<void> _submitFirstLastNameSuccess() async {
-    await tester.tap(find.byKey(Key("submitNameButtonKey")));
+    await tester.tap(find.byKey(const Key("submitNameButtonKey")));
     await tester.pump();
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
     await tester.pumpAndSettle();
   }
 
   Future<void> _dismissNameSnackbar() async {
-    await tester.fling(find.byKey(Key("nameSnackbarKey")), Offset(0, 500), 500);
+    await tester.fling(find.byKey(const Key("nameSnackbarKey")), const Offset(0, 500), 500);
     await tester.pumpAndSettle();
   }
 
   Future<void> _addPhoto() async {
-    await tester.tap(find.byKey(Key("addPhotoButtonKey")));
+    await tester.tap(find.byKey(const Key("addPhotoButtonKey")));
     await tester.pumpAndSettle();
 
-    await tester.fling(find.byKey(Key("editPhotoSnackbarKey")), Offset(0, 500), 500);
+    await tester.fling(find.byKey(const Key("editPhotoSnackbarKey")), const Offset(0, 500), 500);
     await tester.pumpAndSettle();
 
-    await tester.tap(find.byKey(Key("submitPhotoButtonKey")));
+    await tester.tap(find.byKey(const Key("submitPhotoButtonKey")));
     await tester.pumpAndSettle();
   }
 
@@ -122,53 +122,53 @@ class ProfileSetupScreenTest {
   }
 
   Future<void> _addTipError() async {
-    await tester.enterText(find.byKey(Key("defaultTipRateFieldKey")), "17");
-    await tester.pump(Duration(milliseconds: 300));
+    await tester.enterText(find.byKey(const Key("defaultTipRateFieldKey")), "17");
+    await tester.pump(const Duration(milliseconds: 300));
 
-    await tester.enterText(find.byKey(Key("quickTipRateFieldKey")), "17");
-    await tester.pump(Duration(milliseconds: 300));
+    await tester.enterText(find.byKey(const Key("quickTipRateFieldKey")), "17");
+    await tester.pump(const Duration(milliseconds: 300));
 
     await tester.tap(find.text(Platform.isIOS ? 'Done' : 'DONE'));
     await tester.pumpAndSettle();
   }
 
   Future<void> _submitTipRatesFail() async {
-    expect(find.byKey(Key("tipsSnackBarKey")), findsNothing);
+    expect(find.byKey(const Key("tipsSnackBarKey")), findsNothing);
 
-    await tester.tap(find.byKey(Key("submitTipRatesButtonKey")));
+    await tester.tap(find.byKey(const Key("submitTipRatesButtonKey")));
     await tester.pumpAndSettle();
 
-    expect(find.byKey(Key("tipsSnackBarKey")), findsOneWidget);
+    expect(find.byKey(const Key("tipsSnackBarKey")), findsOneWidget);
 
-    await tester.fling(find.byKey(Key("tipsSnackBarKey")), Offset(0, 500), 500);
+    await tester.fling(find.byKey(const Key("tipsSnackBarKey")), const Offset(0, 500), 500);
     await tester.pump();
   }
   
   Future<void> _addTipRates() async {
     expect(find.text('Must be between 0 and 30'), findsNothing);
-    await tester.enterText(find.byKey(Key("defaultTipRateFieldKey")), "");
-    await tester.pump(Duration(milliseconds: 300));
-    await tester.enterText(find.byKey(Key("defaultTipRateFieldKey")), "50");
-    await tester.pump(Duration(milliseconds: 300));
+    await tester.enterText(find.byKey(const Key("defaultTipRateFieldKey")), "");
+    await tester.pump(const Duration(milliseconds: 300));
+    await tester.enterText(find.byKey(const Key("defaultTipRateFieldKey")), "50");
+    await tester.pump(const Duration(milliseconds: 300));
     expect(find.text('Must be between 0 and 30'), findsOneWidget);
 
-    await tester.enterText(find.byKey(Key("defaultTipRateFieldKey")), "");
-    await tester.pump(Duration(milliseconds: 300));
-    await tester.enterText(find.byKey(Key("defaultTipRateFieldKey")), "15");
-    await tester.pump(Duration(milliseconds: 300));
+    await tester.enterText(find.byKey(const Key("defaultTipRateFieldKey")), "");
+    await tester.pump(const Duration(milliseconds: 300));
+    await tester.enterText(find.byKey(const Key("defaultTipRateFieldKey")), "15");
+    await tester.pump(const Duration(milliseconds: 300));
     expect(find.text('Must be between 0 and 30'), findsNothing);
 
     expect(find.text('Must be between 0 and 20'), findsNothing);
-    await tester.enterText(find.byKey(Key("quickTipRateFieldKey")), "");
-    await tester.pump(Duration(milliseconds: 300));
-    await tester.enterText(find.byKey(Key("quickTipRateFieldKey")), "40");
-    await tester.pump(Duration(milliseconds: 300));
+    await tester.enterText(find.byKey(const Key("quickTipRateFieldKey")), "");
+    await tester.pump(const Duration(milliseconds: 300));
+    await tester.enterText(find.byKey(const Key("quickTipRateFieldKey")), "40");
+    await tester.pump(const Duration(milliseconds: 300));
     expect(find.text('Must be between 0 and 20'), findsOneWidget);
 
-    await tester.enterText(find.byKey(Key("quickTipRateFieldKey")), "");
-    await tester.pump(Duration(milliseconds: 300));
-    await tester.enterText(find.byKey(Key("quickTipRateFieldKey")), "7");
-    await tester.pump(Duration(milliseconds: 300));
+    await tester.enterText(find.byKey(const Key("quickTipRateFieldKey")), "");
+    await tester.pump(const Duration(milliseconds: 300));
+    await tester.enterText(find.byKey(const Key("quickTipRateFieldKey")), "7");
+    await tester.pump(const Duration(milliseconds: 300));
     expect(find.text('Must be between 0 and 20'), findsNothing);
 
     await tester.tap(find.text(Platform.isIOS ? 'Done' : 'DONE'));
@@ -176,22 +176,22 @@ class ProfileSetupScreenTest {
   }
 
   Future<void> _submitTipRatesSuccess() async {
-    await tester.tap(find.byKey(Key("submitTipRatesButtonKey")));
+    await tester.tap(find.byKey(const Key("submitTipRatesButtonKey")));
     await tester.pump();
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
     await tester.pumpAndSettle();
   }
 
   Future<void> _dismissTipsSnackbar() async {
-    await tester.fling(find.byKey(Key("tipsSnackBarKey")), Offset(0, 500), 500);
+    await tester.fling(find.byKey(const Key("tipsSnackBarKey")), const Offset(0, 500), 500);
     await tester.pumpAndSettle();
   }
 
   Future<void> _addPaymentMethod() async {
-    await tester.tap(find.byKey(Key("addPaymentButtonKey")));
+    await tester.tap(find.byKey(const Key("addPaymentButtonKey")));
     await tester.pump();
 
-    await tester.tap(find.byKey(Key("submitPaymentMethdKey")));
+    await tester.tap(find.byKey(const Key("submitPaymentMethdKey")));
     await tester.pumpAndSettle();
   }
 }

@@ -12,22 +12,22 @@ class BusinessRepository extends BaseRepository {
     : _businessProvider = businessProvider;
 
   Future<PaginateDataHolder> fetchByName({required String name}) async {
-    final String query = this.formatQuery(baseQuery: 'name=$name');
-    final PaginateDataHolder holder = await this.sendPaginated(request: _businessProvider.fetch(query: query));
+    String query = formatQuery(baseQuery: 'name=$name');
+    PaginateDataHolder holder = await sendPaginated(request: _businessProvider.fetch(query: query));
     
     return deserialize(holder: holder);
   }
 
   Future<PaginateDataHolder> fetchByIdentifier({required String identifier}) async {
-    final String query = this.formatQuery(baseQuery: 'id=$identifier');
-    final PaginateDataHolder holder = await this.sendPaginated(request: _businessProvider.fetch(query: query));
+    String query = formatQuery(baseQuery: 'id=$identifier');
+    PaginateDataHolder holder = await sendPaginated(request: _businessProvider.fetch(query: query));
     
     return deserialize(holder: holder);
   }
 
   Future<PaginateDataHolder> fetchByBeaconIdentifier({required String identifier}) async {
-    final String query = this.formatQuery(baseQuery: 'beacon=$identifier');
-    final PaginateDataHolder holder = await this.sendPaginated(request: _businessProvider.fetch(query: query));
+    String query = formatQuery(baseQuery: 'beacon=$identifier');
+    PaginateDataHolder holder = await sendPaginated(request: _businessProvider.fetch(query: query));
     
     return deserialize(holder: holder);
   }

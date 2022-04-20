@@ -19,12 +19,12 @@ class ActiveLocationRepository extends BaseRepository {
       'minor': beacon.minor
     };
     
-    final Map<String, dynamic> json = await this.send(request: _activeLocationProvider.enterBusiness(body: body));
+    final Map<String, dynamic> json = await send(request: _activeLocationProvider.enterBusiness(body: body));
     return deserialize(json: json);
   }
 
   Future<bool> exitBusiness({required String activeLocationId}) async {
-    final Map<String, dynamic> json = await this.send(request: _activeLocationProvider.exitBusiness(activeLocationId: activeLocationId));
+    final Map<String, dynamic> json = await send(request: _activeLocationProvider.exitBusiness(activeLocationId: activeLocationId));
     return json['deleted'];
   }
 

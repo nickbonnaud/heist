@@ -85,7 +85,7 @@ void main() {
       build: () => cancelIssueFormBloc,
       act: (bloc) {
         when(() => issueRepository.cancelIssue(issueId: any(named: "issueId")))
-          .thenThrow(ApiException(error: "error"));
+          .thenThrow(const ApiException(error: "error"));
 
         bloc.add(Submitted(issueIdentifier: faker.guid.guid()));
       },

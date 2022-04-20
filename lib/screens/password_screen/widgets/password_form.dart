@@ -11,8 +11,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class PasswordForm extends StatefulWidget {
   final Customer _customer;
 
-  PasswordForm({required Customer customer})
-    : _customer = customer;
+  const PasswordForm({required Customer customer, Key? key})
+    : _customer = customer,
+      super(key: key);
 
   @override
   State<PasswordForm> createState() => _PasswordFormState();
@@ -64,7 +65,7 @@ class _PasswordFormState extends State<PasswordForm> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          ScreenTitle(title: 'Change Password'),
+                          const ScreenTitle(title: 'Change Password'),
                           _currentPassword(state: state),
                           _newPassword(state: state),
                           _newPasswordConfirmation(state: state),
@@ -110,7 +111,7 @@ class _PasswordFormState extends State<PasswordForm> {
 
   Widget _currentPassword({required PasswordFormState state}) {
     return TextFormField(
-      key: Key("currentPasswordFieldKey"),
+      key: const Key("currentPasswordFieldKey"),
       decoration: InputDecoration(
         labelText: 'Current Password',
         labelStyle: TextStyle(
@@ -141,7 +142,7 @@ class _PasswordFormState extends State<PasswordForm> {
 
   Widget _newPassword({required PasswordFormState state}) {
     return TextFormField(
-      key: Key("newPasswordFieldKey"),
+      key: const Key("newPasswordFieldKey"),
       decoration: InputDecoration(
         labelText: 'New Password',
         labelStyle: TextStyle(
@@ -173,7 +174,7 @@ class _PasswordFormState extends State<PasswordForm> {
 
   Widget _newPasswordConfirmation({required PasswordFormState state}) {
     return TextFormField(
-      key: Key("newPasswordConfirmationFieldKey"),
+      key: const Key("newPasswordConfirmationFieldKey"),
       decoration: InputDecoration(
         labelText: 'Password Confirmation',
         labelStyle: TextStyle(
@@ -206,7 +207,7 @@ class _PasswordFormState extends State<PasswordForm> {
     return BlocBuilder<PasswordFormBloc, PasswordFormState>(
       builder: (context, state) {
         return OutlinedButton(
-          key: Key("cancelButtonKey"),
+          key: const Key("cancelButtonKey"),
           onPressed: state.isSubmitting ? null : () => _cancelButtonPressed(),
           child: ButtonText(text: 'Cancel', color: state.isSubmitting 
             ? Theme.of(context).colorScheme.callToActionDisabled
@@ -221,7 +222,7 @@ class _PasswordFormState extends State<PasswordForm> {
     return BlocBuilder<PasswordFormBloc, PasswordFormState>(
       builder: (context, state) {
         return ElevatedButton(
-          key: Key("submitButtonKey"),
+          key: const Key("submitButtonKey"),
           onPressed: _canSubmit(state: state) ? () => _submit(state: state) : null,
           child: _buttonChild(state: state),
         );
@@ -231,7 +232,7 @@ class _PasswordFormState extends State<PasswordForm> {
 
   Widget _buttonChild({required PasswordFormState state}) {
     if (state.isSubmitting) {
-      return SizedBox(height: 25.sp, width: 25.sp, child: CircularProgressIndicator());
+      return SizedBox(height: 25.sp, width: 25.sp, child: const CircularProgressIndicator());
     } else {
       String text = state.isOldPasswordVerified ? 'Save' : 'Verify';
       return ButtonText(text: text);
@@ -280,7 +281,7 @@ class _PasswordFormState extends State<PasswordForm> {
     isSuccess ? Vibrate.success() : Vibrate.error();
 
     final SnackBar snackBar = SnackBar(
-      key: Key("passwordFormSnackbarKey"),
+      key: const Key("passwordFormSnackbarKey"),
       content: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -321,7 +322,7 @@ class _PasswordFormState extends State<PasswordForm> {
                   onPressed: () => node.unfocus(), 
                   child: Padding(
                     padding: EdgeInsets.only(right: 16.w),
-                    child: ActionText()
+                    child: const ActionText()
                   )
                 );
               }
@@ -335,7 +336,7 @@ class _PasswordFormState extends State<PasswordForm> {
                 onPressed: () => node.unfocus(), 
                 child: Padding(
                   padding: EdgeInsets.only(right: 16.w),
-                  child: ActionText()
+                  child: const ActionText()
                 )
               );
             }
@@ -349,7 +350,7 @@ class _PasswordFormState extends State<PasswordForm> {
                 onPressed: () => node.unfocus(), 
                 child: Padding(
                   padding: EdgeInsets.only(right: 16.w),
-                  child: ActionText()
+                  child: const ActionText()
                 )
               );
             }

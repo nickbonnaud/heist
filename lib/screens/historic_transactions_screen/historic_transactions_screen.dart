@@ -10,8 +10,9 @@ import 'widgets/historic_transactions_body.dart';
 class HistoricTransactionsScreen extends StatelessWidget {
   final TransactionRepository _transactionRepository;
 
-  HistoricTransactionsScreen({required TransactionRepository transactionRepository})
-    : _transactionRepository = transactionRepository;
+  const HistoricTransactionsScreen({required TransactionRepository transactionRepository, Key? key})
+    : _transactionRepository = transactionRepository,
+      super(key: key);
   
   @override
   Widget build(BuildContext context) {
@@ -19,10 +20,10 @@ class HistoricTransactionsScreen extends StatelessWidget {
       create: (_) => DefaultAppBarBloc(),
       child: BlocProvider<HistoricTransactionsBloc>(
         create: (BuildContext context) => HistoricTransactionsBloc(transactionRepository: _transactionRepository)
-          ..add(FetchHistoricTransactions()),
+          ..add(const FetchHistoricTransactions()),
         child: Scaffold(
           backgroundColor: Theme.of(context).colorScheme.scrollBackground,
-          body: HistoricTransactionsBody(),
+          body: const HistoricTransactionsBody(),
         ),
       ) 
     );

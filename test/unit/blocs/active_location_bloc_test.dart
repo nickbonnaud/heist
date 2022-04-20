@@ -123,7 +123,7 @@ void main() {
         _business = MockDataGenerator().createBusiness();
         when(() => _activeLocation.business).thenReturn(_business);
         when(() => activeLocationRepository.enterBusiness(beacon: any(named: "beacon")))
-          .thenThrow(ApiException(error: "error"));
+          .thenThrow(const ApiException(error: "error"));
 
         bloc.add(NewActiveLocation(beacon: _activeLocation.business.location.beacon));
       },
@@ -259,7 +259,7 @@ void main() {
       },
       act: (bloc) {
         when(() => activeLocationRepository.exitBusiness(activeLocationId: any(named: "activeLocationId")))
-          .thenThrow(ApiException(error: "error occurred"));
+          .thenThrow(const ApiException(error: "error occurred"));
 
         bloc.add(RemoveActiveLocation(beacon: _activeLocation.business.location.beacon));
       },

@@ -48,13 +48,13 @@ class PushNotification extends Equatable {
         type = NotificationType.exit;
         break;
       case 'bill_closed':
-        type = NotificationType.bill_closed;
+        type = NotificationType.billClosed;
         break;
       case 'auto_paid':
-        type = NotificationType.auto_paid;
+        type = NotificationType.autoPaid;
         break;
       case 'fix_bill':
-        type = NotificationType.fix_bill;
+        type = NotificationType.fixBill;
         break;
       default:
         type = NotificationType.other;

@@ -17,6 +17,9 @@ import 'widgets/peek_header.dart';
 
 class PeekSheet extends StatefulWidget {
 
+  const PeekSheet({Key? key})
+    : super(key: key);
+  
   @override
   State<PeekSheet> createState() => _PeekSheetState();
 }
@@ -36,14 +39,14 @@ class _PeekSheetState extends State<PeekSheet> with SingleTickerProviderStateMix
 
     _controller = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 500)
+      duration: const Duration(milliseconds: 500)
     );
 
     _controller.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
-        BlocProvider.of<SideDrawerBloc>(context).add(ButtonVisibilityChanged(isVisible: false));
+        BlocProvider.of<SideDrawerBloc>(context).add(const ButtonVisibilityChanged(isVisible: false));
       } else if (status == AnimationStatus.dismissed) {
-        BlocProvider.of<SideDrawerBloc>(context).add(ButtonVisibilityChanged(isVisible: true));
+        BlocProvider.of<SideDrawerBloc>(context).add(const ButtonVisibilityChanged(isVisible: true));
       }
     });
   }
@@ -62,7 +65,7 @@ class _PeekSheetState extends State<PeekSheet> with SingleTickerProviderStateMix
             padding: EdgeInsets.symmetric(horizontal: 8.w),
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.background,
-              borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
               boxShadow: [
                 BoxShadow(
                   color: Colors.grey.withOpacity(0.3), 
@@ -96,7 +99,7 @@ class _PeekSheetState extends State<PeekSheet> with SingleTickerProviderStateMix
                   DragButton(size: _buttonSize, topMargin: _topMargin, controller: _controller, toggle: _toggle),
                   Positioned(
                     top: _topMargin + _headerFontSize,
-                    child: Container(
+                    child: SizedBox(
                       height: MediaQuery.of(context).size.height,
                       width: MediaQuery.of(context).size.width,
                       child: LogoButtonsList(
@@ -110,7 +113,7 @@ class _PeekSheetState extends State<PeekSheet> with SingleTickerProviderStateMix
                     left: 0,
                     right: 0,
                     child: GestureDetector(
-                      key: Key("dragAreaKey"),
+                      key: const Key("dragAreaKey"),
                       onTap: _toggle,
                       onVerticalDragUpdate: _handleDragUpdate,
                       onVerticalDragEnd: _handleDragEnd,

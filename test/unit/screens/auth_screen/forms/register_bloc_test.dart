@@ -48,23 +48,23 @@ void main() {
       "RegisterBloc EmailChanged event yields state: [isEmailValid: true]",
       build: () => registerBloc,
       act: (bloc) => bloc.add(EmailChanged(email: faker.internet.email())),
-      wait: Duration(milliseconds: 300),
+      wait: const Duration(milliseconds: 300),
       expect: () => [_baseState.update(isEmailValid: true)]
     );
 
     blocTest<RegisterBloc, RegisterState>(
       "RegisterBloc PasswordChanged event yields state: [isPasswordValid: true]",
       build: () => registerBloc,
-      act: (bloc) => bloc.add(PasswordChanged(password: "hdhFDSg3558154#@%&cfbcfgDG", passwordConfirmation: "")),
-      wait: Duration(milliseconds: 300),
+      act: (bloc) => bloc.add(const PasswordChanged(password: "hdhFDSg3558154#@%&cfbcfgDG", passwordConfirmation: "")),
+      wait: const Duration(milliseconds: 300),
       expect: () => [_baseState.update(isPasswordValid: true)]
     );
 
     blocTest<RegisterBloc, RegisterState>(
       "RegisterBloc PasswordConfirmationChanged event yields state: [isPasswordConfirmationValid: true]",
       build: () => registerBloc,
-      act: (bloc) => bloc.add(PasswordConfirmationChanged(passwordConfirmation: "hdhFDSg3558154#@%&cfbcfgDG", password: "hdhFDSg3558154#@%&cfbcfgDG")),
-      wait: Duration(milliseconds: 300),
+      act: (bloc) => bloc.add(const PasswordConfirmationChanged(passwordConfirmation: "hdhFDSg3558154#@%&cfbcfgDG", password: "hdhFDSg3558154#@%&cfbcfgDG")),
+      wait: const Duration(milliseconds: 300),
       expect: () => [_baseState.update(isPasswordConfirmationValid: true)]
     );
 
@@ -88,7 +88,7 @@ void main() {
       "RegisterBloc Submitted event on fail yields state: [RegisterState.loading(), RegisterState.failure()]",
       build: () {
         when(() => authenticationRepository.register(email: any(named: "email"), password: any(named: "password"), passwordConfirmation: any(named: "passwordConfirmation")))
-          .thenThrow(ApiException(error: "error"));
+          .thenThrow(const ApiException(error: "error"));
         return registerBloc;
       },
       act: (bloc) => bloc.add(Submitted(email: faker.internet.email(), password: "hdhFDSg3558154#@%&cfbcfgDG", passwordConfirmation: "hdhFDSg3558154#@%&cfbcfgDG")),

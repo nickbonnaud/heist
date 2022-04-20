@@ -13,16 +13,14 @@ import 'default_app_bar/bloc/default_app_bar_bloc.dart';
 
 class RefundWidget extends StatelessWidget {
   final RefundResource _refundResource;
-  final Key _key;
 
   const RefundWidget({required RefundResource refundResource, required Key key})
     : _refundResource = refundResource,
-      _key = key;
+      super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      key: _key,
       child: ListTile(
         leading: CachedAvatarHero(
           url: _refundResource.business.photos.logo.smallUrl, 

@@ -166,7 +166,7 @@ class RefundsScreenBloc extends Bloc<RefundsScreenEvent, RefundsScreenState> {
     if (currentState is RefundsLoaded && !currentState.paginating) {
       switch (currentState.currentQuery) {
         case Option.all:
-          add(FetchAllRefunds(reset: false));
+          add(const FetchAllRefunds(reset: false));
           break;
         case Option.date:
           add(FetchRefundsByDateRange(dateRange: currentState.queryParams, reset: false));

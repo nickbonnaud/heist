@@ -17,8 +17,9 @@ import 'bloc/register_bloc.dart';
 class RegisterForm extends StatefulWidget {
   final PageController _pageController;
 
-  RegisterForm({required PageController pageController})
-    : _pageController = pageController;
+  const RegisterForm({required PageController pageController, Key? key})
+    : _pageController = pageController,
+      super(key: key);
   
   @override
   State<RegisterForm> createState() => _RegisterFormState();
@@ -87,10 +88,10 @@ class _RegisterFormState extends State<RegisterForm> {
           );
         },
         child: Form(
-          key: Key("registerFormKey"),
+          key: const Key("registerFormKey"),
           child: Padding(
             padding: EdgeInsets.only(left: 16.w, right: 16.w),
-            child: Container(
+            child: SizedBox(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height,
               child: KeyboardActions(
@@ -132,7 +133,7 @@ class _RegisterFormState extends State<RegisterForm> {
     return BlocBuilder<RegisterBloc, RegisterState>(
       builder: (context, state) {
         return TextFormField(
-          key: Key("emailFormFieldKey"),
+          key: const Key("emailFormFieldKey"),
           controller: _emailController,
           focusNode: _emailFocus,
           keyboardType: TextInputType.emailAddress,
@@ -169,7 +170,7 @@ class _RegisterFormState extends State<RegisterForm> {
     return BlocBuilder<RegisterBloc, RegisterState>(
       builder: (context, state) {
         return TextFormField(
-          key: Key("passwordFormFieldKey"),
+          key: const Key("passwordFormFieldKey"),
           controller: _passwordController,
           focusNode: _passwordFocus,
           keyboardType: TextInputType.text,
@@ -208,7 +209,7 @@ class _RegisterFormState extends State<RegisterForm> {
     return BlocBuilder<RegisterBloc, RegisterState>(
       builder: (context, state) {
         return TextFormField(
-          key: Key("passwordConfirmationFormFieldKey"),
+          key: const Key("passwordConfirmationFormFieldKey"),
           controller: _passwordConfirmationController,
           focusNode: _passwordConfirmationFocus,
           keyboardType: TextInputType.text,
@@ -273,10 +274,10 @@ class _RegisterFormState extends State<RegisterForm> {
 
   Widget _buttonChild({required RegisterState state}) {
     return state.isSubmitting
-      ? SizedBox(height: 25.sp, width: 25.sp, child: CircularProgressIndicator())
+      ? SizedBox(height: 25.sp, width: 25.sp, child: const CircularProgressIndicator())
       : Text(
           "Register",
-          key: Key("registerButtonTextKey"),
+          key: const Key("registerButtonTextKey"),
           style: TextStyle(
             fontWeight: FontWeight.normal,
             color: Theme.of(context).colorScheme.onSecondary,
@@ -290,10 +291,10 @@ class _RegisterFormState extends State<RegisterForm> {
       onPressed: () {
         if (animation.status != AnimationStatus.dismissed) {
           animation.reverse().then((_) {
-            widget._pageController.previousPage(duration: Duration(seconds: 1), curve: Curves.decelerate);
+            widget._pageController.previousPage(duration: const Duration(seconds: 1), curve: Curves.decelerate);
           });
         } else {
-          widget._pageController.previousPage(duration: Duration(seconds: 1), curve: Curves.decelerate);
+          widget._pageController.previousPage(duration: const Duration(seconds: 1), curve: Curves.decelerate);
         }
       },
       child: Text('Already have an Account?',
@@ -356,7 +357,7 @@ class _RegisterFormState extends State<RegisterForm> {
                 onPressed: () => node.unfocus(), 
                 child: Padding(
                   padding: EdgeInsets.only(right: 16.w),
-                  child: ActionText()
+                  child: const ActionText()
                 )
               );
             }
@@ -370,7 +371,7 @@ class _RegisterFormState extends State<RegisterForm> {
                 onPressed: () => node.unfocus(), 
                 child: Padding(
                   padding: EdgeInsets.only(right: 16.w),
-                  child: ActionText()
+                  child: const ActionText()
                 )
               );
             }
@@ -384,7 +385,7 @@ class _RegisterFormState extends State<RegisterForm> {
                 onPressed: () => node.unfocus(), 
                 child: Padding(
                   padding: EdgeInsets.only(right: 16.w),
-                  child: ActionText()
+                  child: const ActionText()
                 )
               );
             }
@@ -397,7 +398,7 @@ class _RegisterFormState extends State<RegisterForm> {
   void _errorRegister({required String error}) async {
     Vibrate.error();
     final SnackBar snackBar = SnackBar(
-      key: Key("errorRegisterSnackbarKey"),
+      key: const Key("errorRegisterSnackbarKey"),
       content: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

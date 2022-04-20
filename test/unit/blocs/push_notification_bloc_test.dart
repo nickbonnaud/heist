@@ -93,7 +93,7 @@ void main() {
         when(() => pushNotificationRepository.startMonitoring(onMessageReceived: any(named: "onMessageReceived"), onMessageInteraction: any(named: "onMessageInteraction")))
           .thenReturn(null);
 
-        whenListen(notificationBootBloc, Stream<NotificationBootState>.fromIterable([NotificationBootState(nearbyBusinessesReady: true, openTransactionsReady: true, permissionReady: true)]));
+        whenListen(notificationBootBloc, Stream<NotificationBootState>.fromIterable([const NotificationBootState(nearbyBusinessesReady: true, openTransactionsReady: true, permissionReady: true)]));
 
         return PushNotificationBloc(
           pushNotificationRepository: pushNotificationRepository,
@@ -115,7 +115,7 @@ void main() {
         when(() => pushNotificationRepository.startMonitoring(onMessageReceived: any(named: "onMessageReceived"), onMessageInteraction: any(named: "onMessageInteraction")))
           .thenReturn(null);
 
-        whenListen(notificationBootBloc, Stream<NotificationBootState>.fromIterable([NotificationBootState(nearbyBusinessesReady: true, openTransactionsReady: false, permissionReady: true)]));
+        whenListen(notificationBootBloc, Stream<NotificationBootState>.fromIterable([const NotificationBootState(nearbyBusinessesReady: true, openTransactionsReady: false, permissionReady: true)]));
 
         return PushNotificationBloc(
           pushNotificationRepository: pushNotificationRepository,

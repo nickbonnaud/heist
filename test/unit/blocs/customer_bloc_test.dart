@@ -72,7 +72,7 @@ void main() {
       "Customer Bloc CustomerAuthenticated event on error yields state: [loading: true], [loading: false, errorMessage: error]",
       build: () => customerBloc,
       act: (bloc) {
-        when(() => customerRepository.fetchCustomer()).thenThrow(ApiException(error: "error"));
+        when(() => customerRepository.fetchCustomer()).thenThrow(const ApiException(error: "error"));
         bloc.add(CustomerAuthenticated());
       },
       expect: () {

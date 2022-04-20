@@ -33,11 +33,11 @@ void main() {
     });
 
     test("Transaction can update it's attributes", () {
-      final Map<String, dynamic> json = MockResponses.generateTransaction();
+      Map<String, dynamic> json = MockResponses.generateTransaction();
       var transaction = Transaction.fromJson(json: json);
       
-      final int statusCode = 500;
-      final Status status = Status(name: "error", code: statusCode);
+      int statusCode = 500;
+      Status status = Status(name: "error", code: statusCode);
 
       expect(transaction.status.code == statusCode, false);
 

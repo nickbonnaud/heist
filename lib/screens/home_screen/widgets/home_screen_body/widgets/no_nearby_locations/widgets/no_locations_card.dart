@@ -8,7 +8,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class NoLocationsCard extends StatelessWidget {
 
-  final String textBody =
+  const NoLocationsCard({Key? key})
+    : super(key: key);
+  
+  static const String textBody =
   "Looks like you're exploring alien territory!\n\n"
   "${Constants.appName} is not currently available here.";
   
@@ -63,10 +66,10 @@ class NoLocationsCard extends StatelessWidget {
                     return ElevatedButton(
                       onPressed: state is Loading
                         ? null
-                        : () => BlocProvider.of<GeoLocationBloc>(context).add(FetchLocation(accuracy: Accuracy.MEDIUM)),
+                        : () => BlocProvider.of<GeoLocationBloc>(context).add(const FetchLocation(accuracy: Accuracy.medium)),
                       child: state is Loading 
-                        ? ButtonText(text: 'Fetching')
-                        : ButtonText(text: 'Fetch Location'),
+                        ? const ButtonText(text: 'Fetching')
+                        : const ButtonText(text: 'Fetch Location'),
                     );
                   }
                 )

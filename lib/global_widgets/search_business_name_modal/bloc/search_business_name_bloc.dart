@@ -18,7 +18,7 @@ class SearchBusinessNameBloc extends Bloc<SearchBusinessNameEvent, SearchBusines
       super(SearchBusinessNameState.initial()) { _eventHandler(); }
 
   void _eventHandler() {
-    on<BusinessNameChanged>((event, emit) async => await _mapBusinessNameChangedToState(event: event, emit: emit), transformer: Debouncer.bounce(duration: Duration(milliseconds: 500)));
+    on<BusinessNameChanged>((event, emit) async => await _mapBusinessNameChangedToState(event: event, emit: emit), transformer: Debouncer.bounce(duration: const Duration(milliseconds: 500)));
     on<Reset>((event, emit) => _mapResetToState(emit: emit));
   }
   

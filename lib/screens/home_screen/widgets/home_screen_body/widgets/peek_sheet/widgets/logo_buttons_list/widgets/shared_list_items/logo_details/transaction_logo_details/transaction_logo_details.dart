@@ -14,7 +14,7 @@ class TransactionLogoDetails extends StatelessWidget {
   final AnimationController _controller;
   final int _subListIndex;
 
-  TransactionLogoDetails({
+  const TransactionLogoDetails({
     required String keyValue,
     required double topMargin,
     required double leftMargin,
@@ -22,7 +22,8 @@ class TransactionLogoDetails extends StatelessWidget {
     required double borderRadius,
     required TransactionResource transactionResource,
     required AnimationController controller,
-    required int subListIndex
+    required int subListIndex,
+    Key? key
   })
     : _keyValue = keyValue,
       _topMargin = topMargin,
@@ -31,7 +32,8 @@ class TransactionLogoDetails extends StatelessWidget {
       _borderRadius = borderRadius,
       _transactionResource = transactionResource,
       _controller = controller,
-      _subListIndex = subListIndex;
+      _subListIndex = subListIndex,
+      super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -16,6 +16,7 @@ class Tapped extends GoogleMapScreenEvent {
   @override
   List<Object> get props => [screenCoordinate, business];
 
+  @override
   String toString() => 'Tapped { screenCoordinate: $screenCoordinate, business: $business }';
 }
 

@@ -44,24 +44,24 @@ void main() {
     blocTest<PasswordFormBloc, PasswordFormState>(
       "PasswordFormBloc OldPasswordChanged event yields state: [isOldPasswordValid: true]",
       build: () => passwordFormBloc,
-      wait: Duration(milliseconds: 300),
-      act: (bloc) => bloc.add(OldPasswordChanged(oldPassword: "fdbhGHShh@&7342wmcxs523&^")),
+      wait: const Duration(milliseconds: 300),
+      act: (bloc) => bloc.add(const OldPasswordChanged(oldPassword: "fdbhGHShh@&7342wmcxs523&^")),
       expect: () => [_baseState.update(isOldPasswordValid: true)]
     );
 
     blocTest<PasswordFormBloc, PasswordFormState>(
       "PasswordFormBloc PasswordChanged event yields state: [isPasswordValid: true, isPasswordConfirmationValid: true]",
       build: () => passwordFormBloc,
-      wait: Duration(milliseconds: 300),
-      act: (bloc) => bloc.add(PasswordChanged(password: "ncvdhBDSJSjh76353!!!@#", passwordConfirmation: "ncvdhBDSJSjh76353!!!@#")),
+      wait: const Duration(milliseconds: 300),
+      act: (bloc) => bloc.add(const PasswordChanged(password: "ncvdhBDSJSjh76353!!!@#", passwordConfirmation: "ncvdhBDSJSjh76353!!!@#")),
       expect: () => [_baseState.update(isPasswordValid: true, isPasswordConfirmationValid: true)]
     );
 
     blocTest<PasswordFormBloc, PasswordFormState>(
       "PasswordFormBloc PasswordConfirmationChanged event yields state: [isPasswordConfirmationValid: true]",
       build: () => passwordFormBloc,
-      wait: Duration(milliseconds: 300),
-      act: (bloc) => bloc.add(PasswordConfirmationChanged(password: "ncvdhBDSJSjh76353!!!@#", passwordConfirmation: "ncvdhBDSJSjh76353!!!@#")),
+      wait: const Duration(milliseconds: 300),
+      act: (bloc) => bloc.add(const PasswordConfirmationChanged(password: "ncvdhBDSJSjh76353!!!@#", passwordConfirmation: "ncvdhBDSJSjh76353!!!@#")),
       expect: () => [_baseState.update(isPasswordConfirmationValid: true)]
     );
 
@@ -72,7 +72,7 @@ void main() {
         when(() => authenticationRepository.checkPassword(password: any(named: "password")))
           .thenAnswer((_) async => true);
         
-        bloc.add(OldPasswordSubmitted(oldPassword: "cnjsabj6363d%%&&*ncBDDG"));
+        bloc.add(const OldPasswordSubmitted(oldPassword: "cnjsabj6363d%%&&*ncBDDG"));
       },
       expect: () => [_baseState.update(isSubmitting: true), _baseState.update(isSubmitting: false, isOldPasswordVerified: true, isSuccessOldPassword: true)]
     );
@@ -84,7 +84,7 @@ void main() {
         when(() => authenticationRepository.checkPassword(password: any(named: "password")))
           .thenAnswer((_) async => true);
         
-        bloc.add(OldPasswordSubmitted(oldPassword: "cnjsabj6363d%%&&*ncBDDG"));
+        bloc.add(const OldPasswordSubmitted(oldPassword: "cnjsabj6363d%%&&*ncBDDG"));
       },
       verify: (_) {
         verify(() => authenticationRepository.checkPassword(password: any(named: "password"))).called(1);
@@ -98,7 +98,7 @@ void main() {
         when(() => authenticationRepository.checkPassword(password: any(named: "password")))
           .thenAnswer((_) async => false);
         
-        bloc.add(OldPasswordSubmitted(oldPassword: "cnjsabj6363d%%&&*ncBDDG"));
+        bloc.add(const OldPasswordSubmitted(oldPassword: "cnjsabj6363d%%&&*ncBDDG"));
       },
       expect: () => [_baseState.update(isSubmitting: true), _baseState.update(isSubmitting: false, isOldPasswordVerified: false, isSuccessOldPassword: false, errorMessage: "Looks like that's the wrong password!")]
     );
@@ -108,9 +108,9 @@ void main() {
       build: () => passwordFormBloc,
       act: (bloc) {
         when(() => authenticationRepository.checkPassword(password: any(named: "password")))
-          .thenThrow(ApiException(error: "error"));
+          .thenThrow(const ApiException(error: "error"));
         
-        bloc.add(OldPasswordSubmitted(oldPassword: "cnjsabj6363d%%&&*ncBDDG"));
+        bloc.add(const OldPasswordSubmitted(oldPassword: "cnjsabj6363d%%&&*ncBDDG"));
       },
       expect: () => [_baseState.update(isSubmitting: true), _baseState.update(errorMessage: "error", isSubmitting: false, isOldPasswordVerified: false, isSuccessOldPassword: false)]
     );
@@ -153,7 +153,7 @@ void main() {
       build: () => passwordFormBloc,
       act: (bloc) {
         when(() => customerRepository.updatePassword(oldPassword: any(named: "oldPassword"), password: any(named: "password"), passwordConfirmation: any(named: "passwordConfirmation"), customerId: any(named: "customerId")))
-          .thenThrow(ApiException(error: "error"));
+          .thenThrow(const ApiException(error: "error"));
         
         bloc.add(NewPasswordSubmitted(oldPassword: "cnjsabj6363d%%&&*ncBDDG", password: "dbjdbjHJSDhsv4252-", passwordConfirmation: "dbjdbjHJSDhsv4252-", customerIdentifier: faker.guid.guid()));
       },

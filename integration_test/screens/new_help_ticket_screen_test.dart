@@ -41,59 +41,59 @@ class NewHelpTicketScreenTest {
 
   Future<void> _enterInvalidSubject() async {
     expect(find.text('A Subject is required!'), findsNothing);
-    await tester.enterText(find.byKey(Key("subjectFieldKey")), "  ");
-    await tester.pump(Duration(milliseconds: 300));
+    await tester.enterText(find.byKey(const Key("subjectFieldKey")), "  ");
+    await tester.pump(const Duration(milliseconds: 300));
     expect(find.text('A Subject is required!'), findsOneWidget);
   }
 
   Future<void> _enterInvalidMessage() async {
     expect(find.text('Please include details about the issue.'), findsNothing);
-    await tester.enterText(find.byKey(Key("messageFieldKey")), "  ");
-    await tester.pump(Duration(milliseconds: 300));
+    await tester.enterText(find.byKey(const Key("messageFieldKey")), "  ");
+    await tester.pump(const Duration(milliseconds: 300));
     expect(find.text('Please include details about the issue.'), findsOneWidget);
   }
 
   Future<void> _enterErrorSubject() async {
     expect(find.text('A Subject is required!'), findsOneWidget);
-    await tester.enterText(find.byKey(Key("subjectFieldKey")), "error");
-    await tester.pump(Duration(milliseconds: 300));
+    await tester.enterText(find.byKey(const Key("subjectFieldKey")), "error");
+    await tester.pump(const Duration(milliseconds: 300));
     expect(find.text('A Subject is required!'), findsNothing);
   }
 
   Future<void> _enterMessage() async {
     expect(find.text('Please include details about the issue.'), findsOneWidget);
-    await tester.enterText(find.byKey(Key("messageFieldKey")), faker.lorem.sentence());
-    await tester.pump(Duration(milliseconds: 300));
+    await tester.enterText(find.byKey(const Key("messageFieldKey")), faker.lorem.sentence());
+    await tester.pump(const Duration(milliseconds: 300));
     expect(find.text('Please include details about the issue.'), findsNothing);
   }
 
   Future<void> _submit() async {
     expect(find.byType(CircularProgressIndicator), findsNothing);
-    expect(find.byKey(Key("newHelpTicketSnackbarKey")), findsNothing);
+    expect(find.byKey(const Key("newHelpTicketSnackbarKey")), findsNothing);
 
     await tester.tap(find.text(Platform.isIOS ? 'Done' : 'DONE'));
     await tester.pumpAndSettle();
     
-    await tester.tap(find.byKey(Key("submitButtonKey")));
-    await tester.pump(Duration(milliseconds: 250));
+    await tester.tap(find.byKey(const Key("submitButtonKey")));
+    await tester.pump(const Duration(milliseconds: 250));
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
 
     await tester.pumpAndSettle();
-    expect(find.byKey(Key("newHelpTicketSnackbarKey")), findsOneWidget);
+    expect(find.byKey(const Key("newHelpTicketSnackbarKey")), findsOneWidget);
   }
 
   Future<void> _dismissSnackbar() async {
-    await tester.fling(find.byKey(Key("newHelpTicketSnackbarKey")), Offset(0, 500), 500);
+    await tester.fling(find.byKey(const Key("newHelpTicketSnackbarKey")), const Offset(0, 500), 500);
     await tester.pumpAndSettle();
-    expect(find.byKey(Key("newHelpTicketSnackbarKey")), findsNothing);
+    expect(find.byKey(const Key("newHelpTicketSnackbarKey")), findsNothing);
   }
 
   Future<void> _enterSubject() async {
-    await tester.tap(find.byKey(Key("subjectFieldKey")));
+    await tester.tap(find.byKey(const Key("subjectFieldKey")));
     await tester.pumpAndSettle();
     
-    await tester.enterText(find.byKey(Key("subjectFieldKey")), "Start new issue");
-    await tester.pump(Duration(milliseconds: 300));
+    await tester.enterText(find.byKey(const Key("subjectFieldKey")), "Start new issue");
+    await tester.pump(const Duration(milliseconds: 300));
   }
 
   Future<void> _navigateBack() async {
@@ -105,7 +105,7 @@ class NewHelpTicketScreenTest {
 
   Future<void> _cancel() async {
     expect(find.byType(NewHelpTicketScreen), findsOneWidget);
-    await tester.tap(find.byKey(Key("cancelButtonKey")));
+    await tester.tap(find.byKey(const Key("cancelButtonKey")));
     await tester.pumpAndSettle();
 
     expect(find.byType(NewHelpTicketScreen), findsNothing);

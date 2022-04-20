@@ -10,7 +10,7 @@ class SetupTipCardState extends Equatable {
 
   bool get isFormValid => isTipRateValid && isQuickTipRateValid;
 
-  SetupTipCardState({
+  const SetupTipCardState({
     required this.isTipRateValid,
     required this.isQuickTipRateValid,
     required this.isSubmitting,
@@ -19,7 +19,7 @@ class SetupTipCardState extends Equatable {
   });
 
   factory SetupTipCardState.initial() {
-    return SetupTipCardState(
+    return const SetupTipCardState(
       isTipRateValid: true,
       isQuickTipRateValid: true,
       isSubmitting: false,

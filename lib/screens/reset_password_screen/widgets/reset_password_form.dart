@@ -9,6 +9,9 @@ import 'package:keyboard_actions/keyboard_actions.dart';
 
 class ResetPasswordForm extends StatefulWidget {
 
+  const ResetPasswordForm({Key? key})
+    : super(key: key);
+  
   @override
   State<ResetPasswordForm> createState() => _ResetPasswordFormState();
 }
@@ -58,7 +61,7 @@ class _ResetPasswordFormState extends State<ResetPasswordForm> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      ScreenTitle(title: 'Reset Your Password'),
+                      const ScreenTitle(title: 'Reset Your Password'),
                       _resetCodeField(),
                       SizedBox(height: 15.h),
                       _passwordField(),
@@ -102,7 +105,7 @@ class _ResetPasswordFormState extends State<ResetPasswordForm> {
     return BlocBuilder<ResetPasswordFormBloc, ResetPasswordFormState>(
       builder: (context, state) {
         return TextFormField(
-          key: Key("resetCodeFormKey"),
+          key: const Key("resetCodeFormKey"),
           decoration: InputDecoration(
             labelText: 'Reset Code',
             labelStyle: TextStyle(
@@ -132,7 +135,7 @@ class _ResetPasswordFormState extends State<ResetPasswordForm> {
     return BlocBuilder<ResetPasswordFormBloc, ResetPasswordFormState>(
       builder: (context, state) {
         return TextFormField(
-          key: Key("passwordFormKey"),
+          key: const Key("passwordFormKey"),
           decoration: InputDecoration(
             labelText: 'Password',
             labelStyle: TextStyle(
@@ -163,7 +166,7 @@ class _ResetPasswordFormState extends State<ResetPasswordForm> {
     return BlocBuilder<ResetPasswordFormBloc, ResetPasswordFormState>(
       builder: (context, state) {
         return TextFormField(
-          key: Key("passwordConfirmationKey"),
+          key: const Key("passwordConfirmationKey"),
           decoration: InputDecoration(
             labelText: 'Password Confirmation',
             labelStyle: TextStyle(
@@ -194,7 +197,7 @@ class _ResetPasswordFormState extends State<ResetPasswordForm> {
     return BlocBuilder<ResetPasswordFormBloc, ResetPasswordFormState>(
       builder: (context, state) {
         return ElevatedButton(
-          key: Key("submitButtonKey"),
+          key: const Key("submitButtonKey"),
           onPressed: _buttonEnabled(state: state)
             ? () => _submitButtonPressed(state: state)
             : null,
@@ -206,9 +209,9 @@ class _ResetPasswordFormState extends State<ResetPasswordForm> {
 
   Widget _buttonChild({required ResetPasswordFormState state}) {
     if (state.isSubmitting) {
-      return SizedBox(height: 25.sp, width: 25.sp,  child: CircularProgressIndicator());
+      return SizedBox(height: 25.sp, width: 25.sp,  child: const CircularProgressIndicator());
     } else {
-      return ButtonText(text: 'Submit');
+      return const ButtonText(text: 'Submit');
     }
   }
 
@@ -240,13 +243,10 @@ class _ResetPasswordFormState extends State<ResetPasswordForm> {
 
   void _showSnackbar({String? error}) async {
     error == null ? Vibrate.success() : Vibrate.error();
-
-    final String text = error == null
-      ? "Password Reset. Please Login."
-      : error;
+    final String text = error ?? "Password Reset. Please Login.";
 
     final SnackBar snackBar = SnackBar(
-      key: Key("resetSnackBarKey"),
+      key: const Key("resetSnackBarKey"),
       content: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -284,7 +284,7 @@ class _ResetPasswordFormState extends State<ResetPasswordForm> {
               onPressed: () => node.unfocus(), 
               child: Padding(
                 padding: EdgeInsets.only(right: 16.w),
-                child: ActionText(),
+                child: const ActionText(),
               )
             )
           ]
@@ -296,7 +296,7 @@ class _ResetPasswordFormState extends State<ResetPasswordForm> {
               onPressed: () => node.unfocus(), 
               child: Padding(
                 padding: EdgeInsets.only(right: 16.w),
-                child: ActionText()
+                child: const ActionText()
               )
             )
           ]
@@ -308,7 +308,7 @@ class _ResetPasswordFormState extends State<ResetPasswordForm> {
               onPressed: () => node.unfocus(), 
               child: Padding(
                 padding: EdgeInsets.only(right: 16.w),
-                child: ActionText()
+                child: const ActionText()
               )
             )
           ]

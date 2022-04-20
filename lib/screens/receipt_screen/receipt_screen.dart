@@ -17,20 +17,22 @@ class ReceiptScreen extends StatefulWidget {
   final TransactionIssueRepository _transactionIssueRepository;
   final OpenTransactionsBloc _openTransactionsBloc;
 
-  ReceiptScreen({
+  const ReceiptScreen({
     required TransactionResource transactionResource,
     required ReceiptModalSheetBloc receiptModalSheetBloc,
     required TransactionRepository transactionRepository,
     required TransactionIssueRepository transactionIssueRepository,
     required OpenTransactionsBloc openTransactionsBloc,
-    bool showAppBar = true
+    bool showAppBar = true,
+    Key? key
   })
     : _transactionResource = transactionResource,
       _receiptModalSheetBloc = receiptModalSheetBloc,
       _transactionRepository = transactionRepository,
       _transactionIssueRepository = transactionIssueRepository,
       _openTransactionsBloc = openTransactionsBloc,
-      _showAppBar = showAppBar;
+      _showAppBar = showAppBar,
+      super(key: key);
 
   @override
   State<ReceiptScreen> createState() => _ReceiptScreenState();

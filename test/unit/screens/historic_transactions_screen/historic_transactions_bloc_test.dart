@@ -45,7 +45,7 @@ void main() {
         when(() => transactionRepository.fetchHistoric())
           .thenAnswer((_) async => PaginateDataHolder(data: List<TransactionResource>.generate(5, (_) => _mockDataGenerator.createTransactionResource())));
 
-        bloc.add(FetchHistoricTransactions(reset: false));
+        bloc.add(const FetchHistoricTransactions(reset: false));
       },
       expect: () => [isA<Loading>(), isA<TransactionsLoaded>()]
     );
@@ -57,7 +57,7 @@ void main() {
         when(() => transactionRepository.fetchHistoric())
           .thenAnswer((_) async => PaginateDataHolder(data: List<TransactionResource>.generate(5, (_) => _mockDataGenerator.createTransactionResource())));
 
-        bloc.add(FetchHistoricTransactions(reset: false));
+        bloc.add(const FetchHistoricTransactions(reset: false));
       },
       verify: (_) {
         verify(() => transactionRepository.fetchHistoric()).called(1);
@@ -79,7 +79,7 @@ void main() {
         when(() => transactionRepository.paginate(url: any(named: "url")))
           .thenAnswer((_) async => PaginateDataHolder(data: List<TransactionResource>.generate(5, (_) => _mockDataGenerator.createTransactionResource())));
 
-        bloc.add(FetchHistoricTransactions(reset: false));
+        bloc.add(const FetchHistoricTransactions(reset: false));
       },
       expect: () => [isA<TransactionsLoaded>(), isA<TransactionsLoaded>()]
     );
@@ -99,7 +99,7 @@ void main() {
         when(() => transactionRepository.paginate(url: any(named: "url")))
           .thenAnswer((_) async => PaginateDataHolder(data: List<TransactionResource>.generate(5, (_) => _mockDataGenerator.createTransactionResource())));
 
-        bloc.add(FetchHistoricTransactions(reset: false));
+        bloc.add(const FetchHistoricTransactions(reset: false));
       },
       verify: (_) {
         verify(() => transactionRepository.paginate(url: any(named: "url"))).called(1);
@@ -113,7 +113,7 @@ void main() {
         when(() => transactionRepository.fetchHistoric())
           .thenAnswer((_) async => PaginateDataHolder(data: List<TransactionResource>.generate(5, (_) => _mockDataGenerator.createTransactionResource())));
 
-        bloc.add(FetchHistoricTransactions(reset: true));
+        bloc.add(const FetchHistoricTransactions(reset: true));
       },
       expect: () => [isA<Loading>(), isA<TransactionsLoaded>()]
     );
@@ -123,9 +123,9 @@ void main() {
       build: () => historicTransactionsBloc,
       act: (bloc) {
         when(() => transactionRepository.fetchHistoric())
-          .thenThrow(ApiException(error: "error"));
+          .thenThrow(const ApiException(error: "error"));
 
-        bloc.add(FetchHistoricTransactions(reset: false));
+        bloc.add(const FetchHistoricTransactions(reset: false));
       },
       expect: () => [isA<Loading>(), isA<FetchFailure>()]
     );
@@ -143,9 +143,9 @@ void main() {
       ),
       act: (bloc) {
         when(() => transactionRepository.paginate(url: any(named: "url")))
-          .thenThrow(ApiException(error: "error"));
+          .thenThrow(const ApiException(error: "error"));
 
-        bloc.add(FetchHistoricTransactions(reset: false));
+        bloc.add(const FetchHistoricTransactions(reset: false));
       },
       expect: () => [isA<TransactionsLoaded>(), isA<FetchFailure>()]
     );

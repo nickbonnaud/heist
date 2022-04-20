@@ -16,26 +16,26 @@ class CustomerRepository extends BaseRepository {
       _tokenRepository = tokenRepository;
   
   Future<Customer> fetchCustomer() async {
-    final Map<String, dynamic> json = await this.send(request: _customerProvider.fetchCustomer());
+    Map<String, dynamic> json = await send(request: _customerProvider.fetchCustomer());
     
     return deserialize(json: json);
   }
 
   Future<Customer> updateEmail({required String email, required String customerId}) async {
-    final Map<String, dynamic> body = {'email': email};
+    Map<String, dynamic> body = {'email': email};
     
-    final Map<String, dynamic> json = await this.send(request: _customerProvider.updateEmail(body: body, customerId: customerId));
+    Map<String, dynamic> json = await send(request: _customerProvider.updateEmail(body: body, customerId: customerId));
     return Customer.fromJson(json: json);
   }
 
   Future<Customer> updatePassword({required String oldPassword, required String password, required String passwordConfirmation, required String customerId}) async {
-    final Map<String, dynamic> body = {
+    Map<String, dynamic> body = {
       'old_password': oldPassword,
       'password': password,
       'password_confirmation': passwordConfirmation
     };
 
-    final Map<String, dynamic> json = await this.send(request: _customerProvider.updatePassword(body: body, customerId: customerId));
+    Map<String, dynamic> json = await send(request: _customerProvider.updatePassword(body: body, customerId: customerId));
     return Customer.fromJson(json: json);
   }
 

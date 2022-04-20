@@ -30,16 +30,18 @@ class ReceiptScreenBody extends StatelessWidget {
   final OpenTransactionsBloc _openTransactionsBloc;
   final TransactionIssueRepository _transactionIssueRepository;
 
-  ReceiptScreenBody({
+  const ReceiptScreenBody({
     required TransactionRepository transactionRepository,
     required OpenTransactionsBloc openTransactionsBloc,
     required TransactionIssueRepository transactionIssueRepository,
-    bool showAppBar: true
+    bool showAppBar = true,
+    Key? key
   })
     : _transactionRepository = transactionRepository,
       _openTransactionsBloc = openTransactionsBloc,
       _transactionIssueRepository = transactionIssueRepository,
-      _showAppBar = showAppBar;
+      _showAppBar = showAppBar,
+      super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -104,12 +106,12 @@ class ReceiptScreenBody extends StatelessWidget {
       _warning(context: context, transactionResource: transactionResource),
       SizedBox(height: 5.h),
       _purchasedItems(transactionResource: transactionResource),
-      Divider(thickness: 1),
+      const Divider(thickness: 1),
       Padding(
         padding: EdgeInsets.symmetric(horizontal: 16.w),
         child: _receiptBottom(context: context, transactionResource: transactionResource),
       ),
-      Divider(thickness: 2),
+      const Divider(thickness: 2),
       Padding(
         padding: EdgeInsets.only(
           left: 16.w, 
@@ -129,7 +131,7 @@ class ReceiptScreenBody extends StatelessWidget {
         child: _purchasedLocationMap(transactionResource: transactionResource),
       ),
       SizedBox(height: 20.h),
-      Divider(thickness: 2),
+      const Divider(thickness: 2),
       SizedBox(height: 20.h),
       Center(
         child: Text(
@@ -205,20 +207,20 @@ class ReceiptScreenBody extends StatelessWidget {
 
   Widget _purchasedItems({required TransactionResource transactionResource}) {
     return ListView.separated(
-      key: Key("receiptBodyWithAppBarKey"),
-      physics: NeverScrollableScrollPhysics(),
+      key: const Key("receiptBodyWithAppBarKey"),
+      physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
       itemBuilder: (BuildContext context, int index) {
         return PurchasedItemWidget(purchasedItem: transactionResource.transaction.purchasedItems[index], index: index);
       },
       itemCount: transactionResource.transaction.purchasedItems.length,
-      separatorBuilder: (BuildContext context, int index) => Divider(thickness: 1),
+      separatorBuilder: (BuildContext context, int index) => const Divider(thickness: 1),
     );
   }
 
   Widget _receiptBottom({required BuildContext context, required TransactionResource transactionResource}) {
     return ListView(
-      physics: NeverScrollableScrollPhysics(),
+      physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
       children: [
         _createFooterRow(context: context, title: "Subtotal", value: transactionResource.transaction.netSales),
@@ -228,9 +230,9 @@ class ReceiptScreenBody extends StatelessWidget {
           SizedBox(height: 10.h),
         if (transactionResource.transaction.tip != 0)
           _createFooterRow(context: context, title: "Tip", value: transactionResource.transaction.tip),
-        if (transactionResource.refunds.length > 0)
+        if (transactionResource.refunds.isNotEmpty)
           SizedBox(height: 10.h),
-        if (transactionResource.refunds.length > 0)
+        if (transactionResource.refunds.isNotEmpty)
           _createRefundRow(context: context, transactionResource: transactionResource),
         SizedBox(height: 15.h),
         Row(
@@ -257,7 +259,7 @@ class ReceiptScreenBody extends StatelessWidget {
   }
 
   Widget _purchasedLocationMap({required TransactionResource transactionResource}) {
-    return Container(
+    return SizedBox(
       height: 180.w,
       child: GoogleMap(
         initialCameraPosition: CameraPosition(
@@ -265,10 +267,10 @@ class ReceiptScreenBody extends StatelessWidget {
           zoom: 16.0
         ),
         myLocationButtonEnabled: false,
-        markers: [Marker(
+        markers: {Marker(
           markerId: MarkerId(transactionResource.business.identifier),
           position: LatLng(transactionResource.business.location.geo.lat, transactionResource.business.location.geo.lng),
-        )].toSet(),
+        )},
       ),
     );
   }
@@ -342,7 +344,7 @@ class ReceiptScreenBody extends StatelessWidget {
   }
 
   int _setTotal({required TransactionResource transactionResource}) {
-    if (transactionResource.refunds.length > 0) {
+    if (transactionResource.refunds.isNotEmpty) {
       return transactionResource.transaction.total - transactionResource.refunds.fold(0, (total, refund) => total + refund.total);
     }
     return transactionResource.transaction.total;

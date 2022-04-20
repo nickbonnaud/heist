@@ -38,7 +38,7 @@ void main() {
 
     test("Account Repository throws error on update fail", () async {
       when(() => mockAccountProvider.update(body: any(named: 'body'), accountIdentifier: any(named: "accountIdentifier")))
-        .thenAnswer((_) async => ApiResponse(body: {}, error: "error", isOK: false));
+        .thenAnswer((_) async => const ApiResponse(body: {}, error: "error", isOK: false));
 
       expect(
         accountRepositoryWithMock.update(

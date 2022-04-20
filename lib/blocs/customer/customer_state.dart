@@ -15,7 +15,7 @@ class CustomerState extends Equatable {
   });
 
   factory CustomerState.initial() {
-    return CustomerState(
+    return const CustomerState(
       customer: null,
       loading: true,
       errorMessage: ""

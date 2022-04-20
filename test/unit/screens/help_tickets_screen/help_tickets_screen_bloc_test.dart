@@ -42,7 +42,7 @@ void main() {
     blocTest<HelpTicketsScreenBloc, HelpTicketsScreenState>(
       "HelpTicketsScreenBloc can get List<HelpTicket>",
       build: () => helpTicketsScreenBloc,
-      seed: () => Loaded(helpTickets: [], paginating: false, hasReachedEnd: false, currentQuery: Option.all, queryParams: ""),
+      seed: () => const Loaded(helpTickets: [], paginating: false, hasReachedEnd: false, currentQuery: Option.all, queryParams: ""),
       verify: (_) {
         expect(helpTicketsScreenBloc.helpTickets, isA<List<HelpTicket>>());
       }
@@ -55,7 +55,7 @@ void main() {
         _helpTickets = List<HelpTicket>.generate(4, (_) => _mockDataGenerator.createHelpTicket());
         when(() => helpRepository.fetchAll())
           .thenAnswer((_) async => PaginateDataHolder(data: _helpTickets));
-        bloc.add(FetchAll(reset: false));
+        bloc.add(const FetchAll(reset: false));
       },
       expect: () => [isA<Loading>(), isA<Loaded>()]
     );
@@ -67,7 +67,7 @@ void main() {
         _helpTickets = List<HelpTicket>.generate(4, (_) => _mockDataGenerator.createHelpTicket());
         when(() => helpRepository.fetchAll())
           .thenAnswer((_) async => PaginateDataHolder(data: _helpTickets));
-        bloc.add(FetchAll(reset: false));
+        bloc.add(const FetchAll(reset: false));
       },
       verify: (_) {
         verify(() => helpRepository.fetchAll()).called(1);
@@ -80,8 +80,8 @@ void main() {
       act: (bloc) {
         _helpTickets = List<HelpTicket>.generate(4, (_) => _mockDataGenerator.createHelpTicket());
         when(() => helpRepository.fetchAll())
-          .thenThrow(ApiException(error: "error"));
-        bloc.add(FetchAll(reset: false));
+          .thenThrow(const ApiException(error: "error"));
+        bloc.add(const FetchAll(reset: false));
       },
       expect: () => [isA<Loading>(), isA<FetchFailure>()]
     );
@@ -96,7 +96,7 @@ void main() {
       act: (bloc) {
         when(() => helpRepository.paginate(url: any(named: "url")))
           .thenAnswer((_) async => PaginateDataHolder(data: List<HelpTicket>.generate(4, (_) => _mockDataGenerator.createHelpTicket())));
-        bloc.add(FetchAll(reset: false));
+        bloc.add(const FetchAll(reset: false));
       },
       expect: () => [isA<Loaded>(), isA<Loaded>()]
     );
@@ -111,7 +111,7 @@ void main() {
       act: (bloc) {
         when(() => helpRepository.paginate(url: any(named: "url")))
           .thenAnswer((_) async => PaginateDataHolder(data: List<HelpTicket>.generate(4, (_) => _mockDataGenerator.createHelpTicket())));
-        bloc.add(FetchAll(reset: false));
+        bloc.add(const FetchAll(reset: false));
       },
       verify: (_) {
         verify(() => helpRepository.paginate(url: any(named: "url"))).called(1);
@@ -127,8 +127,8 @@ void main() {
       },
       act: (bloc) {
         when(() => helpRepository.paginate(url: any(named: "url")))
-          .thenThrow(ApiException(error: "error"));
-        bloc.add(FetchAll(reset: false));
+          .thenThrow(const ApiException(error: "error"));
+        bloc.add(const FetchAll(reset: false));
       },
       expect: () => [isA<Loaded>(), isA<FetchFailure>()]
     );
@@ -140,7 +140,7 @@ void main() {
         _helpTickets = List<HelpTicket>.generate(4, (_) => _mockDataGenerator.createHelpTicket());
         when(() => helpRepository.fetchResolved())
           .thenAnswer((_) async => PaginateDataHolder(data: _helpTickets));
-        bloc.add(FetchResolved(reset: true));
+        bloc.add(const FetchResolved(reset: true));
       },
       expect: () => [isA<Loading>(), isA<Loaded>()]
     );
@@ -152,7 +152,7 @@ void main() {
         _helpTickets = List<HelpTicket>.generate(4, (_) => _mockDataGenerator.createHelpTicket());
         when(() => helpRepository.fetchResolved())
           .thenAnswer((_) async => PaginateDataHolder(data: _helpTickets));
-        bloc.add(FetchResolved(reset: true));
+        bloc.add(const FetchResolved(reset: true));
       },
       verify: (_) {
         verify(() => helpRepository.fetchResolved()).called(1);
@@ -170,7 +170,7 @@ void main() {
         when(() => helpRepository.paginate(url: any(named: "url")))
           .thenAnswer((_) async => PaginateDataHolder(data: List<HelpTicket>.generate(4, (_) => _mockDataGenerator.createHelpTicket())));
         
-        bloc.add(FetchResolved(reset: false));
+        bloc.add(const FetchResolved(reset: false));
       },
       expect: () => [isA<Loaded>(), isA<Loaded>()]
     );
@@ -186,7 +186,7 @@ void main() {
         when(() => helpRepository.paginate(url: any(named: "url")))
           .thenAnswer((_) async => PaginateDataHolder(data: List<HelpTicket>.generate(4, (_) => _mockDataGenerator.createHelpTicket())));
         
-        bloc.add(FetchResolved(reset: false));
+        bloc.add(const FetchResolved(reset: false));
       },
       verify: (_) {
         verify(() => helpRepository.paginate(url: any(named: "url"))).called(1);
@@ -199,8 +199,8 @@ void main() {
       act: (bloc) {
         _helpTickets = List<HelpTicket>.generate(4, (_) => _mockDataGenerator.createHelpTicket());
         when(() => helpRepository.fetchResolved())
-          .thenThrow(ApiException(error: "error"));
-        bloc.add(FetchResolved(reset: true));
+          .thenThrow(const ApiException(error: "error"));
+        bloc.add(const FetchResolved(reset: true));
       },
       expect: () => [isA<Loading>(), isA<FetchFailure>()]
     );
@@ -212,7 +212,7 @@ void main() {
         _helpTickets = List<HelpTicket>.generate(4, (_) => _mockDataGenerator.createHelpTicket());
         when(() => helpRepository.fetchOpen())
           .thenAnswer((_) async => PaginateDataHolder(data: _helpTickets));
-        bloc.add(FetchOpen(reset: true));
+        bloc.add(const FetchOpen(reset: true));
       },
       verify: (_) {
         verify(() => helpRepository.fetchOpen()).called(1);
@@ -226,7 +226,7 @@ void main() {
         _helpTickets = List<HelpTicket>.generate(4, (_) => _mockDataGenerator.createHelpTicket());
         when(() => helpRepository.fetchOpen())
           .thenAnswer((_) async => PaginateDataHolder(data: _helpTickets));
-        bloc.add(FetchOpen(reset: true));
+        bloc.add(const FetchOpen(reset: true));
       },
       expect: () => [isA<Loading>(), isA<Loaded>()]
     );
@@ -241,7 +241,7 @@ void main() {
       act: (bloc) {
         when(() => helpRepository.paginate(url: any(named: "url")))
           .thenAnswer((_) async => PaginateDataHolder(data: List<HelpTicket>.generate(4, (_) => _mockDataGenerator.createHelpTicket())));
-        bloc.add(FetchOpen(reset: false));
+        bloc.add(const FetchOpen(reset: false));
       },
       expect: () => [isA<Loaded>(), isA<Loaded>()]
     );

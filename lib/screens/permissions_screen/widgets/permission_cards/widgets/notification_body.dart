@@ -11,8 +11,9 @@ import 'widgets/title_text.dart';
 class NotificationBody extends StatelessWidget {
   final PermissionButtons _permissionButtons;
   
-  NotificationBody({required PermissionButtons permissionButtons})
-    : _permissionButtons = permissionButtons;
+  const NotificationBody({required PermissionButtons permissionButtons, Key? key})
+    : _permissionButtons = permissionButtons,
+      super(key: key);
 
   final String notificationText = 
   'Notifications are required to receive and pay for transactions.';
@@ -26,7 +27,7 @@ class NotificationBody extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             SizedBox(height: 15.h),
-            TitleText(text: 'Stage: Notifications'),
+            const TitleText(text: 'Stage: Notifications'),
             SizedBox(height: 25.h),
             Text(notificationText,
               textAlign: TextAlign.center,

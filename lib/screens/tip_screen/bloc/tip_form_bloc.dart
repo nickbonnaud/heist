@@ -15,7 +15,7 @@ class TipFormBloc extends Bloc<TipFormEvent, TipFormState> {
   final AccountRepository _accountRepository;
   final CustomerBloc _customerBloc;
 
-  final Duration _debounceTime = Duration(milliseconds: 300);
+  final Duration _debounceTime = const Duration(milliseconds: 300);
 
   TipFormBloc({required AccountRepository accountRepository, required CustomerBloc customerBloc})
     : _accountRepository = accountRepository,

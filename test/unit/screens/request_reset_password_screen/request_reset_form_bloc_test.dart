@@ -32,7 +32,7 @@ void main() {
     blocTest<RequestResetFormBloc, RequestResetFormState>(
       "RequestResetFormBloc EmailChanged event yields state: [isEmailValid: true]",
       build: () => requestResetFormBloc,
-      wait: Duration(milliseconds: 300),
+      wait: const Duration(milliseconds: 300),
       act: (bloc) => bloc.add(EmailChanged(email: faker.internet.freeEmail())),
       expect: () => [_baseState.update(isEmailValid: true)]
     );
@@ -53,7 +53,7 @@ void main() {
       "RequestResetFormBloc Submitted event on fail yields state: [isSubmitting: true], [isSubmitting: false, errorMessage: error]",
       build: () {
         when(() => authenticationRepository.requestPasswordReset(email: any(named: "email")))
-          .thenThrow(ApiException(error: "error"));
+          .thenThrow(const ApiException(error: "error"));
         
         return requestResetFormBloc;
       },

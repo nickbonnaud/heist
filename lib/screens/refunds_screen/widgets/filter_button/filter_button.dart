@@ -22,9 +22,10 @@ class FilterButton extends StatefulWidget {
   final Color _startColor;
   final Color _endColor;
 
-  FilterButton({required Color startColor, required Color endColor})
+  const FilterButton({required Color startColor, required Color endColor, Key? key})
     : _startColor = startColor,
-      _endColor = endColor;
+      _endColor = endColor,
+      super(key: key);
 
   @override
   State<FilterButton> createState() => _FilterButtonState();
@@ -44,7 +45,7 @@ class _FilterButtonState extends State<FilterButton> with SingleTickerProviderSt
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 200)
+      duration: const Duration(milliseconds: 200)
     );
     _colorAnimation = ColorTween(
       begin: widget._startColor,
@@ -141,7 +142,7 @@ class _FilterButtonState extends State<FilterButton> with SingleTickerProviderSt
             ),
             iconSize: iconSize,
             alignment: Alignment.center,
-            padding: EdgeInsets.all(0.0),
+            padding: const EdgeInsets.all(0.0),
           ),
         ),
       ),
@@ -170,7 +171,7 @@ class _FilterButtonState extends State<FilterButton> with SingleTickerProviderSt
     return BlocBuilder<FilterButtonBloc, FilterButtonState>(
       builder: (context, state) {
         return FloatingActionButton(
-          key: Key("refundsFilterButtonKey"),
+          key: const Key("refundsFilterButtonKey"),
           onPressed: () => BlocProvider.of<FilterButtonBloc>(context).add(Toggle()),
           child: Transform(
             alignment: Alignment.center,
@@ -209,7 +210,7 @@ class _FilterButtonState extends State<FilterButton> with SingleTickerProviderSt
   }
 
   void _fetchAllRefunds() {
-    BlocProvider.of<RefundsScreenBloc>(context).add(FetchAllRefunds(reset: true));
+    BlocProvider.of<RefundsScreenBloc>(context).add(const FetchAllRefunds(reset: true));
   }
 
   void _searchByDate() async {

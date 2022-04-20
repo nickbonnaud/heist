@@ -18,20 +18,22 @@ class App extends StatelessWidget {
   final PermissionsBloc _permissionsBloc;
   final CustomerBloc _customerBloc;
 
-  App({
+  const App({
     required AuthenticationBloc authenticationBloc,
     required OpenTransactionsBloc openTransactionsBloc,
     required BeaconBloc beaconBloc,
     required NearbyBusinessesBloc nearbyBusinessesBloc,
     required PermissionsBloc permissionsBloc,
-    required CustomerBloc customerBloc
+    required CustomerBloc customerBloc,
+    Key? key
   })
     : _authenticationBloc = authenticationBloc,
       _openTransactionsBloc = openTransactionsBloc,
       _beaconBloc = beaconBloc,
       _nearbyBusinessesBloc = nearbyBusinessesBloc,
       _permissionsBloc = permissionsBloc,
-      _customerBloc = customerBloc;
+      _customerBloc = customerBloc,
+      super(key: key);
   
   @override
   Widget build(BuildContext context) {
@@ -46,7 +48,7 @@ class App extends StatelessWidget {
           permissionsBloc: _permissionsBloc,
           customerBloc: _customerBloc
         ),
-        child: SplashScreen(),
+        child: const SplashScreen(),
       )
     );
   }

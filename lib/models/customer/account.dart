@@ -14,7 +14,7 @@ class Account extends Equatable {
   final int quickTipRate;
   final PrimaryType primary;
 
-  Account({
+  const Account({
     required this.identifier,
     required this.tipRate,
     required this.quickTipRate,
@@ -29,7 +29,7 @@ class Account extends Equatable {
       quickTipRate = json['quick_tip_rate'],
       primary = _stringToPrimaryType(primaryTypeString: json['primary']);
 
-  Account.empty()
+  const Account.empty()
     : identifier = "",
       tipRate = 20,
       quickTipRate = 15,
@@ -40,7 +40,7 @@ class Account extends Equatable {
     int? quickTipRate,
     PrimaryType? primary,
   }) => Account(
-    identifier: this.identifier,
+    identifier: identifier,
     tipRate: tipRate ?? this.tipRate,
     quickTipRate: quickTipRate ?? this.quickTipRate,
     primary: primary ?? this.primary,

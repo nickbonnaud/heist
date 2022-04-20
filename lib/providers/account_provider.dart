@@ -8,6 +8,6 @@ class AccountProvider extends BaseProvider {
   
   Future<ApiResponse> update({required Map<String, dynamic> body, required String accountIdentifier}) async {
     final String url = '${ApiEndpoints.account}/$accountIdentifier';
-    return await this.patch(url: url, body: body);
+    return await patch(url: url, body: body);
   }
 }

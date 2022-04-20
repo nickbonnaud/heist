@@ -17,15 +17,16 @@ enum Options {
 class ReportIssueButton extends StatelessWidget {
   final TransactionResource _transaction;
 
-  ReportIssueButton({required TransactionResource transaction})
-    : _transaction = transaction;
+  const ReportIssueButton({required TransactionResource transaction, Key? key})
+    : _transaction = transaction,
+      super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(right: 8.w),
       child: PopupMenuButton(
-        key: Key("reportIssueButtonKey"),
+        key: const Key("reportIssueButtonKey"),
         onSelected: (Options selection) => _filterSelection(selection: selection, context: context),
         icon: Icon(
           Icons.more_vert,
@@ -63,10 +64,10 @@ class ReportIssueButton extends StatelessWidget {
     IssueType type;
     switch (selection) {
       case Options.wrongBill:
-        type = IssueType.wrong_bill;
+        type = IssueType.wrongBill;
         break;
       case Options.errorInBill:
-        type = IssueType.error_in_bill;
+        type = IssueType.errorInBill;
         break;
       case Options.otherError:
         type = IssueType.other;

@@ -11,9 +11,10 @@ class NewHelpTicketScreen extends StatelessWidget {
   final HelpRepository _helpRepository;
   final HelpTicketsScreenBloc _helpTicketsScreenBloc; 
 
-  NewHelpTicketScreen({required HelpRepository helpRepository, required HelpTicketsScreenBloc helpTicketsScreenBloc})
+  const NewHelpTicketScreen({required HelpRepository helpRepository, required HelpTicketsScreenBloc helpTicketsScreenBloc, Key? key})
     : _helpRepository = helpRepository,
-      _helpTicketsScreenBloc = helpTicketsScreenBloc;
+      _helpTicketsScreenBloc = helpTicketsScreenBloc,
+      super(key: key);
   
   @override
   Widget build(BuildContext context) {
@@ -22,7 +23,7 @@ class NewHelpTicketScreen extends StatelessWidget {
       appBar: BottomModalAppBar(context: context),
       body: BlocProvider<HelpTicketFormBloc>(
         create: (_) => HelpTicketFormBloc(helpRepository: _helpRepository, helpTicketsScreenBloc: _helpTicketsScreenBloc),
-        child: HelpTicketForm(),
+        child: const HelpTicketForm(),
       ),
     );
   }

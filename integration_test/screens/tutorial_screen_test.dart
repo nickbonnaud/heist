@@ -29,8 +29,8 @@ class TutorialScreenTest {
     TestTitle.write(testName: "Tutorial Screen From Drawer Tests");
 
     expect(find.byType(TutorialScreen), findsNothing);
-    await tester.tap(find.byKey(Key("tutorialDrawerItemKey")));
-    await tester.pump(Duration(milliseconds: 350));
+    await tester.tap(find.byKey(const Key("tutorialDrawerItemKey")));
+    await tester.pump(const Duration(milliseconds: 350));
 
     expect(find.byType(TutorialScreen), findsOneWidget);
 
@@ -46,46 +46,46 @@ class TutorialScreenTest {
   }
 
   Future<void> _goToWithBillCard() async {
-    expect(find.byKey(Key("cardAtRegisterKey")), findsOneWidget);
-    await tester.tap(find.byKey(Key("nextButtonAtRegisterKey")));
-    await tester.pump(Duration(milliseconds: 500));
+    expect(find.byKey(const Key("cardAtRegisterKey")), findsOneWidget);
+    await tester.tap(find.byKey(const Key("nextButtonAtRegisterKey")));
+    await tester.pump(const Duration(milliseconds: 500));
   }
 
   Future<void> _goToApprovePaymentCard() async {
-    expect(find.byKey(Key("cardWithBillKey")), findsOneWidget);
-    await tester.tap(find.byKey(Key("nextButtonWithBillKey")));
-    await tester.pump(Duration(milliseconds: 500));
+    expect(find.byKey(const Key("cardWithBillKey")), findsOneWidget);
+    await tester.tap(find.byKey(const Key("nextButtonWithBillKey")));
+    await tester.pump(const Duration(milliseconds: 500));
   }
   
   Future<void> _goToDenyPaymentCard() async {
-    expect(find.byKey(Key("cardApprovePaymentKey")), findsOneWidget);
-    await tester.tap(find.byKey(Key("nextButtonApprovePaymentKey")));
-    await tester.pump(Duration(milliseconds: 500));
+    expect(find.byKey(const Key("cardApprovePaymentKey")), findsOneWidget);
+    await tester.tap(find.byKey(const Key("nextButtonApprovePaymentKey")));
+    await tester.pump(const Duration(milliseconds: 500));
   }
 
   Future<void> _goToFaqCard() async {
-    expect(find.byKey(Key("cardDenyPaymentKey")), findsOneWidget);
+    expect(find.byKey(const Key("cardDenyPaymentKey")), findsOneWidget);
     await tester.pump();
-    await tester.tap(find.byKey(Key("nextButtonDenyPaymentKey")));
-    await tester.pump(Duration(milliseconds: 500));
+    await tester.tap(find.byKey(const Key("nextButtonDenyPaymentKey")));
+    await tester.pump(const Duration(milliseconds: 500));
   }
 
   Future<void> _tapOnFaqs() async {
-    expect(find.byKey(Key("cardFaqKey")), findsOneWidget);
+    expect(find.byKey(const Key("cardFaqKey")), findsOneWidget);
 
-    expect(find.byKey(Key("faqAnswerKey-0")), findsNothing);
+    expect(find.byKey(const Key("faqAnswerKey-0")), findsNothing);
 
-    await tester.tap(find.byKey(Key("faqQuestionKey-0")));
+    await tester.tap(find.byKey(const Key("faqQuestionKey-0")));
     await tester.pump();
-    expect(find.byKey(Key("faqAnswerKey-0")), findsOneWidget);
+    expect(find.byKey(const Key("faqAnswerKey-0")), findsOneWidget);
 
-    await tester.tap(find.byKey(Key("faqAnswerKey-0")));
+    await tester.tap(find.byKey(const Key("faqAnswerKey-0")));
     await tester.pump();
-    expect(find.byKey(Key("faqAnswerKey-0")), findsNothing);
+    expect(find.byKey(const Key("faqAnswerKey-0")), findsNothing);
   }
 
   Future<void> _closeTutorial() async {
-    await tester.tap(find.byKey(Key("nextButtonFaqKey")));
+    await tester.tap(find.byKey(const Key("nextButtonFaqKey")));
     await tester.pumpAndSettle();
   }
 }

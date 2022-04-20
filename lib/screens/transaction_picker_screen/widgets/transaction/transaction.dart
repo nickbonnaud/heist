@@ -22,9 +22,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class Transaction extends StatefulWidget {
   final List<UnassignedTransactionResource> _transactions;
 
-  Transaction({required List<UnassignedTransactionResource> transactions})
-    : _transactions = transactions;
+  const Transaction({required List<UnassignedTransactionResource> transactions, Key? key})
+    : _transactions = transactions,
+      super(key: key);
 
+  @override
   State<Transaction> createState() => _TransactionState();
 }
 
@@ -69,7 +71,7 @@ class _TransactionState extends State<Transaction> {
 
   Widget _underlayBody() {
     return SingleChildScrollView(
-      physics: NeverScrollableScrollPhysics(),
+      physics: const NeverScrollableScrollPhysics(),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -77,26 +79,26 @@ class _TransactionState extends State<Transaction> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               SizedBox(height: 140.h),
-              PurchasedItemWidget(
+              const PurchasedItemWidget(
                 purchasedItem: PurchasedItem(name: "Purchased", subName: null, price: 199, quantity: 1, total: 199),
                 index: 0,
               ),
-              Divider(),
-              PurchasedItemWidget(
+              const Divider(),
+              const PurchasedItemWidget(
                 purchasedItem: PurchasedItem(name: "Item", subName: null, price: 500, quantity: 2, total: 1000),
                 index: 1,
               ),
-              Divider(),
-              PurchasedItemWidget(
+              const Divider(),
+              const PurchasedItemWidget(
                 purchasedItem: PurchasedItem(name: "Another Item", subName: null, price: 1000, quantity: 3, total: 3000),
                 index: 2,
               ),
-              Divider(),
-              PurchasedItemWidget(
+              const Divider(),
+              const PurchasedItemWidget(
                 purchasedItem: PurchasedItem(name: "Last Item", subName: null, price: 2399, quantity: 1, total: 2399),
                 index: 2,
               ),
-              Divider(),
+              const Divider(),
               SizedBox(height: 30.h),
               _createFooterRow(title: "Subtotal", value: 4199),
               SizedBox(height: 10.h),
@@ -135,7 +137,7 @@ class _TransactionState extends State<Transaction> {
       itemCount: widget._transactions.length,
       onPageChanged: (index) {
         if (index != null) {
-          _underlayController.animateToPage(index, duration: Duration(milliseconds: 300), curve: Curves.ease);
+          _underlayController.animateToPage(index, duration: const Duration(milliseconds: 300), curve: Curves.ease);
           BlocProvider.of<TransactionBloc>(context).add(PickerChanged(transactionUpdatedAt: widget._transactions[index].transaction.updatedDate));
         }
       },
@@ -207,7 +209,7 @@ class _TransactionState extends State<Transaction> {
                   child: BlocBuilder<TransactionPickerScreenBloc, TransactionPickerScreenState>(
                     builder: (context, state) {
                       return ElevatedButton(
-                        key: Key("claimSubmitButtonKey"),
+                        key: const Key("claimSubmitButtonKey"),
                         onPressed: state.claiming
                           ? null
                           : () => _claimButtonPressed(state: state, index: index),
@@ -227,10 +229,10 @@ class _TransactionState extends State<Transaction> {
 
   Widget _buttonChild({required TransactionPickerScreenState state}) {
     if (state.claiming) {
-      return SizedBox(height: 25.sp, width: 25.sp, child: CircularProgressIndicator());
+      return SizedBox(height: 25.sp, width: 25.sp, child: const CircularProgressIndicator());
     }
     
-    return ButtonText(text: 'Claim');
+    return const ButtonText(text: 'Claim');
   }
 
   void _claimButtonPressed({required int index, required TransactionPickerScreenState state}) {
@@ -251,9 +253,7 @@ class _TransactionState extends State<Transaction> {
         return item.subName == null;
       });
 
-      if (item == null) {
-        item = purchasedItems[0];
-      }
+      item ??= purchasedItems[0];
 
       return PurchasedItem(name: item.name, subName: "Bill same as another.\nCheck 'Billed' time.", price: item.price, quantity: item.quantity, total: item.total);
     });
@@ -288,7 +288,7 @@ class _TransactionState extends State<Transaction> {
     showPlatformDialog(
       context: context, 
       builder: (_) => PlatformAlertDialog(
-        key: Key("confirmClaimDialogKey"),
+        key: const Key("confirmClaimDialogKey"),
         title: PlatformText("Are you Sure?"),
         content: PlatformText("Claiming a transaction is final. Please be sure this transaction is yours."),
         actions: [

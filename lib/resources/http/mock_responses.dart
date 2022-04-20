@@ -626,9 +626,7 @@ class MockResponses {
 
     numberBusinesses = doPaginate
       ? 25
-      : numberBusinesses == null
-        ? faker.randomGenerator.integer(25, min: 20)
-        : numberBusinesses;
+      : numberBusinesses ?? faker.randomGenerator.integer(25, min: 20);
 
     final List<Map<String, dynamic>> data = List.generate(
       numberBusinesses,
@@ -661,9 +659,7 @@ class MockResponses {
 
     numberRefunds = doPaginate
       ? 25
-      : numberRefunds == null
-        ? faker.randomGenerator.integer(25, min: 20)
-        : numberRefunds;
+      : numberRefunds ?? faker.randomGenerator.integer(25, min: 20);
 
     final List<Map<String, dynamic>> data = List.generate(
       numberRefunds, 
@@ -686,9 +682,7 @@ class MockResponses {
 
     numberTransactions = doPaginate
       ? 25
-      : numberTransactions == null
-        ? faker.randomGenerator.integer(25, min: 1)
-        : numberTransactions;
+      : numberTransactions ?? faker.randomGenerator.integer(25, min: 1);
 
     final List<Map<String, dynamic>> data = List.generate(
       numberTransactions, 
@@ -776,7 +770,7 @@ class MockResponses {
 
   static Map<String, dynamic> generateBusinessProfile({String? name}) {
     return {
-      'name': name == null ? faker.company.name() : name,
+      'name': name ?? faker.company.name(),
       'website': faker.internet.httpUrl(),
       'description': faker.lorem.sentences(faker.randomGenerator.integer(10, min: 6)).join(". "),
       'phone': faker.randomGenerator.fromPattern(["##########"]),
@@ -786,7 +780,7 @@ class MockResponses {
 
   static Map<String, dynamic> generateBusiness({String? name, String? businessIdentifier}) {
     return {
-      "identifier": businessIdentifier == null ? faker.guid.guid() : businessIdentifier,
+      "identifier": businessIdentifier ?? faker.guid.guid(),
       "profile": generateBusinessProfile(name: name),
       'photos': generateBusinessPhotos(),
       "location": generateLocation()
@@ -866,7 +860,7 @@ class MockResponses {
       'subject': faker.lorem.sentence(),
       'message': faker.lorem.sentences(faker.randomGenerator.integer(4, min: 1)).join(". "),
       'read': faker.randomGenerator.boolean(),
-      'resolved': resolved == null ? faker.randomGenerator.boolean() : resolved,
+      'resolved': resolved ?? faker.randomGenerator.boolean(),
       'updated_at': DateTime(date.year, date.month, date.day - index).toIso8601String(),
       'replies': List.generate(faker.randomGenerator.integer(25, min: 20), (index) => generateReply(index: index))
     };
@@ -972,7 +966,7 @@ class MockResponses {
   static Map<String, dynamic> generateUnassignedTransactionResource({Map<String, dynamic>? business}) {
     return {
       'transaction': generateTransactionForUnassignedTransaction(),
-      'business': business == null ? generateBusiness() : business
+      'business': business ?? generateBusiness()
     };
   }
 

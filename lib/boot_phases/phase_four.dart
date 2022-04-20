@@ -15,6 +15,9 @@ import 'package:heist/test_blocs/is_testing_cubit.dart';
 
 class PhaseFour extends StatelessWidget {
 
+  const PhaseFour({Key? key})
+    : super(key: key);
+  
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
@@ -45,7 +48,7 @@ class PhaseFour extends StatelessWidget {
           create: (_) => NotificationNavigationBloc()
         )
       ], 
-      child: PhaseFive()
+      child: const PhaseFive()
     );
   }
 }

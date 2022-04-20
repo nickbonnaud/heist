@@ -18,16 +18,18 @@ class PermissionCards extends StatelessWidget {
   final InitialLoginRepository _initialLoginRepository;
   final String _customerIdentifier;
 
-  PermissionCards({
+  const PermissionCards({
     required PermissionsBloc permissionsBloc,
     required GeoLocationBloc geoLocationBloc,
     required InitialLoginRepository initialLoginRepository,
-    required String customerIdentifier
+    required String customerIdentifier,
+    Key? key
   })
     : _permissionsBloc = permissionsBloc,
       _geoLocationBloc = geoLocationBloc,
       _initialLoginRepository = initialLoginRepository,
-      _customerIdentifier = customerIdentifier;
+      _customerIdentifier = customerIdentifier,
+      super(key: key);
   
   @override
   Widget build(BuildContext context) {
@@ -44,16 +46,16 @@ class PermissionCards extends StatelessWidget {
 
   List<Widget> _createCards({required BuildContext context}) {
     List<Widget> cards = [];
-    PermissionType.values.forEach((type) {
+    for (PermissionType type in PermissionType.values) {
       cards.add(_createCard(context: context, permissionType: type));
-    });
+    }
     return cards;
   }
 
   Widget _createCard({required BuildContext context, required PermissionType permissionType}) {
     List<PermissionType> currentInvalidPermissions = _permissionsBloc.invalidPermissions;
     return AnimatedPositioned(
-      duration: Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 500),
       top: currentInvalidPermissions.contains(permissionType) 
         ? currentInvalidPermissions.indexOf(permissionType) * 10.h
         : MediaQuery.of(context).size.height,

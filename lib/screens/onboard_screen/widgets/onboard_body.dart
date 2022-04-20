@@ -12,12 +12,14 @@ class OnboardBody extends StatefulWidget {
   final PermissionsBloc _permissionsBloc;
   final Status _customerStatus;
 
-  OnboardBody({
+  const OnboardBody({
     required PermissionsBloc permissionsBloc,
-    required Status customerStatus
+    required Status customerStatus,
+    Key? key
   })
     : _permissionsBloc = permissionsBloc,
-      _customerStatus = customerStatus;
+      _customerStatus = customerStatus,
+      super(key: key);
 
   @override
   State<OnboardBody> createState() => _OnboardBodyState();
@@ -44,7 +46,7 @@ class _OnboardBodyState extends State<OnboardBody> with SingleTickerProviderStat
     super.initState();
     _animationController = AnimationController(
       vsync: this,
-      duration: Duration(seconds: 3),
+      duration: const Duration(seconds: 3),
     );
 
     _onboardTitleAnimation = Tween<Offset>(
@@ -52,7 +54,7 @@ class _OnboardBodyState extends State<OnboardBody> with SingleTickerProviderStat
       end: Offset.zero
     ).animate(CurvedAnimation(
       parent: _animationController, 
-      curve: Interval(0.0, 0.90, curve: ElasticOutCurve(0.8))
+      curve: const Interval(0.0, 0.90, curve: ElasticOutCurve(0.8))
     ));
 
     _profileTitleAnimation = Tween<Offset>(
@@ -60,7 +62,7 @@ class _OnboardBodyState extends State<OnboardBody> with SingleTickerProviderStat
       end: Offset.zero
     ).animate(CurvedAnimation(
       parent: _animationController, 
-      curve: Interval(.2, 1.0, curve: ElasticOutCurve(0.8))
+      curve: const Interval(.2, 1.0, curve: ElasticOutCurve(0.8))
     ));
 
     _tutorialTitleAnimation = Tween<Offset>(
@@ -68,7 +70,7 @@ class _OnboardBodyState extends State<OnboardBody> with SingleTickerProviderStat
       end: Offset.zero
     ).animate(CurvedAnimation(
       parent: _animationController, 
-      curve: Interval(0.1, 0.99, curve: ElasticOutCurve(0.8))
+      curve: const Interval(0.1, 0.99, curve: ElasticOutCurve(0.8))
     ));
 
     _permissionsTitleAnimation = Tween<Offset>(
@@ -76,7 +78,7 @@ class _OnboardBodyState extends State<OnboardBody> with SingleTickerProviderStat
       end: Offset.zero
     ).animate(CurvedAnimation(
       parent: _animationController, 
-      curve: Interval(0.0, 0.8, curve: ElasticOutCurve(0.8))
+      curve: const Interval(0.0, 0.8, curve: ElasticOutCurve(0.8))
     ));
 
     _onboardBodyAnimation = Tween<Offset>(
@@ -92,7 +94,7 @@ class _OnboardBodyState extends State<OnboardBody> with SingleTickerProviderStat
       end: Offset.zero
     ).animate(CurvedAnimation(
       parent: _animationController,
-      curve: Interval(0.3, 0.9, curve: ElasticOutCurve(0.8))
+      curve: const Interval(0.3, 0.9, curve: ElasticOutCurve(0.8))
     ));
 
     _buttonAnimation = Tween<Offset>(
@@ -136,7 +138,7 @@ class _OnboardBodyState extends State<OnboardBody> with SingleTickerProviderStat
           ),
         ),
         Stepper(
-          key: Key("onboardStepperKey"),
+          key: const Key("onboardStepperKey"),
           currentStep: currentStep,
           steps: [
             Step(
@@ -193,7 +195,7 @@ class _OnboardBodyState extends State<OnboardBody> with SingleTickerProviderStat
                   return SlideTransition(
                     position: _buttonAnimation,
                     child: TextButton(
-                      key: Key("stepperButtonKey"),
+                      key: const Key("stepperButtonKey"),
                       onPressed: () => _buttonPressed(context, currentStep),
                       child: Text(
                         _buttonText(currentStep: currentStep),
@@ -258,7 +260,9 @@ class _OnboardBodyState extends State<OnboardBody> with SingleTickerProviderStat
       return StepState.complete;
     } else if (currentStep == stepIndex) {
       return StepState.editing;
-    } else return StepState.indexed;
+    } else {
+      return StepState.indexed;
+    }
   }
   
   void _buttonPressed(BuildContext context, int currentStep) {

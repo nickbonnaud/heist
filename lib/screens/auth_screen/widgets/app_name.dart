@@ -7,6 +7,9 @@ import 'package:provider/provider.dart';
 
 class AppName extends StatelessWidget {
 
+  const AppName({Key? key})
+    : super(key: key);
+  
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(

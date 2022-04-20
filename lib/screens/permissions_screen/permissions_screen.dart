@@ -14,35 +14,37 @@ class PermissionsScreen extends StatelessWidget {
   final InitialLoginRepository _initialLoginRepository;
   final String _customerIdentifier;
 
-  PermissionsScreen({
+  const PermissionsScreen({
     required PermissionsBloc permissionsBloc,
     required GeoLocationBloc geoLocationBloc,
     required InitialLoginRepository initialLoginRepository,
-    required String customerIdentifier
+    required String customerIdentifier,
+    Key? key
   })
     : _permissionsBloc = permissionsBloc,
       _geoLocationBloc = geoLocationBloc,
       _initialLoginRepository = initialLoginRepository,
-      _customerIdentifier = customerIdentifier;
+      _customerIdentifier = customerIdentifier,
+      super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xfffff6f4),
+      backgroundColor: const Color(0xfffff6f4),
       body: _constructBody(context: context)
     );
   }
 
   Widget _constructBody({required BuildContext context}) {
     return Column(
-      key: Key("permissionsScreenKey"),
+      key: const Key("permissionsScreenKey"),
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         PermissionsAnimation(permissionsBloc: _permissionsBloc,),
         Expanded(
           child: Stack(
             children: [
-              SuccessCard(),
+              const SuccessCard(),
               PermissionCards(
                 initialLoginRepository: _initialLoginRepository,
                 geoLocationBloc: _geoLocationBloc,

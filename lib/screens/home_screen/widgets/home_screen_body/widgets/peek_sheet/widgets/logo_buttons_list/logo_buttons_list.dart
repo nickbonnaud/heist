@@ -16,9 +16,10 @@ class LogoButtonsList extends StatelessWidget {
 
   final SharedSizes sharedSizes = SharedSizes();
 
-  LogoButtonsList({required AnimationController controller, required double topMargin})
+  LogoButtonsList({required AnimationController controller, required double topMargin, Key? key})
     : _controller = controller,
-      _topMargin = topMargin;
+      _topMargin = topMargin,
+      super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -28,8 +29,8 @@ class LogoButtonsList extends StatelessWidget {
           scrollDirection: _controller.status == AnimationStatus.completed
             ? Axis.vertical
             : Axis.horizontal,
-          child: Container(
-            key: Key('logosListKey'),
+          child: SizedBox(
+            key: const Key('logosListKey'),
             height: _getContainerHeight(context: context, state: state),
             width: _getContainerWidth(context: context, state: state),
             child: Stack(

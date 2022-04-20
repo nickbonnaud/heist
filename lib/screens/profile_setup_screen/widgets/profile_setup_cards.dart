@@ -20,18 +20,20 @@ class ProfileSetupCards extends StatelessWidget {
   final PhotoPickerRepository _photoPickerRepository;
   final AccountRepository _accountRepository;
 
-  ProfileSetupCards({
+  const ProfileSetupCards({
     required CustomerBloc customerBloc,
     required ProfileRepository profileRepository,
     required PhotoRepository photoRepository,
     required PhotoPickerRepository photoPickerRepository,
-    required AccountRepository accountRepository
+    required AccountRepository accountRepository,
+    Key? key
   })
     : _customerBloc = customerBloc,
       _profileRepository = profileRepository,
       _photoRepository = photoRepository,
       _photoPickerRepository = photoPickerRepository,
-      _accountRepository = accountRepository;
+      _accountRepository = accountRepository,
+      super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -51,16 +53,16 @@ class ProfileSetupCards extends StatelessWidget {
 
   List<Widget> _createCards({required BuildContext context}) {
     List<Widget> cards = [];
-    Section.values.forEach((section) { 
+    for (Section section in Section.values) { 
       cards.add(_createCard(context: context, section: section));
-    });
+    }
     return cards;
   }
 
   Widget _createCard({required BuildContext context, required Section section}) {
     List<Section> currentIncompleteSections = BlocProvider.of<ProfileSetupScreenBloc>(context).incompleteSections;
     return AnimatedPositioned(
-      duration: Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 500),
       top: currentIncompleteSections.contains(section) 
         ? currentIncompleteSections.indexOf(section) * 15.h
         : MediaQuery.of(context).size.height,
@@ -72,7 +74,7 @@ class ProfileSetupCards extends StatelessWidget {
         height: MediaQuery.of(context).size.height,
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.background,
-          borderRadius: BorderRadius.only(
+          borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(30),
             topRight: Radius.circular(30),
           ),

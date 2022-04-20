@@ -9,7 +9,7 @@ void main() {
     late int _baseState;
 
     setUp(() {
-      onboardBloc = OnboardBloc(customerStatus: Status(name: "name", code: 100), numberValidPermissions: 1);
+      onboardBloc = OnboardBloc(customerStatus: const Status(name: "name", code: 100), numberValidPermissions: 1);
       _baseState = onboardBloc.state;
     });
 

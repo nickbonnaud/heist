@@ -24,7 +24,7 @@ class SettingsScreenTest {
 
     expect(find.byType(SettingsScreen), findsNothing);
 
-    await tester.tap(find.byKey(Key("settingsDrawerItemKey")));
+    await tester.tap(find.byKey(const Key("settingsDrawerItemKey")));
     await tester.pumpAndSettle();
 
     expect(find.byType(SettingsScreen), findsOneWidget);
@@ -43,7 +43,7 @@ class SettingsScreenTest {
   Future<void> _goToProfile() async {
     expect(find.byType(ProfileScreen), findsNothing);
 
-    await tester.tap(find.byKey(Key("profileTileKey")));
+    await tester.tap(find.byKey(const Key("profileTileKey")));
     await tester.pumpAndSettle();
 
     await ProfileScreenTest(tester: tester).init();
@@ -52,7 +52,7 @@ class SettingsScreenTest {
   Future<void> _goToEmail() async {
     expect(find.byType(EmailScreen), findsNothing);
 
-    await tester.tap(find.byKey(Key("emailTileKey")));
+    await tester.tap(find.byKey(const Key("emailTileKey")));
     await tester.pumpAndSettle();
 
     await EmailScreenTest(tester: tester).init();
@@ -61,7 +61,7 @@ class SettingsScreenTest {
   Future<void> _goToPassword() async {
     expect(find.byType(PasswordScreen), findsNothing);
 
-    await tester.tap(find.byKey(Key("passwordTileKey")));
+    await tester.tap(find.byKey(const Key("passwordTileKey")));
     await tester.pumpAndSettle();
 
     await PasswordScreenTest(tester: tester).init();
@@ -70,7 +70,7 @@ class SettingsScreenTest {
   Future<void> _goToTips() async {
     expect(find.byType(TipScreen), findsNothing);
 
-    await tester.tap(find.byKey(Key("tipTileKey")));
+    await tester.tap(find.byKey(const Key("tipTileKey")));
     await tester.pumpAndSettle();
 
     await TipScreenTest(tester: tester).init();
@@ -79,7 +79,7 @@ class SettingsScreenTest {
   Future<void> _signOut() async {
     expect(find.byType(SignOutScreen), findsNothing);
 
-    await tester.tap(find.byKey(Key("signOutTileKey")));
+    await tester.tap(find.byKey(const Key("signOutTileKey")));
     await tester.pumpAndSettle();
 
     await SignOutScreenTest(tester: tester).init();

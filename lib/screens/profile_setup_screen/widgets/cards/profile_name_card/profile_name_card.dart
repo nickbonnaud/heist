@@ -11,15 +11,16 @@ class ProfileNameCard extends StatelessWidget {
   final ProfileRepository _profileRepository;
   final CustomerBloc _customerBloc;
 
-  ProfileNameCard({required ProfileRepository profileRepository, required CustomerBloc customerBloc})
+  const ProfileNameCard({required ProfileRepository profileRepository, required CustomerBloc customerBloc, Key? key})
     : _profileRepository = profileRepository,
-      _customerBloc = customerBloc;
+      _customerBloc = customerBloc,
+      super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider<ProfileNameFormBloc>(
       create: (BuildContext context) => ProfileNameFormBloc(profileRepository: _profileRepository, customerBloc: _customerBloc),
-      child: ProfileNameBody(),
+      child: const ProfileNameBody(),
     );
   }
 }

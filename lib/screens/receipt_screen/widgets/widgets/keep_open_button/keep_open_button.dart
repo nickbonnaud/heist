@@ -11,8 +11,9 @@ import 'bloc/keep_open_button_bloc.dart';
 class KeepOpenButton extends StatelessWidget {
   final TransactionResource _transactionResource;
 
-  KeepOpenButton({required TransactionResource transactionResource})
-    : _transactionResource = transactionResource;
+  const KeepOpenButton({required TransactionResource transactionResource, Key? key})
+    : _transactionResource = transactionResource,
+      super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +46,7 @@ class KeepOpenButton extends StatelessWidget {
 
   Widget _buttonChild({required BuildContext context, required KeepOpenButtonState state}) {
     if (state.isSubmitting) {
-      return SizedBox(height: 25.sp, width: 25.sp, child: CircularProgressIndicator());
+      return SizedBox(height: 25.sp, width: 25.sp, child: const CircularProgressIndicator());
     } else {
       return Text(
         'Keep Open',

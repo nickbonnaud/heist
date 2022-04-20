@@ -12,11 +12,13 @@ abstract class NearbyBusinessesState extends Equatable {
 class NearbyUninitialized extends NearbyBusinessesState {}
 
 class NearbyBusinessLoaded extends NearbyBusinessesState {
-  final List<Business> businesses;
   final List<PreMarker> preMarkers;
 
   const NearbyBusinessLoaded({required this.businesses, required this.preMarkers});
 
+  @override
+  final List<Business> businesses;
+  
   @override
   List<Object> get props => [businesses, preMarkers];
 

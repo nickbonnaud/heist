@@ -18,14 +18,16 @@ class HomeScreen extends StatelessWidget {
   final NearbyBusinessesBloc _nearbyBusinessesBloc;
   final ActiveLocationBloc _activeLocationBloc;
 
-  HomeScreen({
+  const HomeScreen({
     required GeoLocationBloc geoLocationBloc,
     required NearbyBusinessesBloc nearbyBusinessesBloc,
-    required ActiveLocationBloc activeLocationBloc
+    required ActiveLocationBloc activeLocationBloc,
+    Key? key
   })
     : _geoLocationBloc = geoLocationBloc,
       _nearbyBusinessesBloc = nearbyBusinessesBloc,
-      _activeLocationBloc = activeLocationBloc;
+      _activeLocationBloc = activeLocationBloc, 
+      super(key: key);
   
   @override
   Widget build(BuildContext context) {
@@ -51,7 +53,7 @@ class HomeScreen extends StatelessWidget {
         )
       ],
       child: Scaffold(
-        key: Key("homeScreenKey"),
+        key: const Key("homeScreenKey"),
         backgroundColor: Theme.of(context).colorScheme.background,
         body: MultiBlocProvider(
           providers: [

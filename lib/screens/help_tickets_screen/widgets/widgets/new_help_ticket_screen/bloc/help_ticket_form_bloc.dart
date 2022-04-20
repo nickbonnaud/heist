@@ -14,7 +14,7 @@ class HelpTicketFormBloc extends Bloc<HelpTicketFormEvent, HelpTicketFormState> 
   final HelpRepository _helpRepository;
   final HelpTicketsScreenBloc _helpTicketsScreenBloc;
 
-  final Duration _debounceTime = Duration(milliseconds: 300);
+  final Duration _debounceTime = const Duration(milliseconds: 300);
   
   HelpTicketFormBloc({required HelpRepository helpRepository, required HelpTicketsScreenBloc helpTicketsScreenBloc}) 
   : _helpRepository = helpRepository,

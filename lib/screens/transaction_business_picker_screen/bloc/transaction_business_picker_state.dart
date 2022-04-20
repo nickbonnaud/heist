@@ -7,7 +7,7 @@ class TransactionBusinessPickerState extends Equatable {
   const TransactionBusinessPickerState({required this.availableBusinesses});
 
   factory TransactionBusinessPickerState.initial() {
-    return TransactionBusinessPickerState(availableBusinesses: []);
+    return const TransactionBusinessPickerState(availableBusinesses: []);
   }
 
   TransactionBusinessPickerState update({List<Business>? availableBusinesses}) {

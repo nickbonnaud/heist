@@ -14,6 +14,9 @@ import 'package:heist/repositories/transaction_repository.dart';
 
 class PhaseThree extends StatelessWidget {
   
+  const PhaseThree({Key? key})
+    : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
@@ -33,7 +36,7 @@ class PhaseThree extends StatelessWidget {
           )
         ),
       ], 
-      child: PhaseFour()
+      child: const PhaseFour()
     );
   }
 }

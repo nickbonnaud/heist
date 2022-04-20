@@ -40,7 +40,7 @@ void main() {
     blocTest<ProfileFormBloc, ProfileFormState>(
       "ProfileFormBloc FirstNameChanged event yields state: [isFirstNameValid: true]",
       build: () => profileFormBloc,
-      wait: Duration(milliseconds: 300),
+      wait: const Duration(milliseconds: 300),
       act: (bloc) => bloc.add(FirstNameChanged(firstName: faker.person.firstName())),
       expect: () => [_baseState.update(isFirstNameValid: true)]
     );
@@ -48,7 +48,7 @@ void main() {
     blocTest<ProfileFormBloc, ProfileFormState>(
       "ProfileFormBloc LastNameChanged event yields state: [isLastNameValid: true]",
       build: () => profileFormBloc,
-      wait: Duration(milliseconds: 300),
+      wait: const Duration(milliseconds: 300),
       act: (bloc) => bloc.add(LastNameChanged(lastName: faker.person.lastName())),
       expect: () => [_baseState.update(isLastNameValid: true)]
     );
@@ -91,7 +91,7 @@ void main() {
       build: () => profileFormBloc,
       act: (bloc) {
         when(() => profileRepository.update(firstName: any(named: "firstName"), lastName: any(named: "lastName"), profileIdentifier: any(named: "profileIdentifier")))
-          .thenThrow(ApiException(error: "error"));
+          .thenThrow(const ApiException(error: "error"));
         
         bloc.add(Submitted(firstName: faker.person.firstName(), lastName: faker.person.lastName(), profileIdentifier: faker.guid.guid()));
       },

@@ -8,6 +8,6 @@ class LocationProvider extends BaseProvider {
 
   Future<PaginatedApiResponse> sendLocation({required Map<String, dynamic> body}) async {
     String url = ApiEndpoints.geoLocation;
-    return await this.postPaginated(url: url, body: body);
+    return await postPaginated(url: url, body: body);
   }
 }

@@ -12,8 +12,9 @@ import 'widgets/title_text.dart';
 class LocationBody extends StatelessWidget {
   final PermissionButtons _permissionButtons;
   
-  LocationBody({required PermissionButtons permissionButtons})
-    : _permissionButtons = permissionButtons;
+  const LocationBody({required PermissionButtons permissionButtons, Key? key})
+    : _permissionButtons = permissionButtons,
+      super(key: key);
 
   final String locationTextIos = 
     "Please set Location Services to 'While in Use'.\n\n"
@@ -31,7 +32,7 @@ class LocationBody extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             SizedBox(height: 15.h),
-            TitleText(text: 'Stage: Location Services'),
+            const TitleText(text: 'Stage: Location Services'),
             SizedBox(height: 25.h),
             PlatformWidget(
               cupertino: (_, __) => Text(locationTextIos,

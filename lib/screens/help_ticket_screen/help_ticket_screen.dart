@@ -17,14 +17,16 @@ class HelpTicketScreen extends StatelessWidget {
   final HelpTicketsScreenBloc _helpTicketsScreenBloc;
   final HelpRepository _helpRepository;
 
-  HelpTicketScreen({
+  const HelpTicketScreen({
     required HelpTicket helpTicket,
     required HelpTicketsScreenBloc helpTicketsScreenBloc,
-    required HelpRepository helpRepository
+    required HelpRepository helpRepository,
+    Key? key
   })
     : _helpTicket = helpTicket,
       _helpTicketsScreenBloc = helpTicketsScreenBloc,
-      _helpRepository = helpRepository;
+      _helpRepository = helpRepository,
+      super(key: key);
   
 @override
   Widget build(BuildContext context) {

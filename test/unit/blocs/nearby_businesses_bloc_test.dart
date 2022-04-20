@@ -50,7 +50,7 @@ void main() {
         when(() => iconCreatorRepository.createPreMarkers(businesses: any(named: 'businesses')))
           .thenAnswer((_) async => [MockPreMarker(), MockPreMarker(), MockPreMarker()]);
 
-        bloc.add(FetchNearby(lat: 1.0, lng: 1.0));
+        bloc.add(const FetchNearby(lat: 1.0, lng: 1.0));
       },
       expect: () => [isA<NearbyBusinessLoaded>()],
       verify: (_) {
@@ -69,7 +69,7 @@ void main() {
         when(() => iconCreatorRepository.createPreMarkers(businesses: any(named: 'businesses')))
           .thenAnswer((_) async => [MockPreMarker(), MockPreMarker(), MockPreMarker()]);
 
-        bloc.add(FetchNearby(lat: 1.0, lng: 1.0));
+        bloc.add(const FetchNearby(lat: 1.0, lng: 1.0));
       },
       verify: (_) {
         verify(() => locationRepository.sendLocation(lat: any(named: "lat"), lng: any(named: "lng"), startLocation: any(named: "startLocation"))).called(1);
@@ -82,9 +82,9 @@ void main() {
       build: () => nearbyBusinessesBloc,
       act: (bloc) {
         when(() => locationRepository.sendLocation(lat: any(named: "lat"), lng: any(named: "lng"), startLocation: any(named: "startLocation")))
-          .thenThrow(ApiException(error: "Error!"));
+          .thenThrow(const ApiException(error: "Error!"));
 
-        bloc.add(FetchNearby(lat: 1.0, lng: 1.0));
+        bloc.add(const FetchNearby(lat: 1.0, lng: 1.0));
       },
       expect: () => [isA<FailedToLoadNearby>()],
       verify: (_) {
@@ -101,7 +101,7 @@ void main() {
         when(() => iconCreatorRepository.createPreMarkers(businesses: any(named: 'businesses')))
           .thenAnswer((_) async => [MockPreMarker(), MockPreMarker(), MockPreMarker()]);
 
-        whenListen(geoLocationBloc, Stream<GeoLocationState>.fromIterable([LocationLoaded(latitude: 1.0, longitude: 1.0)]));
+        whenListen(geoLocationBloc, Stream<GeoLocationState>.fromIterable([const LocationLoaded(latitude: 1.0, longitude: 1.0)]));
 
         return NearbyBusinessesBloc(locationRepository: locationRepository, iconCreatorRepository: iconCreatorRepository, geoLocationBloc: geoLocationBloc);
       },

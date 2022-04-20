@@ -8,7 +8,7 @@ class IssueFormState extends Equatable {
   final TransactionResource transactionResource;
   final String errorMessage;
 
-  IssueFormState({
+  const IssueFormState({
     required this.isMessageValid,
     required this.isSubmitting,
     required this.isSuccess,

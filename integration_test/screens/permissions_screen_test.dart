@@ -11,7 +11,7 @@ class PermissionsScreenTest {
   Future<void> init() async {
     TestTitle.write(testName: "Permissions Screen Tests");
 
-    expect(find.byKey(Key("permissionsScreenKey")), findsOneWidget);
+    expect(find.byKey(const Key("permissionsScreenKey")), findsOneWidget);
 
     await _tapEnableBluetoothButton();
     await _tapEnableNotificationsButton();
@@ -20,38 +20,38 @@ class PermissionsScreenTest {
   }
 
   Future<void> _tapEnableBluetoothButton() async {
-    await tester.tap(find.byKey(Key("bluetoothButtonKey")));
-    await tester.pump(Duration(milliseconds: 500));
+    await tester.tap(find.byKey(const Key("bluetoothButtonKey")));
+    await tester.pump(const Duration(milliseconds: 500));
 
-    expect(find.byKey(Key("enablePermissionButtonKey")), findsOneWidget);
-    await tester.tap(find.byKey(Key("enablePermissionButtonKey")));
-    await tester.pump(Duration(seconds: 3));
+    expect(find.byKey(const Key("enablePermissionButtonKey")), findsOneWidget);
+    await tester.tap(find.byKey(const Key("enablePermissionButtonKey")));
+    await tester.pump(const Duration(seconds: 3));
   }
 
   Future<void> _tapEnableNotificationsButton() async {
-    await tester.tap(find.byKey(Key("notificationButtonKey")));
+    await tester.tap(find.byKey(const Key("notificationButtonKey")));
     await tester.pump();
 
-    expect(find.byKey(Key("enablePermissionButtonKey")), findsOneWidget);
-    await tester.tap(find.byKey(Key("enablePermissionButtonKey")));
-    await tester.pump(Duration(seconds: 3));
+    expect(find.byKey(const Key("enablePermissionButtonKey")), findsOneWidget);
+    await tester.tap(find.byKey(const Key("enablePermissionButtonKey")));
+    await tester.pump(const Duration(seconds: 3));
   }
 
   Future<void> _tapEnableLocationButton() async {
-    await tester.tap(find.byKey(Key("locationButtonKey")));
+    await tester.tap(find.byKey(const Key("locationButtonKey")));
     await tester.pump();
 
-    expect(find.byKey(Key("enablePermissionButtonKey")), findsOneWidget);
-    await tester.tap(find.byKey(Key("enablePermissionButtonKey")));
-    await tester.pump(Duration(seconds: 3));
+    expect(find.byKey(const Key("enablePermissionButtonKey")), findsOneWidget);
+    await tester.tap(find.byKey(const Key("enablePermissionButtonKey")));
+    await tester.pump(const Duration(seconds: 3));
   }
 
   Future<void> _tapEnableBeaconButton() async {
-    await tester.tap(find.byKey(Key("beaconButtonKey")));
+    await tester.tap(find.byKey(const Key("beaconButtonKey")));
     await tester.pump();
 
-    expect(find.byKey(Key("enablePermissionButtonKey")), findsOneWidget);
-    await tester.tap(find.byKey(Key("enablePermissionButtonKey")));
+    expect(find.byKey(const Key("enablePermissionButtonKey")), findsOneWidget);
+    await tester.tap(find.byKey(const Key("enablePermissionButtonKey")));
     await tester.pumpAndSettle();
   }
 }

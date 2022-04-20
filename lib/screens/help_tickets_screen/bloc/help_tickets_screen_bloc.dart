@@ -145,13 +145,13 @@ class HelpTicketsScreenBloc extends Bloc<HelpTicketsScreenEvent, HelpTicketsScre
     if (currentState is Loaded && !currentState.paginating) {
       switch (currentState.currentQuery) {
         case Option.all:
-          add(FetchAll(reset: false));
+          add(const FetchAll(reset: false));
           break;
         case Option.open:
-          add(FetchOpen(reset: false));
+          add(const FetchOpen(reset: false));
           break;
         case Option.resolved:
-          add(FetchResolved(reset: false));
+          add(const FetchResolved(reset: false));
           break;
       }
     }

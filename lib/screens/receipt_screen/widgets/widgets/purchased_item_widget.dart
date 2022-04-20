@@ -8,9 +8,10 @@ class PurchasedItemWidget extends StatelessWidget {
   final PurchasedItem _purchasedItem;
   final int _index;
 
-  const PurchasedItemWidget({required PurchasedItem purchasedItem, required int index})
+  const PurchasedItemWidget({required PurchasedItem purchasedItem, required int index, Key? key})
     : _purchasedItem = purchasedItem,
-      _index = index;
+      _index = index,
+      super(key: key);
 
   @override
   Widget build(BuildContext context) {

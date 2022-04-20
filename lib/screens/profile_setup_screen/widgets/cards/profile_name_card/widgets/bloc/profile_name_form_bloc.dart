@@ -15,7 +15,7 @@ class ProfileNameFormBloc extends Bloc<ProfileNameFormEvent, ProfileNameFormStat
   final ProfileRepository _profileRepository;
   final CustomerBloc _customerBloc;
 
-  final Duration _debounceTime = Duration(milliseconds: 300);
+  final Duration _debounceTime = const Duration(milliseconds: 300);
   
   ProfileNameFormBloc({required ProfileRepository profileRepository, required CustomerBloc customerBloc})
     : _profileRepository = profileRepository,

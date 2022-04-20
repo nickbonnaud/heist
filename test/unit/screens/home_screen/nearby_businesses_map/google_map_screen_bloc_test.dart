@@ -30,9 +30,9 @@ void main() {
       build: () => googleMapScreenBloc,
       act: (bloc) {
         _business = MockBusiness();
-        bloc.add(Tapped(screenCoordinate: ScreenCoordinate(x: 1, y: 1), business: _business));
+        bloc.add(Tapped(screenCoordinate: const ScreenCoordinate(x: 1, y: 1), business: _business));
       },
-      expect: () => [GoogleMapScreenState(screenCoordinate: ScreenCoordinate(x: 1, y: 1), business: _business)]
+      expect: () => [GoogleMapScreenState(screenCoordinate: const ScreenCoordinate(x: 1, y: 1), business: _business)]
     );
 
     blocTest<GoogleMapScreenBloc, GoogleMapScreenState>(
@@ -40,7 +40,7 @@ void main() {
       build: () => googleMapScreenBloc,
       seed: () {
         _business = MockBusiness();
-        return GoogleMapScreenState(screenCoordinate: ScreenCoordinate(x: 1, y: 1), business: _business);
+        return GoogleMapScreenState(screenCoordinate: const ScreenCoordinate(x: 1, y: 1), business: _business);
       },
       act: (bloc) {
         _business = MockBusiness();

@@ -6,7 +6,7 @@ class LogoButtonsListState extends Equatable {
   final int numberActiveLocations;
   final int numberNearbyLocations;
 
-  LogoButtonsListState({
+  const LogoButtonsListState({
     required this.numberOpenTransactions,
     required this.numberActiveLocations,
     required this.numberNearbyLocations

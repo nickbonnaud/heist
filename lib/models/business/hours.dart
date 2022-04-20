@@ -11,7 +11,7 @@ class Hours extends Equatable {
   final String saturday;
   final String sunday;
 
-  Hours({
+  const Hours({
     required this.monday,
     required this.tuesday,
     required this.wednesday,

@@ -15,11 +15,11 @@ import 'package:heist/resources/helpers/permissions_checker.dart';
 import 'package:heist/test_blocs/is_testing_cubit.dart';
 
 class PhaseOne extends StatelessWidget {
-
   final bool _testing;
   
-  PhaseOne({bool testing: false})
-    : _testing = testing;
+  const PhaseOne({bool testing = false, Key? key})
+    : _testing = testing,
+      super(key: key);
   
   @override
   Widget build(BuildContext context) {
@@ -42,7 +42,7 @@ class PhaseOne extends StatelessWidget {
 
         BlocProvider<IsTestingCubit>(create: (_) => IsTestingCubit(testing: _testing))
       ],
-      child: PhaseTwo()
+      child: const PhaseTwo()
     );
   }
 }

@@ -9,6 +9,9 @@ import 'page_offset_notifier.dart';
 class Background extends StatelessWidget {
   final FlareControls _controls = FlareControls();
   
+  Background({Key? key})
+    : super(key: key);
+  
   @override
   Widget build(BuildContext context) {
     return Consumer2<PageOffsetNotifier, AnimationController>(
@@ -25,7 +28,7 @@ class Background extends StatelessWidget {
         );
       },
       child: IgnorePointer(
-        child: Container(
+        child: SizedBox(
           height: MediaQuery.of(context).size.height * 1.2,
           width: MediaQuery.of(context).size.width * 2,
           child: FlareActor(

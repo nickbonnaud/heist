@@ -17,7 +17,7 @@ class AppReadyState extends Equatable {
   bool get areBeaconsLoaded => beaconsLoaded;
   bool get areOpenTransactionsLoaded => openTransactionsLoaded;
 
-  AppReadyState({
+  const AppReadyState({
     required this.customerOnboarded,
     required this.permissionChecksComplete,
     required this.permissionsReady,
@@ -29,7 +29,7 @@ class AppReadyState extends Equatable {
   });
 
   factory AppReadyState.initial() {
-    return AppReadyState(
+    return const AppReadyState(
       customerOnboarded: true,
       permissionChecksComplete: false,
       permissionsReady: false,

@@ -14,7 +14,7 @@ class HelpTicket extends Equatable {
   final DateTime updatedAt;
   final List<Reply> replies;
 
-  HelpTicket({
+  const HelpTicket({
     required this.identifier,
     required this.subject,
     required this.message,
@@ -41,7 +41,7 @@ class HelpTicket extends Equatable {
     DateTime? updatedAt,
     List<Reply>? replies
   }) => HelpTicket(
-    identifier: this.identifier,
+    identifier: identifier,
     subject: subject ?? this.subject,
     message: message ?? this.message,
     read: read ?? this.read,
@@ -57,7 +57,7 @@ class HelpTicket extends Equatable {
         : reply.read
     )).toList();
 
-    return this.update(
+    return update(
       replies: updatedReplies
     );
   }

@@ -14,7 +14,7 @@ void main() {
     )
   );
   
-  runApp(PhaseOne());
+  runApp(const PhaseOne());
 }
 
 

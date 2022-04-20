@@ -13,34 +13,33 @@ class HomeScreenBody extends StatelessWidget {
   final NearbyBusinessesBloc _nearbyBusinessesBloc;
   final GeoLocationBloc _geoLocationBloc;
 
-  HomeScreenBody({required NearbyBusinessesBloc nearbyBusinessesBloc, required GeoLocationBloc geoLocationBloc})
+  const HomeScreenBody({required NearbyBusinessesBloc nearbyBusinessesBloc, required GeoLocationBloc geoLocationBloc, Key? key})
     : _nearbyBusinessesBloc = nearbyBusinessesBloc,
-      _geoLocationBloc = geoLocationBloc;
+      _geoLocationBloc = geoLocationBloc,
+      super(key: key);
   
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: BlocBuilder<NearbyBusinessesBloc, NearbyBusinessesState>(
-        builder: (context, state) {
-          if (state is NearbyBusinessLoaded) {
-            
-            if (state.businesses.length == 0) {
-              return NoNearbyLocations();
-            }
-            return Stack(
-              children: [
-                NearbyBusinessesMap(preMarkers: state.preMarkers),
-                PeekSheet(),
-                _dimmer(context: context)
-              ],
-            );
+    return BlocBuilder<NearbyBusinessesBloc, NearbyBusinessesState>(
+      builder: (context, state) {
+        if (state is NearbyBusinessLoaded) {
+          
+          if (state.businesses.isEmpty) {
+            return const NoNearbyLocations();
           }
-          return FetchBusinessesFailScreen(
-            nearbyBusinessesBloc: _nearbyBusinessesBloc,
-            geoLocationBloc: _geoLocationBloc,
+          return Stack(
+            children: [
+              NearbyBusinessesMap(preMarkers: state.preMarkers),
+              const PeekSheet(),
+              _dimmer(context: context)
+            ],
           );
-        },
-      ),
+        }
+        return FetchBusinessesFailScreen(
+          nearbyBusinessesBloc: _nearbyBusinessesBloc,
+          geoLocationBloc: _geoLocationBloc,
+        );
+      },
     );
   }
 
@@ -48,11 +47,11 @@ class HomeScreenBody extends StatelessWidget {
     return BlocBuilder<BusinessScreenVisibleCubit, bool>(
       builder: (context, isVisible) {
         return AnimatedOpacity(
-          key: Key("dimmerKey"),
+          key: const Key("dimmerKey"),
           opacity: isVisible
             ? 0.5
             : 0.0,
-          duration: Duration(milliseconds: 350),
+          duration: const Duration(milliseconds: 350),
           curve: Curves.easeInOut,
           child: IgnorePointer(
             child: Container(

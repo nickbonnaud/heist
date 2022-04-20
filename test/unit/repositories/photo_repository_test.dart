@@ -28,7 +28,7 @@ void main() {
 
     test("Photo Repository throws error on upload photo fail", () async {
       when(() => mockPhotoProvider.upload(body: any(named: "body"), profileIdentifier: any(named: "profileIdentifier")))
-        .thenAnswer((_) async => ApiResponse(body: {}, error: "error", isOK: false));
+        .thenAnswer((_) async => const ApiResponse(body: {}, error: "error", isOK: false));
 
       expect(
         photoRepositoryWithMock.upload(photo: XFile("path"), profileIdentifier: "profileIdentifier"),

@@ -11,6 +11,9 @@ import 'package:provider/provider.dart';
 
 class WelcomeLabel extends StatelessWidget {
 
+  const WelcomeLabel({Key? key})
+    : super(key: key);
+  
   @override
   Widget build(BuildContext context) {
     return Consumer2<PageOffsetNotifier, AnimationController>(

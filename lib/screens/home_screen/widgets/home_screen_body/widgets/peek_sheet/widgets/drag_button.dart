@@ -10,11 +10,12 @@ class DragButton extends StatelessWidget {
   final AnimationController _controller;
   final Function _toggle;
 
-  DragButton({required double size, required double topMargin, required AnimationController controller, required Function toggle})
+  const DragButton({required double size, required double topMargin, required AnimationController controller, required Function toggle, Key? key})
     : _size = size,
       _topMargin = topMargin,
       _controller = controller,
-      _toggle = toggle;
+      _toggle = toggle,
+      super(key: key);
 
   @override
   Widget build(BuildContext context) {

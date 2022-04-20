@@ -6,14 +6,14 @@ class DeleteTicketButtonState extends Equatable {
   final bool isSuccess;
   final String errorMessage;
 
-  DeleteTicketButtonState({
+  const DeleteTicketButtonState({
     required this.isSubmitting,
     required this.isSuccess,
     required this.errorMessage
   });
 
   factory DeleteTicketButtonState.initial() {
-    return DeleteTicketButtonState(
+    return const DeleteTicketButtonState(
       isSubmitting: false,
       isSuccess: false,
       errorMessage: ""

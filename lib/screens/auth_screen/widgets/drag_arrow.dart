@@ -12,6 +12,9 @@ import 'cubit/keyboard_visible_cubit.dart';
 
 class DragArrow extends StatefulWidget {
 
+  const DragArrow({Key? key})
+    : super(key: key);
+  
   @override
   State<DragArrow> createState() => _DragArrowState();
 }
@@ -25,7 +28,7 @@ class _DragArrowState extends State<DragArrow> with SingleTickerProviderStateMix
 
     _controller = AnimationController(
       vsync: this,
-      duration: Duration(seconds: 1),
+      duration: const Duration(seconds: 1),
       lowerBound: 0,
       upperBound: 10
     )..addListener(() {
@@ -45,7 +48,7 @@ class _DragArrowState extends State<DragArrow> with SingleTickerProviderStateMix
           child: Transform.rotate(
             angle: math.pi * animation.value,
             child: GestureDetector(
-              key: Key("dragArrowKey"),
+              key: const Key("dragArrowKey"),
               onTap: () {
                 animation.status == AnimationStatus.completed
                   ? animation.reverse()

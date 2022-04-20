@@ -14,6 +14,7 @@ class ApiResponse extends Equatable {
   });
 
 
+  @override
   List<Object> get props => [body, error, isOK];
 
   @override

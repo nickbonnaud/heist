@@ -14,10 +14,11 @@ class HelpTicketBody extends StatefulWidget {
   final HelpTicket _helpTicket;
   final HelpRepository _helpRepository;
 
-  HelpTicketBody({required HelpTicketsScreenBloc helpTicketsScreenBloc, required HelpTicket helpTicket, required HelpRepository helpRepository})
+  const HelpTicketBody({required HelpTicketsScreenBloc helpTicketsScreenBloc, required HelpTicket helpTicket, required HelpRepository helpRepository, Key? key})
     : _helpTicketsScreenBloc = helpTicketsScreenBloc,
       _helpTicket = helpTicket,
-      _helpRepository = helpRepository;
+      _helpRepository = helpRepository,
+      super(key: key);
 
   @override
   State<HelpTicketBody> createState() => _HelpTicketBodyState();

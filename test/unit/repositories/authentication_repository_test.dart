@@ -22,8 +22,8 @@ void main() {
     setUp(() {
       registerFallbackValue(MockToken());
       mockTokenRepository = MockTokenRepository();
-      when(() => mockTokenRepository.saveToken(token: any(named: "token"))).thenAnswer((_) async => null);
-      when(() => mockTokenRepository.deleteToken()).thenAnswer((_) async => null);
+      when(() => mockTokenRepository.saveToken(token: any(named: "token"))).thenAnswer((_) async => true);
+      when(() => mockTokenRepository.deleteToken()).thenAnswer((_) async => true);
       when(() => mockTokenRepository.hasValidToken()).thenAnswer((_) async => true);
       authenticationRepository = AuthenticationRepository(tokenRepository: mockTokenRepository, authenticationProvider: AuthenticationProvider());
       mockAuthenticationProvider = MockAuthenticationProvider();
@@ -42,7 +42,7 @@ void main() {
 
     test("Authentication Repository throws error on register customer fail", () async {
       when(() => mockAuthenticationProvider.register(body: any(named: "body")))
-        .thenAnswer((_) async => ApiResponse(body: {}, error: "error", isOK: false));
+        .thenAnswer((_) async => const ApiResponse(body: {}, error: "error", isOK: false));
       
       expect(
         authenticationRepositoryWithMock.register(email: "email", password: "password", passwordConfirmation: "passwordConfirmation"), 
@@ -62,7 +62,7 @@ void main() {
 
     test("Authentication Repository throws error on login customer fail", () async {
       when(() => mockAuthenticationProvider.login(body: any(named: "body")))
-        .thenAnswer((_) async => ApiResponse(body: {}, error: "error", isOK: false));
+        .thenAnswer((_) async => const ApiResponse(body: {}, error: "error", isOK: false));
       
       expect(
         authenticationRepositoryWithMock.login(email: "email", password: "password"), 
@@ -77,7 +77,7 @@ void main() {
 
     test("Authentication Repository throws error on logout customer fail", () async {
       when(() => mockAuthenticationProvider.logout())
-        .thenAnswer((_) async => ApiResponse(body: {}, error: "error", isOK: false));
+        .thenAnswer((_) async => const ApiResponse(body: {}, error: "error", isOK: false));
       
       expect(
         authenticationRepositoryWithMock.logout(), 
@@ -92,7 +92,7 @@ void main() {
 
     test("Authentication Repository throws error on check password fail", () async {
       when(() => mockAuthenticationProvider.checkPassword(body: any(named: "body")))
-        .thenAnswer((_) async => ApiResponse(body: {}, error: "error", isOK: false));
+        .thenAnswer((_) async => const ApiResponse(body: {}, error: "error", isOK: false));
       
       expect(
         authenticationRepositoryWithMock.checkPassword(password: "password"), 
@@ -107,7 +107,7 @@ void main() {
 
     test("Authentication Repository throws error on request password reset fail", () async {
       when(() => mockAuthenticationProvider.requestPasswordReset(body: any(named: "body")))
-        .thenAnswer((_) async => ApiResponse(body: {}, error: "error", isOK: false));
+        .thenAnswer((_) async => const ApiResponse(body: {}, error: "error", isOK: false));
       
       expect(
         authenticationRepositoryWithMock.requestPasswordReset(email: "email"), 
@@ -122,7 +122,7 @@ void main() {
 
     test("Authentication Repository throws error on reset password fail", () async {
       when(() => mockAuthenticationProvider.resetPassword(body: any(named: "body")))
-        .thenAnswer((_) async => ApiResponse(body: {}, error: "error", isOK: false));
+        .thenAnswer((_) async => const ApiResponse(body: {}, error: "error", isOK: false));
 
       expect(
         authenticationRepositoryWithMock.resetPassword(email: "email", resetCode: "resetCode", password: "password", passwordConfirmation: "passwordConfirmation"),

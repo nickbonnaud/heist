@@ -18,7 +18,7 @@ class SideDrawerTest {
   Future<void> init() async {
     TestTitle.write(testName: "Side Drawer Tests");
 
-    await tester.tap(find.byKey(Key("menuFabKey")));
+    await tester.tap(find.byKey(const Key("menuFabKey")));
     await tester.pumpAndSettle();
 
     expect(find.byType(DrawerBody), findsOneWidget);

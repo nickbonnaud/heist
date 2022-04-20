@@ -11,7 +11,7 @@ class PasswordFormState extends Equatable {
   final bool isSuccessOldPassword;
   final String errorMessage;
 
-  PasswordFormState({
+  const PasswordFormState({
     required this.isOldPasswordValid,
     required this.isOldPasswordVerified,
     required this.isPasswordValid,
@@ -23,7 +23,7 @@ class PasswordFormState extends Equatable {
   });
 
   factory PasswordFormState.initial() {
-    return PasswordFormState(
+    return const  PasswordFormState(
       isOldPasswordValid: true,
       isOldPasswordVerified: false, 
       isPasswordValid: true, 

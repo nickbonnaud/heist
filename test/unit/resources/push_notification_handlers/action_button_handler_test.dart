@@ -70,14 +70,14 @@ void main() {
         .thenReturn(null);
 
       when(() => externalUrlHandler.go(url: any(named: "url")))
-        .thenAnswer((_) async => null);
+        .thenAnswer((_) async => true);
     }
     
     test("ActionButtonHandler init can view bill", () async {
       final PushNotification notification = PushNotification(
         title: "title",
         body: "body",
-        type: NotificationType.bill_closed,
+        type: NotificationType.billClosed,
         transactionIdentifier: _transactionResource.transaction.identifier,
         businessIdentifier: _transactionResource.business.identifier,
         warningsSent: null
@@ -93,7 +93,7 @@ void main() {
       final PushNotification notification = PushNotification(
         title: "title",
         body: "body",
-        type: NotificationType.bill_closed,
+        type: NotificationType.billClosed,
         transactionIdentifier: _transactionResource.transaction.identifier,
         businessIdentifier: _transactionResource.business.identifier,
         warningsSent: null
@@ -109,7 +109,7 @@ void main() {
       final PushNotification notification = PushNotification(
         title: "title",
         body: "body",
-        type: NotificationType.bill_closed,
+        type: NotificationType.billClosed,
         transactionIdentifier: _transactionResource.transaction.identifier,
         businessIdentifier: _transactionResource.business.identifier,
         warningsSent: null
@@ -125,7 +125,7 @@ void main() {
       final PushNotification notification = PushNotification(
         title: "title",
         body: "body",
-        type: NotificationType.bill_closed,
+        type: NotificationType.billClosed,
         transactionIdentifier: _transactionResource.transaction.identifier,
         businessIdentifier: _transactionResource.business.identifier,
         warningsSent: null
@@ -143,7 +143,7 @@ void main() {
       final PushNotification notification = PushNotification(
         title: "title",
         body: "body",
-        type: NotificationType.auto_paid,
+        type: NotificationType.autoPaid,
         transactionIdentifier: _transactionResource.transaction.identifier,
         businessIdentifier: _transactionResource.business.identifier,
         warningsSent: null
@@ -159,7 +159,7 @@ void main() {
       final PushNotification notification = PushNotification(
         title: "title",
         body: "body",
-        type: NotificationType.bill_closed,
+        type: NotificationType.billClosed,
         transactionIdentifier: _transactionResource.transaction.identifier,
         businessIdentifier: _transactionResource.business.identifier,
         warningsSent: null
@@ -175,7 +175,7 @@ void main() {
       final PushNotification notification = PushNotification(
         title: "title",
         body: "body",
-        type: NotificationType.fix_bill,
+        type: NotificationType.fixBill,
         transactionIdentifier: _transactionResource.transaction.identifier,
         businessIdentifier: _transactionResource.business.identifier,
         warningsSent: null
@@ -191,7 +191,7 @@ void main() {
       final PushNotification notification = PushNotification(
         title: "title",
         body: "body",
-        type: NotificationType.bill_closed,
+        type: NotificationType.billClosed,
         transactionIdentifier: _transactionResource.transaction.identifier,
         businessIdentifier: _transactionResource.business.identifier,
         warningsSent: null
@@ -207,7 +207,7 @@ void main() {
       final PushNotification notification = PushNotification(
         title: "title",
         body: "body",
-        type: NotificationType.bill_closed,
+        type: NotificationType.billClosed,
         transactionIdentifier: _transactionResource.transaction.identifier,
         businessIdentifier: _transactionResource.business.identifier,
         warningsSent: null
@@ -223,7 +223,7 @@ void main() {
       final PushNotification notification = PushNotification(
         title: "title",
         body: "body",
-        type: NotificationType.bill_closed,
+        type: NotificationType.billClosed,
         transactionIdentifier: _transactionResource.transaction.identifier,
         businessIdentifier: _transactionResource.business.identifier,
         warningsSent: null
@@ -239,7 +239,7 @@ void main() {
       final PushNotification notification = PushNotification(
         title: "title",
         body: "body",
-        type: NotificationType.bill_closed,
+        type: NotificationType.billClosed,
         transactionIdentifier: _transactionResource.transaction.identifier,
         businessIdentifier: _transactionResource.business.identifier,
         warningsSent: null
@@ -255,7 +255,7 @@ void main() {
       final PushNotification notification = PushNotification(
         title: "title",
         body: "body",
-        type: NotificationType.bill_closed,
+        type: NotificationType.billClosed,
         transactionIdentifier: _transactionResource.transaction.identifier,
         businessIdentifier: _transactionResource.business.identifier,
         warningsSent: null
@@ -271,7 +271,7 @@ void main() {
       final PushNotification notification = PushNotification(
         title: "title",
         body: "body",
-        type: NotificationType.bill_closed,
+        type: NotificationType.billClosed,
         transactionIdentifier: _transactionResource.transaction.identifier,
         businessIdentifier: _transactionResource.business.identifier,
         warningsSent: null

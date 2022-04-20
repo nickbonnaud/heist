@@ -6,9 +6,10 @@ class MessageBubbleText extends StatelessWidget {
   final String _message;
   final bool _fromAdmin;
 
-  const MessageBubbleText({required String message, bool fromAdmin: false})
+  const MessageBubbleText({required String message, bool fromAdmin = false, Key? key})
     : _message = message,
-      _fromAdmin = fromAdmin;
+      _fromAdmin = fromAdmin,
+      super(key: key);
   
   @override
   Widget build(BuildContext context) {

@@ -34,7 +34,8 @@ class LogoButton extends StatelessWidget {
     required double borderRadius,
     required String keyValue,
     TransactionResource? transactionResource,
-    Business? business
+    Business? business,
+    Key? key
   })
     : _controller = controller,
       _topMargin = topMargin,
@@ -44,7 +45,8 @@ class LogoButton extends StatelessWidget {
       _borderRadius = borderRadius,
       _keyValue = keyValue,
       _transactionResource = transactionResource,
-      _business = business;
+      _business = business,
+      super(key: key);
 
   @override
   Widget build(BuildContext context) {

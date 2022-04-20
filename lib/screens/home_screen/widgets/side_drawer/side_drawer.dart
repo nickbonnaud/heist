@@ -14,19 +14,21 @@ class SideDrawer extends StatefulWidget {
   final Widget _homeScreen;
   final ActiveLocationBloc _activeLocationBloc;
 
-  SideDrawer({
+  const SideDrawer({
     required Widget homeScreen,
     required ActiveLocationBloc activeLocationBloc,
+    Key? key
   })
     : _homeScreen = homeScreen,
-      _activeLocationBloc = activeLocationBloc;
+      _activeLocationBloc = activeLocationBloc,
+      super(key: key);
 
   @override
   State<SideDrawer> createState() => _SideDrawerState();
 }
 
 class _SideDrawerState extends State<SideDrawer> with SingleTickerProviderStateMixin {
-  static const String HERO_KEY = 'MENU_KEY';
+  static const String heroKey = 'MENU_KEY';
   static const double _minScale = 0.86;
   static const double _drawerWidth = 0.66;
   static const double _shadowOffset = 16.0;
@@ -38,12 +40,12 @@ class _SideDrawerState extends State<SideDrawer> with SingleTickerProviderStateM
 
   _open(BuildContext context) {
     _animationController.forward();
-    BlocProvider.of<SideDrawerBloc>(context).add(DrawerStatusChanged(menuOpen: true));
+    BlocProvider.of<SideDrawerBloc>(context).add(const DrawerStatusChanged(menuOpen: true));
   }
 
   _close(BuildContext context) {
     _animationController.reverse();
-    BlocProvider.of<SideDrawerBloc>(context).add(DrawerStatusChanged(menuOpen: false));
+    BlocProvider.of<SideDrawerBloc>(context).add(const DrawerStatusChanged(menuOpen: false));
   }
 
   _onMenuPressed(BuildContext context, SideDrawerState state) {
@@ -56,9 +58,9 @@ class _SideDrawerState extends State<SideDrawer> with SingleTickerProviderStateM
     _animationController = AnimationController(duration: const Duration(milliseconds: 300), vsync: this)
       ..addStatusListener((status) {
         if (status == AnimationStatus.completed && !BlocProvider.of<SideDrawerBloc>(context).state.menuOpened) {
-          BlocProvider.of<SideDrawerBloc>(context).add(DrawerStatusChanged(menuOpen: true));
+          BlocProvider.of<SideDrawerBloc>(context).add(const DrawerStatusChanged(menuOpen: true));
         } else if (status == AnimationStatus.dismissed && BlocProvider.of<SideDrawerBloc>(context).state.menuOpened) {
-          BlocProvider.of<SideDrawerBloc>(context).add(DrawerStatusChanged(menuOpen: false));
+          BlocProvider.of<SideDrawerBloc>(context).add(const DrawerStatusChanged(menuOpen: false));
         }
       });
 
@@ -90,10 +92,10 @@ class _SideDrawerState extends State<SideDrawer> with SingleTickerProviderStateM
           floatingActionButton: state.buttonVisible ? Padding(
             padding: EdgeInsets.only(top: 25.h, left: 10.w),
             child: FloatingActionButton(
-              key: Key("menuFabKey"),
+              key: const Key("menuFabKey"),
               backgroundColor: Theme.of(context).colorScheme.callToAction,
-              heroTag: HERO_KEY,
-              child: Icon(Icons.menu),
+              heroTag: heroKey,
+              child: const Icon(Icons.menu),
               onPressed: () => _onMenuPressed(context, state),
             ),
           ) : null,
@@ -116,18 +118,17 @@ class _SideDrawerState extends State<SideDrawer> with SingleTickerProviderStateM
   }
 
   void _handleDragEnd(DragEndDetails details) {
-    if (_animationController.isAnimating ||
-        _animationController.status == AnimationStatus.completed) return;
+    if (_animationController.isAnimating || _animationController.status == AnimationStatus.completed) return;
     
-    final double flingVelocity =
-      details.velocity.pixelsPerSecond.dy / MediaQuery.of(context).size.width;
-    if (flingVelocity < 0.0)
+    final double flingVelocity = details.velocity.pixelsPerSecond.dy / MediaQuery.of(context).size.width;
+    
+    if (flingVelocity < 0.0) {
       _animationController.fling(velocity: math.max(2.0, -flingVelocity));
-    else if (flingVelocity > 0.0)
+    } else if (flingVelocity > 0.0) {
       _animationController.fling(velocity: math.min(-2.0, -flingVelocity));
-    else
-      _animationController.fling(
-        velocity: _animationController.value < 0.5 ? -2.0 : 2.0);
+    } else {
+      _animationController.fling(velocity: _animationController.value < 0.5 ? -2.0 : 2.0);
+    }
   }
 
   Widget _buildBody({required SideDrawerState state}) {
@@ -136,7 +137,7 @@ class _SideDrawerState extends State<SideDrawer> with SingleTickerProviderStateM
         BlocProvider<TransactionBusinessPickerBloc>(
           create: (_) => TransactionBusinessPickerBloc(activeLocationBloc: widget._activeLocationBloc)
             ..add(Init(activeLocations: widget._activeLocationBloc.state.activeLocations)),
-          child: DrawerBody(),
+          child: const DrawerBody(),
         ),
         Transform.scale(
           scale: _scaleAnimation.value,

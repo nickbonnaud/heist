@@ -38,15 +38,15 @@ void main() {
 
     test("Name validator checks name validity", () {
       List<String> validNames = ["Smith", "john-Diaz", "O'Bryan", "St. Clair"];
-      validNames.forEach((name) { 
+      for (String name in validNames) { 
         expect(Validators.isValidName(name: name), true);
-      });
+      }
 
       
       List<String> invalidNames = ['', "jake]", 'mohammad!', 'jenna,', 'nick/', r'tyler\', 'britney;', 'daniel"' ];
-      invalidNames.forEach((name) {
+      for (String name in invalidNames) {
         expect(Validators.isValidName(name: name), false);
-      });
+      }
     });
 
     test("Defautl Tip Validator checks tip validity", () {
@@ -68,7 +68,7 @@ void main() {
       invalidResetCode = "!12Fgk";
       expect(Validators.isValidResetCode(resetCode: invalidResetCode), false);
 
-      final validResetCode = "hFg53M";
+      String validResetCode = "hFg53M";
       expect(Validators.isValidResetCode(resetCode: validResetCode), true);
     });
   });

@@ -30,7 +30,7 @@ void main() {
     });
 
     test("Help Repository fetch all on error throws exception", () async {
-      when(() => mockHelpProvider.fetchHelpTickets()).thenAnswer((_) async => PaginatedApiResponse(body: [], isOK: false));
+      when(() => mockHelpProvider.fetchHelpTickets()).thenAnswer((_) async => const PaginatedApiResponse(body: [], isOK: false));
       
       expect(
         helpRepositoryWithMock.fetchAll(),
@@ -46,7 +46,7 @@ void main() {
     });
 
     test("Help Repository fetch resolved on error throws exception", () async {
-      when(() => mockHelpProvider.fetchHelpTickets(query: "?resolved=true")).thenAnswer((_) async => PaginatedApiResponse(body: [], isOK: false));
+      when(() => mockHelpProvider.fetchHelpTickets(query: "?resolved=true")).thenAnswer((_) async => const PaginatedApiResponse(body: [], isOK: false));
       
       expect(
         helpRepositoryWithMock.fetchResolved(),
@@ -62,7 +62,7 @@ void main() {
     });
 
     test("Help Repository fetch open on error throws exception", () async {
-      when(() => mockHelpProvider.fetchHelpTickets(query: "?resolved=false")).thenAnswer((_) async => PaginatedApiResponse(body: [], isOK: false));
+      when(() => mockHelpProvider.fetchHelpTickets(query: "?resolved=false")).thenAnswer((_) async => const PaginatedApiResponse(body: [], isOK: false));
       
       expect(
         helpRepositoryWithMock.fetchOpen(),
@@ -78,7 +78,7 @@ void main() {
     });
 
     test("Help Repository paginate on error throws exception", () async {
-      when(() => mockHelpProvider.fetchHelpTickets(paginateUrl: "http://novapay.ai/api/customer/help?page=2")).thenAnswer((_) async => PaginatedApiResponse(body: [], isOK: false));
+      when(() => mockHelpProvider.fetchHelpTickets(paginateUrl: "http://novapay.ai/api/customer/help?page=2")).thenAnswer((_) async => const PaginatedApiResponse(body: [], isOK: false));
       
       expect(
         helpRepositoryWithMock.paginate(url: "http://novapay.ai/api/customer/help?page=2"),
@@ -92,7 +92,7 @@ void main() {
     });
 
     test("Help Repository on store help ticket error throws exception", () async {
-      when(() => mockHelpProvider.storeHelpTicket(body: any(named: "body"))).thenAnswer((_) async => ApiResponse(body: {}, error: "error", isOK: false));
+      when(() => mockHelpProvider.storeHelpTicket(body: any(named: "body"))).thenAnswer((_) async => const ApiResponse(body: {}, error: "error", isOK: false));
       
       expect(
         helpRepositoryWithMock.storeHelpTicket(subject: "subject", message: "message"),
@@ -106,7 +106,7 @@ void main() {
     });
 
     test("Help Repository on store reply error throws exception", () async {
-      when(() => mockHelpProvider.storeReply(body: any(named: "body"))).thenAnswer((_) async => ApiResponse(body: {}, error: "error", isOK: false));
+      when(() => mockHelpProvider.storeReply(body: any(named: "body"))).thenAnswer((_) async => const ApiResponse(body: {}, error: "error", isOK: false));
       
       expect(
         helpRepositoryWithMock.storeReply(identifier: "identifier", message: "message"),
@@ -120,7 +120,7 @@ void main() {
     });
 
     test("Help Repository on update replies as read error throws exception", () async {
-      when(() => mockHelpProvider.updateReplies(ticketIdentifier: any(named: "ticketIdentifier"), body: any(named: "body"))).thenAnswer((_) async => ApiResponse(body: {}, error: "error", isOK: false));
+      when(() => mockHelpProvider.updateReplies(ticketIdentifier: any(named: "ticketIdentifier"), body: any(named: "body"))).thenAnswer((_) async => const ApiResponse(body: {}, error: "error", isOK: false));
       
       expect(
         helpRepositoryWithMock.updateRepliesAsRead(ticketIdentifier: "ticketIdentifier"),
@@ -134,7 +134,7 @@ void main() {
     });
 
     test("Help Repository on delete help ticket error throws exception", () async {
-      when(() => mockHelpProvider.deleteHelpTicket(identifier: any(named: "identifier"))).thenAnswer((_) async => ApiResponse(body: {}, error: "error", isOK: false));
+      when(() => mockHelpProvider.deleteHelpTicket(identifier: any(named: "identifier"))).thenAnswer((_) async => const ApiResponse(body: {}, error: "error", isOK: false));
       
       expect(
         helpRepositoryWithMock.deleteHelpTicket(identifier: "identifier"),

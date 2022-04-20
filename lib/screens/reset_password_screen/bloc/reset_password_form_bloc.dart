@@ -12,7 +12,7 @@ part 'reset_password_form_state.dart';
 class ResetPasswordFormBloc extends Bloc<ResetPasswordFormEvent, ResetPasswordFormState> {
   final AuthenticationRepository _authenticationRepository;
 
-  final Duration _debounceTime = Duration(milliseconds: 300);
+  final Duration _debounceTime = const Duration(milliseconds: 300);
   
   ResetPasswordFormBloc({required AuthenticationRepository authenticationRepository, required String email})
     : _authenticationRepository = authenticationRepository,

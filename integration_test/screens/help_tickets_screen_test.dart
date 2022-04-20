@@ -34,8 +34,8 @@ class HelpTicketsScreenTest {
 
   Future<void> _loadHelpTickets() async {
     expect(find.byType(HelpTicketsScreen), findsNothing);
-    await tester.tap(find.byKey(Key("helpDrawerItemKey")));
-    await tester.pump(Duration(milliseconds: 300));
+    await tester.tap(find.byKey(const Key("helpDrawerItemKey")));
+    await tester.pump(const Duration(milliseconds: 300));
 
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
     await tester.pumpAndSettle();
@@ -47,19 +47,19 @@ class HelpTicketsScreenTest {
   }
 
   Future<void> _scroll() async {
-    expect(find.byKey(Key("helpTicketKey-0")), findsOneWidget);
-    await tester.fling(find.byKey(Key("helpTicketsListKey")), Offset(0, -800), 500);
-    expect(find.byKey(Key("helpTicketKey-0")), findsNothing);
+    expect(find.byKey(const Key("helpTicketKey-0")), findsOneWidget);
+    await tester.fling(find.byKey(const Key("helpTicketsListKey")), const Offset(0, -800), 500);
+    expect(find.byKey(const Key("helpTicketKey-0")), findsNothing);
   }
 
   Future<void> _fetchOpen() async {
     expect(find.byType(CircularProgressIndicator), findsNothing);
 
-    await tester.tap(find.byKey(Key("helpTicketsFilterButtonKey")));
+    await tester.tap(find.byKey(const Key("helpTicketsFilterButtonKey")));
     await tester.pumpAndSettle();
 
     await tester.tap(find.byIcon(Icons.lock_open));
-    await tester.pump(Duration(milliseconds: 250));
+    await tester.pump(const Duration(milliseconds: 250));
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
 
 
@@ -69,7 +69,7 @@ class HelpTicketsScreenTest {
 
   Future<void> _goToDetailsOpen() async {
     expect(find.byType(HelpTicketScreen), findsNothing);
-    await tester.tap(find.byKey(Key("helpTicketKey-0")));
+    await tester.tap(find.byKey(const Key("helpTicketKey-0")));
     await tester.pumpAndSettle();
 
     await HelpTicketScreenTest(tester: tester).initOpen();
@@ -78,11 +78,11 @@ class HelpTicketsScreenTest {
   Future<void> _fetchResolved() async {
     expect(find.byType(CircularProgressIndicator), findsNothing);
 
-    await tester.tap(find.byKey(Key("helpTicketsFilterButtonKey")));
+    await tester.tap(find.byKey(const Key("helpTicketsFilterButtonKey")));
     await tester.pumpAndSettle();
 
     await tester.tap(find.byIcon(Icons.lock_outline));
-    await tester.pump(Duration(milliseconds: 250));
+    await tester.pump(const Duration(milliseconds: 250));
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
 
 
@@ -92,7 +92,7 @@ class HelpTicketsScreenTest {
 
   Future<void> _goToDetailsResolved() async {
     expect(find.byType(HelpTicketScreen), findsNothing);
-    await tester.tap(find.byKey(Key("helpTicketKey-0")));
+    await tester.tap(find.byKey(const Key("helpTicketKey-0")));
     await tester.pumpAndSettle();
 
     await HelpTicketScreenTest(tester: tester).initResolved();
@@ -101,11 +101,11 @@ class HelpTicketsScreenTest {
   Future<void> _fetchAll() async {
     expect(find.byType(CircularProgressIndicator), findsNothing);
 
-    await tester.tap(find.byKey(Key("helpTicketsFilterButtonKey")));
+    await tester.tap(find.byKey(const Key("helpTicketsFilterButtonKey")));
     await tester.pumpAndSettle();
 
     await tester.tap(find.byIcon(Icons.refresh));
-    await tester.pump(Duration(milliseconds: 250));
+    await tester.pump(const Duration(milliseconds: 250));
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
 
 

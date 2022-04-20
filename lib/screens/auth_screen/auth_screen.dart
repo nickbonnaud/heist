@@ -25,15 +25,18 @@ class AuthScreen extends StatefulWidget {
   final AuthenticationBloc _authenticationBloc;
   final PermissionsBloc _permissionsBloc;
 
-  AuthScreen({
+  const AuthScreen({
     required AuthenticationRepository authenticationRepository,
     required AuthenticationBloc authenticationBloc,
-    required PermissionsBloc permissionsBloc
+    required PermissionsBloc permissionsBloc,
+    Key? key
   })
     : _authenticationRepository = authenticationRepository,
       _authenticationBloc = authenticationBloc,
-      _permissionsBloc = permissionsBloc;
+      _permissionsBloc = permissionsBloc,
+      super(key: key);
 
+  @override
   State<AuthScreen> createState() => _AuthScreenState();
 }
 
@@ -49,15 +52,15 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
     super.initState();
     _animationController = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 300),
     );
 
     _formAnimationController = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 300),
     );
 
-    Future.delayed(Duration(milliseconds: 500)).then((value) => _animationController.forward());
+    Future.delayed(const Duration(milliseconds: 500)).then((value) => _animationController.forward());
 
     _pageController.addListener(() {
       if (_pageController.page == 1) {
@@ -71,7 +74,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromRGBO(11, 13, 35, 1),
+      backgroundColor: const Color.fromRGBO(11, 13, 35, 1),
       body: ChangeNotifierProvider(
         create: (_) => PageOffsetNotifier(pageController: _pageController),
         child: ListenableProvider.value(
@@ -81,23 +84,23 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
             child: Stack(
               children: [
                 GestureDetector(
-                  key: Key("verticalDragDetectorKey"),
+                  key: const Key("verticalDragDetectorKey"),
                   onVerticalDragUpdate: _handleDragUpdate,
                   onVerticalDragEnd: _handleDragEnd,
                   child: Stack(
-                    key: Key("stackKey"),
+                    key: const Key("stackKey"),
                     alignment: Alignment.center,
                     children: [
                       Background(),
                       PageView(
                         controller: _pageController,
-                        physics: ClampingScrollPhysics(),
+                        physics: const ClampingScrollPhysics(),
                         children: [
-                          AppName(),
+                          const AppName(),
                           Container()
                         ],
                       ),
-                      PageIndicator(),
+                      const PageIndicator(),
                       BlocProvider<KeyboardVisibleCubit>(
                         create: (_) => KeyboardVisibleCubit(),
                         child: Stack(
@@ -108,7 +111,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
                               pageController: _pageController,
                               permissionsBloc: widget._permissionsBloc
                             ),
-                            DragArrow(),
+                            const DragArrow(),
                           ],
                         ),
                       ),

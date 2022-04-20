@@ -10,7 +10,7 @@ class HelpTicketFormState extends Equatable {
 
   bool get isFormValid => isSubjectValid && isMessageValid;
 
-  HelpTicketFormState({
+  const HelpTicketFormState({
     required this.isSubjectValid,
     required this.isMessageValid,
     required this.isSubmitting,
@@ -19,7 +19,7 @@ class HelpTicketFormState extends Equatable {
   });
 
   factory HelpTicketFormState.initial() {
-    return HelpTicketFormState(
+    return const HelpTicketFormState(
       isSubjectValid: false,
       isMessageValid: false,
       isSubmitting: false,

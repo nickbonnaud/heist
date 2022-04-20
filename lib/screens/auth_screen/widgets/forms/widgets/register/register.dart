@@ -12,21 +12,23 @@ class Register extends StatelessWidget {
   final AuthenticationBloc _authenticationBloc;
   final PageController _pageController;
 
-  Register({
+  const Register({
     required AuthenticationRepository authenticationRepository,
     required AuthenticationBloc authenticationBloc,
-    required PageController pageController
+    required PageController pageController,
+    Key? key
   })
     : _authenticationRepository = authenticationRepository,
       _authenticationBloc = authenticationBloc,
-      _pageController = pageController;
+      _pageController = pageController,
+      super(key: key);
   
   @override
   Widget build(BuildContext context) {
     return Stack(
       alignment: Alignment.center,
       children: [
-        WelcomeLabel(),
+        const WelcomeLabel(),
         BlocProvider<RegisterBloc>(
           create: (_) => RegisterBloc(authenticationRepository: _authenticationRepository, authenticationBloc: _authenticationBloc),
           child: RegisterForm(pageController: _pageController),

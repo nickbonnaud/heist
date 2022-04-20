@@ -5,7 +5,7 @@ class ReceiptScreenState extends Equatable {
   final TransactionResource transactionResource;
   final bool isButtonVisible;
 
-  ReceiptScreenState({required this.transactionResource, required this.isButtonVisible});
+  const ReceiptScreenState({required this.transactionResource, required this.isButtonVisible});
 
   factory ReceiptScreenState.initial({required TransactionResource transactionResource, required bool isButtonVisible }) {
     return ReceiptScreenState(transactionResource: transactionResource, isButtonVisible: isButtonVisible);

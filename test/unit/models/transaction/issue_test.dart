@@ -31,7 +31,7 @@ void main() {
 
       expect(issue.typeToString, isA<String>());
 
-      expect(Issue.enumToString(type: IssueType.error_in_bill), isA<String>());
+      expect(Issue.enumToString(type: IssueType.errorInBill), isA<String>());
     });
 
     test("Issue can update it's attributes", () {

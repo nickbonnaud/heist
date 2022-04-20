@@ -24,18 +24,20 @@ class PermissionButtons extends StatelessWidget {
   final PermissionsBloc _permissionsBloc;
   final String _customerIdentifier;
 
-  PermissionButtons({
+  const PermissionButtons({
     required PermissionType permission,
     required InitialLoginRepository initialLoginRepository,
     required GeoLocationBloc geoLocationBloc,
     required PermissionsBloc permissionsBloc,
-    required String customerIdentifier
+    required String customerIdentifier,
+    Key? key
   })
     : _permission = permission,
       _initialLoginRepository = initialLoginRepository,
       _geoLocationBloc = geoLocationBloc,
       _customerIdentifier = customerIdentifier,
-      _permissionsBloc = permissionsBloc;
+      _permissionsBloc = permissionsBloc,
+      super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +52,7 @@ class PermissionButtons extends StatelessWidget {
                 onPressed: enabled 
                   ? () => _requestPermission(context: context, permission: _permission)
                   : null,
-                child: ButtonText(text: 'Enable')
+                child: const ButtonText(text: 'Enable')
               )),
             SizedBox(width: .1.sw),
           ]
@@ -199,7 +201,7 @@ class PermissionButtons extends StatelessWidget {
             onPressed: () => Navigator.pop(context)
           ),
           PlatformDialogAction(
-            key: Key("enablePermissionButtonKey"),
+            key: const Key("enablePermissionButtonKey"),
             child: PlatformText('Enable'),
             onPressed: () async {
               if (context.read<IsTestingCubit>().state) {

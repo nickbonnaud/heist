@@ -7,7 +7,7 @@ class Photos extends Equatable {
   final String smallUrl;
   final String largeUrl;
 
-  Photos({
+  const Photos({
     required this.name,
     required this.smallUrl,
     required this.largeUrl, 
@@ -18,7 +18,7 @@ class Photos extends Equatable {
       smallUrl = json['small_url'],
       largeUrl = json['large_url'];
   
-  Photos.empty()
+  const Photos.empty()
     : name = "",
       smallUrl = "",
       largeUrl = "";

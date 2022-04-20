@@ -23,14 +23,14 @@ void main() {
     blocTest<SideDrawerBloc, SideDrawerState>(
       "SideDrawerBloc DrawerStatusChanged event yields state: [menuOpen: true, buttonVisible: !buttonVisible]",
       build: () => sideMenuBloc,
-      act: (bloc) => bloc.add(DrawerStatusChanged(menuOpen: true)),
+      act: (bloc) => bloc.add(const DrawerStatusChanged(menuOpen: true)),
       expect: () => [_baseState.update(menuOpened: true, buttonVisible: false)]
     );
 
     blocTest<SideDrawerBloc, SideDrawerState>(
       "SideDrawerBloc ButtonVisibilityChanged event yields state: [buttonVisible: true]",
       build: () => sideMenuBloc,
-      act: (bloc) => bloc.add(ButtonVisibilityChanged(isVisible: true)),
+      act: (bloc) => bloc.add(const ButtonVisibilityChanged(isVisible: true)),
       expect: () => [_baseState.update( buttonVisible: true)]
     );
   });

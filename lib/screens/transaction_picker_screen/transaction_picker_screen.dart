@@ -18,17 +18,19 @@ class TransactionPickerScreen extends StatelessWidget {
   final ActiveLocationBloc _activeLocationBloc;
   final OpenTransactionsBloc _openTransactionsBloc;
 
-  TransactionPickerScreen({
+  const TransactionPickerScreen({
     required TransactionRepository transactionRepository,
     required Business business, required bool fromSettings,
     required ActiveLocationBloc activeLocationBloc,
-    required OpenTransactionsBloc openTransactionsBloc
+    required OpenTransactionsBloc openTransactionsBloc,
+    Key? key
   })
     : _transactionRepository = transactionRepository,
       _business = business,
       _fromSettings = fromSettings,
       _activeLocationBloc = activeLocationBloc,
-      _openTransactionsBloc = openTransactionsBloc;
+      _openTransactionsBloc = openTransactionsBloc,
+      super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +38,7 @@ class TransactionPickerScreen extends StatelessWidget {
       appBar: BottomModalAppBar(
         context: context,
         backgroundColor: Theme.of(context).colorScheme.topAppBar,
-        trailingWidget: InfoButton()
+        trailingWidget: const InfoButton()
       ),
       body: BlocProvider<TransactionPickerScreenBloc>(
         create: (BuildContext context) => TransactionPickerScreenBloc(

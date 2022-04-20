@@ -11,16 +11,15 @@ class BottomModalAppBar extends StatefulWidget implements PreferredSizeWidget {
   final Widget? _trailingWidget;
   final String? _title;
 
-  BottomModalAppBar({required BuildContext context, bool isSliver = false, Widget? trailingWidget, Color? backgroundColor, String? title})
-    : _backgroundColor = backgroundColor == null
-        ? Theme.of(context).colorScheme.background
-        : backgroundColor,
+  BottomModalAppBar({required BuildContext context, bool isSliver = false, Widget? trailingWidget, Color? backgroundColor, String? title, Key? key})
+    : _backgroundColor = backgroundColor ?? Theme.of(context).colorScheme.background,
       _isSliver = isSliver,
       _trailingWidget = trailingWidget,
-      _title = title;
+      _title = title,
+      super(key: key);
   
   @override
-  Size get preferredSize => Size.fromHeight(kToolbarHeight);
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 
   @override
   State<BottomModalAppBar> createState() => _BottomModalAppBarState();
@@ -33,7 +32,7 @@ class _BottomModalAppBarState extends State<BottomModalAppBar> with TickerProvid
   @override
   void initState() {
     super.initState();
-    _showAnimationController = AnimationController(vsync: this, duration: Duration(milliseconds: 300));
+    _showAnimationController = AnimationController(vsync: this, duration: const Duration(milliseconds: 300));
     _showAnimation = Tween(begin: pi / 2, end: 0.0).animate(_showAnimationController);
     _showAnimationController.forward();
   }
@@ -82,7 +81,7 @@ class _BottomModalAppBarState extends State<BottomModalAppBar> with TickerProvid
       builder: (context, child) => Transform.rotate(
         angle: _showAnimation.value,
         child: IconButton(
-          icon: Icon(Icons.arrow_downward),
+          icon: const Icon(Icons.arrow_downward),
           onPressed: () => Navigator.of(context).pop(),
           color: Theme.of(context).colorScheme.topAppBarIcon,
           iconSize: 45.sp,

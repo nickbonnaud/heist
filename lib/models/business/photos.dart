@@ -8,7 +8,7 @@ class Photos extends Equatable {
   final Photo logo;
   final Photo banner;
 
-  Photos({required this.logo, required this.banner});
+  const Photos({required this.logo, required this.banner});
 
   Photos.fromJson({required Map<String, dynamic> json})
     : logo = Photo.fromJson(json: json['logo']),

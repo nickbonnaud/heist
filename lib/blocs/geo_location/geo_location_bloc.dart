@@ -10,10 +10,10 @@ part 'geo_location_event.dart';
 part 'geo_location_state.dart';
 
 enum Accuracy {
-  LOW,
-  MEDIUM,
-  HIGH,
-  BEST
+  low,
+  medium,
+  high,
+  best
 }
 
 class GeoLocationBloc extends Bloc<GeoLocationEvent, GeoLocationState> {
@@ -28,7 +28,7 @@ class GeoLocationBloc extends Bloc<GeoLocationEvent, GeoLocationState> {
         _eventHandler();
         
         _permissionsBlocSubscription = permissionsBloc.stream.listen((PermissionsState state) {
-          if (!this.isGeoLocationReady && state.onStartPermissionsValid) {
+          if (!isGeoLocationReady && state.onStartPermissionsValid) {
             add(GeoLocationReady());
           }
         });
@@ -71,16 +71,16 @@ class GeoLocationBloc extends Bloc<GeoLocationEvent, GeoLocationState> {
     try {
       Position position;
       switch (event.accuracy) {
-        case Accuracy.LOW:
+        case Accuracy.low:
           position = await _geolocatorRepository.fetchLow();
           break;
-        case Accuracy.MEDIUM:
+        case Accuracy.medium:
           position = await _geolocatorRepository.fetchMed();
           break;
-        case Accuracy.HIGH:
+        case Accuracy.high:
           position = await _geolocatorRepository.fetchHigh();
           break;
-        case Accuracy.BEST:
+        case Accuracy.best:
           position = await _geolocatorRepository.fetchBest();
           break;
       }

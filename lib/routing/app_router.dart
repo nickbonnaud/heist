@@ -106,7 +106,7 @@ class AppRouter {
             permissionsBloc: BlocProvider.of<PermissionsBloc>(context)
           ),
           name: routeData.route,
-          transitionDuration: Duration(seconds: 1)
+          transitionDuration: const Duration(seconds: 1)
         );
         break;
       case Routes.onboard:
@@ -122,7 +122,7 @@ class AppRouter {
         route = SlideUpRoute(
           screen: HomeScreen(
             geoLocationBloc: GeoLocationBloc(
-              geolocatorRepository: GeolocatorRepository(
+              geolocatorRepository: const GeolocatorRepository(
                 geolocatorProvider: GeolocatorProvider()
               ), 
               permissionsBloc: BlocProvider.of<PermissionsBloc>(context)
@@ -202,7 +202,7 @@ class AppRouter {
         break;
       case Routes.tutorial:
         route = _createFullScreenDialogRoute(
-          screen: TutorialScreen(),
+          screen: const TutorialScreen(),
           name: routeData.route
         );
         break;
@@ -235,7 +235,7 @@ class AppRouter {
         break;
       case Routes.transactionsIdentifier:
         route = _createFullScreenDialogRoute(
-          screen: SearchIdentifierModal(
+          screen: const SearchIdentifierModal(
             hintText: "Transaction ID"
           ),
           name: routeData.route
@@ -259,7 +259,7 @@ class AppRouter {
         break;
       case Routes.refundsTransactionIdentifier:
         route = _createFullScreenDialogRoute(
-          screen: SearchIdentifierModal(
+          screen: const SearchIdentifierModal(
             hintText: "Transaction ID"
           ),
           name: routeData.route
@@ -267,7 +267,7 @@ class AppRouter {
         break;
       case Routes.refundsIdentifier:
         route = _createFullScreenDialogRoute(
-          screen: SearchIdentifierModal(
+          screen: const SearchIdentifierModal(
             hintText: "Refund ID"
           ),
           name: routeData.route
@@ -275,7 +275,7 @@ class AppRouter {
         break;
       case Routes.settings:
         route = _createRouteDefault(
-          screen: SettingsScreen(), 
+          screen: const SettingsScreen(), 
           name: routeData.route
         );
         break;
@@ -382,7 +382,7 @@ class AppRouter {
         route = SlideUpRoute(
           screen: HomeScreen(
             geoLocationBloc: GeoLocationBloc(
-              geolocatorRepository: GeolocatorRepository(
+              geolocatorRepository: const GeolocatorRepository(
                 geolocatorProvider: GeolocatorProvider()
               ), 
               permissionsBloc: BlocProvider.of<PermissionsBloc>(context)

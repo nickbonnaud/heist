@@ -37,8 +37,8 @@ class RefundsScreenTest {
   }
 
   Future<void> _loadRefunds() async {
-    await tester.tap(find.byKey(Key("refundsDrawerItemKey")));
-    await tester.pump(Duration(milliseconds: 300));
+    await tester.tap(find.byKey(const Key("refundsDrawerItemKey")));
+    await tester.pump(const Duration(milliseconds: 300));
 
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
     await tester.pumpAndSettle();
@@ -48,13 +48,13 @@ class RefundsScreenTest {
   }
 
   Future<void> _scroll() async {
-    expect(find.byKey(Key("refundKey-0")), findsOneWidget);
-    await tester.fling(find.byKey(Key("refundsListKey")), Offset(0, -800), 500);
-    expect(find.byKey(Key("refundKey-0")), findsNothing);
+    expect(find.byKey(const Key("refundKey-0")), findsOneWidget);
+    await tester.fling(find.byKey(const Key("refundsListKey")), const Offset(0, -800), 500);
+    expect(find.byKey(const Key("refundKey-0")), findsNothing);
   }
 
   Future<void> _searchByBusinessName() async {
-    await tester.tap(find.byKey(Key("refundsFilterButtonKey")));
+    await tester.tap(find.byKey(const Key("refundsFilterButtonKey")));
     await tester.pumpAndSettle();
 
     await tester.tap(find.byIcon(Icons.business));
@@ -64,7 +64,7 @@ class RefundsScreenTest {
   }
 
   Future<void> _searchByTransactionId() async {
-    await tester.tap(find.byKey(Key("refundsFilterButtonKey")));
+    await tester.tap(find.byKey(const Key("refundsFilterButtonKey")));
     await tester.pumpAndSettle();
 
     await tester.tap(find.byIcon(Icons.receipt));
@@ -74,7 +74,7 @@ class RefundsScreenTest {
   }
 
   Future<void> _searchByDate() async {
-    await tester.tap(find.byKey(Key("refundsFilterButtonKey")));
+    await tester.tap(find.byKey(const Key("refundsFilterButtonKey")));
     await tester.pumpAndSettle();
 
     await tester.tap(find.byIcon(Icons.event));
@@ -94,7 +94,7 @@ class RefundsScreenTest {
   }
 
   Future<void> _searchByRefundId() async {
-    await tester.tap(find.byKey(Key("refundsFilterButtonKey")));
+    await tester.tap(find.byKey(const Key("refundsFilterButtonKey")));
     await tester.pumpAndSettle();
 
     await tester.tap(find.byIcon(Icons.receipt_long));
@@ -104,7 +104,7 @@ class RefundsScreenTest {
   }
 
   Future<void> _reset() async {
-    await tester.tap(find.byKey(Key("refundsFilterButtonKey")));
+    await tester.tap(find.byKey(const Key("refundsFilterButtonKey")));
     await tester.pumpAndSettle();
 
     await tester.tap(find.byIcon(Icons.refresh));
@@ -117,7 +117,7 @@ class RefundsScreenTest {
   Future<void> _showReceipt() async {
     expect(find.byType(ReceiptScreen), findsNothing);
 
-    await tester.tap(find.byKey(Key("refundKey-0")));
+    await tester.tap(find.byKey(const Key("refundKey-0")));
     await tester.pumpAndSettle();
 
     await ReceiptScreenTest(tester: tester).initRefunds();

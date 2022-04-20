@@ -13,6 +13,9 @@ import 'filter_button/filter_button.dart';
 
 class RefundsScreenBody extends StatefulWidget {
 
+  const RefundsScreenBody({Key? key})
+    : super(key: key);
+  
   @override
   State<RefundsScreenBody> createState() => _RefundsScreenBodyState();
 }
@@ -37,12 +40,12 @@ class _RefundsScreenBodyState extends State<RefundsScreenBody> {
           return ErrorScreen(
             body: "Oops! An error occurred fetching previous refunds!",
             buttonText: "Retry",
-            onButtonPressed: () => BlocProvider.of<RefundsScreenBloc>(context).add(FetchAllRefunds(reset: true)),
+            onButtonPressed: () => BlocProvider.of<RefundsScreenBloc>(context).add(const FetchAllRefunds(reset: true)),
           );
         }
 
         return Stack(
-          key: Key("refundsListKey"),
+          key: const Key("refundsListKey"),
           children: [
             _refundsBody(state: state),
             _filterButton(context: context, state: state)
@@ -96,7 +99,7 @@ class _RefundsScreenBodyState extends State<RefundsScreenBody> {
         sliver: SliverList(
           delegate: SliverChildBuilderDelegate(
             (BuildContext context, int index) => index >= state.refunds.length
-              ? BottomLoader()
+              ? const BottomLoader()
               :  RefundWidget(
                   refundResource: state.refunds[index],
                   key: Key("refundKey-$index"),
@@ -111,7 +114,7 @@ class _RefundsScreenBodyState extends State<RefundsScreenBody> {
     }
     return SliverPadding(
       padding: EdgeInsets.symmetric(horizontal: 8.w),
-      sliver: SliverFillRemaining(
+      sliver: const SliverFillRemaining(
         child: Center(
           child: CircularProgressIndicator(),
         ),

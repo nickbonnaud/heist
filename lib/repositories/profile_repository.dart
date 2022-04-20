@@ -12,22 +12,22 @@ class ProfileRepository extends BaseRepository {
     : _profileProvider = profileProvider;
 
   Future<Customer> store({required String firstName, required String lastName}) async {
-    final Map<String, dynamic> body = {
+    Map<String, dynamic> body = {
       'first_name': firstName,
       'last_name': lastName
     };
 
-    final Map<String, dynamic> json = await this.send(request: _profileProvider.store(body: body));
+    Map<String, dynamic> json = await send(request: _profileProvider.store(body: body));
     return deserialize(json: json);
   }
 
   Future<Customer> update({required String firstName, required String lastName, required String profileIdentifier}) async {
-    final Map<String, dynamic> body = {
+    Map<String, dynamic> body = {
       'first_name': firstName,
       'last_name': lastName
     };
 
-    final Map<String, dynamic> json = await this.send(request: _profileProvider.update(body: body, profileIdentifier: profileIdentifier));
+    Map<String, dynamic> json = await send(request: _profileProvider.update(body: body, profileIdentifier: profileIdentifier));
     return deserialize(json: json);
   }
 

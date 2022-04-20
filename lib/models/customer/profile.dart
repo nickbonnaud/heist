@@ -10,7 +10,7 @@ class Profile extends Equatable {
   final String lastName;
   final Photos photos;
 
-  Profile({
+  const Profile({
     required this.identifier,
     required this.firstName,
     required this.lastName,
@@ -23,20 +23,20 @@ class Profile extends Equatable {
       lastName = json['last_name'],
       photos = json['photos'] != null 
         ? Photos.fromJson(json: json['photos']) 
-        : Photos.empty();
+        : const Photos.empty();
   
-  Profile.empty()
+  const Profile.empty()
     : identifier = '',
       firstName = '',
       lastName = '',
-      photos = Photos.empty();
+      photos = const Photos.empty();
 
   Profile update({
     String? firstName,
     String? lastName,
     Photos? photos
   }) => Profile(
-    identifier: this.identifier,
+    identifier: identifier,
     firstName: firstName ?? this.firstName,
     lastName: lastName ?? this.lastName, 
     photos: photos ?? this.photos

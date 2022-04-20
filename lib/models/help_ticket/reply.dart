@@ -9,7 +9,7 @@ class Reply extends Equatable {
   final DateTime createdAt;
   final bool read;
 
-  Reply({
+  const Reply({
     required this.message,
     required this.fromCustomer,
     required this.createdAt,

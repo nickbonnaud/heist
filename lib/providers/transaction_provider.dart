@@ -8,26 +8,23 @@ import 'package:meta/meta.dart';
 class TransactionProvider extends BaseProvider {
 
   Future<PaginatedApiResponse> fetch({String query = "", String? paginateUrl}) async {
-    final String url = paginateUrl == null
-      ? '${ApiEndpoints.transaction}$query'
-      : paginateUrl;
-
-    return await this.getPaginated(url: url);
+    String url = paginateUrl ?? '${ApiEndpoints.transaction}$query';
+    return await getPaginated(url: url);
   }
 
   Future<PaginatedApiResponse> fetchUnassigned({required String businessIdentifier}) async {
-    final String url = '${ApiEndpoints.unassignedTransaction}?business_id=$businessIdentifier';
-    return await this.getPaginated(url: url);
+    String url = '${ApiEndpoints.unassignedTransaction}?business_id=$businessIdentifier';
+    return await getPaginated(url: url);
   }
 
   Future<ApiResponse> patchUnassigned({required String transactionId}) async {
-    final String url = '${ApiEndpoints.unassignedTransaction}/$transactionId';
-    final Map<String, dynamic> body = {};
-    return await this.patch(url: url, body: body);
+    String url = '${ApiEndpoints.unassignedTransaction}/$transactionId';
+    Map<String, dynamic> body = {};
+    return await patch(url: url, body: body);
   }
 
   Future<ApiResponse> patchStatus({required Map<String, dynamic> body, required String transactionId}) async {
-    final String url = '${ApiEndpoints.transaction}/$transactionId';
-    return await this.patch(url: url, body: body);
+    String url = '${ApiEndpoints.transaction}/$transactionId';
+    return await patch(url: url, body: body);
   }
 }

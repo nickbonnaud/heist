@@ -11,8 +11,9 @@ import 'widgets/search_business_name_body.dart';
 class SearchBusinessNameModal extends StatelessWidget {
   final BusinessRepository _businessRepository;
 
-  const SearchBusinessNameModal({required BusinessRepository businessRepository})
-    : _businessRepository = businessRepository;
+  const SearchBusinessNameModal({required BusinessRepository businessRepository, Key? key})
+    : _businessRepository = businessRepository,
+      super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +24,7 @@ class SearchBusinessNameModal extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 16.w),
         child: BlocProvider<SearchBusinessNameBloc>(
           create: (_) => SearchBusinessNameBloc(businessRepository: _businessRepository),
-          child: SearchBusinessNameBody(),
+          child: const SearchBusinessNameBody(),
         ),
       ),
     );

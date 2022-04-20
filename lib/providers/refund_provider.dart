@@ -7,10 +7,7 @@ import 'package:meta/meta.dart';
 class RefundProvider extends BaseProvider {
 
   Future<PaginatedApiResponse> fetch({String query = "", String? paginateUrl}) async {
-    String url = paginateUrl == null
-      ? '${ApiEndpoints.refund}$query'
-      : paginateUrl;
-
-    return await this.getPaginated(url: url);
+    String url = paginateUrl ?? '${ApiEndpoints.refund}$query';
+    return await getPaginated(url: url);
   }
 }

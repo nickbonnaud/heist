@@ -9,28 +9,26 @@ import 'package:heist/themes/main_theme.dart';
 class Boot extends StatelessWidget {
   final AppRouter _router = AppRouter();
 
+  Boot({Key? key})
+    : super(key: key);
+  
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
-      designSize: Size(375, 812),
-      builder: () => MaterialApp(
+      designSize: const Size(375, 812),
+      minTextAdapt: true,
+      builder: (context) => MaterialApp(
         debugShowCheckedModeBanner: false,
+        useInheritedMediaQuery: true,
         theme: MainTheme.themeData(context: context),
         initialRoute: Routes.app,
         title: Constants.appName,
         onGenerateRoute: (settings) => _router.goTo(context: context, settings: settings),
-        localizationsDelegates: [
+        localizationsDelegates: const [
           DefaultWidgetsLocalizations.delegate,
           DefaultCupertinoLocalizations.delegate,
           DefaultMaterialLocalizations.delegate,
         ],
-        builder: (context, widget) {
-          ScreenUtil.setContext(context);
-          return MediaQuery(
-            data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
-            child: widget!,
-          );
-        },
       )
     );
   }

@@ -5,7 +5,7 @@ import 'package:meta/meta.dart';
 class GeolocatorProvider {
   final bool _testing;
 
-  const GeolocatorProvider({bool testing: false})
+  const GeolocatorProvider({bool testing = false})
     : _testing = testing;
 
   Future<Position> fetch({required LocationAccuracy accuracy}) async {

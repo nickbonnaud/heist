@@ -87,7 +87,7 @@ void main() {
       build: () => keepOpenButtonBloc,
       act: (bloc) {
         when(() => transactionRepository.keepBillOpen(transactionId: any(named: "transactionId")))
-          .thenThrow(ApiException(error: "error"));
+          .thenThrow(const ApiException(error: "error"));
 
         bloc.add(Submitted(transactionId: faker.guid.guid()));
       },

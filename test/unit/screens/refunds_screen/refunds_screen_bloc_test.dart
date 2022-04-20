@@ -54,7 +54,7 @@ void main() {
         when(() => refundRepository.fetchAll())
           .thenAnswer((_) async => PaginateDataHolder(data: _createRefunds(), next: "nex"));
 
-        bloc.add(FetchAllRefunds(reset: false));
+        bloc.add(const FetchAllRefunds(reset: false));
       },
       expect: () => [isA<Loading>(), isA<RefundsLoaded>()]
     );
@@ -66,7 +66,7 @@ void main() {
         when(() => refundRepository.fetchAll())
           .thenAnswer((_) async => PaginateDataHolder(data: _createRefunds(), next: "nex"));
 
-        bloc.add(FetchAllRefunds(reset: true));
+        bloc.add(const FetchAllRefunds(reset: true));
       },
       expect: () => [isA<Loading>(), isA<RefundsLoaded>()]
     );
@@ -79,7 +79,7 @@ void main() {
         when(() => refundRepository.paginate(url: any(named: "url")))
           .thenAnswer((_) async => PaginateDataHolder(data: _createRefunds(), next: "nex"));
 
-        bloc.add(FetchAllRefunds(reset: false));
+        bloc.add(const FetchAllRefunds(reset: false));
       },
       expect: () => [isA<RefundsLoaded>(), isA<RefundsLoaded>()]
     );
@@ -91,7 +91,7 @@ void main() {
         when(() => refundRepository.fetchAll())
           .thenAnswer((_) async => PaginateDataHolder(data: _createRefunds(), next: "nex"));
 
-        bloc.add(FetchAllRefunds(reset: false));
+        bloc.add(const FetchAllRefunds(reset: false));
       },
       verify: (_) {
         verify(() => refundRepository.fetchAll()).called(1);
@@ -103,9 +103,9 @@ void main() {
       build: () => refundsScreenBloc,
       act: (bloc) {
         when(() => refundRepository.fetchAll())
-          .thenThrow(ApiException(error: "error"));
+          .thenThrow(const ApiException(error: "error"));
 
-        bloc.add(FetchAllRefunds(reset: false));
+        bloc.add(const FetchAllRefunds(reset: false));
       },
       expect: () => [isA<Loading>(), isA<FetchFailure>()]
     );
@@ -116,9 +116,9 @@ void main() {
       seed: () => _createRefundsLoadedState(),
       act: (bloc) {
         when(() => refundRepository.paginate(url: any(named: "url")))
-          .thenThrow(ApiException(error: "error"));
+          .thenThrow(const ApiException(error: "error"));
 
-        bloc.add(FetchAllRefunds(reset: false));
+        bloc.add(const FetchAllRefunds(reset: false));
       },
       expect: () => [isA<RefundsLoaded>(), isA<FetchFailure>()]
     );

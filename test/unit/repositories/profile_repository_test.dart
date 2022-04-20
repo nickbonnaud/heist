@@ -27,7 +27,7 @@ void main() {
 
     test("Profile Repository throws error on store profile fail", () async {
       when(() => mockProfileProvider.store(body: any(named: "body")))
-        .thenAnswer((_) async => ApiResponse(body: {}, error: "error", isOK: false));
+        .thenAnswer((_) async => const ApiResponse(body: {}, error: "error", isOK: false));
 
       expect(
         profileRepositoryWithMock.store(firstName: "firstName", lastName: "lastName"), 
@@ -42,7 +42,7 @@ void main() {
 
     test("Profile Repository throws error on update profile fail", () async {
       when(() => mockProfileProvider.update(body: any(named: "body"), profileIdentifier: any(named: "profileIdentifier")))
-        .thenAnswer((_) async => ApiResponse(body: {}, error: "error", isOK: false));
+        .thenAnswer((_) async => const ApiResponse(body: {}, error: "error", isOK: false));
 
       expect(
         profileRepositoryWithMock.update(firstName: "firstName", lastName: "lastName", profileIdentifier: "profileIdentifier"), 

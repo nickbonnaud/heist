@@ -10,8 +10,9 @@ import 'widgets/refunds_screen_body.dart';
 class RefundsScreen extends StatelessWidget {
   final RefundRepository _refundRepository;
 
-  RefundsScreen({required RefundRepository refundRepository})
-    : _refundRepository = refundRepository;
+  const RefundsScreen({required RefundRepository refundRepository, Key? key})
+    : _refundRepository = refundRepository,
+      super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -19,10 +20,10 @@ class RefundsScreen extends StatelessWidget {
       create: (BuildContext context) => DefaultAppBarBloc(),
       child: BlocProvider<RefundsScreenBloc>(
         create: (BuildContext context) => RefundsScreenBloc(refundRepository: _refundRepository)
-          ..add(FetchAllRefunds()),
+          ..add(const FetchAllRefunds()),
         child: Scaffold(
           backgroundColor: Theme.of(context).colorScheme.scrollBackground,
-          body: RefundsScreenBody(),
+          body: const RefundsScreenBody(),
         ),
       ),
     );

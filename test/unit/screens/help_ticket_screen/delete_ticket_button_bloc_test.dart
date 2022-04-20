@@ -61,7 +61,7 @@ void main() {
       "DeleteTicketButtonBloc Submitted event on api failure yields state: [isSubmitting: true], [isSubmitting: false, errorMessage: error]",
       build: () {
         when(() => helpRepository.deleteHelpTicket(identifier: any(named: "identifier")))
-          .thenThrow(ApiException(error: "error"));
+          .thenThrow(const ApiException(error: "error"));
         return deleteTicketButtonBloc;
       },
       act: (bloc) => bloc.add(Submitted(ticketIdentifier: faker.guid.guid())),

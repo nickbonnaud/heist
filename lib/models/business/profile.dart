@@ -11,7 +11,7 @@ class Profile extends Equatable {
   final String description;
   final Hours hours;
   
-  Profile({
+  const Profile({
     required this.name,
     required this.website,
     required this.phone,

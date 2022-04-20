@@ -137,7 +137,7 @@ class HistoricTransactionsBloc extends Bloc<HistoricTransactionsEvent, HistoricT
       if (currentState is TransactionsLoaded && !currentState.paginating) {
         switch (currentState.currentQuery) {
           case Option.all:
-            add(FetchHistoricTransactions(reset: false));
+            add(const FetchHistoricTransactions(reset: false));
             break;
           case Option.date:
             add(FetchTransactionsByDateRange(dateRange: currentState.queryParams, reset: false));

@@ -8,6 +8,6 @@ class PhotoProvider extends BaseProvider {
 
   Future<ApiResponse> upload({required Map<String, dynamic> body, required String profileIdentifier}) async {
     String url = '${ApiEndpoints.photo}/$profileIdentifier';
-    return await this.post(url: url, body: body);
+    return await post(url: url, body: body);
   }
 }

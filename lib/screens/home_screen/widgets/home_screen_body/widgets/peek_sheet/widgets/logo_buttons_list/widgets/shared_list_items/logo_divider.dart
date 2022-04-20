@@ -19,12 +19,14 @@ class LogoDivider extends StatelessWidget {
     required int numberPreviousWidgets, 
     required AnimationController controller,
     required double topMargin,
-    required bool isActiveLocationDivider
+    required bool isActiveLocationDivider,
+    Key? key
   })
     : _numberPreviousWidgets = numberPreviousWidgets,
       _controller = controller,
       _topMargin = topMargin,
-      _isActiveLocationDivider = isActiveLocationDivider;
+      _isActiveLocationDivider = isActiveLocationDivider,
+      super(key: key);
 
   final double _horizontalDividerSize = 100.sw;
   final SharedSizes sharedSizes = SharedSizes();

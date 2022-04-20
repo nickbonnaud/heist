@@ -10,12 +10,14 @@ class OnboardScreen extends StatelessWidget {
   final PermissionsBloc _permissionsBloc;
   final CustomerBloc _customerBloc;
 
-  OnboardScreen({
+  const OnboardScreen({
     required PermissionsBloc permissionsBloc,
     required CustomerBloc customerBloc,
+    Key? key
   })
     : _permissionsBloc = permissionsBloc,
-      _customerBloc = customerBloc;
+      _customerBloc = customerBloc,
+      super(key: key);
 
   @override
   Widget build(BuildContext context) {

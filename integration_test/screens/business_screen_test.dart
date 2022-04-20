@@ -10,7 +10,7 @@ class BusinessScreenTest {
 
   const BusinessScreenTest({required this.tester});
 
-  Future<void> initLogoButtonDismiss({bool isInitial: true}) async {
+  Future<void> initLogoButtonDismiss({bool isInitial = true}) async {
     if (isInitial) {
       TestTitle.write(testName: "Business Screen Tests");
     }
@@ -21,12 +21,12 @@ class BusinessScreenTest {
   }
 
   Future<void> initLogoButtonNearby() async {
-    expect(find.byKey(Key("bannerKey")), findsOneWidget);
-    expect(find.byKey(Key("logoKey")), findsOneWidget);
+    expect(find.byKey(const Key("bannerKey")), findsOneWidget);
+    expect(find.byKey(const Key("logoKey")), findsOneWidget);
 
-    expect(find.byKey(Key("websiteButtonKey")), findsOneWidget);
-    expect(find.byKey(Key("phoneButtonKey")), findsOneWidget);
-    expect(find.byKey(Key("hoursKey")), findsOneWidget);
+    expect(find.byKey(const Key("websiteButtonKey")), findsOneWidget);
+    expect(find.byKey(const Key("phoneButtonKey")), findsOneWidget);
+    expect(find.byKey(const Key("hoursKey")), findsOneWidget);
 
     await _scrollDescription();
     
@@ -35,14 +35,14 @@ class BusinessScreenTest {
   }
 
   Future<void> initLogoButtonActive() async {
-    expect(find.byKey(Key("bannerKey")), findsOneWidget);
-    expect(find.byKey(Key("logoKey")), findsOneWidget);
+    expect(find.byKey(const Key("bannerKey")), findsOneWidget);
+    expect(find.byKey(const Key("logoKey")), findsOneWidget);
 
-    expect(find.byKey(Key("websiteButtonKey")), findsOneWidget);
-    expect(find.byKey(Key("phoneButtonKey")), findsOneWidget);
-    expect(find.byKey(Key("hoursKey")), findsOneWidget);
+    expect(find.byKey(const Key("websiteButtonKey")), findsOneWidget);
+    expect(find.byKey(const Key("phoneButtonKey")), findsOneWidget);
+    expect(find.byKey(const Key("hoursKey")), findsOneWidget);
 
-    expect(find.byKey(Key("claimTransactionButtonKey")), findsOneWidget);
+    expect(find.byKey(const Key("claimTransactionButtonKey")), findsOneWidget);
     await TransactionPickerScreenTest(tester: tester).initBusinessScreen();
 
     await _scrollDescription();
@@ -51,7 +51,7 @@ class BusinessScreenTest {
     await _dismissButtonSwipe();
   }
 
-  Future<void> initDetails({bool shouldSwipe: false}) async {
+  Future<void> initDetails({bool shouldSwipe = false}) async {
     expect(find.byType(BusinessScreen), findsOneWidget);
     if (shouldSwipe) {
       await _dismissButtonSwipe();
@@ -61,25 +61,25 @@ class BusinessScreenTest {
   }
 
   Future<void> _scrollDescription() async {
-    double initialPosition = tester.getCenter(find.byKey(Key("websiteButtonKey"))).dy;
+    double initialPosition = tester.getCenter(find.byKey(const Key("websiteButtonKey"))).dy;
 
-    await tester.drag(find.byKey(Key("scrollBodyKey")), Offset(0, -500));
+    await tester.drag(find.byKey(const Key("scrollBodyKey")), const Offset(0, -500));
     await tester.pump();
 
-    double finalPosition = tester.getCenter(find.byKey(Key("websiteButtonKey"))).dy;
+    double finalPosition = tester.getCenter(find.byKey(const Key("websiteButtonKey"))).dy;
     
     expect(initialPosition != finalPosition, true);
   }
   
   Future<void> _dismissScreenButton() async {
-    await tester.tap(find.byKey(Key("dismissBusinessButtonKey")));
+    await tester.tap(find.byKey(const Key("dismissBusinessButtonKey")));
     await tester.pumpAndSettle();
 
     expect(find.byType(BusinessScreen), findsNothing);
   }
 
   Future<void> _dismissButtonSwipe() async {
-    await tester.fling(find.byKey(Key("dragBarKey")), Offset(0, 500), 3000);
+    await tester.fling(find.byKey(const Key("dragBarKey")), const Offset(0, 500), 3000);
     await tester.pumpAndSettle();
 
     expect(find.byType(BusinessScreen), findsNothing);

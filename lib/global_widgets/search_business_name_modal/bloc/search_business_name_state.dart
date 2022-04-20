@@ -13,7 +13,7 @@ class SearchBusinessNameState extends Equatable {
   });
 
   factory SearchBusinessNameState.initial() {
-    return SearchBusinessNameState(
+    return const SearchBusinessNameState(
       isSubmitting: false,
       businesses: null,
       errorMessage: ""
@@ -24,7 +24,7 @@ class SearchBusinessNameState extends Equatable {
     bool? isSubmitting,
     List<Business>? businesses,
     String? errorMessage,
-    bool resetBusinesses: false,
+    bool resetBusinesses = false,
   }) => SearchBusinessNameState(
     isSubmitting: isSubmitting ?? this.isSubmitting,
     businesses: resetBusinesses ? null : businesses ?? this.businesses,

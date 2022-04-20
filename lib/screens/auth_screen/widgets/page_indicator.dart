@@ -8,6 +8,9 @@ import 'page_offset_notifier.dart';
 
 class PageIndicator extends StatelessWidget {
 
+  const PageIndicator({Key? key})
+    : super(key: key);
+  
   @override
   Widget build(BuildContext context) {
     return Consumer<PageOffsetNotifier>(
@@ -20,7 +23,7 @@ class PageIndicator extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
-                  key: Key("loginIndicatorKey"),
+                  key: const Key("loginIndicatorKey"),
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: notifier.page.round() == 0 
@@ -32,7 +35,7 @@ class PageIndicator extends StatelessWidget {
                 ),
                 SizedBox(width: 8.w),
                 Container(
-                  key: Key("registerIndicatorKey"),
+                  key: const Key("registerIndicatorKey"),
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: notifier.page.round() != 0 

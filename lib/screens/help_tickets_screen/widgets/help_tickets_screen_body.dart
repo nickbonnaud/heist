@@ -16,6 +16,9 @@ import 'widgets/help_ticket_widget.dart';
 
 class HelpTicketsScreenBody extends StatefulWidget {
   
+  const HelpTicketsScreenBody({Key? key})
+    : super(key: key);
+  
   @override
   State<HelpTicketsScreenBody> createState() => _HelpTicketsScreenBodyState();
 }
@@ -41,12 +44,12 @@ class _HelpTicketsScreenBodyState extends State<HelpTicketsScreenBody> {
           return ErrorScreen(
             body: "Oh no! An error occurred fetching your help tickets.",
             buttonText: "Retry",
-            onButtonPressed: () => _helpTicketsScreenBloc.add(FetchAll(reset: true)),
+            onButtonPressed: () => _helpTicketsScreenBloc.add(const FetchAll(reset: true)),
           );
         }
 
         return Stack(
-          key: Key('helpTicketsListKey'),
+          key: const Key('helpTicketsListKey'),
           children: [
             _helpTicketsBody(state: state),
             _filterButton(state: state)
@@ -73,7 +76,7 @@ class _HelpTicketsScreenBodyState extends State<HelpTicketsScreenBody> {
           trailingWidget: Padding(
             padding: EdgeInsets.only(right: 8.w),
             child: IconButton(
-              icon: Icon(Icons.edit), 
+              icon: const Icon(Icons.edit), 
               onPressed: () => _showCreateHelpTicketForm(),
               color: Theme.of(context).colorScheme.callToAction
             ),
@@ -108,7 +111,7 @@ class _HelpTicketsScreenBodyState extends State<HelpTicketsScreenBody> {
         sliver: SliverList(
           delegate: SliverChildBuilderDelegate(
             (BuildContext context, int index) => index >= state.helpTickets.length
-              ? BottomLoader()
+              ? const BottomLoader()
               : HelpTicketWidget(
                   helpTicket: state.helpTickets[index],
                   key: Key('helpTicketKey-$index'),
@@ -122,7 +125,7 @@ class _HelpTicketsScreenBodyState extends State<HelpTicketsScreenBody> {
     }
     return SliverPadding(
       padding: EdgeInsets.symmetric(horizontal: 8.w),
-      sliver: SliverFillRemaining(
+      sliver: const SliverFillRemaining(
         child: Center(
           child: CircularProgressIndicator(),
         ),

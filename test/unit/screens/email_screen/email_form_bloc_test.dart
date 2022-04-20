@@ -40,7 +40,7 @@ void main() {
     blocTest<EmailFormBloc, EmailFormState>(
       "EmailFormBloc EmailChanged event yields state: [isEmailValid: true]",
       build: () => emailFormBloc,
-      wait: Duration(milliseconds: 300),
+      wait: const Duration(milliseconds: 300),
       act: (bloc) => bloc.add(EmailChanged(email: faker.internet.freeEmail())),
       expect: () => [_baseState.update(isEmailValid: true)]
     );
@@ -60,7 +60,7 @@ void main() {
       "EmailFormBloc Submitted event on fail yields state: [isSubmitting: true], [isSubmitting: false, errorMessage: error]",
       build: () {
         when(() => customerRepository.updateEmail(email: any(named: "email"), customerId: any(named: "customerId")))
-          .thenThrow(ApiException(error: "error"));
+          .thenThrow(const ApiException(error: "error"));
         return emailFormBloc;
       },
       act: (bloc) => bloc.add(Submitted(email: faker.internet.email(), identifier: faker.guid.guid())),

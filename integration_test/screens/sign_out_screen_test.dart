@@ -23,26 +23,26 @@ class SignOutScreenTest {
   }
 
   Future<void> _cancel() async {
-    await tester.tap(find.byKey(Key("cancelButtonKey")));
+    await tester.tap(find.byKey(const Key("cancelButtonKey")));
     await tester.pumpAndSettle();
     expect(find.byType(SignOutScreen), findsNothing);
   }
 
   Future<void> _navigateBack() async {
-    await tester.tap(find.byKey(Key("signOutTileKey")));
+    await tester.tap(find.byKey(const Key("signOutTileKey")));
     await tester.pumpAndSettle();
     expect(find.byType(SignOutScreen), findsOneWidget);
   }
 
   Future<void> _signOut() async {
     expect(find.byType(CircularProgressIndicator), findsNothing);
-    await tester.tap(find.byKey(Key("submitButtonKey")));
+    await tester.tap(find.byKey(const Key("submitButtonKey")));
     await tester.pump();
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
     
-    await tester.pump(Duration(seconds: 1));
-    await tester.pump(Duration(seconds: 1));
+    await tester.pump(const Duration(seconds: 1));
+    await tester.pump(const Duration(seconds: 1));
     expect(find.byType(AuthScreen), findsOneWidget);
-    await tester.pump(Duration(seconds: 3));
+    await tester.pump(const Duration(seconds: 3));
   }
 }

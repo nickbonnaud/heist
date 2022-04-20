@@ -11,8 +11,9 @@ import 'package:keyboard_actions/keyboard_actions.dart';
 class TipForm extends StatefulWidget {
   final Account _account;
 
-  TipForm({required Account account})
-    : _account = account;
+  const TipForm({required Account account, Key? key})
+    : _account = account,
+      super(key: key);
 
   @override
   State<TipForm> createState() => _TipFormState();
@@ -61,7 +62,7 @@ class _TipFormState extends State<TipForm> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      ScreenTitle(title: 'Edit Tip Rates'),
+                      const ScreenTitle(title: 'Edit Tip Rates'),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
@@ -114,7 +115,7 @@ class _TipFormState extends State<TipForm> {
     return BlocBuilder<TipFormBloc, TipFormState>(
       builder: (context, state) {
         return TextFormField(
-          key: Key("defaultTipFieldKey"),
+          key: const Key("defaultTipFieldKey"),
           decoration: InputDecoration(
             labelText: 'Default Tip Rate',
             suffix: Text(
@@ -152,7 +153,7 @@ class _TipFormState extends State<TipForm> {
     return BlocBuilder<TipFormBloc, TipFormState>(
       builder: (context, state) {
         return TextFormField(
-          key: Key("quickTipFieldKey"),
+          key: const Key("quickTipFieldKey"),
           decoration: InputDecoration(
             labelText: 'Quick Tip Rate',
             suffix: Text(
@@ -190,7 +191,7 @@ class _TipFormState extends State<TipForm> {
     return BlocBuilder<TipFormBloc, TipFormState>(
       builder: (context, state) {
         return OutlinedButton(
-          key: Key("cancelButtonKey"),
+          key: const Key("cancelButtonKey"),
           onPressed: state.isSubmitting ? null : () => _cancelButtonPressed(),
           child: ButtonText(text: 'Cancel', color: state.isSubmitting
             ? Theme.of(context).colorScheme.callToActionDisabled
@@ -205,7 +206,7 @@ class _TipFormState extends State<TipForm> {
     return BlocBuilder<TipFormBloc, TipFormState>(
       builder: (context, state) {
         return ElevatedButton(
-          key: Key("submitButtonKey"),
+          key: const Key("submitButtonKey"),
           onPressed: _isSaveButtonEnabled(state: state) ? () => _saveButtonPressed(state: state) : null,
           child: _buttonChild(state: state),
         );
@@ -215,9 +216,9 @@ class _TipFormState extends State<TipForm> {
   
   Widget _buttonChild({required TipFormState state}) {
     if (state.isSubmitting) {
-      return SizedBox(height: 25.sp, width: 25.sp, child: CircularProgressIndicator()); 
+      return SizedBox(height: 25.sp, width: 25.sp, child: const CircularProgressIndicator()); 
     } else {
-      return ButtonText(text: 'Save');
+      return const ButtonText(text: 'Save');
     }
   }
 
@@ -255,7 +256,7 @@ class _TipFormState extends State<TipForm> {
   void _showSnackbar({required String message, required TipFormState state}) async {
     state.isSuccess ? Vibrate.success() : Vibrate.error();
     final SnackBar snackBar = SnackBar(
-      key: Key("tipFormSnackbarKey"),
+      key: const Key("tipFormSnackbarKey"),
       content: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -294,7 +295,7 @@ class _TipFormState extends State<TipForm> {
                 onPressed: () => node.unfocus(), 
                 child: Padding(
                   padding: EdgeInsets.only(right: 16.w),
-                  child: ActionText()
+                  child: const ActionText()
                 )
               );
             }
@@ -308,7 +309,7 @@ class _TipFormState extends State<TipForm> {
                 onPressed: () => node.unfocus(), 
                 child: Padding(
                   padding: EdgeInsets.only(right: 16.w),
-                  child: ActionText()
+                  child: const ActionText()
                 )
               );
             }
