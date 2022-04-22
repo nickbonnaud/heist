@@ -7,6 +7,8 @@ import 'package:image_picker/image_picker.dart';
 
 class MockImagePicker {
 
+  const MockImagePicker();
+  
   Future<XFile> init() async {
     ByteData data = await rootBundle.load('assets/profile_customer.png');
     Uint8List bytes = data.buffer.asUint8List();

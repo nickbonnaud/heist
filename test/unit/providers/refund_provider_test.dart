@@ -7,7 +7,7 @@ void main() {
     late RefundProvider refundProvider;
 
     setUp(() {
-      refundProvider = RefundProvider();
+      refundProvider = const RefundProvider();
     });
 
     test("Fetching Refunds returns PaginatedApiResponse", () async {

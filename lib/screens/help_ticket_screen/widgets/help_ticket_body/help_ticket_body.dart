@@ -10,14 +10,10 @@ import 'widgets/message_list/bloc/message_list_bloc.dart';
 import 'widgets/message_list/message_list.dart';
 
 class HelpTicketBody extends StatefulWidget {
-  final HelpTicketsScreenBloc _helpTicketsScreenBloc;
   final HelpTicket _helpTicket;
-  final HelpRepository _helpRepository;
 
-  const HelpTicketBody({required HelpTicketsScreenBloc helpTicketsScreenBloc, required HelpTicket helpTicket, required HelpRepository helpRepository, Key? key})
-    : _helpTicketsScreenBloc = helpTicketsScreenBloc,
-      _helpTicket = helpTicket,
-      _helpRepository = helpRepository,
+  const HelpTicketBody({required HelpTicket helpTicket, Key? key})
+    : _helpTicket = helpTicket,
       super(key: key);
 
   @override
@@ -44,8 +40,8 @@ class _HelpTicketBodyState extends State<HelpTicketBody> {
             if (!widget._helpTicket.resolved)
               BlocProvider<MessageInputBloc>(
                 create: (_) => MessageInputBloc(
-                  helpRepository: widget._helpRepository,
-                  helpTicketsScreenBloc: widget._helpTicketsScreenBloc
+                  helpRepository: RepositoryProvider.of<HelpRepository>(context),
+                  helpTicketsScreenBloc: BlocProvider.of<HelpTicketsScreenBloc>(context)
                 ),
                 child: MessageInput(ticketIdentifier: widget._helpTicket.identifier, scrollController: _scrollController),
               )

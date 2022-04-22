@@ -7,7 +7,7 @@ void main() {
     late ActiveLocationProvider activeLocationProvider;
 
     setUp(() {
-      activeLocationProvider = ActiveLocationProvider();
+      activeLocationProvider = const ActiveLocationProvider();
     });
 
     test("Entering business data returns ApiResponse", () async {

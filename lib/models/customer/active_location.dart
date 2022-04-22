@@ -26,9 +26,22 @@ class ActiveLocation extends Equatable {
         : null;
 
   static NotificationType _stringToNotificationType({required String notificationTypeString}) {
-    return NotificationType.values.firstWhere((notificationType) {
-      return notificationType.toString().substring(notificationType.toString().indexOf('.') + 1).toLowerCase() == notificationTypeString.toLowerCase();
-    });
+    switch (notificationTypeString) {
+      case 'auto_paid':
+        return NotificationType.autoPaid;
+      case 'bill_closed':
+        return NotificationType.billClosed;
+      case 'enter':
+        return NotificationType.enter;
+      case 'exit':
+        return NotificationType.exit;
+      case 'fix_bill':
+        return NotificationType.fixBill;
+      case 'other':
+        return NotificationType.other;
+      default:
+        return NotificationType.other;
+    }
   }
 
   ActiveLocation update({String? transactionIdentifier, NotificationType? lastNotification}) {

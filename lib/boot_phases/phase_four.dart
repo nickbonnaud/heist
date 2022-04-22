@@ -9,7 +9,6 @@ import 'package:heist/blocs/open_transactions/open_transactions_bloc.dart';
 import 'package:heist/blocs/permissions/permissions_bloc.dart';
 import 'package:heist/blocs/receipt_modal_sheet/receipt_modal_sheet_bloc.dart';
 import 'package:heist/boot_phases/phase_five.dart';
-import 'package:heist/providers/beacon_provider.dart';
 import 'package:heist/repositories/beacon_repository.dart';
 import 'package:heist/test_blocs/is_testing_cubit.dart';
 
@@ -24,7 +23,7 @@ class PhaseFour extends StatelessWidget {
       providers: [
         BlocProvider<BeaconBloc>(
           create: (BuildContext context) => BeaconBloc(
-            beaconRepository: BeaconRepository(beaconProvider: BeaconProvider()),
+            beaconRepository: const BeaconRepository(),
             activeLocationBloc: BlocProvider.of<ActiveLocationBloc>(context),
             nearbyBusinessesBloc: BlocProvider.of<NearbyBusinessesBloc>(context),
             testing: context.read<IsTestingCubit>().state

@@ -8,21 +8,22 @@ import 'package:heist/screens/reset_password_screen/bloc/reset_password_form_blo
 import 'widgets/reset_password_form.dart';
 
 class ResetPasswordScreen extends StatelessWidget {
-  final AuthenticationRepository _authenticationRepository;
   final ResetPasswordArgs _resetPasswordArgs;
 
-  const ResetPasswordScreen({required AuthenticationRepository authenticationRepository, required ResetPasswordArgs resetPasswordArgs, Key? key})
-    : _authenticationRepository = authenticationRepository,
-      _resetPasswordArgs = resetPasswordArgs,
+  const ResetPasswordScreen({required ResetPasswordArgs resetPasswordArgs, Key? key})
+    : _resetPasswordArgs = resetPasswordArgs,
       super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: BottomModalAppBar(context: context),
+      appBar: const BottomModalAppBar(),
       body: BlocProvider<ResetPasswordFormBloc>(
-        create: (_) => ResetPasswordFormBloc(authenticationRepository: _authenticationRepository, email: _resetPasswordArgs.email),
+        create: (_) => ResetPasswordFormBloc(
+          authenticationRepository: RepositoryProvider.of<AuthenticationRepository>(context),
+          email: _resetPasswordArgs.email
+        ),
         child: const ResetPasswordForm(),
       ),
     );

@@ -15,7 +15,7 @@ void main() {
     late LocationRepository locationRepositoryWithMock;
 
     setUp(() {
-      locationRepository = LocationRepository(locationProvider: LocationProvider());
+      locationRepository = const LocationRepository();
       mockLocationProvider = MockLocationProvider();
       locationRepositoryWithMock = LocationRepository(locationProvider: mockLocationProvider);
     });

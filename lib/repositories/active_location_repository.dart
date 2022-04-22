@@ -7,9 +7,9 @@ import 'package:meta/meta.dart';
 
 @immutable
 class ActiveLocationRepository extends BaseRepository {
-  final ActiveLocationProvider _activeLocationProvider;
+  final ActiveLocationProvider? _activeLocationProvider;
 
-  ActiveLocationRepository({required ActiveLocationProvider activeLocationProvider})
+  const ActiveLocationRepository({ActiveLocationProvider? activeLocationProvider})
     : _activeLocationProvider = activeLocationProvider;
 
   Future<ActiveLocation> enterBusiness({required Beacon beacon}) async {
@@ -19,13 +19,20 @@ class ActiveLocationRepository extends BaseRepository {
       'minor': beacon.minor
     };
     
-    final Map<String, dynamic> json = await send(request: _activeLocationProvider.enterBusiness(body: body));
+    ActiveLocationProvider activeLocationProvider = _getActiveLocationProvider();
+    final Map<String, dynamic> json = await send(request: activeLocationProvider.enterBusiness(body: body));
     return deserialize(json: json);
   }
 
   Future<bool> exitBusiness({required String activeLocationId}) async {
-    final Map<String, dynamic> json = await send(request: _activeLocationProvider.exitBusiness(activeLocationId: activeLocationId));
+    ActiveLocationProvider activeLocationProvider = _getActiveLocationProvider();
+    
+    final Map<String, dynamic> json = await send(request: activeLocationProvider.exitBusiness(activeLocationId: activeLocationId));
     return json['deleted'];
+  }
+
+  ActiveLocationProvider _getActiveLocationProvider() {
+    return _activeLocationProvider ?? const ActiveLocationProvider();
   }
 
   @override

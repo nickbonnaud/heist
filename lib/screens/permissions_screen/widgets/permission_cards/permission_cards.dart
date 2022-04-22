@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:heist/blocs/geo_location/geo_location_bloc.dart';
-import 'package:heist/blocs/permissions/permissions_bloc.dart';
-import 'package:heist/repositories/initial_login_repository.dart';
-import 'package:heist/screens/permissions_screen/widgets/permission_buttons/permission_buttons.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:heist/blocs/permissions/permissions_bloc.dart';
+import 'package:heist/screens/permissions_screen/widgets/permission_buttons/permission_buttons.dart';
 
 import 'widgets/beacon_body.dart';
 import 'widgets/bluetooth_body.dart';
@@ -13,23 +11,9 @@ import 'widgets/notification_body.dart';
 
 
 class PermissionCards extends StatelessWidget {
-  final PermissionsBloc _permissionsBloc;
-  final GeoLocationBloc _geoLocationBloc;
-  final InitialLoginRepository _initialLoginRepository;
-  final String _customerIdentifier;
 
-  const PermissionCards({
-    required PermissionsBloc permissionsBloc,
-    required GeoLocationBloc geoLocationBloc,
-    required InitialLoginRepository initialLoginRepository,
-    required String customerIdentifier,
-    Key? key
-  })
-    : _permissionsBloc = permissionsBloc,
-      _geoLocationBloc = geoLocationBloc,
-      _initialLoginRepository = initialLoginRepository,
-      _customerIdentifier = customerIdentifier,
-      super(key: key);
+  const PermissionCards({Key? key})
+    : super(key: key);
   
   @override
   Widget build(BuildContext context) {
@@ -53,7 +37,7 @@ class PermissionCards extends StatelessWidget {
   }
 
   Widget _createCard({required BuildContext context, required PermissionType permissionType}) {
-    List<PermissionType> currentInvalidPermissions = _permissionsBloc.invalidPermissions;
+    List<PermissionType> currentInvalidPermissions = BlocProvider.of<PermissionsBloc>(context).invalidPermissions;
     return AnimatedPositioned(
       duration: const Duration(milliseconds: 500),
       top: currentInvalidPermissions.contains(permissionType) 
@@ -85,40 +69,16 @@ class PermissionCards extends StatelessWidget {
     Widget body;
     switch (permissionType) {
       case PermissionType.bluetooth:
-        body = BluetoothBody(permissionButtons: PermissionButtons(
-          permission: PermissionType.bluetooth,
-          customerIdentifier: _customerIdentifier,
-          permissionsBloc: _permissionsBloc,
-          geoLocationBloc: _geoLocationBloc,
-          initialLoginRepository: _initialLoginRepository,
-        ));
+        body = const BluetoothBody(permissionButtons: PermissionButtons(permission: PermissionType.bluetooth));
         break;
       case PermissionType.location:
-        body = LocationBody(permissionButtons: PermissionButtons(
-          permission: PermissionType.location,
-          customerIdentifier: _customerIdentifier,
-          permissionsBloc: _permissionsBloc,
-          geoLocationBloc: _geoLocationBloc,
-          initialLoginRepository: _initialLoginRepository,
-        ));
+        body = const LocationBody(permissionButtons: PermissionButtons(permission: PermissionType.location));
         break;
       case PermissionType.notification:
-        body = NotificationBody(permissionButtons: PermissionButtons(
-          permission: PermissionType.notification,
-          customerIdentifier: _customerIdentifier,
-          permissionsBloc: _permissionsBloc,
-          geoLocationBloc: _geoLocationBloc,
-          initialLoginRepository: _initialLoginRepository,
-        ));
+        body = const NotificationBody(permissionButtons: PermissionButtons(permission: PermissionType.notification));
         break;
       case PermissionType.beacon:
-        body = BeaconBody(
-          permissionButtons: PermissionButtons(permission: PermissionType.beacon,
-          customerIdentifier: _customerIdentifier,
-          permissionsBloc: _permissionsBloc,
-          geoLocationBloc: _geoLocationBloc,
-          initialLoginRepository: _initialLoginRepository,
-        ));
+        body = const BeaconBody(permissionButtons: PermissionButtons(permission: PermissionType.beacon));
         break;
     }
     return Padding(padding: EdgeInsets.only(bottom: 25.h), child: body);

@@ -7,13 +7,9 @@ import 'bloc/setup_tip_card_bloc.dart';
 import 'widgets/setup_tip_body.dart';
 
 class SetupTipCard extends StatelessWidget {
-  final AccountRepository _accountRepository;
-  final CustomerBloc _customerBloc;
 
-  const SetupTipCard({required AccountRepository accountRepository, required CustomerBloc customerBloc, Key? key})
-    : _accountRepository = accountRepository,
-      _customerBloc = customerBloc,
-      super(key: key);
+  const SetupTipCard({Key? key})
+    : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,10 +18,10 @@ class SetupTipCard extends StatelessWidget {
       width: MediaQuery.of(context).size.width,
       child: BlocProvider<SetupTipCardBloc>(
         create: (_) => SetupTipCardBloc(
-          accountRepository: _accountRepository, 
-          customerBloc: _customerBloc
+          accountRepository: RepositoryProvider.of<AccountRepository>(context), 
+          customerBloc: BlocProvider.of<CustomerBloc>(context)
         ),
-        child: SetupTipBody(accountIdentifier: _customerBloc.customer!.account.identifier,),
+        child: const SetupTipBody(),
       ),
     );
   }

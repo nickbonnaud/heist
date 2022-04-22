@@ -8,7 +8,7 @@ void main() {
     late HelpProvider helpProvider;
 
     setUp(() {
-      helpProvider = HelpProvider();
+      helpProvider = const HelpProvider();
     });
 
     test("Fetching Help Tickets returns PaginatedApiResponse", () async {

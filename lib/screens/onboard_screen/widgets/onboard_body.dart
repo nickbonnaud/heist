@@ -1,25 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:heist/blocs/permissions/permissions_bloc.dart';
-import 'package:heist/models/status.dart';
-import 'package:heist/resources/constants.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:heist/blocs/customer/customer_bloc.dart';
+import 'package:heist/blocs/permissions/permissions_bloc.dart';
+import 'package:heist/resources/constants.dart';
 import 'package:heist/routing/routes.dart';
 import 'package:heist/screens/onboard_screen/bloc/onboard_bloc.dart';
 import 'package:heist/themes/global_colors.dart';
 
 class OnboardBody extends StatefulWidget {
-  final PermissionsBloc _permissionsBloc;
-  final Status _customerStatus;
 
-  const OnboardBody({
-    required PermissionsBloc permissionsBloc,
-    required Status customerStatus,
-    Key? key
-  })
-    : _permissionsBloc = permissionsBloc,
-      _customerStatus = customerStatus,
-      super(key: key);
+  const OnboardBody({Key? key})
+    : super(key: key);
 
   @override
   State<OnboardBody> createState() => _OnboardBodyState();
@@ -40,8 +32,8 @@ class _OnboardBodyState extends State<OnboardBody> with SingleTickerProviderStat
 
   @override
   void initState() {
-    _customerOnboarded = widget._customerStatus.code > 103;
-    _permissionsReady = widget._permissionsBloc.allPermissionsValid;
+    _customerOnboarded = BlocProvider.of<CustomerBloc>(context).customer!.status.code > 103;
+    _permissionsReady = BlocProvider.of<PermissionsBloc>(context).allPermissionsValid;
 
     super.initState();
     _animationController = AnimationController(

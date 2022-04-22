@@ -7,9 +7,9 @@ import 'package:heist/routing/routes.dart';
 import 'package:heist/themes/main_theme.dart';
 
 class Boot extends StatelessWidget {
-  final AppRouter _router = AppRouter();
+  final AppRouter _router = const AppRouter();
 
-  Boot({Key? key})
+  const Boot({Key? key})
     : super(key: key);
   
   @override

@@ -8,22 +8,21 @@ import 'bloc/email_form_bloc.dart';
 import 'widgets/email_form.dart';
 
 class EmailScreen extends StatelessWidget {
-  final CustomerRepository _customerRepository;
-  final CustomerBloc _customerBloc;
 
-  const EmailScreen({required CustomerRepository customerRepository, required CustomerBloc customerBloc, Key? key})
-    : _customerRepository = customerRepository,
-      _customerBloc = customerBloc,
-      super(key: key);
+  const EmailScreen({Key? key})
+    : super(key: key);
   
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
-      appBar: BottomModalAppBar(context: context),
+      appBar: const BottomModalAppBar(),
       body: BlocProvider<EmailFormBloc>(
-        create: (_) => EmailFormBloc(customerRepository: _customerRepository, customerBloc: _customerBloc),
-        child: EmailForm(customer: _customerBloc.customer!),
+        create: (_) => EmailFormBloc(
+          customerRepository: RepositoryProvider.of<CustomerRepository>(context),
+          customerBloc: BlocProvider.of<CustomerBloc>(context)
+        ),
+        child: const EmailForm(),
       )
     );
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:heist/blocs/customer/customer_bloc.dart';
 import 'package:heist/resources/helpers/global_text.dart';
 import 'package:heist/resources/helpers/vibrate.dart';
 import 'package:heist/screens/profile_setup_screen/bloc/profile_setup_screen_bloc.dart';
@@ -11,11 +12,9 @@ import '../../widgets/title_text.dart';
 import '../bloc/setup_tip_card_bloc.dart';
 
 class SetupTipBody extends StatefulWidget {
-  final String _accountIdentifier;
 
-  const SetupTipBody({required String accountIdentifier, Key? key})
-    : _accountIdentifier = accountIdentifier,
-      super(key: key);
+  const SetupTipBody({Key? key})
+    : super(key: key);
   
   @override
   State<SetupTipBody> createState() => _SetupTipBodyState();
@@ -212,7 +211,7 @@ class _SetupTipBodyState extends State<SetupTipBody> {
   void _saveButtonPressed({required BuildContext context, required SetupTipCardState state}) {
     if (_isSaveButtonEnabled(state: state)) {
       _setupTipCardBloc.add(Submitted(
-        accountIdentifier: widget._accountIdentifier,
+        accountIdentifier: BlocProvider.of<CustomerBloc>(context).customer!.account.identifier,
         tipRate: int.parse(_tipRateController.text),
         quickTipRate: int.parse(_quickTipRateController.text)
       ));

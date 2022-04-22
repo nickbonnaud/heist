@@ -7,7 +7,7 @@ void main() {
     late TransactionIssueProvider transactionIssueProvider;
 
     setUp(() {
-      transactionIssueProvider = TransactionIssueProvider();
+      transactionIssueProvider = const TransactionIssueProvider();
     });
 
     test("Posting issue returns ApiResponse", () async {

@@ -1,14 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:heist/blocs/active_location/active_location_bloc.dart';
-import 'package:heist/blocs/authentication/authentication_bloc.dart';
-import 'package:heist/blocs/beacon/beacon_bloc.dart';
-import 'package:heist/blocs/customer/customer_bloc.dart';
-import 'package:heist/blocs/geo_location/geo_location_bloc.dart';
-import 'package:heist/blocs/nearby_businesses/nearby_businesses_bloc.dart';
-import 'package:heist/blocs/open_transactions/open_transactions_bloc.dart';
-import 'package:heist/blocs/permissions/permissions_bloc.dart';
-import 'package:heist/blocs/receipt_modal_sheet/receipt_modal_sheet_bloc.dart';
+import 'package:heist/app/app.dart';
 import 'package:heist/global_widgets/route_builders/fade_in_route.dart';
 import 'package:heist/global_widgets/route_builders/overlay_route.dart';
 import 'package:heist/global_widgets/route_builders/slide_up_route.dart';
@@ -17,42 +9,22 @@ import 'package:heist/global_widgets/search_identifier_modal/search_identifier_m
 import 'package:heist/models/business/business.dart';
 import 'package:heist/models/reset_password_args.dart';
 import 'package:heist/models/transaction/transaction_resource.dart';
-import 'package:heist/providers/account_provider.dart';
-import 'package:heist/providers/authentication_provider.dart';
-import 'package:heist/providers/business_provider.dart';
-import 'package:heist/providers/customer_provider.dart';
-import 'package:heist/providers/geolocator_provider.dart';
-import 'package:heist/providers/help_provider.dart';
-import 'package:heist/providers/photo_picker_provider.dart';
-import 'package:heist/providers/photo_provider.dart';
-import 'package:heist/providers/profile_provider.dart';
-import 'package:heist/providers/refund_provider.dart';
-import 'package:heist/providers/storage_provider.dart';
-import 'package:heist/providers/transaction_issue_provider.dart';
-import 'package:heist/providers/transaction_provider.dart';
 import 'package:heist/repositories/account_repository.dart';
 import 'package:heist/repositories/authentication_repository.dart';
 import 'package:heist/repositories/business_repository.dart';
 import 'package:heist/repositories/customer_repository.dart';
-import 'package:heist/repositories/geolocator_repository.dart';
 import 'package:heist/repositories/help_repository.dart';
 import 'package:heist/repositories/initial_login_repository.dart';
 import 'package:heist/repositories/photo_picker_repository.dart';
 import 'package:heist/repositories/photo_repository.dart';
 import 'package:heist/repositories/profile_repository.dart';
 import 'package:heist/repositories/refund_repository.dart';
-import 'package:heist/repositories/token_repository.dart';
 import 'package:heist/repositories/transaction_issue_repository.dart';
 import 'package:heist/repositories/transaction_repository.dart';
-import 'package:heist/app/app.dart';
 import 'package:heist/screens/auth_screen/auth_screen.dart';
 import 'package:heist/screens/business_screen/business_screen.dart';
 import 'package:heist/screens/email_screen/email_screen.dart';
-import 'package:heist/screens/help_ticket_screen/help_ticket_screen.dart';
-import 'package:heist/screens/help_tickets_screen/bloc/help_tickets_screen_bloc.dart';
 import 'package:heist/screens/help_tickets_screen/help_tickets_screen.dart';
-import 'package:heist/screens/help_tickets_screen/models/help_ticket_args.dart';
-import 'package:heist/screens/help_tickets_screen/widgets/widgets/new_help_ticket_screen/new_help_ticket_screen.dart';
 import 'package:heist/screens/historic_transactions_screen/historic_transactions_screen.dart';
 import 'package:heist/screens/home_screen/home_screen.dart';
 import 'package:heist/screens/issue_screen/issue_screen.dart';
@@ -79,319 +51,295 @@ import 'routes.dart';
 
 class AppRouter {
   
+  const AppRouter();
+  
   Route goTo({required BuildContext context, required RouteSettings settings}) {
     final RouteData routeData = RouteData.init(settings: settings);
     Route route;
 
     switch (routeData.route) {
       case Routes.app:
-        route = _createRouteDefault(screen: App(
-          authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
-          openTransactionsBloc: BlocProvider.of<OpenTransactionsBloc>(context),
-          beaconBloc: BlocProvider.of<BeaconBloc>(context),
-          nearbyBusinessesBloc: BlocProvider.of<NearbyBusinessesBloc>(context),
-          permissionsBloc: BlocProvider.of<PermissionsBloc>(context),
-          customerBloc: BlocProvider.of<CustomerBloc>(context),
-        ), 
+        route = _createRouteDefault(
+          screen: const App(), 
+        
         name: routeData.route);
         break;
       case Routes.auth:
         route = FadeInRoute(
-          screen: AuthScreen(
-            authenticationRepository: AuthenticationRepository(
-              tokenRepository: TokenRepository(tokenProvider: StorageProvider()),
-              authenticationProvider: AuthenticationProvider(),
-            ),
-            authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
-            permissionsBloc: BlocProvider.of<PermissionsBloc>(context)
+          screen: RepositoryProvider(
+            create: (_) => const AuthenticationRepository(),
+            child: const AuthScreen(),
           ),
-          name: routeData.route,
-          transitionDuration: const Duration(seconds: 1)
-        );
+
+        name: routeData.route,
+        transitionDuration: const Duration(seconds: 1));
         break;
       case Routes.onboard:
         route = SlideUpRoute(
-          screen: OnboardScreen(
-            permissionsBloc: BlocProvider.of<PermissionsBloc>(context),
-            customerBloc: BlocProvider.of<CustomerBloc>(context),
-          ),
-          name: routeData.route
-        );
+          screen: const OnboardScreen(),
+          
+        name: routeData.route);
         break;
       case Routes.home:
         route = SlideUpRoute(
-          screen: HomeScreen(
-            geoLocationBloc: GeoLocationBloc(
-              geolocatorRepository: const GeolocatorRepository(
-                geolocatorProvider: GeolocatorProvider()
-              ), 
-              permissionsBloc: BlocProvider.of<PermissionsBloc>(context)
-            ),
-            nearbyBusinessesBloc: BlocProvider.of<NearbyBusinessesBloc>(context),
-            activeLocationBloc: BlocProvider.of<ActiveLocationBloc>(context),
-          ),
-          name: routeData.route
-        );
+          screen: const HomeScreen(),
+        
+        name: routeData.route);
         break;
       case Routes.receipt:
         route = _createFullScreenDialogRoute(
-          screen: ReceiptScreen(
-            transactionResource: routeData.args as TransactionResource,
-            receiptModalSheetBloc: BlocProvider.of<ReceiptModalSheetBloc>(context),
-            transactionRepository: TransactionRepository(transactionProvider: TransactionProvider()),
-            transactionIssueRepository: TransactionIssueRepository(issueProvider: TransactionIssueProvider()),
-            openTransactionsBloc: OpenTransactionsBloc(transactionRepository: TransactionRepository(transactionProvider: TransactionProvider()), authenticationBloc: BlocProvider.of<AuthenticationBloc>(context))
+          screen: MultiRepositoryProvider(
+            providers: [
+              RepositoryProvider(
+                create: (_) => const TransactionRepository()
+              ),
+
+              RepositoryProvider(
+                create: (_) => const TransactionIssueRepository()
+              )
+            ],
+            child: ReceiptScreen(transactionResource: routeData.args as TransactionResource)
           ),
-          name: routeData.route
-        );
+
+        name: routeData.route);
         break;
       case Routes.business:
-        route = OverlayRouteTest(
-          screen: BusinessScreen(
-            business: routeData.args as Business,
-          ),
-          name: routeData.route
-        );
+        route = OverlayRouteApp(
+          screen: BusinessScreen(business: routeData.args as Business),
+          
+        name: routeData.route);
         break;
       case Routes.transactionBusinessPicker:
         route = _createRouteDefault(
-          screen: TransactionBusinessPickerScreen(
-            availableBusinesses: routeData.args as List<Business>,
-          ),
-          name: routeData.route
-        );
+          screen: TransactionBusinessPickerScreen(availableBusinesses: routeData.args as List<Business>),
+        
+        name: routeData.route);
         break;
       case Routes.transactionPicker:
         route = _createFullScreenDialogRoute(
-          screen: TransactionPickerScreen(
-            transactionRepository: TransactionRepository(transactionProvider: TransactionProvider()),
-            business: (routeData.args as TransactionPickerArgs).business,
-            fromSettings: (routeData.args as TransactionPickerArgs).fromSettings,
-            activeLocationBloc: BlocProvider.of<ActiveLocationBloc>(context),
-            openTransactionsBloc: BlocProvider.of<OpenTransactionsBloc>(context),
+          screen: RepositoryProvider(
+            create: (_) => const TransactionRepository(),
+            child: TransactionPickerScreen(
+              business: (routeData.args as TransactionPickerArgs).business,
+              fromSettings: (routeData.args as TransactionPickerArgs).fromSettings,
+            ),
           ),
-          name: routeData.route
-        );
+
+        name: routeData.route);
         break;
       case Routes.requestReset:
         route = _createFullScreenDialogRoute(
-          screen: RequestResetPasswordScreen(authenticationRepository: AuthenticationRepository(authenticationProvider: AuthenticationProvider(), tokenRepository: TokenRepository(tokenProvider: StorageProvider()))),
-          name: routeData.route
-        );
+          screen: RepositoryProvider(
+            create: (_) => const AuthenticationRepository(),
+            child: const RequestResetPasswordScreen(),
+          ),
+          
+        name: routeData.route);
         break;
       case Routes.resetPassword:
         route = _createRouteDefault(
-          screen: ResetPasswordScreen(
-            authenticationRepository: AuthenticationRepository(authenticationProvider: AuthenticationProvider(), tokenRepository: TokenRepository(tokenProvider: StorageProvider())), 
-            resetPasswordArgs: routeData.args as ResetPasswordArgs
+          screen: RepositoryProvider(
+            create: (_) => const AuthenticationRepository(),
+            child: ResetPasswordScreen(resetPasswordArgs: routeData.args as ResetPasswordArgs),
           ),
-          name: routeData.route
-        );
+        
+        name: routeData.route);
         break;
       case Routes.onboardProfile:
         route = _createFullScreenDialogRoute(
-          screen: ProfileSetupScreen(
-            customerBloc: BlocProvider.of<CustomerBloc>(context),
-            profileRepository: ProfileRepository(profileProvider: ProfileProvider()),
-            photoRepository: PhotoRepository(photoProvider: PhotoProvider()),
-            accountRepository: AccountRepository(accountProvider: AccountProvider()),
-            photoPickerRepository: PhotoPickerRepository(photoPickerProvder: PhotoPickerProvder())
+          screen: MultiRepositoryProvider(
+            providers: [
+              RepositoryProvider(
+                create: (_) => const ProfileRepository()
+              ),
+
+              RepositoryProvider(
+                create: (_) => const PhotoRepository()
+              ),
+
+              RepositoryProvider(
+                create: (_) => const AccountRepository()
+              ),
+
+              RepositoryProvider(
+                create: (_) => const PhotoPickerRepository()
+              ),
+            ],
+            child: const ProfileSetupScreen()
           ),
-          name: routeData.route
-        );
+
+        name: routeData.route);
         break;
       case Routes.tutorial:
         route = _createFullScreenDialogRoute(
           screen: const TutorialScreen(),
-          name: routeData.route
-        );
+          
+        name: routeData.route);
         break;
       case Routes.onboardPermissions:
         route = _createFullScreenDialogRoute(
-          screen: PermissionsScreen(
-            permissionsBloc: BlocProvider.of<PermissionsBloc>(context),
-            geoLocationBloc: BlocProvider.of<GeoLocationBloc>(context),
-            initialLoginRepository: InitialLoginRepository(tutorialProvider: StorageProvider()),
-            customerIdentifier: BlocProvider.of<CustomerBloc>(context).customer!.identifier
+          screen: RepositoryProvider(
+            create: (_) => const InitialLoginRepository(),
+            child: const PermissionsScreen(),
           ),
-          name: routeData.route
-        );
+
+        name: routeData.route);
         break;
       case Routes.transactions:
         route = _createRouteDefault(
-          screen: HistoricTransactionsScreen(
-            transactionRepository: TransactionRepository(transactionProvider: TransactionProvider()),
+          screen: RepositoryProvider(
+            create: (_) => const TransactionRepository(),
+            child: const HistoricTransactionsScreen()
           ),
-          name: routeData.route
-        );
+          
+        name: routeData.route);
         break;
       case Routes.transactionsBusinessName:
         route = _createFullScreenDialogRoute(
-          screen: SearchBusinessNameModal(
-            businessRepository: BusinessRepository(businessProvider: BusinessProvider()),
+          screen: RepositoryProvider(
+            create: (_) => const BusinessRepository(),
+            child: const SearchBusinessNameModal(),
           ),
-          name: routeData.route
-        );
+          
+        name: routeData.route);
         break;
       case Routes.transactionsIdentifier:
         route = _createFullScreenDialogRoute(
           screen: const SearchIdentifierModal(
             hintText: "Transaction ID"
           ),
-          name: routeData.route
-        );
+
+        name: routeData.route);
         break;
       case Routes.refunds:
         route = _createRouteDefault(
-          screen: RefundsScreen(
-            refundRepository: RefundRepository(refundProvider: RefundProvider())
+          screen: RepositoryProvider(
+            create: (_) => const RefundRepository(),
+            child: const RefundsScreen()
           ),
-          name: routeData.route
-        );
+          
+        name: routeData.route);
         break;
       case Routes.refundsBusinessName:
         route = _createFullScreenDialogRoute(
-          screen: SearchBusinessNameModal(
-            businessRepository: BusinessRepository(businessProvider: BusinessProvider()),
+          screen: RepositoryProvider(
+            create: (_) => const BusinessRepository(),
+            child: const SearchBusinessNameModal()
           ),
-          name: routeData.route
-        );
+
+        name: routeData.route);
         break;
       case Routes.refundsTransactionIdentifier:
         route = _createFullScreenDialogRoute(
           screen: const SearchIdentifierModal(
             hintText: "Transaction ID"
           ),
-          name: routeData.route
-        );
+
+        name: routeData.route);
         break;
       case Routes.refundsIdentifier:
         route = _createFullScreenDialogRoute(
           screen: const SearchIdentifierModal(
             hintText: "Refund ID"
           ),
-          name: routeData.route
-        );
+
+        name: routeData.route);
         break;
       case Routes.settings:
         route = _createRouteDefault(
           screen: const SettingsScreen(), 
-          name: routeData.route
-        );
+          
+        name: routeData.route);
         break;
       case Routes.profile:
         route = _createFullScreenDialogRoute(
-          screen: ProfileScreen(
-            profileRepository: ProfileRepository(profileProvider: ProfileProvider()),
-            photoRepository: PhotoRepository(photoProvider: PhotoProvider()),
-            profile: BlocProvider.of<CustomerBloc>(context).customer!.profile,
-            photoPickerRepository: PhotoPickerRepository(photoPickerProvder: PhotoPickerProvder()),
-            customerBloc: BlocProvider.of<CustomerBloc>(context)
+          screen: MultiRepositoryProvider(
+            providers: [
+              RepositoryProvider(
+                create: (_) => const ProfileRepository()
+              ),
+
+              RepositoryProvider(
+                create: (_) => const PhotoRepository()
+              ),
+
+              RepositoryProvider(
+                create: (_) => const PhotoPickerRepository()
+              ),
+            ],
+            child: const ProfileScreen()
           ),
-          name: routeData.route
-        );
+          
+        name: routeData.route);
         break;
       case Routes.email:
         route = _createFullScreenDialogRoute(
-          screen: EmailScreen(
-            customerRepository: CustomerRepository(
-              customerProvider: CustomerProvider(), 
-              tokenRepository: TokenRepository(tokenProvider: StorageProvider())
-            ),
-            customerBloc: BlocProvider.of<CustomerBloc>(context)
+          screen: RepositoryProvider(
+            create: (_) => const CustomerRepository(),
+            child: const EmailScreen(),
           ),
-          name: routeData.route
-        );
+        
+        name: routeData.route);
         break;
       case Routes.password:
         route = _createFullScreenDialogRoute(
-          screen: PasswordScreen(
-            customerRepository: CustomerRepository(
-              customerProvider: CustomerProvider(), 
-              tokenRepository: TokenRepository(tokenProvider: StorageProvider())
-            ),
-            authenticationRepository: AuthenticationRepository(
-              authenticationProvider: AuthenticationProvider(),
-              tokenRepository: TokenRepository(tokenProvider: StorageProvider())
-            ),
-            customerBloc: BlocProvider.of<CustomerBloc>(context)
+          screen: MultiRepositoryProvider(
+            providers: [
+              RepositoryProvider(
+                create: (_) => const CustomerRepository(),
+              ),
+
+              RepositoryProvider(
+                create: (_) => const AuthenticationRepository(),
+              )
+            ],
+            child: const PasswordScreen()
           ),
-          name: routeData.route
-        );
+          
+        name: routeData.route);
         break;
       case Routes.tips:
         route = _createFullScreenDialogRoute(
-          screen: TipScreen(
-            accountRepository: AccountRepository(accountProvider: AccountProvider()),
-            customerBloc: BlocProvider.of<CustomerBloc>(context)
+          screen: RepositoryProvider(
+            create: (_) => const AccountRepository(),
+            child: const TipScreen(),
           ),
-          name: routeData.route
-        );
+        
+        name: routeData.route);
         break;
       case Routes.logout:
         route = _createFullScreenDialogRoute(
-          screen: SignOutScreen(
-            authenticationRepository: AuthenticationRepository(
-              authenticationProvider: AuthenticationProvider(),
-              tokenRepository: TokenRepository(tokenProvider: StorageProvider())
-            ),
-            authenticationBloc: BlocProvider.of<AuthenticationBloc>(context)
+          screen: RepositoryProvider(
+            create: (_) => const AuthenticationRepository(),
+            child: const SignOutScreen(),
           ),
-          name: routeData.route
-        );
+        
+        name: routeData.route);
         break;
       case Routes.helpTickets:
         route = _createRouteDefault(
-          screen: HelpTicketsScreen(
-            helpRepository: HelpRepository(helpProvider: HelpProvider())
+          screen: RepositoryProvider(
+            create: (_) => const HelpRepository(),
+            child: const HelpTicketsScreen(),
           ),
-          name: routeData.route
-        );
-        break;
-      case Routes.helpTicketDetails:
-        route = _createFullScreenDialogRoute(
-          screen: HelpTicketScreen(
-            helpRepository: HelpRepository(helpProvider: HelpProvider()),
-            helpTicket: (routeData.args as HelpTicketArgs).helpTicket,
-            helpTicketsScreenBloc: (routeData.args as HelpTicketArgs).helpTicketsScreenBloc
-          ),
-          name: routeData.route
-        );
-        break;
-      case Routes.helpTicketNew:
-        route = _createFullScreenDialogRoute(
-          screen: NewHelpTicketScreen(
-            helpRepository: HelpRepository(helpProvider: HelpProvider()),
-            helpTicketsScreenBloc: routeData.args as HelpTicketsScreenBloc
-          ),
-          name: routeData.route
-        );
+
+        name: routeData.route);
         break;
       case Routes.reportIssue:
         IssueArgs issueArgs = routeData.args as IssueArgs;
         route = _createFullScreenDialogRoute(
-          screen: IssueScreen(
-            issueRepository: TransactionIssueRepository(issueProvider: TransactionIssueProvider()),
-            type: issueArgs.type,
-            transaction: issueArgs.transactionResource
+          screen: RepositoryProvider(
+            create: (_) => const TransactionIssueRepository(),
+            child: IssueScreen(type: issueArgs.type, transaction: issueArgs.transactionResource)
           ),
-          name: routeData.route
-        );
+
+        name: routeData.route);
         break;
       default:
         route = SlideUpRoute(
-          screen: HomeScreen(
-            geoLocationBloc: GeoLocationBloc(
-              geolocatorRepository: const GeolocatorRepository(
-                geolocatorProvider: GeolocatorProvider()
-              ), 
-              permissionsBloc: BlocProvider.of<PermissionsBloc>(context)
-            ),
-            nearbyBusinessesBloc: BlocProvider.of<NearbyBusinessesBloc>(context),
-            activeLocationBloc: BlocProvider.of<ActiveLocationBloc>(context),
-          ),
-          name: routeData.route
-        );
+          screen: const HomeScreen(),
+        
+        name: routeData.route);
     }
     return route;
   }

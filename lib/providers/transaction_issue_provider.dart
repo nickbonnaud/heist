@@ -6,6 +6,8 @@ import 'package:meta/meta.dart';
 @immutable
 class TransactionIssueProvider extends BaseProvider {
 
+  const TransactionIssueProvider();
+  
   Future<ApiResponse> postIssue({required Map<String, dynamic> body}) async {
     String url = ApiEndpoints.transactionIssue;
     return await post(url: url, body: body);

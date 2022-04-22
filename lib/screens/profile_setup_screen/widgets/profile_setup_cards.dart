@@ -1,12 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:heist/blocs/customer/customer_bloc.dart';
-import 'package:heist/repositories/account_repository.dart';
-import 'package:heist/repositories/photo_picker_repository.dart';
-import 'package:heist/repositories/photo_repository.dart';
-import 'package:heist/repositories/profile_repository.dart';
-import 'package:heist/screens/profile_setup_screen/bloc/profile_setup_screen_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:heist/screens/profile_setup_screen/bloc/profile_setup_screen_bloc.dart';
 
 import 'cards/profile_name_card/profile_name_card.dart';
 import 'cards/profile_photo_card.dart';
@@ -14,26 +9,9 @@ import 'cards/setup_payment_account_card.dart';
 import 'cards/setup_tip_screen.dart/setup_tip_card.dart';
 
 class ProfileSetupCards extends StatelessWidget {
-  final CustomerBloc _customerBloc;
-  final ProfileRepository _profileRepository;
-  final PhotoRepository _photoRepository;
-  final PhotoPickerRepository _photoPickerRepository;
-  final AccountRepository _accountRepository;
 
-  const ProfileSetupCards({
-    required CustomerBloc customerBloc,
-    required ProfileRepository profileRepository,
-    required PhotoRepository photoRepository,
-    required PhotoPickerRepository photoPickerRepository,
-    required AccountRepository accountRepository,
-    Key? key
-  })
-    : _customerBloc = customerBloc,
-      _profileRepository = profileRepository,
-      _photoRepository = photoRepository,
-      _photoPickerRepository = photoPickerRepository,
-      _accountRepository = accountRepository,
-      super(key: key);
+  const ProfileSetupCards({Key? key})
+    : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -87,38 +65,25 @@ class ProfileSetupCards extends StatelessWidget {
             )
           ]
         ),
-        child: _setBody(section: section),
+        child: _setBody(context: context, section: section),
       ), 
     );
   }
 
-  Widget _setBody({required Section section}) {
+  Widget _setBody({required BuildContext context, required Section section}) {
     Widget screen;
     switch (section) {
       case Section.name:
-        screen = ProfileNameCard(
-          customerBloc: _customerBloc,
-          profileRepository: _profileRepository,
-        );
+        screen = const ProfileNameCard();
         break;
       case Section.photo:
-        screen = ProfilePhotoCard(
-          profile: _customerBloc.state.customer!.profile,
-          photoRepository: _photoRepository,
-          photoPickerRepository: _photoPickerRepository,
-          customerBloc: _customerBloc,
-        );
+        screen = const ProfilePhotoCard();
         break;
       case Section.paymentAccount:
-        screen = SetupPaymentAccountCard(
-          customerBloc: _customerBloc,
-        );
+        screen = const SetupPaymentAccountCard();
         break;
       case Section.tip:
-        screen = SetupTipCard(
-          customerBloc: _customerBloc,
-          accountRepository: _accountRepository,
-        );
+        screen = const SetupTipCard();
         break;
       default: screen = Container();
     }

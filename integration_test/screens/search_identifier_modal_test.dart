@@ -64,7 +64,7 @@ class SearchIdentifierModalTest {
   Future<void> _enterIdentifier() async {
     expect(find.byType(CircularProgressIndicator), findsNothing);
 
-    await tester.enterText(find.byKey(const Key("identifierFieldKey")), "bcbv8y2bbcbxbccsfds4tgghsf3unxhw");
+    await tester.enterText(find.byKey(const Key("identifierFieldKey")), "6bea0fc4-79b1-4cdc-b159-fe607123da17");
     await tester.pump();
     await tester.testTextInput.receiveAction(TextInputAction.search);
     await tester.pump(const Duration(milliseconds: 100));

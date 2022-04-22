@@ -11,29 +11,9 @@ import 'package:heist/screens/splash_screen/splash_screen.dart';
 import 'bloc/app_ready_bloc.dart';
 
 class App extends StatelessWidget {
-  final AuthenticationBloc _authenticationBloc;
-  final OpenTransactionsBloc _openTransactionsBloc;
-  final BeaconBloc _beaconBloc;
-  final NearbyBusinessesBloc _nearbyBusinessesBloc;
-  final PermissionsBloc _permissionsBloc;
-  final CustomerBloc _customerBloc;
 
-  const App({
-    required AuthenticationBloc authenticationBloc,
-    required OpenTransactionsBloc openTransactionsBloc,
-    required BeaconBloc beaconBloc,
-    required NearbyBusinessesBloc nearbyBusinessesBloc,
-    required PermissionsBloc permissionsBloc,
-    required CustomerBloc customerBloc,
-    Key? key
-  })
-    : _authenticationBloc = authenticationBloc,
-      _openTransactionsBloc = openTransactionsBloc,
-      _beaconBloc = beaconBloc,
-      _nearbyBusinessesBloc = nearbyBusinessesBloc,
-      _permissionsBloc = permissionsBloc,
-      _customerBloc = customerBloc,
-      super(key: key);
+  const App({Key? key})
+    : super(key: key);
   
   @override
   Widget build(BuildContext context) {
@@ -41,12 +21,12 @@ class App extends StatelessWidget {
       buildWhen: (previousState, currentState) => previousState is Unknown,
       builder: (context, state) => BlocProvider<AppReadyBloc>(
         create: (context) => AppReadyBloc(
-          authenticationBloc: _authenticationBloc,
-          openTransactionsBloc: _openTransactionsBloc,
-          beaconBloc: _beaconBloc,
-          nearbyBusinessesBloc: _nearbyBusinessesBloc,
-          permissionsBloc: _permissionsBloc,
-          customerBloc: _customerBloc
+          authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+          openTransactionsBloc: BlocProvider.of<OpenTransactionsBloc>(context),
+          beaconBloc: BlocProvider.of<BeaconBloc>(context),
+          nearbyBusinessesBloc: BlocProvider.of<NearbyBusinessesBloc>(context),
+          permissionsBloc: BlocProvider.of<PermissionsBloc>(context),
+          customerBloc: BlocProvider.of<CustomerBloc>(context)
         ),
         child: const SplashScreen(),
       )

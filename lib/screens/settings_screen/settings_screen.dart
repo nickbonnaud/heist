@@ -15,7 +15,7 @@ class SettingsScreen extends StatelessWidget {
     return BlocProvider<DefaultAppBarBloc>(
       create: (BuildContext context) => DefaultAppBarBloc(),
       child: Scaffold(
-        appBar: DefaultAppBar(title: 'Settings'),
+        appBar: const DefaultAppBar(title: 'Settings'),
         body: Padding(
           padding: EdgeInsets.symmetric(horizontal: 16.w),
           child: const SettingsList()

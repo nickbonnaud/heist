@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:heist/blocs/active_location/active_location_bloc.dart';
 import 'package:heist/blocs/authentication/authentication_bloc.dart';
-import 'package:heist/blocs/geo_location/geo_location_bloc.dart';
-import 'package:heist/blocs/nearby_businesses/nearby_businesses_bloc.dart';
 import 'package:heist/blocs/notification_navigation/notification_navigation_bloc.dart';
 import 'package:heist/blocs/receipt_modal_sheet/receipt_modal_sheet_bloc.dart';
 import 'package:heist/routing/routes.dart';
@@ -14,20 +11,9 @@ import 'widgets/home_screen_body/home_screen_body.dart';
 import 'widgets/side_drawer/side_drawer.dart';
 
 class HomeScreen extends StatelessWidget {
-  final GeoLocationBloc _geoLocationBloc;
-  final NearbyBusinessesBloc _nearbyBusinessesBloc;
-  final ActiveLocationBloc _activeLocationBloc;
 
-  const HomeScreen({
-    required GeoLocationBloc geoLocationBloc,
-    required NearbyBusinessesBloc nearbyBusinessesBloc,
-    required ActiveLocationBloc activeLocationBloc,
-    Key? key
-  })
-    : _geoLocationBloc = geoLocationBloc,
-      _nearbyBusinessesBloc = nearbyBusinessesBloc,
-      _activeLocationBloc = activeLocationBloc, 
-      super(key: key);
+  const HomeScreen({Key? key})
+    : super(key: key);
   
   @override
   Widget build(BuildContext context) {
@@ -65,12 +51,8 @@ class HomeScreen extends StatelessWidget {
               create: (_) => BusinessScreenVisibleCubit()
             ),
           ],
-          child: SideDrawer(
-            homeScreen: HomeScreenBody(
-              nearbyBusinessesBloc: _nearbyBusinessesBloc,
-              geoLocationBloc: _geoLocationBloc,
-            ),
-            activeLocationBloc: _activeLocationBloc
+          child: const SideDrawer(
+            homeScreen: HomeScreenBody(),
           ),
         )
       )

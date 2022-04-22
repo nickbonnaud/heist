@@ -1,24 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
-import 'package:heist/models/help_ticket/help_ticket.dart';
-import 'package:heist/repositories/help_repository.dart';
-import 'package:heist/screens/help_tickets_screen/bloc/help_tickets_screen_bloc.dart';
-import 'package:heist/themes/global_colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:heist/models/help_ticket/help_ticket.dart';
+import 'package:heist/themes/global_colors.dart';
 
 import 'bloc/delete_ticket_button_bloc.dart';
 import 'widgets/dialog_body.dart';
 
 class DeleteTicketButton extends StatelessWidget {
   final HelpTicket _helpTicket;
-  final HelpRepository _helpRepository;
-  final HelpTicketsScreenBloc _helpTicketsScreenBloc;
 
-  const DeleteTicketButton({required HelpTicket helpTicket, required HelpRepository helpRepository, required HelpTicketsScreenBloc helpTicketsScreenBloc, Key? key})
+  const DeleteTicketButton({required HelpTicket helpTicket, Key? key})
     : _helpTicket = helpTicket,
-      _helpRepository = helpRepository,
-      _helpTicketsScreenBloc = helpTicketsScreenBloc,
       super(key: key);
    
   @override
@@ -32,10 +26,12 @@ class DeleteTicketButton extends StatelessWidget {
   }
 
   void _deleteButtonPressed({required BuildContext context}) {
+    DeleteTicketButtonBloc deleteTicketButtonBloc = BlocProvider.of<DeleteTicketButtonBloc>(context);
+    
     showPlatformDialog(
-      context: context, 
-      builder: (_) => BlocProvider<DeleteTicketButtonBloc>(
-        create: (_) => DeleteTicketButtonBloc(helpRepository: _helpRepository, helpTicketsScreenBloc: _helpTicketsScreenBloc),
+      context: context,
+      builder: (_) =>  BlocProvider.value(
+        value: deleteTicketButtonBloc,
         child: DialogBody(helpTicket: _helpTicket),
       )
     );

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class OverlayRouteTest extends PageRoute {
+class OverlayRouteApp extends PageRoute {
   final Widget _screen;
   
   static const Offset _begin = Offset(0.0, 1.0);
   static const Offset _end = Offset.zero;
   static const Curve _curve = Curves.easeInOut; 
   
-  OverlayRouteTest({required Widget screen, required String name})
+  OverlayRouteApp({required Widget screen, required String name})
     : _screen = screen,
       super(settings: RouteSettings(name: name), fullscreenDialog: true);
   

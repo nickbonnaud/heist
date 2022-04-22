@@ -6,6 +6,8 @@ import 'package:meta/meta.dart';
 @immutable
 class LocationProvider extends BaseProvider {
 
+  const LocationProvider();
+  
   Future<PaginatedApiResponse> sendLocation({required Map<String, dynamic> body}) async {
     String url = ApiEndpoints.geoLocation;
     return await postPaginated(url: url, body: body);

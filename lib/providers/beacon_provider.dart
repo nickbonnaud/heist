@@ -7,6 +7,8 @@ import 'package:heist/models/business/business.dart';
 @immutable
 class BeaconProvider {
 
+  const BeaconProvider();
+  
   Stream<MonitoringResult> startMonitoring({required List<Business> businesses}) {
     List<Region> regions = _getRegions(businesses: businesses);
     return flutterBeacon.monitoring(regions);

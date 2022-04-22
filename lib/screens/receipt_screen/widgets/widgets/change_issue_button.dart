@@ -17,11 +17,9 @@ enum Options {
 
 class ChangeIssueButton extends StatelessWidget {
   final TransactionResource _transaction;
-  final TransactionIssueRepository _transactionIssueRepository;
 
-  const ChangeIssueButton({required TransactionResource transaction, required TransactionIssueRepository transactionIssueRepository, Key? key})
+  const ChangeIssueButton({required TransactionResource transaction, Key? key})
     : _transaction = transaction,
-      _transactionIssueRepository = transactionIssueRepository,
       super(key: key);
 
   @override
@@ -90,12 +88,12 @@ class ChangeIssueButton extends StatelessWidget {
         break;
     }
 
+    TransactionIssueRepository issueRepository = RepositoryProvider.of<TransactionIssueRepository>(context);
     final TransactionResource? transaction = await showPlatformModalSheet(
       context: context, 
-      builder: (_) => IssueScreen(
-        type: type,
-        transaction: _transaction,
-        issueRepository: _transactionIssueRepository,
+      builder: (_) => RepositoryProvider.value(
+        value: issueRepository,
+        child: IssueScreen(type: type, transaction: _transaction),
       )
     );
     if (transaction != null) {

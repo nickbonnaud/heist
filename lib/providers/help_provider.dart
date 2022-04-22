@@ -7,6 +7,8 @@ import 'package:meta/meta.dart';
 @immutable
 class HelpProvider extends BaseProvider {
 
+  const HelpProvider();
+  
   Future<PaginatedApiResponse> fetchHelpTickets({String query = "", String? paginateUrl}) async {
     String url = paginateUrl ?? '${ApiEndpoints.help}$query';
     return await getPaginated(url: url);

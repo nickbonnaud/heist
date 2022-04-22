@@ -23,7 +23,7 @@ void main() {
       registerFallbackValue(MockToken());
       tokenRepository = MockTokenRepository();
       when(() => tokenRepository.saveToken(token: any(named: "token"))).thenAnswer((_) async => true);
-      customerRepository = CustomerRepository(customerProvider: CustomerProvider(), tokenRepository: tokenRepository);
+      customerRepository = CustomerRepository(tokenRepository: tokenRepository);
       mockCustomerProvider = MockCustomerProvider();
       customerRepositoryWithMock = CustomerRepository(customerProvider: mockCustomerProvider, tokenRepository: tokenRepository);
     });

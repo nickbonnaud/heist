@@ -12,15 +12,9 @@ import 'widgets/drawer_body.dart';
 
 class SideDrawer extends StatefulWidget {
   final Widget _homeScreen;
-  final ActiveLocationBloc _activeLocationBloc;
 
-  const SideDrawer({
-    required Widget homeScreen,
-    required ActiveLocationBloc activeLocationBloc,
-    Key? key
-  })
+  const SideDrawer({required Widget homeScreen, Key? key})
     : _homeScreen = homeScreen,
-      _activeLocationBloc = activeLocationBloc,
       super(key: key);
 
   @override
@@ -135,8 +129,9 @@ class _SideDrawerState extends State<SideDrawer> with SingleTickerProviderStateM
     return Stack(
       children: [
         BlocProvider<TransactionBusinessPickerBloc>(
-          create: (_) => TransactionBusinessPickerBloc(activeLocationBloc: widget._activeLocationBloc)
-            ..add(Init(activeLocations: widget._activeLocationBloc.state.activeLocations)),
+          create: (_) => TransactionBusinessPickerBloc(
+            activeLocationBloc: BlocProvider.of<ActiveLocationBloc>(context)
+          )..add(Init(activeLocations: BlocProvider.of<ActiveLocationBloc>(context).state.activeLocations)),
           child: const DrawerBody(),
         ),
         Transform.scale(

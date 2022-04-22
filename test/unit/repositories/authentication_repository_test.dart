@@ -25,7 +25,7 @@ void main() {
       when(() => mockTokenRepository.saveToken(token: any(named: "token"))).thenAnswer((_) async => true);
       when(() => mockTokenRepository.deleteToken()).thenAnswer((_) async => true);
       when(() => mockTokenRepository.hasValidToken()).thenAnswer((_) async => true);
-      authenticationRepository = AuthenticationRepository(tokenRepository: mockTokenRepository, authenticationProvider: AuthenticationProvider());
+      authenticationRepository = AuthenticationRepository(tokenRepository: mockTokenRepository);
       mockAuthenticationProvider = MockAuthenticationProvider();
       authenticationRepositoryWithMock = AuthenticationRepository(tokenRepository: mockTokenRepository, authenticationProvider: mockAuthenticationProvider);
     });

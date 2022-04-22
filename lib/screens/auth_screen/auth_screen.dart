@@ -2,12 +2,9 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:heist/blocs/authentication/authentication_bloc.dart';
-import 'package:heist/blocs/permissions/permissions_bloc.dart';
-import 'package:heist/repositories/authentication_repository.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:heist/screens/auth_screen/widgets/background.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'widgets/app_name.dart';
 import 'widgets/cubit/keyboard_visible_cubit.dart';
@@ -21,20 +18,9 @@ double topMargin({required BuildContext context}) => MediaQuery.of(context).size
 double mainSquareSize({required BuildContext context}) => MediaQuery.of(context).size.height / 2;
 
 class AuthScreen extends StatefulWidget {
-  final AuthenticationRepository _authenticationRepository;
-  final AuthenticationBloc _authenticationBloc;
-  final PermissionsBloc _permissionsBloc;
 
-  const AuthScreen({
-    required AuthenticationRepository authenticationRepository,
-    required AuthenticationBloc authenticationBloc,
-    required PermissionsBloc permissionsBloc,
-    Key? key
-  })
-    : _authenticationRepository = authenticationRepository,
-      _authenticationBloc = authenticationBloc,
-      _permissionsBloc = permissionsBloc,
-      super(key: key);
+  const AuthScreen({Key? key})
+    : super(key: key);
 
   @override
   State<AuthScreen> createState() => _AuthScreenState();
@@ -105,12 +91,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
                         create: (_) => KeyboardVisibleCubit(),
                         child: Stack(
                           children: [
-                            Forms(
-                              authenticationRepository: widget._authenticationRepository,
-                              authenticationBloc: widget._authenticationBloc,
-                              pageController: _pageController,
-                              permissionsBloc: widget._permissionsBloc
-                            ),
+                            Forms(pageController: _pageController),
                             const DragArrow(),
                           ],
                         ),

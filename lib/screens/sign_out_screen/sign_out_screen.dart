@@ -7,23 +7,19 @@ import 'package:heist/screens/sign_out_screen/bloc/sign_out_bloc.dart';
 import 'package:heist/screens/sign_out_screen/widgets/sign_out_body.dart';
 
 class SignOutScreen extends StatelessWidget {
-  final AuthenticationRepository _authenticationRepository;
-  final AuthenticationBloc _authenticationBloc;
 
-  const SignOutScreen({required AuthenticationRepository authenticationRepository, required AuthenticationBloc authenticationBloc, Key? key})
-    : _authenticationRepository = authenticationRepository,
-      _authenticationBloc = authenticationBloc,
-      super(key: key);
+  const SignOutScreen({Key? key})
+    : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
-      appBar: BottomModalAppBar(context: context),
+      appBar: const BottomModalAppBar(),
       body: BlocProvider<SignOutBloc>(
         create: (_) => SignOutBloc(
-          authenticationRepository: _authenticationRepository,
-          authenticationBloc: _authenticationBloc
+          authenticationRepository: RepositoryProvider.of<AuthenticationRepository>(context),
+          authenticationBloc: BlocProvider.of<AuthenticationBloc>(context)
         ),
         child: const SignOutBody(),
       ),

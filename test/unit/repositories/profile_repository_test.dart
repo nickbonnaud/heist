@@ -15,7 +15,7 @@ void main() {
     late ProfileRepository profileRepositoryWithMock;
 
     setUp(() {
-      profileRepository = ProfileRepository(profileProvider: ProfileProvider());
+      profileRepository = const ProfileRepository();
       mockProfileProvider = MockProfileProvider();
       profileRepositoryWithMock = ProfileRepository(profileProvider: mockProfileProvider);
     });

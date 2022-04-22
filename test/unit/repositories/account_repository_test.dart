@@ -17,7 +17,7 @@ void main() {
     late AccountRepository accountRepositoryWithMock;
 
     setUp(() {
-      accountRepository = AccountRepository(accountProvider: AccountProvider());
+      accountRepository = const AccountRepository();
       mockAccountProvider = MockAccountProvider();
       accountRepositoryWithMock = AccountRepository(accountProvider: mockAccountProvider);
     });

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_beacon/flutter_beacon.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
+import 'package:heist/blocs/customer/customer_bloc.dart';
 import 'package:heist/blocs/geo_location/geo_location_bloc.dart';
 import 'package:heist/blocs/permissions/permissions_bloc.dart';
 import 'package:heist/repositories/initial_login_repository.dart';
@@ -19,24 +20,12 @@ import 'bloc/permission_buttons_bloc.dart';
 
 class PermissionButtons extends StatelessWidget {
   final PermissionType _permission;
-  final InitialLoginRepository _initialLoginRepository;
-  final GeoLocationBloc _geoLocationBloc;
-  final PermissionsBloc _permissionsBloc;
-  final String _customerIdentifier;
 
   const PermissionButtons({
     required PermissionType permission,
-    required InitialLoginRepository initialLoginRepository,
-    required GeoLocationBloc geoLocationBloc,
-    required PermissionsBloc permissionsBloc,
-    required String customerIdentifier,
     Key? key
   })
     : _permission = permission,
-      _initialLoginRepository = initialLoginRepository,
-      _geoLocationBloc = geoLocationBloc,
-      _customerIdentifier = customerIdentifier,
-      _permissionsBloc = permissionsBloc,
       super(key: key);
 
   @override
@@ -82,14 +71,16 @@ class PermissionButtons extends StatelessWidget {
 
   void _requestBluetooth({required BuildContext context, required PermissionType permission}) async {
     BluetoothState currentBleState = await flutterBeacon.bluetoothState;
+    InitialLoginRepository initialLoginRepository = RepositoryProvider.of<InitialLoginRepository>(context);
+    
     if (currentBleState == BluetoothState.stateUnknown) {
       flutterBeacon.bluetoothStateChanged().listen((BluetoothState state) {
-        _initialLoginRepository.setIsInitialLogin(isInitial: false).then((_) {
+        initialLoginRepository.setIsInitialLogin(isInitial: false).then((_) {
           _updateIfGranted(context: context, granted: state == BluetoothState.stateOn, type: permission);
         });
       });
     } else {
-        _initialLoginRepository.setIsInitialLogin(isInitial: false).then((_) {
+        initialLoginRepository.setIsInitialLogin(isInitial: false).then((_) {
         _updateIfGranted(context: context, granted: currentBleState == BluetoothState.stateOn, type: permission);
       });
     }
@@ -98,7 +89,7 @@ class PermissionButtons extends StatelessWidget {
   void _requestLocation({required BuildContext context, required PermissionType permission}) async {
     final PermissionStatus status = await Permission.locationWhenInUse.request();
     if (status.isGranted) {
-      _geoLocationBloc.add(GeoLocationReady());
+      BlocProvider.of<GeoLocationBloc>(context).add(GeoLocationReady());
     }
     _updateIfGranted(context: context, granted: status.isGranted, type: permission);
   }
@@ -112,7 +103,7 @@ class PermissionButtons extends StatelessWidget {
     }
 
     if (status) {
-      OneSignal.shared.setExternalUserId(_customerIdentifier);
+      OneSignal.shared.setExternalUserId(BlocProvider.of<CustomerBloc>(context).customer!.identifier);
     }
     _updateIfGranted(context: context, granted: status, type: permission);
   }
@@ -138,25 +129,27 @@ class PermissionButtons extends StatelessWidget {
 
   void _updateIfGranted({required BuildContext context, required bool granted, required PermissionType type}) {
     BlocProvider.of<PermissionButtonsBloc>(context).add(PermissionButtonsEvent.enable);
-    _updatePermissionsBloc(granted, type);
+    _updatePermissionsBloc(context: context, granted: granted, type: type);
     if (!granted) {
       _showPermissionDeniedAlert(context: context, type: type);
     }
   }
 
-  void _updatePermissionsBloc(bool granted, PermissionType type) {
+  void _updatePermissionsBloc({required BuildContext context, required bool granted, required PermissionType type}) {
+    PermissionsBloc permissionsBloc = BlocProvider.of<PermissionsBloc>(context);
+    
     switch (type) {
       case PermissionType.bluetooth:
-        _permissionsBloc.add(BleStatusChanged(granted: granted));
+        permissionsBloc.add(BleStatusChanged(granted: granted));
         break;
       case PermissionType.location:
-        _permissionsBloc.add(LocationStatusChanged(granted: granted));
+        permissionsBloc.add(LocationStatusChanged(granted: granted));
         break;
       case PermissionType.notification:
-        _permissionsBloc.add(NotificationStatusChanged(granted: granted));
+        permissionsBloc.add(NotificationStatusChanged(granted: granted));
         break;
       case PermissionType.beacon:
-        _permissionsBloc.add(BeaconStatusChanged(granted: granted));
+        permissionsBloc.add(BeaconStatusChanged(granted: granted));
         break;
     }
   }
@@ -205,7 +198,7 @@ class PermissionButtons extends StatelessWidget {
             child: PlatformText('Enable'),
             onPressed: () async {
               if (context.read<IsTestingCubit>().state) {
-                _updatePermissionsBloc(true, type);
+                _updatePermissionsBloc(context: context, granted: true, type: type);
               } else {
                 if (Platform.isAndroid) {
                   if (type == PermissionType.location) {

@@ -8,27 +8,21 @@ import 'bloc/tip_form_bloc.dart';
 import 'widgets/tip_form.dart';
 
 class TipScreen extends StatelessWidget {
-  final AccountRepository _accountRepository;
-  final CustomerBloc _customerBloc;
 
-  const TipScreen({required AccountRepository accountRepository, required CustomerBloc customerBloc, Key? key})
-    : _accountRepository = accountRepository,
-      _customerBloc = customerBloc,
-      super(key: key);
+  const TipScreen({Key? key})
+    : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
-      appBar: BottomModalAppBar(context: context),
+      appBar: const BottomModalAppBar(),
       body: BlocProvider<TipFormBloc>(
         create: (BuildContext context) => TipFormBloc(
-          accountRepository: _accountRepository,
-          customerBloc: _customerBloc,
+          accountRepository: RepositoryProvider.of<AccountRepository>(context),
+          customerBloc: BlocProvider.of<CustomerBloc>(context),
         ),
-        child: TipForm(
-          account: _customerBloc.state.customer!.account,
-        ),
+        child: const TipForm(),
       )
     );
   }

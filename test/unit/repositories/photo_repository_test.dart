@@ -16,7 +16,7 @@ void main() {
     late PhotoRepository photoRepositoryWithMock;
 
     setUp(() {
-      photoRepository = PhotoRepository(photoProvider: PhotoProvider());
+      photoRepository = const PhotoRepository();
       mockPhotoProvider = MockPhotoProvider();
       photoRepositoryWithMock = PhotoRepository(photoProvider: mockPhotoProvider);
     });

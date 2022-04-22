@@ -7,7 +7,7 @@ void main() {
     late AccountProvider accountProvider;
 
     setUp(() {
-      accountProvider = AccountProvider();
+      accountProvider = const AccountProvider();
     });
 
     test("Updating Account data returns ApiResponse", () async {

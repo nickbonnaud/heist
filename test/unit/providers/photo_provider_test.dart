@@ -7,7 +7,7 @@ void main() {
     late PhotoProvider photoProvider;
 
     setUp(() {
-      photoProvider = PhotoProvider();
+      photoProvider = const PhotoProvider();
     });
 
     test("Uploading Photo returns ApiResponse", () async {

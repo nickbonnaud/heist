@@ -3,8 +3,10 @@ import 'package:permission_handler/permission_handler.dart';
 
 class PermissionsChecker {
 
+  const PermissionsChecker();
+  
   Future<bool> bleEnabled() async {
-    // * CHECK * //
+    // TODO //
     // return await Permission.bluetooth.status.isGranted,
     return await flutterBeacon.bluetoothState  == BluetoothState.stateOn;
   }

@@ -1,7 +1,6 @@
 import 'package:meta/meta.dart';
 import 'dart:math' as math;
 
-
 @immutable
 class DistanceCalculator {
 

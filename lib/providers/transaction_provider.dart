@@ -7,6 +7,8 @@ import 'package:meta/meta.dart';
 @immutable
 class TransactionProvider extends BaseProvider {
 
+  const TransactionProvider();
+  
   Future<PaginatedApiResponse> fetch({String query = "", String? paginateUrl}) async {
     String url = paginateUrl ?? '${ApiEndpoints.transaction}$query';
     return await getPaginated(url: url);

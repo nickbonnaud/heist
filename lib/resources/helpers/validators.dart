@@ -1,9 +1,8 @@
-class Validators {
-  static final RegExp _emailRegExp = RegExp(
-    r'^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$',
-  );
+import 'package:validators/validators.dart';
 
-  static bool isValidEmail({required String email}) => _emailRegExp.hasMatch(email);
+class Validators {
+
+  static bool isValidEmail({required String email}) => isEmail(email);
 
   static bool isValidPassword({required String password}) {
     if (password.isEmpty) return false;
@@ -12,7 +11,7 @@ class Validators {
     final bool hasLowerCase = password.contains(RegExp(r'[a-z]'));
     final bool hasDigits = password.contains(RegExp(r'[0-9]'));
     final bool hasSpecialCharacters = password.contains(RegExp(r'[-!@#$%^&*_+=(),.?":{}|<>]'));
-    final bool hasMinLength = password.length >= 8;
+    final bool hasMinLength = password.trim().length >= 8;
 
     return hasUpperCase && hasLowerCase && hasDigits && hasSpecialCharacters && hasMinLength;
   }
@@ -30,7 +29,7 @@ class Validators {
   }
 
   static bool isValidDefaultTip({required String tip}) {
-    final bool isDigits = tip.contains(RegExp(r'[0-9]'));
+    final bool isDigits = isNumeric(tip);
     if (!isDigits) return false;
 
     final int? intTip = int.tryParse(tip);
@@ -43,7 +42,7 @@ class Validators {
   }
 
   static bool isValidQuickTip({required String tip}) {
-    final bool isDigits = tip.contains(RegExp(r'[0-9]'));
+    final bool isDigits = isNumeric(tip);
     if (!isDigits) return false;
 
     final int? intTip = int.tryParse(tip);
@@ -57,20 +56,12 @@ class Validators {
 
   static bool isValidResetCode({required String resetCode}) {
     if (resetCode.isEmpty) return false;
-    final validCharacters = RegExp(r'^[a-zA-Z0-9]+$');
 
     final bool isCorrectLength = resetCode.trim().length == 6;
-    final bool isAlphaNumeric = validCharacters.hasMatch(resetCode);
+    final bool isAlphaNumeric = isAlphanumeric(resetCode);
 
     return isCorrectLength && isAlphaNumeric;
   }
 
-  static bool isValidUUID({required String uuid}) {
-    final validCharacters = RegExp(r'^[a-zA-Z0-9\-]+$');
-
-    bool isCorrectLength = uuid.length == 36;
-    bool hasCorrectCharacters = validCharacters.hasMatch(uuid);
-    
-    return isCorrectLength && hasCorrectCharacters;
-  }
+  static bool isValidUUID({required String uuid}) => isUUID(uuid);
 }

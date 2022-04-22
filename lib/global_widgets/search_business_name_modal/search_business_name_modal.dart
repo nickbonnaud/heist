@@ -9,21 +9,21 @@ import 'bloc/search_business_name_bloc.dart';
 import 'widgets/search_business_name_body.dart';
 
 class SearchBusinessNameModal extends StatelessWidget {
-  final BusinessRepository _businessRepository;
 
-  const SearchBusinessNameModal({required BusinessRepository businessRepository, Key? key})
-    : _businessRepository = businessRepository,
-      super(key: key);
+  const SearchBusinessNameModal({Key? key})
+    : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: BottomModalAppBar(context: context, backgroundColor: Theme.of(context).colorScheme.scrollBackground),
+      appBar: BottomModalAppBar(backgroundColor: Theme.of(context).colorScheme.scrollBackground),
       backgroundColor: Theme.of(context).colorScheme.scrollBackground,
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 16.w),
         child: BlocProvider<SearchBusinessNameBloc>(
-          create: (_) => SearchBusinessNameBloc(businessRepository: _businessRepository),
+          create: (_) => SearchBusinessNameBloc(
+            businessRepository: RepositoryProvider.of<BusinessRepository>(context)
+          ),
           child: const SearchBusinessNameBody(),
         ),
       ),

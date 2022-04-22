@@ -16,15 +16,9 @@ import 'bloc/login_bloc.dart';
 
 class LoginForm extends StatefulWidget {
   final PageController _pageController;
-  final PermissionsBloc _permissionsBloc;
 
-  const LoginForm({
-    required PageController pageController,
-    required PermissionsBloc permissionsBloc,
-    Key? key
-  })
+  const LoginForm({required PageController pageController, Key? key})
     : _pageController = pageController,
-      _permissionsBloc = permissionsBloc,
       super(key: key);
 
   @override
@@ -390,7 +384,7 @@ class _LoginFormState extends State<LoginForm> {
   }
 
   void _navigateToNextPage({required bool onboarded}) {
-    if (widget._permissionsBloc.allPermissionsValid && onboarded) {
+    if (BlocProvider.of<PermissionsBloc>(context).allPermissionsValid && onboarded) {
       Navigator.of(context).pushReplacementNamed(Routes.home);
     } else {
       Navigator.of(context).pushReplacementNamed(Routes.onboard);

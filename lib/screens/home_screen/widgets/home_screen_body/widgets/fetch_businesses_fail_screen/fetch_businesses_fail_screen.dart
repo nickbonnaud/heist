@@ -5,13 +5,9 @@ import 'package:heist/blocs/nearby_businesses/nearby_businesses_bloc.dart';
 import 'package:heist/global_widgets/error_screen/error_screen.dart';
 
 class FetchBusinessesFailScreen extends StatelessWidget {
-  final NearbyBusinessesBloc _nearbyBusinessesBloc;
-  final GeoLocationBloc _geoLocationBloc;
 
-  const FetchBusinessesFailScreen({required NearbyBusinessesBloc nearbyBusinessesBloc, required GeoLocationBloc geoLocationBloc, Key? key})
-    : _nearbyBusinessesBloc = nearbyBusinessesBloc,
-      _geoLocationBloc = geoLocationBloc,
-      super(key: key);
+  const FetchBusinessesFailScreen({Key? key})
+    : super(key: key);
   
   @override
   Widget build(BuildContext context) {
@@ -22,19 +18,22 @@ class FetchBusinessesFailScreen extends StatelessWidget {
           buttonText: state is Loading ? "Fetching" : "Retry",
           onButtonPressed: state is Loading 
             ? null 
-            : () => _retryButtonPressed()
+            : () => _retryButtonPressed(context: context)
         );
       },
     );
   }
 
-  void _retryButtonPressed() {
-    if (_geoLocationBloc.currentLocation == null) {
-      _geoLocationBloc.add(const FetchLocation(accuracy: Accuracy.medium));
+  void _retryButtonPressed({required BuildContext context}) {
+    GeoLocationBloc geoLocationBloc = BlocProvider.of<GeoLocationBloc>(context);
+    NearbyBusinessesBloc nearbyBusinessesBloc = BlocProvider.of<NearbyBusinessesBloc>(context);
+
+    if (geoLocationBloc.currentLocation == null) {
+      geoLocationBloc.add(const FetchLocation(accuracy: Accuracy.medium));
     } else {
-      _nearbyBusinessesBloc.add(FetchNearby(
-        lat: _geoLocationBloc.currentLocation!['lat']!,
-        lng: _geoLocationBloc.currentLocation!['lng']!,
+      nearbyBusinessesBloc.add(FetchNearby(
+        lat: geoLocationBloc.currentLocation!['lat']!,
+        lng: geoLocationBloc.currentLocation!['lng']!,
       ));
     }
   }

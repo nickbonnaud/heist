@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:heist/global_widgets/default_app_bar/bloc/default_app_bar_bloc.dart';
 import 'package:heist/models/help_ticket/help_ticket.dart';
-import 'package:heist/routing/routes.dart';
+import 'package:heist/repositories/help_repository.dart';
+import 'package:heist/screens/help_ticket_screen/help_ticket_screen.dart';
 import 'package:heist/screens/help_tickets_screen/bloc/help_tickets_screen_bloc.dart';
-import 'package:heist/screens/help_tickets_screen/models/help_ticket_args.dart';
 import 'package:heist/themes/global_colors.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class HelpTicketWidget extends StatelessWidget {
   final HelpTicket _helpTicket;
@@ -80,9 +80,19 @@ class HelpTicketWidget extends StatelessWidget {
 
   void _showFullHelpTicket({required BuildContext context}) {
     BlocProvider.of<DefaultAppBarBloc>(context).add(Rotate());
-    Navigator.of(context).pushNamed(
-      Routes.helpTicketDetails,
-      arguments: HelpTicketArgs(helpTicket: _helpTicket, helpTicketsScreenBloc: BlocProvider.of<HelpTicketsScreenBloc>(context)))
-        .then((_) => BlocProvider.of<DefaultAppBarBloc>(context).add(Reset()));
+    
+    HelpTicketsScreenBloc helpTicketsScreenBloc = BlocProvider.of<HelpTicketsScreenBloc>(context);
+    HelpRepository helpRepository = RepositoryProvider.of<HelpRepository>(context);
+
+    Navigator.of(context).push(MaterialPageRoute<HelpTicketScreen>(
+      fullscreenDialog: true,
+      builder: (_) => BlocProvider.value(
+        value: helpTicketsScreenBloc,
+        child: RepositoryProvider.value(
+          value: helpRepository,
+          child: HelpTicketScreen(helpTicket: _helpTicket),
+        )
+      )
+    )).then((_) => BlocProvider.of<DefaultAppBarBloc>(context).add(Reset()));
   }
 }

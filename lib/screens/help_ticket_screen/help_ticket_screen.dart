@@ -14,37 +14,34 @@ import 'widgets/help_ticket_body/widgets/message_list/bloc/message_list_bloc.dar
 
 class HelpTicketScreen extends StatelessWidget {
   final HelpTicket _helpTicket;
-  final HelpTicketsScreenBloc _helpTicketsScreenBloc;
-  final HelpRepository _helpRepository;
 
-  const HelpTicketScreen({
-    required HelpTicket helpTicket,
-    required HelpTicketsScreenBloc helpTicketsScreenBloc,
-    required HelpRepository helpRepository,
-    Key? key
-  })
+  const HelpTicketScreen({required HelpTicket helpTicket, Key? key})
     : _helpTicket = helpTicket,
-      _helpTicketsScreenBloc = helpTicketsScreenBloc,
-      _helpRepository = helpRepository,
       super(key: key);
   
 @override
   Widget build(BuildContext context) {
     return BlocProvider<DeleteTicketButtonBloc>(
-      create: (_) => DeleteTicketButtonBloc(helpRepository: _helpRepository, helpTicketsScreenBloc: _helpTicketsScreenBloc),
+      create: (_) => DeleteTicketButtonBloc(
+        helpRepository: RepositoryProvider.of<HelpRepository>(context),
+        helpTicketsScreenBloc: BlocProvider.of<HelpTicketsScreenBloc>(context)
+      ),
       child: Scaffold(
         backgroundColor: Theme.of(context).colorScheme.scrollBackground,
         appBar: BottomModalAppBar(
-          context: context,
           backgroundColor: Theme.of(context).colorScheme.scrollBackground,
           title: _helpTicket.subject,
           trailingWidget: _helpTicket.resolved
             ? null
-            : DeleteTicketButton(helpTicket: _helpTicket, helpRepository: _helpRepository, helpTicketsScreenBloc: _helpTicketsScreenBloc)
+            : DeleteTicketButton(helpTicket: _helpTicket)
         ),
         body: BlocProvider<MessageListBloc>(
-          create: (_) => MessageListBloc(helpTicket: _helpTicket, helpTicketsScreenBloc: _helpTicketsScreenBloc, helpRepository: _helpRepository),
-          child: HelpTicketBody(helpTicketsScreenBloc: _helpTicketsScreenBloc, helpTicket: _helpTicket, helpRepository: _helpRepository),
+          create: (_) => MessageListBloc(
+            helpTicket: _helpTicket,
+            helpTicketsScreenBloc: BlocProvider.of<HelpTicketsScreenBloc>(context),
+            helpRepository: RepositoryProvider.of<HelpRepository>(context)
+          ),
+          child: HelpTicketBody(helpTicket: _helpTicket),
         )
       ),
     );

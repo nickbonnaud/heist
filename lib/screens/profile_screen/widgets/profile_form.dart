@@ -1,37 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:heist/blocs/customer/customer_bloc.dart';
 import 'package:heist/global_widgets/edit_photo/bloc/edit_photo_bloc.dart';
 import 'package:heist/global_widgets/edit_photo/edit_photo.dart';
 import 'package:heist/models/customer/profile.dart';
-import 'package:heist/repositories/photo_picker_repository.dart';
 import 'package:heist/repositories/photo_repository.dart';
 import 'package:heist/resources/helpers/global_text.dart';
 import 'package:heist/resources/helpers/vibrate.dart';
 import 'package:heist/screens/profile_screen/bloc/profile_form_bloc.dart';
 import 'package:heist/themes/global_colors.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 
 class ProfileForm extends StatefulWidget {
-  final Profile _profile;
-  final PhotoRepository _photoRepository;
-  final PhotoPickerRepository _photoPickerRepository;
-  final CustomerBloc _customerBloc;
 
-  const ProfileForm({
-    required Profile profile,
-    required PhotoRepository photoRepository,
-    required PhotoPickerRepository photoPickerRepository,
-    required CustomerBloc customerBloc,
-    Key? key
-  })
-    : _profile = profile,
-      _photoRepository = photoRepository,
-      _photoPickerRepository = photoPickerRepository,
-      _customerBloc = customerBloc,
-      super(key: key);
+  const ProfileForm({Key? key})
+    : super(key: key);
 
   @override
   State<ProfileForm> createState() => _ProfileFormState();
@@ -51,8 +36,8 @@ class _ProfileFormState extends State<ProfileForm> {
   void initState() {
     super.initState();
     _profileFormBloc = BlocProvider.of<ProfileFormBloc>(context);
-    _firstNameController = TextEditingController(text: widget._profile.firstName);
-    _lastNameController = TextEditingController(text: widget._profile.lastName);
+    _firstNameController = TextEditingController(text: BlocProvider.of<CustomerBloc>(context).customer!.profile.firstName);
+    _lastNameController = TextEditingController(text: BlocProvider.of<CustomerBloc>(context).customer!.profile.lastName);
     _firstNameController.addListener(_onFirstNameChanged);
     _lastNameController.addListener(_onLastNameChanged);
   }
@@ -120,8 +105,11 @@ class _ProfileFormState extends State<ProfileForm> {
   Widget _photo() {
     return Center(
       child: BlocProvider<EditPhotoBloc>(
-        create: (BuildContext context) => EditPhotoBloc(photoRepository: widget._photoRepository, customerBloc: widget._customerBloc),
-        child: EditPhoto(photoPicker: widget._photoPickerRepository, profile: widget._profile,),
+        create: (BuildContext context) => EditPhotoBloc(
+          photoRepository: RepositoryProvider.of<PhotoRepository>(context),
+          customerBloc:BlocProvider.of<CustomerBloc>(context)
+        ),
+        child: const EditPhoto(),
       )
     );
   }
@@ -236,8 +224,9 @@ class _ProfileFormState extends State<ProfileForm> {
   }
 
   bool _formFieldsChanged() {
-    return (widget._profile.firstName != _firstNameController.text)
-      || (widget._profile.lastName != _lastNameController.text);
+    Profile profile = BlocProvider.of<CustomerBloc>(context).customer!.profile;
+    return (profile.firstName != _firstNameController.text)
+      || (profile.lastName != _lastNameController.text);
   }
   
   void _saveButtonPressed({required ProfileFormState state}) {
@@ -245,7 +234,8 @@ class _ProfileFormState extends State<ProfileForm> {
       _profileFormBloc.add(Submitted(
         firstName: _firstNameController.text,
         lastName: _lastNameController.text,
-        profileIdentifier: widget._profile.identifier));
+        profileIdentifier: BlocProvider.of<CustomerBloc>(context).customer!.profile.identifier
+      ));
     }
   }
 

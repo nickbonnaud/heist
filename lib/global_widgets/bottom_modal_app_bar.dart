@@ -6,13 +6,13 @@ import 'package:heist/themes/global_colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class BottomModalAppBar extends StatefulWidget implements PreferredSizeWidget {
-  final Color _backgroundColor;
   final bool _isSliver;
+  final Color? _backgroundColor;
   final Widget? _trailingWidget;
   final String? _title;
 
-  BottomModalAppBar({required BuildContext context, bool isSliver = false, Widget? trailingWidget, Color? backgroundColor, String? title, Key? key})
-    : _backgroundColor = backgroundColor ?? Theme.of(context).colorScheme.background,
+  const BottomModalAppBar({bool isSliver = false, Widget? trailingWidget, Color? backgroundColor, String? title, Key? key})
+    : _backgroundColor = backgroundColor,
       _isSliver = isSliver,
       _trailingWidget = trailingWidget,
       _title = title,
@@ -51,7 +51,7 @@ class _BottomModalAppBarState extends State<BottomModalAppBar> with TickerProvid
       pinned: false,
       snap: false,
       elevation: 0,
-      backgroundColor: widget._backgroundColor,
+      backgroundColor: widget._backgroundColor ?? Theme.of(context).colorScheme.background,
       actions: [
         if (widget._trailingWidget != null)
           widget._trailingWidget!
@@ -66,7 +66,7 @@ class _BottomModalAppBarState extends State<BottomModalAppBar> with TickerProvid
         ? AppBarTitle(text: widget._title!)
         : null,
       elevation: 0,
-      backgroundColor: widget._backgroundColor,
+      backgroundColor: widget._backgroundColor ?? Theme.of(context).colorScheme.background,
       actions: [
         if (widget._trailingWidget != null)
           widget._trailingWidget!

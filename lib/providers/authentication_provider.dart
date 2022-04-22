@@ -6,6 +6,8 @@ import 'package:heist/resources/http/api_endpoints.dart';
 @immutable
 class AuthenticationProvider extends BaseProvider {
 
+  const AuthenticationProvider();
+  
   Future<ApiResponse> register({required Map<String, dynamic> body}) async {
     String url = ApiEndpoints.register;
     return await post(url: url, body: body);

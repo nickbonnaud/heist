@@ -1,19 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:heist/models/customer/customer.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:heist/blocs/customer/customer_bloc.dart';
 import 'package:heist/resources/helpers/global_text.dart';
 import 'package:heist/resources/helpers/vibrate.dart';
 import 'package:heist/screens/email_screen/bloc/email_form_bloc.dart';
 import 'package:heist/themes/global_colors.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class EmailForm extends StatefulWidget {
-  final Customer _customer;
 
-  const EmailForm({required Customer customer, Key? key})
-    : _customer = customer,
-      super(key: key);
+  const EmailForm({Key? key})
+    : super(key: key);
 
   @override
   State<EmailForm> createState() => _EmailFormState();
@@ -21,15 +19,16 @@ class EmailForm extends StatefulWidget {
 
 class _EmailFormState extends State<EmailForm> {
   final FocusNode _emailFocusNode = FocusNode();
+  
   late TextEditingController _emailController;
-
   late EmailFormBloc _emailFormBloc;
   
   @override
   void initState() {
     super.initState();
     _emailFormBloc = BlocProvider.of<EmailFormBloc>(context);
-    _emailController = TextEditingController(text: widget._customer.email);
+    _emailController = TextEditingController(text: BlocProvider.of<CustomerBloc>(context).customer!.email);
+    
     _emailController.addListener(_onEmailChanged);
   }
   
@@ -197,7 +196,7 @@ class _EmailFormState extends State<EmailForm> {
   }
 
   bool _emailChanged() {
-    return widget._customer.email != _emailController.text;
+    return BlocProvider.of<CustomerBloc>(context).customer!.email != _emailController.text;
   }
 
   void _onEmailChanged() {
@@ -206,7 +205,10 @@ class _EmailFormState extends State<EmailForm> {
   
   void _saveButtonPressed({required EmailFormState state}) {
     if (_isSaveButtonEnabled(state: state)) {
-      _emailFormBloc.add(Submitted(identifier: widget._customer.identifier, email: _emailController.text));
+      _emailFormBloc.add(Submitted(
+        identifier: BlocProvider.of<CustomerBloc>(context).customer!.identifier,
+        email: _emailController.text
+      ));
     }
   }
 

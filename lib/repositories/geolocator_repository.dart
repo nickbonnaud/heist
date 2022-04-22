@@ -4,24 +4,32 @@ import 'package:heist/providers/geolocator_provider.dart';
 
 @immutable
 class GeolocatorRepository {
-  final GeolocatorProvider _geolocatorProvider;
+  final GeolocatorProvider? _geolocatorProvider;
 
-  const GeolocatorRepository({required GeolocatorProvider geolocatorProvider})
+  const GeolocatorRepository({GeolocatorProvider? geolocatorProvider})
     : _geolocatorProvider = geolocatorProvider;
 
   Future<Position> fetchLow() async {
-    return await _geolocatorProvider.fetch(accuracy: LocationAccuracy.low);
+    GeolocatorProvider geolocatorProvider = _getGeolocatorProvider();
+    return await geolocatorProvider.fetch(accuracy: LocationAccuracy.low);
   }
 
   Future<Position> fetchMed() async {
-    return await _geolocatorProvider.fetch(accuracy: LocationAccuracy.medium);
+    GeolocatorProvider geolocatorProvider = _getGeolocatorProvider();
+    return await geolocatorProvider.fetch(accuracy: LocationAccuracy.medium);
   }
 
   Future<Position> fetchHigh() async {
-    return await _geolocatorProvider.fetch(accuracy: LocationAccuracy.high);
+    GeolocatorProvider geolocatorProvider = _getGeolocatorProvider();
+    return await geolocatorProvider.fetch(accuracy: LocationAccuracy.high);
   }
 
   Future<Position> fetchBest() async {
-    return await _geolocatorProvider.fetch(accuracy: LocationAccuracy.best);
+    GeolocatorProvider geolocatorProvider = _getGeolocatorProvider();
+    return await geolocatorProvider.fetch(accuracy: LocationAccuracy.best);
+  }
+
+  GeolocatorProvider _getGeolocatorProvider() {
+    return _geolocatorProvider ?? const GeolocatorProvider();
   }
 }

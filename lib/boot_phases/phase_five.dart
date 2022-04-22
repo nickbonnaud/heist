@@ -6,9 +6,6 @@ import 'package:heist/blocs/notification_navigation/notification_navigation_bloc
 import 'package:heist/blocs/open_transactions/open_transactions_bloc.dart';
 import 'package:heist/blocs/push_notification/push_notification_bloc.dart';
 import 'package:heist/boot.dart';
-import 'package:heist/providers/business_provider.dart';
-import 'package:heist/providers/push_notification_provider.dart';
-import 'package:heist/providers/transaction_provider.dart';
 import 'package:heist/repositories/business_repository.dart';
 import 'package:heist/repositories/push_notification_repository.dart';
 import 'package:heist/repositories/transaction_repository.dart';
@@ -24,16 +21,16 @@ class PhaseFive extends StatelessWidget {
     return BlocProvider<PushNotificationBloc>(
       lazy: false,
       create: (context) => PushNotificationBloc(
-        pushNotificationRepository: PushNotificationRepository(pushNotificationProvider: PushNotificationProvider()),
-        businessRepository: BusinessRepository(businessProvider: BusinessProvider()),
-        transactionRepository: TransactionRepository(transactionProvider: TransactionProvider()),
+        pushNotificationRepository: const PushNotificationRepository(),
+        businessRepository: const BusinessRepository(),
+        transactionRepository: const TransactionRepository(),
         notificationBootBloc: BlocProvider.of<NotificationBootBloc>(context),
         nearbyBusinessesBloc: BlocProvider.of<NearbyBusinessesBloc>(context),
         openTransactionsBloc: BlocProvider.of<OpenTransactionsBloc>(context),
         notificationNavigationBloc: BlocProvider.of<NotificationNavigationBloc>(context),
-        externalUrlHandler: ExternalUrlHandler()
+        externalUrlHandler: const ExternalUrlHandler()
       ),
-      child: Boot(),
+      child: const Boot(),
     );
   }
 }

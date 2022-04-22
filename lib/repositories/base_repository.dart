@@ -6,6 +6,8 @@ import 'package:heist/resources/helpers/api_exception.dart';
 
 abstract class BaseRepository {
   
+  const BaseRepository();
+  
   dynamic deserialize({PaginateDataHolder? holder, Map<String, dynamic>? json});
   
   Future<Map<String, dynamic>> send({required Future<ApiResponse> request}) async {

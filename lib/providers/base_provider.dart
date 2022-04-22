@@ -10,19 +10,30 @@ import 'package:heist/resources/http/test_api_interceptors.dart';
 @immutable
 class BaseProvider {
   final String _baseUrl = ApiEndpoints.base;
-  final Dio _dio;
+  final Dio? _dio;
 
-  BaseProvider({Dio? dio})
-    : _dio = dio ?? Dio() {
-      (_dio.transformer as DefaultTransformer).jsonDecodeCallback = parseJson;
-      if (dio == null) {
-        _dio.interceptors.add(TestApiInterceptors());
-      }
-    }
+  const BaseProvider({Dio? dio})
+    : _dio = dio;
+
+  Dio _initDio() {
+    if (_dio != null) return _dio!;
+
+    Dio dio = Dio();
+    (dio.transformer as DefaultTransformer).jsonDecodeCallback = parseJson;
+
+    // TODO
+    // For testing purposes only
+    dio.interceptors.add(TestApiInterceptors());
+    // dio.interceptors.add(ApiInterceptors());
+    
+    return dio;
+  }
 
   Future<ApiResponse> get({required String url}) async {
+    Dio dio = _initDio();
+
     try {
-      Response response = await _dio.get('$_baseUrl/$url');
+      Response response = await dio.get('$_baseUrl/$url');
       return _formatSuccess(response: response);
     } on DioError catch (error) {
       return _formatError(error: error);
@@ -31,9 +42,11 @@ class BaseProvider {
   }
   
   Future<PaginatedApiResponse> getPaginated({required String url}) async {
+    Dio dio = _initDio();
+    
     final String fullUrl = url.contains(_baseUrl) ? url : '$_baseUrl/$url';
     try {      
-      Response response = await _dio.get(fullUrl);
+      Response response = await dio.get(fullUrl);
       return _formatSuccessPaginated(response: response);
     } on DioError catch (error) {
       return _formatErrorPaginated(error: error);
@@ -41,8 +54,10 @@ class BaseProvider {
   }
 
   Future<ApiResponse> post({required String url, required Map<String, dynamic> body}) async {
+    Dio dio = _initDio();
+
     try {
-      final Response response = await _dio.post('$_baseUrl/$url', data: body);
+      final Response response = await dio.post('$_baseUrl/$url', data: body);
       return _formatSuccess(response: response);
     } on DioError catch (error) {
       return _formatError(error: error);
@@ -50,8 +65,10 @@ class BaseProvider {
   }
 
   Future<PaginatedApiResponse> postPaginated({required String url, required Map<String, dynamic> body}) async {
+    Dio dio = _initDio();
+
     try {
-      final Response response = await _dio.post('$_baseUrl/$url', data: body);
+      final Response response = await dio.post('$_baseUrl/$url', data: body);
       return _formatSuccessPaginated(response: response);
     } on DioError catch (error) {
       return _formatErrorPaginated(error: error);
@@ -59,8 +76,10 @@ class BaseProvider {
   }
 
   Future<ApiResponse> patch({required String url, required Map<String, dynamic> body}) async {
+    Dio dio = _initDio();
+    
     try {
-      final Response response = await _dio.patch('$_baseUrl/$url', data: body);
+      final Response response = await dio.patch('$_baseUrl/$url', data: body);
       return _formatSuccess(response: response);
     } on DioError catch (error) {
       return _formatError(error: error);
@@ -68,8 +87,10 @@ class BaseProvider {
   }
 
   Future<ApiResponse> delete({required String url}) async {
+    Dio dio = _initDio();
+    
     try {
-      final Response response = await _dio.delete('$_baseUrl/$url');
+      final Response response = await dio.delete('$_baseUrl/$url');
       return _formatSuccess(response: response);
     } on DioError catch (error) {
       return _formatError(error: error);

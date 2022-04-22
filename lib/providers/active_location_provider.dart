@@ -6,6 +6,8 @@ import 'package:meta/meta.dart';
 @immutable
 class ActiveLocationProvider extends BaseProvider {
 
+  const ActiveLocationProvider();
+  
   Future<ApiResponse> enterBusiness({required Map<String, dynamic> body}) async {
     String url = ApiEndpoints.activeLocation;
     return await post(url: url, body: body);

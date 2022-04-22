@@ -9,28 +9,22 @@ import 'package:heist/screens/password_screen/widgets/password_form.dart';
 import 'bloc/password_form_bloc.dart';
 
 class PasswordScreen extends StatelessWidget {
-  final CustomerRepository _customerRepository;
-  final AuthenticationRepository _authenticationRepository;
-  final CustomerBloc _customerBloc;
 
-  const PasswordScreen({required CustomerRepository customerRepository, required AuthenticationRepository authenticationRepository, required CustomerBloc customerBloc, Key? key})
-    : _customerRepository = customerRepository,
-      _authenticationRepository = authenticationRepository,
-      _customerBloc = customerBloc,
-      super(key: key);
+  const PasswordScreen({Key? key})
+    : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
-      appBar: BottomModalAppBar(context: context),
+      appBar: const BottomModalAppBar(),
       body: BlocProvider<PasswordFormBloc>(
         create: (BuildContext context) => PasswordFormBloc(
-          customerRepository: _customerRepository,
-          authenticationRepository: _authenticationRepository,
-          customerBloc: _customerBloc
+          customerRepository: RepositoryProvider.of<CustomerRepository>(context),
+          authenticationRepository: RepositoryProvider.of<AuthenticationRepository>(context),
+          customerBloc: BlocProvider.of<CustomerBloc>(context)
         ),
-        child: PasswordForm(customer: _customerBloc.customer!)
+        child: const PasswordForm()
       )
     );
   }

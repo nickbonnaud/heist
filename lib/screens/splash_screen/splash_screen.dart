@@ -16,6 +16,7 @@ class SplashScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     BlocProvider.of<PermissionsBloc>(context).add(CheckPermissions());
     BlocProvider.of<AuthenticationBloc>(context).add(InitAuthentication());
+    
     return BlocProvider<SplashScreenBloc>(
       create: (_) => SplashScreenBloc(
         appReadyBloc: BlocProvider.of<AppReadyBloc>(context)

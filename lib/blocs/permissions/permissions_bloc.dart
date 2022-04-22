@@ -87,32 +87,33 @@ class PermissionsBloc extends Bloc<PermissionsEvent, PermissionsState> {
   }
   
   Future<void> _checkPermissions({required Emitter<PermissionsState> emit}) async {
+    // TODO //
     // TEST CHANGE //
     
     bool isInitial =  await _initialLoginRepository.isInitialLogin();
     
     
     if (!isInitial) {
-      List results = await Future.wait([
-        _permissionsChecker.bleEnabled(),
-        _permissionsChecker.locationEnabled(),
-        _permissionsChecker.notificationEnabled(),
-        _permissionsChecker.beaconEnabled(),
-      ]);
-      // emit(state.update(
-      //   bleEnabled: true,
-      //   locationEnabled: true,
-      //   notificationEnabled: true,
-      //   beaconEnabled: true,
-      //   checksComplete: true,
-      // ));
+      // List results = await Future.wait([
+      //   _permissionsChecker.bleEnabled(),
+      //   _permissionsChecker.locationEnabled(),
+      //   _permissionsChecker.notificationEnabled(),
+      //   _permissionsChecker.beaconEnabled(),
+      // ]);
       emit(state.update(
-        bleEnabled: results[0],
-        locationEnabled: results[1],
-        notificationEnabled: results[2],
-        beaconEnabled: results[3],
+        bleEnabled: true,
+        locationEnabled: true,
+        notificationEnabled: true,
+        beaconEnabled: true,
         checksComplete: true,
       ));
+      // emit(state.update(
+      //   bleEnabled: results[0],
+      //   locationEnabled: results[1],
+      //   notificationEnabled: results[2],
+      //   beaconEnabled: results[3],
+      //   checksComplete: true,
+      // ));
     } else {
       add(IsInitialLogin());
     }

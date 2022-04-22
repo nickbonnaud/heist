@@ -6,6 +6,8 @@ import 'package:meta/meta.dart';
 @immutable
 class AccountProvider extends BaseProvider {
   
+  const AccountProvider();
+  
   Future<ApiResponse> update({required Map<String, dynamic> body, required String accountIdentifier}) async {
     final String url = '${ApiEndpoints.account}/$accountIdentifier';
     return await patch(url: url, body: body);

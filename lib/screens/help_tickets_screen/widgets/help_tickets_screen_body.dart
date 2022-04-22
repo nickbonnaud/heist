@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:heist/global_widgets/bottom_loader.dart';
 import 'package:heist/global_widgets/default_app_bar/bloc/default_app_bar_bloc.dart';
 import 'package:heist/global_widgets/default_app_bar/default_app_bar.dart';
 import 'package:heist/global_widgets/error_screen/error_screen.dart';
-import 'package:heist/routing/routes.dart';
+import 'package:heist/repositories/help_repository.dart';
 import 'package:heist/screens/help_tickets_screen/bloc/help_tickets_screen_bloc.dart';
 import 'package:heist/themes/global_colors.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'widgets/filter_button/bloc/filter_button_bloc.dart';
 import 'widgets/filter_button/filter_button.dart';
 import 'widgets/help_ticket_widget.dart';
+import 'widgets/new_help_ticket_screen/new_help_ticket_screen.dart';
 
 
 class HelpTicketsScreenBody extends StatefulWidget {
@@ -27,13 +28,10 @@ class _HelpTicketsScreenBodyState extends State<HelpTicketsScreenBody> {
   final ScrollController _scrollController = ScrollController();
   final double _scrollThreshold = 200.h;
   
-  late HelpTicketsScreenBloc _helpTicketsScreenBloc;
-  
   @override
   void initState() {
     super.initState();
     _scrollController.addListener(_onScroll);
-    _helpTicketsScreenBloc = BlocProvider.of<HelpTicketsScreenBloc>(context);
   }
   
   @override
@@ -44,7 +42,7 @@ class _HelpTicketsScreenBodyState extends State<HelpTicketsScreenBody> {
           return ErrorScreen(
             body: "Oh no! An error occurred fetching your help tickets.",
             buttonText: "Retry",
-            onButtonPressed: () => _helpTicketsScreenBloc.add(const FetchAll(reset: true)),
+            onButtonPressed: () => BlocProvider.of<HelpTicketsScreenBloc>(context).add(const FetchAll(reset: true)),
           );
         }
 
@@ -153,8 +151,20 @@ class _HelpTicketsScreenBodyState extends State<HelpTicketsScreenBody> {
 
   void _showCreateHelpTicketForm() {
     BlocProvider.of<DefaultAppBarBloc>(context).add(Rotate());
-    Navigator.of(context).pushNamed(Routes.helpTicketNew, arguments: _helpTicketsScreenBloc)
-      .then((_) => BlocProvider.of<DefaultAppBarBloc>(context).add(Reset()));
+
+    HelpTicketsScreenBloc helpTicketsScreenBloc = BlocProvider.of<HelpTicketsScreenBloc>(context);
+    HelpRepository helpRepository = RepositoryProvider.of<HelpRepository>(context);
+
+    Navigator.of(context).push(MaterialPageRoute<NewHelpTicketScreen>(
+      fullscreenDialog: true,
+      builder: (_) => BlocProvider.value(
+        value: helpTicketsScreenBloc,
+        child: RepositoryProvider.value(
+          value: helpRepository,
+          child: const NewHelpTicketScreen(),
+        ),
+      )
+    )).then((_) => BlocProvider.of<DefaultAppBarBloc>(context).add(Reset()));
   }
 
   void _onScroll() {
@@ -162,7 +172,7 @@ class _HelpTicketsScreenBodyState extends State<HelpTicketsScreenBody> {
     final double currentScroll = _scrollController.position.pixels;
 
     if (maxScroll - currentScroll <=_scrollThreshold) {
-      _helpTicketsScreenBloc.add(FetchMore());
+      BlocProvider.of<HelpTicketsScreenBloc>(context).add(FetchMore());
     }
   }
 }

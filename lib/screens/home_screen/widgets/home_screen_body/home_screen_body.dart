@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:heist/blocs/geo_location/geo_location_bloc.dart';
 import 'package:heist/blocs/nearby_businesses/nearby_businesses_bloc.dart';
 import 'package:heist/screens/home_screen/blocs/business_screen_visible_cubit.dart';
 
@@ -10,13 +9,9 @@ import 'widgets/no_nearby_locations/no_nearby_locations.dart';
 import 'widgets/peek_sheet/peek_sheet.dart';
 
 class HomeScreenBody extends StatelessWidget {
-  final NearbyBusinessesBloc _nearbyBusinessesBloc;
-  final GeoLocationBloc _geoLocationBloc;
 
-  const HomeScreenBody({required NearbyBusinessesBloc nearbyBusinessesBloc, required GeoLocationBloc geoLocationBloc, Key? key})
-    : _nearbyBusinessesBloc = nearbyBusinessesBloc,
-      _geoLocationBloc = geoLocationBloc,
-      super(key: key);
+  const HomeScreenBody({Key? key})
+    : super(key: key);
   
   @override
   Widget build(BuildContext context) {
@@ -35,10 +30,7 @@ class HomeScreenBody extends StatelessWidget {
             ],
           );
         }
-        return FetchBusinessesFailScreen(
-          nearbyBusinessesBloc: _nearbyBusinessesBloc,
-          geoLocationBloc: _geoLocationBloc,
-        );
+        return const FetchBusinessesFailScreen();
       },
     );
   }

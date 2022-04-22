@@ -8,10 +8,10 @@ import 'package:heist/repositories/token_repository.dart';
 
 @immutable
 class AuthenticationRepository extends BaseRepository {
-  final TokenRepository _tokenRepository;
-  final AuthenticationProvider _authenticationProvider;
+  final TokenRepository? _tokenRepository;
+  final AuthenticationProvider? _authenticationProvider;
   
-  AuthenticationRepository({required TokenRepository tokenRepository, required AuthenticationProvider authenticationProvider})
+  const AuthenticationRepository({TokenRepository? tokenRepository, AuthenticationProvider? authenticationProvider})
     : _tokenRepository = tokenRepository,
       _authenticationProvider = authenticationProvider;
   
@@ -22,7 +22,8 @@ class AuthenticationRepository extends BaseRepository {
       'password_confirmation': passwordConfirmation
     };
 
-    Map<String, dynamic> json = await send(request: _authenticationProvider.register(body: body));
+    AuthenticationProvider authenticationProvider = _getAuthenticationProvider();
+    Map<String, dynamic> json = await send(request: authenticationProvider.register(body: body));
     return deserialize(json: json);
   }
 
@@ -32,50 +33,69 @@ class AuthenticationRepository extends BaseRepository {
       'password': password,
     };
 
-    Map<String, dynamic> json = await send(request: _authenticationProvider.login(body: body));
+    AuthenticationProvider authenticationProvider = _getAuthenticationProvider();
+    Map<String, dynamic> json = await send(request: authenticationProvider.login(body: body));
     return deserialize(json: json);
   }
 
   Future<bool> logout() async {
-    return send(request: _authenticationProvider.logout())
+    AuthenticationProvider authenticationProvider = _getAuthenticationProvider();
+    TokenRepository tokenRepository = _getTokenRepository();
+
+    return send(request: authenticationProvider.logout())
       .then((json) async {
-        await _tokenRepository.deleteToken();
+        await tokenRepository.deleteToken();
         return true;
       });
   }
 
   Future<bool> checkPassword({required String password}) async {
+    AuthenticationProvider authenticationProvider = _getAuthenticationProvider();
     Map<String, dynamic> body = {"password": password};
 
-    return send(request: _authenticationProvider.checkPassword(body: body))
+    return send(request: authenticationProvider.checkPassword(body: body))
       .then((json) => json['password_verified']);
   }
 
   Future<bool> requestPasswordReset({required String email}) async {
+    AuthenticationProvider authenticationProvider = _getAuthenticationProvider();
     Map<String, dynamic> body = {"email": email};
 
-    return send(request: _authenticationProvider.requestPasswordReset(body: body))
+    return send(request: authenticationProvider.requestPasswordReset(body: body))
       .then((_) => true);
   }
 
   Future<bool> resetPassword({required String email, required String resetCode, required String password, required String passwordConfirmation}) async {
+    AuthenticationProvider authenticationProvider = _getAuthenticationProvider();
     Map<String, dynamic> body = {
       "email": email,
       "reset_code": resetCode,
       "password": password,
       "password_confirmation": passwordConfirmation
     };
-    return send(request: _authenticationProvider.resetPassword(body: body))
+    return send(request: authenticationProvider.resetPassword(body: body))
       .then((_) => true);
   }
 
   Future<bool> isSignedIn() async {
-    return await _tokenRepository.hasValidToken();
+    TokenRepository tokenRepository = _getTokenRepository();
+
+    return await tokenRepository.hasValidToken();
+  }
+  
+  AuthenticationProvider _getAuthenticationProvider() {
+    return _authenticationProvider ?? const AuthenticationProvider();
+  }
+  
+  TokenRepository _getTokenRepository() {
+    return _tokenRepository ?? const TokenRepository();
   }
   
   @override
   deserialize({PaginateDataHolder? holder, Map<String, dynamic>? json}) {
-    _tokenRepository.saveToken(token: Token.fromJson(json: json!));
+    TokenRepository tokenRepository = _getTokenRepository();
+    
+    tokenRepository.saveToken(token: Token.fromJson(json: json!));
     return Customer.fromJson(json: json);
   }
 }

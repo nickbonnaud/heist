@@ -10,6 +10,8 @@ import 'package:heist/models/business/business.dart';
 @immutable
 class IconCreatorProvider {
 
+  const IconCreatorProvider();
+  
   Future<BitmapDescriptor> createMarkers({required Size size, required Business business}) async {
     File markerImageFile = await DefaultCacheManager().getSingleFile(business.photos.logo.smallUrl);
     Uint8List imageBytes = await markerImageFile.readAsBytes();

@@ -9,7 +9,10 @@ typedef NotificationOpenedCallback = Function(OSNotificationOpenedResult result)
 @immutable
 class PushNotificationProvider {
 
+  const PushNotificationProvider();
+  
   void startMonitoring({required NotificationReceivedCallback onMessageReceived, required NotificationOpenedCallback onMessageInteraction}) {
+    // TODO
     // Remove after debug
     OneSignal.shared.setLogLevel(OSLogLevel.verbose, OSLogLevel.none);
 

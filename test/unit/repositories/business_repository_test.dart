@@ -16,7 +16,7 @@ void main() {
     late BusinessRepository businessRepositoryWithMock;
 
     setUp(() {
-      businessRepository = BusinessRepository(businessProvider: BusinessProvider());
+      businessRepository = const BusinessRepository();
       
       mockBusinessProvider = MockBusinessProvider();
       when(() => mockBusinessProvider.fetch(query: any(named: "query")))

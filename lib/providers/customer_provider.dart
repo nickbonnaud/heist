@@ -5,6 +5,9 @@ import 'package:meta/meta.dart';
 
 @immutable
 class CustomerProvider extends BaseProvider {
+  
+  const CustomerProvider();
+  
   Future<ApiResponse> fetchCustomer() async {
     String url = ApiEndpoints.self;
     return await get(url: url);

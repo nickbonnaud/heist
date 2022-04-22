@@ -55,7 +55,7 @@ class RefundsScreenTest {
 
   Future<void> _searchByBusinessName() async {
     await tester.tap(find.byKey(const Key("refundsFilterButtonKey")));
-    await tester.pumpAndSettle();
+    await tester.pump(const Duration(milliseconds: 300));
 
     await tester.tap(find.byIcon(Icons.business));
     await tester.pumpAndSettle();
@@ -65,7 +65,7 @@ class RefundsScreenTest {
 
   Future<void> _searchByTransactionId() async {
     await tester.tap(find.byKey(const Key("refundsFilterButtonKey")));
-    await tester.pumpAndSettle();
+    await tester.pump(const Duration(milliseconds: 300));
 
     await tester.tap(find.byIcon(Icons.receipt));
     await tester.pumpAndSettle();
@@ -75,7 +75,7 @@ class RefundsScreenTest {
 
   Future<void> _searchByDate() async {
     await tester.tap(find.byKey(const Key("refundsFilterButtonKey")));
-    await tester.pumpAndSettle();
+    await tester.pump(const Duration(milliseconds: 300));
 
     await tester.tap(find.byIcon(Icons.event));
     await tester.pumpAndSettle();
@@ -95,7 +95,7 @@ class RefundsScreenTest {
 
   Future<void> _searchByRefundId() async {
     await tester.tap(find.byKey(const Key("refundsFilterButtonKey")));
-    await tester.pumpAndSettle();
+    await tester.pump(const Duration(milliseconds: 300));
 
     await tester.tap(find.byIcon(Icons.receipt_long));
     await tester.pumpAndSettle();
@@ -105,7 +105,7 @@ class RefundsScreenTest {
 
   Future<void> _reset() async {
     await tester.tap(find.byKey(const Key("refundsFilterButtonKey")));
-    await tester.pumpAndSettle();
+    await tester.pump(const Duration(milliseconds: 300));
 
     await tester.tap(find.byIcon(Icons.refresh));
     await tester.pump();

@@ -6,13 +6,13 @@ import 'package:heist/themes/main_theme.dart';
 import 'widgets/animated_leading_icon.dart';
 
 class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
-  final Color _backgroundColor;
   final bool _isSliver;
+  final Color? _backgroundColor;
   final Widget? _trailingWidget;
   final String? _title;
 
-  DefaultAppBar({bool isSliver = false, Widget? trailingWidget, Color? backgroundColor, String? title, Key? key})
-    : _backgroundColor = backgroundColor ?? MainTheme.topAppBar,
+  const DefaultAppBar({bool isSliver = false, Widget? trailingWidget, Color? backgroundColor, String? title, Key? key})
+    : _backgroundColor = backgroundColor,
       _isSliver = isSliver,
       _trailingWidget = trailingWidget,
       _title = title,
@@ -36,7 +36,7 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
         ? AppBarTitle(text: _title!)
         : null,
       elevation: 0,
-      backgroundColor: _backgroundColor,
+      backgroundColor: _backgroundColor ?? MainTheme.topAppBar,
       leading: const AnimatedLeadingIcon(),
       actions: [
         if (_trailingWidget != null)
@@ -51,7 +51,7 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
         ? AppBarTitle(text: _title!)
         : null,
       elevation: 0,
-      backgroundColor: _backgroundColor,
+      backgroundColor: _backgroundColor ?? MainTheme.topAppBar,
       leading: const AnimatedLeadingIcon(),
       actions: [
         if (_trailingWidget != null)

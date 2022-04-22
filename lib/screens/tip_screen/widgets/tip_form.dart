@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:heist/blocs/customer/customer_bloc.dart';
 import 'package:heist/models/customer/account.dart';
 import 'package:heist/resources/helpers/global_text.dart';
 import 'package:heist/resources/helpers/vibrate.dart';
@@ -9,11 +10,9 @@ import 'package:heist/themes/global_colors.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
 
 class TipForm extends StatefulWidget {
-  final Account _account;
 
-  const TipForm({required Account account, Key? key})
-    : _account = account,
-      super(key: key);
+  const TipForm({Key? key})
+    : super(key: key);
 
   @override
   State<TipForm> createState() => _TipFormState();
@@ -33,8 +32,8 @@ class _TipFormState extends State<TipForm> {
   void initState() {
     super.initState();
     _tipFormBloc = BlocProvider.of<TipFormBloc>(context);
-    _tipRateController = TextEditingController(text: widget._account.tipRate.toString());
-    _quickTipRateController = TextEditingController(text: widget._account.quickTipRate.toString());
+    _tipRateController = TextEditingController(text: BlocProvider.of<CustomerBloc>(context).customer!.account.tipRate.toString());
+    _quickTipRateController = TextEditingController(text: BlocProvider.of<CustomerBloc>(context).customer!.account.quickTipRate.toString());
 
     _tipRateController.addListener(_onTipRateChanged);
     _quickTipRateController.addListener(_onQuickTipRateChanged);
@@ -239,16 +238,19 @@ class _TipFormState extends State<TipForm> {
   }
 
   bool _formFieldsChanged() {
-    return (widget._account.tipRate != int.parse(_tipRateController.text))
-      || (widget._account.quickTipRate != int.parse(_quickTipRateController.text));
+    Account account = BlocProvider.of<CustomerBloc>(context).customer!.account;
+    return (account.tipRate != int.parse(_tipRateController.text))
+      || (account.quickTipRate != int.parse(_quickTipRateController.text));
   }
 
   void _saveButtonPressed({required TipFormState state}) {
     if (_isSaveButtonEnabled(state: state)) {
+      Account account = BlocProvider.of<CustomerBloc>(context).customer!.account;
+
       _tipFormBloc.add(Submitted(
-        accountIdentifier: widget._account.identifier,
-        tipRate: int.parse(_tipRateController.text) != widget._account.tipRate ? int.parse(_tipRateController.text) : null,
-        quickTipRate: int.parse(_quickTipRateController.text) != widget._account.quickTipRate ? int.parse(_quickTipRateController.text) : null
+        accountIdentifier: account.identifier,
+        tipRate: int.parse(_tipRateController.text) != account.tipRate ? int.parse(_tipRateController.text) : null,
+        quickTipRate: int.parse(_quickTipRateController.text) != account.quickTipRate ? int.parse(_quickTipRateController.text) : null
       ));
     }
   }

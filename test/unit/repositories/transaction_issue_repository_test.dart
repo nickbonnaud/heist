@@ -16,7 +16,7 @@ void main() {
     late TransactionIssueRepository transactionIssueRepositoryWithMock;
 
     setUp(() {
-      transactionIssueRepository = TransactionIssueRepository(issueProvider: TransactionIssueProvider());
+      transactionIssueRepository = const TransactionIssueRepository();
       mockTransactionIssueProvider = MockTransactionIssueProvider();
       transactionIssueRepositoryWithMock = TransactionIssueRepository(issueProvider: mockTransactionIssueProvider);
     });

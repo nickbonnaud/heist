@@ -6,20 +6,25 @@ import 'package:meta/meta.dart';
 
 @immutable
 class LocationRepository extends BaseRepository {
-  final LocationProvider _locationProvider;
+  final LocationProvider? _locationProvider;
 
-  LocationRepository({required LocationProvider locationProvider})
+  const LocationRepository({LocationProvider? locationProvider})
     : _locationProvider = locationProvider;
 
   Future<List<Business>> sendLocation({required double lat, required double lng, required bool startLocation}) async {
+    LocationProvider locationProvider = _getLocationProvider();
     Map<String, dynamic> body = {
       "lat": lat,
       "lng": lng,
       "start_location": startLocation
     };
 
-    PaginateDataHolder holder = await sendPaginated(request:  _locationProvider.sendLocation(body: body));
+    PaginateDataHolder holder = await sendPaginated(request:  locationProvider.sendLocation(body: body));
     return deserialize(holder: holder);
+  }
+
+  LocationProvider _getLocationProvider() {
+    return _locationProvider ?? const LocationProvider();
   }
 
   @override

@@ -4,16 +4,15 @@ import 'package:image_picker/image_picker.dart';
 
 @immutable
 class PhotoPickerRepository {
-  final PhotoPickerProvder _photoPickerProvder;
+  final PhotoPickerProvider _photoPickerProvider = const PhotoPickerProvider();
 
-  const PhotoPickerRepository({required PhotoPickerProvder photoPickerProvder})
-    : _photoPickerProvder = photoPickerProvder;
+  const PhotoPickerRepository();
 
   Future<XFile?> pickPhoto() async {
-    return await _photoPickerProvder.pickPhoto();
+    return await _photoPickerProvider.pickPhoto();
   }
 
   Future<XFile?> takePhoto() async {
-    return await _photoPickerProvder.takePhoto();
+    return await _photoPickerProvider.takePhoto();
   }
 }

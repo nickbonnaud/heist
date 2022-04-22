@@ -5,11 +5,11 @@ import 'package:heist/themes/global_colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class OverlayAppBar extends StatefulWidget implements PreferredSizeWidget {
-  final Color _backgroundColor;
+  final Color? _backgroundColor;
   final Widget? _trailingWidget;
 
-  OverlayAppBar({required BuildContext context, Color? backgroundColor, Widget? trailingWidget, Key? key})
-    : _backgroundColor = backgroundColor ?? Theme.of(context).colorScheme.background,
+  const OverlayAppBar({Color? backgroundColor, Widget? trailingWidget, Key? key})
+    : _backgroundColor = backgroundColor,
       _trailingWidget = trailingWidget,
       super(key: key);
 
@@ -36,7 +36,7 @@ class _OverlayAppBarState extends State<OverlayAppBar> with TickerProviderStateM
   Widget build(BuildContext context) {
     return AppBar(
       elevation: 0,
-      backgroundColor: widget._backgroundColor,
+      backgroundColor: widget._backgroundColor ?? Theme.of(context).colorScheme.background,
       actions: [
         if (widget._trailingWidget != null)
           widget._trailingWidget!

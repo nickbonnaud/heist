@@ -8,34 +8,34 @@ class MockStorageProvider extends Mock implements StorageProvider {}
 
 void main() {
   group("Token Repository Tests", () {
-    late StorageProvider tokenProvider;
+    late StorageProvider storageProvider;
     late TokenRepository tokenRepository;
     late Token token;
 
     setUp(() {
-      tokenProvider = MockStorageProvider();
-      tokenRepository = TokenRepository(tokenProvider: tokenProvider);
+      storageProvider = MockStorageProvider();
+      tokenRepository = TokenRepository(storageProvider: storageProvider);
       token = const Token(value: "value");
     });
 
     test("Token Repository can save token", () async {
-      when(() => tokenProvider.write(key: any(named: "key"), value: any(named: "value")))
+      when(() => storageProvider.write(key: any(named: "key"), value: any(named: "value")))
         .thenAnswer((_) async => true);
       
       await tokenRepository.saveToken(token: token);
-      verify(() => tokenProvider.write(key: any(named: "key"), value: any(named: "value"))).called(1);
+      verify(() => storageProvider.write(key: any(named: "key"), value: any(named: "value"))).called(1);
     });
 
     test("Token Repository can delete token", () async {
-      when(() => tokenProvider.delete(key: any(named: "key")))
+      when(() => storageProvider.delete(key: any(named: "key")))
         .thenAnswer((_) async => true);
       
       await tokenRepository.deleteToken();
-      verify(() => tokenProvider.delete(key: any(named: "key"))).called(1);
+      verify(() => storageProvider.delete(key: any(named: "key"))).called(1);
     });
 
     test("Token Repository can fetch token", () async {
-      when(() => tokenProvider.read(key: any(named: "key")))
+      when(() => storageProvider.read(key: any(named: "key")))
         .thenAnswer((_) async => "token");
       
       var token = await tokenRepository.fetchToken();
@@ -43,7 +43,7 @@ void main() {
     });
 
     test("Token Repository can fetch token returns null if no token present", () async {
-      when(() => tokenProvider.read(key: any(named: "key")))
+      when(() => storageProvider.read(key: any(named: "key")))
         .thenAnswer((_) async => null);
       
       var token = await tokenRepository.fetchToken();
@@ -51,7 +51,7 @@ void main() {
     });
 
     test("Token Repository can check if token valid", () async {
-      when(() => tokenProvider.read(key: any(named: "key")))
+      when(() => storageProvider.read(key: any(named: "key")))
         .thenAnswer((_) async => "token");
       
       var valid = await tokenRepository.hasValidToken();

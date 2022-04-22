@@ -8,7 +8,7 @@ class FaqBodyState extends Equatable {
 
   factory FaqBodyState.initial({required List<String> questions, required List<String> answers}) {
     return FaqBodyState(
-      faqs: questions.asMap().map((index, question) => MapEntry(index, Faq(question: question, answer: answers[index], answerVisible: false)) ).values.toList()
+      faqs: questions.asMap().map((index, question) => MapEntry(index, Faq(question: question, answer: answers[index], answerVisible: false))).values.toList()
     ); 
   }
 

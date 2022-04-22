@@ -1,19 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:heist/models/customer/customer.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:heist/blocs/customer/customer_bloc.dart';
 import 'package:heist/resources/helpers/global_text.dart';
 import 'package:heist/resources/helpers/vibrate.dart';
 import 'package:heist/screens/password_screen/bloc/password_form_bloc.dart';
 import 'package:heist/themes/global_colors.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class PasswordForm extends StatefulWidget {
-  final Customer _customer;
 
-  const PasswordForm({required Customer customer, Key? key})
-    : _customer = customer,
-      super(key: key);
+  const PasswordForm({Key? key})
+    : super(key: key);
 
   @override
   State<PasswordForm> createState() => _PasswordFormState();
@@ -254,7 +252,7 @@ class _PasswordFormState extends State<PasswordForm> {
             oldPassword: _oldPasswordController.text,
             password: _passwordController.text,
             passwordConfirmation: _passwordConfirmationController.text,
-            customerIdentifier: widget._customer.identifier
+            customerIdentifier: BlocProvider.of<CustomerBloc>(context).customer!.identifier
           ))
         : _passwordFormBloc.add(OldPasswordSubmitted(oldPassword: _oldPasswordController.text));
     }

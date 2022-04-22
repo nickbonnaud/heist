@@ -8,19 +8,18 @@ import 'bloc/help_tickets_screen_bloc.dart';
 import 'widgets/help_tickets_screen_body.dart';
 
 class HelpTicketsScreen extends StatelessWidget {
-  final HelpRepository _helpRepository;
 
-  const HelpTicketsScreen({required HelpRepository helpRepository, Key? key})
-    : _helpRepository = helpRepository,
-      super(key: key);
+  const HelpTicketsScreen({Key? key})
+    : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider<DefaultAppBarBloc>(
       create: (BuildContext context) => DefaultAppBarBloc(),
       child: BlocProvider<HelpTicketsScreenBloc>(
-        create: (BuildContext context) => HelpTicketsScreenBloc(helpRepository: _helpRepository)
-          ..add(const FetchAll()),
+        create: (BuildContext context) => HelpTicketsScreenBloc(
+          helpRepository: RepositoryProvider.of<HelpRepository>(context)
+        )..add(const FetchAll()),
         child: Scaffold(
           backgroundColor: Theme.of(context).colorScheme.scrollBackground,
           body: const HelpTicketsScreenBody(),

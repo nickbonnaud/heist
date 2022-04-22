@@ -6,6 +6,8 @@ import 'package:heist/resources/http/api_endpoints.dart';
 @immutable
 class PhotoProvider extends BaseProvider {
 
+  const PhotoProvider();
+  
   Future<ApiResponse> upload({required Map<String, dynamic> body, required String profileIdentifier}) async {
     String url = '${ApiEndpoints.photo}/$profileIdentifier';
     return await post(url: url, body: body);

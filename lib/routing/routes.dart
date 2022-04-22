@@ -37,8 +37,6 @@ class Routes {
   static const String logout = '/settings/logout';
 
   static const String helpTickets = '/help-tickets';
-  static const String helpTicketDetails = '/help-tickets/details';
-  static const String helpTicketNew = '/help-tickets/new';
 
   static const String reportIssue = '/report-issue';
 }

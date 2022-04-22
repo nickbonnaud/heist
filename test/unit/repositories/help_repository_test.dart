@@ -17,7 +17,7 @@ void main() {
     late HelpRepository helpRepositoryWithMock;
 
     setUp(() {
-      helpRepository = HelpRepository(helpProvider: HelpProvider());
+      helpRepository = const HelpRepository();
       mockHelpProvider = MockHelpProvider();
       helpRepositoryWithMock = HelpRepository(helpProvider: mockHelpProvider);
     });

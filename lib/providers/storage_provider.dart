@@ -5,6 +5,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 class StorageProvider {
   final storage = const FlutterSecureStorage();
 
+  const StorageProvider();
 
   Future<String?> read({required String key}) async {
     return await storage.read(key: key);

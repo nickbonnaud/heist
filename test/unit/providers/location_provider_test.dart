@@ -7,7 +7,7 @@ void main() {
     late LocationProvider locationProvider;
 
     setUp(() {
-      locationProvider = LocationProvider();
+      locationProvider = const LocationProvider();
     });
 
     test("Sending Location returns PaginatedAPiResponse", () async {

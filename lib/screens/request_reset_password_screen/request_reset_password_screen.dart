@@ -7,19 +7,19 @@ import 'bloc/request_reset_form_bloc.dart';
 import 'widgets/request_reset_password_form.dart';
 
 class RequestResetPasswordScreen extends StatelessWidget {
-  final AuthenticationRepository _authenticationRepository;
 
-  const RequestResetPasswordScreen({required AuthenticationRepository authenticationRepository, Key? key})
-    : _authenticationRepository = authenticationRepository,
-      super(key: key);
+  const RequestResetPasswordScreen({Key? key})
+    : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: BottomModalAppBar(context: context),
+      appBar: const BottomModalAppBar(),
       body: BlocProvider<RequestResetFormBloc>(
-        create: (_) => RequestResetFormBloc(authenticationRepository: _authenticationRepository),
+        create: (_) => RequestResetFormBloc(
+          authenticationRepository: RepositoryProvider.of<AuthenticationRepository>(context)
+        ),
         child: const RequestResetPasswordForm(),
       ),
     );

@@ -7,7 +7,7 @@ void main() {
     late AuthenticationProvider authenticationProvider;
 
     setUp(() {
-      authenticationProvider = AuthenticationProvider();
+      authenticationProvider = const AuthenticationProvider();
     });
 
     test("Registering a customer returns ApiResponse", () async {

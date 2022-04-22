@@ -12,11 +12,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import './widgets/title_text.dart';
 
 class SetupPaymentAccountCard extends StatelessWidget {
-  final CustomerBloc _customerBloc;
 
-  const SetupPaymentAccountCard({required CustomerBloc customerBloc, Key? key})
-    : _customerBloc = customerBloc,
-      super(key: key);
+  const SetupPaymentAccountCard({Key? key})
+    : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -74,8 +72,8 @@ class SetupPaymentAccountCard extends StatelessWidget {
 
   void _connectButtonPressed({required BuildContext context}) {
     Status status = const Status(name: "pending", code: 120);
-    Customer updatedCustomer = _customerBloc.state.customer!.update(status: status);
-    _customerBloc.add(CustomerUpdated(customer: updatedCustomer));
+    Customer updatedCustomer = BlocProvider.of<CustomerBloc>(context).state.customer!.update(status: status);
+    BlocProvider.of<CustomerBloc>(context).add(CustomerUpdated(customer: updatedCustomer));
   }
 
   bool _isNextButtonEnabled({required CustomerState state}) {

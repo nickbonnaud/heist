@@ -17,7 +17,7 @@ void main() {
     late ActiveLocationRepository activeLocationRepositoryWithMock;
 
     setUp(() {
-      activeLocationRepository = ActiveLocationRepository(activeLocationProvider: ActiveLocationProvider());
+      activeLocationRepository = const ActiveLocationRepository();
       mockActiveLocationProvider = MockActiveLocationProvider();
       activeLocationRepositoryWithMock = ActiveLocationRepository(activeLocationProvider: mockActiveLocationProvider);
     });

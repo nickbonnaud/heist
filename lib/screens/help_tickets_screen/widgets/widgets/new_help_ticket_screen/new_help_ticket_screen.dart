@@ -8,21 +8,20 @@ import 'bloc/help_ticket_form_bloc.dart';
 import 'widgets/help_ticket_form.dart';
 
 class NewHelpTicketScreen extends StatelessWidget {
-  final HelpRepository _helpRepository;
-  final HelpTicketsScreenBloc _helpTicketsScreenBloc; 
 
-  const NewHelpTicketScreen({required HelpRepository helpRepository, required HelpTicketsScreenBloc helpTicketsScreenBloc, Key? key})
-    : _helpRepository = helpRepository,
-      _helpTicketsScreenBloc = helpTicketsScreenBloc,
-      super(key: key);
+  const NewHelpTicketScreen({Key? key})
+    : super(key: key);
   
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
-      appBar: BottomModalAppBar(context: context),
+      appBar: const BottomModalAppBar(),
       body: BlocProvider<HelpTicketFormBloc>(
-        create: (_) => HelpTicketFormBloc(helpRepository: _helpRepository, helpTicketsScreenBloc: _helpTicketsScreenBloc),
+        create: (_) => HelpTicketFormBloc(
+          helpRepository: RepositoryProvider.of<HelpRepository>(context),
+          helpTicketsScreenBloc: BlocProvider.of<HelpTicketsScreenBloc>(context)
+        ),
         child: const HelpTicketForm(),
       ),
     );

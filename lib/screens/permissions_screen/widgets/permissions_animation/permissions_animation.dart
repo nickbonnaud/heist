@@ -8,11 +8,9 @@ import 'package:heist/blocs/permissions/permissions_bloc.dart';
 import 'widgets/takeoff_control.dart';
 
 class PermissionsAnimation extends StatefulWidget {
-  final PermissionsBloc _permissionsBloc;
 
-  const PermissionsAnimation({required PermissionsBloc permissionsBloc, Key? key})
-    : _permissionsBloc = permissionsBloc,
-      super(key: key);
+  const PermissionsAnimation({Key? key})
+    : super(key: key);
 
   @override
   State<PermissionsAnimation> createState() => _PermissionsAnimationState();
@@ -30,7 +28,7 @@ class _PermissionsAnimationState extends State<PermissionsAnimation> {
   @override
   void initState() {
     super.initState();
-    _invalidPermissions = widget._permissionsBloc.invalidPermissions;
+    _invalidPermissions = BlocProvider.of<PermissionsBloc>(context).invalidPermissions;
     _initialAnimation = _setInitialAnimation(incompletePermissions: _invalidPermissions.length);
     _currentAnimation = _initialAnimation;
     _nextAnimation = _setNextAnimation();

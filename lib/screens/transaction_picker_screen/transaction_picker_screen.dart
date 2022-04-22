@@ -12,39 +12,30 @@ import 'bloc/transaction_picker_screen_bloc.dart';
 import 'widgets/transaction_picker_body.dart';
 
 class TransactionPickerScreen extends StatelessWidget {
-  final TransactionRepository _transactionRepository;
   final Business _business;
   final bool _fromSettings;
-  final ActiveLocationBloc _activeLocationBloc;
-  final OpenTransactionsBloc _openTransactionsBloc;
 
   const TransactionPickerScreen({
-    required TransactionRepository transactionRepository,
-    required Business business, required bool fromSettings,
-    required ActiveLocationBloc activeLocationBloc,
-    required OpenTransactionsBloc openTransactionsBloc,
+    required Business business,
+    required bool fromSettings,
     Key? key
   })
-    : _transactionRepository = transactionRepository,
-      _business = business,
+    : _business = business,
       _fromSettings = fromSettings,
-      _activeLocationBloc = activeLocationBloc,
-      _openTransactionsBloc = openTransactionsBloc,
       super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: BottomModalAppBar(
-        context: context,
         backgroundColor: Theme.of(context).colorScheme.topAppBar,
         trailingWidget: const InfoButton()
       ),
       body: BlocProvider<TransactionPickerScreenBloc>(
         create: (BuildContext context) => TransactionPickerScreenBloc(
-          transactionRepository: _transactionRepository,
-          activeLocationBloc: _activeLocationBloc,
-          openTransactionsBloc: _openTransactionsBloc
+          transactionRepository: RepositoryProvider.of<TransactionRepository>(context),
+          activeLocationBloc: BlocProvider.of<ActiveLocationBloc>(context),
+          openTransactionsBloc: BlocProvider.of<OpenTransactionsBloc>(context)
         )
           ..add(Fetch(businessIdentifier: _business.identifier)),
         child: TransactionPickerBody(businessIdentifier: _business.identifier, fromSettings: _fromSettings,),

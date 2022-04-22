@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:heist/blocs/customer/customer_bloc.dart';
 import 'package:heist/global_widgets/edit_photo/bloc/edit_photo_bloc.dart';
 import 'package:heist/global_widgets/edit_photo/edit_photo.dart';
 import 'package:heist/models/customer/customer.dart';
-import 'package:heist/models/customer/profile.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:heist/repositories/photo_picker_repository.dart';
 import 'package:heist/repositories/photo_repository.dart';
 import 'package:heist/resources/helpers/global_text.dart';
 import 'package:heist/screens/profile_setup_screen/bloc/profile_setup_screen_bloc.dart';
@@ -15,24 +13,9 @@ import 'package:heist/themes/global_colors.dart';
 import './widgets/title_text.dart';
 
 class ProfilePhotoCard extends StatelessWidget {
-  final PhotoRepository _photoRepository;
-  final PhotoPickerRepository _photoPickerRepository;
-  final CustomerBloc _customerBloc;
-  final Profile _profile;
 
-
-  const ProfilePhotoCard({
-    required PhotoRepository photoRepository,
-    required PhotoPickerRepository photoPickerRepository,
-    required CustomerBloc customerBloc,
-    required Profile profile,
-    Key? key
-  })
-    : _photoRepository = photoRepository,
-      _photoPickerRepository = photoPickerRepository,
-      _customerBloc = customerBloc,
-      _profile = profile,
-      super(key: key);
+  const ProfilePhotoCard({Key? key})
+    : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -53,14 +36,10 @@ class ProfilePhotoCard extends StatelessWidget {
                   const TitleText(text: "Next add a Profile Photo."),
                   BlocProvider<EditPhotoBloc>(
                     create: (BuildContext context) => EditPhotoBloc(
-                      photoRepository: _photoRepository,
-                      customerBloc: _customerBloc,
+                      photoRepository: RepositoryProvider.of<PhotoRepository>(context),
+                      customerBloc: BlocProvider.of<CustomerBloc>(context),
                     ),
-                    child: EditPhoto(
-                      photoPicker: _photoPickerRepository,
-                      profile: _profile,
-                      autoDismiss: false,
-                    ),
+                    child: const EditPhoto(autoDismiss: false),
                   ),
                   Column(
                     children: [

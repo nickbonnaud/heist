@@ -7,17 +7,9 @@ import 'bloc/onboard_bloc.dart';
 import 'widgets/onboard_body.dart';
 
 class OnboardScreen extends StatelessWidget {
-  final PermissionsBloc _permissionsBloc;
-  final CustomerBloc _customerBloc;
 
-  const OnboardScreen({
-    required PermissionsBloc permissionsBloc,
-    required CustomerBloc customerBloc,
-    Key? key
-  })
-    : _permissionsBloc = permissionsBloc,
-      _customerBloc = customerBloc,
-      super(key: key);
+  const OnboardScreen({Key? key})
+    :super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,14 +17,11 @@ class OnboardScreen extends StatelessWidget {
       backgroundColor: Theme.of(context).colorScheme.background,
       body: BlocProvider<OnboardBloc>(
         create: (_) => OnboardBloc(
-          customerStatus: _customerBloc.customer!.status,
-          numberValidPermissions: _permissionsBloc.numberValidPermissions
+          customerStatus: BlocProvider.of<CustomerBloc>(context).customer!.status,
+          numberValidPermissions: BlocProvider.of<PermissionsBloc>(context).numberValidPermissions
         ),
-        child: SafeArea(
-          child: OnboardBody(
-            permissionsBloc: _permissionsBloc,
-            customerStatus: _customerBloc.customer!.status,
-          )
+        child: const SafeArea(
+          child: OnboardBody()
         ),
       ),
     );

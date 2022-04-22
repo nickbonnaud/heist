@@ -7,7 +7,7 @@ void main() {
     late BusinessProvider businessProvider;
 
     setUp(() {
-      businessProvider = BusinessProvider();
+      businessProvider = const BusinessProvider();
     });
 
     test("Fetching Businesses returns PaginatedApiResponse", () async {

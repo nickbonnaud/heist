@@ -7,6 +7,7 @@ import 'package:heist/models/business/business.dart';
 import 'package:heist/models/business/hours.dart';
 import 'package:heist/models/customer/active_location.dart';
 import 'package:heist/resources/helpers/global_text.dart';
+import 'package:heist/resources/helpers/vibrate.dart';
 import 'package:heist/routing/routes.dart';
 import 'package:heist/screens/transaction_picker_screen/models/transaction_picker_args.dart';
 import 'package:heist/themes/global_colors.dart';
@@ -336,8 +337,28 @@ class _BusinessScreenState extends State<BusinessScreen> with SingleTickerProvid
     if (await canLaunch(widget._business.profile.website)) {
       await launch(widget._business.profile.website);
     } else {
-      print('cannot launch url');
+      _errorLaunchUrlSnackbar();
     }
+  }
+
+  void _errorLaunchUrlSnackbar() {
+    Vibrate.error();
+
+    SnackBar snackBar = SnackBar(
+      content: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+            child: SnackbarText(text: "An error occurred. Unable to open ${widget._business.profile.website}.")
+          ),
+        ],
+      ),
+      backgroundColor: Theme.of(context).colorScheme.error
+    );
+
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(snackBar);
   }
 
   void _goToTransactionFinderScreen() {

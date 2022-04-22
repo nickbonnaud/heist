@@ -17,7 +17,7 @@ void main() {
     late RefundRepository refundRepositoryWithMock;
 
     setUp(() {
-      refundRepository = RefundRepository(refundProvider: RefundProvider());
+      refundRepository = const RefundRepository();
       mockRefundProvider = MockRefundProvider();
       refundRepositoryWithMock = RefundRepository(refundProvider: mockRefundProvider);
     });

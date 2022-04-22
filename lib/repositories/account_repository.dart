@@ -6,9 +6,9 @@ import 'package:meta/meta.dart';
 
 @immutable
 class AccountRepository extends BaseRepository {
-  final AccountProvider _accountProvider;
+  final AccountProvider? _accountProvider;
 
-  AccountRepository({required AccountProvider accountProvider})
+  const AccountRepository({AccountProvider? accountProvider})
     : _accountProvider = accountProvider;
   
   Future<Customer> update({required String accountIdentifier, int? tipRate, int? quickTipRate, String? primary}) async {
@@ -23,8 +23,14 @@ class AccountRepository extends BaseRepository {
       body.addAll({'primary': primary});
     }
 
-    final Map<String, dynamic> json = await send(request: _accountProvider.update(body: body, accountIdentifier: accountIdentifier));
+    
+    AccountProvider accountProvider = _getAccountProvider();
+    final Map<String, dynamic> json = await send(request: accountProvider.update(body: body, accountIdentifier: accountIdentifier));
     return deserialize(json: json);
+  }
+
+  AccountProvider _getAccountProvider() {
+    return _accountProvider ?? const AccountProvider();
   }
 
   @override

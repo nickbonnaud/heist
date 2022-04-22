@@ -6,6 +6,8 @@ import 'package:meta/meta.dart';
 @immutable
 class BusinessProvider extends BaseProvider {
 
+  const BusinessProvider();
+  
   Future<PaginatedApiResponse> fetch({String query = "", String? paginateUrl}) async {
     final String url = paginateUrl ?? '${ApiEndpoints.business}$query';
 

@@ -14,7 +14,7 @@ void main() {
     )
   );
   
-  runApp(const PhaseOne());
+  runApp(const PhaseOne(testing: true));
 }
 
 

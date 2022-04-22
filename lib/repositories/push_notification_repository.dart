@@ -3,10 +3,9 @@ import 'package:meta/meta.dart';
 
 @immutable
 class PushNotificationRepository {
-  final PushNotificationProvider _pushNotificationProvider;
+  final PushNotificationProvider _pushNotificationProvider = const PushNotificationProvider();
 
-  const PushNotificationRepository({required PushNotificationProvider pushNotificationProvider})
-    : _pushNotificationProvider = pushNotificationProvider;
+  const PushNotificationRepository();
 
   void startMonitoring({required NotificationReceivedCallback onMessageReceived, required NotificationOpenedCallback onMessageInteraction}) {
     _pushNotificationProvider.startMonitoring(onMessageReceived: onMessageReceived, onMessageInteraction: onMessageInteraction);
