@@ -24,7 +24,7 @@ class HomeScreenBody extends StatelessWidget {
           }
           return Stack(
             children: [
-              NearbyBusinessesMap(preMarkers: state.preMarkers),
+              const NearbyBusinessesMap(),
               const PeekSheet(),
               _dimmer(context: context)
             ],

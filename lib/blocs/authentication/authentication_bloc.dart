@@ -28,9 +28,9 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
     // TODO //
     // TEST CHANGE //
     
-    // final bool isSignedIn = await _authenticationRepository.isSignedIn();
+    final bool isSignedIn = await _authenticationRepository.isSignedIn();
 
-    final bool isSignedIn = true;
+    // final bool isSignedIn = true;
     
     if (isSignedIn) {
       _customerBloc.add(CustomerAuthenticated());

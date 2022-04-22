@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:heist/blocs/geo_location/geo_location_bloc.dart';
 import 'package:heist/blocs/permissions/permissions_bloc.dart';
 import 'package:heist/repositories/geolocator_repository.dart';
@@ -41,7 +42,7 @@ void main() {
       build: () => geoLocationBloc,
       seed: () => const LocationLoaded(latitude: 1.0, longitude: 1.0),
       verify: (_) {
-        expect(geoLocationBloc.currentLocation, {'lat': 1.0, 'lng': 1.0});
+        expect(geoLocationBloc.currentLocation, const LatLng(1.0, 1.0));
       }
     );
 

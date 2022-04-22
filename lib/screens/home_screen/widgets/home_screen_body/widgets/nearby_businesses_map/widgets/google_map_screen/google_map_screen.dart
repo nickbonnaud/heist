@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:heist/blocs/geo_location/geo_location_bloc.dart';
+import 'package:heist/blocs/nearby_businesses/nearby_businesses_bloc.dart';
 import 'package:heist/global_widgets/cached_avatar_hero.dart';
 import 'package:heist/models/business/business.dart';
 import 'package:heist/screens/business_screen/business_screen.dart';
@@ -15,27 +16,15 @@ import '../../models/pre_marker.dart';
 import 'bloc/google_map_screen_bloc.dart';
 
 class GoogleMapScreen extends StatefulWidget{
-  final double _latitude;
-  final double _longitude;
-  final List<PreMarker> _preMarkers;
 
-  const GoogleMapScreen({
-    required double latitude,
-    required double longitude,
-    required List<PreMarker> preMarkers,
-    Key? key
-  })
-    : _latitude = latitude,
-      _longitude = longitude,
-      _preMarkers = preMarkers,
-      super(key: key);
+  const GoogleMapScreen({Key? key})
+    : super(key: key);
 
   @override
   State<GoogleMapScreen> createState() => _GoogleMapScreenState();
 }
   
 class _GoogleMapScreenState extends State<GoogleMapScreen> {
-  static const mapKey = 'MAP_KEY';
   late GoogleMapController _controller;
 
   @override
@@ -52,7 +41,7 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
             GoogleMap(
               onMapCreated: (GoogleMapController controller) => _controller = controller,
               initialCameraPosition: CameraPosition(
-                target: LatLng(widget._latitude, widget._longitude),
+                target: BlocProvider.of<GeoLocationBloc>(context).currentLocation!,
                 zoom: 14.0,
               ),
               gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>{
@@ -60,7 +49,9 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
                   () => EagerGestureRecognizer()
                 )
               },
-              markers: _createMarkers(preMarkers: widget._preMarkers),
+              markers: _createMarkers(
+                preMarkers: BlocProvider.of<NearbyBusinessesBloc>(context).preMarkers
+              ),
               myLocationButtonEnabled: false,
             ),
             BlocBuilder<GoogleMapScreenBloc, GoogleMapScreenState>(
@@ -68,8 +59,8 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
                 if (state.screenCoordinate != null) {
                   return Positioned(
                     key: const Key("state.business!.identifier"),
-                    top: state.screenCoordinate!.y.toDouble().h - 40.h,
-                    left: state.screenCoordinate!.x.toDouble().w - 5.w,
+                    top: state.screenCoordinate!.y.toDouble() - 20,
+                    left: state.screenCoordinate!.x.toDouble(),
                     child: CachedAvatarHero(
                       url: state.business!.photos.logo.smallUrl, 
                       radius: 5.sp, 
@@ -81,11 +72,6 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
               }
             ),
           ],
-        ),
-        floatingActionButton: FloatingActionButton(
-          heroTag: mapKey,
-          child: const Icon(Icons.my_location),
-          onPressed: () => _changeLocation(),
         ),
       )
     );
@@ -100,12 +86,8 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
   Marker _createCustomerLocationMarker() {
     return Marker(
       markerId: const MarkerId('customer_marker'),
-      position: LatLng(widget._latitude, widget._longitude)
+      position: BlocProvider.of<GeoLocationBloc>(context).currentLocation!
     );
-  }
-
-  void _changeLocation() {
-    BlocProvider.of<GeoLocationBloc>(context).add(const FetchLocation(accuracy: Accuracy.medium));
   }
 
   void _showBusinessSheet({required Business business}) {

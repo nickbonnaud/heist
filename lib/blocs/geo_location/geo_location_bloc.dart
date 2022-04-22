@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:heist/blocs/permissions/permissions_bloc.dart';
 import 'package:heist/repositories/geolocator_repository.dart';
 
@@ -37,10 +38,10 @@ class GeoLocationBloc extends Bloc<GeoLocationEvent, GeoLocationState> {
 
   bool get isGeoLocationReady => state is LocationLoaded;
 
-  Map<String, double>? get currentLocation {
+  LatLng? get currentLocation {
     final currentState = state;
     if (currentState is LocationLoaded) {
-      return {'lat': currentState.latitude, 'lng': currentState.longitude};
+      return LatLng(currentState.latitude, currentState.longitude);
     }
     return null;
   }

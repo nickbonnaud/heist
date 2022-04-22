@@ -19,6 +19,7 @@ class NearbyBusinessesBloc extends Bloc<NearbyBusinessesEvent, NearbyBusinessesS
   late StreamSubscription _geoLocationBlocSubscription;
 
   List<Business> get businesses => state.businesses;
+  List<PreMarker> get preMarkers => (state as NearbyBusinessLoaded).preMarkers;
   
   NearbyBusinessesBloc({
     required LocationRepository locationRepository,

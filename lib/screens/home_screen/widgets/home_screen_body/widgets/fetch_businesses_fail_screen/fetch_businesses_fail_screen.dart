@@ -32,8 +32,8 @@ class FetchBusinessesFailScreen extends StatelessWidget {
       geoLocationBloc.add(const FetchLocation(accuracy: Accuracy.medium));
     } else {
       nearbyBusinessesBloc.add(FetchNearby(
-        lat: geoLocationBloc.currentLocation!['lat']!,
-        lng: geoLocationBloc.currentLocation!['lng']!,
+        lat: geoLocationBloc.currentLocation!.latitude,
+        lng: geoLocationBloc.currentLocation!.longitude,
       ));
     }
   }

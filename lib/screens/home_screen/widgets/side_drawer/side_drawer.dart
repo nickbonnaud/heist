@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heist/blocs/active_location/active_location_bloc.dart';
+import 'package:heist/blocs/geo_location/geo_location_bloc.dart';
 import 'package:heist/screens/home_screen/blocs/side_drawer_bloc/side_drawer_bloc.dart';
 import 'package:heist/screens/transaction_business_picker_screen/bloc/transaction_business_picker_bloc.dart';
 import 'package:heist/themes/global_colors.dart';
@@ -22,7 +23,8 @@ class SideDrawer extends StatefulWidget {
 }
 
 class _SideDrawerState extends State<SideDrawer> with SingleTickerProviderStateMixin {
-  static const String heroKey = 'MENU_KEY';
+  static const String _menuKey = 'MENU_KEY';
+  static const String _locationKey = 'LOCATION_KEY';
   static const double _minScale = 0.86;
   static const double _drawerWidth = 0.66;
   static const double _shadowOffset = 16.0;
@@ -85,17 +87,38 @@ class _SideDrawerState extends State<SideDrawer> with SingleTickerProviderStateM
           ),
           floatingActionButton: state.buttonVisible ? Padding(
             padding: EdgeInsets.only(top: 25.h, left: 10.w),
-            child: FloatingActionButton(
-              key: const Key("menuFabKey"),
-              backgroundColor: Theme.of(context).colorScheme.callToAction,
-              heroTag: heroKey,
-              child: const Icon(Icons.menu),
-              onPressed: () => _onMenuPressed(context, state),
+            child: Column(
+              children: [
+                _menuButton(state: state),
+                SizedBox(height: 20.h,),
+                _locationButton()
+              ],
             ),
           ) : null,
           floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
         );
       }
+    );
+  }
+
+  Widget _menuButton({required SideDrawerState state}) {
+    return FloatingActionButton(
+      tooltip: "Menu",
+      key: const Key("menuFabKey"),
+      backgroundColor: Theme.of(context).colorScheme.callToAction,
+      heroTag: _menuKey,
+      child: const Icon(Icons.menu),
+      onPressed: () => _onMenuPressed(context, state),
+    );
+  }
+
+  Widget _locationButton() {
+    return FloatingActionButton.small(
+      tooltip: "Reset Location",
+      heroTag: _locationKey,
+      backgroundColor: Colors.white,
+      child: Icon(Icons.my_location, color: Theme.of(context).colorScheme.callToAction),
+      onPressed: () => _changeLocation(),
     );
   }
 
@@ -123,6 +146,10 @@ class _SideDrawerState extends State<SideDrawer> with SingleTickerProviderStateM
     } else {
       _animationController.fling(velocity: _animationController.value < 0.5 ? -2.0 : 2.0);
     }
+  }
+
+  void _changeLocation() {
+    BlocProvider.of<GeoLocationBloc>(context).add(const FetchLocation(accuracy: Accuracy.medium));
   }
 
   Widget _buildBody({required SideDrawerState state}) {
