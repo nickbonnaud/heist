@@ -19,17 +19,6 @@ class EmailChanged extends EmailFormEvent {
   String toString() => 'EmailChanged { email: $email }';
 }
 
-class Submitted extends EmailFormEvent {
-  final String email;
-  final String identifier;
-
-  const Submitted({required this.email, required this.identifier});
-
-  @override
-  List<Object> get props => [email, identifier];
-
-  @override
-  String toString() => 'Submitted { email: $email, identifier: $identifier }';
-}
+class Submitted extends EmailFormEvent {}
 
 class Reset extends EmailFormEvent {}

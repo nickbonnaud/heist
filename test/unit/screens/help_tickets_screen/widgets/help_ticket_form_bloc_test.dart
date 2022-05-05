@@ -20,6 +20,9 @@ void main() {
     late HelpTicketFormBloc helpTicketFormBloc;
     late HelpTicketFormState _baseState;
 
+    late String subject;
+    late String message;
+
     setUp(() {
       registerFallbackValue(HelpTicketAdded(helpTicket: MockHelpTicket()));
       helpRepository = MockHelpRepository();
@@ -41,28 +44,40 @@ void main() {
       "HelpTicketFormBloc SubjectChanged event yields state: [isSubjectValid: true]",
       build: () => helpTicketFormBloc,
       wait: const Duration(milliseconds: 300),
-      act: (bloc) => bloc.add(SubjectChanged(subject: faker.lorem.sentence())),
-      expect: () => [_baseState.update(isSubjectValid: true)]
+      act: (bloc) {
+        subject = faker.lorem.sentence();
+        bloc.add(SubjectChanged(subject: subject));
+      },
+      expect: () => [_baseState.update(subject: subject, isSubjectValid: true)]
     );
 
     blocTest<HelpTicketFormBloc, HelpTicketFormState>(
       "HelpTicketFormBloc MessageChanged event yields state: [isMessageValid: true]",
       build: () => helpTicketFormBloc,
       wait: const Duration(milliseconds: 300),
-      act: (bloc) => bloc.add(MessageChanged(message: faker.lorem.sentence())),
-      expect: () => [_baseState.update(isMessageValid: true)]
+      act: (bloc) {
+        message = faker.lorem.sentence();
+        bloc.add(MessageChanged(message: message));
+      },
+      expect: () => [_baseState.update(message: message, isMessageValid: true)]
     );
 
     blocTest<HelpTicketFormBloc, HelpTicketFormState>(
       "HelpTicketFormBloc Submitted event yields state: [isSubmitting: true], [isSubmitting: false, isSuccess: true]",
       build: () => helpTicketFormBloc,
+      seed: () {
+        subject = faker.lorem.sentence();
+        message = faker.lorem.sentence();
+        _baseState = _baseState.update(subject: subject, message: message);
+        return _baseState;
+      },
       act: (bloc) {
         when(() => helpRepository.storeHelpTicket(subject: any(named: "subject"), message: any(named: "message")))
           .thenAnswer((_) async => MockHelpTicket());
         when(() => helpTicketsScreenBloc.add(any(that: isA<HelpTicketAdded>())))
           .thenReturn(null);
 
-        bloc.add(Submitted(subject: faker.lorem.sentence(), message: faker.lorem.sentence()));
+        bloc.add(Submitted());
       },
       expect: () => [_baseState.update(isSubmitting: true), _baseState.update(isSubmitting: false, isSuccess: true)]
     );
@@ -70,13 +85,19 @@ void main() {
     blocTest<HelpTicketFormBloc, HelpTicketFormState>(
       "HelpTicketFormBloc Submitted event calls helpRepository.storeHelpTicket && helpTicketsScreenBloc.add",
       build: () => helpTicketFormBloc,
+      seed: () {
+        subject = faker.lorem.sentence();
+        message = faker.lorem.sentence();
+        _baseState = _baseState.update(subject: subject, message: message);
+        return _baseState;
+      },
       act: (bloc) {
         when(() => helpRepository.storeHelpTicket(subject: any(named: "subject"), message: any(named: "message")))
           .thenAnswer((_) async => MockHelpTicket());
         when(() => helpTicketsScreenBloc.add(any(that: isA<HelpTicketAdded>())))
           .thenReturn(null);
 
-        bloc.add(Submitted(subject: faker.lorem.sentence(), message: faker.lorem.sentence()));
+        bloc.add(Submitted());
       },
       verify: (_) {
         verify(() => helpRepository.storeHelpTicket(subject: any(named: "subject"), message: any(named: "message"))).called(1);
@@ -87,11 +108,17 @@ void main() {
     blocTest<HelpTicketFormBloc, HelpTicketFormState>(
       "HelpTicketFormBloc Submitted event on fail yields state: [isSubmitting: true], [isSubmitting: false, errorMessage: error]",
       build: () => helpTicketFormBloc,
+      seed: () {
+        subject = faker.lorem.sentence();
+        message = faker.lorem.sentence();
+        _baseState = _baseState.update(subject: subject, message: message);
+        return _baseState;
+      },
       act: (bloc) {
         when(() => helpRepository.storeHelpTicket(subject: any(named: "subject"), message: any(named: "message")))
           .thenThrow(const ApiException(error: "error"));
 
-        bloc.add(Submitted(subject: faker.lorem.sentence(), message: faker.lorem.sentence()));
+        bloc.add(Submitted());
       },
       expect: () => [_baseState.update(isSubmitting: true), _baseState.update(isSubmitting: false, errorMessage: "error")]
     );
@@ -99,11 +126,16 @@ void main() {
     blocTest<HelpTicketFormBloc, HelpTicketFormState>(
       "HelpTicketFormBloc Reset event on yields state: [isSuccess: false, errorMessage: '']",
       build: () => helpTicketFormBloc,
-      seed: () => _baseState.update(isSuccess: true, errorMessage: "error"),
+      seed: () {
+        subject = faker.lorem.sentence();
+        message = faker.lorem.sentence();
+        _baseState = _baseState.update(subject: subject, message: message, isSuccess: true, errorMessage: "error");
+        return _baseState;
+      },
       act: (bloc) {
         bloc.add(Reset());
       },
-      expect: () => [_baseState.update(isSuccess: false, errorMessage: "")]
+      expect: () => [_baseState.update(subject: subject, message: message, isSuccess: false, errorMessage: "")]
     );
   });
 }

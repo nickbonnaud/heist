@@ -8,6 +8,8 @@ import 'package:heist/resources/helpers/api_exception.dart';
 import 'package:heist/screens/email_screen/bloc/email_form_bloc.dart';
 import 'package:mocktail/mocktail.dart';
 
+import '../../../helpers/mock_data_generator.dart';
+
 class MockCustomerRepository extends Mock implements CustomerRepository {}
 class MockCustomerBloc extends Mock implements CustomerBloc {}
 class MockCustomer extends Mock implements Customer {}
@@ -21,9 +23,15 @@ void main() {
 
     late EmailFormState _baseState;
 
+    late Customer customer;
+    late String email;
+
     setUp(() {
       customerRepository = MockCustomerRepository();
       customerBloc = MockCustomerBloc();
+
+      customer = MockDataGenerator().createCustomer();
+      when(() => customerBloc.customer).thenReturn(customer);
 
       emailFormBloc = EmailFormBloc(customerRepository: customerRepository, customerBloc: customerBloc);
       _baseState = emailFormBloc.state;
@@ -34,15 +42,18 @@ void main() {
     });
 
     test("Initial state of EmailFormBloc is EmailFormState.initial()", () {
-      expect(emailFormBloc.state, EmailFormState.initial());
+      expect(emailFormBloc.state, EmailFormState.initial(email: customer.email));
     });
 
     blocTest<EmailFormBloc, EmailFormState>(
       "EmailFormBloc EmailChanged event yields state: [isEmailValid: true]",
       build: () => emailFormBloc,
       wait: const Duration(milliseconds: 300),
-      act: (bloc) => bloc.add(EmailChanged(email: faker.internet.freeEmail())),
-      expect: () => [_baseState.update(isEmailValid: true)]
+      act: (bloc) {
+        email = faker.internet.freeEmail();
+        bloc.add(EmailChanged(email: email));
+      },
+      expect: () => [_baseState.update(email: email, isEmailValid: true)]
     );
 
     blocTest<EmailFormBloc, EmailFormState>(
@@ -52,7 +63,12 @@ void main() {
           .thenAnswer((_) async => MockCustomer());
         return emailFormBloc;
       },
-      act: (bloc) => bloc.add(Submitted(email: faker.internet.email(), identifier: faker.guid.guid())),
+      seed: () {
+        email = faker.internet.freeEmail();
+        _baseState = _baseState.update(email: email);
+        return _baseState;
+      },
+      act: (bloc) => bloc.add(Submitted()),
       expect: () => [_baseState.update(isSubmitting: true), _baseState.update(isSubmitting: false, isSuccess: true)]
     );
 
@@ -63,14 +79,23 @@ void main() {
           .thenThrow(const ApiException(error: "error"));
         return emailFormBloc;
       },
-      act: (bloc) => bloc.add(Submitted(email: faker.internet.email(), identifier: faker.guid.guid())),
+      seed: () {
+        email = faker.internet.freeEmail();
+        _baseState = _baseState.update(email: email);
+        return _baseState;
+      },
+      act: (bloc) => bloc.add(Submitted()),
       expect: () => [_baseState.update(isSubmitting: true), _baseState.update(isSubmitting: false, errorMessage: "error")]
     );
 
     blocTest<EmailFormBloc, EmailFormState>(
       "EmailFormBloc Reset event yields state: [errorMessage: '', isSuccess: false]",
       build: () => emailFormBloc,
-      seed: () => _baseState.update(errorMessage: "error", isSuccess: true),
+      seed: () {
+        email = faker.internet.email();
+        _baseState = _baseState.update(email: email, errorMessage: "error", isSuccess: true);
+        return _baseState;
+      },
       act: (bloc) => bloc.add(Reset()),
       expect: () => [_baseState.update(errorMessage: "", isSuccess: false)]
     );

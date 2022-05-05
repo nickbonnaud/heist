@@ -21,12 +21,8 @@ class SetupTipBody extends StatefulWidget {
 }
 
 class _SetupTipBodyState extends State<SetupTipBody> {
-  final TextEditingController _tipRateController = TextEditingController(text: "15");
   final FocusNode _tipRateNode = FocusNode();
-  final TextEditingController _quickTipRateController = TextEditingController(text: "5");
   final FocusNode _quickTipRateNode = FocusNode();
-
-  bool get isPopulated => _tipRateController.text.isNotEmpty && _quickTipRateController.text.isNotEmpty;
 
   late SetupTipCardBloc _setupTipCardBloc;
 
@@ -34,8 +30,6 @@ class _SetupTipBodyState extends State<SetupTipBody> {
   void initState() {
     super.initState();
     _setupTipCardBloc = BlocProvider.of<SetupTipCardBloc>(context);
-    _tipRateController.addListener(_onTipRateChanged);
-    _quickTipRateController.addListener(_onQuickTipRateChanged);
   }
   
   @override
@@ -96,9 +90,6 @@ class _SetupTipBodyState extends State<SetupTipBody> {
 
   @override
   void dispose() {
-    _tipRateController.dispose();
-    _quickTipRateController.dispose();
-
     _tipRateNode.dispose();
     _quickTipRateNode.dispose();
     super.dispose();
@@ -127,14 +118,16 @@ class _SetupTipBodyState extends State<SetupTipBody> {
             fontWeight: FontWeight.w700,
             fontSize: 28.sp
           ),
-          controller: _tipRateController,
+          onChanged: (tipRate) => _onTipRateChanged(tipRate: tipRate),
           keyboardType: TextInputType.number,
           textInputAction: TextInputAction.done,
           autocorrect: false,
           autovalidateMode: AutovalidateMode.onUserInteraction,
           textAlign: TextAlign.center,
           focusNode: _tipRateNode,
-          validator: (_) => !state.isTipRateValid ? 'Must be between 0 and 30' : null,
+          validator: (_) => !state.isTipRateValid && state.tipRate.isNotEmpty
+            ? 'Must be between 0 and 30'
+            : null,
         );
       }
     );
@@ -163,14 +156,16 @@ class _SetupTipBodyState extends State<SetupTipBody> {
             fontWeight: FontWeight.w700,
             fontSize: 28.sp
           ),
-          controller: _quickTipRateController,
+          onChanged: (quickTipRate) => _onQuickTipRateChanged(quickTipRate: quickTipRate),
           keyboardType: TextInputType.number,
           textInputAction: TextInputAction.done,
           autocorrect: false,
           autovalidateMode: AutovalidateMode.onUserInteraction,
           textAlign: TextAlign.center,
           focusNode: _quickTipRateNode,
-          validator: (_) => !state.isQuickTipRateValid ? 'Must be between 0 and 20' : null,
+          validator: (_) => !state.isQuickTipRateValid && state.quickTipRate.isNotEmpty
+            ? 'Must be between 0 and 20'
+            : null,
         );
       },
     );
@@ -196,25 +191,21 @@ class _SetupTipBodyState extends State<SetupTipBody> {
     }
   }
 
-  void _onTipRateChanged() {
-    _setupTipCardBloc.add(TipRateChanged(tipRate: _tipRateController.text));
+  void _onTipRateChanged({required String tipRate}) {
+    _setupTipCardBloc.add(TipRateChanged(tipRate: tipRate));
   }
 
-  void _onQuickTipRateChanged() {
-    _setupTipCardBloc.add(QuickTipRateChanged(quickTipRate: _quickTipRateController.text));
+  void _onQuickTipRateChanged({required String quickTipRate}) {
+    _setupTipCardBloc.add(QuickTipRateChanged(quickTipRate: quickTipRate));
   }
 
   bool _isSaveButtonEnabled({required SetupTipCardState state}) {
-    return state.isFormValid && isPopulated && !state.isSubmitting;
+    return state.isFormValid && !state.isSubmitting;
   }
 
   void _saveButtonPressed({required BuildContext context, required SetupTipCardState state}) {
     if (_isSaveButtonEnabled(state: state)) {
-      _setupTipCardBloc.add(Submitted(
-        accountIdentifier: BlocProvider.of<CustomerBloc>(context).customer!.account.identifier,
-        tipRate: int.parse(_tipRateController.text),
-        quickTipRate: int.parse(_quickTipRateController.text)
-      ));
+      _setupTipCardBloc.add(Submitted());
     }
   }
 

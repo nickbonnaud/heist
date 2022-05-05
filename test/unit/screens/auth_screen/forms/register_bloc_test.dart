@@ -21,6 +21,10 @@ void main() {
 
     late RegisterState _baseState;
 
+    late String email;
+    late String password;
+    late String passwordConfirmation;
+
     setUp(() {
       registerFallbackValue(LoggedIn(customer: MockCustomer()));
 
@@ -47,38 +51,68 @@ void main() {
     blocTest<RegisterBloc, RegisterState>(
       "RegisterBloc EmailChanged event yields state: [isEmailValid: true]",
       build: () => registerBloc,
-      act: (bloc) => bloc.add(EmailChanged(email: faker.internet.email())),
+      act: (bloc) {
+        email = faker.internet.email();
+        bloc.add(EmailChanged(email: email));
+      },
       wait: const Duration(milliseconds: 300),
-      expect: () => [_baseState.update(isEmailValid: true)]
+      expect: () => [_baseState.update(email: email, isEmailValid: true)]
     );
 
     blocTest<RegisterBloc, RegisterState>(
       "RegisterBloc PasswordChanged event yields state: [isPasswordValid: true]",
       build: () => registerBloc,
-      act: (bloc) => bloc.add(const PasswordChanged(password: "hdhFDSg3558154#@%&cfbcfgDG", passwordConfirmation: "")),
+      act: (bloc) {
+        password = "hdhFDSg3558154#@%&cfbcfgDG";
+        bloc.add(PasswordChanged(password: password));
+      },
       wait: const Duration(milliseconds: 300),
-      expect: () => [_baseState.update(isPasswordValid: true)]
+      expect: () => [_baseState.update(password: password, isPasswordValid: true)]
     );
 
     blocTest<RegisterBloc, RegisterState>(
       "RegisterBloc PasswordConfirmationChanged event yields state: [isPasswordConfirmationValid: true]",
       build: () => registerBloc,
-      act: (bloc) => bloc.add(const PasswordConfirmationChanged(passwordConfirmation: "hdhFDSg3558154#@%&cfbcfgDG", password: "hdhFDSg3558154#@%&cfbcfgDG")),
+      seed: () {
+        password = "hdhFDSg3558154#@%&cfbcfgDG";
+        _baseState = _baseState.update(password: password);
+        return _baseState;
+      },
+      act: (bloc) {
+        passwordConfirmation = password;
+        bloc.add(PasswordConfirmationChanged(passwordConfirmation: passwordConfirmation));
+      },
       wait: const Duration(milliseconds: 300),
-      expect: () => [_baseState.update(isPasswordConfirmationValid: true)]
+      expect: () => [_baseState.update(passwordConfirmation: passwordConfirmation, isPasswordConfirmationValid: true)]
     );
 
     blocTest<RegisterBloc, RegisterState>(
       "RegisterBloc Submitted event yields state: [RegisterState.loading()], [RegisterState.success()]",
       build: () => registerBloc,
-      act: (bloc) => bloc.add(Submitted(email: faker.internet.email(), password: "hdhFDSg3558154#@%&cfbcfgDG", passwordConfirmation: "hdhFDSg3558154#@%&cfbcfgDG")),
-      expect: () => [RegisterState.loading(), RegisterState.success()]
+      seed: () {
+        email = faker.internet.email();
+        password = "hdhFDSg3558154#@%&cfbcfgDG";
+        passwordConfirmation = password;
+
+        _baseState = _baseState.update(email: email, password: password, passwordConfirmation: passwordConfirmation);
+        return _baseState;
+      },
+      act: (bloc) => bloc.add(Submitted()),
+      expect: () => [_baseState.update(isSubmitting: true), _baseState.update(isSubmitting: false, isSuccess: true)]
     );
 
     blocTest<RegisterBloc, RegisterState>(
       "RegisterBloc Submitted event calls authenticationRepository.register",
       build: () => registerBloc,
-      act: (bloc) => bloc.add(Submitted(email: faker.internet.email(), password: "hdhFDSg3558154#@%&cfbcfgDG", passwordConfirmation: "hdhFDSg3558154#@%&cfbcfgDG")),
+      seed: () {
+        email = faker.internet.email();
+        password = "hdhFDSg3558154#@%&cfbcfgDG";
+        passwordConfirmation = password;
+
+        _baseState = _baseState.update(email: email, password: password, passwordConfirmation: passwordConfirmation);
+        return _baseState;
+      },
+      act: (bloc) => bloc.add(Submitted()),
       verify: (_) {
         verify(() => authenticationRepository.register(email: any(named: "email"), password: any(named: "password"), passwordConfirmation: any(named: "passwordConfirmation")));
       }
@@ -91,8 +125,16 @@ void main() {
           .thenThrow(const ApiException(error: "error"));
         return registerBloc;
       },
-      act: (bloc) => bloc.add(Submitted(email: faker.internet.email(), password: "hdhFDSg3558154#@%&cfbcfgDG", passwordConfirmation: "hdhFDSg3558154#@%&cfbcfgDG")),
-      expect: () => [RegisterState.loading(), RegisterState.failure(errorMessage: "error")]
+      seed: () {
+        email = faker.internet.email();
+        password = "hdhFDSg3558154#@%&cfbcfgDG";
+        passwordConfirmation = password;
+
+        _baseState = _baseState.update(email: email, password: password, passwordConfirmation: passwordConfirmation);
+        return _baseState;
+      },
+      act: (bloc) => bloc.add(Submitted()),
+      expect: () => [_baseState.update(isSubmitting: true), _baseState.update(isSubmitting: false, errorMessage: "error")]
     );
   });
 }

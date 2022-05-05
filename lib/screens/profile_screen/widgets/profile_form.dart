@@ -23,12 +23,8 @@ class ProfileForm extends StatefulWidget {
 }
 
 class _ProfileFormState extends State<ProfileForm> {
-  late TextEditingController _firstNameController;
   final FocusNode _firstNameFocus = FocusNode();
-  late TextEditingController _lastNameController;
   final FocusNode _lastNameFocus = FocusNode();
-
-  bool get isPopulated => _firstNameController.text.isNotEmpty && _lastNameController.text.isNotEmpty;
 
   late ProfileFormBloc _profileFormBloc;
 
@@ -36,10 +32,6 @@ class _ProfileFormState extends State<ProfileForm> {
   void initState() {
     super.initState();
     _profileFormBloc = BlocProvider.of<ProfileFormBloc>(context);
-    _firstNameController = TextEditingController(text: BlocProvider.of<CustomerBloc>(context).customer!.profile.firstName);
-    _lastNameController = TextEditingController(text: BlocProvider.of<CustomerBloc>(context).customer!.profile.lastName);
-    _firstNameController.addListener(_onFirstNameChanged);
-    _lastNameController.addListener(_onLastNameChanged);
   }
 
   @override
@@ -94,9 +86,6 @@ class _ProfileFormState extends State<ProfileForm> {
   
   @override
   void dispose() {
-    _firstNameController.dispose();
-    _lastNameController.dispose();
-
     _firstNameFocus.dispose();
     _lastNameFocus.dispose();
     super.dispose();
@@ -130,14 +119,17 @@ class _ProfileFormState extends State<ProfileForm> {
             fontWeight: FontWeight.w700,
             fontSize: 28.sp
           ),
-          controller: _firstNameController,
+          onChanged: (firstName) => _onFirstNameChanged(firstName: firstName),
+          initialValue: BlocProvider.of<CustomerBloc>(context).customer!.profile.firstName,
           focusNode: _firstNameFocus,
           keyboardType: TextInputType.text,
           textInputAction: TextInputAction.done,
           textCapitalization: TextCapitalization.words,
           autocorrect: false,
           autovalidateMode: AutovalidateMode.onUserInteraction,
-          validator: (_) => !state.isFirstNameValid ? 'Invalid First Name' : null,
+          validator: (_) => !state.isFirstNameValid && state.firstName.isNotEmpty 
+            ? 'Invalid First Name'
+            : null,
         );
       }
     );
@@ -159,14 +151,17 @@ class _ProfileFormState extends State<ProfileForm> {
             fontWeight: FontWeight.w700,
             fontSize: 28.sp
           ),
-          controller: _lastNameController,
+          onChanged: (lastName) => _onLastNameChanged(lastName: lastName),
+          initialValue: BlocProvider.of<CustomerBloc>(context).customer!.profile.lastName,
           focusNode: _lastNameFocus,
           keyboardType: TextInputType.text,
           textInputAction: TextInputAction.done,
           textCapitalization: TextCapitalization.words,
           autocorrect: false,
           autovalidateMode: AutovalidateMode.onUserInteraction,
-          validator: (_) => !state.isLastNameValid ? 'Invalid Last Name' : null,
+          validator: (_) => !state.isLastNameValid && state.lastName.isNotEmpty
+            ? 'Invalid Last Name' 
+            : null,
         );
       }
     );
@@ -211,31 +206,27 @@ class _ProfileFormState extends State<ProfileForm> {
     }
   }
   
-  void _onFirstNameChanged() {
-    _profileFormBloc.add(FirstNameChanged(firstName: _firstNameController.text));
+  void _onFirstNameChanged({required String firstName}) {
+    _profileFormBloc.add(FirstNameChanged(firstName: firstName));
   }
 
-  void _onLastNameChanged() {
-    _profileFormBloc.add(LastNameChanged(lastName: _lastNameController.text));
+  void _onLastNameChanged({required String lastName}) {
+    _profileFormBloc.add(LastNameChanged(lastName: lastName));
   }
 
   bool _isSaveButtonEnabled({required ProfileFormState state}) {
-    return state.isFormValid && _formFieldsChanged() && isPopulated && !state.isSubmitting;
+    return state.isFormValid && !state.isSubmitting && _formFieldsChanged(state: state);
   }
 
-  bool _formFieldsChanged() {
+  bool _formFieldsChanged({required ProfileFormState state}) {
     Profile profile = BlocProvider.of<CustomerBloc>(context).customer!.profile;
-    return (profile.firstName != _firstNameController.text)
-      || (profile.lastName != _lastNameController.text);
+    return (profile.firstName != state.firstName)
+      || (profile.lastName != state.lastName);
   }
   
   void _saveButtonPressed({required ProfileFormState state}) {
     if (_isSaveButtonEnabled(state: state)) {
-      _profileFormBloc.add(Submitted(
-        firstName: _firstNameController.text,
-        lastName: _lastNameController.text,
-        profileIdentifier: BlocProvider.of<CustomerBloc>(context).customer!.profile.identifier
-      ));
+      _profileFormBloc.add(Submitted());
     }
   }
 

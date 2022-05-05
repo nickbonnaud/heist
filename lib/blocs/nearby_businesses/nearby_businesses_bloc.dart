@@ -50,6 +50,8 @@ class NearbyBusinessesBloc extends Bloc<NearbyBusinessesEvent, NearbyBusinessesS
   }
 
   Future<void> _mapFetchNearbyToState({required FetchNearby event, required Emitter<NearbyBusinessesState> emit}) async {
+    emit(LoadingNearbyBusinesses());
+
     try {
       final List<Business> businesses = await _locationRepository.sendLocation(
         lat: event.lat,

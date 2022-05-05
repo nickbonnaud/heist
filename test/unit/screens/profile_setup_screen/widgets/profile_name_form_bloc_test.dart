@@ -20,6 +20,9 @@ void main() {
     late ProfileNameFormBloc profileNameFormBloc;
     late ProfileNameFormState _baseState;
 
+    late String firstName;
+    late String lastName;
+
     setUp(() {
       registerFallbackValue(CustomerUpdated(customer: MockCustomer()));
       profileRepository = MockProfileRepository();
@@ -41,21 +44,33 @@ void main() {
       "ProfileNameFormBloc FirstNameChanged event yields state: [isFirstNameValid: true]",
       build: () => profileNameFormBloc,
       wait: const Duration(milliseconds: 300),
-      act: (bloc) => bloc.add(FirstNameChanged(firstName: faker.person.firstName())),
-      expect: () => [_baseState.update(isFirstNameValid: true)]
+      act: (bloc) {
+        firstName = faker.person.firstName();
+        bloc.add(FirstNameChanged(firstName: firstName));
+      },
+      expect: () => [_baseState.update(firstName: firstName, isFirstNameValid: true)]
     );
 
     blocTest<ProfileNameFormBloc, ProfileNameFormState>(
       "ProfileNameFormBloc LastNameChanged event yields state: [isLastNameValid: true]",
       build: () => profileNameFormBloc,
       wait: const Duration(milliseconds: 300),
-      act: (bloc) => bloc.add(LastNameChanged(lastName: faker.person.lastName())),
-      expect: () => [_baseState.update(isLastNameValid: true)]
+      act: (bloc) {
+        lastName = faker.person.lastName();
+        bloc.add(LastNameChanged(lastName: lastName));
+      },
+      expect: () => [_baseState.update(lastName: lastName, isLastNameValid: true)]
     );
 
     blocTest<ProfileNameFormBloc, ProfileNameFormState>(
       "ProfileNameFormBloc Submitted event yields state: [isSubmitting: true], [isSubmitting: false, isSuccess: true]",
       build: () => profileNameFormBloc,
+      seed: () {
+        firstName = faker.person.firstName();
+        lastName = faker.person.lastName();
+        _baseState = _baseState.update(firstName: firstName, lastName: lastName);
+        return _baseState;
+      },
       act: (bloc) {
         when(() => profileRepository.store(firstName: any(named: "firstName"), lastName: any(named: "lastName")))
           .thenAnswer((_) async => MockCustomer());
@@ -63,7 +78,7 @@ void main() {
         when(() => customerBloc.add(any(that: isA<CustomerUpdated>())))
           .thenReturn(null);
 
-        bloc.add(Submitted(firstName: faker.person.firstName(), lastName: faker.person.lastName()));
+        bloc.add(Submitted());
       },
       expect: () => [_baseState.update(isSubmitting: true), _baseState.update(isSubmitting: false, isSuccess: true)]
     );
@@ -71,6 +86,12 @@ void main() {
     blocTest<ProfileNameFormBloc, ProfileNameFormState>(
       "ProfileNameFormBloc Submitted event calls profileRepository.store && customerBloc.add",
       build: () => profileNameFormBloc,
+      seed: () {
+        firstName = faker.person.firstName();
+        lastName = faker.person.lastName();
+        _baseState = _baseState.update(firstName: firstName, lastName: lastName);
+        return _baseState;
+      },
       act: (bloc) {
         when(() => profileRepository.store(firstName: any(named: "firstName"), lastName: any(named: "lastName")))
           .thenAnswer((_) async => MockCustomer());
@@ -78,7 +99,7 @@ void main() {
         when(() => customerBloc.add(any(that: isA<CustomerUpdated>())))
           .thenReturn(null);
 
-        bloc.add(Submitted(firstName: faker.person.firstName(), lastName: faker.person.lastName()));
+        bloc.add(Submitted());
       },
       verify: (_) {
         verify(() => profileRepository.store(firstName: any(named: "firstName"), lastName: any(named: "lastName"))).called(1);
@@ -89,11 +110,17 @@ void main() {
     blocTest<ProfileNameFormBloc, ProfileNameFormState>(
       "ProfileNameFormBloc Submitted event on fail yields state: [isSubmitting: true], [isSubmitting: false, errorMessage: error]",
       build: () => profileNameFormBloc,
+      seed: () {
+        firstName = faker.person.firstName();
+        lastName = faker.person.lastName();
+        _baseState = _baseState.update(firstName: firstName, lastName: lastName);
+        return _baseState;
+      },
       act: (bloc) {
         when(() => profileRepository.store(firstName: any(named: "firstName"), lastName: any(named: "lastName")))
           .thenThrow(const ApiException(error: "error"));
 
-        bloc.add(Submitted(firstName: faker.person.firstName(), lastName: faker.person.lastName()));
+        bloc.add(Submitted());
       },
       expect: () => [_baseState.update(isSubmitting: true), _baseState.update(isSubmitting: false, errorMessage: "error")]
     );
@@ -101,7 +128,12 @@ void main() {
     blocTest<ProfileNameFormBloc, ProfileNameFormState>(
       "ProfileNameFormBloc Reset event yields state: [isSuccess: false, errorMessage: ""]",
       build: () => profileNameFormBloc,
-      seed: () => _baseState.update(isSuccess: true, errorMessage: "error"),
+      seed: () {
+        firstName = faker.person.firstName();
+        lastName = faker.person.lastName();
+        _baseState = _baseState.update(firstName: firstName, lastName: lastName, isSuccess: true, errorMessage: "error");
+        return _baseState;
+      },
       act: (bloc) {
         bloc.add(Reset());
       },

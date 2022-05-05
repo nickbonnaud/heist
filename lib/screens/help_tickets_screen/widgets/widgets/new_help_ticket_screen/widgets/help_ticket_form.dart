@@ -18,21 +18,15 @@ class HelpTicketForm extends StatefulWidget {
 }
 
 class _HelpTicketFormState extends State<HelpTicketForm> {
-  final TextEditingController _subjectController = TextEditingController();
   final FocusNode _subjectFocus = FocusNode();
-  final TextEditingController _messageController = TextEditingController();
   final FocusNode _messageFocus = FocusNode();
-  late HelpTicketFormBloc _helpTicketFormBloc;
 
-  bool get isPopulated => _subjectController.text.isNotEmpty && _messageController.text.isNotEmpty;
+  late HelpTicketFormBloc _helpTicketFormBloc;
   
   @override
   void initState() {
     super.initState();
     _helpTicketFormBloc = BlocProvider.of<HelpTicketFormBloc>(context);
-
-    _subjectController.addListener(_onSubjectChanged);
-    _messageController.addListener(_onMessageChanged);
   }
   
   @override
@@ -87,9 +81,6 @@ class _HelpTicketFormState extends State<HelpTicketForm> {
 
   @override
   void dispose() {
-    _subjectController.dispose();
-    _messageController.dispose();
-
     _subjectFocus.dispose();
     _messageFocus.dispose();
     super.dispose();
@@ -112,7 +103,7 @@ class _HelpTicketFormState extends State<HelpTicketForm> {
             fontWeight: FontWeight.w700,
             fontSize: 28.sp
           ),
-          controller: _subjectController,
+          onChanged: (subject) => _onSubjectChanged(subject: subject),
           focusNode: _subjectFocus,
           keyboardType: TextInputType.text,
           textInputAction: TextInputAction.done,
@@ -144,7 +135,7 @@ class _HelpTicketFormState extends State<HelpTicketForm> {
             fontWeight: FontWeight.w500,
             fontSize: 28.sp
           ),
-          controller: _messageController,
+          onChanged: (message) => _onMessageChanged(message: message),
           focusNode: _messageFocus,
           keyboardType: TextInputType.multiline,
           maxLines: 3,
@@ -196,12 +187,12 @@ class _HelpTicketFormState extends State<HelpTicketForm> {
     return const ButtonText(text: "Submit");
   }
 
-  void _onSubjectChanged() {
-    _helpTicketFormBloc.add(SubjectChanged(subject: _subjectController.text));
+  void _onSubjectChanged({required String subject}) {
+    _helpTicketFormBloc.add(SubjectChanged(subject: subject));
   }
 
-  void _onMessageChanged() {
-    _helpTicketFormBloc.add(MessageChanged(message: _messageController.text));
+  void _onMessageChanged({required String message}) {
+    _helpTicketFormBloc.add(MessageChanged(message: message));
   }
 
   void _cancelButtonPressed() {
@@ -209,15 +200,12 @@ class _HelpTicketFormState extends State<HelpTicketForm> {
   }
 
   bool _isSubmitButtonEnabled({required HelpTicketFormState state}) {
-    return state.isFormValid && isPopulated && !state.isSubmitting;
+    return state.isFormValid && !state.isSubmitting;
   }
 
   void _submitButtonPressed({required HelpTicketFormState state}) {
     if (_isSubmitButtonEnabled(state: state)) {
-      _helpTicketFormBloc.add(Submitted(
-        subject: _subjectController.text,
-        message: _messageController.text
-      ));
+      _helpTicketFormBloc.add(Submitted());
     }
   }
   

@@ -20,12 +20,8 @@ class ProfileNameBody extends StatefulWidget {
 }
 
 class _ProfileNameBodyState extends State<ProfileNameBody> {
-  late TextEditingController _firstNameController;
   final FocusNode _firstNameFocus = FocusNode();
-  late TextEditingController _lastNameController;
   final FocusNode _lastNameFocus = FocusNode();
-
-  bool get isPopulated => _firstNameController.text.isNotEmpty && _lastNameController.text.isNotEmpty;
 
   late ProfileNameFormBloc _profileNameFormBloc;
   
@@ -33,10 +29,6 @@ class _ProfileNameBodyState extends State<ProfileNameBody> {
   void initState() {
     super.initState();
     _profileNameFormBloc = BlocProvider.of<ProfileNameFormBloc>(context);
-    _firstNameController = TextEditingController();
-    _lastNameController = TextEditingController();
-    _firstNameController.addListener(_onFirstNameChanged);
-    _lastNameController.addListener(_onLastNameChanged);
   }
 
   @override
@@ -88,9 +80,6 @@ class _ProfileNameBodyState extends State<ProfileNameBody> {
   
   @override
   void dispose() {
-    _firstNameController.dispose();
-    _lastNameController.dispose();
-
     _firstNameFocus.dispose();
     _lastNameFocus.dispose();
     super.dispose();
@@ -112,7 +101,7 @@ class _ProfileNameBodyState extends State<ProfileNameBody> {
             fontWeight: FontWeight.w700,
             fontSize: 28.sp
           ),
-          controller: _firstNameController,
+          onChanged: (firstName) => _onFirstNameChanged(firstName: firstName),
           focusNode: _firstNameFocus,
           keyboardType: TextInputType.text,
           textCapitalization: TextCapitalization.words,
@@ -123,7 +112,9 @@ class _ProfileNameBodyState extends State<ProfileNameBody> {
           },
           autocorrect: false,
           autovalidateMode: AutovalidateMode.onUserInteraction,
-          validator: (_) => !state.isFirstNameValid ? 'Invalid first name' : null,
+          validator: (_) => !state.isFirstNameValid && state.firstName.isNotEmpty
+            ? 'Invalid first name' 
+            : null,
         );
       }
     );
@@ -145,7 +136,7 @@ class _ProfileNameBodyState extends State<ProfileNameBody> {
             fontWeight: FontWeight.w700,
             fontSize: 28.sp
           ),
-          controller: _lastNameController,
+          onChanged: (lastName) => _onLastNameChanged(lastName: lastName),
           focusNode: _lastNameFocus,
           keyboardType: TextInputType.text,
           textCapitalization: TextCapitalization.words,
@@ -155,7 +146,9 @@ class _ProfileNameBodyState extends State<ProfileNameBody> {
           },
           autocorrect: false,
           autovalidateMode: AutovalidateMode.onUserInteraction,
-          validator: (_) => !state.isLastNameValid ? 'Invalid last name' : null,
+          validator: (_) => !state.isLastNameValid && state.lastName.isNotEmpty
+            ? 'Invalid last name'
+            : null,
         );
       },
     );
@@ -173,20 +166,17 @@ class _ProfileNameBodyState extends State<ProfileNameBody> {
     );
   }
   
-  void _onFirstNameChanged() {
-    _profileNameFormBloc.add(FirstNameChanged(firstName: _firstNameController.text));
+  void _onFirstNameChanged({required String firstName}) {
+    _profileNameFormBloc.add(FirstNameChanged(firstName: firstName));
   }
 
-  void _onLastNameChanged() {
-    _profileNameFormBloc.add(LastNameChanged(lastName: _lastNameController.text));
+  void _onLastNameChanged({required String lastName}) {
+    _profileNameFormBloc.add(LastNameChanged(lastName: lastName));
   }
 
   void _saveButtonPressed({required ProfileNameFormState state}) {
     if (_isSaveButtonEnabled(state: state)) {
-      _profileNameFormBloc.add(Submitted(
-        firstName: _firstNameController.text,
-        lastName: _lastNameController.text)
-      );
+      _profileNameFormBloc.add(Submitted());
     }
   }
   
@@ -199,7 +189,7 @@ class _ProfileNameBodyState extends State<ProfileNameBody> {
   }
 
   bool _isSaveButtonEnabled({required ProfileNameFormState state}) {
-    return state.isFormValid && isPopulated && !state.isSubmitting;
+    return state.isFormValid && !state.isSubmitting;
   }
 
   void _showSnackbar({required String message, required ProfileNameFormState state}) async {

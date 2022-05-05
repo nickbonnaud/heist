@@ -5,7 +5,7 @@ import 'package:heist/global_widgets/search_identifier_modal/widgets/search_iden
 import 'package:heist/themes/global_colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import 'cubit/search_identifier_modal_cubit.dart';
+import 'bloc/search_identifier_modal_bloc.dart';
 
 class SearchIdentifierModal extends StatelessWidget {
   final String _hintText;
@@ -21,8 +21,8 @@ class SearchIdentifierModal extends StatelessWidget {
       backgroundColor: Theme.of(context).colorScheme.scrollBackground,
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 16.w),
-        child: BlocProvider<SearchIdentifierModalCubit>(
-          create: (_) => SearchIdentifierModalCubit(),
+        child: BlocProvider<SearchIdentifierModalBloc>(
+          create: (_) => SearchIdentifierModalBloc(),
           child: SearchIdentifierBody(hintText: _hintText),
         ),
       ),

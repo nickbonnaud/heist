@@ -26,12 +26,8 @@ class LoginForm extends StatefulWidget {
 }
 
 class _LoginFormState extends State<LoginForm> {
-  final TextEditingController _emailController = TextEditingController();
   final FocusNode _emailFocus = FocusNode();
-  final TextEditingController _passwordController = TextEditingController();
   final FocusNode _passwordFocus = FocusNode();
-
-  bool get isPopulated => _emailController.text.isNotEmpty && _passwordController.text.isNotEmpty;
 
   late LoginBloc _loginBloc;
 
@@ -39,8 +35,6 @@ class _LoginFormState extends State<LoginForm> {
   void initState() {
     super.initState();
     _loginBloc = BlocProvider.of<LoginBloc>(context);
-    _emailController.addListener(_onEmailChanged);
-    _passwordController.addListener(_onPasswordChanged);
 
     _emailFocus.addListener(keyboardVisibilityChanged);
     _passwordFocus.addListener(keyboardVisibilityChanged);
@@ -131,9 +125,6 @@ class _LoginFormState extends State<LoginForm> {
 
   @override
   void dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
-
     _emailFocus.dispose();
     _passwordFocus.dispose();
     super.dispose();
@@ -144,15 +135,15 @@ class _LoginFormState extends State<LoginForm> {
       builder: (context, state) {
         return TextFormField(
           key: const Key("emailFormFieldKey"),
-          controller: _emailController,
           focusNode: _emailFocus,
           keyboardType: TextInputType.emailAddress,
           keyboardAppearance: Brightness.light,
           textInputAction: TextInputAction.next,
+          onChanged: (email) => _onEmailChanged(email: email),
           onFieldSubmitted: (_) {
             _changeFocus(context: context, current: _emailFocus, next: _passwordFocus);
           },
-          validator: (_) => !state.isEmailValid && _emailController.text.isNotEmpty
+          validator: (_) => !state.isEmailValid && state.email.isNotEmpty
             ? 'Invalid Email'
             : null,
           autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -181,15 +172,15 @@ class _LoginFormState extends State<LoginForm> {
       builder: (context, state) {
         return TextFormField(
           key: const Key("passwordFormFieldKey"),
-          controller: _passwordController,
           focusNode: _passwordFocus,
           keyboardType: TextInputType.text,
           keyboardAppearance: Brightness.light,
           textInputAction: TextInputAction.done,
+          onChanged: (password) => _onPasswordChanged(password: password),
           onFieldSubmitted: (_) {
             _passwordFocus.unfocus();
           },
-          validator: (_) => !state.isPasswordValid && _passwordController.text.isNotEmpty
+          validator: (_) => !state.isPasswordValid && state.password.isNotEmpty
             ? 'Invalid Password'
             : null,
           autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -298,12 +289,12 @@ class _LoginFormState extends State<LoginForm> {
     context.read<KeyboardVisibleCubit>().toggle(isVisible: keyboardVisible);
   }
   
-  void _onEmailChanged() {
-    _loginBloc.add(EmailChanged(email: _emailController.text));
+  void _onEmailChanged({required String email}) {
+    _loginBloc.add(EmailChanged(email: email));
   }
 
-  void _onPasswordChanged() {
-    _loginBloc.add(PasswordChanged(password: _passwordController.text));
+  void _onPasswordChanged({required String password}) {
+    _loginBloc.add(PasswordChanged(password: password));
   }
 
   void _changeFocus({required BuildContext context, required FocusNode current, required FocusNode next}) {
@@ -312,7 +303,7 @@ class _LoginFormState extends State<LoginForm> {
   }
 
   bool _isLoginButtonEnabled({required LoginState state}) {
-    return state.isFormValid && isPopulated && !state.isSubmitting;
+    return state.isFormValid && !state.isSubmitting;
   }
 
   void _submit({required LoginState state}) {
@@ -322,7 +313,7 @@ class _LoginFormState extends State<LoginForm> {
   }
   
   void _onFormSubmitted() {
-    _loginBloc.add(Submitted(email: _emailController.text, password: _passwordController.text));
+    _loginBloc.add(Submitted());
   }
 
   KeyboardActionsConfig _buildKeyboard({required BuildContext context}) {

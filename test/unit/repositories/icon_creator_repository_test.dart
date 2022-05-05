@@ -35,7 +35,7 @@ void main() {
       int numberBusinesses = 5;
       final List<Business> businesses = List.generate(numberBusinesses, (index) => mockDataGenerator.createBusiness());
 
-      var preMarkers = await iconCreatorRepository.createPreMarkers(businesses: businesses);
+      var preMarkers = await iconCreatorRepository.createPreMarkers(businesses: businesses, size: const Size(150, 150));
       expect(preMarkers, isA<List<PreMarker>>());
       expect(preMarkers.length, numberBusinesses);
     });

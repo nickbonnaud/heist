@@ -18,7 +18,7 @@ class EmailFormBloc extends Bloc<EmailFormEvent, EmailFormState> {
   EmailFormBloc({required CustomerRepository customerRepository, required CustomerBloc customerBloc})
     : _customerRepository = customerRepository,
       _customerBloc = customerBloc,
-      super(EmailFormState.initial()) { _eventHandler(); }
+      super(EmailFormState.initial(email: customerBloc.customer!.email)) { _eventHandler(); }
 
   void _eventHandler() {
     on<EmailChanged>((event, emit) => _mapEmailChangedToState(event: event, emit: emit), transformer: Debouncer.bounce(duration: const Duration(milliseconds: 300)));
@@ -27,13 +27,13 @@ class EmailFormBloc extends Bloc<EmailFormEvent, EmailFormState> {
   }
   
   void _mapEmailChangedToState({required EmailChanged event, required Emitter<EmailFormState> emit}) {
-    emit(state.update(isEmailValid: Validators.isValidEmail(email: event.email)));
+    emit(state.update(email: event.email, isEmailValid: Validators.isValidEmail(email: event.email)));
   }
 
   Future<void> _mapSubmittedToState({required Submitted event, required Emitter<EmailFormState> emit}) async {
     emit(state.update(isSubmitting: true));
     try {
-      Customer customer = await _customerRepository.updateEmail(email: event.email, customerId: event.identifier);
+      Customer customer = await _customerRepository.updateEmail(email: state.email, customerId: _customerBloc.customer!.identifier);
       emit(state.update(isSubmitting: false, isSuccess: true));
       _customerBloc.add(CustomerUpdated(customer: customer));
     } on ApiException catch (exception) {

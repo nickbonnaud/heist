@@ -52,7 +52,7 @@ void main() {
 
         bloc.add(const FetchNearby(lat: 1.0, lng: 1.0));
       },
-      expect: () => [isA<NearbyBusinessLoaded>()],
+      expect: () => [isA<LoadingNearbyBusinesses>(), isA<NearbyBusinessLoaded>()],
       verify: (_) {
         expect((nearbyBusinessesBloc.state as NearbyBusinessLoaded).businesses, isA<List<Business>>());
         expect((nearbyBusinessesBloc.state as NearbyBusinessLoaded).preMarkers, isA<List<PreMarker>>());
@@ -86,7 +86,7 @@ void main() {
 
         bloc.add(const FetchNearby(lat: 1.0, lng: 1.0));
       },
-      expect: () => [isA<FailedToLoadNearby>()],
+      expect: () => [isA<LoadingNearbyBusinesses>(), isA<FailedToLoadNearby>()],
       verify: (_) {
         expect((nearbyBusinessesBloc.state as FailedToLoadNearby).error, "Error!");
       }
@@ -105,7 +105,7 @@ void main() {
 
         return NearbyBusinessesBloc(locationRepository: locationRepository, iconCreatorRepository: iconCreatorRepository, geoLocationBloc: geoLocationBloc);
       },
-      expect: () => [isA<NearbyBusinessLoaded>()],
+      expect: () => [isA<LoadingNearbyBusinesses>(), isA<NearbyBusinessLoaded>()],
     );
 
     blocTest<NearbyBusinessesBloc, NearbyBusinessesState>(

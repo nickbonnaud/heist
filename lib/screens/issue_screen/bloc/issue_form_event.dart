@@ -19,32 +19,8 @@ class MessageChanged extends IssueFormEvent {
   String toString() => 'MessageChanged { message: $message }';
 }
 
-class Submitted extends IssueFormEvent {
-  final String message;
-  final IssueType type;
-  final String transactionIdentifier;
+class Submitted extends IssueFormEvent {}
 
-  const Submitted({required this.message, required this.type, required this.transactionIdentifier});
-
-  @override
-  List<Object> get props => [message, type, transactionIdentifier];
-
-  @override
-  String toString() => 'Submitted { message: $message, type: $type, transactionIdentifier: $transactionIdentifier }';
-}
-
-class Updated extends IssueFormEvent {
-  final String message;
-  final IssueType type;
-  final String issueIdentifier;
-
-  const Updated({required this.message, required this.type, required this.issueIdentifier});
-
-  @override
-  List<Object> get props => [message, type, issueIdentifier];
-
-  @override
-  String toString() => 'Updated { message: $message, type: $type, issueIdentifier: $issueIdentifier }';
-}
+class Updated extends IssueFormEvent {}
 
 class Reset extends IssueFormEvent {}

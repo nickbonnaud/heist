@@ -19,11 +19,6 @@ class _SearchBusinessNameBodyState extends State<SearchBusinessNameBody> {
   final FocusNode _focusNode = FocusNode();
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: MediaQuery.of(context).size.height,

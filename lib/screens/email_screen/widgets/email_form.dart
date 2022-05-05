@@ -20,16 +20,12 @@ class EmailForm extends StatefulWidget {
 class _EmailFormState extends State<EmailForm> {
   final FocusNode _emailFocusNode = FocusNode();
   
-  late TextEditingController _emailController;
   late EmailFormBloc _emailFormBloc;
   
   @override
   void initState() {
     super.initState();
     _emailFormBloc = BlocProvider.of<EmailFormBloc>(context);
-    _emailController = TextEditingController(text: BlocProvider.of<CustomerBloc>(context).customer!.email);
-    
-    _emailController.addListener(_onEmailChanged);
   }
   
   @override
@@ -84,7 +80,6 @@ class _EmailFormState extends State<EmailForm> {
 
   @override
   void dispose() {
-    _emailController.dispose();
     _emailFocusNode.dispose();
     super.dispose();
   }
@@ -105,7 +100,9 @@ class _EmailFormState extends State<EmailForm> {
             fontWeight: FontWeight.w700,
             fontSize: 28.sp
           ),
-          controller: _emailController,
+          initialValue: BlocProvider.of<CustomerBloc>(context).customer!.email,
+          onChanged: (email) => _onEmailChanged(email: email),
+          onFieldSubmitted: (_) => _emailFocusNode.unfocus(),
           keyboardType: TextInputType.emailAddress,
           textInputAction: TextInputAction.done,
           autocorrect: false,
@@ -192,23 +189,20 @@ class _EmailFormState extends State<EmailForm> {
   }
 
   bool _isSaveButtonEnabled({required EmailFormState state}) {
-    return state.isEmailValid && _emailChanged() && _emailController.text.isNotEmpty && !state.isSubmitting;
+    return state.isFormValid && _emailChanged(state: state) && !state.isSubmitting;
   }
 
-  bool _emailChanged() {
-    return BlocProvider.of<CustomerBloc>(context).customer!.email != _emailController.text;
+  bool _emailChanged({required EmailFormState state}) {
+    return BlocProvider.of<CustomerBloc>(context).customer!.email != state.email;
   }
 
-  void _onEmailChanged() {
-    _emailFormBloc.add(EmailChanged(email: _emailController.text));
+  void _onEmailChanged({required String email}) {
+    _emailFormBloc.add(EmailChanged(email: email));
   }
   
   void _saveButtonPressed({required EmailFormState state}) {
     if (_isSaveButtonEnabled(state: state)) {
-      _emailFormBloc.add(Submitted(
-        identifier: BlocProvider.of<CustomerBloc>(context).customer!.identifier,
-        email: _emailController.text
-      ));
+      _emailFormBloc.add(Submitted());
     }
   }
 

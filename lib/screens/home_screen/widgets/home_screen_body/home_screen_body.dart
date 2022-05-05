@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:heist/blocs/nearby_businesses/nearby_businesses_bloc.dart';
 import 'package:heist/screens/home_screen/blocs/business_screen_visible_cubit.dart';
 
@@ -29,9 +30,28 @@ class HomeScreenBody extends StatelessWidget {
               _dimmer(context: context)
             ],
           );
+        } else if (state is NearbyUninitialized || state is LoadingNearbyBusinesses) {
+          return _fetchingLocation();
         }
         return const FetchBusinessesFailScreen();
       },
+    );
+  }
+
+  Widget _fetchingLocation() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const CircularProgressIndicator(),
+        SizedBox(height: 40.h),
+        Text(
+          "Fetching Location...",
+          style: TextStyle(
+            fontWeight: FontWeight.w900,
+            fontSize: 30.sp
+          ),
+        ),
+      ],
     );
   }
 

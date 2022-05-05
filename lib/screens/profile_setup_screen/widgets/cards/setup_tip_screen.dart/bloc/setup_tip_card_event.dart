@@ -31,18 +31,6 @@ class QuickTipRateChanged extends SetupTipCardEvent {
   String toString() => 'QuickTipRateChanged { quickTipRate: $quickTipRate }';
 }
 
-class Submitted extends SetupTipCardEvent {
-  final int tipRate;
-  final int quickTipRate;
-  final String accountIdentifier;
-
-  const Submitted({required this.tipRate, required this.quickTipRate, required this.accountIdentifier});
-
-  @override
-  List<Object> get props => [tipRate, quickTipRate, accountIdentifier];
-
-  @override
-  String toString() => 'Submitted { tipRate: $tipRate, quickTipRate: $quickTipRate, accountIdentifier, $accountIdentifier }';
-}
+class Submitted extends SetupTipCardEvent {}
 
 class Reset extends SetupTipCardEvent {}

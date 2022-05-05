@@ -7,17 +7,19 @@ import 'package:heist/screens/home_screen/widgets/home_screen_body/widgets/nearb
 
 @immutable
 class IconCreatorRepository {
-  static final Size _size = Size(150.r, 150.r);
   final IconCreatorProvider? _iconCreatorProvider;
 
   const IconCreatorRepository({IconCreatorProvider? iconCreatorProvider})
     : _iconCreatorProvider = iconCreatorProvider;
 
-  Future<List<PreMarker>> createPreMarkers({required List<Business> businesses}) async {
+  Future<List<PreMarker>> createPreMarkers({required List<Business> businesses, Size? size}) async {
     IconCreatorProvider iconCreatorProvider = _iconCreatorProvider ?? const IconCreatorProvider();
     
     return await Future.wait(businesses.map((business) async {
-      BitmapDescriptor marker = await iconCreatorProvider.createMarkers(size: _size, business: business);
+      BitmapDescriptor marker = await iconCreatorProvider.createMarkers(
+        size: size ?? Size(150.r, 150.r),
+        business: business
+      );
       return PreMarker(
         markerId: business.identifier,
         lat: business.location.geo.lat,

@@ -9,6 +9,8 @@ import 'package:heist/resources/helpers/api_exception.dart';
 import 'package:heist/screens/issue_screen/bloc/issue_form_bloc.dart';
 import 'package:mocktail/mocktail.dart';
 
+import '../../../helpers/mock_data_generator.dart';
+
 class MockTransactionIssueRepository extends Mock implements TransactionIssueRepository {}
 class MockOpenTransactionsBloc extends Mock implements OpenTransactionsBloc {}
 class MockTransaction extends Mock implements TransactionResource {}
@@ -23,6 +25,9 @@ void main() {
     late IssueFormState _baseState;
     late TransactionResource _transaction;
 
+    late IssueType issueType;
+    late String message;
+
     setUp(() {
       registerFallbackValue(UpdateOpenTransaction(transaction: MockTransaction()));
       registerFallbackValue(IssueType.errorInBill);
@@ -30,9 +35,10 @@ void main() {
       issueRepository = MockTransactionIssueRepository();
       openTransactionsBloc = MockOpenTransactionsBloc();
 
-      _transaction = MockTransaction();
+      _transaction = MockDataGenerator().createTransactionResource();
+      issueType = IssueType.errorInBill;
 
-      issueFormBloc = IssueFormBloc(issueRepository: issueRepository, openTransactionsBloc: openTransactionsBloc, transactionResource: _transaction);
+      issueFormBloc = IssueFormBloc(issueType: issueType, issueRepository: issueRepository, openTransactionsBloc: openTransactionsBloc, transactionResource: _transaction);
       _baseState = issueFormBloc.state;
     });
 
@@ -41,20 +47,28 @@ void main() {
     });
 
     test("Initial state of IssueFormBloc is IssueFormState.initial", () {
-      expect(issueFormBloc.state, IssueFormState.initial(transactionResource: _transaction));
+      expect(issueFormBloc.state, IssueFormState.initial(issueType: issueType, transactionResource: _transaction));
     });
 
     blocTest<IssueFormBloc, IssueFormState>(
       "IssueFormBloc MessageChanged event yields state: [isMessageValid: true]",
       build: () => issueFormBloc,
       wait: const Duration(milliseconds: 300),
-      act: (bloc) => bloc.add(MessageChanged(message: faker.lorem.sentence())),
-      expect: () => [_baseState.update(isMessageValid: true)]
+      act: (bloc) {
+        message = faker.lorem.sentence();
+        bloc.add(MessageChanged(message: message));
+      },
+      expect: () => [_baseState.update(message: message, isMessageValid: true)]
     );
 
     blocTest<IssueFormBloc, IssueFormState>(
       "IssueFormBloc Submitted event yields state: [isSubmitting: true], [isSubmitting: false, isSuccess: true, transactionResource: transaction]",
       build: () => issueFormBloc,
+      seed: () {
+        message = faker.lorem.sentence();
+        _baseState = _baseState.update(message: message);
+        return _baseState;
+      },
       act: (bloc) {
         when(() => issueRepository.reportIssue(type: any(named: "type"), transactionId: any(named: "transactionId"), message: any(named: "message")))
           .thenAnswer((_) async {
@@ -65,7 +79,7 @@ void main() {
         when(() => openTransactionsBloc.add(any(that: isA<UpdateOpenTransaction>())))
           .thenReturn(null);
 
-        bloc.add(Submitted(message: faker.lorem.sentence(), type: IssueType.errorInBill, transactionIdentifier: faker.guid.guid()));
+        bloc.add(Submitted());
       },
       expect: () => [_baseState.update(isSubmitting: true), _baseState.update(isSubmitting: false, isSuccess: true, transactionResource: _transaction)]
     );
@@ -73,6 +87,11 @@ void main() {
     blocTest<IssueFormBloc, IssueFormState>(
       "IssueFormBloc Submitted event calls issueRepository.reportIssue",
       build: () => issueFormBloc,
+      seed: () {
+        message = faker.lorem.sentence();
+        _baseState = _baseState.update(message: message);
+        return _baseState;
+      },
       act: (bloc) {
         when(() => issueRepository.reportIssue(type: any(named: "type"), transactionId: any(named: "transactionId"), message: any(named: "message")))
           .thenAnswer((_) async {
@@ -83,7 +102,7 @@ void main() {
         when(() => openTransactionsBloc.add(any(that: isA<UpdateOpenTransaction>())))
           .thenReturn(null);
 
-        bloc.add(Submitted(message: faker.lorem.sentence(), type: IssueType.errorInBill, transactionIdentifier: faker.guid.guid()));
+        bloc.add(Submitted());
       },
       verify: (_) {
         verify(() => issueRepository.reportIssue(type: any(named: "type"), transactionId: any(named: "transactionId"), message: any(named: "message"))).called(1);
@@ -93,11 +112,16 @@ void main() {
     blocTest<IssueFormBloc, IssueFormState>(
       "IssueFormBloc Submitted event on error yields state: [isSubmitting: true], [isSubmitting: false, errorMessage: error]",
       build: () => issueFormBloc,
+      seed: () {
+        message = faker.lorem.sentence();
+        _baseState = _baseState.update(message: message);
+        return _baseState;
+      },
       act: (bloc) {
         when(() => issueRepository.reportIssue(type: any(named: "type"), transactionId: any(named: "transactionId"), message: any(named: "message")))
           .thenThrow(const ApiException(error: "error"));
 
-        bloc.add(Submitted(message: faker.lorem.sentence(), type: IssueType.errorInBill, transactionIdentifier: faker.guid.guid()));
+        bloc.add(Submitted());
       },
       expect: () => [_baseState.update(isSubmitting: true), _baseState.update(isSubmitting: false, errorMessage: "error")]
     );
@@ -105,6 +129,11 @@ void main() {
     blocTest<IssueFormBloc, IssueFormState>(
       "IssueFormBloc Updated event yields state: [isSubmitting: true], [isSubmitting: false, isSuccess: true, transactionResource: transaction]",
       build: () => issueFormBloc,
+      seed: () {
+        message = faker.lorem.sentence();
+        _baseState = _baseState.update(message: message);
+        return _baseState;
+      },
       act: (bloc) {
         when(() => issueRepository.changeIssue(type: any(named: "type"), issueId: any(named: "issueId"), message: any(named: "message")))
           .thenAnswer((_) async {
@@ -115,7 +144,7 @@ void main() {
         when(() => openTransactionsBloc.add(any(that: isA<UpdateOpenTransaction>())))
           .thenReturn(null);
 
-        bloc.add(Updated(message: faker.lorem.sentence(), type: IssueType.errorInBill, issueIdentifier: faker.guid.guid()));
+        bloc.add(Updated());
       },
       expect: () => [_baseState.update(isSubmitting: true), _baseState.update(isSubmitting: false, isSuccess: true, transactionResource: _transaction)]
     );
@@ -123,6 +152,11 @@ void main() {
     blocTest<IssueFormBloc, IssueFormState>(
       "IssueFormBloc Updated event calls issueRepository.changeIssue",
       build: () => issueFormBloc,
+      seed: () {
+        message = faker.lorem.sentence();
+        _baseState = _baseState.update(message: message);
+        return _baseState;
+      },
       act: (bloc) {
         when(() => issueRepository.changeIssue(type: any(named: "type"), issueId: any(named: "issueId"), message: any(named: "message")))
           .thenAnswer((_) async {
@@ -133,7 +167,7 @@ void main() {
         when(() => openTransactionsBloc.add(any(that: isA<UpdateOpenTransaction>())))
           .thenReturn(null);
 
-        bloc.add(Updated(message: faker.lorem.sentence(), type: IssueType.errorInBill, issueIdentifier: faker.guid.guid()));
+        bloc.add(Updated());
       },
       verify: (_) {
         verify(() => issueRepository.changeIssue(type: any(named: "type"), issueId: any(named: "issueId"), message: any(named: "message"))).called(1);
@@ -143,11 +177,16 @@ void main() {
     blocTest<IssueFormBloc, IssueFormState>(
       "IssueFormBloc Updated event on error yields state: [isSubmitting: true], [isSubmitting: false, errorMessage: error]",
       build: () => issueFormBloc,
+      seed: () {
+        message = faker.lorem.sentence();
+        _baseState = _baseState.update(message: message);
+        return _baseState;
+      },
       act: (bloc) {
         when(() => issueRepository.changeIssue(type: any(named: "type"), issueId: any(named: "issueId"), message: any(named: "message")))
           .thenThrow(const ApiException(error: "error"));
 
-        bloc.add(Updated(message: faker.lorem.sentence(), type: IssueType.errorInBill, issueIdentifier: faker.guid.guid()));
+        bloc.add(Updated());
       },
       expect: () => [_baseState.update(isSubmitting: true), _baseState.update(isSubmitting: false, errorMessage: "error")]
     );

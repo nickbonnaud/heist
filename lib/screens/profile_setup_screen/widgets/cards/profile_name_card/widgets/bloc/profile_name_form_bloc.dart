@@ -25,22 +25,22 @@ class ProfileNameFormBloc extends Bloc<ProfileNameFormEvent, ProfileNameFormStat
   void _eventHandler() {
     on<FirstNameChanged>((event, emit) => _mapFirstNameChangedToState(event: event, emit: emit), transformer: Debouncer.bounce(duration: _debounceTime));
     on<LastNameChanged>((event, emit) => _mapLastNameChangedToState(event: event, emit: emit), transformer: Debouncer.bounce(duration: _debounceTime));
-    on<Submitted>((event, emit) async => await _mapSubmittedToState(event: event, emit: emit));
+    on<Submitted>((event, emit) async => await _mapSubmittedToState(emit: emit));
     on<Reset>((event, emit) => _mapResetToState(emit: emit));
   }
 
   void _mapFirstNameChangedToState({required FirstNameChanged event, required Emitter<ProfileNameFormState> emit}) {
-    emit(state.update(isFirstNameValid: Validators.isValidName(name: event.firstName)));
+    emit(state.update(firstName: event.firstName, isFirstNameValid: Validators.isValidName(name: event.firstName)));
   }
 
   void _mapLastNameChangedToState({required LastNameChanged event, required Emitter<ProfileNameFormState> emit}) {
-    emit(state.update(isLastNameValid: Validators.isValidName(name: event.lastName)));
+    emit(state.update(lastName: event.lastName, isLastNameValid: Validators.isValidName(name: event.lastName)));
   }
 
-  Future<void> _mapSubmittedToState({required Submitted event, required Emitter<ProfileNameFormState> emit}) async {
+  Future<void> _mapSubmittedToState({required Emitter<ProfileNameFormState> emit}) async {
     emit(state.update(isSubmitting: true));
     try {
-      Customer customer = await _profileRepository.store(firstName: event.firstName, lastName: event.lastName);
+      Customer customer = await _profileRepository.store(firstName: state.firstName, lastName: state.lastName);
       _customerBloc.add(CustomerUpdated(customer: customer));
       emit(state.update(isSubmitting: false, isSuccess: true));
     } on ApiException catch (exception) {

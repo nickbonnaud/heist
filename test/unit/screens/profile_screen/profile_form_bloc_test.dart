@@ -1,5 +1,4 @@
 import 'package:bloc_test/bloc_test.dart';
-import 'package:faker/faker.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:heist/blocs/customer/customer_bloc.dart';
 import 'package:heist/models/customer/customer.dart';
@@ -7,6 +6,8 @@ import 'package:heist/repositories/profile_repository.dart';
 import 'package:heist/resources/helpers/api_exception.dart';
 import 'package:heist/screens/profile_screen/bloc/profile_form_bloc.dart';
 import 'package:mocktail/mocktail.dart';
+
+import '../../../helpers/mock_data_generator.dart';
 
 class MockProfileRepository extends Mock implements ProfileRepository {}
 class MockCustomerBloc extends Mock implements CustomerBloc {}
@@ -17,6 +18,8 @@ void main() {
     late ProfileRepository profileRepository;
     late CustomerBloc customerBloc;
 
+    late Customer customer;
+
     late ProfileFormBloc profileFormBloc;
     late ProfileFormState _baseState;
 
@@ -24,6 +27,9 @@ void main() {
       registerFallbackValue(CustomerUpdated(customer: MockCustomer()));
       profileRepository = MockProfileRepository();
       customerBloc = MockCustomerBloc();
+      
+      customer = MockDataGenerator().createCustomer();
+      when(() => customerBloc.customer).thenReturn(customer);
 
       profileFormBloc = ProfileFormBloc(profileRepository: profileRepository, customerBloc: customerBloc);
       _baseState = profileFormBloc.state;
@@ -34,23 +40,23 @@ void main() {
     });
 
     test("Initial state of ProfileFormBloc is ProfileFormState.initial()", () {
-      expect(profileFormBloc.state, ProfileFormState.initial());
+      expect(profileFormBloc.state, ProfileFormState.initial(profile: customer.profile));
     });
 
     blocTest<ProfileFormBloc, ProfileFormState>(
       "ProfileFormBloc FirstNameChanged event yields state: [isFirstNameValid: true]",
       build: () => profileFormBloc,
       wait: const Duration(milliseconds: 300),
-      act: (bloc) => bloc.add(FirstNameChanged(firstName: faker.person.firstName())),
-      expect: () => [_baseState.update(isFirstNameValid: true)]
+      act: (bloc) => bloc.add(const FirstNameChanged(firstName: 'fake')),
+      expect: () => [_baseState.update(isFirstNameValid: true, firstName: 'fake')]
     );
 
     blocTest<ProfileFormBloc, ProfileFormState>(
       "ProfileFormBloc LastNameChanged event yields state: [isLastNameValid: true]",
       build: () => profileFormBloc,
       wait: const Duration(milliseconds: 300),
-      act: (bloc) => bloc.add(LastNameChanged(lastName: faker.person.lastName())),
-      expect: () => [_baseState.update(isLastNameValid: true)]
+      act: (bloc) => bloc.add(const LastNameChanged(lastName: 'last')),
+      expect: () => [_baseState.update(isLastNameValid: true, lastName: 'last')]
     );
 
     blocTest<ProfileFormBloc, ProfileFormState>(
@@ -63,7 +69,7 @@ void main() {
         when(() => customerBloc.add(any(that: isA<CustomerUpdated>())))
           .thenReturn(null);
         
-        bloc.add(Submitted(firstName: faker.person.firstName(), lastName: faker.person.lastName(), profileIdentifier: faker.guid.guid()));
+        bloc.add(Submitted());
       },
       expect: () => [_baseState.update(isSubmitting: true), _baseState.update(isSubmitting: false, isSuccess: true)]
     );
@@ -78,7 +84,7 @@ void main() {
         when(() => customerBloc.add(any(that: isA<CustomerUpdated>())))
           .thenReturn(null);
         
-        bloc.add(Submitted(firstName: faker.person.firstName(), lastName: faker.person.lastName(), profileIdentifier: faker.guid.guid()));
+        bloc.add(Submitted());
       },
       verify: (_) {
         verify(() => profileRepository.update(firstName: any(named: "firstName"), lastName: any(named: "lastName"), profileIdentifier: any(named: "profileIdentifier"))).called(1);
@@ -93,7 +99,7 @@ void main() {
         when(() => profileRepository.update(firstName: any(named: "firstName"), lastName: any(named: "lastName"), profileIdentifier: any(named: "profileIdentifier")))
           .thenThrow(const ApiException(error: "error"));
         
-        bloc.add(Submitted(firstName: faker.person.firstName(), lastName: faker.person.lastName(), profileIdentifier: faker.guid.guid()));
+        bloc.add(Submitted());
       },
       expect: () => [_baseState.update(isSubmitting: true), _baseState.update(isSubmitting: false, errorMessage: "error")]
     );

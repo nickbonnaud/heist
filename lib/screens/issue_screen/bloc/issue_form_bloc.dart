@@ -16,27 +16,37 @@ class IssueFormBloc extends Bloc<IssueFormEvent, IssueFormState> {
   final TransactionIssueRepository _issueRepository;
   final OpenTransactionsBloc _openTransactionsBloc;
 
-  IssueFormBloc({required TransactionIssueRepository issueRepository, required OpenTransactionsBloc openTransactionsBloc, required TransactionResource transactionResource})
+  IssueFormBloc({
+    required TransactionIssueRepository issueRepository,
+    required OpenTransactionsBloc openTransactionsBloc,
+    required TransactionResource transactionResource,
+    required IssueType issueType
+  })
     : _issueRepository = issueRepository,
       _openTransactionsBloc = openTransactionsBloc,
-      super(IssueFormState.initial(transactionResource: transactionResource)) { _eventHandler(); }
+      super(IssueFormState.initial(transactionResource: transactionResource, issueType: issueType)) { _eventHandler(); }
 
   void _eventHandler() {
     on<MessageChanged>((event, emit) => _mapMessageChangedToState(event: event, emit: emit), transformer: Debouncer.bounce(duration: const Duration(milliseconds: 300)));
-    on<Submitted>((event, emit) async => await _mapSubmittedToState(event: event, emit: emit));
-    on<Updated>((event, emit) async => await _mapUpdatedToState(event: event, emit: emit));
+    on<Submitted>((event, emit) async => await _mapSubmittedToState(emit: emit));
+    on<Updated>((event, emit) async => await _mapUpdatedToState(emit: emit));
     on<Reset>((event, emit) => _mapResetToState(emit: emit));
   }
 
   void _mapMessageChangedToState({required MessageChanged event, required Emitter<IssueFormState> emit}) {
-    emit(state.update(isMessageValid: event.message.length >=5));
+    emit(state.update(message: event.message, isMessageValid: event.message.length >=5));
   }
 
-  Future<void> _mapSubmittedToState({required Submitted event, required Emitter<IssueFormState> emit}) async {
+  Future<void> _mapSubmittedToState({required Emitter<IssueFormState> emit}) async {
     emit(state.update(isSubmitting: true));
 
     try {
-      TransactionResource transaction = await _issueRepository.reportIssue(type: event.type, transactionId: event.transactionIdentifier, message: event.message);
+      TransactionResource transaction = await _issueRepository.reportIssue(
+        type: state.issueType,
+        transactionId: state.transactionResource.transaction.identifier,
+        message: state.message
+      );
+
       _openTransactionsBloc.add(UpdateOpenTransaction(transaction: transaction));
       emit(state.update(isSubmitting: false, isSuccess: true, transactionResource: transaction));
     } on ApiException catch (exception) {
@@ -44,11 +54,16 @@ class IssueFormBloc extends Bloc<IssueFormEvent, IssueFormState> {
     }
   }
 
-  Future<void> _mapUpdatedToState({required Updated event, required Emitter<IssueFormState> emit}) async {
+  Future<void> _mapUpdatedToState({required Emitter<IssueFormState> emit}) async {
     emit(state.update(isSubmitting: true));
 
     try {
-      TransactionResource transaction= await _issueRepository.changeIssue(type: event.type, issueId: event.issueIdentifier, message: event.message);
+      TransactionResource transaction= await _issueRepository.changeIssue(
+        type: state.issueType,
+        issueId: state.transactionResource.issue!.identifier,
+        message: state.message
+      );
+
       _openTransactionsBloc.add(UpdateOpenTransaction(transaction: transaction));
       emit(state.update(isSubmitting: false, isSuccess: true, transactionResource: transaction));
     } on ApiException catch (exception) {

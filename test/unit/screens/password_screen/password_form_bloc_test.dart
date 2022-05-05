@@ -1,5 +1,4 @@
 import 'package:bloc_test/bloc_test.dart';
-import 'package:faker/faker.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:heist/blocs/customer/customer_bloc.dart';
 import 'package:heist/models/customer/customer.dart';
@@ -8,6 +7,8 @@ import 'package:heist/repositories/customer_repository.dart';
 import 'package:heist/resources/helpers/api_exception.dart';
 import 'package:heist/screens/password_screen/bloc/password_form_bloc.dart';
 import 'package:mocktail/mocktail.dart';
+
+import '../../../helpers/mock_data_generator.dart';
 
 class MockCustomerRepository extends Mock implements CustomerRepository {}
 class MockAuthenticationRepository extends Mock implements AuthenticationRepository {}
@@ -23,11 +24,20 @@ void main() {
     late PasswordFormBloc passwordFormBloc;
     late PasswordFormState _baseState;
 
+    late Customer customer;
+
+    late String oldPassword;
+    late String password;
+    late String passwordConfirmation;
+
     setUp(() {
       registerFallbackValue(CustomerUpdated(customer: MockCustomer()));
       customerRepository = MockCustomerRepository();
       authenticationRepository = MockAuthenticationRepository();
+
+      customer = MockDataGenerator().createCustomer();
       customerBloc = MockCustomerBloc();
+      when(() => customerBloc.customer).thenReturn(customer);
 
       passwordFormBloc = PasswordFormBloc(customerRepository: customerRepository, authenticationRepository: authenticationRepository, customerBloc: customerBloc);
       _baseState = passwordFormBloc.state;
@@ -45,34 +55,53 @@ void main() {
       "PasswordFormBloc OldPasswordChanged event yields state: [isOldPasswordValid: true]",
       build: () => passwordFormBloc,
       wait: const Duration(milliseconds: 300),
-      act: (bloc) => bloc.add(const OldPasswordChanged(oldPassword: "fdbhGHShh@&7342wmcxs523&^")),
-      expect: () => [_baseState.update(isOldPasswordValid: true)]
+      act: (bloc) {
+        oldPassword = "fdbhGHShh@&7342wmcxs523&^";
+        bloc.add(OldPasswordChanged(oldPassword: oldPassword));
+      },
+      expect: () => [_baseState.update(oldPassword: oldPassword, isOldPasswordValid: true)]
     );
 
     blocTest<PasswordFormBloc, PasswordFormState>(
-      "PasswordFormBloc PasswordChanged event yields state: [isPasswordValid: true, isPasswordConfirmationValid: true]",
+      "PasswordFormBloc PasswordChanged event yields state: [isPasswordValid: true]",
       build: () => passwordFormBloc,
       wait: const Duration(milliseconds: 300),
-      act: (bloc) => bloc.add(const PasswordChanged(password: "ncvdhBDSJSjh76353!!!@#", passwordConfirmation: "ncvdhBDSJSjh76353!!!@#")),
-      expect: () => [_baseState.update(isPasswordValid: true, isPasswordConfirmationValid: true)]
+      act: (bloc) {
+        password = "ncvdhBDSJSjh76353!!!@#";
+        bloc.add(PasswordChanged(password: password));
+      },
+      expect: () => [_baseState.update(password: password, isPasswordValid: true)]
     );
 
     blocTest<PasswordFormBloc, PasswordFormState>(
       "PasswordFormBloc PasswordConfirmationChanged event yields state: [isPasswordConfirmationValid: true]",
       build: () => passwordFormBloc,
       wait: const Duration(milliseconds: 300),
-      act: (bloc) => bloc.add(const PasswordConfirmationChanged(password: "ncvdhBDSJSjh76353!!!@#", passwordConfirmation: "ncvdhBDSJSjh76353!!!@#")),
-      expect: () => [_baseState.update(isPasswordConfirmationValid: true)]
+      seed: () {
+        password = "ncvdhBDSJSjh76353!!!@#";
+        _baseState = _baseState.update(password: password);
+        return _baseState;
+      },
+      act: (bloc) {
+        passwordConfirmation = password;
+        bloc.add(PasswordConfirmationChanged(passwordConfirmation: passwordConfirmation));
+      },
+      expect: () => [_baseState.update(passwordConfirmation: passwordConfirmation, isPasswordConfirmationValid: true)]
     );
 
     blocTest<PasswordFormBloc, PasswordFormState>(
       "PasswordFormBloc OldPasswordSubmitted event on password match yields state: [isSubmitting: true], [isSubmitting: false, isOldPasswordVerified: true, isSuccessOldPassword: true]",
       build: () => passwordFormBloc,
+      seed: () {
+        oldPassword = "cnjsabj6363d%%&&*ncBDDG";
+        _baseState = _baseState.update(oldPassword: oldPassword);
+        return _baseState;
+      },
       act: (bloc) {
         when(() => authenticationRepository.checkPassword(password: any(named: "password")))
           .thenAnswer((_) async => true);
         
-        bloc.add(const OldPasswordSubmitted(oldPassword: "cnjsabj6363d%%&&*ncBDDG"));
+        bloc.add(OldPasswordSubmitted());
       },
       expect: () => [_baseState.update(isSubmitting: true), _baseState.update(isSubmitting: false, isOldPasswordVerified: true, isSuccessOldPassword: true)]
     );
@@ -80,11 +109,16 @@ void main() {
     blocTest<PasswordFormBloc, PasswordFormState>(
       "PasswordFormBloc OldPasswordSubmitted event calls authenticationRepository.checkPassword",
       build: () => passwordFormBloc,
+      seed: () {
+        oldPassword = "cnjsabj6363d%%&&*ncBDDG";
+        _baseState = _baseState.update(oldPassword: oldPassword);
+        return _baseState;
+      },
       act: (bloc) {
         when(() => authenticationRepository.checkPassword(password: any(named: "password")))
           .thenAnswer((_) async => true);
         
-        bloc.add(const OldPasswordSubmitted(oldPassword: "cnjsabj6363d%%&&*ncBDDG"));
+        bloc.add(OldPasswordSubmitted());
       },
       verify: (_) {
         verify(() => authenticationRepository.checkPassword(password: any(named: "password"))).called(1);
@@ -94,11 +128,16 @@ void main() {
     blocTest<PasswordFormBloc, PasswordFormState>(
       "PasswordFormBloc OldPasswordSubmitted event on password not matching yields state: [isSubmitting: true], [isSubmitting: false, isOldPasswordVerified: false, isSuccessOldPassword: false, errorMessage: Looks like that's the wrong password!]",
       build: () => passwordFormBloc,
+      seed: () {
+        oldPassword = "cnjsabj6363d%%&&*ncBDDG";
+        _baseState = _baseState.update(oldPassword: oldPassword);
+        return _baseState;
+      },
       act: (bloc) {
         when(() => authenticationRepository.checkPassword(password: any(named: "password")))
           .thenAnswer((_) async => false);
         
-        bloc.add(const OldPasswordSubmitted(oldPassword: "cnjsabj6363d%%&&*ncBDDG"));
+        bloc.add(OldPasswordSubmitted());
       },
       expect: () => [_baseState.update(isSubmitting: true), _baseState.update(isSubmitting: false, isOldPasswordVerified: false, isSuccessOldPassword: false, errorMessage: "Looks like that's the wrong password!")]
     );
@@ -106,11 +145,16 @@ void main() {
     blocTest<PasswordFormBloc, PasswordFormState>(
       "PasswordFormBloc OldPasswordSubmitted event on fail yields state: [isSubmitting: true], [errorMessage: error, isSubmitting: false, isOldPasswordVerified: false, isSuccessOldPassword: false]",
       build: () => passwordFormBloc,
+      seed: () {
+        oldPassword = "cnjsabj6363d%%&&*ncBDDG";
+        _baseState = _baseState.update(oldPassword: oldPassword);
+        return _baseState;
+      },
       act: (bloc) {
         when(() => authenticationRepository.checkPassword(password: any(named: "password")))
           .thenThrow(const ApiException(error: "error"));
         
-        bloc.add(const OldPasswordSubmitted(oldPassword: "cnjsabj6363d%%&&*ncBDDG"));
+        bloc.add(OldPasswordSubmitted());
       },
       expect: () => [_baseState.update(isSubmitting: true), _baseState.update(errorMessage: "error", isSubmitting: false, isOldPasswordVerified: false, isSuccessOldPassword: false)]
     );
@@ -118,6 +162,12 @@ void main() {
     blocTest<PasswordFormBloc, PasswordFormState>(
       "PasswordFormBloc NewPasswordSubmitted event yields state: [isSubmitting: true], [isSubmitting: false, isSuccess: true]",
       build: () => passwordFormBloc,
+      seed: () {
+        password = "cnjsabj6363d%%&&*ncBDDG";
+        passwordConfirmation = password;
+        _baseState = _baseState.update(password: password, passwordConfirmation: passwordConfirmation);
+        return _baseState;
+      },
       act: (bloc) {
         when(() => customerRepository.updatePassword(oldPassword: any(named: "oldPassword"), password: any(named: "password"), passwordConfirmation: any(named: "passwordConfirmation"), customerId: any(named: "customerId")))
           .thenAnswer((_) async => MockCustomer());
@@ -125,7 +175,7 @@ void main() {
         when(() => customerBloc.add(any(that: isA<CustomerUpdated>())))
           .thenReturn(null);
         
-        bloc.add(NewPasswordSubmitted(oldPassword: "cnjsabj6363d%%&&*ncBDDG", password: "dbjdbjHJSDhsv4252-", passwordConfirmation: "dbjdbjHJSDhsv4252-", customerIdentifier: faker.guid.guid()));
+        bloc.add(NewPasswordSubmitted());
       },
       expect: () => [_baseState.update(isSubmitting: true), _baseState.update(isSubmitting: false, isSuccess: true)]
     );
@@ -133,6 +183,12 @@ void main() {
     blocTest<PasswordFormBloc, PasswordFormState>(
       "PasswordFormBloc NewPasswordSubmitted event calls customerRepository.updatePassword && customerBloc.add",
       build: () => passwordFormBloc,
+      seed: () {
+        password = "cnjsabj6363d%%&&*ncBDDG";
+        passwordConfirmation = password;
+        _baseState = _baseState.update(password: password, passwordConfirmation: passwordConfirmation);
+        return _baseState;
+      },
       act: (bloc) {
         when(() => customerRepository.updatePassword(oldPassword: any(named: "oldPassword"), password: any(named: "password"), passwordConfirmation: any(named: "passwordConfirmation"), customerId: any(named: "customerId")))
           .thenAnswer((_) async => MockCustomer());
@@ -140,7 +196,7 @@ void main() {
         when(() => customerBloc.add(any(that: isA<CustomerUpdated>())))
           .thenReturn(null);
         
-        bloc.add(NewPasswordSubmitted(oldPassword: "cnjsabj6363d%%&&*ncBDDG", password: "dbjdbjHJSDhsv4252-", passwordConfirmation: "dbjdbjHJSDhsv4252-", customerIdentifier: faker.guid.guid()));
+        bloc.add(NewPasswordSubmitted());
       },
       verify: (_) {
         verify(() => customerRepository.updatePassword(oldPassword: any(named: "oldPassword"), password: any(named: "password"), passwordConfirmation: any(named: "passwordConfirmation"), customerId: any(named: "customerId"))).called(1);
@@ -151,11 +207,17 @@ void main() {
     blocTest<PasswordFormBloc, PasswordFormState>(
       "PasswordFormBloc NewPasswordSubmitted event on fail yields state: [isSubmitting: true], [errorMessage: exception.error, isSubmitting: false]",
       build: () => passwordFormBloc,
+      seed: () {
+        password = "cnjsabj6363d%%&&*ncBDDG";
+        passwordConfirmation = password;
+        _baseState = _baseState.update(password: password, passwordConfirmation: passwordConfirmation);
+        return _baseState;
+      },
       act: (bloc) {
         when(() => customerRepository.updatePassword(oldPassword: any(named: "oldPassword"), password: any(named: "password"), passwordConfirmation: any(named: "passwordConfirmation"), customerId: any(named: "customerId")))
           .thenThrow(const ApiException(error: "error"));
         
-        bloc.add(NewPasswordSubmitted(oldPassword: "cnjsabj6363d%%&&*ncBDDG", password: "dbjdbjHJSDhsv4252-", passwordConfirmation: "dbjdbjHJSDhsv4252-", customerIdentifier: faker.guid.guid()));
+        bloc.add(NewPasswordSubmitted());
       },
       expect: () => [_baseState.update(isSubmitting: true), _baseState.update(isSubmitting: false, errorMessage: "error")]
     );
@@ -163,7 +225,13 @@ void main() {
     blocTest<PasswordFormBloc, PasswordFormState>(
       "PasswordFormBloc Reset event yields state: [isSuccess: false, isSuccessOldPassword: false, errorMessage: ""]",
       build: () => passwordFormBloc,
-      seed: () => _baseState.update(isSuccess: true, isSuccessOldPassword: true, errorMessage: "error"),
+      seed: () {
+        oldPassword = "cnjsabj6363d%%&&*ncBDDG";
+        password = "ncvdhBDSJSjh76353!!!@#";
+        passwordConfirmation = password;
+        _baseState = _baseState.update(oldPassword: oldPassword, password: password, passwordConfirmation: passwordConfirmation, isSuccess: true, isSuccessOldPassword: true, errorMessage: "error");
+        return _baseState;
+      },
       act: (bloc) {
         bloc.add(Reset());
       },

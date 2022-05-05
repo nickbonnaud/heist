@@ -31,17 +31,6 @@ class MessageChanged extends HelpTicketFormEvent {
   String toString() => 'MessageChanged { message: $message }';
 }
 
-class Submitted extends HelpTicketFormEvent {
-  final String subject;
-  final String message;
-
-  const Submitted({required this.subject, required this.message});
-
-  @override
-  List<Object> get props => [subject, message];
-
-  @override
-  String toString() => 'Submitted { subjectL $subject, messageL $message }';
-}
+class Submitted extends HelpTicketFormEvent {}
 
 class Reset extends HelpTicketFormEvent {}

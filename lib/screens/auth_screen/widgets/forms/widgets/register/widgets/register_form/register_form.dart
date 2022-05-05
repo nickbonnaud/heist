@@ -26,16 +26,13 @@ class RegisterForm extends StatefulWidget {
 }
 
 class _RegisterFormState extends State<RegisterForm> {
-  final TextEditingController _emailController = TextEditingController();
   final FocusNode _emailFocus = FocusNode();
-  final TextEditingController _passwordController = TextEditingController();
   final FocusNode _passwordFocus = FocusNode();
-  final TextEditingController _passwordConfirmationController = TextEditingController();
   final FocusNode _passwordConfirmationFocus = FocusNode();
 
-  bool get isPopulated => _emailController.text.isNotEmpty
-    && _passwordController.text.isNotEmpty
-    && _passwordConfirmationController.text.isNotEmpty;
+  // bool get isPopulated => _emailController.text.isNotEmpty
+  //   && _passwordController.text.isNotEmpty
+  //   && _passwordConfirmationController.text.isNotEmpty;
 
   late RegisterBloc _registerBloc;
   
@@ -43,9 +40,6 @@ class _RegisterFormState extends State<RegisterForm> {
   void initState() {
     super.initState();
     _registerBloc = BlocProvider.of<RegisterBloc>(context);
-    _emailController.addListener(_onEmailChanged);
-    _passwordController.addListener(_onPasswordChanged);
-    _passwordConfirmationController.addListener(_onPasswordConfirmationChanged);
 
     _emailFocus.addListener(keyboardVisibilityChanged);
     _passwordFocus.addListener(keyboardVisibilityChanged);
@@ -119,10 +113,6 @@ class _RegisterFormState extends State<RegisterForm> {
 
   @override
   void dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
-    _passwordConfirmationController.dispose();
-
     _emailFocus.dispose();
     _passwordFocus.dispose();
     _passwordConfirmationFocus.dispose();
@@ -134,15 +124,15 @@ class _RegisterFormState extends State<RegisterForm> {
       builder: (context, state) {
         return TextFormField(
           key: const Key("emailFormFieldKey"),
-          controller: _emailController,
           focusNode: _emailFocus,
           keyboardType: TextInputType.emailAddress,
           keyboardAppearance: Brightness.light,
           textInputAction: TextInputAction.next,
+          onChanged: (email) => _onEmailChanged(email: email),
           onFieldSubmitted: (_) {
             _changeFocus(context: context, current: _emailFocus, next: _passwordFocus);
           },
-          validator: (_) => !state.isEmailValid && _emailController.text.isNotEmpty 
+          validator: (_) => !state.isEmailValid && state.email.isNotEmpty 
             ? 'Invalid Email'
             : null,
           autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -171,15 +161,15 @@ class _RegisterFormState extends State<RegisterForm> {
       builder: (context, state) {
         return TextFormField(
           key: const Key("passwordFormFieldKey"),
-          controller: _passwordController,
           focusNode: _passwordFocus,
           keyboardType: TextInputType.text,
           keyboardAppearance: Brightness.light,
           textInputAction: TextInputAction.next,
+          onChanged: (password) => _onPasswordChanged(password: password),
           onFieldSubmitted: (_) {
             _changeFocus(context: context, current: _passwordFocus, next: _passwordConfirmationFocus);
           },
-          validator: (_) => !state.isPasswordValid && _passwordController.text.isNotEmpty
+          validator: (_) => !state.isPasswordValid && state.password.isNotEmpty
             ? 'Min 8 characters, at least 1 uppercase, 1 number, 1 special character'
             : null,
           autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -210,15 +200,15 @@ class _RegisterFormState extends State<RegisterForm> {
       builder: (context, state) {
         return TextFormField(
           key: const Key("passwordConfirmationFormFieldKey"),
-          controller: _passwordConfirmationController,
           focusNode: _passwordConfirmationFocus,
           keyboardType: TextInputType.text,
           keyboardAppearance: Brightness.light,
           textInputAction: TextInputAction.done,
+          onChanged: (passwordConfirmation) => _onPasswordConfirmationChanged(passwordConfirmation: passwordConfirmation),
           onFieldSubmitted: (_) {
             _passwordConfirmationFocus.unfocus();
           },
-          validator: (_) => !state.isPasswordConfirmationValid && _passwordConfirmationController.text.isNotEmpty 
+          validator: (_) => !state.isPasswordConfirmationValid && state.passwordConfirmation.isNotEmpty 
             ? "Passwords do not match"
             : null,
           autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -313,16 +303,16 @@ class _RegisterFormState extends State<RegisterForm> {
     context.read<KeyboardVisibleCubit>().toggle(isVisible: keyboardVisible);
   }
 
-  void _onEmailChanged() {
-    _registerBloc.add(EmailChanged(email: _emailController.text));
+  void _onEmailChanged({required String email}) {
+    _registerBloc.add(EmailChanged(email: email));
   }
 
-  void _onPasswordChanged() {
-    _registerBloc.add(PasswordChanged(password: _passwordController.text, passwordConfirmation: _passwordConfirmationController.text));
+  void _onPasswordChanged({required String password}) {
+    _registerBloc.add(PasswordChanged(password: password));
   }
 
-  void _onPasswordConfirmationChanged() {
-    _registerBloc.add(PasswordConfirmationChanged(passwordConfirmation: _passwordConfirmationController.text, password: _passwordController.text));
+  void _onPasswordConfirmationChanged({required String passwordConfirmation}) {
+    _registerBloc.add(PasswordConfirmationChanged(passwordConfirmation: passwordConfirmation));
   }
 
   void _changeFocus({required BuildContext context, required FocusNode current, required FocusNode next}) {
@@ -331,7 +321,7 @@ class _RegisterFormState extends State<RegisterForm> {
   }
   
   bool _isRegisterButtonEnabled({required RegisterState state}) {
-    return state.isFormValid && isPopulated && !state.isSubmitting;
+    return state.isFormValid && !state.isSubmitting;
   }
 
   void _submit({required RegisterState state}) {
@@ -341,7 +331,7 @@ class _RegisterFormState extends State<RegisterForm> {
   }
 
   void _onFormSubmitted() {
-    _registerBloc.add(Submitted(email: _emailController.text, password: _passwordController.text, passwordConfirmation: _passwordConfirmationController.text));
+    _registerBloc.add(Submitted());
   }
 
   KeyboardActionsConfig _buildKeyboard({required BuildContext context}) {

@@ -25,22 +25,27 @@ class SetupTipCardBloc extends Bloc<SetupTipCardEvent, SetupTipCardState> {
   void _eventHandler() {
     on<TipRateChanged>((event, emit) => _mapTipRateChangedToState(event: event, emit: emit), transformer: Debouncer.bounce(duration: _debounceTime));
     on<QuickTipRateChanged>((event, emit) => _mapQuickTipRateChangedToState(event: event, emit: emit), transformer: Debouncer.bounce(duration: _debounceTime));
-    on<Submitted>((event, emit) async => await _mapSubmittedToState(event: event, emit: emit));
+    on<Submitted>((event, emit) async => await _mapSubmittedToState(emit: emit));
     on<Reset>((event, emit) => _mapResetToState(emit: emit));
   }
 
   void _mapTipRateChangedToState({required TipRateChanged event, required Emitter<SetupTipCardState> emit}) {
-    emit(state.update(isTipRateValid: Validators.isValidDefaultTip(tip: event.tipRate)));
+    emit(state.update(tipRate: event.tipRate, isTipRateValid: Validators.isValidDefaultTip(tip: event.tipRate)));
   }
 
   void _mapQuickTipRateChangedToState({required QuickTipRateChanged event, required Emitter<SetupTipCardState> emit}) {
-    emit(state.update(isQuickTipRateValid: Validators.isValidQuickTip(tip: event.quickTipRate)));
+    emit(state.update(quickTipRate: event.quickTipRate, isQuickTipRateValid: Validators.isValidQuickTip(tip: event.quickTipRate)));
   }
 
-  Future<void> _mapSubmittedToState({required Submitted event, required Emitter<SetupTipCardState> emit}) async {
+  Future<void> _mapSubmittedToState({required Emitter<SetupTipCardState> emit}) async {
     emit(state.update(isSubmitting: true));
     try {
-      Customer customer = await _accountRepository.update(accountIdentifier: event.accountIdentifier, tipRate: event.tipRate, quickTipRate: event.quickTipRate);
+      Customer customer = await _accountRepository.update(
+        accountIdentifier: _customerBloc.customer!.account.identifier,
+        tipRate: int.parse(state.tipRate),
+        quickTipRate: int.parse(state.quickTipRate)
+      )
+      ;
       _customerBloc.add(CustomerUpdated(customer: customer));
       emit(state.update(isSubmitting: false, isSuccess: true));
     } on ApiException catch (exception) {

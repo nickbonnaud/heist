@@ -31,9 +31,10 @@ class IssueScreen extends StatelessWidget {
             create: (BuildContext context) => IssueFormBloc(
               issueRepository: RepositoryProvider.of<TransactionIssueRepository>(context),
               openTransactionsBloc: BlocProvider.of<OpenTransactionsBloc>(context),
-              transactionResource: _transaction
+              transactionResource: _transaction,
+              issueType: _type
             ),
-            child: IssueForm(type: _type, transaction: _transaction),
+            child: const IssueForm(),
           )
         : BlocProvider<CancelIssueFormBloc>(
           create: (BuildContext context) => CancelIssueFormBloc(

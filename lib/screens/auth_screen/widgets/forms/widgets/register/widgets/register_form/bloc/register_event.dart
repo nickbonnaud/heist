@@ -21,46 +21,28 @@ class EmailChanged extends RegisterEvent {
 
 class PasswordChanged extends RegisterEvent {
   final String password;
-  final String passwordConfirmation;
 
-  const PasswordChanged({required this.password, required this.passwordConfirmation});
-
-  @override
-  List<Object> get props => [password, passwordConfirmation];
+  const PasswordChanged({required this.password});
 
   @override
-  String toString() => 'PasswordChanged { password: $password, passwordConfirmation: $passwordConfirmation }';
+  List<Object> get props => [password];
+
+  @override
+  String toString() => 'PasswordChanged { password: $password }';
 }
 
 class PasswordConfirmationChanged extends RegisterEvent {
   final String passwordConfirmation;
-  final String password;
 
-  const PasswordConfirmationChanged({required this.passwordConfirmation, required this.password});
-
-  @override
-  List<Object> get props => [passwordConfirmation, password];
+  const PasswordConfirmationChanged({required this.passwordConfirmation});
 
   @override
-  String toString() => 'PasswordConfirmationChanged { passwordConfirmation: $passwordConfirmation, password: $password }';
+  List<Object> get props => [passwordConfirmation];
+
+  @override
+  String toString() => 'PasswordConfirmationChanged { passwordConfirmation: $passwordConfirmation }';
 }
 
-class Submitted extends RegisterEvent {
-  final String email;
-  final String password;
-  final String passwordConfirmation;
-
-  const Submitted({required this.email, required this.password, required this.passwordConfirmation});
-
-  @override
-  List<Object> get props => [email, password, passwordConfirmation];
-  
-  @override
-  String toString() => '''Submitted {
-    email: $email,
-    password: $password,
-    passwordConfirmation: $passwordConfirmation 
-  }''';
-}
+class Submitted extends RegisterEvent {}
 
 class Reset extends RegisterEvent {}

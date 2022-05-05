@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:heist/blocs/customer/customer_bloc.dart';
 import 'package:heist/resources/helpers/global_text.dart';
 import 'package:heist/resources/helpers/vibrate.dart';
 import 'package:heist/screens/password_screen/bloc/password_form_bloc.dart';
@@ -18,9 +17,6 @@ class PasswordForm extends StatefulWidget {
 }
 
 class _PasswordFormState extends State<PasswordForm> {
-  final TextEditingController _oldPasswordController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _passwordConfirmationController = TextEditingController();
   final FocusNode _oldPasswordFocus = FocusNode();
   final FocusNode _passwordFocus = FocusNode();
   final FocusNode _passwordConfirmationFocus = FocusNode();
@@ -32,9 +28,6 @@ class _PasswordFormState extends State<PasswordForm> {
   void initState() {
     super.initState();
     _passwordFormBloc = BlocProvider.of<PasswordFormBloc>(context);
-    _oldPasswordController.addListener(_onOldPasswordChanged);
-    _passwordController.addListener(_onPasswordChanged);
-    _passwordConfirmationController.addListener(_onPasswordConfirmationChanged);
   }
   
   @override
@@ -97,10 +90,6 @@ class _PasswordFormState extends State<PasswordForm> {
 
   @override
   void dispose() {
-    _oldPasswordController.dispose();
-    _passwordController.dispose();
-    _passwordConfirmationController.dispose();
-
     _oldPasswordFocus.dispose();
     _passwordFocus.dispose();
     _passwordConfirmationFocus.dispose();
@@ -121,12 +110,12 @@ class _PasswordFormState extends State<PasswordForm> {
         fontWeight: FontWeight.w700,
         fontSize: 28.sp
       ),
-      controller: _oldPasswordController,
+      onChanged: (oldPassword) => _onOldPasswordChanged(oldPassword: oldPassword),
       keyboardType: TextInputType.text,
       textInputAction: TextInputAction.send,
       autocorrect: false,
       autovalidateMode: AutovalidateMode.onUserInteraction,
-      validator: (_) => !state.isOldPasswordValid && _oldPasswordController.text.isNotEmpty
+      validator: (_) => !state.isOldPasswordValid && state.oldPassword.isNotEmpty
         ? 'Invalid Password'
         : null,
       obscureText: true,
@@ -152,12 +141,12 @@ class _PasswordFormState extends State<PasswordForm> {
         fontWeight: FontWeight.w700,
         fontSize: 28.sp
       ),
-      controller: _passwordController,
+      onChanged: (password) => _onPasswordChanged(password: password),
       keyboardType: TextInputType.text,
       textInputAction: TextInputAction.next,
       autocorrect: false,
       autovalidateMode: AutovalidateMode.onUserInteraction,
-      validator: (_) => !state.isPasswordValid && _passwordController.text.isNotEmpty
+      validator: (_) => !state.isPasswordValid && state.password.isNotEmpty
         ? 'Invalid Password'
         : null,
       obscureText: true,
@@ -184,12 +173,12 @@ class _PasswordFormState extends State<PasswordForm> {
         fontWeight: FontWeight.w700,
         fontSize: 28.sp
       ),
-      controller: _passwordConfirmationController,
+      onChanged: (passwordConfirmation) => _onPasswordConfirmationChanged(passwordConfirmation: passwordConfirmation),
       keyboardType: TextInputType.text,
       textInputAction: TextInputAction.done,
       autocorrect: false,
       autovalidateMode: AutovalidateMode.onUserInteraction,
-      validator: (_) => !state.isPasswordConfirmationValid && _passwordConfirmationController.text.isNotEmpty
+      validator: (_) => !state.isPasswordConfirmationValid && state.passwordConfirmation.isNotEmpty
         ? 'Confirmation does not match'
         : null,
       obscureText: true,
@@ -239,35 +228,30 @@ class _PasswordFormState extends State<PasswordForm> {
 
   bool _canSubmit({required PasswordFormState state}) {
     if (state.isOldPasswordVerified) {
-      return state.isPasswordValid && _passwordController.text.isNotEmpty && state.isPasswordConfirmationValid && _passwordConfirmationController.text.isNotEmpty && !state.isSubmitting;
+      return state.passwordFormValid && !state.isSubmitting;
     } else {
-      return state.isOldPasswordValid && _oldPasswordController.text.isNotEmpty && !state.isSubmitting;
+      return state.oldPasswordFormValid && !state.isSubmitting;
     }
   }
 
   void _submit({required PasswordFormState state}) {
     if (_canSubmit(state: state)) {
       state.isOldPasswordVerified 
-        ? _passwordFormBloc.add(NewPasswordSubmitted(
-            oldPassword: _oldPasswordController.text,
-            password: _passwordController.text,
-            passwordConfirmation: _passwordConfirmationController.text,
-            customerIdentifier: BlocProvider.of<CustomerBloc>(context).customer!.identifier
-          ))
-        : _passwordFormBloc.add(OldPasswordSubmitted(oldPassword: _oldPasswordController.text));
+        ? _passwordFormBloc.add(NewPasswordSubmitted())
+        : _passwordFormBloc.add(OldPasswordSubmitted());
     }
   }
   
-  void _onOldPasswordChanged() {
-    _passwordFormBloc.add(OldPasswordChanged(oldPassword: _oldPasswordController.text));
+  void _onOldPasswordChanged({required String oldPassword}) {
+    _passwordFormBloc.add(OldPasswordChanged(oldPassword: oldPassword));
   }
 
-  void _onPasswordChanged() {
-    _passwordFormBloc.add(PasswordChanged(password: _passwordController.text, passwordConfirmation: _passwordConfirmationController.text));
+  void _onPasswordChanged({required String password}) {
+    _passwordFormBloc.add(PasswordChanged(password: password));
   }
 
-  void _onPasswordConfirmationChanged() {
-    _passwordFormBloc.add(PasswordConfirmationChanged(passwordConfirmation: _passwordConfirmationController.text, password: _passwordController.text));
+  void _onPasswordConfirmationChanged({required String passwordConfirmation}) {
+    _passwordFormBloc.add(PasswordConfirmationChanged(passwordConfirmation: passwordConfirmation));
   }
 
   void _cancelButtonPressed() {
