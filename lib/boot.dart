@@ -17,7 +17,7 @@ class Boot extends StatelessWidget {
     return ScreenUtilInit(
       designSize: const Size(375, 812),
       minTextAdapt: true,
-      builder: (context) => MaterialApp(
+      builder: (context, child) => MaterialApp(
         debugShowCheckedModeBanner: false,
         useInheritedMediaQuery: true,
         theme: MainTheme.themeData(context: context),

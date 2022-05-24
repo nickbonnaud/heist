@@ -2,12 +2,17 @@ part of 'request_reset_form_bloc.dart';
 
 @immutable
 class RequestResetFormState extends Equatable {
+  final String email;
   final bool isEmailValid;
+
   final bool isSubmitting;
   final bool isSuccess;
   final String errorMessage;
 
+  bool get isFormValid => isEmailValid && email.isNotEmpty;
+
   const RequestResetFormState({
+    required this.email,
     required this.isEmailValid,
     required this.isSubmitting,
     required this.isSuccess,
@@ -16,6 +21,7 @@ class RequestResetFormState extends Equatable {
 
   factory RequestResetFormState.initial() {
     return const RequestResetFormState(
+      email: "",
       isEmailValid: true,
       isSubmitting: false,
       isSuccess: false,
@@ -24,11 +30,13 @@ class RequestResetFormState extends Equatable {
   }
 
   RequestResetFormState update({
+    String? email,
     bool? isEmailValid,
     bool? isSubmitting,
     bool? isSuccess,
     String? errorMessage
   }) => RequestResetFormState(
+    email: email ?? this.email,
     isEmailValid: isEmailValid ?? this.isEmailValid, 
     isSubmitting: isSubmitting ?? this.isSubmitting, 
     isSuccess: isSuccess ?? this.isSuccess,
@@ -36,8 +44,8 @@ class RequestResetFormState extends Equatable {
   );
 
   @override
-  List<Object> get props => [isEmailValid, isSubmitting, isSuccess, errorMessage];
+  List<Object> get props => [email, isEmailValid, isSubmitting, isSuccess, errorMessage];
 
   @override
-  String toString() => 'RequestResetFormState { isEmailValid: $isEmailValid, isSubmitting: $isSubmitting, isSuccess: $isSuccess, errorMessage: $errorMessage }';
+  String toString() => 'RequestResetFormState { email: $email, isEmailValid: $isEmailValid, isSubmitting: $isSubmitting, isSuccess: $isSuccess, errorMessage: $errorMessage }';
 }

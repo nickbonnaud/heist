@@ -13,8 +13,12 @@ void main() {
     late AuthenticationRepository authenticationRepository;
     late ResetPasswordFormBloc resetPasswordFormBloc;
 
-    late String _email;
     late ResetPasswordFormState _baseState;
+
+    late String _email;
+    late String resetCode;
+    late String password;
+    late String passwordConfirmation;
 
     setUp(() {
       authenticationRepository = MockAuthenticationRepository();
@@ -32,27 +36,41 @@ void main() {
     });
 
     blocTest<ResetPasswordFormBloc, ResetPasswordFormState>(
-      "ResetPasswordFormBloc ResetCodeChanged event yields state: [isResetCodeValid: false]",
+      "ResetPasswordFormBloc ResetCodeChanged event yields state: [isResetCodeValid: true]",
       build: () => resetPasswordFormBloc,
       wait: const Duration(milliseconds: 300),
-      act: (bloc) => bloc.add(const ResetCodeChanged(resetCode: "3#dj")),
-      expect: () => [_baseState.update(isResetCodeValid: false)]
+      act: (bloc) {
+        resetCode = "1r2k32";
+        bloc.add(ResetCodeChanged(resetCode: resetCode));
+      },
+      expect: () => [_baseState.update(resetCode: resetCode, isResetCodeValid: true)]
     );
 
     blocTest<ResetPasswordFormBloc, ResetPasswordFormState>(
       "ResetPasswordFormBloc PasswordChanged event yields state: [isPasswordValid: true]",
       build: () => resetPasswordFormBloc,
       wait: const Duration(milliseconds: 300),
-      act: (bloc) => bloc.add(const PasswordChanged(password: "cdndjHCDhbs!!#3474", passwordConfirmation: "")),
-      expect: () => [_baseState.update(isPasswordValid: true)]
+      act: (bloc) {
+        password = "cdndjHCDhbs!!#3474";
+        bloc.add(PasswordChanged(password: password));
+      },
+      expect: () => [_baseState.update(password: password, isPasswordValid: true)]
     );
 
     blocTest<ResetPasswordFormBloc, ResetPasswordFormState>(
-      "ResetPasswordFormBloc PasswordConfirmationChanged event yields state: [isPasswordConfirmationValid: false]",
+      "ResetPasswordFormBloc PasswordConfirmationChanged event yields state: [isPasswordConfirmationValid: true]",
       build: () => resetPasswordFormBloc,
       wait: const Duration(milliseconds: 300),
-      act: (bloc) => bloc.add(const PasswordConfirmationChanged(password: "jSg@nd556&sj", passwordConfirmation: "password")),
-      expect: () => [_baseState.update(isPasswordConfirmationValid: false)]
+      seed: () {
+        password = "jSg@nd556&sj";
+        _baseState = _baseState.update(password: password);
+        return _baseState;
+      },
+      act: (bloc) {
+        passwordConfirmation = password;
+        bloc.add(PasswordConfirmationChanged(passwordConfirmation: passwordConfirmation));
+      },
+      expect: () => [_baseState.update(passwordConfirmation: passwordConfirmation, isPasswordConfirmationValid: true)]
     );
 
     blocTest<ResetPasswordFormBloc, ResetPasswordFormState>(
@@ -63,7 +81,14 @@ void main() {
 
         return resetPasswordFormBloc;
       },
-      act: (bloc) => bloc.add(const Submitted(resetCode: "resetCode", password: 'password', passwordConfirmation: 'passwordConfirmation')),
+      seed: () {
+        resetCode = "1r2k32";
+        password = "jSg@nd556&sj";
+        passwordConfirmation = password;
+        _baseState = _baseState.update(resetCode: resetCode, password: password, passwordConfirmation: passwordConfirmation);
+        return _baseState;
+      },
+      act: (bloc) => bloc.add(Submitted()),
       expect: () => [_baseState.update(isSubmitting: true), _baseState.update(isSubmitting: false, isSuccess: true)]
     );
 
@@ -75,14 +100,27 @@ void main() {
 
         return resetPasswordFormBloc;
       },
-      act: (bloc) => bloc.add(const Submitted(resetCode: "resetCode", password: 'password', passwordConfirmation: 'passwordConfirmation')),
+      seed: () {
+        resetCode = "1r2k32";
+        password = "jSg@nd556&sj";
+        passwordConfirmation = password;
+        _baseState = _baseState.update(resetCode: resetCode, password: password, passwordConfirmation: passwordConfirmation);
+        return _baseState;
+      },
+      act: (bloc) => bloc.add(Submitted()),
       expect: () => [_baseState.update(isSubmitting: true), _baseState.update(isSubmitting: false, errorMessage: "error")]
     );
 
     blocTest<ResetPasswordFormBloc, ResetPasswordFormState>(
       "ResetPasswordFormBloc Reset event yields state: [errorMessage: '', isSuccess: false]",
       build: () => resetPasswordFormBloc,
-      seed: () => _baseState.update(errorMessage: "error", isSuccess: true),
+      seed: () {
+        resetCode = "1r2k32";
+        password = "jSg@nd556&sj";
+        passwordConfirmation = password;
+        _baseState = _baseState.update(resetCode: resetCode, password: password, passwordConfirmation: passwordConfirmation, errorMessage: "error", isSuccess: true);
+        return _baseState;
+      },
       act: (bloc) => bloc.add(Reset()),
       expect: () => [_baseState.update(errorMessage: "", isSuccess: false)]
     );

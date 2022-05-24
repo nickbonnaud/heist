@@ -20,7 +20,6 @@ class RequestResetPasswordForm extends StatefulWidget {
 
 class _RequestResetPasswordFormState extends State<RequestResetPasswordForm> {
   final FocusNode _emailFocusNode = FocusNode();
-  late TextEditingController _emailController;
 
   late RequestResetFormBloc _formBloc;
 
@@ -28,8 +27,6 @@ class _RequestResetPasswordFormState extends State<RequestResetPasswordForm> {
   void initState() {
     super.initState();
     _formBloc = BlocProvider.of<RequestResetFormBloc>(context);
-    _emailController = TextEditingController();
-    _emailController.addListener(_onEmailChanged);
   }
   
   @override
@@ -80,7 +77,6 @@ class _RequestResetPasswordFormState extends State<RequestResetPasswordForm> {
 
   @override
   void dispose() {
-    _emailController.dispose();
     _emailFocusNode.dispose();
     super.dispose();
   }
@@ -101,13 +97,13 @@ class _RequestResetPasswordFormState extends State<RequestResetPasswordForm> {
             fontWeight: FontWeight.w700,
             fontSize: 28.sp
           ),
-          controller: _emailController,
+          onChanged: (email) => _onEmailChanged(email: email),
           keyboardType: TextInputType.emailAddress,
           textInputAction: TextInputAction.done,
           autocorrect: false,
           autovalidateMode: AutovalidateMode.onUserInteraction,
           focusNode: _emailFocusNode,
-          validator: (_) => !state.isEmailValid && _emailController.text.isNotEmpty
+          validator: (_) => !state.isEmailValid && state.email.isNotEmpty
             ? "Invalid Email"
             : null,
         );
@@ -138,12 +134,12 @@ class _RequestResetPasswordFormState extends State<RequestResetPasswordForm> {
   }
 
   bool _buttonEnabled({required RequestResetFormState state}) {
-    return state.isEmailValid && _emailController.text.isNotEmpty && !state.isSubmitting;
+    return state.isFormValid && !state.isSubmitting;
   }
 
   void _submitButtonPressed({required RequestResetFormState state}) {
     if (_buttonEnabled(state: state)) {
-      _formBloc.add(Submitted(email: _emailController.text));
+      _formBloc.add(Submitted());
     }
   }
 
@@ -172,13 +168,13 @@ class _RequestResetPasswordFormState extends State<RequestResetPasswordForm> {
       .closed.then((_) {
         _formBloc.add(Reset());
         if (error == null) {
-          Navigator.of(context).pushReplacementNamed(Routes.resetPassword, arguments: ResetPasswordArgs(email: _emailController.text));
+          Navigator.of(context).pushReplacementNamed(Routes.resetPassword, arguments: ResetPasswordArgs(email: _formBloc.state.email));
         }
       });
   }
 
-  void _onEmailChanged() {
-    _formBloc.add(EmailChanged(email: _emailController.text));
+  void _onEmailChanged({required String email}) {
+    _formBloc.add(EmailChanged(email: email));
   }
 
   KeyboardActionsConfig _buildKeyboard() {

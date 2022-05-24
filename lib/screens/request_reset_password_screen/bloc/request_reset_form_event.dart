@@ -19,16 +19,6 @@ class EmailChanged extends RequestResetFormEvent {
   String toString() => 'EmailChanged { email: $email }';
 }
 
-class Submitted extends RequestResetFormEvent {
-  final String email;
-
-  const Submitted({required this.email});
-
-  @override
-  List<Object> get props => [email];
-
-  @override
-  String toString() => 'Submitted { email: $email }';
-}
+class Submitted extends RequestResetFormEvent {}
 
 class Reset extends RequestResetFormEvent {}

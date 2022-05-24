@@ -95,7 +95,7 @@ class TipScreenTest {
     expect(find.byKey(const Key("tipFormSnackbarKey")), findsOneWidget);
 
     await tester.fling(find.byKey(const Key("tipFormSnackbarKey")), const Offset(0, 500), 500);
-    await tester.pump();
+    await tester.pumpAndSettle();
   }
 
   Future<void> _navigateBack() async {

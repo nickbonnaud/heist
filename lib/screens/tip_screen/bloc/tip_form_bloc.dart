@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:heist/blocs/customer/customer_bloc.dart';
+import 'package:heist/models/customer/account.dart';
 import 'package:heist/models/customer/customer.dart';
 import 'package:heist/repositories/account_repository.dart';
 import 'package:heist/resources/helpers/api_exception.dart';
@@ -20,7 +21,7 @@ class TipFormBloc extends Bloc<TipFormEvent, TipFormState> {
   TipFormBloc({required AccountRepository accountRepository, required CustomerBloc customerBloc})
     : _accountRepository = accountRepository,
       _customerBloc = customerBloc,
-      super(TipFormState.initial()) { _eventHandler(); }
+      super(TipFormState.initial(account: customerBloc.customer!.account)) { _eventHandler(); }
   
   void _eventHandler() {
     on<TipRateChanged>((event, emit) => _mapTipRateChangedToState(event: event, emit: emit), transformer: Debouncer.bounce(duration: _debounceTime));
@@ -30,17 +31,21 @@ class TipFormBloc extends Bloc<TipFormEvent, TipFormState> {
   }
 
   void _mapTipRateChangedToState({required TipRateChanged event, required Emitter<TipFormState> emit}) {
-    emit(state.update(isTipRateValid: Validators.isValidDefaultTip(tip: event.tipRate)));
+    emit(state.update(tipRate: event.tipRate, isTipRateValid: Validators.isValidDefaultTip(tip: event.tipRate)));
   }
 
   void _mapQuickTipRateChangedToState({required QuickTipRateChanged event, required Emitter<TipFormState> emit}) {
-    emit(state.update(isQuickTipRateValid: Validators.isValidQuickTip(tip: event.quickTipRate)));
+    emit(state.update(quickTipRate: event.quickTipRate, isQuickTipRateValid: Validators.isValidQuickTip(tip: event.quickTipRate)));
   }
 
   Future<void> _mapSubmittedToState({required Submitted event, required Emitter<TipFormState> emit}) async {
     emit(state.update(isSubmitting: true));
     try {
-      Customer customer = await _accountRepository.update(accountIdentifier: event.accountIdentifier, tipRate: event.tipRate, quickTipRate: event.quickTipRate);
+      Customer customer = await _accountRepository.update(
+        accountIdentifier: _customerBloc.customer!.account.identifier,
+        tipRate: int.parse(state.tipRate),
+        quickTipRate: int.parse(state.quickTipRate)
+      );
       _customerBloc.add(CustomerUpdated(customer: customer));
       emit(state.update(isSubmitting: false, isSuccess: true));
     } on ApiException catch (exception) {

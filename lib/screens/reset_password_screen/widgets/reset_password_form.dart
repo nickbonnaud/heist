@@ -21,22 +21,12 @@ class _ResetPasswordFormState extends State<ResetPasswordForm> {
   final FocusNode _passwordFocusNode = FocusNode();
   final FocusNode _passwordConfirmationFocusNode = FocusNode();
 
-  final TextEditingController _resetCodeController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _passwordConfirmationController = TextEditingController();
-
   late ResetPasswordFormBloc _resetPasswordFormBloc;
-  
-  bool get fieldsNotEmpty => _resetCodeController.text.isNotEmpty && _passwordController.text.isNotEmpty && _passwordConfirmationController.text.isNotEmpty;
   
   @override
   void initState() {
     super.initState();
     _resetPasswordFormBloc = BlocProvider.of<ResetPasswordFormBloc>(context);
-
-    _resetCodeController.addListener(_onResetCodeChanged);
-    _passwordController.addListener(_onPasswordChanged);
-    _passwordConfirmationController.addListener(_onPasswordConfirmationChanged);
   }
   
   @override
@@ -95,9 +85,6 @@ class _ResetPasswordFormState extends State<ResetPasswordForm> {
     _passwordFocusNode.dispose();
     _passwordConfirmationFocusNode.dispose();
 
-    _resetCodeController.dispose();
-    _passwordController.dispose();
-    _passwordConfirmationController.dispose();
     super.dispose();
   }
 
@@ -117,13 +104,13 @@ class _ResetPasswordFormState extends State<ResetPasswordForm> {
             fontWeight: FontWeight.w700,
             fontSize: 28.sp
           ),
-          controller: _resetCodeController,
+          onChanged: (resetCode) => _onResetCodeChanged(resetCode: resetCode),
           keyboardType: TextInputType.text,
           textInputAction: TextInputAction.done,
           autocorrect: false,
           autovalidateMode: AutovalidateMode.onUserInteraction,
           focusNode: _resetCodeFocusNode,
-          validator: (_) => !state.isResetCodeValid
+          validator: (_) => !state.isResetCodeValid && state.resetCode.isNotEmpty
             ? "Invalid Reset Code"
             : null,
         );
@@ -147,7 +134,7 @@ class _ResetPasswordFormState extends State<ResetPasswordForm> {
             fontWeight: FontWeight.w700,
             fontSize: 28.sp
           ),
-          controller: _passwordController,
+          onChanged: (password) => _onPasswordChanged(password: password),
           keyboardType: TextInputType.text,
           textInputAction: TextInputAction.done,
           autocorrect: false,
@@ -178,7 +165,7 @@ class _ResetPasswordFormState extends State<ResetPasswordForm> {
             fontWeight: FontWeight.w700,
             fontSize: 28.sp
           ),
-          controller: _passwordConfirmationController,
+          onChanged: (passwordConfirmation) => _onPasswordConfirmationChanged(passwordConfirmation: passwordConfirmation),
           keyboardType: TextInputType.text,
           textInputAction: TextInputAction.done,
           autocorrect: false,
@@ -216,29 +203,25 @@ class _ResetPasswordFormState extends State<ResetPasswordForm> {
   }
 
   bool _buttonEnabled({required ResetPasswordFormState state}) {
-    return state.fieldsValid && fieldsNotEmpty && !state.isSubmitting;
+    return state.isFormValid && !state.isSubmitting;
   }
 
   void _submitButtonPressed({required ResetPasswordFormState state}) {
     if (_buttonEnabled(state: state)) {
-      _resetPasswordFormBloc.add(Submitted(
-        resetCode: _resetCodeController.text,
-        password: _passwordController.text,
-        passwordConfirmation: _passwordConfirmationController.text
-      ));
+      _resetPasswordFormBloc.add(Submitted());
     }
   }
   
-  void _onResetCodeChanged() {
-    _resetPasswordFormBloc.add(ResetCodeChanged(resetCode: _resetCodeController.text));
+  void _onResetCodeChanged({required String resetCode}) {
+    _resetPasswordFormBloc.add(ResetCodeChanged(resetCode: resetCode));
   }
 
-  void _onPasswordChanged() {
-    _resetPasswordFormBloc.add(PasswordChanged(password: _passwordController.text, passwordConfirmation: _passwordConfirmationController.text));
+  void _onPasswordChanged({required String password}) {
+    _resetPasswordFormBloc.add(PasswordChanged(password: password));
   }
 
-  void _onPasswordConfirmationChanged() {
-    _resetPasswordFormBloc.add(PasswordConfirmationChanged(passwordConfirmation: _passwordConfirmationController.text, password: _passwordController.text));
+  void _onPasswordConfirmationChanged({required String passwordConfirmation}) {
+    _resetPasswordFormBloc.add(PasswordConfirmationChanged(passwordConfirmation: passwordConfirmation));
   }
 
   void _showSnackbar({String? error}) async {

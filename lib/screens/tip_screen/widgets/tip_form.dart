@@ -19,12 +19,8 @@ class TipForm extends StatefulWidget {
 }
 
 class _TipFormState extends State<TipForm> {
-  TextEditingController _tipRateController = TextEditingController();
   final FocusNode _tipRateNode = FocusNode();
-  TextEditingController _quickTipRateController = TextEditingController();
   final FocusNode _quickTipRateNode = FocusNode();
-
-  bool get isPopulated => _tipRateController.text.isNotEmpty && _quickTipRateController.text.isNotEmpty;
 
   late TipFormBloc _tipFormBloc;
 
@@ -32,11 +28,6 @@ class _TipFormState extends State<TipForm> {
   void initState() {
     super.initState();
     _tipFormBloc = BlocProvider.of<TipFormBloc>(context);
-    _tipRateController = TextEditingController(text: BlocProvider.of<CustomerBloc>(context).customer!.account.tipRate.toString());
-    _quickTipRateController = TextEditingController(text: BlocProvider.of<CustomerBloc>(context).customer!.account.quickTipRate.toString());
-
-    _tipRateController.addListener(_onTipRateChanged);
-    _quickTipRateController.addListener(_onQuickTipRateChanged);
   }
   
   @override
@@ -102,11 +93,9 @@ class _TipFormState extends State<TipForm> {
 
   @override
   void dispose() {
-    _tipRateController.dispose();
-    _quickTipRateController.dispose();
-
     _tipRateNode.dispose();
     _quickTipRateNode.dispose();
+
     super.dispose();
   }
 
@@ -133,14 +122,15 @@ class _TipFormState extends State<TipForm> {
             fontWeight: FontWeight.w700,
             fontSize: 28.sp
           ),
-          controller: _tipRateController,
+          initialValue: BlocProvider.of<CustomerBloc>(context).customer!.account.tipRate.toString(),
+          onChanged: (tipRate) => _onTipRateChanged(tipRate: tipRate),
           keyboardType: TextInputType.number,
           textInputAction: TextInputAction.done,
           autocorrect: false,
           autovalidateMode: AutovalidateMode.onUserInteraction,
           textAlign: TextAlign.center,
           focusNode: _tipRateNode,
-          validator: (_) => !state.isTipRateValid 
+          validator: (_) => !state.isTipRateValid && state.tipRate.isNotEmpty
             ? 'Must be between 0 and 30' 
             : null,
         );
@@ -171,14 +161,15 @@ class _TipFormState extends State<TipForm> {
             fontWeight: FontWeight.w700,
             fontSize: 28.sp
           ),
-          controller: _quickTipRateController,
+          initialValue: BlocProvider.of<CustomerBloc>(context).customer!.account.quickTipRate.toString(),
+          onChanged: (quickTipRate) => _onQuickTipRateChanged(quickTipRate: quickTipRate),
           keyboardType: TextInputType.number,
           textInputAction: TextInputAction.done,
           autocorrect: false,
           autovalidateMode: AutovalidateMode.onUserInteraction,
           textAlign: TextAlign.center,
           focusNode: _quickTipRateNode,
-          validator: (_) => !state.isQuickTipRateValid
+          validator: (_) => !state.isQuickTipRateValid && state.quickTipRate.isNotEmpty
             ? 'Must be between 0 and 20'
             : null,
         );
@@ -221,12 +212,12 @@ class _TipFormState extends State<TipForm> {
     }
   }
 
-  void _onTipRateChanged() {
-    _tipFormBloc.add(TipRateChanged(tipRate: _tipRateController.text));
+  void _onTipRateChanged({required String tipRate}) {
+    _tipFormBloc.add(TipRateChanged(tipRate: tipRate));
   }
 
-  void _onQuickTipRateChanged() {
-    _tipFormBloc.add(QuickTipRateChanged(quickTipRate: _quickTipRateController.text));
+  void _onQuickTipRateChanged({required String quickTipRate}) {
+    _tipFormBloc.add(QuickTipRateChanged(quickTipRate: quickTipRate));
   }
 
   void _cancelButtonPressed() {
@@ -234,24 +225,18 @@ class _TipFormState extends State<TipForm> {
   }
 
   bool _isSaveButtonEnabled({required TipFormState state}) {
-    return state.isFormValid && _formFieldsChanged() && isPopulated && !state.isSubmitting;
+    return state.isFormValid && _formFieldsChanged(state: state) && !state.isSubmitting;
   }
 
-  bool _formFieldsChanged() {
+  bool _formFieldsChanged({required TipFormState state}) {
     Account account = BlocProvider.of<CustomerBloc>(context).customer!.account;
-    return (account.tipRate != int.parse(_tipRateController.text))
-      || (account.quickTipRate != int.parse(_quickTipRateController.text));
+    return (account.tipRate != int.parse(state.tipRate))
+      || (account.quickTipRate != int.parse(state.quickTipRate));
   }
 
   void _saveButtonPressed({required TipFormState state}) {
     if (_isSaveButtonEnabled(state: state)) {
-      Account account = BlocProvider.of<CustomerBloc>(context).customer!.account;
-
-      _tipFormBloc.add(Submitted(
-        accountIdentifier: account.identifier,
-        tipRate: int.parse(_tipRateController.text) != account.tipRate ? int.parse(_tipRateController.text) : null,
-        quickTipRate: int.parse(_quickTipRateController.text) != account.quickTipRate ? int.parse(_quickTipRateController.text) : null
-      ));
+      _tipFormBloc.add(Submitted());
     }
   }
 

@@ -22,30 +22,30 @@ class ResetPasswordFormBloc extends Bloc<ResetPasswordFormEvent, ResetPasswordFo
     on<ResetCodeChanged>((event, emit) => _mapResetCodeChangedToState(event: event, emit: emit), transformer: Debouncer.bounce(duration: _debounceTime));
     on<PasswordChanged>((event, emit) => _mapPasswordChangedToState(event: event, emit: emit), transformer: Debouncer.bounce(duration: _debounceTime));
     on<PasswordConfirmationChanged>((event, emit) => _mapPasswordConfirmationChangedToState(event: event, emit: emit), transformer: Debouncer.bounce(duration: _debounceTime));
-    on<Submitted>((event, emit) async => await _mapSubmittedToState(event: event, emit: emit));
+    on<Submitted>((event, emit) async => await _mapSubmittedToState(emit: emit));
     on<Reset>((event, emit) => _mapResetToState(emit: emit));
   }
 
   void _mapResetCodeChangedToState({required ResetCodeChanged event, required Emitter<ResetPasswordFormState> emit}) {
-    emit(state.update(isResetCodeValid: Validators.isValidResetCode(resetCode: event.resetCode)));
+    emit(state.update(resetCode: event.resetCode, isResetCodeValid: Validators.isValidResetCode(resetCode: event.resetCode)));
   }
 
   void _mapPasswordChangedToState({required PasswordChanged event, required Emitter<ResetPasswordFormState> emit}) {
-    final bool isPasswordConfirmationValid = event.passwordConfirmation.isNotEmpty
-      ? Validators.isPasswordConfirmationValid(password: event.password, passwordConfirmation: event.passwordConfirmation)
+    final bool isPasswordConfirmationValid = state.passwordConfirmation.isNotEmpty
+      ? Validators.isPasswordConfirmationValid(password: event.password, passwordConfirmation: state.passwordConfirmation)
       : false;
-    emit(state.update(isPasswordValid: Validators.isValidPassword(password: event.password), isPasswordConfirmationValid: isPasswordConfirmationValid));
+    emit(state.update(password: event.password, isPasswordValid: Validators.isValidPassword(password: event.password), isPasswordConfirmationValid: isPasswordConfirmationValid));
   }
 
   void _mapPasswordConfirmationChangedToState({required PasswordConfirmationChanged event, required Emitter<ResetPasswordFormState> emit}) {
-    emit(state.update(isPasswordConfirmationValid: Validators.isPasswordConfirmationValid(password: event.password, passwordConfirmation: event.passwordConfirmation)));
+    emit(state.update(passwordConfirmation: event.passwordConfirmation, isPasswordConfirmationValid: Validators.isPasswordConfirmationValid(password: state.password, passwordConfirmation: event.passwordConfirmation)));
   }
 
-  Future<void> _mapSubmittedToState({required Submitted event, required Emitter<ResetPasswordFormState> emit}) async {
+  Future<void> _mapSubmittedToState({required Emitter<ResetPasswordFormState> emit}) async {
     emit(state.update(isSubmitting: true));
 
     try {
-      await _authenticationRepository.resetPassword(email: state.email, resetCode: event.resetCode, password: event.password, passwordConfirmation: event.passwordConfirmation);
+      await _authenticationRepository.resetPassword(email: state.email, resetCode: state.resetCode, password: state.password, passwordConfirmation: state.passwordConfirmation);
       emit(state.update(isSubmitting: false, isSuccess: true));
     } on ApiException catch (exception) {
       emit(state.update(isSubmitting: false, errorMessage: exception.error));

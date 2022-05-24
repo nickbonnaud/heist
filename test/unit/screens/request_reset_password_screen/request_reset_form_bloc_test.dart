@@ -14,6 +14,7 @@ void main() {
     late RequestResetFormBloc requestResetFormBloc;
 
     late RequestResetFormState _baseState;
+    late String email;
 
     setUp(() {
       authenticationRepository = MockAuthenticationRepository();
@@ -33,8 +34,11 @@ void main() {
       "RequestResetFormBloc EmailChanged event yields state: [isEmailValid: true]",
       build: () => requestResetFormBloc,
       wait: const Duration(milliseconds: 300),
-      act: (bloc) => bloc.add(EmailChanged(email: faker.internet.freeEmail())),
-      expect: () => [_baseState.update(isEmailValid: true)]
+      act: (bloc) {
+        email = faker.internet.freeEmail();
+        bloc.add(EmailChanged(email: email));
+      },
+      expect: () => [_baseState.update(email: email, isEmailValid: true)]
     );
 
     blocTest<RequestResetFormBloc, RequestResetFormState>(
@@ -45,7 +49,12 @@ void main() {
         
         return requestResetFormBloc;
       },
-      act: (bloc) => bloc.add(Submitted(email: faker.internet.freeEmail())),
+      seed: () {
+        email = faker.internet.freeEmail();
+        _baseState = _baseState.update(email: email);
+        return _baseState;
+      },
+      act: (bloc) => bloc.add(Submitted()),
       expect: () => [_baseState.update(isSubmitting: true), _baseState.update(isSubmitting: false, isSuccess: true)]
     );
 
@@ -57,7 +66,12 @@ void main() {
         
         return requestResetFormBloc;
       },
-      act: (bloc) => bloc.add(Submitted(email: faker.internet.freeEmail())),
+      seed: () {
+        email = faker.internet.freeEmail();
+        _baseState = _baseState.update(email: email);
+        return _baseState;
+      },
+      act: (bloc) => bloc.add(Submitted()),
       expect: () => [_baseState.update(isSubmitting: true), _baseState.update(isSubmitting: false, errorMessage: "error")]
     );
 
