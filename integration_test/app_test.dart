@@ -16,6 +16,7 @@ void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
   
   testWidgets("Init App Tests", (tester) async {
+    
     await tester.pumpWidget(const PhaseOne(testing: true));
 
     await SplashScreenTest(tester: tester).init();
