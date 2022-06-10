@@ -32,7 +32,7 @@ class IssueFormState extends Equatable {
       issueType: issueType,
 
       message: "",
-      isMessageValid: true,
+      isMessageValid: false,
 
       isSubmitting: false,
       isSuccess: false,

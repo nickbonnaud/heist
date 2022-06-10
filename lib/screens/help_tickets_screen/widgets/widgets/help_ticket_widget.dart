@@ -83,7 +83,7 @@ class HelpTicketWidget extends StatelessWidget {
     
     HelpTicketsScreenBloc helpTicketsScreenBloc = BlocProvider.of<HelpTicketsScreenBloc>(context);
     HelpRepository helpRepository = RepositoryProvider.of<HelpRepository>(context);
-
+    
     Navigator.of(context).push(MaterialPageRoute<HelpTicketScreen>(
       fullscreenDialog: true,
       builder: (_) => BlocProvider.value(

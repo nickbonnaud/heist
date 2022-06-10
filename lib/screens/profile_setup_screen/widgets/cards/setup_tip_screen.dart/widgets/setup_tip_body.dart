@@ -117,6 +117,7 @@ class _SetupTipBodyState extends State<SetupTipBody> {
             fontWeight: FontWeight.w700,
             fontSize: 28.sp
           ),
+          initialValue: state.tipRate,
           onChanged: (tipRate) => _onTipRateChanged(tipRate: tipRate),
           keyboardType: TextInputType.number,
           textInputAction: TextInputAction.done,
@@ -155,6 +156,7 @@ class _SetupTipBodyState extends State<SetupTipBody> {
             fontWeight: FontWeight.w700,
             fontSize: 28.sp
           ),
+          initialValue: state.quickTipRate,
           onChanged: (quickTipRate) => _onQuickTipRateChanged(quickTipRate: quickTipRate),
           keyboardType: TextInputType.number,
           textInputAction: TextInputAction.done,

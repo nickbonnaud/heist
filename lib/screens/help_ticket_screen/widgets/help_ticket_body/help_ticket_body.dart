@@ -32,21 +32,12 @@ class _HelpTicketBodyState extends State<HelpTicketBody> {
   
   @override
   Widget build(BuildContext context) {
-    return Stack(
+    return Column(
       children: [
-        Column(
-          children: [
-            MessageList(scrollController: _scrollController),
-            if (!widget._helpTicket.resolved)
-              BlocProvider<MessageInputBloc>(
-                create: (_) => MessageInputBloc(
-                  helpRepository: RepositoryProvider.of<HelpRepository>(context),
-                  helpTicketsScreenBloc: BlocProvider.of<HelpTicketsScreenBloc>(context)
-                ),
-                child: MessageInput(ticketIdentifier: widget._helpTicket.identifier, scrollController: _scrollController),
-              )
-          ],
-        )
+        Expanded(
+          child: MessageList(scrollController: _scrollController)
+        ),
+        _messageInput(),
       ],
     );
   }
@@ -55,6 +46,20 @@ class _HelpTicketBodyState extends State<HelpTicketBody> {
   void dispose() {
     _scrollController.dispose();
     super.dispose();
+  }
+
+  Widget _messageInput() {
+    if (!widget._helpTicket.resolved) {
+      return BlocProvider<MessageInputBloc>(
+        create: (_) => MessageInputBloc(
+          helpRepository: RepositoryProvider.of<HelpRepository>(context),
+          helpTicketsScreenBloc: BlocProvider.of<HelpTicketsScreenBloc>(context)
+        ),
+        child: MessageInput(ticketIdentifier: widget._helpTicket.identifier, scrollController: _scrollController),
+      );
+    }
+
+    return Container();
   }
 
   void _markRepliesAsRead() {

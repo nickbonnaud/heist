@@ -23,7 +23,8 @@ class EmailFormState extends Equatable {
   factory EmailFormState.initial({required String email}) {
     return EmailFormState(
       email: email,
-      isEmailValid: true,
+      isEmailValid: email.isNotEmpty,
+
       isSubmitting: false,
       isSuccess: false,
       errorMessage: ""
@@ -33,12 +34,14 @@ class EmailFormState extends Equatable {
   EmailFormState update({
     String? email,
     bool? isEmailValid,
+
     bool? isSubmitting,
     bool? isSuccess,
     String? errorMessage
   }) => EmailFormState(
     email: email ?? this.email,
-    isEmailValid: isEmailValid ?? this.isEmailValid, 
+    isEmailValid: isEmailValid ?? this.isEmailValid,
+    
     isSubmitting: isSubmitting ?? this.isSubmitting, 
     isSuccess: isSuccess ?? this.isSuccess,
     errorMessage: errorMessage ?? this.errorMessage

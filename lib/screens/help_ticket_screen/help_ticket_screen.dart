@@ -19,31 +19,35 @@ class HelpTicketScreen extends StatelessWidget {
     : _helpTicket = helpTicket,
       super(key: key);
   
-@override
+  @override
   Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.scrollBackground,
+      appBar: BottomModalAppBar(
+        backgroundColor: Theme.of(context).colorScheme.scrollBackground,
+        title: _helpTicket.subject,
+        trailingWidget: _helpTicket.resolved
+          ? null
+          : _deleteTicketButton(context: context)
+      ),
+      body: BlocProvider<MessageListBloc>(
+        create: (_) => MessageListBloc(
+          helpTicket: _helpTicket,
+          helpTicketsScreenBloc: BlocProvider.of<HelpTicketsScreenBloc>(context),
+          helpRepository: RepositoryProvider.of<HelpRepository>(context)
+        ),
+        child: HelpTicketBody(helpTicket: _helpTicket),
+      ),
+    );
+  }
+
+  Widget _deleteTicketButton({required BuildContext context}) {
     return BlocProvider<DeleteTicketButtonBloc>(
       create: (_) => DeleteTicketButtonBloc(
         helpRepository: RepositoryProvider.of<HelpRepository>(context),
         helpTicketsScreenBloc: BlocProvider.of<HelpTicketsScreenBloc>(context)
       ),
-      child: Scaffold(
-        backgroundColor: Theme.of(context).colorScheme.scrollBackground,
-        appBar: BottomModalAppBar(
-          backgroundColor: Theme.of(context).colorScheme.scrollBackground,
-          title: _helpTicket.subject,
-          trailingWidget: _helpTicket.resolved
-            ? null
-            : DeleteTicketButton(helpTicket: _helpTicket)
-        ),
-        body: BlocProvider<MessageListBloc>(
-          create: (_) => MessageListBloc(
-            helpTicket: _helpTicket,
-            helpTicketsScreenBloc: BlocProvider.of<HelpTicketsScreenBloc>(context),
-            helpRepository: RepositoryProvider.of<HelpRepository>(context)
-          ),
-          child: HelpTicketBody(helpTicket: _helpTicket),
-        )
-      ),
+      child: DeleteTicketButton(helpTicket: _helpTicket)
     );
   }
 }

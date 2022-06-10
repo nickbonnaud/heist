@@ -76,14 +76,6 @@ class _LoginFormState extends State<LoginForm> {
                   child: child,
                 )
               ),
-              Positioned(
-                bottom: animation.value * 60.h + ((1 - animation.value) * -60.h),
-                child: Consumer2<PageOffsetNotifier, AnimationController>(
-                  builder: (context, notifier, animation, child) {
-                    return _goToRegisterForm(animation: animation);
-                  }
-                )
-              )
             ]
           );
         },
@@ -113,6 +105,8 @@ class _LoginFormState extends State<LoginForm> {
                     ),
                     SizedBox(height: 40.h),
                     _submitButton(),
+                    SizedBox(height: 40.h),
+                    _goToRegisterButton()
                   ],
                 )
               ),
@@ -205,25 +199,21 @@ class _LoginFormState extends State<LoginForm> {
     );
   }
 
-  Widget _goToRegisterForm({required AnimationController animation}) {
-    return TextButton(
-      onPressed: () {
-        if (animation.status != AnimationStatus.dismissed) {
-          animation.reverse().then((_) {
-            widget._pageController.nextPage(duration: const Duration(seconds: 1), curve: Curves.decelerate);
-          });
-        } else {
-          widget._pageController.nextPage(duration: const Duration(seconds: 1), curve: Curves.decelerate);
-        }
-      },
-      child: Text("Don't have an account?",
-        style: TextStyle(
-          color: Theme.of(context).colorScheme.callToAction,
-          fontSize: 20.sp,
-          decoration: TextDecoration.underline,
-          letterSpacing: 0.5.w
-        )
-      ),
+  Widget _goToRegisterButton() {
+    return Consumer2<PageOffsetNotifier, AnimationController>(
+      builder: (context, notifier, animation, child) {
+        return TextButton(
+          onPressed: () => _goToRegisterButtonPressed(animation: animation), 
+          child: Text("Don't have an account?",
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.callToAction,
+              fontSize: 20.sp,
+              decoration: TextDecoration.underline,
+              letterSpacing: 0.5.w
+            )
+          )
+        );
+      }
     );
   }
   
@@ -284,6 +274,10 @@ class _LoginFormState extends State<LoginForm> {
         );
   }
 
+  bool _isLoginButtonEnabled({required LoginState state}) {
+    return state.isFormValid && !state.isSubmitting;
+  }
+
   void keyboardVisibilityChanged() {
     final bool keyboardVisible = _emailFocus.hasFocus || _passwordFocus.hasFocus;
     context.read<KeyboardVisibleCubit>().toggle(isVisible: keyboardVisible);
@@ -302,10 +296,6 @@ class _LoginFormState extends State<LoginForm> {
     FocusScope.of(context).requestFocus(next);
   }
 
-  bool _isLoginButtonEnabled({required LoginState state}) {
-    return state.isFormValid && !state.isSubmitting;
-  }
-
   void _submit({required LoginState state}) {
     if (_isLoginButtonEnabled(state: state)) {
       _onFormSubmitted();
@@ -314,6 +304,14 @@ class _LoginFormState extends State<LoginForm> {
   
   void _onFormSubmitted() {
     _loginBloc.add(Submitted());
+  }
+
+  void _goToRegisterButtonPressed({required AnimationController animation}) {
+    if (animation.status != AnimationStatus.dismissed) {
+      animation.reverse().then((_) => widget._pageController.nextPage(duration: const Duration(seconds: 1), curve: Curves.decelerate));
+    } else {
+      widget._pageController.nextPage(duration: const Duration(seconds: 1), curve: Curves.decelerate);
+    }
   }
 
   KeyboardActionsConfig _buildKeyboard({required BuildContext context}) {

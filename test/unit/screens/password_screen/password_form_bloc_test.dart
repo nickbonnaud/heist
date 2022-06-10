@@ -70,7 +70,7 @@ void main() {
         password = "ncvdhBDSJSjh76353!!!@#";
         bloc.add(PasswordChanged(password: password));
       },
-      expect: () => [_baseState.update(password: password, isPasswordValid: true)]
+      expect: () => [_baseState.update(password: password, isPasswordValid: true, isPasswordConfirmationValid: true)]
     );
 
     blocTest<PasswordFormBloc, PasswordFormState>(

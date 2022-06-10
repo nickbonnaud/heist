@@ -30,10 +30,6 @@ class _RegisterFormState extends State<RegisterForm> {
   final FocusNode _passwordFocus = FocusNode();
   final FocusNode _passwordConfirmationFocus = FocusNode();
 
-  // bool get isPopulated => _emailController.text.isNotEmpty
-  //   && _passwordController.text.isNotEmpty
-  //   && _passwordConfirmationController.text.isNotEmpty;
-
   late RegisterBloc _registerBloc;
   
   @override
@@ -70,14 +66,6 @@ class _RegisterFormState extends State<RegisterForm> {
                   child: child,
                 )
               ),
-              Positioned(
-                bottom: animation.value * 60.h + ((1 - animation.value) * -60.h),
-                child: Consumer2<PageOffsetNotifier, AnimationController>(
-                  builder: (context, notifier, animation, child) {
-                    return _goToLoginForm(animation: animation);
-                  }
-                )
-              )
             ]
           );
         },
@@ -101,6 +89,8 @@ class _RegisterFormState extends State<RegisterForm> {
                     _passwordConfirmationTextField(),
                     SizedBox(height: 40.h),
                     _submitButton(),
+                    SizedBox(height: 40.h),
+                    _goToLoginButton()
                   ],
                 ),
               ),
@@ -276,25 +266,21 @@ class _RegisterFormState extends State<RegisterForm> {
         );
   }
 
-  Widget _goToLoginForm({required AnimationController animation}) {
-    return TextButton(
-      onPressed: () {
-        if (animation.status != AnimationStatus.dismissed) {
-          animation.reverse().then((_) {
-            widget._pageController.previousPage(duration: const Duration(seconds: 1), curve: Curves.decelerate);
-          });
-        } else {
-          widget._pageController.previousPage(duration: const Duration(seconds: 1), curve: Curves.decelerate);
-        }
-      },
-      child: Text('Already have an Account?',
-        style: TextStyle(
-          color: Theme.of(context).colorScheme.callToAction,
-          fontSize: 20.sp,
-          decoration: TextDecoration.underline,
-          letterSpacing: 0.5.w
-        )
-      )
+  Widget _goToLoginButton() {
+    return Consumer2<PageOffsetNotifier, AnimationController>(
+      builder: (context, notifier, animation, child) {
+        return TextButton(
+          onPressed: () => _goToLoginButtonPressed(animation: animation),
+          child: Text('Already have an Account?',
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.callToAction,
+              fontSize: 20.sp,
+              decoration: TextDecoration.underline,
+              letterSpacing: 0.5.w
+            )
+          )
+        );
+      }
     );
   }
 
@@ -334,6 +320,14 @@ class _RegisterFormState extends State<RegisterForm> {
     _registerBloc.add(Submitted());
   }
 
+  void _goToLoginButtonPressed({required AnimationController animation}) {
+    if (animation.status != AnimationStatus.dismissed) {
+      animation.reverse().then((_) => widget._pageController.previousPage(duration: const Duration(seconds: 1), curve: Curves.decelerate));
+    } else {
+      widget._pageController.previousPage(duration: const Duration(seconds: 1), curve: Curves.decelerate);
+    }
+  }
+  
   KeyboardActionsConfig _buildKeyboard({required BuildContext context}) {
     return KeyboardActionsConfig(
       keyboardBarColor: Theme.of(context).colorScheme.keyboardHelpBarLight,

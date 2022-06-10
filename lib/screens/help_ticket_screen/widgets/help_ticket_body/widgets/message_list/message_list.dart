@@ -18,24 +18,22 @@ class MessageList extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
-    return Flexible(
-      key: const Key("messageListKey"),
-      child: BlocBuilder<MessageListBloc, MessageListState>(
-        builder: (context, state) {
-          return ListView.builder(
-            padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
-            itemCount: state.helpTicket.replies.length + 1,
-            reverse: true,
-            controller: _scrollController,
-            itemBuilder: (context, index) {
-              if (index == state.helpTicket.replies.length) {
-                return _initialHelpMessage(context: context, state: state, index: index);
-              }
-              return MessageBubble(reply: state.helpTicket.replies[index], key: Key("messageBubbleKey-$index"));
+    return BlocBuilder<MessageListBloc, MessageListState>(
+      builder: (context, state) {
+        return ListView.builder(
+          key: const Key("messageListKey"),
+          padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
+          itemCount: state.helpTicket.replies.length + 1,
+          reverse: true,
+          controller: _scrollController,
+          itemBuilder: (context, index) {
+            if (index == state.helpTicket.replies.length) {
+              return _initialHelpMessage(context: context, state: state, index: index);
             }
-          );
-        },
-      )
+            return MessageBubble(reply: state.helpTicket.replies[index], key: Key("messageBubbleKey-$index"));
+          }
+        );
+      },
     );
   }
 

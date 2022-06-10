@@ -7,6 +7,7 @@ class ProfileFormState extends Equatable {
 
   final bool isFirstNameValid;
   final bool isLastNameValid;
+
   final bool isSubmitting;
   final bool isSuccess;
   final String errorMessage;
@@ -21,6 +22,7 @@ class ProfileFormState extends Equatable {
 
     required this.isFirstNameValid,
     required this.isLastNameValid,
+
     required this.isSubmitting,
     required this.isSuccess,
     required this.errorMessage
@@ -31,8 +33,9 @@ class ProfileFormState extends Equatable {
       firstName: profile.firstName,
       lastName: profile.lastName,
 
-      isFirstNameValid: true,
-      isLastNameValid: true,
+      isFirstNameValid: profile.firstName.isNotEmpty,
+      isLastNameValid: profile.lastName.isNotEmpty,
+
       isSubmitting: false,
       isSuccess: false,
       errorMessage: ""
@@ -45,6 +48,7 @@ class ProfileFormState extends Equatable {
 
     bool? isFirstNameValid,
     bool? isLastNameValid,
+
     bool? isSubmitting,
     bool? isSuccess,
     String? errorMessage
@@ -54,6 +58,7 @@ class ProfileFormState extends Equatable {
 
     isFirstNameValid: isFirstNameValid ?? this.isFirstNameValid,
     isLastNameValid: isLastNameValid ?? this.isLastNameValid,
+
     isSubmitting: isSubmitting ?? this.isSubmitting,
     isSuccess: isSuccess ?? this.isSuccess,
     errorMessage: errorMessage ?? this.errorMessage
@@ -67,11 +72,13 @@ class ProfileFormState extends Equatable {
     return '''ProfileFormState {
       firstName: $firstName,
       lastName: $lastName,
+
       isFirstNameValid: $isFirstNameValid,
       isLastNameValid: $isLastNameValid,
+
       isSubmitting: $isSubmitting,
       isSuccess: $isSuccess,
-      errorMessage: errorMessage
+      errorMessage: $errorMessage
     }''';
   }
 }

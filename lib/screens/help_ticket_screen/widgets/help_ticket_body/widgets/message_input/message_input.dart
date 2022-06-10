@@ -45,9 +45,14 @@ class _MessageInputState extends State<MessageInput> {
         }
       },
       child: Container(
+        decoration: BoxDecoration(
+          border: Border(
+            top: BorderSide(color: Theme.of(context).colorScheme.surface, width: 1.5)
+          )
+        ),
         child: Row(
           children: [
-            Flexible(
+            Expanded(
               child: Container(
                 margin: EdgeInsets.only(left: 8.w, top: 8.h),
                 child: _textField()
@@ -66,12 +71,6 @@ class _MessageInputState extends State<MessageInput> {
               )
             )
           ],
-        ),
-        width: double.infinity,
-        decoration: BoxDecoration(
-          border: Border(
-            top: BorderSide(color: Theme.of(context).colorScheme.surface, width: 1.5)
-          )
         ),
       ),
     );

@@ -16,7 +16,7 @@ class MessageInputState extends Equatable {
 
   factory MessageInputState.initial() {
     return const MessageInputState(
-      isInputValid: true,
+      isInputValid: false,
       isSubmitting: false,
       isSuccess: false,
       errorMessage: ""

@@ -41,10 +41,10 @@ class PasswordFormState extends Equatable {
       password: "",
       passwordConfirmation: "",
 
-      isOldPasswordValid: true,
+      isOldPasswordValid: false,
       isOldPasswordVerified: false, 
-      isPasswordValid: true, 
-      isPasswordConfirmationValid: true, 
+      isPasswordValid: false, 
+      isPasswordConfirmationValid: false, 
 
       isSubmitting: false, 
       isSuccess: false,

@@ -7,6 +7,7 @@ class LoginState extends Equatable {
 
   final bool isEmailValid;
   final bool isPasswordValid;
+
   final bool isSubmitting;
   final bool isSuccess;
   final String errorMessage;
@@ -21,6 +22,7 @@ class LoginState extends Equatable {
 
     required this.isEmailValid,
     required this.isPasswordValid,
+
     required this.isSubmitting,
     required this.isSuccess,
     required this.errorMessage
@@ -33,6 +35,7 @@ class LoginState extends Equatable {
       
       isEmailValid: false,
       isPasswordValid: false,
+
       isSubmitting: false,
       isSuccess: false,
       errorMessage: ""
@@ -45,6 +48,7 @@ class LoginState extends Equatable {
 
     bool? isEmailValid,
     bool? isPasswordValid,
+
     bool? isSubmitting,
     bool? isSuccess,
     String? errorMessage
@@ -55,6 +59,7 @@ class LoginState extends Equatable {
 
       isEmailValid: isEmailValid,
       isPasswordValid: isPasswordValid,
+
       isSubmitting: isSubmitting,
       isSuccess: isSuccess,
       errorMessage: errorMessage
@@ -67,6 +72,7 @@ class LoginState extends Equatable {
 
     bool? isEmailValid,
     bool? isPasswordValid,
+
     bool? isSubmitting,
     bool? isSuccess,
     String? errorMessage
@@ -76,7 +82,8 @@ class LoginState extends Equatable {
       password: password ?? this.password,
 
       isEmailValid: isEmailValid ?? this.isEmailValid,
-      isPasswordValid: isPasswordValid ?? this.isPasswordValid, 
+      isPasswordValid: isPasswordValid ?? this.isPasswordValid,
+      
       isSubmitting: isSubmitting ?? this.isSubmitting, 
       isSuccess: isSuccess ?? this.isSuccess,
       errorMessage: errorMessage ?? this.errorMessage

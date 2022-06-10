@@ -14,6 +14,7 @@ class RequestResetFormState extends Equatable {
   const RequestResetFormState({
     required this.email,
     required this.isEmailValid,
+
     required this.isSubmitting,
     required this.isSuccess,
     required this.errorMessage
@@ -22,7 +23,8 @@ class RequestResetFormState extends Equatable {
   factory RequestResetFormState.initial() {
     return const RequestResetFormState(
       email: "",
-      isEmailValid: true,
+      isEmailValid: false,
+
       isSubmitting: false,
       isSuccess: false,
       errorMessage: ""
@@ -32,13 +34,15 @@ class RequestResetFormState extends Equatable {
   RequestResetFormState update({
     String? email,
     bool? isEmailValid,
+    
     bool? isSubmitting,
     bool? isSuccess,
     String? errorMessage
   }) => RequestResetFormState(
     email: email ?? this.email,
-    isEmailValid: isEmailValid ?? this.isEmailValid, 
-    isSubmitting: isSubmitting ?? this.isSubmitting, 
+    isEmailValid: isEmailValid ?? this.isEmailValid,
+    isSubmitting: isSubmitting ?? this.isSubmitting,
+    
     isSuccess: isSuccess ?? this.isSuccess,
     errorMessage: errorMessage ?? this.errorMessage
   );
